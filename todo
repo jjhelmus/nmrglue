@@ -1,0 +1,31 @@
+fileio
+======
+- add 4d support to all modules
+- 'glue' format based on HDF
+- lowmem_2d support in pipe
+- write_slice3d function in all modules
+- iter3D object in all modules
+- spinev module
+- simpson module
+- make documentation pretty
+
+process
+=======
+- refactor code from pipe_proc into proc_base
+- bruker_proc module
+- sparky_proc module
+- varian_proc module
+- proc_bl module - baseline functions
+- FWHT in proc_base
+- proc_lp modules - linear prediction functions
+- proc_mem - Maximum extropy functions
+
+util
+====
+- peakpick modules
+- rewrite isdicsame in misc to check for 'nearness' of int/float types
+- rewrite isdatasame in misc
+
+gui
+===
+- write some common gui functions
