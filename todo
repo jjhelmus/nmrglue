@@ -23,8 +23,6 @@ process
 util
 ====
 - peakpick modules
-- rewrite isdicsame in misc to check for 'nearness' of int/float types
-- rewrite isdatasame in misc
 
 gui
 ===

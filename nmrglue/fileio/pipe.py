@@ -197,7 +197,7 @@ def create_dic(udic,datetimeobj=datetime.datetime.now()):
     dic = datetime2dic(datetimeobj,dic) # add the datetime to the dictionary
 
     # fill global dictionary parameters
-    dic["FDDIMCOUNT"] = udic["ndim"]
+    dic["FDDIMCOUNT"] = float(udic["ndim"])
 
     # fill in parameters for each dimension
     for i,adic in enumerate([udic[k] for k in xrange(udic["ndim"])]):
@@ -276,7 +276,7 @@ def add_axis_to_dic(dic,adic,n):
         dic["FDREALSIZE"] = psize
     
     if n==1:  # first indirect
-        dic["FDSPECNUM"] = adic["size"] # R+I
+        dic["FDSPECNUM"] = float(adic["size"]) # R+I
     
     if n==2:  # second indirect
         if adic["complex"]:
@@ -1010,7 +1010,7 @@ def fdata2dic(fdata):
 
     # Populate the dictionary with FDATA which contains numbers
     for key in fdata_dic.keys():
-        dic[key] = fdata[ int( fdata_dic[key] ) ]
+        dic[key] = float(fdata[ int( fdata_dic[key] ) ])
 		
     # make the FDDIMORDER
     dic["FDDIMORDER"] = [dic["FDDIMORDER1"],dic["FDDIMORDER2"],  \

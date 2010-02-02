@@ -4,19 +4,28 @@ Misc. functions
 
 import numpy as np
 
+# default tolerences
+rtol = 1.001e-01
+atol = 1.001e-01
+dtol = 1.001e-01
 
-rtol = 1.0000000000000001e-01   # 1.0001E-6 is the goal, 1.e-3 is good
-atol = 0.001
-dtol = 0.001
+def pair_similar(dic1,data1,dic2,data2,verb=False,atol=atol,rtol=rtol,
+    dtol=dtol):
+    """
+    Check a dic,data pair against a second dic,data pair for differences
 
-def check_pair(dic1,data1,dic2,data2,verb=False):
-
-    r1 = isdataclose(data1,data2,verb)
-    r2 = isdicsame(dict(dic1),dict(dic2),verb)
+    Returns tuple of Booleans indicating agreement between data and 
+    dictionaries
+    """
+    r1 = isdatasimilar(data1,data2,verb,atol,rtol)
+    r2 = isdicsimilar(dict(dic1),dict(dic2),verb,dtol)
 
     return r1,r2
 
-def isdataclose(data1,data2,verb=False):
+def isdatasimilar(data1,data2,verb=False,atol=atol,rtol=rtol):
+    """
+    Check that data is equal within tolerance
+    """
 
     r = True
     if data1.dtype != data2.dtype:
@@ -33,49 +42,121 @@ def isdataclose(data1,data2,verb=False):
             print "Data does not match"
     return r
 
-def isdicsame(dic1,dic2,verb=False):
-    
-    dic1 = cleandic(dict(dic1))
-    dic2 = cleandic(dict(dic2))
+def isdicsimilar(dic1,dic2,verb=False,dtol=dtol):
+    """
+    Compare two dictionaries for differences
 
+    float and int types compared within dtol
+    lists and dictionaries checked recursively
+    all other checked by simple equivalence
+
+    """
+
+    # create copies of the two dictionaries
+    dic1 = dict(dic1)
+    dic2 = dict(dic2)
+    
+    # set return value to True
     r = True
+
+    # create sets
     kset1 = set(dic1.keys())
     kset2 = set(dic2.keys())
-
     dset = set.difference(kset1,kset2)
     iset = set.intersection(kset1,kset2)
 
-    if len(dset) != 0:
+    # print out any keys not in both dictionaries
+    if len(dset) !=0:
         r = False
         if verb:
-            print "Keys not in both sets:",dset
+            print "Keys not in both dictionaries:",dset
 
+    # loop over keys in both sets
     for k in iset:
-        #print k,dic1[k],dic2[k]
-        if type(dic1[k]) == np.float32:
-            if abs(dic1[k] - dic2[k]) > dtol:
-                r = False
-                if verb:
-                    print "Key mismatch:",k,dic1[k],dic2[k]
-        else:
-            if dic1[k] != dic2[k]:
-                r = False
-                if verb:
-                    print "Key mismatch:",k,dic1[k],dic2[k]
+        v1,v2 = dic1[k],dic2[k]
 
-    #for k in iset:
-    #    if dic1[k] != dic2[k]:
-    #        r = False
-    #        if verb:
-    #            print "Key mismatch:",k,dic1[k],dic2[k]
+        # type checking
+        if type(v1) != type(v2):
+            r=False
+            if verb:
+                print "Key has different type",k,type(dic1[k]),type(dic2[k])
+            
+        # iterable checking
+        if isinstance(v1,dict):
+            #if verb:
+            #    print "Checking sub-dictionary:",k
+            r = r and isdicsimilar(v1,v2,verb=verb,dtol=dtol)
+        
+        elif isinstance(v1,list):
+            #if verb:
+            #    print "Checking sub-list:",k
+            r = r and islistsimilar(v1,v2,verb=verb,dtol=dtol)
+
+        # numeric type
+        elif isinstance(v1,int) or isinstance(v1,float):
+            if abs(v1-v2) > dtol:
+                r = False
+                if verb:
+                    print "Key mismatch:",k,v1,v2
+
+        # all other type just check if equal
+        else:
+            if v1!=v2:
+                r = False
+                if verb:
+                    print "Key mismatch:",k,v1,v2
+
     return r
 
-def cleandic(dic):
-  
-    if dic.has_key("FDSLICECOUNT"):
-        del(dic["FDSLICECOUNT"])
-    if dic.has_key("RAWFDATA"):
-        del(dic["RAWFDATA"])
-    if dic.has_key("CURFILE"):
-        del(dic["CURFILE"])
-    return dic
+def islistsimilar(l1,l2,verb=False,dtol=dtol):
+    """
+    Compare two lists (or iterable) for differences
+
+    see isdicsimilar
+
+    """
+
+    # set return value to True
+    r = True
+
+    # print out any keys not in both dictionaries
+    if len(l1) != len(l2):
+        r = False
+        if verb:
+            print "Lists not of same length:",len(l1),len(l2)
+
+    # loop over keys in both sets
+    for v1,v2 in zip(l1,l2):
+        
+        # type checking
+        if type(v1) != type(v2):
+            r=False
+            if verb:
+                print "Item has different type",v1,v2
+            
+        # iterable checking
+        if isinstance(v1,dict):
+            #if verb:
+            #    print "Checking sub-dictionary"
+            r = r and isdicsimilar(v1,v2,verb=verb,dtol=dtol)
+        
+        if isinstance(v1,list):
+            #if verb:
+            #    print "Checking sub-list"
+            r = r and islistsimilar(v1,v2,verb=verb,dtol=dtol)
+
+        # numeric type
+        elif isinstance(v1,int) or isinstance(v1,float):
+            if abs(v1-v2) > dtol:
+                r = False
+                if verb:
+                    print "Item mismatch:",v1,v2
+
+        # all other type just check if equal
+        else:
+            if v1!=v2:
+                r = False
+                if verb:
+                    print "Item mismatch:",v1,v2
+
+    return r
