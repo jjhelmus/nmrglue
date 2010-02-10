@@ -1,3 +1,10 @@
+global
+======
+- write user Guide and nice documentation
+- install scripts
+- add to pyPI
+
+
 fileio
 ======
 - add 4d support to all modules
@@ -5,20 +12,17 @@ fileio
 - lowmem_2d support in pipe
 - write_slice3d function in all modules
 - iter3D object in all modules
-- spinev module
-- simpson module
-- make documentation pretty
+- spinev module?
+- simpson module?
 
 process
 =======
-- refactor code from pipe_proc into proc_base
-- bruker_proc module
-- sparky_proc module
-- varian_proc module
-- proc_bl module - baseline functions
+- check for XXX in files
+- fix differences between NMRPipe and pipe_proc
+- add poly functions to proc_lp
 - FWHT in proc_base
-- proc_lp modules - linear prediction functions
-- proc_mem - Maximum extropy functions
+- proc_lp module - linear prediction functions
+- proc_mem module- Maximum extropy functions
 
 util
 ====
@@ -27,3 +31,26 @@ util
 gui
 ===
 - write some common gui functions
+
+tests
+=====
+test_varian
+test_bruker
+test_pipe
+test_sparky
+test_convert
+test_pipe_proc
+
+examples
+========
+1D,2D,3D converstions:
+ - varian -> pipe
+ - bruker -> pipe
+
+2D,3D conversions
+ - pipe -> sparky
+ - sparky -> pipe
+
+- Fit of relaxation data
+
+Making figures

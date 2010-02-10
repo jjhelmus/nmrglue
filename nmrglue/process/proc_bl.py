@@ -1,26 +1,6 @@
 """
-NMR baseline processing functions 
-
-proc_bl
-=======
-
-Provides:
-
-    1. Functions which filter, smooth, and flatten NMR baselines.
-
-calc_bl_* functions calculate baseline on 1D vector.
-All other functions work on 1D or 2D data on the last (-1) axis.
-
-Documentation is available in the docstrings and at http://XXX
-
-Status: 
-
-To Do: poly baseline correction
-       test all functions
-
-History:
-(jjh) 2009.09.14 med and sol functions
-(jjh) 2009.09.08 initial code laydown
+A collection of NMR processing functions for filtering, smoothing, and 
+correcting spectral baselines.  
 
 """
 
@@ -28,41 +8,40 @@ import numpy as np
 import scipy
 import scipy.ndimage
 
+# Linear (First order) baseline correction
 
 def base(data,nl,nw=0):
     """
-    baseline correction (first-order) on nodes (nl).
+    Linear (first-order) Baseline Correction based on node list.
 
     Parameters:
-    data    1D or 2D data array (ndarray)
-    nl      List of baseline nodes
-    nw      Node width in pts
+
+    * data  Array of spectral data.
+    * nl    List of baseline nodes.
+    * nw    Node half-width in points.
 
     """
 
     if data.ndim == 1:
         data = data-calc_bl_linear(data,nl,nw)
-    else:
-        out = np.array(data)
+    else:   # for 2D array loop over traces
         for i,vec in enumerate(data):
-            out[i] = data[i]-calc_bl_linear(vec,nl,nw)
-        data = out
+            data[i] = data[i]-calc_bl_linear(vec,nl,nw)
     return data
 
-
 def calc_bl_linear(x,nl,nw=0):
-    """ calculate baseline using linear approximation between nodes
+    """ 
+    Calculate a baseline using linear approximation between nodes
 
     Parameters:
-    x   
-    nl  List of baseline nodes (pts of only noise)
-    nw  +/- points to calculate node value 
+
+    * x     1D data
+    * nl    List of baseline nodes
+    * nw    Node half-width in points
 
     """
-
     bl = np.zeros_like(x)
     for i in range(len(nl)-1):
-        
         # minimum and maximum index
         min = nl[i]
         max = nl[i+1]
@@ -70,49 +49,95 @@ def calc_bl_linear(x,nl,nw=0):
         # linspace s1 and s2
         s1 = x[min-nw:min+nw+1].mean()
         s2 = x[max-nw:max+nw+1].mean()
-    
         bl[min:max+1] = np.linspace(s1,s2,max-min+1)
-
     return bl
+
+# Constant baseline correction
+
+def cbf(data,last=10,apply=slice(None)):
+    """
+    Constant Baseline correction
+
+    Parameters:
+
+    * data  Array of spectral data.
+    * last  Percent of -1 axis used to calculate correction. 
+    * apply Slice describing 0th-axis region(s) to apply correction to. 
+            Ignored in 1D data.
+
+    """
+    # calculate the correction
+    n = data.shape[-1]*last/100.+1.  
+    corr = data[...,-n:].sum(axis=-1)/n
+    
+    # apply correction
+    if data.ndim == 2:
+        data[apply] =  data[apply] - np.array([corr]).transpose()[apply]
+        return data
+    else:
+        return data-corr
+
+def cbf_explicit(data,calc=slice(None),apply=slice(None)):
+    """
+    Constant Baseline - explicit region
+
+    Parameters:
+
+    * data  Array of spectral data.
+    * calc  Slice describing region to use for calculating correction.
+    * apply Slice describing 0th-axis region(s) to apply correction to.
+            Ignored in 1D data.
+
+    """
+    # calculate correction
+    n = len(range(data.shape[-1])[calc])
+    corr = data[...,calc].sum(axis=-1)/n
+
+    # apply correction
+    if data.ndim == 2:
+        data[apply] = data[apply] - np.array([corr]).transpose()[apply]
+        return data
+    else:
+        return data-corr
+
+# Median baseline correction
 
 def med(data,mw=24,sf=16,sigma=5.0):
     """
-    median baseline correction
+    Median baseline correction
 
-    Algorith described in 
+    Algorith described in:
     Friedrichs, M.S. JBNMR 1995 5 147-153.
 
     Parameters:
-    data    1D or 2D data array
-    mw      Median Window size in pts.
-    sf      Smooth window size in pts.
-    sigma   Standard-deviation of Gaussian in convolution
+
+    * data  Array of spectral data.
+    * mw    Median Window size in pts.
+    * sf    Smooth window size in pts.
+    * sigma Standard-deviation of Gaussian in convolution
 
     """
-
     if data.ndim == 1:
         data = data - calc_bl_med(data,mw,sf,sigma)
     else:
-        out = np.array(data)
         for i,vec in enumerate(data):
-            out[i] = vec - calc_bl_med(vec,mw,sf,sigma)
-        data = out
-
-    return data
+            data[i] = vec - calc_bl_med(vec,mw,sf,sigma)
+    return out
 
 
 def calc_bl_med(x,mw,sf,sigma):
     """
-    1D median baseline correction
+    Calculate a baseline using median baseline correction.
 
-    Calculates baseline using algorithm from: 
+    Algorithm described in:
     Friedrichs, M.S. JBNMR 1995 5 147-153
 
     Parameter:
-    x       input 1D ndarray
-    mw      Median filter width
-    sf      Convolution filter size
-    sigma   standard-deviation of Gaussian in convolution
+
+    x       1D data
+    mw      Median Window size in pts.
+    sf      Smooth window size in pts.
+    sigma   Standard-deviation of Gaussian in convolution.
 
     """
 
@@ -125,8 +150,8 @@ def calc_bl_med(x,mw,sf,sigma):
     # fill in the median vector
     half_mw = mw/2
     m = scipy.ndimage.median_filter(e,mw+1,mode="mirror")
-    # using the median_filter might give slightly different than
-    # algorithm but is MUCH faster
+    # using the median_filter might give slightly different results than
+    # described algorithm but is MUCH faster
 
     # convolve with a gaussian
     g = scipy.signal.gaussian(sf,sigma)
@@ -134,48 +159,91 @@ def calc_bl_med(x,mw,sf,sigma):
 
     return scipy.signal.convolve(m,g,mode='same')
 
+# Solvent Filter
 
-def sol(data,w=16,shape="boxcar",filter=None):
-    """ solvent filter
+def sol_general(data,filter,w=16,mode='same'):
+    """
+    Solvent filter with generic filter.
 
-    Method described in Marion et al. JMR 1989 84 425-430
-
+    Algorithm described in:
+    Marion et al. JMR 1989 84 425-430
+    
     Parameters:
-    data    data (fid)
-    w       Width (full width) of convolution shape
-    shape   Lowpass shape
-    filter  Custom Lowpass shape (1D array)
 
+    * data   Array of spectral data.
+    * filter filter to convolve with data
+    * mode   mode for output ('valid','same', or 'full')
 
     """
+    A = filter.sum()
+    if data.ndim == 2:
+        filter = np.atleast2d(filter)
+    return data-scipy.signal.convolve(data,filter,mode=mode)/A
 
-    if filter!=None:
-        s = filter
-    else:
-        if shape == "boxcar":
-            s = scipy.signal.boxcar(w)
-        elif shape == "sine":
-            s = np.cos(np.pi*np.linspace(-0.5,0.5,w))
-        elif shape == "sine2":
-            s = np.cos(np.pi*np.linspace(-0.5,0.5,w))**2
-        elif shape == "gaussian":
-            s = scipy.signal.gaussian(w,w/2.)
-        else:
-            raise ValueError("invalid shape")
+def sol_boxcar(data,w=16,mode='same'):
+    """ 
+    Solvent filter with boxcar filter.
 
-    A = s.sum()
+    Parameters:
 
-    # convolve with shape 
-    if data.ndim == 1:
-        return data-scipy.signal.convolve(data,s,mode='same')/A
-    else:
-        return data-scipy.signal.convolve(data,np.atleast2d(s),mode='same')/A
+    * data   Array of spectral data.
+    * w      Width of convolution window.
+    * mode   mode for output ('valid','same', or 'full')
 
+    """
+    filter = scipy.signal.boxcar(w)
+    return sol_general(data,filter,w=w,mode=mode)
+
+def sol_sine(data,w=16,mode='same'):
+    """ 
+    Solvent filter with sine-bell filter.
+
+    Parameters:
+
+    * data   Array of spectral data.
+    * w      Width of convolution window.
+    * mode   mode for output ('valid','same', or 'full')
+
+    """
+    filter = np.cos(np.pi*np.linspace(-0.5,0.5,w))
+    return sol_general(data,filter,w=w,mode=mode)
+
+def sol_sine2(data,w=16,mode='same'):
+    """ 
+    Solvent filter with square sine-bell filter.
+
+    Parameters:
+
+    * data   Array of spectral data.
+    * w      Width of convolution window.
+    * mode   mode for output ('valid','same', or 'full')
+
+    """
+    filter = np.cos(np.pi*np.linspace(-0.5,0.5,w))**2
+    return sol_general(data,filter,w=w,mode=mode)
+
+def sol_gaussian(data,w=16,mode='same'):
+    """ 
+    Solvent filter with square gaussian filter.
+
+    Parameters:
+
+    * data   Array of spectral data.
+    * w      Width of convolution window.
+    * mode   mode for output ('valid','same', or 'full')
+
+    """
+    filter = scipy.signal.gaussian(w,w/2.)
+    return sol_general(data,filter,w=w,mode=mode)
+
+
+# Polynomial Solvent Subtraction
 
 def poly_td(data):
-    """ polynomial time domain solvent subtraction
+    """ 
+    Polynomial time domain solvent subtraction
 
-    From NMRPipe paper( appendix):
+    From NMRPipe paper(appendix):
 
     when used with the argument -time, fits all data points to a polynomial,
     which is then subtracted from the original data.  It is intended to fit
@@ -183,8 +251,6 @@ def poly_td(data):
     often causes less distortions than time-domain convolution methods.
     By default, a fourth-order polynomials is used.  For speed successive
     averages of regions are usually fit, rather than fitting all of the data.
-
-
 
     Alg:
 
@@ -198,7 +264,8 @@ def poly_td(data):
     pass
 
 def poly_fd(data):
-    """ polynomial frequency doomain baseline correction
+    """ 
+    Polynomial frequency domain baseline correction
 
     From NMRPipe paper (appendix):
     

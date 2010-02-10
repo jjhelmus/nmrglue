@@ -1,65 +1,36 @@
 """
-Function to process NMRPipe dic,data tuples similar to NMRPipe
+NMRPipe like processing functions for use with pipe dic,data pairs.
 
-pipe_proc
-=========
+These functions try to mimic NMRPipe processing functions but many differences
+exist between to two implementations.  In particular when using this module:
 
-Provides:
-    
-    1.  NMR Processing functions similar to NMRPipe.
+ * hdr=True over-rides all values in the calling function. 
+ * A di flag is not used, rather the di functions should be used to delete
+   the imaginary portion of a spectra.
+ * x1,xn and other limits must be expressed in points.  spec2pnt or other unit 
+   conversion functions should be used before calling the processing function 
+   to calculate these values.
+ * No functions implement the dmx or nodmx flags.
 
-Documentation is available in the docstrings and at http://XXX
+Additional differences from NMRPipe's functions are documented in the 
+individual processing functions.
 
+The following functions have not been implemented and will raise a 
+NotImplemented exception:
 
-To do:  
-        test with 1D/2D and real/complex and freq/time and transposed/not
-        Check for XXX in this file
-        extract out more into proc_base
-        unify recomputer orig functions
-        Lots of documentation.
-
-NMRPipe Functions Not Implemented (11) will raise NotImplemented exception:
-
-    poly    - polynonial baseline correction (very little documentation)
-    lp      - linear prediction
-    lpc     - macro of lp
-    lp2d    - 2D linear prediction
-    mem     - Maximum Entropy
-    ml      - maximum likelyhood freq. map (no documentation)
-    ebs     - (no documentation)
-    ann     - (no documentation)
-    ztp     - 3D matrix transpose (no need)
-    xyz2zyx - 3D matrix transpose (no need)
-    mac     - macro language interpreter (no need)
-
-Implementation Caveat:
-
-    - hdr=True overwrites apodization values in the calling function.
-    - To delete imaginaries use the di function (-di not implemented).
-    - All functions require x1, xn, etc to be in units of points, use
-      the spec2pts to calculate these values before calling.
-    - No functions implement the dmx or nodmx flags.
-
-History
-(jjh) 2009.10.28 changed to unit_conversion object framework
-(jjh) 2009.10.14 changes to pnt2spec and spec2pnt
-(jjh) 2009.10.02 code refactoring
-(jjh) 2009.09.18 unit conversion functions, bugfixes in ext
-(jjh) 2009.09.14 sol and med functions
-(jjh) 2009.09.08 base function.
-(jjh) 2009.08.XX various bug fixes as making test suite    
-(jjh) 2009.07.15 implemented di
-(jjh) 2009.06.12 Fixed bugs in apod functions.
-(jjh) 2009.06.05 finished zd, cleaned up code
-(jjh) 2009.06.04 Implemented qmix,zd
-(jjh) 2009.06.03 Documentation now listed unimplemented functions
-(jjh) 2009.05.28 many functions implemented in last 2 weeks
-(jjh) 2009.05.12 jmod function
-(jjh) 2009.05.11 em, gm, gmb function
+ * ann      Fourier Analysis by Neural Net
+ * ebs      EBS Reconstruction
+ * lp       Linear Prediction
+ * lpc      Linear Predictions
+ * lp2d     2D Linear Prediction
+ * mac      Macro Language Interpreter
+ * mem      Maximum Entropy
+ * ml       Maximum likelyhood frequency
+ * poly     Polynomail baseline correction
+ * xyz2zyx  3D matrix transpose
+ * ztp      3D matrix transpose
 
 """
-
-# standard library modules
 
 # external modules
 import numpy as np
@@ -71,9 +42,6 @@ from nmrglue.fileio import pipe,fileiobase
 import proc_base as p
 import proc_bl
 
-
-__version__ = '0.98'
-
 pi = np.pi
 
 ###################
@@ -81,21 +49,23 @@ pi = np.pi
 ###################
 
 class unit_conversion(fileiobase.unit_conversion):
-    
+    """ 
+    Unit converter class that returns NMRPipe like index values.  Useful
+    when calling pipe_proc functions
+
+    """
     # NMRPipe indexes from 1 to MAX instead on 0 to MAX-1
     # we need to modify two method to account for this off by one problem
-    
     def __unit2pnt(self,val,units):
         return fileiobase.unit_conversion.__unit2pnt(self,val,units)+1
 
     def __pnt2unit(self,val,units):
         return fileiobase.unit_conversion.__pnt2unit(self,val-1,units)
 
-
-
 def make_uc(dic,data,dim=-1):
-    """ Make a unit conversion object"""
-
+    """ 
+    Make a unit conversion object which accepts/returns NMRPipe index values.
+    """
     if dim == -1:
         dim = data.ndim - 1 # last dimention
 
@@ -108,7 +78,6 @@ def make_uc(dic,data,dim=-1):
         cplx = True
     else:
         cplx = False
-
     sw = dic[fn+"SW"]
     if sw == 0.0:
         sw = 1.0
@@ -116,45 +85,53 @@ def make_uc(dic,data,dim=-1):
     if obs == 0.0:
         obs = 1.0
     car = dic[fn+"CAR"]*obs
-
     return unit_conversion(size,cplx,sw,obs,car)
-
-
 
 #####################
 # Dictionary Macros #
 #####################
 
+def recalc_orig(dic,data,fn,axis=-1):
+    """
+    Recalculate origin for given axis
+    """
+    # ORIG calculation
+    s = float(data.shape[axis])
+    
+    # This really should check that the axis is not the last...
+    if dic[fn+"QUADFLAG"] == 0 and axis!=-1:
+        s = int(s/2.)
+
+    sw  = dic[fn+"SW"]
+    car = dic[fn+"CAR"]
+    obs = dic[fn+"OBS"]
+    s2  = float(dic[fn+"CENTER"])
+    dic[fn+"ORIG"] = car*obs-sw*((s-s2)/s)
+
+    return dic
 
 def update_minmax(dic,data):
     """
-    Update the FDDISPMAX parameters returns dictionary
-
+    Update the MAX/MIN dictionary keys
     """
-
     # maximum and minimum values
     dic["FDMAX"] = float(data.max().real)
     dic["FDDISPMAX"] = dic["FDMAX"]
     dic["FDMIN"] = float(data.min().real)
     dic["FDDISPMIN"] = dic["FDMIN"]
     dic["FDSCALEFLAG"] = 1.0    # FDMIN/MAX are valid
-
     return dic
-
 
 def clean_minmax(dic):
     """
-    clear FDDISPMAX parameters returns dictionary
-    
+    Clean MAX/MIN dictionary keys
     """
-
     # maximum and minimum values
     dic["FDMAX"] = 0.0
     dic["FDDISPMAX"] = 0.0
     dic["FDMIN"] = 0.0
     dic["FDDISPMIN"] = 0.0
     dic["FDSCALEFLAG"] = 0.0    # FDMIN/MAX not valid
-
     return dic
 
 
@@ -162,14 +139,29 @@ def clean_minmax(dic):
 # Apodization functions #
 #########################
 
-
 def apod(dic,data,qName=None,q1=0.0,q2=0.0,q3=0.0,
     c=1.0,start=1,size='default',inv=False,one=False,hdr=False):
     """ 
     Generic Apodization
+
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * qName Apodization function name: SP, EM, GM, GMB, TM, TRI, JMOD.
+    * q1    First parameter for apodization.
+    * q2    Second parameter for apodization.
+    * q3    Third parameter for apodization.
+    * c     First point scale value.
+    * start Number of points in apodization window.
+    * size  Starting location of apodization window. Default is full size.
+    * inv   True for inverse apodization, False for normal apodization.
+    * one   True to set points outside of window to 1.
+            False leaves points outside of window as is.
+    * hdr   True to read apodization parameters from Header.
+
     """
     # calls the appropiate apodization function
-
     a_list = ['SP','EM','GM','GMB','TM','TRI','JMOD']
 
     if hdr:
@@ -201,11 +193,22 @@ def apod(dic,data,qName=None,q1=0.0,q2=0.0,q3=0.0,
     if qName == "TRI":
         return tri(dic,data,q1,q2,q3,c,start,size,inv,one,hdr)
 
-
 def em(dic,data,lb=0.0,
     c=1.0,start=1,size='default',inv=False,one=False,hdr=False):
-    """
-    Exponential Multiply Window
+    """ 
+    Exponential apodization
+
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * lp    Exponential line broadening in Hz.
+    * c     First point scale value.
+    * start Number of points in apodization window.
+    * size  Starting location of apodization window. Default is full size.
+    * inv   True for inverse apodization, False for normal apodization.
+    * one   True leaves points outside of window as is, False zeros them.
+    * hdr   True to read apodization parameters from Header.
 
     """
     start = start - 1   # arrays should start at 0
@@ -246,18 +249,29 @@ def em(dic,data,lb=0.0,
         data[...,0] = data[...,0]*c
 
     dic = update_minmax(dic,data)
-
     return dic,data
-
 
 def gm(dic,data,g1=0.0,g2=0.0,g3=0.0,
     c=1.0,start=1,size='default',inv=False,one=False,hdr=False):
-    """
+    """ 
     Lorentz-to-Gauss apodization
+
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * g1    Inverse exponential width in Hz
+    * g2    Gaussian broaden width in Hz
+    * g3    Location of Gauss maximum (0.0 to 1.0)
+    * c     First point scale value.
+    * start Number of points in apodization window. Default is full size.
+    * size  Starting location of apodization window.
+    * inv   True for inverse apodization, False for normal apodization.
+    * one   True leaves points outside of window as is, False zeros them.
+    * hdr   True to read apodization parameters from Header.
 
     """
     start = start - 1 # arrays should start at 0
-
     fn = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
 
     if hdr: # read apod values from data header
@@ -306,18 +320,29 @@ def gm(dic,data,g1=0.0,g2=0.0,g3=0.0,
         data[...,0] = data[...,0]*c
 
     dic = update_minmax(dic,data)
-
     return dic,data
 
 
 def gmb(dic,data,lb=0.0,gb=0.0,
     c=1.0,start=1,size='default',inv=False,one=False,hdr=False):
-    """
-    Gaussian apodization
+    """ 
+    Modified Gaussian Apodization
+
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * lb    Exponential term in Hz
+    * gb    Gaussian term in Hz
+    * c     First point scale value.
+    * start Number of points in apodization window.
+    * size  Starting location of apodization window. Default is full size.
+    * inv   True for inverse apodization, False for normal apodization.
+    * one   True leaves points outside of window as is, False zeros them.
+    * hdr   True to read apodization parameters from Header.
 
     """
     start = start - 1 # arrays should start at 0
-
     fn = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
 
     if hdr: # read apod values from data header
@@ -358,21 +383,33 @@ def gmb(dic,data,lb=0.0,gb=0.0,
         data[...,0] = data[...,0]*c
 
     dic = update_minmax(dic,data)
-
     return dic,data
 
 
 def jmod(dic,data,off=0.0,j=0.0,lb=0.0,sin=False,cos=False,
     c=1.0,start=1,size='default',inv=False,one=False,hdr=False):
     """
-    exponentially damped j-modulation
+    Exponentially Damped J-Modulation Apodization
 
-    sin or cos set True overwrite off value.
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * off   Modulation start in fraction of pi radians.
+    * j     J-modulation in Hz
+    * lb    Exponential line Broadening in Hz
+    * sin   Set True for Sin modulation, off parameter ignored.
+    * cos   Set True for Cos modulation, off parameter ignored.
+    * c     First point scale value.
+    * start Number of points in apodization window.
+    * size  Starting location of apodization window. Default is full size.
+    * inv   True for inverse apodization, False for normal apodization.
+    * one   True leaves points outside of window as is, False zeros them.
+    * hdr   True to read apodization parameters from Header.
+
     """
     start = start - 1 # arrays should start at 0
-
     fn = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
-
 
     if sin:
         off = 0.0
@@ -419,16 +456,29 @@ def jmod(dic,data,off=0.0,j=0.0,lb=0.0,sin=False,cos=False,
         data[...,0] = data[...,0]/c
     else:
         data[...,0] = data[...,0]*c
-
     dic = update_minmax(dic,data)
-
     return dic,data
 
 
 def sp(dic,data,off=0.0,end=1.0,pow=1.0,
     c=1.0,start=1,size='default',inv=False,one=False,hdr=False):
-    """
-    sine bell
+    """ 
+    Sine Bell Apodization
+
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * off   Sine-bell start location as a fraction of pi radians.
+    * end   Sine-bell end location as a fraction of pi radians.
+    * pow   Sine-bell exponent.  
+    * c     First point scale value.
+    * start Number of points in apodization window.
+    * size  Starting location of apodization window. Default is full size.
+    * inv   True for inverse apodization, False for normal apodization.
+    * one   True leaves points outside of window as is, False zeros them.
+    * hdr   True to read apodization parameters from Header.
+
     """
     start = start - 1 # arrays should start at 0
 
@@ -478,8 +528,22 @@ sine = sp   # wrapper for sine functions
 
 def tm(dic,data,t1=0.0,t2=0.0,
     c=1.0,start=1,size='default',inv=False,one=False,hdr=False):
-    """
-    trapezoid apodization
+    """ 
+    Trapezoid Apodization
+
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * t1    Points in left side of trapezoid.
+    * t2    Points in right side of trapezoid.
+    * c     First point scale value.
+    * start Number of points in apodization window.
+    * size  Starting location of apodization window. Default is full size.
+    * inv   True for inverse apodization, False for normal apodization.
+    * one   True leaves points outside of window as is, False zeros them.
+    * hdr   True to read apodization parameters from Header.
+
     """
     start = start - 1 # arrays should start at 0
 
@@ -530,10 +594,23 @@ def tm(dic,data,t1=0.0,t2=0.0,
 def tri(dic,data,loc="auto",lHi=0.0,rHi=0.0,
     c=1.0,start=1,size='default',inv=False,one=False,hdr=False):
     """
-    triangular apodization
+    Triangular Apodization
 
-    Differences from NMRPipe.
-    Right side of spectrum slightly different, but errors are small,
+    The right side of the apodization is slightly different than NMRPipe.
+
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * loc   Location of Apex in points. "auto" sets to middle trace.
+    * lHi   Left side starting height.
+    * rHi   Right side starting height.
+    * c     First point scale value. 
+    * start Number of points in apodization window.
+    * size  Starting location of apodization window. Dafault is full size.
+    * inv   True for inverse apodization, False for normal apodization.
+    * one   True leaves points outside of window as is, False zeros them.
+    * hdr   True to read apodization parameters from Header.
 
     """
     start = start - 1 # arrays should start at 0
@@ -588,7 +665,16 @@ def tri(dic,data,loc="auto",lHi=0.0,rHi=0.0,
 
 def rs(dic,data,rs=0.0,sw=False):
     """
-    Right shift and zero pad
+    Right Shift and Zero Pad
+
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * rs    Number of points to right shift.  Negative values are intepreted
+            as left shifting.
+    * sw    True to update chemical shift calibration parameters.
+
     """
 
     if rs < 0:  # negative right shifts are left shifts
@@ -602,20 +688,22 @@ def rs(dic,data,rs=0.0,sw=False):
     if sw and dic[fn+"FTFLAG"] == 1:    
         # we are in freq domain and must update NDORIG and NDCENTER
         dic[fn+"CENTER"] = dic[fn+"CENTER"]+rs
-        
-        # recalc orig
-        s = data.shape[-1]
-        s2 = dic[fn+"CENTER"]
-        sw = dic[fn+"SW"]
-        car = dic[fn+"CAR"]
-        obs = dic[fn+"OBS"]
-        dic[fn+"ORIG"] =  -1.*sw*((s-s2)/s)+car*obs
+        dic = recalc_orig(dic,data,fn)
             
     return dic,data
 
 def ls(dic,data,ls=0.0,sw=False):
     """
-    Left shift and zero pad
+    Left Shift and Zero Pad
+
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * ls    Number of points to left shift.  Negative values are intepreted
+            as right shifting.
+    * sw    True to update chemical shift calibration parameters.
+
     """
     if ls < 0:
         return rs(dic,data,rs=-ls,sw=sw)
@@ -623,21 +711,12 @@ def ls(dic,data,ls=0.0,sw=False):
     data = p.ls(data,ls)
     dic = update_minmax(dic,data)
 
-
     if sw:
         fn = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
         if dic[fn+"FTFLAG"] == 1:   # freq domain
             # update NDORIG and NDCENTER
             dic[fn+"CENTER"] = dic[fn+"CENTER"]-ls
-
-            # recalc orig from new center
-            s = data.shape[-1]
-            s2 = dic[fn+"CENTER"]
-            sw = dic[fn+"SW"]
-            car = dic[fn+"CAR"]
-            obs = dic[fn+"OBS"]
-            dic[fn+"ORIG"] =  -1.*sw*((s-s2)/s)+car*obs
-
+            dic = recalc_orig(dic,data,fn)
         else:   # time domain
             dic[fn+"APOD"] = data.shape[-1] - ls
             dic[fn+"TDSIZE"] = data.shape[-1] - ls 
@@ -648,17 +727,24 @@ def cs(dic,data,dir,pts=0.0,neg=False,sw=False):
     """
     Circular Shift
 
-    Differences from NMRPipe:
-    Functions syntax is different.  Parameter dir should be 'rs' or 'ls'.
-    Parameter pts is the number of points to shift.
+    Syntax is different from NMRPipe.
+
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * dir   Direction to shift spectra, 'rs' or 'ls'.
+    * pts   Number of points to shift.
+    * neg   Negate shifted points.
+    * sw    True to update chemical shift calibration parameters.
+
     """
-    
     if dir == "ls":
         pts = -pts
     elif dir !="rs":
         raise ValueError("dir must be ls or rs")
 
-    data = p.roll(data,pts,neg=neg)
+    data = p.cs(data,pts,neg=neg)
     dic = update_minmax(dic,data)
 
     fn = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
@@ -666,41 +752,39 @@ def cs(dic,data,dir,pts=0.0,neg=False,sw=False):
     if sw and dic[fn+"FTFLAG"] == 1:
         # freq domain update NDORIG and NDCENTER
         dic[fn+"CENTER"] = dic[fn+"CENTER"]+pts
-
-        # recalc orig
-        s = data.shape[-1]
-        s2 = dic[fn+"CENTER"]
-        sw = dic[fn+"SW"]
-        car = dic[fn+"CAR"]
-        obs = dic[fn+"OBS"]
-        dic[fn+"ORIG"] =  -1.*sw*((s-s2)/s)+car*obs
-
+        dic = recalc_orig(dic,data,fn)
+    
     return dic,data
 
 def fsh(dic,data,dir,pts,sw=True):
     """
-    frequency shift via FT
+    Frequency Shift
 
-    Differences from NMRPipe:
-    - Parameter sw is on by default.
-    - Does not perform Hilbert transform when data is complex (NMRPipe does) 
-      rather uses provided imaginary data.
-    - FDMIN and FDMAX slightly off (results of double precision FFTs? jjh)
+    This function does not perfrom a Hilbert transfrom when data is complex, 
+    NMRPipe seems to.  As such the results of the imaginary channel differs
+    from NMRPipe. In addition MAX/MIN value are slightly different than those
+    from NMRPipe.
+
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * dir   Direction of shift, 'rs' or 'ls'.
+    * pts   Number of points to shift.
+    * sw    True to update chemical shift calibration parameters.
 
     """
-
     if dir not in ["ls","rs"]:
         raise ValueError("dir must be ls or rs")
 
     if np.iscomplexobj(data) == False:  # real data
         null,data = _ht(dict(dic),data,zf=True)
         del_imag = True
-
     else:   # imaginary data
         del_imag = False
         # NMRPipe always performs a hilbert transform
         # uncommenting the next two lines will match NMRPipe's fsh real
-        # channel results, no idea how to get the imaginary channel
+        # channel results, the imaginary channel is a mystery.
         #null,data = _ht(dict(dic),data,zf=True)
         #data = np.array(data,dtype="complex64")
 
@@ -713,44 +797,44 @@ def fsh(dic,data,dir,pts,sw=True):
 
     fn = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
     if dic[fn+"FTFLAG"] == 1 and sw: # freq domain
-        
         dic[fn+"CENTER"] = dic[fn+"CENTER"] + pts
-
-        # update NDORIG
-        s = dic["FDSIZE"]
-        sw  = dic[fn+"SW"]
-        car = dic[fn+"CAR"]
-        obs = dic[fn+"OBS"]
-        center = dic[fn+"CENTER"]
-        dic[fn+"ORIG"] = -sw * (s-center)/s + car * obs
-
-
+        dic = recalc_orig(dic,data,fn)
     if del_imag == False:
         return dic,data
     else:
         return dic,data.real
 
-
 ##############
 # Transforms #
 ##############
 
-
 def ft(dic,data,auto=False,real=False,inv=False,alt=False,neg=False,
     null=False,bruk=False):
     """
-    fourier transform
+    Complex Fourier Transform
 
-    Differences from NMRPipe:
-    - The dmx, and nodmx parameters are not implemented.
+    Choosing multiply conflicting modes produces results different from
+    NMRPipe.
+
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+
+    Set any of the following to True to choose a mode.
+    * auto  Choose mode automatically
+    * real  Transform Real-only data
+    * inv   Inverse transform
+    * alt   Sign Alternate
+    * neg   Negate Imaginaties
+    * null  Do not apply transform, only adjust headers
+    * bruk  Process Redfield sequential data (same as alt=True,real=True)
 
     """
-    
     size = data.shape[-1]
 
     # super-flags
     if auto:
-
         # turn off all flags
         real = False
         inv  = False
@@ -776,7 +860,6 @@ def ft(dic,data,auto=False,real=False,inv=False,alt=False,neg=False,
             or dic[fn+"AQSIGN"]==18:
                 alt = True
                 neg = True
-
         # auto debugging
         #print "real:",real
         #print "inv:",inv
@@ -823,15 +906,19 @@ def ft(dic,data,auto=False,real=False,inv=False,alt=False,neg=False,
         dic[fn+"TDSIZE"] = dic[fn+"TDSIZE"]/2.0
         dic["FDSIZE"] = dic["FDSIZE"]/2.0
 
-
     dic = update_minmax(dic,data)
-
     return dic,data
 
 
 def rft(dic,data,inv=False):
     """
-    real fourier transform
+    Real Fourier Transform
+    
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * inv   True to perform inverse transform.
 
     """
 
@@ -859,12 +946,18 @@ def rft(dic,data,inv=False):
 
 def ha(dic,data,inv=False):
     """
-    hadamard transform
+    Hadamard Transform
 
-    This function is very slow. Implementing a FWHT will significantly improve
-    speed.
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * inv   True to scale by 1/N where N is the length of the trace.
+
+    This function is very slow.  Implemented a FWHT in proc_base would 
+    significantly improve the speed of this functions.
+
     """
-
     data = p.ha(data)
 
     if inv:
@@ -878,13 +971,8 @@ def ha(dic,data,inv=False):
     # calculation for dictionary updates
     s = data.shape[-1]
     s2 = s/2.0 + 1
-    sw = dic[fn+"SW"]
-    car = dic[fn+"CAR"]
-    obs = dic[fn+"OBS"]
-    
-    # update the dictionary
     dic[fn+"CENTER"] = s2
-    dic[fn+"ORIG"] =  -1.*sw*((s-s2)/s)+car*obs
+    dic = recalc_orig(dic,data,fn)
     dic["FDSIZE"] = s
 
     return dic,data
@@ -892,10 +980,18 @@ def ha(dic,data,inv=False):
 
 def ht(dic,data,mode="ps0-0",zf=False,td=False,auto=False):
     """
-    hilbert transform 
-    
-    Differences from NMRPipe:
-    - The ps90-180 mirror image HT mode does not work like NMRPipe's.
+    Hilbert Transform 
+
+    "ps90-180" mirror image mode gives different results than NMRPipe.
+
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * mode  "ps0-0" or "ps90-180" for mirror image mode
+    * zf    Zero fill for speed
+    * td    Set time-domain parameter to Size/2
+    * auto  Set True to select mode and zf parameter automatically.
 
     """
 
@@ -908,34 +1004,17 @@ def ht(dic,data,mode="ps0-0",zf=False,td=False,auto=False):
         else:
             zf = True
             mode = "ps0-0"
-
-    dt = data.dtype
-
     if mode not in ["ps0-0","ps90-180"]:
         raise ValueError("mode must be ps0-0 or ps90-180")
-
     if mode == "ps90-180":
         # XXX this gets close but not quite right
         data = -data[::-1]
-
     if zf:
         N = 2**(np.ceil(np.log2(data.shape[-1]))) #not same as NMRPipe
-        fac = N/data.shape[-1]
     else:
         N = data.shape[-1]
-        fac = 1.0
-    
-    z = np.zeros(data.shape,dtype="complex64")
 
-    if data.ndim == 1:
-        z[:] = scipy.signal.hilbert(data.real,N)[:data.shape[-1]]*fac
-    else:
-        for i,vec in enumerate(data):
-            z[i] = scipy.signal.hilbert(vec.real,N)[:data.shape[-1]]*fac
-    
-    # sometimes the hilbert changes the real data, we don't want this
-    z.real = data.real
-
+    z = np.array(p.ht(data,N),dtype="complex64")
     dic = update_minmax(dic,data)
 
     # set the QUADFLAG as complex
@@ -945,34 +1024,358 @@ def ht(dic,data,mode="ps0-0",zf=False,td=False,auto=False):
 
     if td:
         dic[fn+"APOD"] = data.shape[-1]/2.
-        #dic[fn+"APOD"] = dic[fn+"APOD"]/2.
 
     return dic,z
 
 _ht = ht    # macro so ps can call function
 
-####################    
-# Simple functions #
-####################
+##########################
+# Standard NMR Functions #
+##########################
+
+def di(dic,data):
+    """
+    Delete Imaginaries
+    """
+
+    data = p.di(data)
+    fn = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+
+    if dic[fn+"QUADFLAG"] == 0.0:
+        dic[fn+"QUADFLAG"] = 1
+
+        if fn == "FDF2":
+            dic["FDSPECNUM"] = dic["FDSPECNUM"]/2.0
+            dic["FDSLICECOUNT"] = dic["FDSPECNUM"]
+
+        if dic["FDF1QUADFLAG"] == 1 and dic["FDF2QUADFLAG"]:
+            dic["FDQUADFLAG"] = 1.0
+
+    return dic,data
+
+def ps(dic,data,p0=0.0,p1=0.0,inv=False,hdr=False,noup=False,ht=False,
+       zf=False,exp=False,tc=0.0):
+    """
+    Phase Shift
+
+    inv=True will correctly invert an expoenential phase correction. FDFNP0 and
+    FDFNP1 are updated unless noup=True.  rs and ls are not implemented, call
+    rs or ls first.  
+
+    Parameters:
+        
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * p0    Zero order phase in degrees.
+    * p1    First order phase in defrees.
+    * inv   Set True to perform an inverse phase correction.
+    * hdr   Use phase values in header dictionary.
+    * noup  Don't update values in header dictionary.
+    * ht    Set True to use Hilbert transform to reconstruct imaginaries.
+    * zf    Set True to zero fill before Hilbert Transform
+    * exp   Set True for Exponential correction
+    * tc    Exponential decay constant.
+
+    """
+
+    fn = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+
+    if ht:  # Hilbert transform  
+        dic,data = _ht(dic,data,zf=zf)
+
+    if hdr: # read from header
+        p0 = dic[fn+"P0"]
+        p1 = dic[fn+"P1"]
+    
+    if exp:
+        data = p.ps_exp(data,p0=p0,tc=tc,inv=inv)
+    else:
+        data = p.ps(data,p0=p0,p1=p1,inv=inv)
+ 
+    if noup == False:
+        dic[fn+"P0"] = p0
+        dic[fn+"P1"] = p1
+
+    dic = update_minmax(dic,data)
+
+    return dic,data
+
+def tp(dic,data,hyper=False,nohyper=False,auto=False,nohdr=False):
+    """ 
+    Transpose Data (2D)
+
+    Parameters:
+
+    * dic       Dictionary of NMRPipe parameters.
+    * data      array of spectral data.
+    * hyper     Hypercomplex tranpose.
+    * nohyper   Supress Hypercomplex transpose.
+    * auto      Choose mode automatically.
+    * nohdr     Do mark the data transposed in the header dictionary.
+
+    """
+    # XXX test if works with TPPI
+    dt = data.dtype
+    
+    if nohyper:
+        hyper = False
+
+    if auto:
+        if (dic["FD2DPHASE"] == 1) or (dic["FD2DPHASE"] == 2):
+            hyper = True
+        else:
+            hyper = False
+
+    data = p.tp(data,hyper)
+    if hyper:   # Hypercomplex transpose need type recast
+        data = np.array(data,dtype=dt) 
+
+    # update the dimentionality and order
+    dic["FDSLICECOUNT"],dic["FDSIZE"] = data.shape[0],data.shape[1]
+    dic["FDSPECNUM"] = dic["FDSLICECOUNT"]
+    
+    dic["FDDIMORDER1"],dic["FDDIMORDER2"]=dic["FDDIMORDER2"],dic["FDDIMORDER1"] 
+    
+    dic['FDDIMORDER'] = [ dic["FDDIMORDER1"], dic["FDDIMORDER2"], 
+                          dic["FDDIMORDER3"], dic["FDDIMORDER4"] ]
+
+    if nohdr != True:
+        dic["FDTRANSPOSED"] = (dic["FDTRANSPOSED"]+1)%2
+
+    dic = clean_minmax(dic)
+
+    return dic,data
+
+ytp = tp    # alias for tp
+xy2yx = tp  # alias for tp
+
+def zf(dic,data,zf=1,pad="auto",size="auto",
+    mid=False,inter=False,auto=False,inv=False):
+    """
+    Zero Fill
+
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+
+    One (and only one) of the following should be defined:
+    * zf    Number of times to double the size.
+    * pad   Number of zeros to add.
+    * size  Desired final size.
+
+    Set these to True for desired operation (some override other parameters):
+    * mid   Zero fill in middle.
+    * inter Zero fill between points.
+    * auto  Round final size to power of 2.
+    * inv   Extract time domain data points.
+
+    """
+   
+    fn = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
 
 
-def null(dic,data):
+    if inv: # recover original time domain points
+        
+        # calculation for dictionary updates
+        s = dic[fn+"TDSIZE"]
+        s2 = s/2.0 + 1
+        sw = dic[fn+"SW"]
+        car = dic[fn+"CAR"]
+        obs = dic[fn+"OBS"]
+    
+        # update the dictionary
+        dic[fn+"ZF"] = -1.*s
+        dic[fn+"CENTER"] = s2
+        dic = recalc_orig(dic,data,fn)
+        dic["FDSIZE"] = s
+
+        return dic,data[...,:s]
+
+    if inter:   # zero filling between points done first
+        data = p.zf_inter(data,zf)
+        dic[fn+"SW"] = dic[fn+"SW"]*(zf+1)
+        zf = 0
+        pad = 0 # NMRPipe ignores pad after a inter zf
+
+    # set zpad, the number of zeros to be padded
+    zpad = data.shape[-1]*2**zf-data.shape[-1]
+
+    if pad != "auto":
+        zpad = pad
+
+    if size != "auto":
+        zpad = size - data.shape[-1]
+
+    # auto is applied on top of over parameters:
+    if auto:
+        fsize = data.shape[-1]+zpad
+        fsize = 2**(np.ceil(np.log(fsize)/np.log(2)))
+        zpad = fsize - data.shape[-1]
+
+    if zpad < 0:
+        zpad = 0
+
+    data = p.zf_pad(data,pad=zpad,mid=mid)
+
+    # calculation for dictionary updates
+    s = data.shape[-1]
+    s2 = s/2.0 + 1
+    sw = dic[fn+"SW"]
+    car = dic[fn+"CAR"]
+    obs = dic[fn+"OBS"]
+    
+    # update the dictionary
+    dic[fn+"ZF"] = -1.*s
+    dic[fn+"CENTER"] = s2
+    dic = recalc_orig(dic,data,fn)
+    dic["FDSIZE"] = s
+
+    dic = update_minmax(dic,data)
+
+    return dic,data
+
+
+######################
+# Baseline Functions #
+######################
+
+def base(dic,data,nl=None,nw=0,first=False,last=False):
     """
-    No change
+    Linear Baseline Correction
+
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * nl    List of baseline nodes in points.
+    * nw    Node width in points.
+    * first Set True to include first point of data in node list.
+    * last  Set True to include last point of data in node list.
+
     """
+    if first:
+        nl = [1]+nl
+    if last:
+        nl.append(data.shape[-1])
+
+    # change values in node list to start at 0
+    for i in xrange(len(nl)):
+        nl[i] = nl[i]-1
+
+    data = proc_bl.base(data,nl,nw)
+    dic = update_minmax(dic,data)
+    return dic,data
+
+def cbf(dic,data,last=10,reg=False,slice=slice(None)):
+    """ 
+    Constant Baseline correction
+
+    Parameters ref and slice should be python slice objects if explicit
+    correction is desired (recall python arrays start at 0 not 1).  The
+    noseq and nodmx parameters are not implemented.
+    
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * last  Percent of trace to use for calculating correction.
+    * reg   Slice object describing X-axis region(s) to apply correction to.
+    * slice Slice object describing Y-axis region(s) to apply correction to.
+
+    """
+    
+    if reg != False:
+        data = proc_bl.cbf_explicit(data,calc=reg,apply=slice)
+    else:
+        data = proc_bl.cbf(data,last,slice)
+
+    dic = update_minmax(dic,data)
+    return dic,data
+
+def med(dic,data,nw=24,sf=16,sigma=5.0):
+    """
+    Median Baseline Correction
+
+    This function applies Friendrich's model-free baseline flatting algorithm
+    (Friendrichs JBNMR 1995 5 147-153).  NMRPipe applies a different algorithm.
+    
+
+    Parameters:
+    
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * nw    Median window in points.
+    * sf    Smoothing filter in points.
+    * sigma Gaussian convolution width.
+
+    """
+
+    data = proc_bl.med(data,mw=nw,sf=sf,sigma=sigma)
+    dic = update_minmax(dic,data)
+
+    return dic,data
+
+def sol(dic,data,mode="low",fl=16,fs=1,head=0):
+    """
+    Solvent Filter
+
+    Only low pass filter implemented. mir, noseq, and nodmx parameters not 
+    implemented.
+
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * mode  Filter Mode (must be "low")
+    * fl    Filter length in points
+    * fs    Lowpass filter shape (1=boxcar, 2=sine , 3=Sine^2)
+    * head  Number of points to skip
+
+    Differences from NMRPipe:
+    - Parameter "mir" not implemented
+    - Parameters "noseq" and "nodmx" not implemented
+
+    """
+
+    if fs not in [1,2,3]:
+        raise ValueError("fs must be 1, 2 or 3")
+
+    if fs == 1:
+        data[...,head:] = proc_bl.sol_boxcar(data[...,head:],w=fl*2+1)
+    elif fs == 2:
+        data[...,head:] = proc_bl.sol_sine(data[...,head:],w=fl*2+1)
+    elif fs == 3:
+        data[...,head:] = proc_bl.sol_sine2(data[...,head:],w=fl*2+1)
 
     dic = update_minmax(dic,data)
     return dic,data
 
 
+###################  
+# Basic Utilities #
+###################
+
 def add(dic,data,r=0.0,i=0.0,c=0.0,ri=False,x1=1.0,xn='default'):
-    """ add constant to data 
-   
-    Differences from NMRPipe:
-    - Parameter c is used even when r and i are defined.
+    """ 
+    Add a Constant
+
+    Parameter c is used even when r and i are defined.  NMRPipe ignores c when
+    r or i are defined.
+
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * r     Constant to add to real data.
+    * i     Constant to add to imaginary data.
+    * c     Constant to add to read and imaginary data
+    * ri    Add real and imaginary data into real channel.
+    * x1    First point of region to add constant to.
+    * xn    Last point of region to add constant to. 'default' specifies the 
+            end of the vector.
 
     """
-
     mn = x1 - 1
     if xn == 'default':
         mx = data.shape[-1]
@@ -980,288 +1383,56 @@ def add(dic,data,r=0.0,i=0.0,c=0.0,ri=False,x1=1.0,xn='default'):
         mx = xn
 
     if ri:
-        data[...,mn:mx].real = data[...,mn:mx].real+data[...,mn:mx].imag
+        data[...,mn:mx].real = p.add_ri(data[...,mn:mx])
 
     else:
-        v = r + i*1.j + c + c*1.j
-        data[...,mn:mx] = data[...,mn:mx]+v
+        data[...,mn:mx] = p.add(data[...,mn:mx],r,i,c)
     dic = update_minmax(dic,data)
 
     return dic,data
-
-def mult(dic,data,r=1.0,i=1.0,c=1.0,inv=False,hdr=False,x1=1.0,xn='default'):
-    """
-    multiple data by constant
-
-    Differences from NMRPipe:
-    - Parameter c is used even when r and i are defined.
-
-    """
-
-    mn = x1 - 1
-    if xn == 'default':
-        mx = data.shape[-1]
-    else:
-        mx = xn
-
-    if hdr: # read in C from header
-        fn = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
-        c = dic[fn+"C1"] 
-        r = 1.0
-        i = 1.0
-
-    rf = (r*c)  # real factor
-    cf = (i*c)  # complex factor
-
-    if inv:
-        rf = 1/rf
-        cf = 1/cf
-
-    data[...,mn:mx].real = data[...,mn:mx].real*rf
-    if np.iscomplex(data).any():
-        data[...,mn:mx].imag = data[...,mn:mx].imag*cf
-
-    dic = update_minmax(dic,data)
-
-    return dic,data
-
-
-def set(dic,data,r="a",i="a",c="a",x1=1.0,xn='default'):
-    """
-    set data to constant
-    
-    """
-
-    mn = x1 - 1
-    if xn == 'default':
-        mx = data.shape[-1]
-    else:
-        mx = xn
-
-    if r == "a" and i =="a" and c=="a":
-        rc = 0
-        ic = 0
-
-    if c !="a":
-        rc = c
-        ic = c
-
-    if r !="a":
-        rc = r
-
-    if i !="a":
-        ic = i
-
-    data[...,mn:mx].real = rc
-    if np.iscomplex(data).any():
-        data[...,mn:mx].imag = ic
-
-    dic = update_minmax(dic,data)
-    return dic,data
-
-
-def rev(dic,data,sw=True):
-    """
-    reverse data
-    """
-    
-    data = data[...,::-1]
-    dic = update_minmax(dic,data)
-
-    fn = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
-    if sw and dic[fn+"FTFLAG"] == 1:
-        # freq domain update NDORIG and NDCENTER
-        dic[fn+"CENTER"] = dic[fn+"CENTER"]-1
-        
-        # recalc orig
-        s = data.shape[-1]
-        s2 = dic[fn+"CENTER"]
-        sw = dic[fn+"SW"]
-        car = dic[fn+"CAR"]
-        obs = dic[fn+"OBS"]
-        dic[fn+"ORIG"] =  -1.*sw*((s-s2)/s)+car*obs
-
-    return dic,data
-
 
 def dx(dic,data):
     """
-    Derivative
+    Derivative by central difference.
+
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+
     """
-
-    # there is likely a way to do this with np.append 
-    z = np.zeros(data.shape,dtype=data.dtype)
-
-    z[...,0]  = data[...,1] - data[...,0]    # first point
-    z[...,-1] = data[...,-1] - data[...,-2]  # last point 
-    z[...,1:-1]  = data[...,2:] - data[...,:-2] # interior
-
-    dic = update_minmax(dic,z)
-
-    return dic,z
-
-
-def integ(dic,data):
-    """
-    Integral (cummulative sum along axis)
-    """
-
-    data = np.cumsum(data,axis=-1)
+    data = p.dx(data)
     dic = update_minmax(dic,data)
     return dic,data
-
-def mc(dic,data,mode="mod"):
-    """ Modules/Magnitude calculation
-
-    mode should be 'mod' or 'pow' 
-    """
-
-    if mode=="mod":
-        data = np.sqrt(data.real**2+data.imag**2)
-        dic["FDMCFLAG"] = 1.0
-    elif mode=="pow":
-        data = data.real**2+data.imag**2
-        dic["FDMCFLAG"] = 2.0
-    else:
-        raise ValueError("mode must mod or pow")
-    dic = update_minmax(dic,data)
-
-    # change to mag. flags
-    fn = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
-    dic[fn+"QUADFLAG"] = 1.0
-    dic["FDQUADFLAG"] = 1.0
-
-    return dic,data
-
-
-def qart(dic,data,a=0.0,f=0.0,auto=False):
-    """
-    Scale Quad Artifacts
-
-    R' = R
-    I' = (1+a)*I + f*R
-
-    Difference from NMRPipe:
-    - auto=True performs a Gram-Schmidt orthogonalization from the real and 
-      imaginary channels. Therefore none of the grid search parameters are 
-      implemented.
-    
-    """
-
-    if auto:
-        # use Gram-Schmidt coefficents to remove quad artifacts
-        A,B = calc_gram_schmidth(data)
-        a = A-1
-        f = B
-
-    #n = np.empty(data.shape,dtype=data.dtype)
-    #n.real = data.real
-    #n.imag = (1+a)*data.imag + f*data.real
-    #data = n
-    data.imag = (1+a)*data.imag + f*data.real
-    dic = update_minmax(dic,data)
-
-    return dic,data
-
-
-def calc_gram_schmidt(data):
-    """
-    calculate Gram-Schmidt orthogonalization parameters
-
-    Calculates parameters A,B to generate orthogonal real and imag
-    channel data using:
-
-    R' = R
-    I' = A*I + B*R
-    """
-
-    # similar to method in Hock and Stern "NMR Data Processing" p.61
-    
-    # sum of correlation between data.real and data.imag
-    C = (data.real*data.imag).sum()
-
-    # total power in real channel
-    R = (data.real*data.real).sum()
-
-    # remove correlation from imag channel
-    idata = data.imag-(C/R)*data.real
-
-    # total power in uncorrelated imag channel
-    S = (idata*idata).sum()
-
-    # imag(data'') = R/S*imag(data')
-    # imag(data')  = imag(data)-C/R * real(data)
-    # therefore:
-    # imag(data'') = R/S*imag(data) - R*C/(S*R) * real(data) 
-    # so A = R/S, B=-C/(S)
-
-    return( R/S,-C/S)
-
-
-def cbf(dic,data,last=10,reg=False,slice=slice(None)):
-    """ 
-    Constant Baseline correction
-
-    Difference from NMRPipe:
-    - Parameters reg and slice should be slice objects if explicit correction
-      is desired (recall python arrays start at 0 not 1 so the first limit 
-      should be ix1-1). 
-    - noseq and nodmx are not implemented.
-
-    """
-
-    n = data.shape[-1]*last/100. +1
-    correction = data[...,-n:].sum(axis=-1)/n
-    
-    if reg != False:
-        n = len(range(data.shape[-1])[reg])
-        correction = data[...,reg].sum(axis=-1)/n
-    
-    if data.ndim == 2:
-        correction = np.array([correction]).transpose()
-        data[slice] = data[slice] - correction[slice]
-    else: 
-        data= data - correction
-
-    dic = update_minmax(dic,data)
-    return dic,data
-
-
-#########################
-# Utility Functions     #
-# slices, shuffles, etc #
-#########################
-
 
 def ext(dic,data,x1="default",xn="default",y1="default",yn="default",round=1,
-    time=False,left=False,right=False,mid=False,pow2=False,sw=True):
+    left=False,right=False,mid=False,pow2=False,sw=True):
     """
-    extract region
+    Extract Region
 
+    The time parameter is not implemented.  Using multiple conflicting 
+    parameters may result in different results than NMRPipe.
 
-    Difference from NMRPipe.
-    - The sw parameter is on by default.
-    - The time parameter is not implemented (poor documentation). 
-    - Certain parameters take precident over others: mid > right > left
-      and pow > round.
+    Parameters:
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * x1    X-axis extract region start
+    * xn    X-axis extract region stop
+    * y1    Y-axis extract region start
+    * yn    Y-axis extract region stop
+    * round Round extract size to nearest N points
+   
+    Set any of the following to True to select the desired extraction.
+    * left  Extract Left Half.
+    * right Extract Right Half.
+    * mid   Extract Center Half.
+
+    * pow2  Set True to round extracted size to nearest power of 2.
+    * sw    Set True to update Sweep Width and ppm calibration
 
     """
-
-    # set up axis Hz arrays for later...
-    #fn = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc    
-    #fn2 = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc   
-    #
-    #x_np = (dic[fn+"CENTER"]-1)*2  # number of points in X
-    #x_sw = float(dic[fn+"ORIG"])     # SW in X dim
-    #x_orig = dic[fn+"ORIG"]         # right edge Hz
-    #x_hz = np.linspace(x_orig+x_sw*(x_np-1.)/x_np,x_orig,x_np)
-
-    #if data.ndim == 2:
-    #    fn2 = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
-    #    y_np = (dic[fn2+"CENTER"]-1)*2   # number of points in Y
-    #    y_sw = float(dic[fn2+"ORIG"])     # SW in Y dim
-    #    y_orig = dic[fn2+"ORIG"]       # right Edge Hz
-    #    y_hz = np.linspace(y_orig+y_sw*(y_np-1.)/y_np,y_orig,x_np)
+    # this function does not weap proc_base.ext rather the slice is performed 
+    # here
 
     # store old sizes
     old_x = float(data.shape[-1])
@@ -1346,8 +1517,9 @@ def ext(dic,data,x1="default",xn="default",y1="default",yn="default",round=1,
         #print "xmin:",x_min,"xmax:",x_max
 
         data = data[y_min:y_max,x_min:x_max]
-        dic["FDSLICECOUNT"] = y_max - y_min
-        dic["FDSPECNUM"] = dic["FDSLICECOUNT"]
+        if y_min!=1 and y_max !=data.shape[0]:  # only update when sliced
+            dic["FDSLICECOUNT"] = y_max - y_min
+        dic["FDSPECNUM"] = y_max - y_min
         dic["FDSIZE"] = x_max - x_min
         
     else:       # 1D Array
@@ -1363,30 +1535,18 @@ def ext(dic,data,x1="default",xn="default",y1="default",yn="default",round=1,
        
 
         if dic[fn+"FTFLAG"] == 0:   # time domain
-            dic[fn+"CENTER"] = s/2+1
+            dic[fn+"CENTER"] = float(int(s/2.+1))
             dic[fn+"APOD"]   = s
             dic[fn+"TDSIZE"] = s
-            # ORIG calculation
-            sw  = dic[fn+"SW"] 
-            car = dic[fn+"CAR"]
-            obs = dic[fn+"OBS"]
-            dic[fn+"ORIG"] = -sw * (np.ceil(s/2.)-1)/s + car*obs
+            dic = recalc_orig(dic,data,fn)
 
         else:   # freq domain
             dic[fn+"X1"] = x_min+1
             dic[fn+"XN"] = x_max
             dic[fn+"APOD"] = np.floor(dic[fn+"APOD"] * s/old_x)
-
             dic[fn+"CENTER"] = dic[fn+"CENTER"] - x_min
             dic[fn+"SW"] = dic[fn+"SW"] * s/old_x
-       
-            # XXXORIG calculation (correct way to calc orig)
-            sw  = dic[fn+"SW"]
-            car = dic[fn+"CAR"]
-            obs = dic[fn+"OBS"]
-            s2  = dic[fn+"CENTER"]
-            dic[fn+"ORIG"] = car*obs-sw*((s-s2)/s)
-
+            dic = recalc_orig(dic,data,fn)
 
         if data.ndim == 2:
             
@@ -1399,11 +1559,7 @@ def ext(dic,data,x1="default",xn="default",y1="default",yn="default",round=1,
                 dic[fn+"CENTER"] = s/2+1
                 dic[fn+"APOD"]   = s
                 dic[fn+"TDSIZE"] = s
-                # ORIG calculation
-                sw  = dic[fn+"SW"]
-                car = dic[fn+"CAR"]
-                obs = dic[fn+"OBS"]
-                dic[fn+"ORIG"] = -sw * (np.ceil(s/2.)-1)/s + car*obs
+                dic = recalc_orig(dic,data,fn,-2)
 
             else:   # freq domain
                 if y_min != 0:
@@ -1414,85 +1570,69 @@ def ext(dic,data,x1="default",xn="default",y1="default",yn="default",round=1,
                     dic[fn+"APOD"] = np.floor(dic[fn+"APOD"] * s/old_y)
                 dic[fn+"CENTER"] = dic[fn+"CENTER"] - y_min
                 dic[fn+"SW"] = dic[fn+"SW"] * s/old_y
-
-                # XXXORIG calculation (correct way to calc orig)
-                sw  = dic[fn+"SW"]
-                car = dic[fn+"CAR"]
-                obs = dic[fn+"OBS"]
-                s2  = dic[fn+"CENTER"]
-                dic[fn+"ORIG"] = car*obs-sw*((s-s2)/s)
-
-            """
-            # ORIG calculation
-            sw  = dic[fn+"SW"]
-            car = dic[fn+"CAR"]
-            obs = dic[fn+"OBS"]
-            dic[fn+"ORIG"] = -sw * (np.ceil(s/2.)-1)/s + car*obs
-
-            dic[fn+"CENTER"] = s/2+1
-            if dic[fn+"FTFLAG"] == 0:   # time domain
-                dic[fn+"APOD"]   = s
-                dic[fn+"TDSIZE"] = s
-            else:   # freq domain
-                dic[fn+"FTSIZE"] = s
-            """
+                dic = recalc_orig(dic,data,fn,-2)
 
     dic = update_minmax(dic,data)
 
     return dic,data
 
-
-def sign(dic,data,ri=False,r=False,i=False,left=False,right=False,alt=False,
-    abs=False,sign=False):
+def integ(dic,data):
     """
-    Sign manipulation utils
+    Integral by Simple Sum
 
-    Difference from NMRPipe:
-    - All sign manipulation set to true are applied in order appearing in 
-      function definition, no parameters take precidence.
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+
     """
-
-    if ri:
-        data = -data
-
-    if r:
-        data.real = -data.real
-
-    if i:
-        data.imag = -data.imag
-
-    if left:
-        data[...,:data.shape[-1]/2.] = -data[...,:data.shape[-1]/2.]
- 
-    if right: 
-        data[...,data.shape[-1]/2.:] = -data[...,data.shape[-1]/2.:]
-
-    if alt:
-        data[...,1::2] = -data[...,1::2]
-
-    if abs:
-        data.real = np.abs(data.real)
-        data.imag = np.abs(data.imag)
-
-    if sign:
-        data.real = np.sign(data.real)
-        data.imag = np.sign(data.imag)
-
+    data = p.integ(data)
     dic = update_minmax(dic,data)
     return dic,data
 
+def mc(dic,data,mode="mod"):
+    """ 
+    Modules/Magnitude Calculation
+
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * mode  "mod" or "pow" for Modules or Square Modules
+
+    """
+    if mode=="mod":
+        data = p.mc(data)
+        dic["FDMCFLAG"] = 1.0
+    elif mode=="pow":
+        data = p.mc_pow(data)
+        dic["FDMCFLAG"] = 2.0
+    else:
+        raise ValueError("mode must mod or pow")
+    dic = update_minmax(dic,data)
+
+    # change to mag. flags
+    fn = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+    dic[fn+"QUADFLAG"] = 1.0
+    dic["FDQUADFLAG"] = 1.0
+
+    return dic,data
 
 def mir(dic,data,mode="left",invl=False,invr=False,sw=True):
     """
-    Append mirror image
+    Append Mirror Image
 
-    Valid modes are: left, right, center, ps90-180, ps0-0
-    invr only applied when mode=left and invl when mode=right
+    Negations selected are applied regardless of mode selected.
 
-    Differences from NMRPipe:
-    - Parameter sw set by default.
-    - invr and invl are always applied
-
+    Parameters:
+        
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * mode  Type of mirror image to apply valid modes are 'left', 'right',
+            'center', 'ps90-180','pw0-0'
+    * invl  Set True to negate left half
+    * invr  Set True to negate right half
+    
     """
 
     fn = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
@@ -1503,36 +1643,21 @@ def mir(dic,data,mode="left",invl=False,invr=False,sw=True):
     if dic[fn+"FTFLAG"] == 0: # time domain
 
         if mode=="left":
-            data = np.append(data,data[...,::-1],axis=-1)
-
+            data = p.mir_left(data) 
         if mode=="right":
-            data = np.append(data[...,::-1],data,axis=-1)
-
+            data = p.mir_right(data)
         if mode=="center":
-            s = data.shape[-1]
-            data=np.concatenate( (data[...,s/2:],data,data[...,:s/2]),axis=-1)
-
+            data = p.mir_center(data)
         if mode=="ps90-180":
-            s = data.shape[-1]
-            data = np.concatenate((-data[...,s/2:],data,-data[...,:s/2]),\
-                                   axis=-1)
-
+            data = p.neg_edges(p.mir_center(data))
         if invr:
-            s = data.shape[-1]
-            data[...,s/2:] = -data[...,s/2:]
-
+            data = p.neg_right(data)    
         if invl:
-            s = data.shape[-1]
-            data[...,:s/2] = -data[...,:s/2]
-
+            data = p.neg_left(data)
         dic["FDSIZE"] = dic["FDSIZE"]*2
 
         if mode=="ps0-0":
-            # no idea how this is a "center" mode
-            s = int(data.shape[-1])
-            data = np.concatenate( (data[...,s-1:0:-1],data),axis=-1)
-            if np.iscomplexobj(data):
-                data.imag[...,:s-1] = -data.imag[...,:s-1]
+            data = p.mir_center_onepoint(data)
             dic["FDSIZE"] = dic["FDSIZE"]-1
     
     else: # freq domain
@@ -1540,140 +1665,174 @@ def mir(dic,data,mode="left",invl=False,invr=False,sw=True):
         old_size = int(dic["FDSIZE"])
 
         if mode=="left":
-            data = np.append(data,data[...,::-1],axis=-1)
+            data = p.mir_left(data)
             dic[fn+"CENTER"] = old_size + dic[fn+"CENTER"]
-
         if mode=="right":
-            data = np.append(data[...,::-1],data,axis=-1)
+            data = p.mir_right(data)
             dic[fn+"CENTER"] = dic[fn+"CENTER"]
-
         if mode=="center":
-            s = data.shape[-1]
-            data=np.concatenate( (data[...,s/2:],data,data[...,:s/2]),axis=-1)
+            data = p.mir_center(data)
             dic[fn+"CENTER"] = dic[fn+"CENTER"] + old_size/2.
-
         if mode=="ps90-180":
-            s = data.shape[-1]
-            data = np.concatenate((-data[...,s/2:],data,-data[...,:s/2]),\
-            axis=-1)
+            data = p.neg_edges(p.mir_center(data))
             dic[fn+"CENTER"] = dic[fn+"CENTER"] + old_size/2.
-
         if mode=="ps0-0":
-            s = int(data.shape[-1])
-            data = np.concatenate( (data[...,s-1:0:-1],data),axis=-1)
-            if np.iscomplexobj(data):
-                data.imag[...,:s-1] = -data.imag[...,:s-1]
+            data = p.mir_center_onepoint(data)
             dic[fn+"CENTER"] = dic[fn+"CENTER"] + old_size
-
         if invr:
-            s = data.shape[-1]
-            data[...,s/2:] = -data[...,s/2:]
-
+            data = p.neg_right(data)
         if invl:
-            s = data.shape[-1]
-            data[...,:s/2] = -data[...,:s/2]
+            data = p.neg_left(data)
 
         # dictionary updates
         dic["FDSIZE"] = data.shape[-1]
         dic[fn+"APOD"] = dic["FDSIZE"]
         dic[fn+"FTSIZE"] = dic["FDSIZE"]
         dic[fn+"TDSIZE"] = dic["FDSIZE"]
-        dic[fn+"ZF"] = -dic["FDSIZE"]
-        
+        dic[fn+"ZF"] = -dic["FDSIZE"] 
         s = dic["FDSIZE"]
         dic[fn+"SW"] = dic[fn+"SW"]*float(s)/float(old_size)
-
-        # this is the 'best' way to calculate ORIG
-        sw  = dic[fn+"SW"]
-        car = dic[fn+"CAR"]
-        obs = dic[fn+"OBS"]
-        center = dic[fn+"CENTER"]
-        dic[fn+"ORIG"] = -sw * (s-center)/s + car * obs
-
+        dic = recalc_orig(dic,data,fn)  # recalculate origin
 
     dic = update_minmax(dic,data)
     return dic,data
 
-
-def coadd(dic,data,cList=[1,1],axis='x',time=False):
+def mult(dic,data,r=1.0,i=1.0,c=1.0,inv=False,hdr=False,x1=1.0,xn='default'):
     """
-    Co-add Data
+    Multiple by a Constant
+
+    Parameter c is used even when r and i are defined.  NMRPipe ignores c when
+    r or i are defined.
+
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * r     Constant to multply real data by.
+    * i     Constant to multiply imaginary data by.
+    * c     Constant to multiply both real and imaginary data by.
+    * inv   Multiply by inverse of Constant (both real and imaginary)
+    * hdr   Use constant value from header.
+    * x1    First point of region to multiply constant by.
+    * xn    Last point of region to multiply constant by. 'default' specifies 
+            the end of the vector.
+
     """
-    # make a empty blank array then add cList[i]*data[...,i:m:k] to it for 
-    # each i for 0 to k=len(cList), m is needed to avoid arrays 1 element 
-    # too large, when 'y' axis selected use data[i:m:k] 
-
-    if axis not in ['x','y']:
-        raise ValueError("axis must be x or y")
-
-    if axis=='x':
-        s = list(data.shape)
-        s[-1] = int(s[-1]/len(cList))
-        n = np.zeros(s,dtype=data.dtype)  # the new array 
-        k = len(cList)
-        m = s[-1] * k
-        for i in range(k):
-            n = n + cList[i]*data[...,i:m:k]
-        data = n
-        dic["FDSIZE"] = data.shape[-1]
- 
-    if axis=='y':
-        s = list(data.shape)
-        s[0] = int(s[0]/len(cList))
-        n = np.zeros(s,dtype=data.dtype)  # the new array 
-        k = len(cList)
-        m = s[0] * k
-        for i in range(k):
-            n = n + cList[i]*data[i:m:k]
-        data = n
-        dic["FDSLICECOUNT"] = dic["FDSPECNUM"] = data.shape[0]
-   
-
-    dic = update_minmax(dic,data)
-
-    idx = ['x','y'].index(axis)
-
-    if time:
-        fn = "FDF"+str(int(dic["FDDIMORDER"][idx])) # F1, F2, etc
-        dic[fn+"APOD"] = np.floor(dic[fn+"APOD"]/len(cList))
-        dic[fn+"TDSIZE"] = np.floor(dic[fn+"TDSIZE"]/len(cList))
-
-    return dic,data
-
-
-coad = coadd    # macro for coadd
-
-
-def save(dic,data,name,overwrite=1):
-    """
-    Save Current Vector
-
-    Note: FDPIPECOUNT is not set by this function since it has no 
-    meaning in pipe_proc context
-    """
-
-    dic["FDPIPECOUNT"] = 1.0
-
-    if dic["FDDIMCOUNT"] == 1:
-        pipe.write_1D(name,data,dic,overwrite)
+    mn = x1 - 1
+    if xn == 'default':
+        mx = data.shape[-1]
     else:
-        pipe.write_2D(name,data,dic,overwrite)
+        mx = xn
 
-    dic["FDPIPECOUNT"] = 0.0
+    if hdr: # read in C from header
+        fn = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+        c = dic[fn+"C1"] 
+        r = 1.0
+        i = 1.0
+
+    rf = (r*c)  # real factor
+    cf = (i*c)  # complex factor
+    if inv:
+        rf = 1/rf
+        cf = 1/cf
+
+    data[...,mn:mx] = p.mult(data[...,mn:mx],r=rf,i=cf,c=1.0)
+    dic = update_minmax(dic,data)
+    return dic,data
+
+def rev(dic,data,sw=True):
+    """
+    Reverse Data
+
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * sw    Adjust sweep width and ppm calibration.
+
+    """
+    data = p.rev(data)
+    dic = update_minmax(dic,data)
+    fn = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+    if sw and dic[fn+"FTFLAG"] == 1:
+        # freq domain update NDORIG and NDCENTER
+        dic[fn+"CENTER"] = dic[fn+"CENTER"]-1
+        dic = recalc_orig(dic,data,fn)
+
+    return dic,data
+
+def set(dic,data,r="a",i="a",c="a",x1=1.0,xn='default'):
+    """
+    Set to a Constant
+
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * r     Constant to set real data to. "a" sets to 0 unless c is defined.
+    * i     Constant to set imag data to. "a" sets to 0 unless c is defined.
+    * c     Constant to set real and imaginary. "a" sets to 0 unless
+            r or i is defined. 
+    * x1    First point of region to set to constant.
+    * xn    Last point of region to set to constant. 'default' specifies the 
+            end of the vector.
+    
+    """
+
+    mn = x1 - 1
+    if xn == 'default':
+        mx = data.shape[-1]
+    else:
+        mx = xn
+
+    if r == "a" and i =="a" and c=="a":
+        rc = 0
+        ic = 0
+
+    if c !="a":
+        rc = c
+        ic = c
+
+    if r !="a":
+        rc = r
+
+    if i !="a":
+        ic = i
+
+    # this is so simple we do not use the proc_base functions 
+    data[...,mn:mx].real = rc
+    if np.iscomplex(data).any():
+        data[...,mn:mx].imag = ic
+
     dic = update_minmax(dic,data)
     return dic,data
 
 def shuf(dic,data,mode=None):
     """
-    shuffle utilities
+    Shuffle Utilities
 
-    Difference from NMRPipe:
-    - mode="rr2ri" ignores the imaginary vector and does NOT create a 
-    mis-sized matrix.  In addition true min/max values are recorded.
-    - mode="bswap" updates min/max and may result in NaN in the data.
-    - mode="r2i" and "i2r" not implemented as pipe does not support integer 
-      NMRPipe format.
+    rr2ri mode ignores any imaginary vector refusing to create a mis-sized
+    vector.  bswap mode may results in NaN in the data.  r2i and i2r not 
+    implemented.  All modes correctly update minimum and maximum values
 
+    Parameters:
+        
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * mode  shuffle mode to apply:
+
+    Valid modes are:
+    
+    * ri2c  Interleave real/imaginary.
+    * c2ri  Seperate real/imaginary.
+    * ri2rr Append real/imaginary.
+    * rr2ri Unappend real/imaginary.
+    * exlr  Exchange left/right halfs.
+    * rolr  Rotate left/right halfs.
+    * swap  Swap real/imaginary.
+    * bswap Byte-swap.
+    * inv   Do nothing.
+    
     """
 
     valid_modes = ["ri2c","c2ri","ri2rr","rr2ri","exlr","rolr","swap",
@@ -1685,14 +1844,7 @@ def shuf(dic,data,mode=None):
     fn = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
 
     if mode == "ri2c":
-        # interleave real and imaginary data
-        s = list(data.shape)
-        s[-1] = s[-1]*2
-        n = np.empty(s,dtype="float32")
-        n[...,::2]  = data.real
-        n[...,1::2] = data.imag
-        data = n
-
+        data = p.ri2c(data) # interleave real and imaginary data
         # update the dictionary
         dic["FDQUADFLAG"] = 1.0
         dic[fn+"QUADFLAG"] = 1.0
@@ -1703,13 +1855,7 @@ def shuf(dic,data,mode=None):
 
     if mode == "c2ri":
         # seperate real and imaginary
-        s = list(data.shape)
-        s[-1] = int(s[-1]/2)
-        n = np.empty(s,dtype="complex64")
-        n.real = data.real[...,::2]
-        n.imag = data.real[...,1::2]
-        data = n
-
+        data = np.array(p.c2ri(data),dtype="complex64")
         # update the dictionary
         dic["FDQUADFLAG"] = 0.0
         dic[fn+"QUADFLAG"] = 0.0
@@ -1719,15 +1865,7 @@ def shuf(dic,data,mode=None):
         dic["FDREALSIZE"] = data.shape[-1]
 
     if mode == "ri2rr":
-        # appended imaginary data (NMRPipe interleaves for user)
-        s = list(data.shape)
-        half = int(s[-1])
-        s[-1] = half*2
-        n = np.empty(s,dtype="float32")
-        n[...,:half] = data.real
-        n[...,half:] = data.imag
-        data = n
-
+        data = p.ri2rr(data)    # appended imaginary data
         # update the dictionary
         if data.ndim == 2:
             dic["FDSLICECOUNT"] = data.shape[0] / 2.0
@@ -1737,15 +1875,7 @@ def shuf(dic,data,mode=None):
         dic["FDSIZE"] = data.shape[-1]
 
     if mode == "rr2ri":
-        # unappend imaginary data (ignores current imag data)
-        s = list(data.shape)
-        half = int(s[-1] / 2.0)
-        s[-1] = half
-        n = np.empty(s,dtype="complex64")
-        n.real = data[...,:half]
-        n.imag = data[...,half:]
-        data = n
-        
+        data = p.rr2ri(data)    # unappend imaginary data (ignores imag data)
         # update the dictionary
         if data.ndim == 2:
             dic["FDSLICECOUNT"] = data.shape[0]
@@ -1756,54 +1886,207 @@ def shuf(dic,data,mode=None):
         dic["FDSIZE"] = data.shape[-1] 
 
     if mode == "exlr":
-        # exchange left and right
-        half = int(data.shape[-1]/2)
-        n = np.empty(data.shape,data.dtype)
-        n[...,:half] = data[...,half:]
-        n[...,half:] = data[...,:half]
-        data = n
-
+        data = p.exlr(data) # exchange left and right 
     if mode == "rolr":
-        # rotate left right halves
-        half = int(data.shape[-1]/2)
-        n = np.empty(data.shape,data.dtype)
-        n[...,:half] = data[...,(half-1)::-1]
-        n[...,half:] = data[...,:(half-1):-1]
-        data = n
-
+        data = p.rolr(data) # rotate left right halves
     if mode == "swap":
-        n = np.empty(data.shape,data.dtype)
-        n.real = data.imag
-        n.imag = data.real
-        data = n
-
+        data = p.swap(data)
     if mode == "bswap":
-        data = data.byteswap()
-
+        data = p.bswap(data)
     if mode == "r2i":
         raise NotImplementedError("Integer Mode not implemented")
-
     if mode == "i2r":
         raise NotImplementedError("Integer Mode not implemented")
-
     if mode == "inv":
-        # These doesn't seem to do anything....
+        # This does not seem to do anything....
         #XXX check data with odd number of points
         pass
-
     # update the dictionary
     dic = update_minmax(dic,data)
 
     return dic,data
 
+def sign(dic,data,ri=False,r=False,i=False,left=False,right=False,alt=False,
+    abs=False,sign=False):
+    """
+    Sign Manipulation Utilities
+
+    All sign manupulation modes set True are applied.
+
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+
+    Select one or more of the desired modes by setting to True:
+    * ri    Negate all data.
+    * r     Negate real data.
+    * i     Negate imaginary data.
+    * left  Negate left half.
+    * right Negate right half.
+    * alt   Negate Alterate points.
+    * abs   Replace data with absolute value of data.
+    * sign  Replace data with sign (-1 or 1) of data.
+
+    """
+    if ri:  data = p.neg_all(data)
+    if r:   data = p.neg_real(data)
+    if i:   data = p.neg_imag(data)
+    if left: data = p.neg_left(data)
+    if right: data = p.neg_right(data)
+    if alt: data = p.neg_alt(data)
+    if abs: data = p.abs(data)
+    if sign: data = p.sign(data)
+    dic = update_minmax(dic,data)
+    return dic,data
+
+##################
+# Misc Functions #
+##################
+
+def coadd(dic,data,cList=[1,1],axis='x',time=False):
+    """
+    Co-Addition of Data
+
+    Parameters:
+    
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * cList List of coefficients
+    * axis  Axis to co-add from/to, either 'x' or 'y'
+    * time  Set True to adjust time-domain headers to account for data 
+            size reduction
+
+    """
+    if axis=='x': 
+        data = p.coadd(data,cList,axis=-1)
+        dic["FDSIZE"] = data.shape[-1]
+        idx = 0
+    elif axis=='y': 
+        data = p.coadd(data,cList,axis=0)
+        dic["FDSLICECOUNT"] = dic["FDSPECNUM"] = data.shape[0]
+        idx = 1
+    else:
+        raise ValueError("axis must be x or y")
+
+    dic = update_minmax(dic,data)
+    if time:
+        fn = "FDF"+str(int(dic["FDDIMORDER"][idx])) # F1, F2, etc
+        dic[fn+"APOD"] = np.floor(dic[fn+"APOD"]/len(cList))
+        dic[fn+"TDSIZE"] = np.floor(dic[fn+"TDSIZE"]/len(cList))
+    return dic,data
+
+coad = coadd    # macro for coadd
+
+def dev(dic,data):
+    """
+    Development Function (Null Function)
+    """
+    return dic,data
+
+def img(dic,data,filter,dx=1.0,dy=1.0,kern=[1],conv=False,thres=None):
+    """
+    Image Processing Utilities
+
+    This function wraps when regions extend past the edges (NMRPipe doesn't).
+    The filter is applied to both the real and imaginary channels
+
+    Parameters:
+        
+    * dic    Dictionary of NMRPipe parameters.
+    * data   array of spectral data.
+    * filter Filter to apply
+    * dx     Filter X-axis width in points.
+    * dy     Filter Y-axis width in points.
+    * kern   List of kernal values
+    * conv   Set True to apply convolution filter
+    * thres  Threshold value for use in computing filter, None turns off.
+
+    Supported filters are:
+    
+    * median    Median
+    * min       Minimum
+    * max       Maximim
+    * amin      Absolute Minimum
+    * amax      Absolute Maximum
+    * range     Range
+    * avg       Average
+    * dev       Standard Deviation
+
+    """
+
+    # deal with thres by making a masked array
+    if thres != None:
+        if thres==True:
+            thres = 0.0 # default value of 0.0
+        data = p.thres(data,thres) 
+
+    if conv:    # convolution with kernal
+        data = p.conv(data,kern,m="wrap")
+        dic = update_minmax(dic,data)
+        return dic,data
+
+    s = (2*dy+1,2*dx+1) # size tuple
+    # the various filters
+    if filter == "median":  data = p.filter_median(data,s=s,m="wrap")
+    elif filter == "min":   data = p.filter_min(data,s=s,m="wrap")
+    elif filter == "max":   data = p.filter_max(data,s=s,m="wrap")
+    elif filter == "amin":  data = p.filter_amin(data,s=s,m="wrap")
+    elif filter == "amax":  data = p.filter_amax(data,s=s,m="wrap")
+    elif filter == "range": data = p.filter_range(data,s=s,m="wrap")
+    elif filter == "avg":   data = p.filter_avg(data,s=s,m="wrap")
+    elif filter == "dev":   data = p.filter_dev(data,s=s,m="wrap")
+    else:
+        raise ValueError("Invalid filter")
+
+    dic = update_minmax(dic,data)
+    return dic,data
+
+def null(dic,data):
+    """
+    Null Function (no change) 
+    """
+    dic = update_minmax(dic,data)
+    return dic,data
+
+def qart(dic,data,a=0.0,f=0.0,auto=False):
+    """
+    Scale Quad Artifacts
+
+    Auto mode performs Gram-Schmidt orthogonalization.  No grid search is
+    performed.
+
+    Parameters:
+    
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * a     Amplitude Adjustment
+    * f     Phase Adjustment
+    * auto  Perform Gram-Schmidth orthogonalization to find a and f.
+    """
+    if auto:
+        data = p.qart_auto(data)    
+    else:
+        data = p.qart(data,a,f)
+
+    dic = update_minmax(dic,data)
+    return dic,data
 
 def qmix(dic,data,ic=1,oc=1,cList=[0],time=False):
     """
-    complex mixing of input to outputs
+    Complex Mixing of Input to Outputs
 
-    Difference from NMRPipe
-    - ic and oc must evenly divide the number of fid (data.shape[0]) and
-      cowardly refuses to make invalid length files.
+    ic and oc must evenly divide the matrix shape.  Refuses to make invalid
+    length files.
+ 
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * ic    Input channel count.
+    * oc    Output channel count.
+    * cList ic by oc list or array
+    * time  Set True to adjust time-domain size headers.
 
     """
     ic = int(ic)
@@ -1815,22 +2098,10 @@ def qmix(dic,data,ic=1,oc=1,cList=[0],time=False):
     if data.shape[0] % ic != 0 or data.shape[0] % oc != 0:
         raise ValueError("ic and oc must be divide the number of vectors")
 
-    # transform matrix
-    cmatrix = np.array(cList,dtype='float').reshape(ic,oc)
-    cmatrix = cmatrix.transpose()
+    carr = np.array(cList,dtype='float').reshape(ic,oc)
+    data = p.qmix(data,carr)
 
-    # create a empty matrix to hold output
-    n_cols = data.shape[1] 
-    n_rows = data.shape[0]/float(ic)*float(oc)
-    n = np.empty((n_rows,n_cols),dtype=data.dtype)
-
-    # remix by 'block'
-    for i in range(int(n_rows/oc)):
-        block = data[i*ic:(i+1)*ic]
-        n[i*oc:(i+1)*oc] = np.dot(cmatrix,block)
-
-
-    data = n
+    #data = n
     dic = update_minmax(dic,data)
     dic["FDSPECNUM"] = data.shape[0]
     dic["FDSLICECOUNT"] = data.shape[0]
@@ -1846,570 +2117,154 @@ def qmix(dic,data,ic=1,oc=1,cList=[0],time=False):
 
     return dic,data
 
-
-def img(dic,data,filter,dx=1.0,dy=1.0,kern=[1],conv=False,thres=None):
+def save(dic,data,name,overwrite=True):
     """
-    Image processing util
+    Save Current Vector
 
-    Difference from NMRPipe:
-    - This function wraps when regions extend past the edges, NMRPipe doesn't
-      (even though its documentation states it does).  
-    - The filter is applied to the imaginary portion of the data.  NMRPipe 
-      does something different with the imaginary channel.  
-      This means that only data[dy:-dy,dx:-dx].real will match NMRPipe's
-      output.
+    The resulting FDPIPECOUNT header parameter does not NMRPipe's.
 
-    """
-
-    # deal with thres by making a masked array
-    if thres != False:
-        if thres==True:
-            thres = 0.0 # default value of 0.0
-        data = np.ma.masked_less(data,thres)    
-
-    # create an empty copy of the data
-    n = np.empty(data.shape,dtype=data.dtype)
-    w = "wrap"
-
-    if conv:    # convolution with kernal
-        kern = np.array(kern)
-        n.real = scipy.ndimage.convolve(data.real,weights=kern,mode=w)
-        n.imag = scipy.ndimage.convolve(data.imag,weights=kern,mode=w)
-        
-        data = n
-        dic = update_minmax(dic,data)
-        return dic,data
-
-    # else we have a defined filter
-    flts = ["median","min","max","amin","amax","range","avg","dev","thresh"]
-
-    if filter not in flts:
-        raise ValueError("filter not valid")
-
-    s = (2*dy+1,2*dx+1) # size tuple
-
-    if filter == "median":
-        n.real = scipy.ndimage.median_filter(data.real,size=s,mode=w)
-        n.imag = scipy.ndimage.median_filter(data.imag,size=s,mode=w)
-
-    if filter == "min":
-        n.real = scipy.ndimage.minimum_filter(data.real,size=s,mode=w)
-        n.imag = scipy.ndimage.minimum_filter(data.imag,size=s,mode=w)
-        data = n
-        
-    if filter == "max":
-        n.real = scipy.ndimage.maximum_filter(data.real,size=s,mode=w)
-        n.imag = scipy.ndimage.maximum_filter(data.imag,size=s,mode=w)
-        data = n
-
-    # these functions are much slower (rewrite like _nd_image.so for speed)
-    if filter == "amin":
-        n.real = scipy.ndimage.generic_filter(data.real,i_amin,size=s,mode=w)
-        n.imag = scipy.ndimage.generic_filter(data.imag,i_amin,size=s,mode=w)
-        data = n
-
-    if filter == "amax":
-        n.real = scipy.ndimage.generic_filter(data.real,i_amax,size=s,mode=w)
-        n.imag = scipy.ndimage.generic_filter(data.imag,i_amax,size=s,mode=w)
-        data = n
-
-    if filter == "range":
-        n.real = scipy.ndimage.generic_filter(data.real,i_range,size=s,mode=w)
-        n.imag = scipy.ndimage.generic_filter(data.imag,i_range,size=s,mode=w)
-        data = n
-
-    if filter == "avg":
-        n.real = scipy.ndimage.generic_filter(data.real,i_avg,size=s,mode=w)
-        n.imag = scipy.ndimage.generic_filter(data.imag,i_avg,size=s,mode=w)
-        data = n
-
-    if filter == "dev":
-        n.real = scipy.ndimage.generic_filter(data.real,i_dev,size=s,mode=w)
-        n.imag = scipy.ndimage.generic_filter(data.imag,i_dev,size=s,mode=w)
-        data = n
-
-    dic = update_minmax(dic,data)
-
-    return dic,data
-
-# Image filter functions
-
-def i_amin(arr):
-    """ find minimum absolute value"""
-    return  arr[np.abs(arr).argmin()]
-
-def i_amax(arr):
-    """ find maximum absolute value"""
-    return arr[np.abs(arr).argmax()]
-
-def i_range(arr):
-    return arr.max() - arr.min()
-
-def i_avg(arr):
-    return arr.avg()
-
-def i_dev(arr):
-    return arr.std()
-
-
-##################
-# Misc Functions #
-##################
-
-
-def ps(dic,data,p0=0.0,p1=0.0,inv=False,hdr=False,noup=False,ht=False,
-       zf=False,exp=False,tc=0.0):
-    """
-    phase shift
-
-    Difference from NMRPipe:
-    - inv=True will invert an exponential phase correction, NMRPipe doesn't.
-    - FDFNP0 and FDFNP1 will be updated unless noup=True.  NMRPipe never seems
-      to write to these for 2D+.  
-    - Time-domain phase correction with rs, and ls are not implemented in this
-      function, rather use the rs or ls functions.
+    Parameters:
+    
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * name  Name of file to write to.
+    * overwrite Set True to overwrite existing files.
     
     """
 
-    fn = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+    dic["FDPIPECOUNT"] = 1.0
 
-    if ht:  # Hilbert transform
-      
-        dic,data = _ht(dic,data,zf=zf)
-
-    if hdr: # read from header
-        p0 = dic[fn+"P0"]
-        p1 = dic[fn+"P1"]
-    
-    if exp:
-        data = p.ps_exp(data,p0=p0,tc=tc,inv=inv)
+    if dic["FDDIMCOUNT"] == 1:
+        pipe.write_1D(name,dic,data,overwrite)
     else:
-        data = p.ps(data,p0=p0,p1=p1,inv=inv)
- 
-    if noup == False:
-        dic[fn+"P0"] = p0
-        dic[fn+"P1"] = p1
+        pipe.write_2D(name,dic,data,overwrite)
 
-
+    dic["FDPIPECOUNT"] = 0.0
     dic = update_minmax(dic,data)
-
     return dic,data
-
-
-def zf(dic,data,zf=1,pad="auto",size="auto",
-    mid=False,inter=False,auto=False,inv=False):
-    """
-    zero fill
-
-    Only one of zf, pad, size should be set....
-
-    Notes: pad over rides zf, size over rides zf and pad
-           pad is ignored if inter flag set
-    """
-   
-    fn = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
-
-
-    if inv: # recover original time domain points
-        
-        # calculation for dictionary updates
-        s = dic[fn+"TDSIZE"]
-        s2 = s/2.0 + 1
-        sw = dic[fn+"SW"]
-        car = dic[fn+"CAR"]
-        obs = dic[fn+"OBS"]
-    
-        # update the dictionary
-        dic[fn+"ZF"] = -1.*s
-        dic[fn+"CENTER"] = s2
-        dic[fn+"ORIG"] =  -1.*sw*((s-s2)/s)+car*obs
-        dic["FDSIZE"] = s
-
-        return dic,data[...,:s]
-
-    if inter:   # zero filling between points done first
-        data = p.zf_inter(data,zf)
-        dic[fn+"SW"] = dic[fn+"SW"]*(zf+1)
-        zf = 0
-        pad = 0 # NMRPipe ignores pad after a inter zf
-
-    # set zpad, the number of zeros to be padded
-    zpad = data.shape[-1]*2**zf-data.shape[-1]
-
-    if pad != "auto":
-        zpad = pad
-
-    if size != "auto":
-        zpad = size - data.shape[-1]
-
-    # auto is applied on top of over parameters:
-    if auto:
-        fsize = data.shape[-1]+zpad
-        fsize = 2**(np.ceil(np.log(fsize)/np.log(2)))
-        zpad = fsize - data.shape[-1]
-
-    if zpad < 0:
-        zpad = 0
-
-    data = p.zf(data,pad=zpad,mid=mid)
-
-    # calculation for dictionary updates
-    s = data.shape[-1]
-    s2 = s/2.0 + 1
-    sw = dic[fn+"SW"]
-    car = dic[fn+"CAR"]
-    obs = dic[fn+"OBS"]
-    
-    # update the dictionary
-    dic[fn+"ZF"] = -1.*s
-    dic[fn+"CENTER"] = s2
-    dic[fn+"ORIG"] =  -1.*sw*((s-s2)/s)+car*obs
-
-    dic["FDSIZE"] = s
-
-    dic = update_minmax(dic,data)
-
-    return dic,data
-
-
-def tp(dic,data,hyper=False,nohyper=False,auto=False,nohdr=False):
-    """ 
-    transpose data
-
-    XXX test if works with TPPI
-    """
-
-    dt = data.dtype
-    
-    if nohyper:
-        hyper = False
-
-
-    if auto:
-        if (dic["FD2DPHASE"] == 1) or (dic["FD2DPHASE"] == 2):
-            hyper = True
-        else:
-            hyper = False
-
-    if hyper:   # Hypercomplex transpose
-        data = p.pack_complex(p.unpack_complex(data).transpose())
-        data = np.array(data,dtype=dt) 
-    else:
-        data = data.transpose()
-
-
-    # update the dimentionality and order
-    dic["FDSLICECOUNT"],dic["FDSIZE"] = data.shape[0],data.shape[1]
-    dic["FDSPECNUM"] = dic["FDSLICECOUNT"]
-    
-    dic["FDDIMORDER1"],dic["FDDIMORDER2"]=dic["FDDIMORDER2"],dic["FDDIMORDER1"] 
-    
-    dic['FDDIMORDER'] = [ dic["FDDIMORDER1"], dic["FDDIMORDER2"], 
-                          dic["FDDIMORDER3"], dic["FDDIMORDER4"] ]
-
-    if nohdr != True:
-        dic["FDTRANSPOSED"] = (dic["FDTRANSPOSED"]+1)%2
-
-    dic = clean_minmax(dic)
-
-    return dic,data
-
-
-ytp = tp    # alias for tp
-xy2yx = tp  # alias for tp
-
 
 def smo(dic,data,n=1,center=False):
     """
     Smooth Data
+
+    Parameters:
+
+    * dic    Dictionary of NMRPipe parameters.
+    * data   array of spectral data.
+    * n      Smoothing window in points.
+    * center Set True to perform centering (subtract smoothed data)
+
     """
 
     a = p.smo(data,n=n)
     # NMRPipe doesn't truely smooth the left edge of the vector
     for i in range(n):
         a[...,i] = data[...,0:(n+i)].sum(axis=-1) / (n+1+i)
-
     if center:
+        # to avoid the same error center without use proc_base functions
         a = data - a
 
     dic = update_minmax(dic,a)
 
     return dic,a
 
-
 def zd(dic,data,wide=1.0,x0=1.0,slope=0,func=0,g=1):
     """
-    zero diagonal band
-    """
+    Zero Diagonal Band
 
+    Parameters:
+
+    * dic   Dictionary of NMRPipe parameters.
+    * data  array of spectral data.
+    * wide  Diagonal band width in points
+    * x0    Diagonal start location in points.
+    * slope Diagonal slope (X/Y ratio), 0 for auto mode.
+    * func  0=boxcar, 1=Triangle, 2=Sine Bell, 3=Gaussian.
+    * g     Gauss Width.
+
+    """
     if x0 == 0:      # pipe takes x0=0 to be x0=1
         x0 = 1.0
-
-    rows = data.shape[0]
-    cols = data.shape[-1]
 
     if slope==0:    # Auto Mode
         fn = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc     
         fn2 = "FDF"+str(int(dic["FDDIMORDER"][1])) # F1, F2, etc    
         sw1 = dic[fn+"SW"]
         sw2 = dic[fn2+"SW"]
-        slope = cols*sw1/(rows*sw2) 
+        slope = data.shape[-1]*sw1/(data.shape[0]*sw2) 
 
-    # calculation 
-    width = wide*2+1        # width of diagonal band
-    c_start = x0+slope-1    # start of center diagonal band
-
-    # maximum row is last row or 
-    max_r = int(min(rows,np.floor( (cols-c_start+wide)/slope)+1))
-
-    # window function definitions
-    if func==0: # boxcar
-        window = np.zeros(width)
-
-    elif func==1: # triangle
-        window = np.append(np.linspace(1,0,wide+1),np.linspace(0,1,wide+1)[1:])
-
-    elif func==2: # sinebell
-        window = 1-np.sin(np.linspace(0,pi,width))
-
-    elif func==3: # Gaussian
-        tln2 = np.sqrt(2*np.log(2))
-        window = 1-scipy.signal.gaussian(width,g/tln2)
-        # this can be re-written without scipy.signal if wanted
-    else:
-        raise ValueError("functions must be 0 to 3")
-
-    # apply window to diagonal band row-by-row
-    for r in xrange(max_r): # r from 0 to max_r-1
-
-        w_min = 0           # window min
-        w_max = len(window) # window max
-
-        c_mid = int(r*slope+(c_start))        # middle of diagonal band
-        c_min = c_mid-wide
-        c_max = c_mid+wide+1
-
-        if c_min < 0:
-            w_min = int(-c_min)
-            c_min = 0 
-        if c_max > cols:
-            w_max = int(w_max-(c_max-cols))
-            c_max = cols
-
-        w_size = c_max - c_min
-        data[r,c_min:c_max] = data[r,c_min:c_max] * window[w_min:w_max]
+    if func==0:     data = p.zd_boxcar(data,wide,x0-1,slope)
+    elif func==1:   data = p.zd_triangle(data,wide,x0-1,slope)
+    elif func==2:   data = p.zd_sinebell(data,wide,x0-1,slope)
+    elif func==3:   data = p.zd_gaussian(data,wide,x0-1,slope,g)
+    else:   
+        raise ValueError("func must be 0,1,2 or 3")
 
     dic = update_minmax(dic,data)
-
     return dic,data
 
-
-def dev(dic,data):
-    """
-    Development
-    """
-    return dic,data
-
-
-def di(dic,data):
-    """
-    deletes imaginary data
-    """
-
-    data = data.real
-    fn = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
-
-    if dic[fn+"QUADFLAG"] == 0.0:
-        dic[fn+"QUADFLAG"] = 1
-
-        if fn == "FDF2":
-            dic["FDSPECNUM"] = dic["FDSPECNUM"]/2.0
-            dic["FDSLICECOUNT"] = dic["FDSPECNUM"]
-
-        if dic["FDF1QUADFLAG"] == 1 and dic["FDF2QUADFLAG"]:
-            dic["FDQUADFLAG"] = 1.0
-
-    return dic,data
-
-
-# baseline correction
-
-
-def base(dic,data,nl=None,nw=0,first=False,last=False):
-    """ linear baseline correction
-    """
-
-    if first:
-        nl = [1]+nl
-    if last:
-        nl.append(data.shape[-1])
-
-    # change node list into 0...spape-1 from 1...shape
-    for i in xrange(len(nl)):
-        nl[i] = nl[i]-1
-
-    data = proc_bl.base(data,nl,nw)
-    dic = update_minmax(dic,data)
-    return dic,data
-
-
-def sol(dic,data,mode="low",fl=16,fs=1,head=0):
-    """
-    solvent filter
-
-    Differences from NMRPipe:
-    - only Low Pass filter mode implemented (no documentation on spline
-      and polynomial filters
-    - Parameters associated with Spline and Polynomial filters (po, sn, sf,
-      and poly) not implemented.
-    - Parameter "mir" not implemented
-    - Parameters "noseq" and "nodmx" not implemented
-
-    """
-
-    if fs not in [1,2,3]:
-        raise ValueError("fs must be 1, 2 or 3")
-
-    if fs == 1:
-        sh = "boxcar"
-    elif fs == 2:
-        sh = "sine"
-    elif fs == 3:
-        sh = "sine2"
-
-    data[...,head:] = proc_bl.sol(data[...,head:],fl*2+1,sh)
-    dic = update_minmax(dic,data)
-    return dic,data
-
-
-def med(dic,data,nw=24,sf=16,sigma=5.0):
-    """
-    median baseline correction
-
-    Difference from NMRPipe:
-    - only applied Friedrichs model-free baseline flatting algorithm
-      (Friedrichs JBNMR 1995 5 147-153).  NMRPipe does something else.
-    - Additional parameter, sigma, adjusts spread of Gaussian which is 
-      convoluted with median baseline to determind final baseline.
-
-    """
-
-    data = proc_bl.med(data,mw=nw,sf=sf,sigma=sigma)
-    dic = update_minmax(dic,data)
-
-    return dic,data
-
-
-def poly(dic,data):
-    """
-    polynomial baseline correction
-
-    Implementation: ???
-
-    See Callaghan et al, JMR 1984 56 101-109.  Also NMRPipe describes time
-    domain version.
-    """
-    raise NotImplementedError
-
-
-###################################
-# Not Implemented Function Shells #
-###################################
-
-
-# Linear Prediction
-
-def lp(dic,data):
-    """
-    linear prediction
-
-    Implementation: Medium
-
-    Lots of documentation. Talkbox scikits might have some code to use
-
-    """
-    raise NotImplementedError
-
-
-lpc = lp        # lpc is depreciated
-
-
-def lp2d(dic,data):
-    """
-    2D linear prediction
-
-    Function was NOT in original NMRPipe paper.
-
-    Prototype in NMRPipe, not on website
-    """
-    raise NotImplementedError
-
-
-# Maximum Entropy
-
-def mem(dic,data):
-    """
-    maximum entropy reconstruction
-
-    Implementation: Hard but well documented.
-
-    Numerous References for implementation.  
-    May be able to use scipy.maxentropy (might be Burg. MEM)
-    """
-    raise NotImplementedError
-
-# Functions which will not be implemented in pipe_proc due to lack of 
-# necessity or documentation.
-
-def ml(dic,data):
-    """
-    maximum likelihood frequency map
-
-    Function was NOT in original NMRPipe paper.
-
-    This function has almost no documentation, implementation may be hard.
-
-    """
-    raise NotImplementedError
-
-
-def ztp(dic,data):
-    """ 3D Matrix transpose 
-
-    There is no need in pipe_proc for this function so it will not be
-    implemented.  Rather use the iter3D object from the pipe module.
-
-    """
-    raise NotImplementedError
-
-
-def xyz2zyx(dic,data):
-    """ 3D Matrix transpose 
-
-    There is no need in pipe_proc for this function so it will not be
-    implemented.  Rather use the iter3D object from the pipe module.
-
-    """
-    raise NotImplementedError
-
-
-def ebs(dic,data):
-    """
-    EBS Reconstruction
-
-    This function is not well documented in NMRPipe and therefore will not be
-    implemented in pipe_proc
-
-    """
-    raise NotImplementedError
-
+#############################
+# Not Implemented Functions #
+#############################
 
 def ann(dic,data):
     """
     Fourier Analysis by Neural Net
+    """
+    raise NotImplementedError
 
-    This function is not well documented in NMRPipe and therefore will not be
-    implemented in pipe_proc
+def ebs(dic,data):
+    """
+    EBS Reconstruction
+    """
+    raise NotImplementedError
 
+def lp(dic,data):
+    """
+    Linear Prediction
+    """
+    raise NotImplementedError
+
+lpc = lp        # lpc is depreciated
+
+def lp2d(dic,data):
+    """
+    2D Linear Prediction
+    """
+    raise NotImplementedError
+
+def mac(dic,data):
+    """
+    Macro Language Interpreter
+    """
+    raise NotImplementedError
+
+def mem(dic,data):
+    """
+    Maximum Entropy Reconstruction
+    """
+    raise NotImplementedError
+
+def ml(dic,data):
+    """
+    Maximum Likelihood Frequency Map
+    """
+    raise NotImplementedError
+
+def poly(dic,data):
+    """
+    Polynomial Baseline Correction
+    """
+    raise NotImplementedError
+
+def xyz2zyx(dic,data):
+    """ 
+    3D Matrix transpose 
+    """
+    raise NotImplementedError
+
+def ztp(dic,data):
+    """ 
+    3D Matrix Transpose 
     """
     raise NotImplementedError
