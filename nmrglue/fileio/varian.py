@@ -323,7 +323,7 @@ def read_fid_lowmem(filename,(lenZ,lenY)=(None,None)):
     if lenZ == None or lenY == None:    # 2D data
         return read_fid_lowmem_2D(filename)    
     else:   # 3D data
-        return read_fid_lowmem_3D(filename)
+        return read_fid_lowmem_3D(filename,(lenZ,lenY))
 
 def read_fid_lowmem_2D(filename):
     """ 

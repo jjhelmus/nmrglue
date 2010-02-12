@@ -553,7 +553,7 @@ def write_3D(filemask,dic,data,overwrite=False):
             dic["FDMIN"]     = plane.min()
             dic["FDDISPMIN"] = dic["FDMIN"]
 
-        write_2D(fn,plane,dic,overwrite)
+        write_2D(fn,dic,plane,overwrite)
 
 
 def put_data(filename,fdata,data,overwrite=False):
@@ -1109,6 +1109,8 @@ def flist_from_filemask(filemask):
     """
     # split into directory and fm
     d,fm = os.path.split(filemask)
+    if d == '':
+        d = '.'
 
     flist = []
     i = 1

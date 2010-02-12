@@ -751,7 +751,8 @@ def mir_center_onepoint(data):
     """
     s = int(data.shape[-1])
     data =  np.concatenate( (data[...,s-1:0:-1],data),axis=-1)
-    data.imag[...,:s-1] = -data.imag[...,:s-1]
+    if np.iscomplexobj(data):
+        data.imag[...,:s-1] = -data.imag[...,:s-1]
     return data
 
 # Multiply by a constant
@@ -918,7 +919,7 @@ def rr2ri(data):
     Unappend real and imaginary data returing a complex array
     """
     # make a 1,1 array to determind dtype
-    temp = np.array(data.flat[0]+data.flat[1]*j)
+    temp = np.array(data.flat[0]+data.flat[1]*1.j)
     s = list(data.shape)
     half = int(s[-1] / 2.0)
     s[-1] = half
@@ -1467,7 +1468,7 @@ def qmix(data,carr):
     n = np.empty(s,data.dtype)
 
     # remix each block
-    for i in xrange(data.shape[0]/float(ic)):
+    for i in xrange(int(data.shape[0]/float(ic))):
         block = data[i*ic:(i+1)*ic]
         n[i*oc:(i+1)*oc]=np.dot(carr,block)
 

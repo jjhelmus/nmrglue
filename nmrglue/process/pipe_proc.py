@@ -139,7 +139,7 @@ def clean_minmax(dic):
 # Apodization functions #
 #########################
 
-def apod(dic,data,qName=None,q1=0.0,q2=0.0,q3=0.0,
+def apod(dic,data,qName=None,q1=1.0,q2=1.0,q3=1.0,
     c=1.0,start=1,size='default',inv=False,one=False,hdr=False):
     """ 
     Generic Apodization
@@ -168,7 +168,15 @@ def apod(dic,data,qName=None,q1=0.0,q2=0.0,q3=0.0,
         fn = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
         qnum = dic[fn+"APODCODE"]
         qName = ["","SP","EM","GM","TM","","TRI","GMB","JMOD"][qnum]
+
+    # Set apod codes here so that all three parameter are set
+    fn = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+    dic[fn+"APODQ1"] = q1
+    dic[fn+"APODQ2"] = q2
+    dic[fn+"APODQ3"] = q3
+
     
+
     if qName not in a_list:
         raise ValueError("qName must be SP, EM, GM, GMB, TM, TRI or JMOD")
 
@@ -913,7 +921,9 @@ def ft(dic,data,auto=False,real=False,inv=False,alt=False,neg=False,
 def rft(dic,data,inv=False):
     """
     Real Fourier Transform
-    
+
+    Gives slightly different result in certain cases.
+
     Parameters:
 
     * dic   Dictionary of NMRPipe parameters.
@@ -1641,21 +1651,13 @@ def mir(dic,data,mode="left",invl=False,invr=False,sw=True):
         raise ValueError("invalid mode") 
 
     if dic[fn+"FTFLAG"] == 0: # time domain
-
-        if mode=="left":
-            data = p.mir_left(data) 
-        if mode=="right":
-            data = p.mir_right(data)
-        if mode=="center":
-            data = p.mir_center(data)
-        if mode=="ps90-180":
-            data = p.neg_edges(p.mir_center(data))
-        if invr:
-            data = p.neg_right(data)    
-        if invl:
-            data = p.neg_left(data)
+        if mode=="left":    data = p.mir_left(data) 
+        if mode=="right":   data = p.mir_right(data)
+        if mode=="center":  data = p.mir_center(data)
+        if mode=="ps90-180":    data = p.neg_edges(p.mir_center(data))
+        if invr:    data = p.neg_right(data)    
+        if invl:    data = p.neg_left(data)
         dic["FDSIZE"] = dic["FDSIZE"]*2
-
         if mode=="ps0-0":
             data = p.mir_center_onepoint(data)
             dic["FDSIZE"] = dic["FDSIZE"]-1
@@ -1875,7 +1877,8 @@ def shuf(dic,data,mode=None):
         dic["FDSIZE"] = data.shape[-1]
 
     if mode == "rr2ri":
-        data = p.rr2ri(data)    # unappend imaginary data (ignores imag data)
+        # unappend imaginary data (ignores imag data)
+        data = np.array(p.rr2ri(data),dtype="complex64")
         # update the dictionary
         if data.ndim == 2:
             dic["FDSLICECOUNT"] = data.shape[0]
