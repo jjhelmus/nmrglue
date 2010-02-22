@@ -14,8 +14,8 @@ import sys
 import nmrglue.fileio.pipe as pipe
 import nmrglue.util.misc as util
 
-verb1=False   # basic verbosity
-verb2=False   # verbosity of util functions
+verb1=True   # basic verbosity
+verb2=True   # verbosity of util functions
 
 test_dir = './pipe_proc_tests'
 execfile(os.path.join(test_dir,"all_tests.py"))
