@@ -857,8 +857,9 @@ def ft(dic,data,auto=False,real=False,inv=False,alt=False,neg=False,
         else: # freq domain
            
             # Real, TPPI and Sequential data is real transform
-            if dic["FD2DPHASE"] == 0 or dic["FD2DPHASE"] == 1:
-                real = True
+            if dic["FDDIMCOUNT"] >= 2.:
+                if dic["FD2DPHASE"] == 0 or dic["FD2DPHASE"] == 1:
+                    real = True
 
             # sign and negation in AQSIGN
             if dic[fn+"AQSIGN"] == 1 or dic[fn+"AQSIGN"] == 2:
@@ -1130,16 +1131,23 @@ def tp(dic,data,hyper=False,nohyper=False,auto=False,nohdr=False):
     if nohyper:
         hyper = False
 
+    fn = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+    fn2= "FDF"+str(int(dic["FDDIMORDER"][1])) # F1, F2, etc
+
     if auto:
-        if (dic["FD2DPHASE"] == 1) or (dic["FD2DPHASE"] == 2):
+        if (dic[fn+"QUADFLAG"]!=1) and (dic[fn2+"QUADFLAG"]!=1):
             hyper = True
         else:
             hyper = False
 
-    data = p.tp(data,hyper)
     if hyper:   # Hypercomplex transpose need type recast
-        data = np.array(data,dtype=dt) 
-
+        data = np.array(p.tp_hyper(data),dtype="complex64")
+    else:
+        data = p.tp(data)
+        if dic[fn2+"QUADFLAG"] != 1 and nohyper!=True:
+            # unpack complex as needed
+            data = np.array(p.c2ri(data),dtype="complex64")
+        
     # update the dimentionality and order
     dic["FDSLICECOUNT"],dic["FDSIZE"] = data.shape[0],data.shape[1]
     dic["FDSPECNUM"] = dic["FDSLICECOUNT"]

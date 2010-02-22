@@ -616,7 +616,7 @@ def write_slice_3D(filemask,dic,data,shape,(sz,sy,sx) ):
         if os.path.isfile(f) == False:
             # file doesn't exist, create a empty one        
             ndata = np.zeros( (dy,dx),dtype=data.dtype)
-            write_2D(f,ndata,dic,False)
+            write_2D(f,dic,data,False)
             del(ndata)
         
         # mmap the [new] file
@@ -906,6 +906,10 @@ class iter3D(object):
             # the Y size is incorrect
             dic["FDSPECNUM"] = self.i_max
 
+            # update the file count XXX these should be done bettwe
+            dic["FDFILECOUNT"] = plane.shape[0]
+            dic["FDF3SIZE"] = plane.shape[0]
+
             shape = ( plane.shape[0],self.i_max,plane.shape[2] )
             sx = slice(None)
             sy = slice(self.i,self.i+1,1)
@@ -918,7 +922,8 @@ class iter3D(object):
         #print "shape:",shape
         #print "plane.shape",plane.shape
         #print "sx,sy,sz",sx,sy,sz
-        write_slice_3D(filemask,plane,dic,shape,(sz,sy,sx) )
+        #print dic["FDFILECOUNT"]
+        write_slice_3D(filemask,dic,plane,shape,(sz,sy,sx) )
 
 
 # Shaping functions
@@ -1152,7 +1157,8 @@ class pipe_3d(fileiobase.data_3d):
 
             if len(self.farray) >  dic["FDFILECOUNT"]:
                 print "Warning: more file match filemask than indicated fdata"
-                self.farray = self.farray[:dic["FDFILECOUNT"]]
+                #print len(self.farray),dic["FDFILECOUNT"]
+                self.farray = self.farray[:int(dic["FDFILECOUNT"])]
             else:
                 raise IOError,"Incomplete 3D file"
 

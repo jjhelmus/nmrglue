@@ -110,7 +110,7 @@ class converter(object):
 
     # IMPORTERS (from_*)
 
-    def from_universal(self,dic):
+    def from_universal(self,dic,data):
         """ 
         load data from universal dic,data pair
         """
@@ -120,7 +120,7 @@ class converter(object):
         self._iproc = {}
 
         # set the dictionary
-        self._udic = udic
+        self._udic = dic
 
     def from_varian(self,dic,data,udic=None):
         """ 

@@ -1,11 +1,9 @@
 """
-Function to reading and writing sparky (.ucsf) files.
+Functions for reading and writing sparky (.ucsf) files.
 
-Information on the sparky file format can be found online at online at:
+Information on the sparky file format can be found online at:
 http://www.cgl.ucsf.edu/home/sparky/manual/files.html
-and in the source file: ucsffile.cc
-
-All data is packed big endian
+and in the source file ucsffile.cc .
 
 """
 
@@ -238,6 +236,7 @@ def write(filename,dic,data,overwrite=False):
     Write a sparky file
 
     Parameters:
+
     * filename  Name of file to write to.
     * data      Data array.
     * dic       Sparky dictionary Dictionary.

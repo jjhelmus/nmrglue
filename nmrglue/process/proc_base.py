@@ -523,24 +523,27 @@ def ps_exp(data,p0=0.0,tc=0.0,inv=False):
         apod = 1/apod
     return apod*data
 
-def tp(data,hyper=True):
+def tp(data):
     """ 
     Transpose Data
 
-    Parameters:
-    
     * data  Array of spectral data.
     * hyper Set True if hypercomplex data.
 
     """
-    if hyper:
-        # unpack, transpose, repack
-        return c2ri( ri2c(data).transpose() )   
-    else:
-        return data.transpose()
+    return data.transpose()
 
 ytp = tp
 xy2yx = tp
+
+
+def tp_hyper(data):
+    """ 
+    Hypercomplex Tranpose 
+
+    Use when both dimension are complex
+    """
+    return c2ri(ri2c(data).transpose())
 
 def zf_inter(data,pts=1):
     """
