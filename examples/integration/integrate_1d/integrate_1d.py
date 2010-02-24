@@ -48,5 +48,4 @@ for name,start,end in peak_list:
 # close the output file and save the plot
 f.close()
 ax.set_xlim(ppm_scale[0],ppm_scale[-1])
-ax.set_ylim(-3.e5,1.7e7)
-fig.savefig("integration_plot.ps")
+fig.savefig("plot.png") # change this to plot.pdf, plot.ps, etc
