@@ -102,10 +102,24 @@ def recalc_orig(dic,data,fn,axis=-1):
     if dic[fn+"QUADFLAG"] == 0 and axis!=-1:
         s = int(s/2.)
 
+    # correct TPPI size in indirect dim when in time domain
+    if dic["FD2DPHASE"] == 1 and fn!="FDF2" and dic[fn+"FTFLAG"]!=1.:
+        s = int(s/2.)
+
     sw  = dic[fn+"SW"]
     car = dic[fn+"CAR"]
     obs = dic[fn+"OBS"]
     s2  = float(dic[fn+"CENTER"])
+    
+    # debugging info:
+    #print "Recalc of origin"
+    #print "s:",s
+    #print "axis:",axis
+    #print "sw:",sw
+    #print "car:",car
+    #print "obs:",obs
+    #print "s2:",s2
+ 
     dic[fn+"ORIG"] = car*obs-sw*((s-s2)/s)
 
     return dic
@@ -858,7 +872,7 @@ def ft(dic,data,auto=False,real=False,inv=False,alt=False,neg=False,
            
             # Real, TPPI and Sequential data is real transform
             if dic["FDDIMCOUNT"] >= 2.:
-                if dic["FD2DPHASE"] == 0 or dic["FD2DPHASE"] == 1:
+                if dic["FD2DPHASE"]==0 or dic["FD2DPHASE"]==1 and fn!="FDF2":
                     real = True
 
             # sign and negation in AQSIGN
@@ -882,14 +896,16 @@ def ft(dic,data,auto=False,real=False,inv=False,alt=False,neg=False,
         alt = True
 
     if real:    # keep real data
-        data.imag = 0.0
+        if np.iscomplexobj(data):
+            data.imag = 0.0
     
     if alt: # sign alternate
         if inv == False:    # inv with alt, alternates the inverse
             data[...,1::2] = data[...,1::2]*-1.
 
     if neg: # negate the imaginary 
-        data.imag = data.imag * -1.
+        if np.iscomplexobj(data):
+            data.imag = data.imag * -1.
 
     # update the dictionary
     fn = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
@@ -902,6 +918,10 @@ def ft(dic,data,auto=False,real=False,inv=False,alt=False,neg=False,
         dic = update_minmax(dic,data)
         return dic,data
 
+    # recast data if needed
+    if data.dtype!="complex64":
+        data = data.astype("complex64")
+
     if inv: # inverse transform
         data = p.icomplexft(data)
         if alt:
@@ -910,7 +930,14 @@ def ft(dic,data,auto=False,real=False,inv=False,alt=False,neg=False,
         data = p.complexft(data)
 
     if real:
-        data = data[...,size/2:]
+        # return a complex array with double size
+        data = np.array(data[...,size/2:],dtype="complex64")
+
+        # adjust quadrature 
+        dic[fn+"QUADFLAG"] = 0.0
+        dic["FDQUADFLAG"] = 0.0
+
+        # adjust size
         dic[fn+"APOD"] = dic[fn+"APOD"]/2.0
         dic[fn+"TDSIZE"] = dic[fn+"TDSIZE"]/2.0
         dic["FDSIZE"] = dic["FDSIZE"]/2.0
@@ -1056,8 +1083,10 @@ def di(dic,data):
         dic[fn+"QUADFLAG"] = 1
 
         if fn == "FDF2":
-            dic["FDSPECNUM"] = dic["FDSPECNUM"]/2.0
-            dic["FDSLICECOUNT"] = dic["FDSPECNUM"]
+            # half number of point in indirect dim for States/
+            if dic["FD2DPHASE"] != 0 and dic["FD2DPHASE"] != 1:
+                dic["FDSPECNUM"] = dic["FDSPECNUM"]/2.0
+                dic["FDSLICECOUNT"] = dic["FDSPECNUM"]
 
         if dic["FDF1QUADFLAG"] == 1 and dic["FDF2QUADFLAG"]:
             dic["FDQUADFLAG"] = 1.0
@@ -1246,6 +1275,8 @@ def zf(dic,data,zf=1,pad="auto",size="auto",
     # update the dictionary
     dic[fn+"ZF"] = -1.*s
     dic[fn+"CENTER"] = s2
+    if dic["FD2DPHASE"] == 1 and fn!="FDF2":   # TPPI data
+        dic[fn+"CENTER"] = np.round(s2/2.+0.001)
     dic = recalc_orig(dic,data,fn)
     dic["FDSIZE"] = s
 

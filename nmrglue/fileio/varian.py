@@ -112,11 +112,11 @@ def write_fid(filename,dic,data,overwrite=False,repack=False):
     """
 
     if data.ndim == 1:
-        write_fid_1D(filename,dic,data,overwrite=False,repack=False)
+        write_fid_1D(filename,dic,data,overwrite=overwrite,repack=False)
     elif data.ndim == 2:
-        write_fid_2D(filename,dic,data,overwrite=False,repack=False)
+        write_fid_2D(filename,dic,data,overwrite=overwrite,repack=False)
     elif data.ndim == 3:
-        write_fid_3D(filename,dic,data,overwrite=False,repack=False)
+        write_fid_3D(filename,dic,data,overwrite=overwrite,repack=False)
     else:
         raise ValueError("unsupported dimensionality") 
     

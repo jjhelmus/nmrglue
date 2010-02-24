@@ -199,20 +199,20 @@ def create_dic(udic,datetimeobj=datetime.datetime.now()):
     # fill global dictionary parameters
     dic["FDDIMCOUNT"] = float(udic["ndim"])
 
-    # fill in parameters for each dimension
-    for i,adic in enumerate([udic[k] for k in xrange(udic["ndim"])]):
-        n = int((dic["FDDIMCOUNT"]-1)-i)
-        dic = add_axis_to_dic(dic,adic,n)
-
     # FD2DPHASE
     if udic[0]["encoding"] == "tppi":
         dic["FD2DPHASE"] = 1.0
     elif udic[0]["encoding"] == "states":
         dic["FD2DPHASE"] = 2.0
     else:
-        dic["FD2DPHASE"] = 0.0
-        
-    
+        dic["FD2DPHASE"] = 0.0    
+ 
+    # fill in parameters for each dimension
+    for i,adic in enumerate([udic[k] for k in xrange(udic["ndim"])]):
+        n = int((dic["FDDIMCOUNT"]-1)-i)
+        dic = add_axis_to_dic(dic,adic,n)
+
+   
     if dic["FDDIMCOUNT"] >= 3: # at least 3D    
         dic["FDFILECOUNT"] = dic["FDF3SIZE"] * dic["FDF4SIZE"]
 
@@ -253,6 +253,8 @@ def add_axis_to_dic(dic,adic,n):
     else:
         psize = adic["size"]/1.
 
+    # origin calculation size
+    osize = psize
 
     # set FT/TD SIZE and FTFLAG depending on domain
     if adic["time"]:    
@@ -264,12 +266,23 @@ def add_axis_to_dic(dic,adic,n):
     
     # apodization and center
     dic[fn+"APOD"]   = dic[fn+"TDSIZE"]
-    dic[fn+"CENTER"] = int(psize / 2.)+1.
+   
+    if n==0 or dic["FD2DPHASE"]!=1:
+        dic[fn+"CENTER"] = int(psize / 2.)+1.
+    else:   # TPPI requires division by 4
+        dic[fn+"CENTER"] = int(psize/4.)+1
+        osize = psize/2.
 
     # origin (last point) is CAR*OBS-SW*(N/2-1)/N
     # see Fig 3.1 on p.36 of Hoch and Stern
+    #print "fn:",n
+    #print  "CAR:",dic[fn+"CAR"]
+    #print  "OBS:",dic[fn+"OBS"]
+    #print  "SW:",dic[fn+"SW"]
+    #print  "osize:",osize
+    #print  "CENTER:",dic[fn+"CENTER"]
     dic[fn+"ORIG"] = dic[fn+"CAR"]*dic[fn+"OBS"] - dic[fn+"SW"] * \
-        (psize-dic[fn+"CENTER"])/psize
+        (osize-dic[fn+"CENTER"])/osize
  
     if n==0:  # direct dim
         dic["FDSIZE"]     = psize
