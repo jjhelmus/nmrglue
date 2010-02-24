@@ -12,3 +12,6 @@ Contents:
 
     reference/index
 
+    examples/index
+
+    tutorial
