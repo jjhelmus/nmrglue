@@ -23,8 +23,11 @@ The following is a series of python scripts which show some uses of nmrglue
     varian2pipe_2d.rst
     varian2pipe_2d_tppi.rst
     varian2pipe_3d.rst
+    fitting_t1_data.rst
     integrate_1d.rst
     integrate_2d.rst
+    interactive_1d.rst
+    interactive_2d.rst
     plot_1d_time.rst
     plot_1d_freq.rst
     plot_2d_boxes.rst

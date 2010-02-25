@@ -1,30 +1,28 @@
-Pre-release Todo:
-=================
+Todo and idea list broken down by directory
 
-Misc
-----
-- common data directory
-- module documentation (user guide)
-- tutorial documentation
+Global
+------
 - install script
+- grep for XXX in all files
 - add to pyPI
 
-examples
----------
-- bruker -> pipe 1,2,3D
-- pipe -> sparky 2,3D
-- process 1,2,3D pipe files
-- process 1,2,3D glue files
-- varian -> glue 1,2,3D?
-- bruker -> glue 1,2,3D?
-- T1 measurements
-- unarray data
-- 2D plotting
-- 1D plotting
-- 2D integration
-- example documentation
-- apodization Gui sample
 
+doc
+---
+- tutorial documentation
+- complete reference documentation
+- check for typos/mis-spelling in all documents
+- change directory layout and make script to copy over additional files
+  (example code, figures, etc)
+
+examples
+--------
+- full arrayed experiment processing examples
+    - T1 measurements
+    - TEDOR fitting
+- process 1,2,3D glue files (need glue module)
+- varian -> glue 1,2,3D (need glue module)
+- bruker -> glue 1,2,3D (need glue module)
 
 tests
 -----
@@ -34,68 +32,36 @@ tests
 - test_varian.py
 - test_sparky.py
 - test_glue.py
+- test_pipe_proc.py
 
-Coding
+nmrglue
 -------
-- move hdf5 module to glue and work on
-- gui modules
-- LP code
-- peakpicking code?
-- glue_proc module
-- pipe_proc fixes
 
+    filio
+    -----
+    - move hdf5 module to glue and write data object wrapper
+    - varian global read/write functions
+    - add 4d support to all fileio modules
+    - lowmem_2d in pipe module
+    - write_slice3d and iter3D in all fileio modules
+    - spinev module
+    - simpson module
 
+    gui
+    ---
+    - gui module with common gui functions (get_ppm_scale, etc)
 
-Post-release
-=============
+    process
+    ------
+    - LP code in proc_lp module (Linear Prediction)
+    - glue_proc module
+    - debug XXX in pipe_proc
+    - more work on broken tests in test_pipe_proc
+    - proc_mem module (Maximum Entropy)
+    - add missing functions in pipe_proc
+    - FWHT in proc_base
+    - profile processing and optimize
 
-
-
-fileio
-======
-- add 4d support to all modules
-- lowmem_2d support in pipe
-- write_slice3d function in all modules
-- iter3D object in all modules
-- spinev module?
-- simpson module?
-
-process
-=======
-- check for XXX in files
-- fix differences between NMRPipe and pipe_proc
-- add poly functions to proc_lp
-- FWHT in proc_base
-- proc_lp module - linear prediction functions
-- proc_mem module- Maximum extropy functions
-
-util
-====
-- peakpick modules
-
-gui
-===
-- write some common gui functions
-
-tests
-=====
-test_varian
-test_bruker
-test_pipe
-test_sparky
-test_convert
-test_pipe_proc
-
-examples
-========
-1D,2D,3D converstions:
- - varian -> pipe
- - bruker -> pipe
-
-2D,3D conversions
- - pipe -> sparky
- - sparky -> pipe
-
-- Fit of relaxation data
-
-Making figures
+    misc
+    ----
+    - peakpicking code
