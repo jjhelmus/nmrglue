@@ -91,10 +91,88 @@ def create_dic(udic):
 
     return dic
 
+# global read/write functions
 
+def read(dir=".",fid_file="fid",procpar_file="procpar",read_blockhead=False,
+         (lenZ,lenY)=(None,None)):
+    """
+    Read Varian files in a directory
+
+    Parameters:
+
+    * dir               Directory holding Varian data.
+    * fid_file          Name of fid_file in directory
+    * procpar_file      Name of procpar file in directory
+    * read_blockhead    Set True to head blockheader(s)
+    * lenZ,lenY         Shape of Z and Y dimension required for 3D data
+
+    """
+    if os.path.isdir(dir) != True:
+        raise IOError,"directory %s does not exist"%(dir)
+
+    # read in the fid file
+    fname = os.path.join(dir,fid_file)
+    dic,data = read_fid(fname,read_blockhead,(lenZ,lenY))
+
+    # read in the procpar file
+    dic["procpar"] = read_procpar(os.path.join(dir,procpar_file))
+
+    return dic,data
+
+
+def read_lowmem(dir=".",fid_file="fid",procpar_file="procpar",
+                (lenZ,lenY)=(None,None)):
+    """
+    Read Varian files in a directory using minimal memory
+
+    Parameters:
+
+    * dir               Directory holding Varian data. 
+    * fid_file          Name of fid_file in directory
+    * procpar_file      Name of procpar file in directory
+    * lenZ,lenY         Shape of Z and Y dimension required for 3D data
+
+    """
+    if os.path.isdir(dir) != True:
+        raise IOError,"directory %s does not exist"%(dir)
+
+    # read in the fid file
+    fname = os.path.join(dir,fid_file)
+    dic,data = read_fid_lowmem(fname,(lenZ,lenY))
+
+    # read in the procpar file
+    dic["procpar"] = read_procpar(os.path.join(dir,procpar_file))
+
+    return dic,data
+
+
+def write(dir,dic,data,fid_file="fid",procpar_file="procpar",repack=False,
+          overwrite=False):
+    """
+    Write Varian files to a directory
+
+    Parameters:
+
+    * dir               Directory to write to.
+    * data              Array of spectral data to write.
+    * fid_file          Name of fid file to write to.
+    * procpar_file      Name of procpar file to write to.
+    * repack            True/False to repack file and block headers.
+    * overwrite         True/False to overwrite existing file.
+
+    """
+    # write out the fid file
+    fname = os.path.join(dir,fid_file)
+    write_fid(fname,dic,data,repack=repack,overwrite=overwrite)
+    
+    # write out procpar file
+    write_proc(os.path.join(dir,procpar_file),dic["procpar"],overwrite)
+    
+    return
+    
 # varian binary (fid) file reading/writing
 
-def write_fid(filename,dic,data,overwrite=False,repack=False):
+def write_fid(filename,dic,data,repack=False,overwrite=False):
     """ 
     Write a varian binary (fid) file
 
@@ -122,7 +200,7 @@ def write_fid(filename,dic,data,overwrite=False,repack=False):
     
     return
 
-def write_fid_3D(filename,dic,data,overwrite=False,repack=False):
+def write_fid_3D(filename,dic,data,repack=False,overwrite=False):
     """ 
     Write a 3D varian binary (fid) file
     """
@@ -175,7 +253,7 @@ def write_fid_3D(filename,dic,data,overwrite=False,repack=False):
 
     return
 
-def write_fid_2D(filename,dic,data,overwrite=False,repack=False):
+def write_fid_2D(filename,dic,data,repack=False,overwrite=False):
     """ 
     Write a 2D varian binary (fid) file
     """
@@ -221,7 +299,7 @@ def write_fid_2D(filename,dic,data,overwrite=False,repack=False):
 
     return
        
-def write_fid_1D(filename,dic,data,overwrite=False,repack=False):
+def write_fid_1D(filename,dic,data,repack=False,overwrite=False):
     """ 
     Write a 1D varian binary (fid) file
     """
