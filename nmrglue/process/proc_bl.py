@@ -177,7 +177,7 @@ def sol_general(data,filter,w=16,mode='same'):
     """
     A = filter.sum()
     if data.ndim == 2:
-        filter = np.atleast2d(filter)
+        filter = np.atleast_2d(filter)
     return data-scipy.signal.convolve(data,filter,mode=mode)/A
 
 def sol_boxcar(data,w=16,mode='same'):

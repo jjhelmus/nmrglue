@@ -550,7 +550,7 @@ sine = sp   # wrapper for sine functions
 
 def tm(dic,data,t1=0.0,t2=0.0,
     c=1.0,start=1,size='default',inv=False,one=False,hdr=False):
-    """ 
+    """
     Trapezoid Apodization
 
     Parameters:
