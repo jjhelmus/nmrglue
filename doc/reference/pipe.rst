@@ -37,6 +37,8 @@ High-Level Classes
 
 These are the classes the majority of users will use from the pipe module.
 
+.. _pipe_iter3D:
+
 .. autoclass:: iter3D
 
 

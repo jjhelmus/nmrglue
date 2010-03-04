@@ -193,3 +193,5 @@ latex_documents = [
 
 # If false, no module index is generated.
 #latex_use_modindex = True
+
+autosummary_generate = ['reference/pipe_proc.rst','reference/proc_base.rst','reference/proc_bl.rst']

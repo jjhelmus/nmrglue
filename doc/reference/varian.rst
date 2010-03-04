@@ -10,10 +10,13 @@ High-Level Functions
 
 These are the functions the majority of users will use from the varian module.
 
+.. autofunction:: read
+.. autofunction:: read_lowmem
 .. autofunction:: read_fid
 .. autofunction:: read_fid_lowmem
 .. autofunction:: read_fid_lowmem_2D
 .. autofunction:: read_fid_lowmem_3D
+.. autofunction:: write
 .. autofunction:: write_fid
 .. autofunction:: write_fid_1D
 .. autofunction:: write_fid_2D
