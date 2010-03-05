@@ -1,0 +1,2 @@
+recursive-exclude tests *.ft2 *.fid *.ft *.dat
+recursive-exclude examples *.ft

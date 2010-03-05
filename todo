@@ -6,14 +6,10 @@ Global
 - grep for XXX in all files
 - add to pyPI
 
-
 doc
 ---
-- tutorial documentation
-- complete reference documentation
 - check for typos/mis-spelling in all documents
-- change directory layout and make script to copy over additional files
-  (example code, figures, etc)
+- script to copy over additional files (example code, figures, etc)
 
 examples
 --------
@@ -39,11 +35,12 @@ nmrglue
 
     filio
     -----
-    - move hdf5 module to glue and write data object wrapper
-    - varian global read/write functions
-    - add 4d support to all fileio modules
+    - ppm_limits, ppm_scale, hz_limits, hz_scale in unit_conversion object.
+    - global nD low-memory object (and support in all modules)
     - lowmem_2d in pipe module
-    - write_slice3d and iter3D in all fileio modules
+    - ability to write slices to file in all modules (ala pipe.write_slice3d)
+    - global iter3D object
+    - rewrite glue module with better dataset wrapping
     - spinev module
     - simpson module
 
@@ -64,4 +61,9 @@ nmrglue
 
     misc
     ----
-    - peakpicking code
+    - peakpicking module
+    - peakfitting module
+
+Other thoughts
+--------------
+- Unix like commands (coadd_pipe, unarray_varian, ...)

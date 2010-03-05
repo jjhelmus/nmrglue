@@ -1,0 +1,17 @@
+=======================
+Installation of nmrglue
+=======================
+
+Requirements
+------------
+
+nmrglue requires numpy 1.3.0 or later (numpy.scipy.org) and  
+scipy 0.7.1 or later (www.scipy.org).  In addition h5py version 1.2.0 or later
+(code.google.com/p/h5py) must be installed to use to glue module.
+
+Installation
+------------
+
+nmrglue can be installed using pythons Distutils (as root):
+
+    python setup.py install
