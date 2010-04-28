@@ -20,9 +20,11 @@ dic,data = ng.pipe.read("../../common_data/2d_pipe/test.ft2")
 
 # make ppm scales
 uc_13c = ng.pipe.make_uc(dic,data,dim=1)
-ppm_13c = np.linspace(uc_13c.ppm(0),uc_13c.ppm(data.shape[1]-1),data.shape[1])
+ppm_13c = uc_13c.ppm_scale()
+#ppm_13c = np.linspace(uc_13c.ppm(0),uc_13c.ppm(data.shape[1]-1),data.shape[1])
 uc_15n = ng.pipe.make_uc(dic,data,dim=0)
-ppm_15n = np.linspace(uc_15n.ppm(0),uc_15n.ppm(data.shape[0]-1),data.shape[0])
+ppm_15n = uc_15n.ppm_scale()
+#ppm_15n = np.linspace(uc_15n.ppm(0),uc_15n.ppm(data.shape[0]-1),data.shape[0])
 
 # create the figure
 fig = plt.figure()

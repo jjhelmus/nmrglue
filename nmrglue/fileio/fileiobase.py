@@ -78,7 +78,6 @@ class unit_conversion():
 
 
     # individual unit conversion functions
-
     def __percent2pts(self,percent):
         return percent*(self._size-1)/100.0
 
@@ -97,18 +96,45 @@ class unit_conversion():
     def __pts2ppm(self,pts):
         return (pts*self._delta)+self._first
 
-    # routers
+    # times based units: seconds, ms, and us
+    def __sec2pts(self,sec):
+        return sec*self._sw
 
+    def __pts2sec(self,pts):
+        return pts*1./self._sw
+
+    def __ms2pts(self,ms):
+        return ms*self._sw/1.e3
+
+    def __pts2ms(self,pts):
+        return pts*1.e3/self._sw
+
+    def __us2pts(self,us):
+        return us*self._sw/1.e6
+
+    def __pts2us(self,pts):
+        return pts*1.e6/self._sw
+
+
+    # routers
     def __unit2pnt(self,val,units):
         """ 
         Convert units to points
         """
-        if units.upper() == "PPM":
+        units = units.upper()
+        if units == "PPM":
             pts = self.__ppm2pts(val)
-        elif units.upper() == "HZ":
+        elif units == "HZ":
             pts = self.__hz2pts(val)
-        elif units.upper() == "%" or units.upper() == "PERCENT":
+        elif units == "%" or units == "PERCENT":
             pts = self.__percent2pts(val)
+        elif units == "SEC" or units == "SECOND" or units == "S":
+            pts = self.__sec2pts(val)
+        elif units == "MS":
+            pts = self.__ms2pts(val)
+        elif units == "US":
+            pts = self.__us2pts(val)
+
         else:
             raise ValueError("invalid unit type")
 
@@ -122,16 +148,24 @@ class unit_conversion():
         """ 
         Convert points to units
         """
+        units = units.upper()
 
         if self._cplx:
             val = val-round(val)
 
-        if units.upper() == "PPM":
+        if units == "PPM":
             k = self.__pts2ppm(val)
-        elif units.upper() == "HZ":
+        elif units == "HZ":
             k = self.__pts2hz(val)
-        elif units.upper() == "%" or units.upper() == "PERCENT":
+        elif units == "%" or units == "PERCENT":
             k = self.__pts2percent(val)
+        elif units == "SEC" or units == "SECOND" or units == "S":
+            k = self.__pts2sec(val)
+        elif units == "MS":
+            k = self.__pts2ms(val)
+        elif units == "US":
+            k = self.__pts2us(val)
+
         else:
             raise ValueError("invalid units")
 
@@ -162,7 +196,6 @@ class unit_conversion():
             return self.__unit2pnt(val,unit)
 
     # User functions
-
     def f(self,val,unit=None):
         """
         Convert string or value/unit pair to float
@@ -193,11 +226,114 @@ class unit_conversion():
         """
         return self.__pnt2unit(val,"PERCENT")
 
+    def seconds(self,val):
+        """ 
+        Convert to seconds
+        """
+        return self.__pnt2unit(val,"SEC")
+
+    def sec(self,val):
+        """ 
+        Convert to seconds
+        """
+        return self.__pnt2unit(val,"SEC")
+
+    def ms(self,val):
+        """ 
+        Convert to milliseconds (ms)
+        """
+        return self.__pnt2unit(val,"MS")
+
+    def us(self,val):
+        """ 
+        Convert to microseconds (us)
+        """
+        return self.__pnt2unit(val,"US")
+
     def unit(self,val,unit):
         """
         Convert val points to unit
         """
         return self.__pnt2unit(val,unit)
+
+
+    # limits and scales
+    def percent_limits(self):
+        """ 
+        Return tuple of left and right edges in percent
+        """
+        return 0.0,100.0
+    
+    def percent_scale(self):
+        """
+        Return array of percent values
+        """
+        return linspace(0.0,100.0,self._size)
+
+    def ppm_limits(self):
+        """
+        Return tuple of left and right edges in ppm
+        """
+        return self.ppm(0),self.ppm(self._size-1)
+
+    def ppm_scale(self):
+        """
+        Return array of ppm values
+        """
+        x0,x1 = self.ppm_limits()
+        return np.linspace(x0,x1,self._size)
+
+    def hz_limits(self):
+        """ 
+        Return tuple of left and right edges in Hz
+        """
+        return self.hz(0),self.hz(self._size-1)
+
+    def hz_scale(self):
+        """
+        Return array of hz values
+        """
+        x0,x1 = self.hz_limits()
+        return np.linspace(x0,x1,self._size)
+
+    def sec_limits(self):
+        """ 
+        Return tuple of left and right edges in seconds
+        """
+        return self.sec(0),self.sec(self._size-1)
+
+    def sec_scale(self):
+        """
+        Return array of seconds values
+        """
+        x0,x1 = self.sec_limits()
+        return np.linspace(x0,x1,self._size)
+
+    def ms_limits(self):
+        """ 
+        Return tuple of left and right edges in milliseconds
+        """
+        return self.ms(0),self.ms(self._size-1)
+
+    def ms_scale(self):
+        """
+        Return array of seconds values
+        """
+        x0,x1 = self.ms_limits()
+        return np.linspace(x0,x1,self._size)
+
+    def us_limits(self):
+        """ 
+        Return tuple of left and right edges in milliseconds
+        """
+        return self.us(0),self.us(self._size-1)
+
+    def us_scale(self):
+        """
+        Return array of seconds values
+        """
+        x0,x1 = self.us_limits()
+        return np.linspace(x0,x1,self._size)
 
     __call__ = i    # calling the object x is the same as x.i
 

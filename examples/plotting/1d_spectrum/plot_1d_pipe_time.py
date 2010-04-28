@@ -8,14 +8,13 @@ import numpy as np
 # read in the data from a NMRPipe file
 dic,data = ng.pipe.read("../../common_data/1d_pipe/test.fid")
 
-# determind the time scale
-sw = dic["FDF2SW"]
-times = np.array([x*1.e3/sw for x in range(data.size)])
+# make a unit conversion object
+uc = ng.pipe.make_uc(dic,data)
 
 # plot the spectrum
 fig = plt.figure()
 ax = fig.add_subplot(111)
-ax.plot(times,data,'k-')
+ax.plot(uc.ms_scale(),data,'k-')
 
 # decorate axes
 ax.set_yticklabels([])

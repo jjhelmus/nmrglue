@@ -8,14 +8,13 @@ import numpy as np
 # read in the data from a NMRPipe file
 dic,data = ng.pipe.read("../../common_data/1d_pipe/test.ft")
 
-# determind the ppm scale
+# create a unit conversion object
 uc = ng.pipe.make_uc(dic,data)
-ppm_scale = np.linspace(uc.ppm(0),uc.ppm(data.size-1),data.size)
 
 # plot the spectrum
 fig = plt.figure()
 ax = fig.add_subplot(111)
-ax.plot(ppm_scale,data,'k-')
+ax.plot(uc.ppm_scale(),data,'k-')
 
 # decorate axes
 ax.set_yticklabels([])

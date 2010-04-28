@@ -2,7 +2,7 @@ Todo and idea list broken down by directory
 
 Global
 ------
-- install script
+- check/update install script
 - grep for XXX in all files
 - add to pyPI
 
@@ -35,7 +35,6 @@ nmrglue
 
     filio
     -----
-    - ppm_limits, ppm_scale, hz_limits, hz_scale in unit_conversion object.
     - global nD low-memory object (and support in all modules)
     - lowmem_2d in pipe module
     - ability to write slices to file in all modules (ala pipe.write_slice3d)
@@ -46,7 +45,7 @@ nmrglue
 
     gui
     ---
-    - gui module with common gui functions (get_ppm_scale, etc)
+    - gui module with common gui functions.
 
     process
     ------
@@ -59,7 +58,7 @@ nmrglue
     - FWHT in proc_base
     - profile processing and optimize
 
-    misc
+    util
     ----
     - peakpicking module
     - peakfitting module
