@@ -49,8 +49,8 @@ nmrglue
 
     process
     ------
-    - LP code in proc_lp module (Linear Prediction)
-    - glue_proc module
+    - test and document proc_lp module as lp/lpc/lp2d in pipe_proc module.
+    - glue_proc module?
     - debug XXX in pipe_proc
     - more work on broken tests in test_pipe_proc
     - proc_mem module (Maximum Entropy)

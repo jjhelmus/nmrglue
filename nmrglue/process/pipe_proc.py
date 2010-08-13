@@ -20,9 +20,6 @@ NotImplemented exception:
 
  * ann      Fourier Analysis by Neural Net
  * ebs      EBS Reconstruction
- * lp       Linear Prediction
- * lpc      Linear Predictions
- * lp2d     2D Linear Prediction
  * mac      Macro Language Interpreter
  * mem      Maximum Entropy
  * ml       Maximum likelyhood frequency
@@ -41,6 +38,7 @@ import scipy.signal
 from nmrglue.fileio import pipe,fileiobase
 import proc_base as p
 import proc_bl
+import proc_lp
 
 pi = np.pi
 
@@ -2245,6 +2243,189 @@ def zd(dic,data,wide=1.0,x0=1.0,slope=0,func=0,g=1):
     dic = update_minmax(dic,data)
     return dic,data
 
+###############################
+# Linear Prediction Functions #
+###############################
+
+def lp(dic,data,pred="default",x1="default",xn="default",ord=8,mode='f',
+       append='after',bad_roots='auto',mirror=None,fix_mode='on',method='tls'):
+    """
+    Linear Prediction
+
+    Parameters are slightly different than NMRPipe.  
+
+    Parameters:
+
+    * dic       Dictionary of NMRPipe parameters.
+    * data      array of spectral data.
+    * pred      Number of points to predict, "default" chooses the vector size
+                for forward prediction, 1 for backward prediction
+    * x1        First point in 1D vector to use to extract LP filter.   
+    * xn        Last point in 1D vector to use to extract LP filter.
+    * ord       Prediction order (Number of LP coefficients)
+    * mode      Mode to generate LP filter ('f'-forward,'b'-backward,
+                'fb'-forward-backward)
+    * append    Where to append predicted data ('before' or 'after') 
+    * bad_roots Type of roots which are bad and should be stabilized,
+                either those with 'incr' or 'decr' signals, set to None for
+                no root stabilizing. Default of 'auto' set root fixing
+                based on LP mode.
+                (mode=='f' or 'fb' -> 'incr', mode=='b' -> 'decr')
+    * mirror    '90-180','0-0' or None for one-point shifted mirror image,
+                extract mirror image, and No mirror image
+
+    Additional Parameters (Not included in NMRPipe):
+        
+    * fix_mode  Method used to stabilize bad roots, "on" to move the roots
+                onto the unit circle, "reflect" to reflect bad roots across
+                the unit circle.
+    * method    Method to use to calculate the LP filter, choose from
+                'svd','qr','choleskey' or 'tls'.
+
+
+
+    """
+    # check parameter
+    if mirror not in [None,'90-180','0-0']:
+        raise ValueError("mirror must be None,'90-180' or '0-0'")
+    
+    # pred default values
+    if pred == "default":   
+        if mode == "after":
+            pred = data.shape[-1]   # double the number of points
+        else:
+            pred = 1    # predict 1 point before the data
+
+    # remove first pred points if appending before data
+    if mode == "before":
+        data = data[...,pred:]
+
+    # create slice object
+    if x1 == "default":
+        x_min = 0
+    elif mode == "before":
+        x_min = x1-pred-1
+    else:
+        x_min = x1-1
+    
+    if xn == "default":
+        x_max = data.shape[-1]
+    else:
+        x_max = xn-1
+    sl = slice(x_min,x_max)
+    
+    # mirror mode (remap to proc_lp names
+    mirror = {None:None,'90-180':'180','0-0':'0'}[mirror]
+
+    # mode, append, bad_roots, fix_mode, and method are passed unchanged
+
+    # use LP-TLS for best results
+    data = proc_lp.lp(data,pred,sl,ord,mode,append,bad_roots,fix_mode,mirror,
+                      method)
+
+    # calculation for dictionary updates
+    fn = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+    s = data.shape[-1]
+    s2 = s/2.0 + 1
+    
+    # update the dictionary
+    dic[fn+"CENTER"] = s2
+    if dic["FD2DPHASE"] == 1 and fn!="FDF2":   # TPPI data
+        dic[fn+"CENTER"] = np.round(s2/2.+0.001)
+    dic = recalc_orig(dic,data,fn)
+    dic["FDSIZE"] = s
+    dic[fn+"APOD"] = s
+    dic[fn+"TDSIZE"] = s
+
+    dic = update_minmax(dic,data)
+    
+    return dic,data
+
+lpc = lp        # macro to lp
+
+def lp2d(dic,data,xOrd=8,yOrd=8,xSize="default",ySize="default",
+         xMirror='0',yMirror='0',fix_pts=True,method='svd'):
+    """
+    2D Linear Prediction using LP2D procedure
+
+    Applies the LP2D procedure as described in:
+    G. Zhu and A. Bax, Journal of Magnetic Resonance, 1992, 98, 192-199.
+    to the data matrix. Parameters differ from NMRPipe because this function
+    is not well documented.
+
+    Parameters:
+        
+    * dic       Dictionary of NMRPipe parameters.
+    * data      array of spectral data.
+    * xOrd      Linear Prediction X dimension order.      
+    * yOrd      Linear Prediction Y dimension order.
+    * xSize     New size of Y-axis, 'default' double size.
+    * ySize     New size of Y-axis, 'default' double size.
+    * xMirror   '0' or '180' indicating how the mirror image of the X-axis 
+                should be formed.  '0' indicated no delay, '180' for a 
+                half-point delay.
+    * yMirror   '0' or '180' indicating how the mirror image of the Y-axis
+                should be formed.  '0' indicated no delay, '180' for a
+                half-point delay.
+    * fix_pts   Set to True to reduce predicted points with magnitude larger
+                than the largest data point. False leaved predicted points
+                unaltered.
+    * method    Method used to calculate the LP prediction matrix, choose from
+                'svd','qr','cholesky', or 'tls'.
+
+    """
+
+    # determind how many points to predict in each dimension
+    if xOrd == "default":
+        xpred = data.shape[1]
+    else:
+        xpred = xOrd - data.shapae[1]
+    if yOrd == "default":
+        ypred = data.shape[0]
+    else:
+        ypred = yOrd - data.shapae[0]
+
+    
+    # predict the X (last) axis.
+    data = proc_lp.lp2d(data,xpred,yOrd,xOrd,yMirror,fix_pts,method)
+
+    # transpose the data matrix, predict Y axis, tranpose back
+    data = data.T
+    data = proc_lp.lp2d(data,ypred,xOrd,yOrd,xMirror,fix_pts,method)
+    data = data.T
+
+    # update dictionary
+    # x-axis updates
+    fn = "FDF"+str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+    s = data.shape[1]
+    s2 = s/2.0 + 1
+    
+    # update the dictionary
+    dic[fn+"CENTER"] = s2
+    if dic["FD2DPHASE"] == 1 and fn!="FDF2":   # TPPI data
+        dic[fn+"CENTER"] = np.round(s2/2.+0.001)
+    dic = recalc_orig(dic,data,fn)
+    dic["FDSIZE"] = s
+    dic[fn+"APOD"] = s
+    dic[fn+"TDSIZE"] = s
+
+    # y-axis updates
+    fn = "FDF"+str(int(dic["FDDIMORDER"][1])) # F1, F2, etc
+    s = data.shape[0]
+    s2 = s/2.0 + 1
+    
+    # update the dictionary
+    dic[fn+"CENTER"] = s2
+    if dic["FD2DPHASE"] == 1 and fn!="FDF2":   # TPPI data
+        dic[fn+"CENTER"] = np.round(s2/2.+0.001)
+    dic = recalc_orig(dic,data,fn)
+    dic[fn+"APOD"] = s
+    dic[fn+"TDSIZE"] = s
+
+    dic = update_minmax(dic,data)
+
+    return dic,data
+
 #############################
 # Not Implemented Functions #
 #############################
@@ -2258,20 +2439,6 @@ def ann(dic,data):
 def ebs(dic,data):
     """
     EBS Reconstruction
-    """
-    raise NotImplementedError
-
-def lp(dic,data):
-    """
-    Linear Prediction
-    """
-    raise NotImplementedError
-
-lpc = lp        # lpc is depreciated
-
-def lp2d(dic,data):
-    """
-    2D Linear Prediction
     """
     raise NotImplementedError
 
