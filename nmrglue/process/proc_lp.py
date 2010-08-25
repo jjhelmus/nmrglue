@@ -296,7 +296,7 @@ def lp2d(data,pred,P,M,mirror='0',fix_points=True,method='svd'):
         raise ValueError("method must be 'svd','qr','cholesky', or 'tls'")
 
     # form lp2d equation matrix and vector
-    D,d = make_lp2d_Dd(x,P,M,'f')
+    D,d = make_lp2d_Dd(data,P,M,'f')
 
     # Solve lp2d equation to find the prediction matrix
     c = find_lpc(D,d,method)

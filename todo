@@ -10,6 +10,8 @@ doc
 ---
 - check for typos/mis-spelling in all documents
 - script to copy over additional files (example code, figures, etc)
+- document proc_lp module
+- document peak_fit and peak_pick module
 
 examples
 --------
@@ -22,6 +24,7 @@ examples
 
 tests
 -----
+- convert to nose?
 - test_bruker.py
 - test_convert.py
 - test_pipe.py
@@ -32,6 +35,13 @@ tests
 
 nmrglue
 -------
+
+
+    analysis
+    --------
+    - test and add to peak_pick module
+    - test and add to peak_fit module
+    - decide on final folder structure
 
     filio
     -----
@@ -49,7 +59,7 @@ nmrglue
 
     process
     ------
-    - test and document proc_lp module as lp/lpc/lp2d in pipe_proc module.
+    - test and document proc_lp module and lp/lpc/lp2d in pipe_proc module.
     - glue_proc module?
     - debug XXX in pipe_proc
     - more work on broken tests in test_pipe_proc
@@ -60,8 +70,7 @@ nmrglue
 
     util
     ----
-    - peakpicking module
-    - peakfitting module
+
 
 Other thoughts
 --------------

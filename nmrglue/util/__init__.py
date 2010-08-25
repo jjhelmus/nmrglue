@@ -1,2 +1,1 @@
-# import qview
 import misc

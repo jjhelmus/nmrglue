@@ -2297,7 +2297,7 @@ def lp(dic,data,pred="default",x1="default",xn="default",ord=8,mode='f',
             pred = 1    # predict 1 point before the data
 
     # remove first pred points if appending before data
-    if mode == "before":
+    if append == "before":
         data = data[...,pred:]
 
     # create slice object
@@ -2379,11 +2379,11 @@ def lp2d(dic,data,xOrd=8,yOrd=8,xSize="default",ySize="default",
     if xOrd == "default":
         xpred = data.shape[1]
     else:
-        xpred = xOrd - data.shapae[1]
+        xpred = xOrd - data.shape[1]
     if yOrd == "default":
         ypred = data.shape[0]
     else:
-        ypred = yOrd - data.shapae[0]
+        ypred = yOrd - data.shape[0]
 
     
     # predict the X (last) axis.
