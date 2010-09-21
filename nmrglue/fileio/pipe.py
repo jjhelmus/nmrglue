@@ -22,6 +22,9 @@ import fileiobase
 def read_tab(file):
     """ 
     Read a NMRPipe .tab file into a records array
+
+    Returns dic,rec where dic is a dictionary of important parameters in the 
+    table, rec is a records array of data in the table.
     """
 
     f = open(file)
@@ -44,8 +47,11 @@ def read_tab(file):
 
     names = dic["VARS"][0].split()  # determind the column names
 
-    rec = np.recfromtxt(file,skiprows=skiprows,names=names)
+    # XXX might want to determind dtype from dic["FORMAT"][0] or
+    # write custom converters...
+    rec = np.recfromtxt(file,skiprows=skiprows,names=names,comments="XXXXX")
 
+    
     return dic,rec
 
 
@@ -1166,12 +1172,17 @@ class pipe_3d(fileiobase.data_3d):
 
         dic,data = read_2D(self.farray[0]) # read in the first 2D plane
 
-        if len(self.farray) != dic["FDFILECOUNT"]:
+        # determine the number of planes in the spectrum.
+        f3 = "FDF"+str(int(dic["FDDIMORDER3"]))
+        f4 = "FDF"+str(int(dic["FDDIMORDER4"]))
 
-            if len(self.farray) >  dic["FDFILECOUNT"]:
-                print "Warning: more file match filemask than indicated fdata"
-                #print len(self.farray),dic["FDFILECOUNT"]
-                self.farray = self.farray[:int(dic["FDFILECOUNT"])]
+        nfiles = int(dic[f3+"SIZE"]*dic[f4+"SIZE"])
+        
+        if len(self.farray) != nfiles:
+
+            if len(self.farray) >  nfiles:
+                print "Warning: more files match filemask than expected"
+                self.farray = self.farray[:nfiles]
             else:
                 raise IOError,"Incomplete 3D file"
 
