@@ -1,5 +1,5 @@
 """
-Linear Prediction (LP) functions for extrapolating and modeling 1D NMR signals
+Linear Prediction (LP) functions for extrapolating and modeling NMR signals
 
 """
 
@@ -22,9 +22,9 @@ import numpy as np
 import scipy
 import scipy.linalg
 
-################################################
-# 1D linear prediction extrapolation functions #
-################################################
+#############################################
+# linear prediction extrapolation functions #
+#############################################
 
 
 def lp(data,pred=1,slice=slice(None),order=8,mode="f",append="after",
