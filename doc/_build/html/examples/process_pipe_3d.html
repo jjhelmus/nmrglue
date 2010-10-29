@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>process example: process_pipe_3d &mdash; nmrglue v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="nmrglue v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Examples" href="index.html" />
+    <link rel="next" title="unarray example: unarray_1d_varian" href="unarray_1d_varian.html" />
+    <link rel="prev" title="process example: process_pipe_2d_tppi" href="process_pipe_2d_tppi.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="unarray_1d_varian.html" title="unarray example: unarray_1d_varian"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="process_pipe_2d_tppi.html" title="process example: process_pipe_2d_tppi"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">nmrglue v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="process_pipe_2d_tppi.html"
+                                  title="previous chapter">process example: process_pipe_2d_tppi</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="unarray_1d_varian.html"
+                                  title="next chapter">unarray example: unarray_1d_varian</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/examples/process_pipe_3d.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="process-example-process-pipe-3d">
+<span id="process-pipe-3d"></span><h1>process example: process_pipe_3d<a class="headerlink" href="#process-example-process-pipe-3d" title="Permalink to this headline">¶</a></h1>
+<p>This example shows how nmrglue can be used to process NMR data.  In this
+script a 3D time domain NMRPipe file is processing into a 3D NMRPipe
+frequency domain file. For 3D processing the XXX iter3D object is used to
+loop over XY and ZX planes.After processing the resulting file is compared to
+one processed with NMRPipe.</p>
+<p>[<a class="reference external" href="el/processing/process_pipe_3d.py">source code</a>]</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#! /usr/bin/env python</span>
+
+<span class="kn">import</span> <span class="nn">nmrglue</span> <span class="kn">as</span> <span class="nn">ng</span>
+
+<span class="c"># create the iterator (xiter) which will loop over YX planes</span>
+<span class="n">xiter</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">iter3D</span><span class="p">(</span><span class="s">&quot;../common_data/3d_pipe/data/test</span><span class="si">%03d</span><span class="s">.fid&quot;</span><span class="p">,</span><span class="s">&#39;x&#39;</span><span class="p">,</span><span class="s">&#39;x&#39;</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="s">&quot;Processing XY planes...&quot;</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,(</span><span class="n">dic</span><span class="p">,</span><span class="n">plane</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">xiter</span><span class="p">):</span>
+    
+    <span class="c"># process the direct dimention (x)</span>
+    <span class="n">dic</span><span class="p">,</span><span class="n">plane</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">zf</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">plane</span><span class="p">,</span><span class="n">auto</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">dic</span><span class="p">,</span><span class="n">plane</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">ft</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">plane</span><span class="p">,</span><span class="n">auto</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">dic</span><span class="p">,</span><span class="n">plane</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">ps</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">plane</span><span class="p">,</span><span class="n">p0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span><span class="n">p1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">dic</span><span class="p">,</span><span class="n">plane</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">di</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">plane</span><span class="p">)</span>
+
+    <span class="c"># process the first indirect (y) dimention</span>
+    <span class="n">dic</span><span class="p">,</span><span class="n">plane</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">tp</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">plane</span><span class="p">)</span>
+    <span class="n">dic</span><span class="p">,</span><span class="n">plane</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">zf</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">plane</span><span class="p">,</span><span class="n">auto</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">dic</span><span class="p">,</span><span class="n">plane</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">ft</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">plane</span><span class="p">,</span><span class="n">auto</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">dic</span><span class="p">,</span><span class="n">plane</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">ps</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">plane</span><span class="p">,</span><span class="n">p0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span><span class="n">p1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">dic</span><span class="p">,</span><span class="n">plane</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">di</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">plane</span><span class="p">)</span>
+    <span class="n">dic</span><span class="p">,</span><span class="n">plane</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">tp</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">plane</span><span class="p">)</span>
+   
+    <span class="c"># write out the plane</span>
+    <span class="c">#print &quot;Writing out Z slice:&quot;,i,&quot;/&quot;,xiter.i_max</span>
+    <span class="n">xiter</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;./ft/test</span><span class="si">%03d</span><span class="s">.ft2&quot;</span><span class="p">,</span><span class="n">plane</span><span class="p">,</span><span class="n">dic</span><span class="p">)</span>
+
+
+<span class="k">print</span> <span class="s">&quot;Processing ZX planes...&quot;</span>
+
+<span class="c"># create the iterator (ziter) which will loop over XZ planes</span>
+<span class="n">ziter</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">iter3D</span><span class="p">(</span><span class="s">&quot;./ft/test</span><span class="si">%03d</span><span class="s">.ft2&quot;</span><span class="p">,</span><span class="s">&#39;z&#39;</span><span class="p">,</span><span class="s">&#39;z&#39;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,(</span><span class="n">dic</span><span class="p">,</span><span class="n">plane</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ziter</span><span class="p">):</span>
+
+    <span class="c"># process the z-dim</span>
+    <span class="n">dic</span><span class="p">,</span><span class="n">plane</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">zf</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">plane</span><span class="p">,</span><span class="n">auto</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">dic</span><span class="p">,</span><span class="n">plane</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">ft</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">plane</span><span class="p">,</span><span class="n">auto</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">dic</span><span class="p">,</span><span class="n">plane</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">ps</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">plane</span><span class="p">,</span><span class="n">p0</span><span class="o">=-</span><span class="mf">92.0</span><span class="p">,</span><span class="n">p1</span><span class="o">=</span><span class="mf">65.0</span><span class="p">)</span>
+    <span class="n">dic</span><span class="p">,</span><span class="n">plane</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">di</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">plane</span><span class="p">)</span>
+
+    <span class="c"># write out the plane</span>
+    <span class="c">#print &quot;Writing out Y slice:&quot;,i,&quot;/&quot;,ziter.i_max</span>
+    <span class="n">ziter</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;./ft/test</span><span class="si">%03d</span><span class="s">.ft3&quot;</span><span class="p">,</span><span class="n">plane</span><span class="p">,</span><span class="n">dic</span><span class="p">)</span>
+
+<span class="k">print</span> <span class="s">&quot;Done&quot;</span>
+<span class="c"># check against a file processed with NMRPipe</span>
+<span class="n">dic1</span><span class="p">,</span><span class="n">data1</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read_lowmem</span><span class="p">(</span><span class="s">&quot;../common_data/3d_pipe/ft/test</span><span class="si">%03d</span><span class="s">.ft3&quot;</span><span class="p">)</span>
+<span class="n">dic2</span><span class="p">,</span><span class="n">data2</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read_lowmem</span><span class="p">(</span><span class="s">&quot;./ft/test</span><span class="si">%03d</span><span class="s">.ft3&quot;</span><span class="p">)</span>
+<span class="c"># we&#39;ll check two 2D slices as the whole 3D takes a long time</span>
+<span class="k">print</span> <span class="n">ng</span><span class="o">.</span><span class="n">misc</span><span class="o">.</span><span class="n">pair_similar</span><span class="p">(</span><span class="n">dic1</span><span class="p">,</span><span class="n">data1</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span><span class="n">dic2</span><span class="p">,</span><span class="n">data2</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span><span class="n">verb</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">ng</span><span class="o">.</span><span class="n">misc</span><span class="o">.</span><span class="n">pair_similar</span><span class="p">(</span><span class="n">dic1</span><span class="p">,</span><span class="n">data1</span><span class="p">[</span><span class="mi">52</span><span class="p">],</span><span class="n">dic2</span><span class="p">,</span><span class="n">data2</span><span class="p">[</span><span class="mi">52</span><span class="p">],</span><span class="n">verb</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="unarray_1d_varian.html" title="unarray example: unarray_1d_varian"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="process_pipe_2d_tppi.html" title="process example: process_pipe_2d_tppi"
+             >previous</a> |</li>
+        <li><a href="../index.html">nmrglue v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Oct 29, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

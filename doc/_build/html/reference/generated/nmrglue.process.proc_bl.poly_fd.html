@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nmrglue.process.proc_bl.poly_fd &mdash; nmrglue v1.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="nmrglue v1.0 documentation" href="../../index.html" />
+    <link rel="up" title="nmrglue.proc_bl" href="../proc_bl.html" />
+    <link rel="next" title="nmrglue.pipe_proc" href="../pipe_proc.html" />
+    <link rel="prev" title="nmrglue.process.proc_bl.poly_td" href="nmrglue.process.proc_bl.poly_td.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="../pipe_proc.html" title="nmrglue.pipe_proc"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.proc_bl.poly_td.html" title="nmrglue.process.proc_bl.poly_td"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">nmrglue v1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../proc_bl.html" accesskey="U">nmrglue.proc_bl</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="nmrglue.process.proc_bl.poly_td.html"
+                                  title="previous chapter">nmrglue.process.proc_bl.poly_td</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="../pipe_proc.html"
+                                  title="next chapter">nmrglue.pipe_proc</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../../_sources/reference/generated/nmrglue.process.proc_bl.poly_fd.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="nmrglue-process-proc-bl-poly-fd">
+<h1>nmrglue.process.proc_bl.poly_fd<a class="headerlink" href="#nmrglue-process-proc-bl-poly-fd" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="nmrglue.process.proc_bl.poly_fd">
+<tt class="descclassname">nmrglue.process.proc_bl.</tt><tt class="descname">poly_fd</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#nmrglue.process.proc_bl.poly_fd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Polynomial frequency domain baseline correction</p>
+<p>From NMRPipe paper (appendix):</p>
+<p>applies a polynomial baseline correction of the order specified by 
+argument -ord via an automated base-line detection method when used
+with argument -auto.  The defauly is a forth-order polynomial. The 
+automated base-line mode works as follows: a copy of a given vector is 
+divided into a series of adjacent sections, typically eight points wide.
+The average value of each section is subtracted from all points in that 
+section, to generate a &#8216;centered&#8217; vector.  The intensities of the entire
+centered vector are sorted, and the standard deviation of the noise is
+estimated under the assumption that a given fraction (typically about
+30%) of the smallest intensities belong to the base-line, and that the 
+noise is normally distributed.  This noise estimate is multiplied by a 
+constant, typically about 1.5, to yield a classification threshold.  
+Then, each section in the centered vector is classified as base line only
+if its standard deviation does not exceed the threshold.  These 
+classifications are used to correct the original vector.</p>
+<p>Alg:</p>
+<ol class="arabic simple">
+<li>Divide into &#8216;blocks&#8217;</li>
+<li>Center each block and create centered vector</li>
+<li>Calculate intensity (abs) of each centered vector</li>
+<li>Sort intensities, lower 30% belong to baseline</li>
+<li>Fit base line intensities to Normal distribution, gives estimation
+of standard deviation (std) of noise</li>
+<li>Classification threshold set to 1.5*std</li>
+</ol>
+<p>7. Qualify each block in centered vector as baseline only 
+(its std &lt; thres) or not (std &gt; thres)
+8. Fit baseline only points to polynomial and substract off</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../pipe_proc.html" title="nmrglue.pipe_proc"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.proc_bl.poly_td.html" title="nmrglue.process.proc_bl.poly_td"
+             >previous</a> |</li>
+        <li><a href="../../index.html">nmrglue v1.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../proc_bl.html" >nmrglue.proc_bl</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Oct 29, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+nmrglue.process.proc_base.em
+============================
+
+.. currentmodule:: nmrglue.process.proc_base
+
+.. autofunction:: em

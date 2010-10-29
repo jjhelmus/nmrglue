@@ -1,0 +1,6 @@
+nmrglue.process.proc_base.mir_center
+====================================
+
+.. currentmodule:: nmrglue.process.proc_base
+
+.. autofunction:: mir_center

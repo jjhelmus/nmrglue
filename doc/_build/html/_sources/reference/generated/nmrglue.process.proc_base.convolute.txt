@@ -1,0 +1,6 @@
+nmrglue.process.proc_base.convolute
+===================================
+
+.. currentmodule:: nmrglue.process.proc_base
+
+.. autofunction:: convolute

@@ -1,0 +1,6 @@
+nmrglue.process.proc_base.zf_inter
+==================================
+
+.. currentmodule:: nmrglue.process.proc_base
+
+.. autofunction:: zf_inter

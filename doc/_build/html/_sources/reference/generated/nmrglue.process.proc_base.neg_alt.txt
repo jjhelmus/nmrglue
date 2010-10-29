@@ -1,0 +1,6 @@
+nmrglue.process.proc_base.neg_alt
+=================================
+
+.. currentmodule:: nmrglue.process.proc_base
+
+.. autofunction:: neg_alt

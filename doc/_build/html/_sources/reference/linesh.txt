@@ -1,0 +1,38 @@
+nmrglue.linesh
+==============
+
+.. automodule:: nmrglue.analysis.linesh
+
+This module is import as nmrglue.linesh and can be called as such
+
+High-Level Functions
+--------------------
+
+These are the functions the majority of users will use from the linesh module.
+
+.. autofunction:: fit_NDregion
+.. autofunction:: sim_NDregion
+
+
+
+Low-Level Functions
+-------------------
+
+These functions are typically not used directly by users. They are called by
+high level functions.  Developers and user who want fine control over lineshape
+fitting may be interested in these functions.
+
+.. autofunction:: f_NDregion
+.. autofunction:: s_NDregion
+.. autofunction:: s_single_NDregion
+.. autofunction:: err_NDregion
+.. autofunction:: make_slist
+.. autofunction:: ls_str2class
+.. autofunction:: split_list
+
+Low-Level Classes
+-----------------
+
+.. autoclass:: gauss1D
+.. autoclass:: lorentz1D
+.. autoclass:: scale1D

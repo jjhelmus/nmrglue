@@ -1,0 +1,360 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nmrglue.linesh &mdash; nmrglue v1.0 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="nmrglue v1.0 documentation" href="../index.html" />
+    <link rel="up" title="Reference Guide" href="index.html" />
+    <link rel="next" title="nmrglue.misc" href="misc.html" />
+    <link rel="prev" title="nmrglue.process.pipe_proc.ztp" href="generated/nmrglue.process.pipe_proc.ztp.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="misc.html" title="nmrglue.misc"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.process.pipe_proc.ztp.html" title="nmrglue.process.pipe_proc.ztp"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">nmrglue v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Reference Guide</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">nmrglue.linesh</a><ul>
+<li><a class="reference external" href="#high-level-functions">High-Level Functions</a></li>
+<li><a class="reference external" href="#low-level-functions">Low-Level Functions</a></li>
+<li><a class="reference external" href="#low-level-classes">Low-Level Classes</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="generated/nmrglue.process.pipe_proc.ztp.html"
+                                  title="previous chapter">nmrglue.process.pipe_proc.ztp</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="misc.html"
+                                  title="next chapter">nmrglue.misc</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/reference/linesh.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-nmrglue.analysis.linesh">
+<h1>nmrglue.linesh<a class="headerlink" href="#module-nmrglue.analysis.linesh" title="Permalink to this headline">¶</a></h1>
+<p>Functions for fitting and simulating arbitrary dimensional lineshapes commonly
+found in nmr experiments</p>
+<p>This module is import as nmrglue.linesh and can be called as such</p>
+<div class="section" id="high-level-functions">
+<h2>High-Level Functions<a class="headerlink" href="#high-level-functions" title="Permalink to this headline">¶</a></h2>
+<p>These are the functions the majority of users will use from the linesh module.</p>
+<dl class="function">
+<dt id="nmrglue.analysis.linesh.fit_NDregion">
+<tt class="descclassname">nmrglue.analysis.linesh.</tt><tt class="descname">fit_NDregion</tt><big>(</big><em>region</em>, <em>lineshapes</em>, <em>guesses</em>, <em>amp_guesses</em>, <em>guesses_bounds=None</em>, <em>amp_bounds=None</em>, <em>**kw</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.linesh.fit_NDregion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit a N-dimensional region.</p>
+<p>Parameters:</p>
+<ul>
+<li><p class="first">region         N-dimensional region to fit.</p>
+</li>
+<li><p class="first">lineshapes     List of lineshapes by label (str) or a lineshape class.</p>
+</li>
+<li><dl class="first docutils">
+<dt>guesses        P-length list (P is the number of peaks in region) of </dt>
+<dd><p class="first last">N-length lists of tuples where each each tuple is the 
+optimiztion starting parameters for a given peak and 
+dimension lineshape.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">amp_guesses    P-length list of amplitudes.</p>
+</li>
+<li><dl class="first docutils">
+<dt>guesses_bounds List of bounds for parameter of same shape as guesses.  If</dt>
+<dd><p class="first last">none of the parameters in a given dimension have limits 
+None can be used, otherwise each dimension should have a 
+list/tuple of (min,max) or None for each parameter.  
+min or max may be None when there is no bound in a given 
+direction.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>amp_bounds     P-length list of bounds for the amplitude with format </dt>
+<dd><p class="first last">similar to guesses_bound.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>kw             Additional keywords passed to the scipy.optimize.leastsq </dt>
+<dd><p class="first last">function.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns: param_best,amp_best,ier</p>
+<ul>
+<li><dl class="first docutils">
+<dt>params_best   Optimal values for lineshape parameters with same format</dt>
+<dd><p class="first last">as guesses input parameter.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">amp_best      List of optimal peak amplitudes.</p>
+</li>
+<li><dl class="first docutils">
+<dt>ier           Interger flag from scipy.optimize.leastsq indicating if</dt>
+<dd><p class="first last">the solution was found.  1,2,3,4 indicates that a solution
+was found.  Otherwise the solution was not found.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Note on the lineshape parameter:</p>
+<p>Elements of the lineshape parameter list can be string indicating the
+lineshape of given dimension or an instance of a lineshape class 
+which provide a sim method which takes two arguments, the first being the 
+length of the lineshape the second being a list of lineshape parameters, 
+and returns a simulated lineshape as well as a nparam method which when 
+given the length of lineshape returns the number of parameters needed to
+describe the lineshape. Currently the following strings are allowed:</p>
+<ul class="simple">
+<li>&#8216;g&#8217; or &#8216;gauss&#8217;    Gaussian (normal) lineshape.</li>
+<li>&#8216;l&#8217; or &#8216;lorentz&#8217;  Lorentzian lineshape.</li>
+<li>&#8216;s&#8217; or &#8216;scale&#8217;    Scaled lineshape.</li>
+</ul>
+<p>The following are all valid lineshapes parameters for a 2D Gaussian peak:</p>
+<p>[&#8216;g&#8217;,&#8217;g&#8217;]
+[&#8216;gauss&#8217;,&#8217;gauss&#8217;]
+[ng.linesh.gauss1D(),ng.linesh.gauss1D()]</p>
+<p>An simple example of a lineshape class which simulates the function y=c:</p>
+<dl class="docutils">
+<dt>class constant(): </dt>
+<dd><dl class="first last docutils">
+<dt>def sim(self,M,p):</dt>
+<dd>c = p
+return c*np.ones(M)</dd>
+<dt>def nparam(self,M):</dt>
+<dd>return 1</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.linesh.sim_NDregion">
+<tt class="descclassname">nmrglue.analysis.linesh.</tt><tt class="descname">sim_NDregion</tt><big>(</big><em>shape</em>, <em>lineshapes</em>, <em>params</em>, <em>amps</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.linesh.sim_NDregion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulate a arbitrary dimensional region with one or more peaks.</p>
+<p>Parameters:</p>
+<ul>
+<li><p class="first">shape         tuple of region shape</p>
+</li>
+<li><dl class="first docutils">
+<dt>lineshapes    List of lineshapes by label (str) or a lineshape class.</dt>
+<dd><p class="first last">See fit_NDregion for additional documentation.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>params        P-length list (P is the number of peaks in region) of </dt>
+<dd><p class="first last">N-length lists of tuples where each each tuple is 
+lineshape parameters for a given peak and dimension.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">amps          P-length of peak amplitudes.</p>
+</li>
+</ul>
+<p>Returns: array containing simulated region</p>
+</dd></dl>
+
+</div>
+<div class="section" id="low-level-functions">
+<h2>Low-Level Functions<a class="headerlink" href="#low-level-functions" title="Permalink to this headline">¶</a></h2>
+<p>These functions are typically not used directly by users. They are called by
+high level functions.  Developers and user who want fine control over lineshape
+fitting may be interested in these functions.</p>
+<dl class="function">
+<dt id="nmrglue.analysis.linesh.f_NDregion">
+<tt class="descclassname">nmrglue.analysis.linesh.</tt><tt class="descname">f_NDregion</tt><big>(</big><em>region</em>, <em>ls_classes</em>, <em>p0</em>, <em>p_bounds</em>, <em>n_peaks</em>, <em>**kw</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.linesh.f_NDregion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit an arbitrary dimensional regions  containing one or more peaks 
+using a contrained Levenberg-Marquard optmization algorithm.</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>region        N-dimensional region to fit</li>
+<li>ls_classes    List of lineshape classes</li>
+<li>p0            Initial parameter guesses</li>
+<li>p_bounds      (min,max) pairs for each element of p0</li>
+<li>n_peaks       Number of peaks</li>
+</ul>
+<p>Additional keyword are passed directly to leastsqbound and in turn
+passed to scipy.optimize.leastsq after variable transformation.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.linesh.s_NDregion">
+<tt class="descclassname">nmrglue.analysis.linesh.</tt><tt class="descname">s_NDregion</tt><big>(</big><em>p</em>, <em>shape</em>, <em>ls_classes</em>, <em>n_peaks</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.linesh.s_NDregion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulate a arbitrary dimensional region with one or more peaks.</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>p             List (and must be a list) of parameters</li>
+<li>shape         tuple of region shape</li>
+<li>ls_classes    List of lineshape classes</li>
+<li>n_peaks       Number of peaks in region</li>
+</ul>
+<p>p is modified by this functions, pass a copy if p should be retained.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.linesh.s_single_NDregion">
+<tt class="descclassname">nmrglue.analysis.linesh.</tt><tt class="descname">s_single_NDregion</tt><big>(</big><em>p</em>, <em>shape</em>, <em>ls_classes</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.linesh.s_single_NDregion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulate a arbitrary dimensional region with a single peak. Called 
+repeatly by s_NDregion to build up a full ND region.</p>
+<p>Parameters:
+* p             List (and must be a list) of parameters
+* shape         tuple of region shape
+* ls_classes    List of lineshape classes</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.linesh.err_NDregion">
+<tt class="descclassname">nmrglue.analysis.linesh.</tt><tt class="descname">err_NDregion</tt><big>(</big><em>p</em>, <em>region</em>, <em>shape</em>, <em>ls_classes</em>, <em>n_peaks</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.linesh.err_NDregion" title="Permalink to this definition">¶</a></dt>
+<dd>Error functions for a NDregion, called by f_NDregion function</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.linesh.make_slist">
+<tt class="descclassname">nmrglue.analysis.linesh.</tt><tt class="descname">make_slist</tt><big>(</big><em>l</em>, <em>t_sizes</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.linesh.make_slist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a list of tuples of given sizes from a list</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>l         List/array to pack into shaped list.</li>
+<li>t_sizes   List of tuple sizes.</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.linesh.ls_str2class">
+<tt class="descclassname">nmrglue.analysis.linesh.</tt><tt class="descname">ls_str2class</tt><big>(</big><em>l</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.linesh.ls_str2class" title="Permalink to this definition">¶</a></dt>
+<dd>Convert lineshape string to lineshape class</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.linesh.split_list">
+<tt class="descclassname">nmrglue.analysis.linesh.</tt><tt class="descname">split_list</tt><big>(</big><em>l</em>, <em>N</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.linesh.split_list" title="Permalink to this definition">¶</a></dt>
+<dd>Split list l into N sublists of equal size</dd></dl>
+
+</div>
+<div class="section" id="low-level-classes">
+<h2>Low-Level Classes<a class="headerlink" href="#low-level-classes" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nmrglue.analysis.linesh.gauss1D">
+<em class="property">class </em><tt class="descclassname">nmrglue.analysis.linesh.</tt><tt class="descname">gauss1D</tt><a class="headerlink" href="#nmrglue.analysis.linesh.gauss1D" title="Permalink to this definition">¶</a></dt>
+<dd><p>One dimensional gaussian (normal) class</p>
+<p>Parameters (mu,sigma):</p>
+<ul class="simple">
+<li>mu    mean (center of mean)</li>
+<li>sigma variance (width if distribution)</li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="nmrglue.analysis.linesh.lorentz1D">
+<em class="property">class </em><tt class="descclassname">nmrglue.analysis.linesh.</tt><tt class="descname">lorentz1D</tt><a class="headerlink" href="#nmrglue.analysis.linesh.lorentz1D" title="Permalink to this definition">¶</a></dt>
+<dd><p>One dimensional lorentzian class</p>
+<p>Parameters (x_0,g):</p>
+<ul class="simple">
+<li>x_0     the center of the lorentzian.</li>
+<li>gamma   the scale parameter .</li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="nmrglue.analysis.linesh.scale1D">
+<em class="property">class </em><tt class="descclassname">nmrglue.analysis.linesh.</tt><tt class="descname">scale1D</tt><a class="headerlink" href="#nmrglue.analysis.linesh.scale1D" title="Permalink to this definition">¶</a></dt>
+<dd><p>One dimensional scale class</p>
+<p>Simulates a lineshape with functional form:</p>
+<p>1,p_0,p_1,p_2,....</p>
+<p>Where p_0, p_1, ... are the parameters provided.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="misc.html" title="nmrglue.misc"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.process.pipe_proc.ztp.html" title="nmrglue.process.pipe_proc.ztp"
+             >previous</a> |</li>
+        <li><a href="../index.html">nmrglue v1.0 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Reference Guide</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Oct 29, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Overview &mdash; nmrglue v1.0 documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '#',
+        VERSION:     '1.0',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="nmrglue v1.0 documentation" href="#" />
+    <link rel="next" title="Tutorial" href="tutorial.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="Tutorial"
+             accesskey="N">next</a> |</li>
+        <li><a href="#">nmrglue v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="#">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">Overview</a><ul>
+<li><a class="reference external" href="#what-can-nmrglue-do">What can nmrglue do?</a></li>
+<li><a class="reference external" href="#documentation">documentation</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            <h4>Next topic</h4>
+            <p class="topless"><a href="tutorial.html"
+                                  title="next chapter">Tutorial</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/index.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="overview">
+<h1>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Release:</th><td class="field-body">1.0</td>
+</tr>
+<tr class="field"><th class="field-name">Date:</th><td class="field-body">October 29, 2010</td>
+</tr>
+</tbody>
+</table>
+<p>nmrglue is a module for working with NMR data in <a class="reference external" href="http://python.org">Python</a>.
+When used with the <a class="reference external" href="http://numpy.scipy.org/">Numpy</a>,
+<a class="reference external" href="http://scipy.org/">Scipy</a>, and
+<a class="reference external" href="http://matplotlib.sourceforge.net/">matplotlib</a> packages nmrglue provides a
+robust interpreted environment for processing, analysing, and inspecting NMR
+data.</p>
+<div class="section" id="what-can-nmrglue-do">
+<h2>What can nmrglue do?<a class="headerlink" href="#what-can-nmrglue-do" title="Permalink to this headline">¶</a></h2>
+<p>nmrglue has the ability to read, write and convert between a number of common
+NMR file formats including Varian, Bruker, NMRPipe, and Sparky files.  The
+files, which are represented in python as dictionaries of spectral parameters
+and <a class="reference external" href="http://numpy.scipy.org/">Numpy</a> array objects, can be easily examined,
+modified amd processed as desired.</p>
+<p>nmrglue provides a number of common functions for processing NMR data such as
+apodization, spectral shifting, Fourier and other transformations,
+baseline smoothing and flattening, and linear prediction.  In addition new
+processing schemes can be implemented easily using the nmrglue provided
+functions and the multitude of numerical routines provided by the
+<a class="reference external" href="http://numpy.scipy.org/">Numpy</a> and <a class="reference external" href="http://scipy.org/">Scipy</a> packages.</p>
+<p>When used in conjunction with the
+<a class="reference external" href="http://matplotlib.sourceforge.net/">matplotlib</a> (or other) python plotting
+library nmrglue can be used to create publication quality figures of NMR
+spectrum or examine data interactively.</p>
+<a class="reference external image-reference" href="_images/spectrum.png"><img alt="_images/spectrum.png" src="_images/spectrum.png" style="width: 400.0px; height: 300.0px;" /></a>
+<a class="reference external image-reference" href="_images/spectrum1.png"><img alt="_images/spectrum1.png" src="_images/spectrum1.png" style="width: 400.0px; height: 300.0px;" /></a>
+<p>nmrglue can be used to analysis NMR data, with routines to perform peak
+picking, multidimensional lineshape fitting (peak fitting), and
+peak intergration.  New analysis methods can be rapidly developed and tested
+in Python or by integrating Fortran and C/C++ code.</p>
+</div>
+<div class="section" id="documentation">
+<h2>documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="tutorial.html">Tutorial</a><ul>
+<li class="toctree-l2"><a class="reference external" href="tutorial.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference external" href="tutorial.html#reading-nmr-files">Reading NMR files</a></li>
+<li class="toctree-l2"><a class="reference external" href="tutorial.html#universal-dictionaries">Universal dictionaries</a></li>
+<li class="toctree-l2"><a class="reference external" href="tutorial.html#manipulating-nmr-data">Manipulating NMR data</a></li>
+<li class="toctree-l2"><a class="reference external" href="tutorial.html#writing-nmr-files">Writing NMR files</a></li>
+<li class="toctree-l2"><a class="reference external" href="tutorial.html#the-unit-conversion-object">The unit_conversion object</a></li>
+<li class="toctree-l2"><a class="reference external" href="tutorial.html#converting-between-file-formats">Converting between file formats</a></li>
+<li class="toctree-l2"><a class="reference external" href="tutorial.html#low-memory-reading-of-files">Low memory reading of files</a></li>
+<li class="toctree-l2"><a class="reference external" href="tutorial.html#processing-data">Processing data</a></li>
+<li class="toctree-l2"><a class="reference external" href="tutorial.html#using-matplotlib-to-create-figures">Using matplotlib to create figures</a></li>
+<li class="toctree-l2"><a class="reference external" href="tutorial.html#additional-resources">Additional resources</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="reference/index.html">Reference Guide</a><ul>
+<li class="toctree-l2"><a class="reference external" href="reference/index.html#fileio-modules">fileio modules</a></li>
+<li class="toctree-l2"><a class="reference external" href="reference/index.html#process-modules">process modules</a></li>
+<li class="toctree-l2"><a class="reference external" href="reference/index.html#analysis-modules">analysis modules</a></li>
+<li class="toctree-l2"><a class="reference external" href="reference/index.html#util-modules">util modules</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="examples/index.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference external" href="examples/index.html#application-examples">Application Examples</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/index.html#coadd-examples">Coadd Examples</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/index.html#convert-examples">Convert Examples</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/index.html#fitting-examples">Fitting Examples</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/index.html#integration-examples">Integration Examples</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/index.html#interactive-examples">Interactive Examples</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/index.html#plotting-examples">Plotting Examples</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/index.html#processing-examples">Processing Examples</a></li>
+<li class="toctree-l2"><a class="reference external" href="examples/index.html#unarray-examples">Unarray Examples</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="Tutorial"
+             >next</a> |</li>
+        <li><a href="#">nmrglue v1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Oct 29, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>
