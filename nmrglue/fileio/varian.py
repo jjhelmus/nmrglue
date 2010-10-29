@@ -357,6 +357,10 @@ def read_fid(filename,read_blockhead=False,(lenZ,lenY)=(None,None)):
     # read the fileheader
     dic = fileheader2dic(get_fileheader(f))
 
+    # if ntraces is not 1 use _ntraces version 
+    if dic["ntraces"] != 1:
+        return read_fid_ntraces(filename,read_blockhead,(lenZ,lenY))
+
     # check for 3D data sets
     if lenZ!=None and lenY!=None:
         f.close()
@@ -376,6 +380,45 @@ def read_fid(filename,read_blockhead=False,(lenZ,lenY)=(None,None)):
 
     return dic,np.squeeze(data)
 
+def read_fid_ntraces(filename,read_blockhead=False,(lenZ,lenY)=(None,None)):
+    """ 
+    Read a varian binary (fid) file which may have multiple traces per block.  
+    Returns dic,data pair.  
+
+    When read_blockhead is True will read blockheader(s).
+
+    For 3D data sets the length of the two indirect dimensions must be provided
+    as lenZ and lenY.  If not provided the data set is open as if it was a 2D
+    data set.
+
+    The data dtype will be complex64 or complex128 so that there is no loss of 
+    precision in the conversions from int16/int32.
+    """
+
+    # open the file
+    f = open(filename)
+
+    # read the fileheader
+    dic = fileheader2dic(get_fileheader(f))
+
+    # read the data
+    if read_blockhead:
+        bdic,data = get_nblocks_ntraces(f,dic,dic["nblocks"],read_blockhead)
+        dic["blockheader"] = bdic
+    else:
+        data = get_nblocks_ntraces(f,dic,dic["nblocks"],read_blockhead)
+
+    # reshape if 3D data
+    if lenZ!=None and lenY!=None:
+        lenX = data.size/(lenZ*lenY)
+        data.reshape(lenZ,lenY,lenX)
+
+    f.close()
+    data = uninterleave_data(data)
+
+    return dic,np.squeeze(data)
+
+
 def read_fid_lowmem(filename,(lenZ,lenY)=(None,None)):
     """
     Read a varian binary (fid) file with mimimal memory usage returning a 
@@ -394,6 +437,9 @@ def read_fid_lowmem(filename,(lenZ,lenY)=(None,None)):
     f = open(filename)
     dic = fileheader2dic(get_fileheader(f))
     f.close()
+
+    if dic["ntraces"] != 1:
+        raise NotImplemented("Reading of files with ntraces!=1 not supported")
 
     if dic["nblocks"] == 1: # 1D data, no lowmem function
         return read_fid(filename)
@@ -650,6 +696,43 @@ def get_block(file,filedic,read_blockhead=False):
         
         return dic,trace
 
+def get_block_ntraces(file,filedic,read_blockhead=False):
+    """ 
+    Read a block from file described by filedic dictionary which may have
+    multiple traces in each data block.
+
+    When read_blockhead is True will read blockheader(s) and returns 
+    block_dic,trace.  When read_blockhead is False returns trace.
+
+    """
+    
+    # find the dtype
+    dt = find_dtype(filedic)
+
+    # Do not return blockheaders
+    if read_blockhead == False: # Do not return blockheaders
+        for i in xrange(filedic["nbheaders"]):
+            skip_blockheader(file)
+        trace = get_trace(file,filedic["np"]*filedic["ntraces"],dt)
+        return trace.reshape(filedic["ntraces"],filedic["np"])
+    
+    # read the blockheaders
+    else:
+        dic = dict()
+        # read the headers
+        if filedic["nbheaders"] >= 1:
+            dic.update(blockheader2dic(get_blockheader(file)))
+        if filedic["nbheaders"] >= 2:
+            dic["hyperhead"] = hyperheader2dic(get_hyperheader(file))
+        if filedic["nbheaders"] >= 3:
+            for i in xrange(2,filedic["nbheaders"]):
+                skip_blockheader(file)
+        # read the data
+        trace = get_trace(file,filedic["np"]*filedic["ntraces"],dt)
+        
+        return dic,trace.reshape(filedic["ntraces"],filedic["np"])
+
+
 def get_nblocks(file,filedic,n,read_blockhead=False):
     """ Read n blocks from file described by filedic dictionary
 
@@ -671,6 +754,39 @@ def get_nblocks(file,filedic,n,read_blockhead=False):
             bdic[i],data[i] = get_block(file,filedic,read_blockhead)
         else:
             data[i] = get_block(file,filedic,read_blockhead)
+
+    if read_blockhead:
+        return bdic,data
+    else:
+        return data
+
+
+def get_nblocks_ntraces(file,filedic,n,read_blockhead=False):
+    """ 
+    Read n blocks from file described by filedic dictionary which may
+    have multiple traces per block.
+
+    When read_blockhead is True will read blockheader(s) and returns
+    block_dic,data.  When read_blockheader is False returns data.
+
+    """
+
+    # create an empty array to hold data
+    dt = find_dtype(filedic)
+    n_pts = filedic["nblocks"]*filedic["ntraces"]    # total indirect dim points
+    data = np.empty( (n_pts,filedic["np"]),dtype=dt)
+
+    if read_blockhead:
+        bdic = [0]*n_pts
+
+    # read the data
+    for i in xrange(filedic["nblocks"]):
+        if read_blockhead:
+            bdic[i],bdata = get_block_ntraces(file,filedic,read_blockhead)
+            data[i*filedic["ntraces"]:(i+1)*filedic["ntraces"]] = bdata
+        else:
+            bdata = get_block_ntraces(file,filedic,read_blockhead)
+            data[i*filedic["ntraces"]:(i+1)*filedic["ntraces"]] = bdata
 
     if read_blockhead:
         return bdic,data
