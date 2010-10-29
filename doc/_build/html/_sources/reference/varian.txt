@@ -13,6 +13,7 @@ These are the functions the majority of users will use from the varian module.
 .. autofunction:: read
 .. autofunction:: read_lowmem
 .. autofunction:: read_fid
+.. autofunction:: read_fid_ntraces
 .. autofunction:: read_fid_lowmem
 .. autofunction:: read_fid_lowmem_2D
 .. autofunction:: read_fid_lowmem_3D
@@ -43,7 +44,9 @@ files will be interested in these functions.
 .. autofunction:: uninterleave_data
 .. autofunction:: interleave_data
 .. autofunction:: get_block
+.. autofunction:: get_block_ntraces
 .. autofunction:: get_nblocks
+.. autofunction:: get_nblocks_ntraces
 .. autofunction:: get_fileheader
 .. autofunction:: get_blockheader
 .. autofunction:: get_hyperheader

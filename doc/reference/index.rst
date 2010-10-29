@@ -26,7 +26,9 @@ process modules
 
     proc_base
     proc_bl
+    proc_lp
     pipe_proc
+
 
 
 analysis modules
@@ -35,6 +37,7 @@ analysis modules
 .. toctree::
     :maxdepth: 2
 
+    leastsqbound
     linesh
 
 util modules

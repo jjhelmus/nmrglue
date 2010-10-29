@@ -143,6 +143,19 @@ precision in the conversions from int16/int32.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="nmrglue.fileio.varian.read_fid_ntraces">
+<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">read_fid_ntraces</tt><big>(</big><em>filename</em>, <em>read_blockhead=False</em>, <em>(lenZ</em>, <em>lenY)=(None</em>, <em>None)</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.read_fid_ntraces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a varian binary (fid) file which may have multiple traces per block.  
+Returns dic,data pair.</p>
+<p>When read_blockhead is True will read blockheader(s).</p>
+<p>For 3D data sets the length of the two indirect dimensions must be provided
+as lenZ and lenY.  If not provided the data set is open as if it was a 2D
+data set.</p>
+<p>The data dtype will be complex64 or complex128 so that there is no loss of 
+precision in the conversions from int16/int32.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="nmrglue.fileio.varian.read_fid_lowmem">
 <tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">read_fid_lowmem</tt><big>(</big><em>filename</em>, <em>(lenZ</em>, <em>lenY)=(None</em>, <em>None)</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.read_fid_lowmem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a varian binary (fid) file with mimimal memory usage returning a 
@@ -310,9 +323,27 @@ block_dic,trace.  When read_blockhead is False returns trace.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="nmrglue.fileio.varian.get_block_ntraces">
+<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">get_block_ntraces</tt><big>(</big><em>file</em>, <em>filedic</em>, <em>read_blockhead=False</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.get_block_ntraces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a block from file described by filedic dictionary which may have
+multiple traces in each data block.</p>
+<p>When read_blockhead is True will read blockheader(s) and returns 
+block_dic,trace.  When read_blockhead is False returns trace.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="nmrglue.fileio.varian.get_nblocks">
 <tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">get_nblocks</tt><big>(</big><em>file</em>, <em>filedic</em>, <em>n</em>, <em>read_blockhead=False</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.get_nblocks" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read n blocks from file described by filedic dictionary</p>
+<p>When read_blockhead is True will read blockheader(s) and returns
+block_dic,data.  When read_blockheader is False returns data.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.varian.get_nblocks_ntraces">
+<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">get_nblocks_ntraces</tt><big>(</big><em>file</em>, <em>filedic</em>, <em>n</em>, <em>read_blockhead=False</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.get_nblocks_ntraces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read n blocks from file described by filedic dictionary which may
+have multiple traces per block.</p>
 <p>When read_blockhead is True will read blockheader(s) and returns
 block_dic,data.  When read_blockheader is False returns data.</p>
 </dd></dl>

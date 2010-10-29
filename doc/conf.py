@@ -74,7 +74,8 @@ exclude_trees = ['_build']
 pygments_style = 'sphinx'
 
 # A list of documents for which stub pages should be generated.
-autosummary_generate = ['reference/pipe_proc.rst','reference/proc_base.rst','reference/proc_bl.rst']
+autosummary_generate = ['reference/pipe_proc.rst','reference/proc_base.rst',
+'reference/proc_bl.rst','reference/proc_lp.rst']
 
 # -- Options for HTML output ---------------------------------------------------
 

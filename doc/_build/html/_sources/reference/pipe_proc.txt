@@ -103,6 +103,16 @@ Misc
     zd
 
 
+Linear Prediction
+-----------------
+
+.. autosummary::
+    :toctree: generated/
+
+    lp
+    lpc
+    lp2d
+
 Not Implemented
 ---------------
 
@@ -111,9 +121,6 @@ Not Implemented
 
     ann
     ebs
-    lp
-    lpc
-    lp2d
     mac
     mem
     ml
