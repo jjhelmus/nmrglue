@@ -28,6 +28,15 @@ process modules
     proc_bl
     pipe_proc
 
+
+analysis modules
+----------------
+
+.. toctree::
+    :maxdepth: 2
+
+    linesh
+
 util modules
 ------------
 
