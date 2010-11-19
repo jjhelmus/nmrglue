@@ -1,6 +1,0 @@
-nmrglue.process.proc_base.zf_auto
-=================================
-
-.. currentmodule:: nmrglue.process.proc_base
-
-.. autofunction:: zf_auto

@@ -1,6 +1,0 @@
-nmrglue.process.proc_lp.root2freq
-=================================
-
-.. currentmodule:: nmrglue.process.proc_lp
-
-.. autofunction:: root2freq

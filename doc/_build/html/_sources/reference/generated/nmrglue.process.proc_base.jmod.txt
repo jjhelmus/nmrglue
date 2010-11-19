@@ -1,6 +1,0 @@
-nmrglue.process.proc_base.jmod
-==============================
-
-.. currentmodule:: nmrglue.process.proc_base
-
-.. autofunction:: jmod

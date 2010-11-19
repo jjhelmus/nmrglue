@@ -1,6 +1,0 @@
-nmrglue.process.proc_base.qmix
-==============================
-
-.. currentmodule:: nmrglue.process.proc_base
-
-.. autofunction:: qmix

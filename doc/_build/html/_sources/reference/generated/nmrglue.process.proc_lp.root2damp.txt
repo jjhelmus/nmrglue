@@ -1,6 +1,0 @@
-nmrglue.process.proc_lp.root2damp
-=================================
-
-.. currentmodule:: nmrglue.process.proc_lp
-
-.. autofunction:: root2damp

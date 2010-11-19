@@ -1,6 +1,0 @@
-nmrglue.process.proc_base.add_ri
-================================
-
-.. currentmodule:: nmrglue.process.proc_base
-
-.. autofunction:: add_ri

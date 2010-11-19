@@ -1,6 +1,0 @@
-nmrglue.process.proc_base.mc_pow
-================================
-
-.. currentmodule:: nmrglue.process.proc_base
-
-.. autofunction:: mc_pow

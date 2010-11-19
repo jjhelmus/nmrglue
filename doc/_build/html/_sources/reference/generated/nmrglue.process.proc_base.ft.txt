@@ -1,6 +1,0 @@
-nmrglue.process.proc_base.ft
-============================
-
-.. currentmodule:: nmrglue.process.proc_base
-
-.. autofunction:: ft

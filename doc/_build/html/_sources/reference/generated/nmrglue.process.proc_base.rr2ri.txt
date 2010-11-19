@@ -1,6 +1,0 @@
-nmrglue.process.proc_base.rr2ri
-===============================
-
-.. currentmodule:: nmrglue.process.proc_base
-
-.. autofunction:: rr2ri

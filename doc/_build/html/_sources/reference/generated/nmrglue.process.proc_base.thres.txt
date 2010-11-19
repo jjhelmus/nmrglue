@@ -1,6 +1,0 @@
-nmrglue.process.proc_base.thres
-===============================
-
-.. currentmodule:: nmrglue.process.proc_base
-
-.. autofunction:: thres

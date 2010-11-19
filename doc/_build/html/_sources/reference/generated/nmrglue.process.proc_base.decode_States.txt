@@ -1,6 +1,0 @@
-nmrglue.process.proc_base.decode_States
-=======================================
-
-.. currentmodule:: nmrglue.process.proc_base
-
-.. autofunction:: decode_States

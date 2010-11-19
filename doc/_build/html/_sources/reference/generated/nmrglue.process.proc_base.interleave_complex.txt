@@ -1,6 +1,0 @@
-nmrglue.process.proc_base.interleave_complex
-============================================
-
-.. currentmodule:: nmrglue.process.proc_base
-
-.. autofunction:: interleave_complex

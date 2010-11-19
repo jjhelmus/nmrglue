@@ -1,6 +1,0 @@
-nmrglue.process.proc_base.avg_flt
-=================================
-
-.. currentmodule:: nmrglue.process.proc_base
-
-.. autofunction:: avg_flt

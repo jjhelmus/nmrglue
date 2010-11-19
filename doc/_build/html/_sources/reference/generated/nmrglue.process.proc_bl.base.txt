@@ -1,6 +1,0 @@
-nmrglue.process.proc_bl.base
-============================
-
-.. currentmodule:: nmrglue.process.proc_bl
-
-.. autofunction:: base

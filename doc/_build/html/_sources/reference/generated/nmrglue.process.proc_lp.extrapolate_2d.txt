@@ -1,6 +1,0 @@
-nmrglue.process.proc_lp.extrapolate_2d
-======================================
-
-.. currentmodule:: nmrglue.process.proc_lp
-
-.. autofunction:: extrapolate_2d

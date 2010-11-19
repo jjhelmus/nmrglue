@@ -1,6 +1,0 @@
-nmrglue.process.proc_lp.lp_tls
-==============================
-
-.. currentmodule:: nmrglue.process.proc_lp
-
-.. autofunction:: lp_tls

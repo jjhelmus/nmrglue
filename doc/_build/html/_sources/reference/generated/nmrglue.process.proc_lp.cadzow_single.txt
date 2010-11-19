@@ -1,6 +1,0 @@
-nmrglue.process.proc_lp.cadzow_single
-=====================================
-
-.. currentmodule:: nmrglue.process.proc_lp
-
-.. autofunction:: cadzow_single

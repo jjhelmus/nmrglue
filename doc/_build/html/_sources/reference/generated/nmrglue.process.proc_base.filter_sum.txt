@@ -1,6 +1,0 @@
-nmrglue.process.proc_base.filter_sum
-====================================
-
-.. currentmodule:: nmrglue.process.proc_base
-
-.. autofunction:: filter_sum
