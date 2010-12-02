@@ -391,19 +391,22 @@ def read(filename):
     """
     Read a NMRPipe binary file returning a dic,data pair.
 
-    For 3D/4D files filename should be a filemask with a "%" formatter.  
+    For 3D/4D files filename should be a filemask with a "%" formatter or
+    file is read as a 2D file.
     """
 
     if "%" in filename:
         filemask = filename
         filename = filename % 1
+    else:
+        filemask = None
 
     fdata = get_fdata(filename)
     dic = fdata2dic(fdata)  
     order = dic["FDDIMCOUNT"]
     if order == 1:
         return read_1D(filename)
-    if order == 2:
+    if order == 2 or filemask == None:  # if no mask read as 2D
         return read_2D(filename)
     if order == 3:
         return read_3D(filemask)
