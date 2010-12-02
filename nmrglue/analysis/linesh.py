@@ -1,6 +1,6 @@
 """
 Functions for fitting and simulating arbitrary dimensional lineshapes commonly
-found in nmr experiments
+found in NMR experiments
 
 """
 
@@ -10,75 +10,11 @@ from leastsqbound import leastsqbound
 
 pi = np.pi
 
-# lineshape classes
-
-class gauss1D():
-    """
-    One dimensional gaussian (normal) class
-    
-    Parameters (mu,sigma):
-
-    * mu    mean (center of mean)
-    * sigma variance (width if distribution)
-
-    """
-
-    name = "guassian"
-
-    def sim(self,M,p):
-        mu,sigma = p
-        s2 = sigma**2
-        return np.exp(-(np.arange(M)-mu)**2/(2*s2))/(np.sqrt(2*pi*s2))
-
-    def nparam(self,M):
-        return 2
-
-class lorentz1D():
-    """
-    One dimensional lorentzian class
-
-    Parameters (x_0,g):
-
-    * x_0     the center of the lorentzian.
-    * gamma   the scale parameter .
-   
-    """
-
-    name = "lorentz"
-
-    def sim(self,M,p):
-        x0,gamma = p
-        return 1./pi*1./(gamma**2 + (np.arange(M)-x0)**2)
-
-    def nparam(self,M):
-        return 2
-
-
-class scale1D():
-    """
-    One dimensional scale class
-
-    Simulates a lineshape with functional form:
-
-    1,p_0,p_1,p_2,....
-
-    Where p_0, p_1, ... are the parameters provided.
-
-    """
-
-    name = "scale"
-    def sim(self,M,p):
-        l = np.empty(M,dtype='float')
-        l[0] = 1
-        l[1:] = p
-        return l
-
-    def nparam(self,M):
-        return int(M-1)
-
+# lineshape classes translator
+from analysisbase import ls_str2class
+from analysisbase import pick2linesh,linesh2pick
 
 # User facing functions
-
 def sim_NDregion(shape,lineshapes,params,amps):
     """
     Simulate a arbitrary dimensional region with one or more peaks.
@@ -145,7 +81,7 @@ def sim_NDregion(shape,lineshapes,params,amps):
 
 
 def fit_NDregion(region,lineshapes,guesses,amp_guesses,guesses_bounds=None,
-                 amp_bounds=None,**kw):
+                 amp_bounds=None,error_flag=False,**kw):
     """
     Fit a N-dimensional region.
 
@@ -166,6 +102,8 @@ def fit_NDregion(region,lineshapes,guesses,amp_guesses,guesses_bounds=None,
                      direction.
     * amp_bounds     P-length list of bounds for the amplitude with format 
                      similar to guesses_bound.
+    * error_flag     Set to True to estimate errors for each lineshape 
+                     parameter and amplitude.
 
     * kw             Additional keywords passed to the scipy.optimize.leastsq 
                      function.
@@ -193,12 +131,13 @@ def fit_NDregion(region,lineshapes,guesses,amp_guesses,guesses_bounds=None,
     * 'g' or 'gauss'    Gaussian (normal) lineshape.
     * 'l' or 'lorentz'  Lorentzian lineshape.
     * 's' or 'scale'    Scaled lineshape.
-    
+    * 'p' or 'peak'     Gaussian lineshape which takes FWHM as a parameter.
+
     The following are all valid lineshapes parameters for a 2D Gaussian peak:
 
     ['g','g']
     ['gauss','gauss']
-    [ng.linesh.gauss1D(),ng.linesh.gauss1D()]
+    [ng.analysisbase.gauss1D(),ng.analysisbase.gauss1D()]
     
     An simple example of a lineshape class which simulates the function y=c:
 
@@ -258,6 +197,7 @@ def fit_NDregion(region,lineshapes,guesses,amp_guesses,guesses_bounds=None,
     if len(guesses_bounds) != n_peaks:
         raise ("Incorrect number of parameter bounds provided")
 
+    # build the parameter bound list to be passed to f_NDregion
     p_bounds = []
     for i,peak_bounds in enumerate(guesses_bounds): # peak loop
         
@@ -319,6 +259,10 @@ def fit_NDregion(region,lineshapes,guesses,amp_guesses,guesses_bounds=None,
     #print p_bounds
     #print n_peaks
 
+    # include full_output=True when errors requested 
+    if error_flag:
+        kw["full_output"] = True
+
     
     # perform fitting
     r = f_NDregion(region,ls_classes,p0,p_bounds,n_peaks,**kw)
@@ -331,7 +275,7 @@ def fit_NDregion(region,lineshapes,guesses,amp_guesses,guesses_bounds=None,
         p_best,cov_xi,infodic,mesg,ier = r
     else:
         p_best,ier = r
-
+    
     # unpack and repack p_best
     # pull off the ampltides
     amp_best = p_best[:n_peaks]
@@ -342,7 +286,25 @@ def fit_NDregion(region,lineshapes,guesses,amp_guesses,guesses_bounds=None,
     # for each peak repack the flat parameter lists to reference by dimension
     param_best = [make_slist(l,dim_nparam) for l in p_list]
 
-    return param_best,amp_best,ier
+    # return as is if no errors requested
+    if error_flag==False:
+        return param_best,amp_best,ier
+
+    # calculate errors
+    p_err = calc_errors(region,ls_classes,p_best,cov_xi,n_peaks)
+
+    # unpack and repack the error p_err
+    # pull off the amplitude errors
+    amp_err = p_err[:n_peaks]
+    
+    # split the remaining errors into n_peaks equal sized lists
+    pe_list = split_list(list(p_err[n_peaks:]),n_peaks)
+    
+    # for each peak repack the flat errors list to reference by dimension
+    param_err = [make_slist(l,dim_nparam) for l in pe_list]
+    
+    return param_best,amp_best,param_err,amp_err,ier
+
 
 def make_slist(l,t_sizes):
     """
@@ -361,16 +323,38 @@ def make_slist(l,t_sizes):
         start = start+s
     return out
 
-def ls_str2class(l):
-    """ Convert lineshape string to lineshape class """
-    if l == "gauss" or l == "g":
-        return gauss1D()
-    elif l == "lorentz" or l == "l":
-        return lorentz1D()
-    elif l == "scale" or l == "s":
-        return scale1D()
-    else:
-        raise ValueError("Unknown lineshape %s",(l))
+def split_list(l,N):
+    """ Split list l into N sublists of equal size """
+    step = int(len(l)/N)
+    div_points = range(0,len(l)+1,step)
+    return [l[div_points[i]:div_points[i+1]] for i in xrange(N)]
+
+
+def calc_errors(region,ls_classes,p,cov,n_peaks):
+    """
+    Calcuate the parameter errors from the Standard Errors of the Estimate.
+
+    Parameters:
+    
+    * region        N-dimensional region to fit
+    * ls_classes    List of lineshape classes
+    * p             Parameters (array)
+    * cov           Covariance matrix from leastsq fitting
+    * n_peaks       Number of peaks in region
+
+    Returns: array of standard errors of parameters in p
+
+    """
+
+    # calculate the residuals
+    resid = err_NDregion(p,region,region.shape,ls_classes,n_peaks)
+    
+    SS_err = np.power(resid,2).sum()    # Sum of squared residuals
+    n = region.size # size of sample XXX not sure if this always makes sense
+    k = p.size-1    # free parameters
+    st_err = np.sqrt(SS_err/(n-k-1))    # standard error of estimate
+    
+    return st_err*np.sqrt(np.diag(cov))
 
 # internal functions
 
@@ -401,12 +385,6 @@ def s_NDregion(p,shape,ls_classes,n_peaks):
         r = r+s_single_NDregion([A]+curr_p,shape,ls_classes)
     
     return r
-
-def split_list(l,N):
-    """ Split list l into N sublists of equal size """
-    step = int(len(l)/N)
-    div_points = range(0,len(l)+1,step)
-    return [l[div_points[i]:div_points[i+1]] for i in xrange(N)]
 
 def s_single_NDregion(p,shape,ls_classes):
     """
