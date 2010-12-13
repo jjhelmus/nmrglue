@@ -800,72 +800,218 @@ def uncomplexify_data(data_in):
 
 # digital filter functions
 
-dqd_dictionary = {
+# Table of points to frequency shift Bruker data to remove digital filter
+# (Phase is 360 degrees * num_pts)
+# This table is an 'un-rounded' version base on the table by
+# W.M. Westler and F. Abildgaard's offline processing note, online at:
+# http://www.boc.chem.uu.nl/static/local/prospectnd/dmx_digital_filters.html
+# and the updated table with additional entries at:
+# http://sbtools.uchc.edu/help/nmr/nmr_toolkit/bruker_dsp_table.asp
 
- 10:{   2:44.7500,   3:33.5000,   4:66.6250,    6:59.0833,    8:68.5625,
-       12:60.3750,  16:69.5313,  24:61.0208,   32:70.0156,   48:61.3438,
-       64:70.2578,  96:61.5052, 128:70.3789,  192:61.5859,  256:70.4395,
-      384:61.6263, 512:70.4697, 768:61.6465, 1024:70.4849, 1536:61.6566,
-     2048:70.4924 } ,
+# The rounding in the above tables appear to be based on k / (2*DECIM)
+# for example 2 : 44.75   = 44 + 3/4
+#             4 : 66.625  = 66 + 5/8
+#             8 : 68.563 ~= 68 + 9/16 = 68.5625
+# Using this the un-rounded table was created by checking possible unrounded
+# fracions which would round to those in the original table.
 
- 11:{   2:46.0000,   3:36.5000,   4:48.0000,    6:50.1667,    8:53.2500,
-       12:69.5000,  16:72.2500,  24:70.1667,   32:72.7500,   48:70.5000,
-       64:73.0000,  96:70.6667, 128:72.5000,  192:71.3333,  256:72.2500,
-      384:71.6667, 512:72.1250, 768:71.8333, 1024:72.0625, 1536:71.9167,
-     2048:72.0313 } ,
+bruker_dsp_table = {
+    10: { 
+        2    : 44.75,
+        3    : 33.5,
+        4    : 66.625,
+        6    : 59.083333333333333,
+        8    : 68.5625,
+        12   : 60.375,
+        16   : 69.53125,
+        24   : 61.020833333333333,
+        32   : 70.015625,
+        48   : 61.34375,
+        64   : 70.2578125,
+        96   : 61.505208333333333,
+        128  : 70.37890625,
+        192  : 61.5859375,
+        256  : 70.439453125,
+        384  : 61.626302083333333,
+        512  : 70.4697265625,
+        768  : 61.646484375,
+        1024 : 70.48486328125,
+        1536 : 61.656575520833333,
+        2048 : 70.492431640625,
+        },
+    11: {
+        2    : 46.,
+        3    : 36.5,
+        4    : 48.,
+        6    : 50.166666666666667,
+        8    : 53.25,
+        12   : 69.5,
+        16   : 72.25,
+        24   : 70.166666666666667,
+        32   : 72.75,
+        48   : 70.5,
+        64   : 73.,
+        96   : 70.666666666666667,
+        128  : 72.5,
+        192  : 71.333333333333333,
+        256  : 72.25,
+        384  : 71.666666666666667,
+        512  : 72.125,
+        768  : 71.833333333333333,
+        1024 : 72.0625,
+        1536 : 71.916666666666667,
+        2048 : 72.03125
+        },
+    12: {
+        2    : 46. ,
+        3    : 36.5,
+        4    : 48.,
+        6    : 50.166666666666667,
+        8    : 53.25,
+        12   : 69.5,
+        16   : 71.625,
+        24   : 70.166666666666667,
+        32   : 72.125,
+        48   : 70.5,
+        64   : 72.375,
+        96   : 70.666666666666667,
+        128  : 72.5,
+        192  : 71.333333333333333,
+        256  : 72.25,
+        384  : 71.666666666666667,
+        512  : 72.125,
+        768  : 71.833333333333333,
+        1024 : 72.0625,
+        1536 : 71.916666666666667,
+        2048 : 72.03125
+        },
+    13: {
+        2    : 2.75, 
+        3    : 2.8333333333333333,
+        4    : 2.875,
+        6    : 2.9166666666666667,
+        8    : 2.9375,
+        12   : 2.9583333333333333,
+        16   : 2.96875,
+        24   : 2.9791666666666667,
+        32   : 2.984375,
+        48   : 2.9895833333333333,
+        64   : 2.9921875,
+        96   : 2.9947916666666667
+        } 
+    }
 
- 12:{   2:46.311 ,   3:36.530 ,   4:47.870 ,    6:50.229 ,    8:53.289 ,
-       12:69.551 ,  16:71.600 ,  24:70.184 ,   32:72.138 ,   48:70.528 ,
-       64:72.348 ,  96:70.700 , 128:72.524 } 
-}
 
+def remove_digital_filter(dic,data):
+    """
+    Remove the digial filter from Bruker data.
 
-def dig_filter_pts(dic):
-    """ 
-    Determind the number of points to freq. shifting data to remove the digital
-    filter
+    Use rm_dig_filter to specify decim, dspfvs, and grpdly paraters.
+
+    Parameters:
+
+    * dic   Dictionary of Bruker parameters
+    * data  array of data.
+
+    Returns: array with digital filter removed
 
     """
+    if 'acqus' not in dic:
+        raise ValueError("dictionary does not contain acqus parameters") 
     
-    if "acqus" not in dic:
-        print "Warning: filter not found as dictionary is missing acqus key"
-        return 0
+    if 'DECIM' not in dic['acqus']:
+        raise ValueError("dictionary does not contain DECIM parameter")
+    decim = dic['acqus']['DECIM']
+    
+    if 'DSPFVS' not in dic['acqus']:
+        raise ValueError("dictionary does not contain DSPFVS parameter")
+    dspfvs = dic['acqus']['DSPFVS']
 
-    acqus = dic["acqus"]
-
-    if acqus.has_key("GRPDLY"):
-        return dic["acqus"]["GRPDLY"]
-
-    if "DECIM" not in acqus or "DSPFVS" not in acqus:
-        print "Warning: filter not found, DECIM or DSPFVS parameter missing"
-        return 0
-
-    dec  = acqus["DECIM"]
-    dsp = acqus["DSPFVS"]
-
-    if dqd_dictionary.has_key(dsp) and dqd_dictionary[dsp].has_key(dec):
-        return dqd_dictionary[dsp][dec]
+    if 'GRPDLY' not in dic['acqus']:
+        grpdly = 0
     else:
-        print "Warning: filter not found, DECIM/DSPFVS pair not in table"
-        return 0
+        grpdly = dic['acqus']['GRPDLY']
+
+    return rm_dig_filter(data,decim,dspfvs,grpdly)
 
 
-def remove_digital_filter(data,pts):
-    """ 
-    Remove digital filter
-
-    As described in:
     
-        DMX DIGITAL FILTERS AND NON-BRUKER OFFLINE PROCESSING III
-        W. M. Westler and F.  Abildgaard
+def rm_dig_filter(data,decim,dspfvs,grpdly=0):
+    """
+    Remove the digital filter from Bruker data.
+
+    Use remove_digital_filter to find parameters from Bruker dictionary.
+
+    Parameters:
+    
+    * data      Array of data.
+    * decim     Decimation rate (Bruker DECIM parameter).
+    * dspfvs    Firmware version (Bruker DSPFVS parameter).
+    * grpdly    Group delay, when available.  (Bruker GRPDLY parameter).
+
+    grpdly is not always needed, but when provided decim and dspfvs are 
+    ignored.
+
+    Returns: array with digital filter removed.
 
     """
-    fsh_data = proc_base.fsh(data,-pts)
-    return fsh_data[...,:data.shape[-1]-np.round(pts)]
+    
+    # This algorithm gives results similar but not exactly the same
+    # as NMRPipe.  It was worked out by examining sample FID converted using
+    # NMRPipe against spectra shifted with nmrglue's processing functions.  
+    # When a frequency shifting with a fft first (fft->first order phase->ifft)
+    # the middle of the fid nearly matches NMRPipe's and the difference at the
+    # beginning is simply the end of the spectra reversed.  A few points at 
+    # the end of the spectra are skipped entirely. 
+    # -jjh 2010.12.01
+
+    # The algorithm is as follows:
+    # 1. FFT the data
+    # 2. Apply a negative first order phase to the data.  The phase is 
+    #    determined by the GRPDLY parameter or found in the DSPFVS/DECIM 
+    #    loopup table.
+    # 3. Inverse FFT  
+    # (these first three steps are a frequency shift with a FFT first, fsh2)
+    # 4. Round the applied first order phase up by two integers. For example
+    #    71.4 -> 73, 67.8 -> 69, and 48 -> 50, this is the number of points
+    #    removed from the end of the fid.
+    # 5. If the size of the removed portion is greater than 6, remove the first
+    #    6 points, reverse the remaining points, and add then to the beginning
+    #    of the spectra.  If less that 6 points were removed, leave the FID 
+    #    alone.
+          
+    
+    if grpdly > 0:  # use group delay value if provided (not 0 or -1)
+        phase = grpdly
+    
+    # determind the phase correction
+    else:
+        if dspfvs >= 14:    # DSPFVS greater than 14 give no phase correction.
+            phase = 0.
+        else:   # loop up the phase in the table
+            if dspfvs not in bruker_dsp_table:
+                raise ValueError("dspfvs not in lookup table")
+            if decim not in bruker_dsp_table[dspfvs]:
+                raise ValueError("decim not in lookup table")
+            phase = bruker_dsp_table[dspfvs][decim]
+
+    # and the number of points to remove (skip) and add to the beginning
+    skip = int(np.floor(phase+2.))  # round up two integers
+    add = int(max(skip-6,0))        # 6 less, or 0
+
+    # DEBUG 
+    #print "phase: %f, skip: %i add: %i"%(phase,skip,add)
+
+    # frequency shift
+    pdata = proc_base.fsh2(data,-phase)
+    
+    # add points at the end of the specta to beginning
+    pdata[...,:add] = pdata[...,:add]+pdata[...,:-(add+1):-1]
+    # remove points at end of spectra
+    return pdata[...,:-skip]
 
 
 # JCAMP-DX functions
-
 
 def read_jcamp(filename):
     """ 
