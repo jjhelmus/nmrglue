@@ -9,6 +9,7 @@ NMRPipe file structure is described in the NMRPipe man pages and fdatap.h
 import struct 
 import datetime
 import os
+from StringIO import StringIO
 
 # external modules
 import numpy as np
@@ -16,72 +17,104 @@ import numpy as np
 # nmrglue modules
 import fileiobase
 
+# these conversion functions are also accessable in the pipe module
+from table import pipe2glue,glue2pipe,guess_pformat
 
 # table reading/writing
 
-def read_tab(file):
-    """ 
-    Read a NMRPipe .tab file into a records array
+def read_table(filename):
+    """
+    Read a NMRPipe database table (.tab) file.
 
-    Returns dic,rec where dic is a dictionary of important parameters in the 
-    table, rec is a records array of data in the table.
+    Parameters:
+
+    * filename  Name of file to read
+
+    Returns: pcomments,pformat,rec
+
+    * pcomments List of NMRPipe comment lines.
+    * pformats  List of NMRPipe table column formats strings.
+    * rec       Records array with named fields.
+
     """
 
-    f = open(file)
+    # divide up into comment lines and data lines
     specials = ["VARS","FORMAT","NULLSTRING","NULLVALUE","REMARK","DATA"]
-    dic = dict()
-    for k in specials:
-        dic[k] = []
-
-    # first pass which finds 'special' lines 
-    skiprows = 0
-    for ln,line in enumerate(f):
+    f = open(filename,'r')
+    cl = []
+    dl = []
+    for line in f:
         for k in specials:
-            lk = len(k)
-            if line[0:lk] == k: # the line begins with a speical string
-                dic[k].append(line[lk:].lstrip().rstrip()) 
-                skiprows = ln
-
-    f.close()
-    skiprows = skiprows+1   # since enumerate will start with 0
-
-    names = dic["VARS"][0].split()  # determind the column names
-
-    # XXX might want to determind dtype from dic["FORMAT"][0] or
-    # write custom converters...
-    rec = np.recfromtxt(file,skiprows=skiprows,names=names,comments="XXXXX")
-
-    
-    return dic,rec
-
-
-def write_tab(filename,dic,rec,overwrite=False):
-    """ 
-    Write NMRPipe .tab file from a records array
-    """
-
-    f = fileiobase.open_towrite(filename,overwrite=overwrite)
-
-    # print out the special line
-    for k in dic.keys():
-        if len(dic[k]) != 0:
-            for line in dic[k]:
-                print >> f,k,line
-            print >> f,""   # extra blank line
+            if line[:len(k)]==k:
+                cl.append(line)
+                break
         else:
-            pass        # do nothing if no lines with special 
-
+            dl.append(line)
+    f.close()
     
-    if len(dic["FORMAT"]) != 0:
-        format = dic["FORMAT"][0]
-    else:
-        format = "%s "*len(rec[0])
+    # pull out and parse the VARS line
+    vl = [i for i,l in enumerate(cl) if l[:4]=="VARS"]
+    if len(vl)!=1:
+        raise IOError("%s has no/more than one VARS line"%(filename))
+    dtd = {'names':cl.pop(vl[0]).split()[1:]}
 
-    # and print out the 
+    # pull out and parse the FORMAT line
+    fl = [i for i,l in enumerate(cl) if l[:6]=="FORMAT"]
+    if len(fl)!=1:
+        raise IOError("%s has no/more than one FORMAT line"%(filename))
+    pformat = cl.pop(fl[0]).split()[1:]
+    p2f = {'d':'i4','f':'f8','e':'f8','s':'S256'}   # pipe -> format dict.
+    dtd['formats'] = [p2f[i[-1]] for i in pformat]
+
+    # DEBUG
+    #print  dtd['names'],dtd['formats']
+
+    s = StringIO("".join(dl))
+
+    rec = np.recfromtxt(s,dtype=dtd,comments='XXXXXXXXXXX')
+    return cl,pformat,np.atleast_1d(rec)
+
+
+def write_table(filename,pcomments,pformats,rec,overwrite=False):
+    """
+    Write a NMRPipe database table (.tab) file.
+
+    Parameters:
+
+    * filename  Name of file to write to.
+    * pcomments List of NMRPipe comment lines.
+    * pformats  List of NMRPipe table column formats strings.
+    * rec       Records array of table.
+    * overwrite Set True to overwrite file if it exists.
+
+    """
+    if len(rec[0])!=len(pformats):
+        s = "number of rec columns %i and pformat elements %i do not match"
+        raise ValueError( s%(len(rec[0]),len(pformats) ) )
+    
+    # open the file for writing
+    f = fileiobase.open_towrite(filename,overwrite)
+
+    # write out the VARS line
+    names = rec.dtype.names
+    s = "VARS   "+" ".join(names)+"\n"
+    f.write(s)
+
+    # write out the FORMAT line
+    s = "FORMAT "+" ".join(pformats)+"\n"
+    f.write(s)
+
+    # write out any comment lines
+    for c in pcomments:
+        f.write(c)
+
+    # write out each line of the records array
+    s = " ".join(pformats)+"\n"
     for row in rec:
-        print >> f,format % tuple(row)
+        f.write(s%tuple(row))
 
     f.close()
+    return
 
 # unit conversion functions
 
