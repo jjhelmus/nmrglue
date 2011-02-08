@@ -75,7 +75,7 @@ def create_dic(udic):
 # Global read/write function and related utilities
 
 def read(dir=".",bin_file=None,acqus_files=None,pprog_file=None,shape=None,
-         cplex=None,big=None):
+         cplex=None,big=None,read_prog=True,read_acqus=True):
     """ 
     Read Bruker files in directory
 
@@ -89,6 +89,8 @@ def read(dir=".",bin_file=None,acqus_files=None,pprog_file=None,shape=None,
     * cplex         Complexity of direct dimention (True/False).
     * big           Endianness of binary file. Set to True for big-endian, 
                     False for little-endian and None to determind automatically
+    * read_prog     True will read pulseprogram file, False prevents reading.
+    * read_acqus    True will read acqus file(s), False prevents reading.
 
     Only the dir parameter must be defined, others will be determined 
     automatically if not specified.
@@ -120,11 +122,13 @@ def read(dir=".",bin_file=None,acqus_files=None,pprog_file=None,shape=None,
     dic = dict()
 
     # read the acqus_files and add to the dictionary
-    for f in acqus_files:
-        dic[f] = read_jcamp(os.path.join(dir,f))
+    if read_acqus:
+        for f in acqus_files:
+            dic[f] = read_jcamp(os.path.join(dir,f))
 
     # read the pulse program and add to the dictionary
-    dic["pprog"] = read_pprog(os.path.join(dir,pprog_file))
+    if read_prog:
+        dic["pprog"] = read_pprog(os.path.join(dir,pprog_file))
 
     # determind file size and add to the dictionary
     dic["FILE_SIZE"] = os.stat(os.path.join(dir,bin_file)).st_size
@@ -153,7 +157,7 @@ def read(dir=".",bin_file=None,acqus_files=None,pprog_file=None,shape=None,
 
 
 def read_lowmem(dir=".",bin_file=None,acqus_files=None,pprog_file=None,
-                shape=None,cplex=None,big=None):
+               shape=None,cplex=None,big=None,read_prog=True,read_acqus=True):
     """ 
     Read Bruker files using minimal amounts of memory 
 
@@ -167,6 +171,8 @@ def read_lowmem(dir=".",bin_file=None,acqus_files=None,pprog_file=None,
     * cplex         Complexity of direct dimention (True/False).
     * big           Endianness of binary file. Set to True for big-endian, 
                     False for little-endian and None to determind automatically
+    * read_pprog    True will read pulseprogram file, False prevents reading.
+    * read_acqus    True will read acqus file(s), False prevents reading.
 
     Only the dir parameter must be defined, others will be determined 
     automatically if not specified.
@@ -198,11 +204,13 @@ def read_lowmem(dir=".",bin_file=None,acqus_files=None,pprog_file=None,
     dic = dict()
 
     # read the acqus_files and add to the dictionary
-    for f in acqus_files:
-        dic[f] = read_jcamp(os.path.join(dir,f))
+    if read_acqus:
+        for f in acqus_files:
+            dic[f] = read_jcamp(os.path.join(dir,f))
 
     # read the pulse program and add to the dictionary
-    dic["pprog"] = read_pprog(os.path.join(dir,pprog_file))
+    if read_prog:
+        dic["pprog"] = read_pprog(os.path.join(dir,pprog_file))
 
     # determind file size and add to the dictionary
     dic["FILE_SIZE"] = os.stat(os.path.join(dir,bin_file)).st_size
@@ -230,9 +238,8 @@ def read_lowmem(dir=".",bin_file=None,acqus_files=None,pprog_file=None,
     return dic,data
 
 
-
 def write(dir,dic,data,bin_file=None,acqus_files=None,pprog_file=None,
-    overwrite=False,big=True):
+    overwrite=False,big=True,write_prog=True,write_acqus=True):
     """ 
     Write Bruker files 
 
@@ -247,6 +254,8 @@ def write(dir,dic,data,bin_file=None,acqus_files=None,pprog_file=None,
     * overwrite     True to overwrite files, False to warn.
     * big           Endiness to write binary data with,
                     bigendian=True, little=False
+    * write_prog    True will write pulseprogram file, False does not.
+    * write_acqus   True will write acqus file(s), False does not.
 
     If any of bin_file,acqus_files or pprog_file are None the associated 
     file(s) will be determined automatically
@@ -269,11 +278,14 @@ def write(dir,dic,data,bin_file=None,acqus_files=None,pprog_file=None,
 
 
     # write out the acqus files
-    for f in acqus_files:
-        write_jcamp(dic[f],os.path.join(dir,f),overwrite=overwrite)
+    if write_acqus:
+        for f in acqus_files:
+            write_jcamp(dic[f],os.path.join(dir,f),overwrite=overwrite)
 
     # write out the pulse program
-    write_pprog(os.path.join(dir,pprog_file),dic["pprog"],overwrite=overwrite)
+    if write_prog:
+        write_pprog(os.path.join(dir,pprog_file),dic["pprog"],
+                    overwrite=overwrite)
 
     # write out the binary data
     bin_full = os.path.join(dir,bin_file)
@@ -371,6 +383,8 @@ def guess_shape(dic):
 
     # Determind Z dimension size if needed
     if ndim >= 3:
+        
+        print x,y
 
         z = dic["FILE_SIZE"] / (x*y*4)
 
@@ -1284,9 +1298,14 @@ def read_pprog(filename):
             if "=" in line:
                 # strip quotes, split on = and add to var dictionary
                 text = text.strip("\"")
-                key,value = text.split("=")
-                var[key]=value
-                #print line,"--Assignment"
+                t = text.split("=")
+                if len(t) >= 2:
+                    key,value = t[0],t[1]
+                    var[key]=value
+                    #print line,"--Assignment"
+                else:
+                    pass
+                    #print line,"--Statement"
                 continue
             else:
                 #print line,"--Statement"
