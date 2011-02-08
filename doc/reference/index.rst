@@ -16,6 +16,7 @@ fileio modules
     fileiobase
     pipe
     sparky
+    table
     varian
 
 process modules

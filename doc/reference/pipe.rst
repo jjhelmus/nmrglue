@@ -21,8 +21,11 @@ These are the functions the majority of users will use from the pipe module.
 .. autofunction:: write_1D
 .. autofunction:: write_2D
 .. autofunction:: write_3D
-.. autofunction:: read_tab
-.. autofunction:: write_tab
+.. autofunction:: read_table
+.. autofunction:: write_table
+.. autofunction:: pipe2glue
+.. autofunction:: glue2pipe
+.. autofunction:: guess_pformat
 .. autofunction:: make_uc
 .. autofunction:: guess_udic
 .. autofunction:: create_dic
