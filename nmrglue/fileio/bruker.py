@@ -384,8 +384,6 @@ def guess_shape(dic):
     # Determind Z dimension size if needed
     if ndim >= 3:
         
-        print x,y
-
         z = dic["FILE_SIZE"] / (x*y*4)
 
         if len(lp)==4 or len(lp)==6:
