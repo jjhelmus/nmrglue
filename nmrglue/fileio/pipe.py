@@ -424,8 +424,15 @@ def read(filename):
     """
     Read a NMRPipe binary file returning a dic,data pair.
 
-    For 3D/4D files filename should be a filemask with a "%" formatter or
-    file is read as a 2D file.
+    For standard multi-file 3D/4D NMRPipe data sets, filename should be a 
+    filemask (for example "/ft/test%03d.ft3") with a "%" formatter.  If only
+    one file of a 3D/4D data set is provided only that 2D slice of the data is
+    read (for example "/ft/test001.ft3" results in a 2D data set being read).
+
+    NMRPipe data streams stored as files (one file 3D/4D data sets made using
+    xyz2pipe) can be read by providing the file name of the stream.  The entire
+    data set is read into memory.
+
     """
 
     if "%" in filename:
@@ -451,19 +458,30 @@ def read_lowmem(filename):
     """
     Read a NMRPipe binary file with minimal memory usage.
 
-    For 3D/4D files filename should be a filemask with a "%" formatter.  
+    For standard multi-file 3D/4D NMRPipe data sets, filename should be a
+    filemask (for example "/ft/test%03d.ft3") with a "%" formatter.  If only
+    one file of a 3D/4D data set is provided only that 2D slice of the data is
+    read (for example "/ft/test001.ft3" results in a 2D data set being read).
+
+    NMRPipe data streams stored as files (one file 3D/4D data sets made using
+    xyz2pipe) can be read by providing the file name of the stream.  The entire
+    data set is read into memory, no low memory access is provided by nmrglue
+    for these files.
+
     """
 
     if "%" in filename:
         filemask = filename
         filename = filename % 1
+    else:
+        filemask = None
 
     fdata = get_fdata(filename)
     dic = fdata2dic(fdata)  
     order = dic["FDDIMCOUNT"]
     if order == 1:
         return read_1D(filename)
-    if order == 2:
+    if order == 2 or filemask == None:  # if no mask read as 2D
         return read_2D(filename)
     if order == 3:
         return read_lowmem_3D(filemask)
@@ -491,6 +509,10 @@ def read_1D(filename):
 def read_2D(filename):
     """
     Read a 2D NMRPipe binary file returning a dic,data pair
+    
+    This function should also be used to read NMRPipe data streams stored as 
+    files (one file 3D/4D data sets made using xyz2pipe)
+    
     """
 
     fdata,data = get_fdata_data(filename)   # get the fdata and data arrays
@@ -509,7 +531,11 @@ def read_2D(filename):
 
 def read_3D(filemask):
     """
-    Read a 3D NMRPipe binary file returning a dic,data pair
+    Read a 3D NMRPipe binary file returning a dic,data pair.
+
+    This function should not be used to read NMRPipe data streams stored as
+    (one file 3D/4D data sets made using xyz2pipe), read_2D should be used.
+
     """
 
     dic,data = read_lowmem_3D(filemask)
@@ -1014,6 +1040,16 @@ def find_shape(dic):
         # dim is complex FDSPECNUM is half of the correct value
         if dic["FDQUADFLAG"] == 0 and multi == 1.0:
             dim2 = dim2*2
+
+        
+        # check for 3/4D data stream format files (made using xyz2pipe)
+        if dic["FDDIMCOUNT"] == 3 and dic["FDPIPEFLAG"] != 0:
+            dim3 = int(dic["FDF3SIZE"])
+            return (dim3,dim2,dim1)
+        if dic["FDDIMCOUNT"] == 4 and dic["FDPIPEFLAG"] != 0:
+            dim3 = int(dic["FDF3SIZE"])
+            dim4 = int(dic["FDF4SIZE"])
+            return (dim4,dim3,dim2,dim1)
 
         return (dim2,dim1)
 
