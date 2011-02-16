@@ -672,3 +672,153 @@ class data_3d(object):
         n = self.__fcopy__(order=new_order)
         
         return n
+
+
+class data_4d(object):
+    """
+    data_4d emulates numpy.ndarray object without loading data into memory
+
+    * slicing operations return ndarray objects
+    * can iterate over with expected results
+    * transpose and swapaxes functions create a new data_4d object with the
+      new axes ordering
+    * has ndim, shape, and dtype attributes.
+
+    """
+
+    def __init__(self,order):
+
+        pass
+
+    def __copy__(self):
+        """ 
+        create a copy
+        """
+        return __fcopy(self,self.order)
+
+    def __getitem__(self,key):
+        """
+        x.__getitem__(y) <==> x[y]
+        """
+
+        # formats the input into a formated 
+
+        # convert the key into a list
+        if type(key) != tuple:
+            rlist = [key]
+        else:
+            rlist = list(key)
+
+        # remove Ellipsis
+        while Ellipsis in rlist:
+            i = rlist.index(Ellipsis)
+            rlist.pop(i)
+            for j in range(4-len(rlist)):
+                rlist.insert(i,slice(None))
+
+        if len(rlist) > 4:
+            raise IndexError,"invalid index"
+
+        # replace integers with slices
+        for i,v in enumerate(rlist):
+            if type(v) == int:
+                
+                # check for out of range indexes
+                if v >= self.shape[i]:
+                    raise IndexError,"index(%s) out of range(0<=index<%s) \
+                    in dimension %s" % (v,self.shape[i]-1,i)
+
+                if v <= (-1*self.shape[i]-1):
+                    raise IndexError,"index(%s) out of range(0<=index<%s) \
+                    in dimension %s" % (v,self.shape[i]-1,i)
+
+                if v < 0:
+                    w  = self.shape[i]+v
+                    rlist[i] = slice(w,w+1,1)
+                else:
+                    rlist[i] = slice(v,v+1,1)
+            
+        # pad the list with additional dimentions
+        for i in range(len(rlist),4):
+            rlist.append(slice(None))
+
+        # reorder the slices into z,y,x
+        sa = rlist[self.order.index("a")]
+        sz = rlist[self.order.index("z")]
+        sy = rlist[self.order.index("y")]
+        sx = rlist[self.order.index("x")]
+
+        # get the data
+        data = self.__fgetitem__( (sa,sz,sy,sx) )
+
+        # reorder the data
+        if data.shape != (0,):
+            a = [ ["a","z","y","x"].index(n) for n in self.order ]
+            return np.squeeze(data.transpose(a))
+        else:
+            data
+
+    def __len__(self):
+        """
+        x._len__ <==> len(x)
+        """
+        return self.shape[0]
+
+    def __iter__(self):
+        for index in xrange(0,self.shape[0]):
+            yield self[index]
+
+    def swapaxes(self,axis1,axis2):
+        """
+        Return fid_3d object with axis1 and axis2 interchanged
+
+        Parameters:
+        * axis1 First axis
+        * axis2 Second axis
+
+        """
+
+        axis1,axis2 = int(axis1),int(axis2)
+
+        if axis1 < 0:
+            axis1 = 4-axis1
+        if axis2 < 0:
+            axis2 = 4-axis2
+        if axis1 >= 4:
+            raise ValueError,"bad axis1 argument to swapaxes"
+        if axis2 >= 4:
+            raise ValueError,"bad axis2 argument to swapaxes"
+
+        order = list(self.order)
+        order[axis1],order[axis2] = order[axis2],order[axis1]
+        n = self.__fcopy__(order=order)
+
+        return n
+
+    def transpose(self,(axis1,axis2,axis3,axis4)=(3,2,1,0)):
+
+        ax1,ax2,ax3,ax4 = int(axis1),int(axis2),int(axis3),int(axis4)
+
+        if ax1 < 0:
+            ax1 = 4-ax1
+        if ax2 < 0:
+            ax2 = 4-ax2
+        if ax3 < 0:
+            ax3 = 4-ax2
+        if ax4 < 0:
+            ax4 = 4-ax4
+
+
+
+        if (ax1==ax2 or ax1==ax3 or ax1==ax4 or 
+            ax2==ax3 or ax2==ax4 or ax3==ax4) :
+            raise ValueError, "repeated axis in transpose"
+
+        if ax1>=4 or ax2>=4 or ax3>=4 or ax4>=4:
+            raise ValueError, "invalid axis for this array"
+
+        order = list(self.order)
+        new_order = [ order[ax1],order[ax2],order[ax3],order[ax4] ]
+        n = self.__fcopy__(order=new_order)
+        
+        return n

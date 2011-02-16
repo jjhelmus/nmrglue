@@ -472,9 +472,7 @@ def read_lowmem(filename):
     read (for example "/ft/test001.ft3" results in a 2D data set being read).
 
     NMRPipe data streams stored as files (one file 3D/4D data sets made using
-    xyz2pipe) can be read by providing the file name of the stream.  The entire
-    data set is read into memory, no low memory access is provided by nmrglue
-    for these files.
+    xyz2pipe) can be read by providing the file name of the stream.  
 
     """
 
@@ -489,11 +487,25 @@ def read_lowmem(filename):
     order = dic["FDDIMCOUNT"]
     if order == 1:
         return read_1D(filename)
-    if order == 2 or filemask == None:  # if no mask read as 2D
+    if order == 2:
         return read_2D(filename)
+    
+    # if PIPEFLAG is set the file is a NMRPipe stream
+    if dic["FDPIPEFLAG"] != 0:
+        if order == 3:
+            return read_lowmem_3Ds(filename)
+        if order == 4:
+            return read_lowmem_4Ds(filename)
+
+    if filemask == None:  # if no mask read as 2D
+        return read_2D(filename)
+
     if order == 3:
         return read_lowmem_3D(filemask)
-   
+  
+    if order == 4:
+        raise NotImplemented
+
     raise ValueError,'unknown dimentionality: %s'%order
 
 
@@ -559,10 +571,31 @@ def read_lowmem_3D(filemask):
     """
 
     data = pipe_3d(filemask)    # create a new data_3d object
-
     dic = fdata2dic(get_fdata(data.farray[0]))
 
     return (dic,data)
+
+def read_lowmem_3Ds(filename):
+    """ 
+    Read a NMRPipe stream binary file with minimal memory usage.
+    """
+
+    data = pipestream_3d(filename)    # create a new data_3d object
+    dic = fdata2dic(get_fdata(filename))
+
+    return (dic,data)
+
+def read_lowmem_4Ds(filename):
+    """ 
+    Read a NMRPipe stream binary file with minimal memory usage.
+    """
+
+    data = pipestream_4d(filename)    # create a new data_3d object
+    dic = fdata2dic(get_fdata(filename))
+
+    return (dic,data)
+
+
 
 
 # writing functions
@@ -1043,7 +1076,7 @@ def find_shape(dic):
             multi = 2.0
 
         dim1 = int(dic["FDSIZE"]*multi)
-        dim2 = dic["FDSPECNUM"]
+        dim2 = int(dic["FDSPECNUM"])
 
         # when the direct dim is singular and the indirect 
         # dim is complex FDSPECNUM is half of the correct value
@@ -1225,6 +1258,209 @@ def flist_from_filemask(filemask):
 
     return flist
 
+
+def get_trace(fhandle,ntrace,pts,bswap,cplex):
+    """
+    Get a single trace from a NMRPipe file 
+
+    Parameters:
+
+    * fhandle   File object of open NMRPipe file
+    * ntrace    Trace numbers (starting from 0)
+    * pts       Number of points in trace, R|I.
+    * bswap     True/False to perform byteswap on trace.
+    * cplex     True/False to unappend imaginary data.
+
+    """
+
+    if cplex:
+        tpts = pts*2
+    else:
+        tpts = pts
+    
+    fhandle.seek( 4*(512+ntrace*tpts) ) 
+    trace = np.fromfile(fhandle,'float32',tpts)
+
+    if bswap:
+        trace = trace.byteswap()
+
+    if cplex:
+      return unappend_data(trace) 
+    else:
+        return trace
+
+
+class pipestream_3d(fileiobase.data_3d):
+    """
+    pipestream_3d emulates numpy.ndarray objects without loading data into 
+    memory for low memory reading of 3D NMRPipe data stream (one file 3D):
+
+    * slicing operations return ndarray objects.
+    * can iterate over with expected results.
+    * transpose and swapaxes functions create a new pipestream_3d object with 
+      the new axes ordering.
+    * has ndim, shape, and dtype attributes.
+
+    """
+
+    def __init__(self,filename,order=["z","y","x"]):
+        """
+        Create and set up object
+        """
+        
+
+        fdata = get_fdata(filename) # get the header data
+        if fdata[2] - 2.345 > 1e-6: # check if byteswapping will be necessary
+            self.bswap = True
+        else:
+            self.bswap = False
+        
+        dic = fdata2dic(fdata)  # create the dictionary
+        shape = find_shape(dic)
+
+        # set object attributes 
+        self.filename = filename
+        self.lenZ = shape[0]
+        self.lenY = shape[1]
+        self.order = order
+        self.ndim = 3
+
+        # check 0th dimensions quadrature
+        fn = "FDF"+str(int(dic["FDDIMORDER1"]))
+        if dic[fn+"QUADFLAG"] == 1.0:
+            self.cplex = False
+            self.dtype=np.dtype('float32')
+            self.lenX = shape[2]
+        else:
+            self.cplex = True
+            self.dtype=np.dtype('complex64')
+            self.lenX = shape[2]/2
+
+        # build the shape
+        a =  [self.lenZ,self.lenY,self.lenX]
+        self.shape = (a[order.index("z")],a[order.index("y")],
+                      a[order.index("x")] )
+
+    def _fcopy__(self,order):
+        """
+        Create a copy
+        """
+        n = pipesteam_3d(self.filename,order)
+        return n
+
+    def __fgetitem__(self, (sZ,sY,sX) ):
+        """
+        Return ndarray of selected values
+
+        (sz,sy,sx) is a well formated tuple of slices
+        """
+        
+        f = open(self.filename,'r') # open the file for reading
+        # determine which objects should be selected
+        xch = range(self.lenX)[sX]
+        ych = range(self.lenY)[sY]
+        zch = range(self.lenZ)[sZ]
+        
+        # create an empty array to store the selected slice
+        out = np.empty( (len(zch),len(ych),len(zch)) ,dtype=self.dtype)
+
+        # read in the data trace by trace
+        for zi,z in enumerate(zch):
+            for yi,y in enumerate(ych):
+                ntrace = y+z*self.lenY
+                trace = get_trace(f,ntrace,self.lenX,self.bswap,self.cplex)
+                out[zi,yi] = trace[sX]
+        
+        f.close()
+        return out
+
+
+class pipestream_4d(fileiobase.data_4d):
+    """
+    pipestream_4d emulates numpy.ndarray objects without loading data into 
+    memory for low memory reading of 4D NMRPipe data stream (one file 4D):
+
+    * slicing operations return ndarray objects.
+    * can iterate over with expected results.
+    * transpose and swapaxes functions create a new pipestream_3d object with 
+      the new axes ordering.
+    * has ndim, shape, and dtype attributes.
+
+    """
+
+    def __init__(self,filename,order=["a","z","y","x"]):
+        """
+        Create and set up object
+        """
+        
+
+        fdata = get_fdata(filename) # get the header data
+        if fdata[2] - 2.345 > 1e-6: # check if byteswapping will be necessary
+            self.bswap = True
+        else:
+            self.bswap = False
+        
+        dic = fdata2dic(fdata)  # create the dictionary
+        shape = find_shape(dic)
+
+        # set object attributes 
+        self.filename = filename
+        self.lenA = shape[0]
+        self.lenZ = shape[1]
+        self.lenY = shape[2]
+        self.order = order
+        self.ndim = 4
+
+        # check 0th dimensions quadrature
+        fn = "FDF"+str(int(dic["FDDIMORDER1"]))
+        if dic[fn+"QUADFLAG"] == 1.0:
+            self.cplex = False
+            self.dtype=np.dtype('float32')
+            self.lenX = shape[3]
+        else:
+            self.cplex = True
+            self.dtype=np.dtype('complex64')
+            self.lenX = shape[3]/2
+
+        # build the shape
+        a =  [self.lenA,self.lenZ,self.lenY,self.lenX]
+        self.shape = (a[order.index("a")],a[order.index("z")],
+                      a[order.index("y")],a[order.index("x")] )
+
+    def _fcopy__(self,order):
+        """
+        Create a copy
+        """
+        n = pipesteam_4d(self.filename,order)
+        return n
+
+    def __fgetitem__(self, (sA,sZ,sY,sX) ):
+        """
+        Return ndarray of selected values
+
+        (sA,sZ,sY,sX) is a well formated tuple of slices
+        """
+        
+        f = open(self.filename,'r') # open the file for reading
+        # determine which objects should be selected
+        xch = range(self.lenX)[sX]
+        ych = range(self.lenY)[sY]
+        zch = range(self.lenZ)[sZ]
+        ach = range(self.lenA)[sA]
+
+        # create an empty array to store the selected slice
+        out=np.empty( (len(ach),len(zch),len(ych),len(zch)) ,dtype=self.dtype)
+
+        # read in the data trace by trace
+        for ai,a in enumerate(ach):
+            for zi,z in enumerate(zch):
+                for yi,y in enumerate(ych):
+                    ntrace = y+z*self.lenY+a*self.lenY*self.lenZ
+                    trace = get_trace(f,ntrace,self.lenX,self.bswap,self.cplex)
+                    out[ai,zi,yi] = trace[sX]
+        
+        f.close()
+        return out
 
 class pipe_3d(fileiobase.data_3d):
     """ 
