@@ -145,6 +145,14 @@ def make_uc(dic,data,dim=-1):
 
     car = dic[fn+"CAR"]*obs
 
+    # NMRPipe keeps the carrier constant during extractions storing the 
+    # location of this point as CENTER.  This may not be the actual "center" of
+    # the spectrum and may not even be a valid index in that dimension. We need
+    # to re-center the carrier value so that actually represents the 
+    # frequency of the central point in the dimension.
+    car = car + sw/size * ( dic[fn+"CENTER"]-1.-size/2. )
+    
+
     return fileiobase.unit_conversion(size,cplx,sw,obs,car)
 
 
@@ -510,8 +518,8 @@ def read_2D(filename):
     """
     Read a 2D NMRPipe binary file returning a dic,data pair
     
-    This function should also be used to read NMRPipe data streams stored as 
-    files (one file 3D/4D data sets made using xyz2pipe)
+    This function should also be used to read NMRPipe data streams stored in a 
+    single file (one file 3D/4D data sets made using xyz2pipe)
     
     """
 
@@ -533,8 +541,9 @@ def read_3D(filemask):
     """
     Read a 3D NMRPipe binary file returning a dic,data pair.
 
-    This function should not be used to read NMRPipe data streams stored as
-    (one file 3D/4D data sets made using xyz2pipe), read_2D should be used.
+    This function should not be used to read NMRPipe data streams stored in a
+    single file (one file 3D/4D data sets made using xyz2pipe), read_2D 
+    should be used.
 
     """
 
