@@ -1362,7 +1362,7 @@ class pipestream_3d(fileiobase.data_3d):
         zch = range(self.lenZ)[sZ]
         
         # create an empty array to store the selected slice
-        out = np.empty( (len(zch),len(ych),len(zch)) ,dtype=self.dtype)
+        out = np.empty( (len(zch),len(ych),len(xch)) ,dtype=self.dtype)
 
         # read in the data trace by trace
         for zi,z in enumerate(zch):
@@ -1449,7 +1449,7 @@ class pipestream_4d(fileiobase.data_4d):
         ach = range(self.lenA)[sA]
 
         # create an empty array to store the selected slice
-        out=np.empty( (len(ach),len(zch),len(ych),len(zch)) ,dtype=self.dtype)
+        out=np.empty( (len(ach),len(zch),len(ych),len(xch)) ,dtype=self.dtype)
 
         # read in the data trace by trace
         for ai,a in enumerate(ach):
