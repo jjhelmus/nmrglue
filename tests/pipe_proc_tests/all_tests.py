@@ -228,9 +228,9 @@ qmix_list = ["qmix.dat","qmix.glue","qmix2.dat","qmix2.glue"]
 qmix = {"py":"qmix.py","sh":"qmix.com","f":qmix_list}
 suite["qmix"] = qmix
 
-save_list = ["save.dat","save.glue","save2.dat","save2.glue"]
-save = {"py":"save.py","sh":"save.com","f":save_list}
-suite["save"] = save
+#save_list = ["save.dat","save.glue","save2.dat","save2.glue"]
+#save = {"py":"save.py","sh":"save.com","f":save_list}
+#suite["save"] = save
 
 smo_list = ["smo.dat","smo.glue","smo2.dat","smo2.glue","smo3.dat","smo3.glue"]
 smo = {"py":"smo.py","sh":"smo.com","f":smo_list}
