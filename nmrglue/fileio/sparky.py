@@ -239,8 +239,10 @@ def write(filename,dic,data,overwrite=False):
 
     * filename  Name of file to write to.
     * data      Data array.
-    * dic       Sparky dictionary Dictionary.
+    * dic       Sparky parameter dictionary.
     * overwrite Set to True to overwrite existing file.
+
+    No return
 
     """
 
@@ -253,6 +255,22 @@ def write(filename,dic,data,overwrite=False):
     
     raise ValueError,"unknown dimentionality: %s"%order
 
+def write_lowmem(filename,dic,data,overwrite=False):
+    """
+    Write a sparky file tile by tile (low memory)
+
+    Parameters:
+
+    * filename  Name of file to write to.
+    * data      Data array.
+    * dic       Sparky parameter dictionary.
+    * overwrite Set to True to overwrite existing file.
+    
+    No return
+
+    """
+    # write also writes tile by tile...
+    return write(filename,dic,data,overwrite)
 
 # dimensional reading/writing functions
 
@@ -422,33 +440,37 @@ def read_lowmem_3D(filename):
 
 # sparky_* objects
 
-class sparky_2d(fileiobase.data_2d):
+class sparky_2d(fileiobase.data_nd):
     """
-    sparky_2d emulates a numpy.ndarray object without loading data into memory
+    Emulates a numpy.ndarray object without loading data into memory for low
+    memory reading of 2D Sparky files.
 
-    * slicing operations return ndarray objects
-    * can iterate over with expected results
-    * transpose and swapaxes functions create a new sparky_2d object with the
-      new axes ordering.
+    * slicing operations return ndarray objects.
+    * can iterate over with expected results.
+    * transpose and swapaxes methods create a new objects with correct axes
+      ordering.
     * has ndim, shape, and dtype attributes.
 
     """
 
-    def __init__(self,filename,order=["y","x"]):
-
+    def __init__(self,filename,order=None):
+        """
+        Create and set up object
+        """
         # open the file
         self.filename = filename
-        self.f = open(filename)
+        f = open(filename)
 
         # read the fileheader
-        self.dic = fileheader2dic(get_fileheader(self.f))
-        
+        self.dic = fileheader2dic(get_fileheader(f))
+
         if self.dic["naxis"] != 2:
-            raise StandardError,"file not 2D sparky file"
+            raise StandardError,"file is not a 2D Sparky file"
 
         # read in the axisheaders
-        self.dic["w1"] = axisheader2dic(get_axisheader(self.f))
-        self.dic["w2"] = axisheader2dic(get_axisheader(self.f))
+        self.dic["w1"] = axisheader2dic(get_axisheader(f))
+        self.dic["w2"] = axisheader2dic(get_axisheader(f))
+        f.close()
 
         # sizes
         self.lenY = self.dic["w1"]["npoints"]
@@ -458,36 +480,32 @@ class sparky_2d(fileiobase.data_2d):
         self.lentY = self.dic["w1"]["bsize"]
         self.lentX = self.dic["w2"]["bsize"]
 
-
-        # order
-        self.order = order
-
-        # shape based on order
-
-        a = [self.lenY,self.lenX]
-        self.shape = ( a[order.index("y")], a[order.index("x")] )
-        del(a)
-    
-        # dtype and ndim
+        # check order
+        if order == None:
+            order = (0, 1)
+        
+        # finalize
         self.dtype = np.dtype("float32")
-        self.ndim = 2
-
+        self.order = order
+        self.fshape = (self.lenY, self.lenX)
+        self.__setdimandshape__()
 
     def __fcopy__(self,order):
         
         n = sparky_2d(self.filename,order)
         return n
 
-    def __fgetitem__(self,(sY,sX)):
+    def __fgetitem__(self,slices):
         """
         Returns ndarray of selected values
 
-        (sY,sX) is a well formateed tuple of slices
-
+        slices is a well formatted 2-tuple of slices
         """
+        sY,sX = slices
+        
+        f = open(self.filename)
 
         #print sY,sX
-
         gY = range(self.lenY)[sY]   # list of values to take in Y
         gX = range(self.lenX)[sX]   # list of values to take in X
 
@@ -503,7 +521,7 @@ class sparky_2d(fileiobase.data_2d):
                 
                 # get the tile and reshape it
                 ntile = iY*np.ceil(self.lenX/self.lentX)+iX
-                tile = get_tilen(self.f,ntile,(self.lentX,self.lentY))
+                tile = get_tilen(f,ntile,(self.lentX,self.lentY))
                 tile = tile.reshape(self.lentY,self.lentX)
 
                 # tile minimum and max values for each dim
@@ -541,37 +559,40 @@ class sparky_2d(fileiobase.data_2d):
                 # put the cut tile to the out array (uses some fancy indexing)
                 out[np.ix_(YinO,XinO)] = ctile
 
+        f.close()
         return out
 
 
-class sparky_3d(fileiobase.data_3d):
+class sparky_3d(fileiobase.data_nd):
     """
-    sparky_3d emulates a numpy.ndarray object without loading data into memory
+    Emulates a numpy.ndarray object without loading data into memory for low
+    memory reading of 3D Sparky files.
 
-    * slicing operations return ndarray objects
-    * can iterate over with expected results
-    * transpose and swapaxes functions create a new sparky_3d object with the
-      new axes ordering.
+    * slicing operations return ndarray objects.
+    * can iterate over with expected results.
+    * transpose and swapaxes methods create a new objects with correct axes
+      ordering.
     * has ndim, shape, and dtype attributes.
 
     """
 
-    def __init__(self,filename,order=["z","y","x"]):
+    def __init__(self,filename,order=None):
 
         # open the file
         self.filename = filename
-        self.f = open(filename)
+        f = open(filename)
 
         # read the fileheader
-        self.dic = fileheader2dic(get_fileheader(self.f))
+        self.dic = fileheader2dic(get_fileheader(f))
         
         if self.dic["naxis"] != 3:
-            raise StandardError,"file not 3D sparky file"
+            raise StandardError,"file not 3D Sparky file"
 
         # read in the axisheaders
-        self.dic["w1"] = axisheader2dic(get_axisheader(self.f))
-        self.dic["w2"] = axisheader2dic(get_axisheader(self.f))
-        self.dic["w3"] = axisheader2dic(get_axisheader(self.f))
+        self.dic["w1"] = axisheader2dic(get_axisheader(f))
+        self.dic["w2"] = axisheader2dic(get_axisheader(f))
+        self.dic["w3"] = axisheader2dic(get_axisheader(f))
+        f.close()
 
         # sizes
         self.lenZ = self.dic["w1"]["npoints"]
@@ -583,32 +604,30 @@ class sparky_3d(fileiobase.data_3d):
         self.lentY = self.dic["w2"]["bsize"]
         self.lentX = self.dic["w3"]["bsize"]
 
-        # order
-        self.order = order
-
-        # shape based on order
-
-        a = [self.lenZ,self.lenY,self.lenX]
-        self.shape = ( a[order.index("z")], a[order.index("y")], 
-                       a[order.index("x")] )
-        del(a)
-    
-        # dtype and ndim
+        # check order
+        if order == None:
+            order = (0, 1, 2)
+        
+        # finalize
         self.dtype = np.dtype("float32")
-        self.ndim = 3
+        self.order = order
+        self.fshape = (self.lenZ, self.lenY, self.lenX)
+        self.__setdimandshape__()
 
     def __fcopy__(self,order):
         
         n = sparky_3d(self.filename,order)
         return n
 
-    def __fgetitem__(self,(sZ,sY,sX)):
+    def __fgetitem__(self,slices):
         """ 
         Returns ndarray of selected values
 
-        (sZ,sY,sX) is a well formateed tuple of slices
+        slices is a well formateed 3-tuple of slices
 
         """
+        sZ,sY,sX = slices
+        f = open(self.filename)
 
         gZ = range(self.lenZ)[sZ]   # list of values to take in Z
         gY = range(self.lenY)[sY]   # list of values to take in Y
@@ -635,7 +654,7 @@ class sparky_3d(fileiobase.data_3d):
                 
                     # get the tile and reshape it
                     ntile = iZ*ttX*ttY + iY*ttX + iX
-                    tile = get_tilen(self.f,ntile,tile_tup)
+                    tile = get_tilen(f,ntile,tile_tup)
                     tile = tile.reshape(tile_tup)
 
                     # tile minimum and max values for each dim
@@ -685,13 +704,13 @@ class sparky_3d(fileiobase.data_3d):
 
                     # put the cut tile to the out array 
                     out[np.ix_(ZinO,YinO,XinO)] = ctile
-
+        f.close()
         return out
 
 
 # tile and data get/put functions
 
-def get_tilen(file,n_tile,tw_tuple):
+def get_tilen(f,n_tile,tw_tuple):
     """ 
     Read in tile n from file object with tile sizes given by tw_tuple
     
@@ -704,43 +723,43 @@ def get_tilen(file,n_tile,tw_tuple):
         tsize = tsize*i
 
     # seek to the beginning of the tile
-    file.seek(int(180+128*len(tw_tuple)+n_tile*tsize))
+    f.seek(int(180+128*len(tw_tuple)+n_tile*tsize))
     
-    return np.frombuffer(file.read(tsize),dtype='>f4')
+    return np.frombuffer(f.read(tsize),dtype='>f4')
 
 
-def get_tile(file,num_points):
+def get_tile(f,num_points):
     """ 
     Read tile data from file object
     """
     bsize = num_points*4        # size in bytes
 
-    return np.frombuffer(file.read(bsize),dtype='>f4')
+    return np.frombuffer(f.read(bsize),dtype='>f4')
 
 
-def put_tile(file,tile):
+def put_tile(f,tile):
     """ 
     Put tile data to file
     """
-    file.write(tile.astype('>f4').tostring())
+    f.write(tile.astype('>f4').tostring())
     return
 
 
-def get_data(file):
+def get_data(f):
     """ 
     Read all data from sparky file object
     """
-    return np.frombuffer(file.read(),dtype='>f4')
+    return np.frombuffer(f.read(),dtype='>f4')
 
 
-def put_data(file,data):
+def put_data(f,data):
     """ 
     Put data to file
 
     Does not untile data, assumes this has been done
     
     """
-    file.write(data.astype('>f4').tostring())
+    f.write(data.astype('>f4').tostring())
     return
 
 
@@ -1010,7 +1029,7 @@ def untile_data3D(data,(lentZ,lentY,lentX),(lenZ,lenY,lenX)):
 
 # fileheader functions
 
-def get_fileheader(file):
+def get_fileheader(f):
     """ 
     Get fileheader from file and return a list
 
@@ -1027,15 +1046,15 @@ def get_fileheader(file):
     # so that the long is @ a multiple of 4
     # also sparky always packs big-endian, hence > 
 
-    return struct.unpack('>10s 4c 9s 26s 80s 3x l 40s 4x',file.read(180) )  
+    return struct.unpack('>10s 4c 9s 26s 80s 3x l 40s 4x',f.read(180) )  
 
 
-def put_fileheader(file,fl):
+def put_fileheader(f,fl):
     """ 
     Write fileheader list to file (180-bytes)
     """
 
-    file.write( struct.pack('>10s 4c 9s 26s 80s 3x l 40s 4x',*fl))
+    f.write( struct.pack('>10s 4c 9s 26s 80s 3x l 40s 4x',*fl))
     return
 
 
@@ -1083,7 +1102,7 @@ def dic2fileheader(dic):
 # axisheader functions
 
 
-def get_axisheader(file):
+def get_axisheader(f):
     """ 
     Get axisheader from file and return a list
 
@@ -1098,14 +1117,14 @@ def get_axisheader(file):
     # spectrometer_freq(f),spectral_width(f),xmtr_freq(f),zero_order(f),
     # first_order(f),first_pt_scale(f),ZEROS
 
-    return struct.unpack('>6s h 3I 6f 84s',file.read(128) )
+    return struct.unpack('>6s h 3I 6f 84s',f.read(128) )
 
-def put_axisheader(file,al):
+def put_axisheader(f,al):
     """ 
     Write axisheader list to file (128-bytes)
     """
 
-    file.write( struct.pack('>6s h 3I 6f 84s',*al) )
+    f.write( struct.pack('>6s h 3I 6f 84s',*al) )
     return
 
 

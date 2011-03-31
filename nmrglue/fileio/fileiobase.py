@@ -7,7 +7,7 @@ used by multiple nmrglue.fileio modules
 import numpy as np
 import os
 import string
-
+import itertools
 
 
 def create_blank_udic(ndim):
@@ -360,21 +360,143 @@ def open_towrite(filename,overwrite=False):
     return open(filename,'w')
 
 
+################################################
+# numpy ndarray emulation and helper functions #
+################################################
+
+
+# iterator for ND array
+
+def ndfrom_iter(shape,slices):
+    ch = [range(lenx)[sX] for lenx,sX in zip(shape,slices)]
+    return itertools.product(*ch)
+
+def ndto_iter(shape,slices):
+    ich = [range(len(range(lenx)[sX])) for lenx,sX in zip(shape,slices)]
+    return itertools.product(*ich)
+
+def ndtofrom_iter(shape,slices):
+    ch = [range(lenx)[sX] for lenx,sX in zip(shape,slices)]
+    ich = [range(len(i)) for i in ch]
+    return zip(itertools.product(*ich),itertools.product(*ch))
+
+def size_and_ndtofrom_iter(shape,slices):
+    ch = [range(lenx)[sX] for lenx,sX in zip(shape,slices)]
+    s = [len(i) for i in ch]
+    ich = [range(i) for i in s]
+    return s,zip(itertools.product(*ich),itertools.product(*ch))
+
+
+# index2trace and trace2index functions
+
+def index2trace_flat(shape,index):
+    """
+    Calculate trace number from shape and index of all indirect dimensions
+    assuming a flat structure
+    """
+    # We need to perform: 
+    # index[0]*shape[1]*...shape[-1] + index[1]*shape[2]*...shape[-1] + ... 
+    # + index[-1]*shape[-1] + index[-1]
+    # To do this we calculate the product of shape[X] elements and multiple
+    # by the corresponding index element, index[-1] as added at the beginning
+    a = index[-1]
+    for i,v in enumerate(index[:-1]):
+        s = shape[i+1:]
+        mult = reduce(lambda x,y: x*y, shape[i+1:])
+        a = a+mult*v
+    return a
+
+def trace2index_flat(shape,ntrace):
+    """
+    Calculate the index of a trace assuming a flat structure
+    """
+    # algorithm is to take quotient/remainers of sizes in reverse
+    q = ntrace  # seed quotient with remained
+    index = []
+    for s in shape[:0:-1]:  # loop from last size to 2nd size
+        q,r = divmod(q,s)
+        index.insert(0,r)
+    index.insert(0,q)
+    return tuple(index)
+
+def index2trace_opp(shape,index):
+    """
+    Calculate trace number from shape and index of all indirect dimensions
+    assuming a phase ordering opposite the time increments.
+    """
+    n = len(shape)
+    # deal with the phase component
+    phases = [v%2 for v in index]
+    nphase = index2trace_flat([2]*n,phases[::-1])
+    
+    # deal with the remainer 
+    pindex = [v//2 for v in index]
+    pshape = [i/2 for i in shape]
+    nbase = index2trace_flat(pshape,pindex)
+
+    return nbase*2**n+nphase
+
+def trace2index_opp(shape,ntrace):   
+    """
+    Calculate the index of a trace assuming opposite phase/time increment 
+    ordering
+    """
+    n = len(shape)
+    q,r = divmod(ntrace,2**n)
+    to_add = list(trace2index_flat([2]*n,r))[::-1]
+    pshape = [i/2 for i in shape]
+    base = list(trace2index_flat(pshape,q))
+    total = [b*2+a for b,a in zip(base,to_add)]
+    return tuple(total)
+
+
+def index2trace_reg(shape,index):
+    """
+    Calculate trace number from shape and index of all indirect dimensions
+    assuming the same  phase and time ordering.
+    """
+    n = len(shape)
+    # deal with the phase component
+    phases = [v%2 for v in index]
+    nphase = index2trace_flat([2]*n,phases)
+    
+    # deal with the remainer 
+    pindex = [v//2 for v in index]
+    pshape = [i/2 for i in shape]
+    nbase = index2trace_flat(pshape,pindex)
+
+    return nbase*2**n+nphase
+
+
+def trace2index_reg(shape,ntrace):   
+    """
+    Calculate the index of a trace assuming the same phase/time increment 
+    ordering
+    """
+    n = len(shape)
+    q,r = divmod(ntrace,2**n)
+    to_add = list(trace2index_flat([2]*n,r))
+    pshape = [i/2 for i in shape]
+    base = list(trace2index_flat(pshape,q))
+    total = [b*2+a for b,a in zip(base,to_add)]
+    return tuple(total)
+
+
+
+
 #
-#data_* class primatives
+# data_nd class
 #
-#inherited classes should define:
+# inherited classes should define:
 #
-#    __init__ which sets up the object and defines:
-#        
-#        self.lenX
-#        self.lenY
-#        self.lenZ if data_3d or data_4d
-#        self.lenA if data_4d
-#        self.order list of "x","y",{"z","a"}
-#        self.shape
-#        self.dtype
-#        self.ndim
+#    __init__ which sets up the object and defines at minimum
+#       
+#       self.fshape shape of data on disk (shape when order = (0,1,2...)
+#       self.order order of axes, default is (0,1,2,...)       
+#       self.dtype
+#       
+#   self.__setdimandshape__ can be called to set self.dim and self.shape
+#    if they are not set by __init__
 #
 #    __fgetitem__ which takes well formatted tuples of slices
 #    and returns ndarray objects
@@ -383,168 +505,26 @@ def open_towrite(filename,overwrite=False):
 #
 
 
-class data_2d(object):
+class data_nd(object):
     """
-    data_2d emulates numpy.ndarray object without loading data into memory
+    data_nd emulates numpy.ndarray object without loading data into memory
 
     * slicing operations return ndarray objects
     * can iterate over with expected results
-    * transpose and swapaxes functions create a new data_2d object with the
+    * transpose and swapaxes functions create a new data_nd object with the
       new axes ordering
     * has ndim, shape, and dtype attributes.
 
     """
 
     def __init__(self,order):
-        """
-        Create and set up a data_2d object
-        """
         pass
 
-
-    def __copy__(self):
-        """
-        Create a copy
-        """
-
-        return __fcopy__(self,self.order)
-
-
-    def __getitem__(self,key):
-        """ 
-        x.__getitem__(y) <==> x[y]
-        """
-
-        # convert the key into a list
-        if type(key) != tuple:
-            rlist = [key]
-        else:
-            rlist = list(key)
-
-        # remove Ellipsis
-        while Ellipsis in rlist:
-            i = rlist.index(Ellipsis)
-            rlist.pop(i)
-            for j in range(2-len(rlist)):
-                rlist.insert(i,slice(None))
-
-        if len(rlist) > 2:
-            raise IndexError,"invalid index"
-
-        # replace integers with slices
-        for i,v in enumerate(rlist):
-            if type(v) == int:
-                
-                # check for out of range indexes
-                if v >= self.shape[i]:
-                    raise IndexError,"index(%s) out of range(0<=index<%s) \
-                    in dimension %s" % (v,self.shape[i]-1,i)
-
-                if v <= (-1*self.shape[i]-1):
-                    raise IndexError,"index(%s) out of range(0<=index<%s) \
-                    in dimension %s" % (v,self.shape[i]-1,i)
-
-                if v < 0:
-                    w  = self.shape[i]+v
-                    rlist[i] = slice(w,w+1,1)
-                else:
-                    rlist[i] = slice(v,v+1,1)
-            
-        # pad the list with additional dimentions
-        for i in range(len(rlist),2):
-            rlist.append(slice(None))
-
-        # reorder the slices into z,y,x
-        sy = rlist[self.order.index("y")]
-        sx = rlist[self.order.index("x")]
-
-        # get the data
-        data = self.__fgetitem__( (sy,sx) )
-
-        # reorder the data
-        if data.shape != (0,):
-            a = [ ["y","x"].index(n) for n in self.order ]
-            return np.squeeze(data.transpose(a))
-        else:
-            data
-
-    def __len__(self):
-        """
-        x._len__ <==> len(x)
-        """
-        return self.shape[0]
-
-    def __iter__(self):
-        for index in xrange(0,self.shape[0]):
-            yield self[index]
-
-    def swapaxes(self,axis1,axis2):
-        """ 
-        Return a data_2d object with axis1 and axis2 interchanged
-
-        Parameters:
-        * axis1 First axis
-        * axis2 Second axis
-
-        """
-
-        axis1,axis2 = int(axis1),int(axis2)
-
-        if axis1 < 0:
-            axis1 = 2-axis1
-        if axis2 < 0:
-            axis2 = 2-axis2
-        if axis1 >= 2:
-            raise ValueError,"bad axis1 argument to swapaxes"
-        if axis2 >= 2:
-            raise ValueError,"bad axis2 argument to swapaxes"
-
-        order = list(self.order)
-        order[axis1],order[axis2] = order[axis2],order[axis1]
-        n = self.__fcopy__(order=order)
-
-        return n
-
-    def transpose(self,(axis1,axis2)=(1,0)):
-        """
-        Transpose data
-        """
-        ax1,ax2 = int(axis1),int(axis2)
-
-        if ax1 < 0:
-            ax1 = 2-ax1
-        if ax2 < 0:
-            ax2 = 2-ax2
-
-        if ax1 == ax2:
-            raise ValueError, "repeated axis in transpose"
-
-        if ax1>=2 or ax2>=2:
-            raise ValueError, "invalid axis for this array"
-
-        order = list(self.order)
-        new_order = [ order[ax1],order[ax2] ]
-        n = self.__fcopy__(order=new_order)
+    def __setdimandshape__(self):
         
-        return n
-
-
-
-class data_3d(object):
-    """
-    data_3d emulates numpy.ndarray object without loading data into memory
-
-    * slicing operations return ndarray objects
-    * can iterate over with expected results
-    * transpose and swapaxes functions create a new fid_3d object with the
-      new axes ordering
-    * has ndim, shape, and dtype attributes.
-
-    """
-
-    def __init__(self,order):
-
-        pass
+        # set ndim and shape
+        self.ndim = len(self.fshape)
+        self.shape = tuple([self.fshape[i] for i in self.order])
 
     def __copy__(self):
         """ 
@@ -557,8 +537,6 @@ class data_3d(object):
         x.__getitem__(y) <==> x[y]
         """
 
-        # formats the input into a formated 
-
         # convert the key into a list
         if type(key) != tuple:
             rlist = [key]
@@ -569,10 +547,10 @@ class data_3d(object):
         while Ellipsis in rlist:
             i = rlist.index(Ellipsis)
             rlist.pop(i)
-            for j in range(3-len(rlist)):
+            for j in range(self.ndim-len(rlist)):
                 rlist.insert(i,slice(None))
 
-        if len(rlist) > 3:
+        if len(rlist) > self.ndim:
             raise IndexError,"invalid index"
 
         # replace integers with slices
@@ -595,21 +573,18 @@ class data_3d(object):
                     rlist[i] = slice(v,v+1,1)
             
         # pad the list with additional dimentions
-        for i in range(len(rlist),3):
+        for i in range(len(rlist),self.ndim):
             rlist.append(slice(None))
 
-        # reorder the slices into z,y,x
-        sz = rlist[self.order.index("z")]
-        sy = rlist[self.order.index("y")]
-        sx = rlist[self.order.index("x")]
+        # reorder the slices into file order
+        frlist = [rlist[self.order.index(i)] for i in range(self.ndim)]
 
         # get the data
-        data = self.__fgetitem__( (sz,sy,sx) )
+        data = self.__fgetitem__(tuple(frlist))
 
-        # reorder the data
+        # re-order the data
         if data.shape != (0,):
-            a = [ ["z","y","x"].index(n) for n in self.order ]
-            return np.squeeze(data.transpose(a))
+            return np.squeeze(data.transpose(self.order))
         else:
             data
 
@@ -625,7 +600,7 @@ class data_3d(object):
 
     def swapaxes(self,axis1,axis2):
         """
-        Return fid_3d object with axis1 and axis2 interchanged
+        Return data_nd object with axis1 and axis2 interchanged
 
         Parameters:
         * axis1 First axis
@@ -636,12 +611,12 @@ class data_3d(object):
         axis1,axis2 = int(axis1),int(axis2)
 
         if axis1 < 0:
-            axis1 = 3-axis1
+            axis1 = self.ndim-axis1
         if axis2 < 0:
-            axis2 = 3-axis2
-        if axis1 >= 3:
+            axis2 = self.ndim-axis2
+        if axis1 >= self.ndim:
             raise ValueError,"bad axis1 argument to swapaxes"
-        if axis2 >= 3:
+        if axis2 >= self.ndim:
             raise ValueError,"bad axis2 argument to swapaxes"
 
         order = list(self.order)
@@ -650,175 +625,39 @@ class data_3d(object):
 
         return n
 
-    def transpose(self,(axis1,axis2,axis3)=(2,1,0)):
+    def transpose(self,*axes):
+        """
+        Permute the dimensions of the array
+        """
 
-        ax1,ax2,ax3 = int(axis1),int(axis2),int(axis3)
+        if axes==():    # default is to switch order of axes
+            axes = range(self.ndim)[::-1]
 
-        if ax1 < 0:
-            ax1 = 3-ax1
-        if ax2 < 0:
-            ax2 = 3-ax2
-        if ax3 < 0:
-            ax3 = 3-ax2
+        if len(axes)==1:    # if a single tuple is given unpack
+            axes = axes[0]
 
-        if ax1 == ax2 or ax1 == ax3 or ax2 == ax3:
-            raise ValueError, "repeated axis in transpose"
-
-        if ax1>=3 or ax2>=3 or ax3>=3:
-            raise ValueError, "invalid axis for this array"
-
-        order = list(self.order)
-        new_order = [ order[ax1],order[ax2],order[ax3] ]
-        n = self.__fcopy__(order=new_order)
+        try:    # convert to integers
+            axes = [int(i) for i in axes]
+        except:
+            raise TypeError("an integer is required")
         
-        return n
+        if len(axes) != self.ndim:   # check for to few/many axes
+            raise ValueError("axes don't match array")
 
-
-class data_4d(object):
-    """
-    data_4d emulates numpy.ndarray object without loading data into memory
-
-    * slicing operations return ndarray objects
-    * can iterate over with expected results
-    * transpose and swapaxes functions create a new data_4d object with the
-      new axes ordering
-    * has ndim, shape, and dtype attributes.
-
-    """
-
-    def __init__(self,order):
-
-        pass
-
-    def __copy__(self):
-        """ 
-        create a copy
-        """
-        return __fcopy(self,self.order)
-
-    def __getitem__(self,key):
-        """
-        x.__getitem__(y) <==> x[y]
-        """
-
-        # formats the input into a formated 
-
-        # convert the key into a list
-        if type(key) != tuple:
-            rlist = [key]
-        else:
-            rlist = list(key)
-
-        # remove Ellipsis
-        while Ellipsis in rlist:
-            i = rlist.index(Ellipsis)
-            rlist.pop(i)
-            for j in range(4-len(rlist)):
-                rlist.insert(i,slice(None))
-
-        if len(rlist) > 4:
-            raise IndexError,"invalid index"
-
-        # replace integers with slices
-        for i,v in enumerate(rlist):
-            if type(v) == int:
-                
-                # check for out of range indexes
-                if v >= self.shape[i]:
-                    raise IndexError,"index(%s) out of range(0<=index<%s) \
-                    in dimension %s" % (v,self.shape[i]-1,i)
-
-                if v <= (-1*self.shape[i]-1):
-                    raise IndexError,"index(%s) out of range(0<=index<%s) \
-                    in dimension %s" % (v,self.shape[i]-1,i)
-
-                if v < 0:
-                    w  = self.shape[i]+v
-                    rlist[i] = slice(w,w+1,1)
-                else:
-                    rlist[i] = slice(v,v+1,1)
-            
-        # pad the list with additional dimentions
-        for i in range(len(rlist),4):
-            rlist.append(slice(None))
-
-        # reorder the slices into z,y,x
-        sa = rlist[self.order.index("a")]
-        sz = rlist[self.order.index("z")]
-        sy = rlist[self.order.index("y")]
-        sx = rlist[self.order.index("x")]
-
-        # get the data
-        data = self.__fgetitem__( (sa,sz,sy,sx) )
-
-        # reorder the data
-        if data.shape != (0,):
-            a = [ ["a","z","y","x"].index(n) for n in self.order ]
-            return np.squeeze(data.transpose(a))
-        else:
-            data
-
-    def __len__(self):
-        """
-        x._len__ <==> len(x)
-        """
-        return self.shape[0]
-
-    def __iter__(self):
-        for index in xrange(0,self.shape[0]):
-            yield self[index]
-
-    def swapaxes(self,axis1,axis2):
-        """
-        Return fid_3d object with axis1 and axis2 interchanged
-
-        Parameters:
-        * axis1 First axis
-        * axis2 Second axis
-
-        """
-
-        axis1,axis2 = int(axis1),int(axis2)
-
-        if axis1 < 0:
-            axis1 = 4-axis1
-        if axis2 < 0:
-            axis2 = 4-axis2
-        if axis1 >= 4:
-            raise ValueError,"bad axis1 argument to swapaxes"
-        if axis2 >= 4:
-            raise ValueError,"bad axis2 argument to swapaxes"
-
-        order = list(self.order)
-        order[axis1],order[axis2] = order[axis2],order[axis1]
-        n = self.__fcopy__(order=order)
-
-        return n
-
-    def transpose(self,(axis1,axis2,axis3,axis4)=(3,2,1,0)):
-
-        ax1,ax2,ax3,ax4 = int(axis1),int(axis2),int(axis3),int(axis4)
-
-        if ax1 < 0:
-            ax1 = 4-ax1
-        if ax2 < 0:
-            ax2 = 4-ax2
-        if ax3 < 0:
-            ax3 = 4-ax2
-        if ax4 < 0:
-            ax4 = 4-ax4
-
-
-
-        if (ax1==ax2 or ax1==ax3 or ax1==ax4 or 
-            ax2==ax3 or ax2==ax4 or ax3==ax4) :
-            raise ValueError, "repeated axis in transpose"
-
-        if ax1>=4 or ax2>=4 or ax3>=4 or ax4>=4:
-            raise ValueError, "invalid axis for this array"
-
-        order = list(self.order)
-        new_order = [ order[ax1],order[ax2],order[ax3],order[ax4] ]
-        n = self.__fcopy__(order=new_order)
+        # replace negatives axes values with positives
+        for i,v in enumerate(axes):
+            if v<0:
+                axes[i] = self.ndim+v
         
-        return n
+        # check for invalid axes
+        for v in axes:
+            if v>=self.ndim:
+                raise ValueError("invalid axis for this array")
+
+        # check for repeated axes
+        if len(set(axes)) != self.ndim:
+            raise ValueError("repeated axis in tranpose")
+
+        # create a new data_nd object with transposed order
+        return self.__fcopy__(order=tuple([self.order[i] for i in axes]))
+

@@ -13,10 +13,10 @@ Bruker JCAMP-DX files (acqus, etc) are text file which are described by the
 prefixed with a '$'.
 
 Bruker pulseprogram files are text files described in various Bruker manuals.
-Of special important are lines which describe exterenal variable assignments 
+Of special important are lines which describe external variable assignments 
 (surrounded by "'s), loops (begin with lo), phases (contain ip of dp) or 
 increments (contain id, dd, ipu or dpu).  These lines are parsed when reading
-the file.
+the file with nmrglue.
 
 """
 
@@ -58,18 +58,60 @@ def create_dic(udic):
     """ 
     Create a bruker dictionary from a universal dictionary
     """
+    ndim = udic['ndim']
+
     # determind the size in bytes
-    if udic[udic["ndim"]-1]["complex"]:
+    if udic[ndim-1]["complex"]:
         bytes = 8
     else:
         bytes = 4
 
-    for k in xrange(udic["ndim"]): 
+    for k in xrange(ndim): 
         bytes*=udic[k]["size"]
 
     dic= {"FILE_SIZE":bytes}
 
+    # create the pprog dictionary parameter
+    dic["pprog"] = {'incr': [[],[1]]*(ndim*2-2), 'loop': [2]*(ndim*2-2),
+                    'ph_extra': [[]]*(ndim*2-2),'phase': [[]]*(ndim*2-2),
+                    'var': {}}
+    
+    
+    # create acqus dictionary parameters and fill in loop sizes
+    dic['acqus'] = create_acqus_dic(udic[ndim-1],direct=True)
+    if ndim >= 2:
+        dic["acqu2s"] = create_acqus_dic(udic[ndim-2])
+        dic["pprog"]["loop"][1] = udic[ndim-2]["size"]/2
+    if ndim >= 3:
+        dic["acqu3s"] = create_acqus_dic(udic[ndim-3])
+        dic["pprog"]["loop"][3] = udic[ndim-3]["size"]/2
+    if ndim >= 4:
+        dic["acqu4s"] = create_acqus_dic(udic[ndim-4])
+        dic["pprog"]["loop"][5] = udic[ndim-4]["size"]/2
+    
     return dic
+
+def create_acqus_dic(adic,direct=False):
+    """
+    Create a acqus dictionary for an universal axis dictionary.  Set 
+    direct=True for direct dimension.
+    """
+
+    if adic["complex"]:
+        AQ_mod = 3
+        if direct:
+            TD = int( np.ceil(adic["size"]/256.)*256 )*2
+        else:
+            TD = adic["size"]
+    else:
+        AQ_mod = 1
+        if direct:
+            TD = int( np.ceil(adic["size"]/256.)*256 )
+        else:
+            TD = adic["size"]
+
+    s = '##NMRGLUE automatically created parameter file'
+    return {'_comments':[],'_coreheader':[s],'AQ_mod':AQ_mod,'TD':TD}
 
 
 # Global read/write function and related utilities
@@ -91,6 +133,8 @@ def read(dir=".",bin_file=None,acqus_files=None,pprog_file=None,shape=None,
                     False for little-endian and None to determind automatically
     * read_prog     True will read pulseprogram file, False prevents reading.
     * read_acqus    True will read acqus file(s), False prevents reading.
+
+    Returns: dic,data
 
     Only the dir parameter must be defined, others will be determined 
     automatically if not specified.
@@ -174,6 +218,8 @@ def read_lowmem(dir=".",bin_file=None,acqus_files=None,pprog_file=None,
     * read_pprog    True will read pulseprogram file, False prevents reading.
     * read_acqus    True will read acqus file(s), False prevents reading.
 
+    Returns: dic,data
+
     Only the dir parameter must be defined, others will be determined 
     automatically if not specified.
 
@@ -239,7 +285,7 @@ def read_lowmem(dir=".",bin_file=None,acqus_files=None,pprog_file=None,
 
 
 def write(dir,dic,data,bin_file=None,acqus_files=None,pprog_file=None,
-    overwrite=False,big=True,write_prog=True,write_acqus=True):
+    overwrite=False,big=None,write_prog=True,write_acqus=True):
     """ 
     Write Bruker files 
 
@@ -253,9 +299,12 @@ def write(dir,dic,data,bin_file=None,acqus_files=None,pprog_file=None,
     * pprog_file    Filename of pulseprogram in directory.
     * overwrite     True to overwrite files, False to warn.
     * big           Endiness to write binary data with,
-                    bigendian=True, little=False
+                    bigendian=True, little=False, determined from dictionary
+                    if None.
     * write_prog    True will write pulseprogram file, False does not.
     * write_acqus   True will write acqus file(s), False does not.
+
+    No return.
 
     If any of bin_file,acqus_files or pprog_file are None the associated 
     file(s) will be determined automatically
@@ -286,10 +335,85 @@ def write(dir,dic,data,bin_file=None,acqus_files=None,pprog_file=None,
     if write_prog:
         write_pprog(os.path.join(dir,pprog_file),dic["pprog"],
                     overwrite=overwrite)
+    
+    # determind endianness (assume little-endian unless BYTORDA is 1)
+    if big == None:
+        big = False # default value
+        if "acqus" in dic and "BYTORDA" in dic["acqus"]:
+            if dic["acqus"]["BYTORDA"] == 1:
+                big = True
+            else:
+                big = False
 
     # write out the binary data
     bin_full = os.path.join(dir,bin_file)
     write_binary(bin_full,dic,data,big=big,overwrite=overwrite)
+
+    return
+
+
+def write_lowmem(dir,dic,data,bin_file=None,acqus_files=None,pprog_file=None,
+    overwrite=False,big=None,write_prog=True,write_acqus=True):
+    """ 
+    Write Bruker files trace by trace (low memory)
+
+    Parameters:
+
+    * dir           Directory to write to.
+    * dic           dictionary holding acqus_files and pprog_file parameters.
+    * data          array of data
+    * bin_file      Filename of binary file to write to in directory
+    * acqus_files   Filename(s) of acqus files in directory to write to.
+    * pprog_file    Filename of pulseprogram in directory.
+    * overwrite     True to overwrite files, False to warn.
+    * big           Endiness to write binary data with,
+                    bigendian=True, little=False
+    * write_prog    True will write pulseprogram file, False does not.
+    * write_acqus   True will write acqus file(s), False does not.
+
+    No return.
+
+    If any of bin_file,acqus_files or pprog_file are None the associated 
+    file(s) will be determined automatically
+
+    """
+    # determind parameters automatically
+    if bin_file == None:
+        if data.ndim == 1:
+            bin_file = "fid"
+        else:
+            bin_file = "ser"
+
+    if acqus_files == None:
+        acq = ["acqus","acqu2s","acqu3s","acqu4s"]
+        acqus_files = [k for k in acq if dic.has_key(k)]
+
+    if pprog_file == None:
+        pprog_file = "pulseprogram"
+
+
+    # write out the acqus files
+    if write_acqus:
+        for f in acqus_files:
+            write_jcamp(dic[f],os.path.join(dir,f),overwrite=overwrite)
+
+    # write out the pulse program
+    if write_prog:
+        write_pprog(os.path.join(dir,pprog_file),dic["pprog"],
+                    overwrite=overwrite)
+
+    # determind endianness (assume little-endian unless BYTORDA is 1)
+    if big == None:
+        big = False # default value
+        if "acqus" in dic and "BYTORDA" in dic["acqus"]:
+            if dic["acqus"]["BYTORDA"] == 1:
+                big = True
+            else:
+                big = False
+
+    # write out the binary data
+    bin_full = os.path.join(dir,bin_file)
+    write_binary_lowmem(bin_full,dic,data,big=big,overwrite=overwrite)
 
     return
 
@@ -429,6 +553,8 @@ def read_binary(filename,shape=(1),cplex=True,big=True):
     * big       Endianness of binary file, True for big-endian, False for 
                 little-endian
 
+    Returns: dic,data.  dic contains "FILE_SIZE" key/value.
+
     If data cannot be reshaped 1D version of data will be returned
 
     """
@@ -465,22 +591,15 @@ def read_binary_lowmem(filename,shape=(1),cplex=True,big=True):
     * big       Endianness of binary file, True for big-endian, False for 
                 little-endian
 
-    Will issue warning if shape/cplex does not seem correct given the file
-    size.
+    Returns: dic,data.  dic contains "FILE_SIZE" key/value.
+
+    Raises ValueError if shape does not agree with file size
 
     """
-
     # create dictionary
     dic = {"FILE_SIZE":os.stat(filename).st_size}
-
-    if len(shape) == 2:
-        return dic,ser_2d(filename,shape=shape,cplex=cplex,big=big)
-    elif len(shape) == 3:
-        return dic,ser_3d(filename,shape=shape,cplex=cplex,big=big)
-    elif len(shape) == 4:   # this does not work yet...
-        return dic,ser_4d(filename,shape=shape,cplex=cplex,big=big)
-    else:
-        raise ValueError,"incorrect shape dimensionality, must be 2, 3 or 4"
+    data = bruker_nd(filename,shape,cplex,big)
+    return dic,data
 
 
 def write_binary(filename,dic,data,overwrite=False,big=True):
@@ -495,295 +614,189 @@ def write_binary(filename,dic,data,overwrite=False,big=True):
     * overwrite     True to overwrite files, False to warn.
     * big           Endiness to write binary data with,
                     bigendian=True, little=False
+    No return.
 
     """
+    # open the file for writing
+    f = fileiobase.open_towrite(filename,overwrite=overwrite)
+    
+    # convert objec to an array if it is not already one...
+    if type(data) != np.ndarray:
+        data = np.array(data)
 
+    if np.iscomplexobj(data):
+        put_data(f,uncomplexify_data(data),big)
+    else:
+        put_data(f,data,big)
+        
+    f.close()
+    return
+
+def write_binary_lowmem(filename,dic,data,overwrite=False,big=True):
+    """ 
+    Write Bruker binary data to file trace by trace (using minimal memory).
+
+    Parameters:
+
+    * filename      Filename to write to.
+    * dic           dictionary holding acqus_files and pprog_file parameters.
+    * data          array of data
+    * overwrite     True to overwrite files, False to warn.
+    * big           Endiness to write binary data with,
+                    bigendian=True, little=False
+    No return.
+    
+    """
     # open the file for writing
     f = fileiobase.open_towrite(filename,overwrite=overwrite)
 
-    if type(data) == np.ndarray:
-        if np.iscomplexobj(data):
-            put_data(f,uncomplexify_data(data),big)
-        else:
-            put_data(f,data,big)
-        
-        f.close()
-        return
+    cplex = np.iscomplexobj(data)
 
-    # we have a more complex data object, assume complex
-    if data.ndim == 1:
-        trace = data[:]
-        if np.iscomplexobj(data):
+    # write out file trace by trace
+    for tup in np.ndindex(data.shape[:-1]):
+        trace = data[tup]
+        if cplex:
             put_data(f,uncomplexify_data(trace),big)
         else:
             put_data(f,trace,big)
-
-    elif data.ndim == 2:
-        for trace in data:
-            if np.iscomplexobj(data):
-                put_data(f,uncomplexify_data(trace),big)
-            else:
-                put_data(f,trace,big)
-
-    elif data.ndim == 3:
-        for i in xrange(data.shape[0]):
-            for j in xrange(data.shape[1]):
-                trace = data[i,j]
-                if np.iscomplexobj(trace):
-                    put_data(f,uncomplexify_data(trace),big)
-                else:
-                    put_data(f,trace,big)
-
-    else:   
-        raise ValueError("unknown dimensionality")
-
     f.close()
     return
 
 
-# ser_* objects
+# lowmemory ND object
 
-class ser_2d(fileiobase.data_2d):
+class bruker_nd(fileiobase.data_nd):
     """
-    set_2d emulates a numpy.ndarray object without loading data into memory
+    Emulate a numpy.ndarray objects without loading data into memory for low
+    memory reading of Bruker fid/ser files
 
-    * slicing operations returns ndarray objects.
-    * can iterate over with expected results
-    * transpose and swapaxes functions creates a new ser_2d object with the 
-       new axes ordering
+    * slicing operations return ndarray objects.
+    * can iterate over with expected results.
+    * transpose and swapaxes methods create a new objects with correct axes
+      ordering.
     * has ndim, shape, and dtype attributes.
 
     """
 
-    def __init__(self,filename,shape,cplex,big,order=["y","x"]):
-        """create and set up a ser_2d object"""
+    def __init__(self,filename,fshape,cplex,big,order=None):
+        """
+        Create and set up
+        """
         
-        if len(shape) != 2:
-            raise ValueError,"shape parameter is not a 2 tuple"
-
-        # unpack shape
-        lenY,lenX = shape
-
-        # check if size correct
-        
-        if cplex == True:
-            if os.stat(filename).st_size != lenY*lenX*4*2:
-                raise IndexError,"invalid dimensions"
+        # check that size is correct
+        pts = reduce(lambda x,y: x*y, fshape)
+        if cplex:
+            if os.stat(filename).st_size != pts*4*2:
+                raise ValueError("shape does not agree with file size")
         else:
-            if os.stat(filename).st_size != lenY*lenX*4:
-                raise IndexError,"invalid dimensions"
+            if os.stat(filename).st_size != pts*4:
+                raise ValueError("shape does not agree with file size")
 
-        # open the file
+        # check order
+        if order==None:
+            order = range(len(fshape))
+        
+        # finalize
         self.filename = filename
-        self.f = open(filename)
-
-        # sizes 
-        self.lenX = lenX
-        self.lenY = lenY
-
-        # order
-        self.order = order
-
-        # shape based on order
-        a = [self.lenY,self.lenX]
-        self.shape = ( a[order.index("y")], a[order.index("x")])
-        del(a)
-
-        # complexity and endianness
+        self.fshape = fshape
         self.cplex = cplex
         self.big = big
+        self.order = order
 
-        # dtype
         if self.cplex:
             self.dtype = np.dtype("complex128")
         else:
             self.dtype = np.dtype("int32")
-
-        # dimensionality
-        self.ndim = 2
-
+        
+        self.__setdimandshape__()   # set ndim and shape attributes
 
     def __fcopy__(self,order):
-        
-        n = ser_2d(self.filename,(self.lenY,self.lenX),self.cplex,self.big,
-                   order)
-        return n
-
-    def __fgetitem__(self,(sY,sX)):
-        """returns ndarray of selected values
-
-        (sY,sX) is a well formatted tuple of slices
-
+        """ 
+        Create a copy
         """
 
-        # make the empty data set
-        lenY = len(range(self.lenY)[sY])
-        lenX = len(range(self.lenX)[sX])
-        if self.cplex:
-            data = np.empty( (lenY,lenX),dtype="complex128")
-        else:
-            if self.big:
-                data = np.empty( (lenY,lenX),dtype=">i4")
-            else:
-                data = np.empty( (lenY,lenX),dtype="<i4")
+        n = bruker_nd(self.filename,self.fshape,self.cplex,self.big,order)
+        return n
 
-        # read the data
-        for jY,iY in enumerate(range(self.lenY)[sY]):
-            
+    def __fgetitem__(self,slices):
+        """
+        return ndarray of selected values
+
+        slices is a well formatted n-tuple of slices
+        """
+
+        # seperate the last slice from the first slices
+        lslice = slices[-1]
+        fslice = slices[:-1]
+
+        # and the same for fshape
+        lfshape = self.fshape[-1]
+        ffshape = self.fshape[:-1]
+
+        # find the output size and make a in/out nd interator
+        osize,nd_iter = fileiobase.size_and_ndtofrom_iter(ffshape,fslice)
+        osize.append( len( range(lfshape)[lslice]) )
+
+        # create an empty array to store the selected slices
+        out = np.empty(tuple(osize),dtype=self.dtype)
+
+        f = open(self.filename,'r')
+
+        # read in the data trace by trace
+        for out_index,in_index in nd_iter:
+
+            # determine the trace number from the index
+            ntrace = fileiobase.index2trace_flat(ffshape,in_index)
+
+            # seek to the correct place in the file
             if self.cplex:
-                self.f.seek(iY*self.lenX*2*4)   # 2x4-byte int32 per cplex pt. 
-                trace = get_trace(self.f,self.lenX*2,self.big)
-                trace = complexify_data(trace)[sX]
+                ts = ntrace * lfshape * 2* 4
+                f.seek(ts)
+                trace = get_trace(f,lfshape*2,self.big)
+                trace = complexify_data(trace)
             else:
-                self.f.seek(iY*self.lenX*4)     # 1x4-byte int32 per real pt.
-                trace = get_trace(self.f,self.lenX,self.big)
-
-            data[jY] = trace
-
-        return data
-
-
-class ser_3d(fileiobase.data_3d):
-    """
-    set_3d emulates a numpy.ndarray object without loading data into memory
-
-    * slicing operations returns ndarray objects.
-    * can iterate over with expected results
-    * transpose and swapaxes functions creates a new ser_3d object with the 
-       new axes ordering
-    * has ndim, shape, and dtype attributes.
-    
-    """
-
-    def __init__(self,filename,shape,cplex,big,order=["z","y","x"]):
-        """ create and set up a ser_3d object """
-
-        if len(shape) !=3:
-            raise ValueError,"shape parameter is not a 3 tuple"
-
-        # unpack shape
-        lenZ,lenY,lenX = shape
-
-        # check if size correct
-        if cplex == True:
-            if os.stat(filename).st_size != lenZ*lenY*lenX*4*2:
-                raise IndexError,"invalid dimentions"
-        else:
-            if os.stat(filename).st_size != lenZ*lenY*lenX*4:
-                raise IndexError,"invalid dimentions"
-
-        # open the file
-        self.filename = filename
-        self.f = open(filename)
-
-        # sizes 
-        self.lenX = lenX
-        self.lenY = lenY
-        self.lenZ = lenZ
-
-        # order
-        self.order = order
-
-        # shape based on order
-        a = [self.lenZ,self.lenY,self.lenX]
-        self.shape = ( a[order.index("z")],a[order.index("y")],
-                       a[order.index("x")])
-        del(a)
-
-        # complexity and endianness
-        self.cplex = cplex
-        self.big = big
-
-        # dtype
-        if self.cplex:
-            self.dtype = np.dtype("complex128")
-        else:
-            self.dtype = np.dtype("int32")
-
-        # dimensionality
-        self.ndim = 3
-
-    def __fcopy__(self,order):
+                ts = ntrace * lfshape * 2
+                f.seek(ts)
+                trace = get_trace(f,lfshape,self.big)
+ 
+            # save to output
+            out[out_index] = trace[lslice]
         
-        n = ser_3d(self.filename,(self.lenZ,self.lenY,self.lenX),self.cplex,
-                   self.big,order)
-        return n
-
-    def __fgetitem__(self,(sZ,sY,sX)):
-        """ returns ndarray of selected values
-
-        (sZ,sY,sX) is a well formatted tuple of slices
-
-        """
-
-        # make the empty data set
-        lenZ = len(range(self.lenZ)[sZ])
-        lenY = len(range(self.lenY)[sY])
-        lenX = len(range(self.lenX)[sX])
-
-        if self.cplex:
-            data = np.empty( (lenZ,lenY,lenX),dtype="complex128")
-        else:
-            if self.big:
-                data = np.empty( (lenZ,lenY,lenX),dtype=">i4")
-            else:
-                data = np.empty( (lenZ,lenY,lenX),dtype="<i4")
-
-        # read the data
-        for jZ,iZ in enumerate(range(self.lenZ)[sZ]): 
-            for jY,iY in enumerate(range(self.lenY)[sY]):
-            
-                if self.cplex:
-                    # each complex point is 2 4-byte int32 
-                    ts = iZ*self.lenY*self.lenX*2*4+iY*self.lenX*2*4
-                    self.f.seek(ts)
-                    trace = get_trace(self.f,self.lenX*2,self.big)
-                    trace = complexify_data(trace)[sX]
-                else:
-                    # each real point is a 4-byte int32
-                    ts = iZ*self.lenY*self.lenX*4+iY*self.lenX*4
-                    self.f.seek(ts)
-                    trace = get_trace(self.f,self.lenX,self.big)
-
-                data[jZ,jY] = trace
-
-        return data
-
-
+        return out
 
 # binary get/put functions
 
-def get_data(file,big):
+def get_data(f,big):
     """ 
     Get binary data from file object with given endiness
     """
     if big == True:
-        return np.frombuffer(file.read(),dtype='>i4')
+        return np.frombuffer(f.read(),dtype='>i4')
     else:
-        return np.frombuffer(file.read(),dtype='<i4')
+        return np.frombuffer(f.read(),dtype='<i4')
 
-def put_data(file,data,big=True):
+def put_data(f,data,big=True):
     """ 
     Put data to file object with given endiness
     """
 
     if big:
-        file.write(data.astype('>i4').tostring())
+        f.write(data.astype('>i4').tostring())
     else:
-        file.write(data.astype('<i4').tostring())
+        f.write(data.astype('<i4').tostring())
     
     return
 
-def get_trace(file,num_points,big):
+def get_trace(f,num_points,big):
     """ 
     Get trace of num_points from file with given endiness
     """
     if big == True:
         bsize = num_points*np.dtype('>i4').itemsize
-        return np.frombuffer(file.read(bsize),dtype='>i4')
+        return np.frombuffer(f.read(bsize),dtype='>i4')
     else:
         bsize = num_points*np.dtype('<i4').itemsize
-        return np.frombuffer(file.read(bsize),dtype='<i4')
+        return np.frombuffer(f.read(bsize),dtype='<i4')
 
 
 # data manipulation functions
@@ -1186,7 +1199,7 @@ def write_jcamp_pair(f,key,value):
     line = "##$"+key+"= "
 
     if type(value) == float or type(value) == int:  # simple numbers
-        line = line + str(value)
+        line = line + repr(value)
 
     elif type(value) == str:        # string
         line = line+"<"+value+">"
@@ -1199,7 +1212,7 @@ def write_jcamp_pair(f,key,value):
         
     elif type(value) == list:   # lists
         # write out the current line
-        line = line+"(0.."+str(len(value)-1)+")"
+        line = line+"(0.."+repr(len(value)-1)+")"
         f.write(line)
         f.write("\n")
         line = ""
@@ -1213,7 +1226,7 @@ def write_jcamp_pair(f,key,value):
                 f.write("\n")
                 line = ""
 
-            to_add = str(v)
+            to_add = repr(v)
 
             if len(line+" "+to_add) > 80:
                 f.write(line)

@@ -26,13 +26,10 @@ class converter(object):
         ng.pipe.write("test.fid",pdic,pdata)
 
     """
-
-
     def __init__(self):
         """ 
-        Create and set up the object 
+        Create a converter object
         """
-
         pass
 
     # utility functions
@@ -58,22 +55,16 @@ class converter(object):
         if self._data.dtype.kind != np.dtype(self._odtype).kind:
             print "Warning: Incompatiable dtypes, conversion not recommended"
 
-
         # Return data
-        if isinstance(self._data,np.ndarray):   # 'real' data
+        if isinstance(self._data,np.ndarray):   # in memory data
             return self.__procdata()
 
         else:   # return emulated data
-            # create the needed emulated data class
-            if self._data.ndim == 2:
-                ptup = (self._iproc,self._oproc,self._odtype)
-                return udata_2d(self._data,ptup,self._data.order)
-            if self._data.ndim == 3:
-                ptup = (self._iproc,self._oproc,self._odtype)
-                return udata_3d(self._data,ptup,self._data.order)
-            else:
-                raise NotImplementedError("dimension of data not supported")
-
+            iproc = self._iproc
+            oproc = self._oproc
+            odtype = self._odtype
+            order = self._data.order
+            return udata_nd(self._data,iproc,oproc,odtype,order)
 
     def __procdata(self):
         """ 
@@ -86,7 +77,12 @@ class converter(object):
         # processing for input type
         # sign alt. indirect dimension
         if data.ndim >= 2 and "alt_id_sign" in self._iproc:
-            data[1::2] = -data[1::2]
+            #data[1::2] = -data[1::2]
+            s = [slice(None,None,None)]*data.ndim
+            for i in range(data.ndim-1):
+                s[i] = slice(1,None,2)
+                data[s] = -data[s]
+                s[i] = slice(None,None,None)
 
         if "realfactor" in self._iproc:
             data.real = data.real*self._iproc['realfactor']
@@ -97,7 +93,11 @@ class converter(object):
         # processing for output 
         # sign alt. indirect dimension
         if data.ndim >= 2 and "alt_id_sign" in self._oproc:
-            data[1::2] = -data[1::2]
+            s = [slice(None,None,None)]*data.ndim
+            for i in range(data.ndim-1):
+                s[i] = slice(1,None,2)
+                data[s] = -data[s]
+                s[i] = slice(None,None,None)
 
         if "realfactor" in self._oproc:
             data.real = data.real*self._oproc['realfactor']
@@ -114,7 +114,6 @@ class converter(object):
         """ 
         load data from universal dic,data pair
         """
-
         # set data
         self._data = data
         self._iproc = {}
@@ -133,7 +132,6 @@ class converter(object):
         * udic    Universal dictionary. If not provided is guessed.
 
         """
-
         # set data
         self._data = data
         if udic != None and udic[0]['encoding'].lower() == "tppi":
@@ -152,7 +150,6 @@ class converter(object):
         """ 
         Load data and dictionary from NMRPipe pair
         """
-
         # set data
         self._data = data
         self._iproc = {}
@@ -168,11 +165,9 @@ class converter(object):
         """ 
         Load data and dictionary from Sparky pair
         """
-
         # set data
         self._data = data
         self._iproc = {}
-
 
         # set the universal dictionary
         if udic != None:
@@ -185,7 +180,6 @@ class converter(object):
         """ 
         Load data and dictionary from Bruker ser/fid file
         """
-
         # set data
         self._data = data
         self._iproc = {}
@@ -197,14 +191,12 @@ class converter(object):
             self._udic = bruker.guess_udic(dic,data)
 
     
-
     # EXPORTERS (to_*)
 
     def to_universal(self):
         """ 
         Return universal dictionary and original data
         """
-
         # create dictionary
         dic = dict(self._udic)
 
@@ -219,7 +211,6 @@ class converter(object):
         """ 
         Return NMRPipe dic,data pair
         """
-           
         # create dictionary
         dic = pipe.create_dic(self._udic,datetimeobj)
 
@@ -237,7 +228,6 @@ class converter(object):
         """ 
         Return Varian dic,data pair
         """
-
         # create dictionary
         dic = varian.create_dic(self._udic)
 
@@ -252,7 +242,6 @@ class converter(object):
         """ 
         Return sparky dic,data pair
         """
-        
         # create dictionary
         dic = sparky.create_dic(self._udic,datetimeobj,user)
 
@@ -267,7 +256,6 @@ class converter(object):
         """ 
         Return Bruker dic,data pair
         """
-    
         # create dictionary
         dic = bruker.create_dic(self._udic)
 
@@ -277,187 +265,85 @@ class converter(object):
 
         return dic,self.__returndata()
 
-
-class udata_2d(fileiobase.data_2d):
+class udata_nd(fileiobase.data_nd):
     """
-    udata_2d emulates a numpy.ndarray object without loading data into memory
+    Wrap other fileiobase.data_nd derived objects with input/output conversion
+    when slices are requested.  
 
-    * slicing operations return ndarray objects
-    * can be used in iteration with expected results
-    * transpose and swapaxes functions create a new udata_2d object with
-      new axes ordering.
-    * has ndim,shape and dtype attributes
-
-    This object processes other data_2d derived objects as they are read
-    from disk.
+    * slicing operations return ndarray objects.
+    * can iterate over with expected results.
+    * transpose and swapaxes methods create a new objects with correct axes
+      ordering.
+    * has ndim, shape, and dtype attributes.
 
     """
-
-    def __init__(self,data,(iproc,oproc,odtype),order=["y","x"]):
-        """ 
-        Create and set up a udata_2d object
+    
+    def __init__(self,edata,iproc,oproc,odtype,order=None):
         """
-        # copy the converter attributes
-        self._iproc  = iproc
-        self._oproc  = oproc
-        self._odtype = odtype
-
-        # create a copy of the data with correct order
-        self.data = data.__fcopy__(order)
-
-        # required data_2d attributes
-        self.lenX = self.data.lenX
-        self.lenY = self.data.lenY
-        self.order = self.data.order
-        self.shape = self.data.shape
-        self.dtype = self._odtype
-        self.ndim = 2
+        create and set up
+        """
+        # set converter attributes
+        self._iproc = iproc         # input processing dictionary
+        self._oproc = oproc         # output processing dictionary
+        self._odtype = odtype       # output dtype
+        self.edata = edata          # file
+        
+        # required data_nd attributes
+        self.order = order  
+        self.fshape = edata.fshape
+        self.dtype = odtype
+        self.__setdimandshape__()   # set ndim and shape attributes
 
     def __fcopy__(self,order):
-        """ 
-        Create a copy with given order
         """
-
-        ptup = (self._iproc,self._oproc,self._odtype)
-        n = udata_2d(self.data,ptup,order)
+        Create a copy
+        """
+        n = udata_nd(self.edata,self._iproc,self._oproc,self._odtype,order)
         return n
 
-    def __fgetitem__(self,(sY,sX)):
-        """ 
-        Returns ndarray of selected values
-
-        sY,sX is a well formatted 2-tuple of slices
-
+    def __fgetitem__(self,slices):
         """
+        Return ndarray of selected values
 
-        # get the raw data
-        data = self.data.__fgetitem__( (sY,sX))
+        slices is a well formateed n-tuple of slices
+        """
+        data = self.edata.__fgetitem__(slices)
+        
+        # input processing 
+        if "alt_id_sign" in self._iproc:    # sign alt. indirect dimension
+            if "alt_id_sign" not in self._oproc:    # skip if in both
+                fslice = slices[:-1]
+                ffshape = self.fshape[:-1]
+                nd_iter = fileiobase.ndtofrom_iter(ffshape,fslice)
+                for out_index,in_index in nd_iter:
+                    # negate the trace if there is an odd number of 
+                    # odd number indices in the slice
+                    if np.mod(in_index,2).sum()%2 == 1: 
+                        data[out_index] = -data[out_index]
 
-        # process the data for output
-
-        # sign alt. indirect dimension
-        if "alt_id_sign" in self._iproc:
-            # XXX there is probably a better way to do this with tile, etc
-            factor = np.ones( (self.lenY,1) )
-            factor[1::2]=-1
-            data = factor[sY]*data
 
         if "realfactor" in self._iproc:
             data.real = data.real*self._iproc['realfactor']
-            
         if "imagfactor" in self._iproc:
             data.imag = data.imag*self._iproc['imagfactor']
 
-        # processing for output 
-
-        # sign alt. indirect dimension
+        # output processing
         if "alt_id_sign" in self._oproc:
-            factor = np.ones( (self.lenY,1) )
-            factor[1::2]=-1
-            data = factor[sY]*data
+            if "alt_id_sign" not in self._iproc:
+                fslice = slices[:-1]
+                ffshape = self.fshape[:-1]
+                nd_iter = fileiobase.ndtofrom_iter(ffshape,fslice)
+                for out_index,in_index in nd_iter:
+                    # negate the trace if there is an odd number of 
+                    # odd number indices in the slice
+                    if np.mod(in_index,2).sum()%2 == 1: 
+                        data[out_index] = -data[out_index]
 
-        if "realfactor" in self._oproc:
-            data.real = data.real*self._oproc['realfactor']
-            
-        if "imagfactor" in self._oproc:
-            data.imag = data.imag*self._oproc['imagfactor']
-
-        return data.astype(self._odtype)
-
-
-class udata_3d(fileiobase.data_3d):
-    """
-    udata_3d emulates a numpy.ndarray object without loading data into memory
-
-    * slicing operations return ndarray objects
-    * can be used in iteration with expected results
-    * transpose and swapaxes functions create a new udata_3d object with
-      new axes ordering.
-    * has ndim,shape and dtype attributes
-
-    This object processes other data_3d derived objects as they are read
-    from disk.
-
-    """
-
-    def __init__(self,data,(iproc,oproc,odtype),order=["z","y","x"]):
-        """ 
-        Create and set up a udata_3d object
-        """
-        # copy the converter attributes
-        self._iproc  = iproc
-        self._oproc  = oproc
-        self._odtype = odtype
-
-        # create a copy of the data with correct order
-        self.data = data.__fcopy__(order)
-
-        # required data_2d attributes
-        self.lenX = self.data.lenX
-        self.lenY = self.data.lenY
-        self.lenZ = self.data.lenZ
-        self.order = self.data.order
-        self.shape = self.data.shape
-        self.dtype = self._odtype
-        self.ndim = 3
-
-    def __fcopy__(self,order):
-        """ 
-        Create a copy with given order
-        """
-
-        ptup = (self._iproc,self._oproc,self._odtype)
-        n = udata_3d(self.data,ptup,order)
-        return n
-
-    def __fgetitem__(self,(sZ,sY,sX)):
-        """ 
-        Returns ndarray of selected values
-
-        (sZ,sY,sX) is a  formatted tuple of slices
-
-        """
-        # get the raw data
-        data = self.data.__fgetitem__( (sZ,sY,sX))
-
-        # process the data for output
-
-        # sign alt. indirect dimension 
-        # XXX there is probably a better way to do this...
-        if "alt_id_sign" in self._iproc:
            
-            # alternate Y axis 
-            factor1 = np.ones( (self.lenY,1) )
-            factor1[1::2]=-1
-            for i,j in enumerate(factor1[sY]):
-                if j==-1:
-                    np.atleast_3d(data)[:,i,:]*=-1
-
-            # alternate Z axis
-            factor2 = np.ones( (self.lenZ,1) )
-            factor2[1::2]=-1
-            for i,j in enumerate(factor2[sZ]):
-                if j==-1:
-                    np.atleast_3d(data)[i,:,:]*=-1
-
-        if "realfactor" in self._iproc:
-            data.real = data.real*self._iproc['realfactor']
-            
-        if "imagfactor" in self._iproc:
-            data.imag = data.imag*self._iproc['imagfactor']
-
-        # processing for output 
-
-        # sign alt. indirect dimension
-        if "alt_id_sign" in self._oproc:
-            factor = np.ones( (self.lenY,1) )
-            factor[1::2]=-1
-            data = factor[sY]*data
 
         if "realfactor" in self._oproc:
             data.real = data.real*self._oproc['realfactor']
-            
         if "imagfactor" in self._oproc:
             data.imag = data.imag*self._oproc['imagfactor']
-
+        
         return data.astype(self._odtype)
