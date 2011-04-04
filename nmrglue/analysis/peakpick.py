@@ -3,6 +3,7 @@ Peak picking routines, lineshape parameter guessing, and related functions.
 
 """
 
+# external modules
 import numpy as np
 import scipy
 
@@ -13,6 +14,7 @@ from analysisbase import ls_str2class,pick2linesh,linesh2pick,slice2limits
 # lineshape classes
 from analysisbase import peak1D,gauss1D,lorentz1D,scale1D
 
+# spectral segmentation functions
 from segmentation import find_downward,find_all_downward
 from segmentation import find_upward,find_all_upward
 from segmentation import find_connected,find_all_connected
@@ -141,7 +143,8 @@ def pick(data,thres,msep=None,direction='both',algorithm="thres",
 
 # region finding and formatting
 
-def find_regions(data,centers,thres,linewidths=None,amplitudes=None):
+def find_regions(data,centers,thres,linewidths=None,amplitudes=None,pad=None,
+    resolve=True):
     """
     Find regions in spectra containing peaks.
 
@@ -152,6 +155,8 @@ def find_regions(data,centers,thres,linewidths=None,amplitudes=None):
     * thres         Threshold value for segmenting.
     * linewidths    Array of peak linewidths, optional.
     * amplitudes    Array of peak amplitudes, optional.
+    * pad           Tuple of additional points to surround each region with. 
+    * resolve       True/False to resolve overlapping regions.
 
     Returns: regions
 
@@ -181,6 +186,10 @@ def find_regions(data,centers,thres,linewidths=None,amplitudes=None):
             s="Number of amplitudes does not match the number of peaks"
             raise ValueError(s)
         lamp = list(amplitudes) # list of amplitudes
+
+    if pad!=None:
+        if len(pad)!=len(lcen[0]):
+            raise ValueError("pad has incorrect length")
 
     regions = []    # list of spectral regions
 
@@ -227,7 +236,158 @@ def find_regions(data,centers,thres,linewidths=None,amplitudes=None):
         # add the current region dictionary to the list of regions
         regions.append(r)
     
+    # pad the spectrum
+    if pad!=None:
+        regions = pad_regions(regions,pad,data.shape)
+    if resolve:
+        regions = resolve_region_overlap(regions)
+
     return regions
+
+
+def regions2recarray(regions):
+    """
+    Convert a regions list to a records array
+    """
+
+    np.sum([len(r['centers']) for r in regions])
+
+def pad_regions(regions,pad,shape=None):
+    """
+    Add a pad to each region in regions list
+
+    Parameters:
+        
+    * regions   Region dictionary (is changed by this functions)
+    * pad       Tuple of value to pad on each side on region
+    * shape     Shape of spectrum dictionary points to
+
+    Returns: regions
+
+    """
+    for ir,r in enumerate(regions):
+
+        # minimum, do not allow to go below 0.
+        new_min = [max(i-j,0) for i,j in zip(r['min'],pad)]
+        
+        # maximum, do not allow to go above shape when provided)
+        if shape == None:
+            new_max =  [i+j for i,j in zip(r['max'],pad)]
+        else:
+            new_max = [min(i+j,k) for i,j,k in zip(r['max'],pad,shape)]
+
+        # replace old region limits with new limits
+        regions[ir]['min'] = tuple(new_min)
+        regions[ir]['max'] = tuple(new_max)
+        
+    return regions
+
+
+def resolve_region_overlap(regions):
+    """
+    Resolve overlapping regions
+    
+    Parameters:
+
+    * regions   Region dictionary (is changed by this functions)
+
+    Returns: regions
+
+    """
+    
+    # this is a Brute force method... not very efficient
+    done = False
+
+    while done != True:
+        # list of region limits
+        lms_list = [(r['min'],r['max']) for r in regions]
+
+        # DEBUG
+        #print "Number of Regions:",len(lms_list)
+
+        for lms in lms_list:
+            overlap = limits_in_limits(lms_list,lms)
+            if len(overlap)!=1:
+                # combine the overlapping regions
+                regions = combine_regions(regions,overlap)
+                # break the for loop, lms_list must be re-made
+                break
+        else:   # when the loop finishes completely, we are done!
+            done = True
+
+    return regions
+
+def combine_regions(regions,list_to_combine):
+    """
+    Combine regions in a list of regions to combine
+    """
+    # if only region is given, nothing must be done
+    if len(list_to_combine)==1:
+        return regions
+
+    # sort the list greatest to least
+    list_to_combine.sort(reverse=True)
+
+    # combine regions pair wise
+    while len(list_to_combine)!=1:
+
+        # region 1 (larger index)
+        nregion1 = list_to_combine.pop(0)
+        region1 = regions.pop(nregion1)
+        # region 2 (smaller index)
+        nregion2 = list_to_combine[0]
+        region2 = regions[nregion2]
+
+        regions[nregion2] = combine_2regions(region2,region1)
+
+    return regions
+
+def combine_2regions(r1,r2):
+    """ 
+    Combine two regions, r1 and r2, returns a new region dictionary
+    """
+    n = {}  # the new region
+    n['min'] = tuple([min(i,j) for i,j in zip(r1['min'],r2['min'])])
+    n['max'] = tuple([max(i,j) for i,j in zip(r1['max'],r2['max'])])
+    n['centers'] = r1['centers']+r2['centers']
+
+    if 'linewidths' in r1 and 'linewidths' in r2:
+        n['linewidths'] = r1['linewidths']+r2['linewidths']
+    
+    if 'amplitudes' in r1 and 'amplitudes' in r2:
+        n['amplitudes'] = r1['amplitudes']+r2['amplitudes']
+    
+    return n
+
+# limit overlap searching
+
+def limits_in_limits(lms_list,lms):
+    """
+    Find all limit tuples in lms_list which are overlapping with limits, lms.
+    
+    Returns a list of indicies of lms_list which overlap.
+
+    """
+    return [i for i,l in enumerate(lms_list) if is_overlappedND(l,lms)]
+
+
+def is_overlappedND(lms1,lms2):
+    """
+    Determind if regions defined by limit1 and limit2 overlap
+    """
+
+    # make a list of min,max pairs in each dimension
+    p1 = [(i,j) for i,j in zip(lms1[0],lms1[1])]
+    p2 = [(i,j) for i,j in zip(lms2[0],lms2[1])]
+
+    # the regions are overlapped only if all dimensions are overlapped
+    return (False not in [is_overlapped1D(i,j) for i,j in zip(p1,p2)])
+
+def is_overlapped1D((min1,max1),(min2,max2)):
+    """
+    Determine if two line segments are overlapped given limits of both
+    """
+    return (min1<=min2<=max1 or min2<=min1<=max2)
 
 
 def region2linesh(region):
@@ -356,6 +516,8 @@ def filter_by_distance(data,centers,msep,lineshapes=None,amplitudes=None):
              amplitudes.take(keep) )
 
 
+# peak searching
+
 def pts_in_limits(pts,lms):
     """
     Find all points in pts that are within a box defined by limits lms
@@ -372,6 +534,75 @@ def in_limits(pt,lms):
     return (False not in [min<=x<=max for x,min,max in zip(pt,lms[0],lms[1])])
 
 
+
+# parameter guessing functions
+
+def guess_params_center(data,center,thres,lineshapes):
+    """
+    Guess the parameter of a peak centered at center.
+
+    Parameters:
+
+    * data          Spectral data
+    * center        Location of peak center
+    * thres         Noise threshold 
+    * lineshapes    List of lineshape classes
+
+    Return: centers,linewidths,amplitudes
+
+    * centers   Array of estimated peak centers in each dimension.
+    * linewidth Array of estimated linewidths in each dimension
+    * amplitude Estimate of peak amplitude
+
+    """
+
+    # find the segment containing the peak
+    if data[center] > 0:
+        segment = find_downward(data,center,thres)
+    else:
+        segment = find_upward(data,center,-thres)
+
+    return guess_params_segment(data,segment,lineshapes)
+
+def guess_params_segment(data,segment,lineshapes):
+    """
+    Guess the parameter of a peak in a provided segment.
+
+    Parameters:
+
+    * data          Spectral data
+    * segment       List of points in segment.
+    * lineshapes    List of lineshape classes
+
+    Return: centers,linewidths,amplitudes
+
+    * centers   Array of estimated peak centers in each dimension.
+    * linewidth Array of estimated linewidths in each dimension
+    * amplitude Estimate of peak amplitude
+
+    """
+
+    # find the rectangular region around the segment
+    limits = find_limits(segment)
+    region= data[limits2slice(limits)]
+
+    # amptide is estimated by the sum of all points in region
+    amp = np.sum(region)
+
+    lw  = []    # list of linewidths
+    cen = []    # list of peak centers
+    # loop over the axes
+    for axis,ls in enumerate(lineshapes):
+        # create the 1D lineshape 
+        r = squish(np.copy(region),axis)
+        # estimate the linewidth
+        center,linewidth = ls.guessp(r)
+        lw.append(linewidth)
+        cen.append(center)
+
+    return np.array(cen),np.array(lw),amp
+
+#### Do not rewrite (should not know about lwclasses)
 
 # algorithm specific peak picking routines
 
@@ -601,69 +832,4 @@ def pick_thres_fast(data,thres,msep,direction="both"):
         np.bitwise_and(nthres,mn) ) ) )
 
 
-# parameter guessing functions
 
-def guess_params_center(data,center,thres,lineshapes):
-    """
-    Guess the parameter of a peak centered at center.
-
-    Parameters:
-
-    * data          Spectral data
-    * center        Location of peak center
-    * thres         Noise threshold 
-    * lineshapes    List of lineshape classes
-
-    Return: centers,linewidths,amplitudes
-
-    * centers   Array of estimated peak centers in each dimension.
-    * linewidth Array of estimated linewidths in each dimension
-    * amplitude Estimate of peak amplitude
-
-    """
-
-    # find the segment containing the peak
-    if data[center] > 0:
-        segment = find_downward(data,center,thres)
-    else:
-        segment = find_upward(data,center,-thres)
-
-    return guess_params_segment(data,segment,lineshapes)
-
-def guess_params_segment(data,segment,lineshapes):
-    """
-    Guess the parameter of a peak in a provided segment.
-
-    Parameters:
-
-    * data          Spectral data
-    * segment       List of points in segment.
-    * lineshapes    List of lineshape classes
-
-    Return: centers,linewidths,amplitudes
-
-    * centers   Array of estimated peak centers in each dimension.
-    * linewidth Array of estimated linewidths in each dimension
-    * amplitude Estimate of peak amplitude
-
-    """
-
-    # find the rectangular region around the segment
-    limits = find_limits(segment)
-    region= data[limits2slice(limits)]
-
-    # amptide is estimated by the sum of all points in region
-    amp = np.sum(region)
-
-    lw  = []    # list of linewidths
-    cen = []    # list of peak centers
-    # loop over the axes
-    for axis,ls in enumerate(lineshapes):
-        # create the 1D lineshape 
-        r = squish(np.copy(region),axis)
-        # estimate the linewidth
-        center,linewidth = ls.guessp(r)
-        lw.append(linewidth)
-        cen.append(center)
-
-    return np.array(cen),np.array(lw),amp

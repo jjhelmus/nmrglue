@@ -11,35 +11,50 @@ from leastsqbound import leastsqbound
 pi = np.pi
 
 # lineshape classes translator
-from analysisbase import ls_str2class
-from analysisbase import pick2linesh,linesh2pick
+from analysisbase import ls_str2class,squish
+from nmrglue.fileio import table 
 
-# User facing functions
-def sim_NDregion(shape,lineshapes,params,amps):
+def estimate_scales(spectrum,centers,box_width,scale_axis=0):
     """
-    Simulate a arbitrary dimensional region with one or more peaks.
+    Estimate scale parameter for boxes in spectrum
 
     Parameters:
+    
+    * spectrum      Slicable spectral data.
+    * centers       List of box center tuples.
+    * box_width     Tuple describing the widths of the box around peaks.
+    * scale_axis    Axis number which to estimate scale parameters.
+    """
+    shape = spectrum.shape
+    bcenters = np.round(np.array(centers).astype('int'))
+    scales = []
+    # loop over the box centers
+    for bc in bcenters:
+    
+    # calculate box limits
+        bmin = [max(c-w,0) for c,w in zip(bc,box_width)]
+        bmax = [min(c+w+1,s) for c,w,s in zip(bc,box_width,shape)]
+        # cut the spectrum and squish
 
-    * shape         tuple of region shape
-    * lineshapes    List of lineshapes by label (str) or a lineshape class.
-                    See fit_NDregion for additional documentation.
-    * params        P-length list (P is the number of peaks in region) of 
-                    N-length lists of tuples where each each tuple is 
-                    lineshape parameters for a given peak and dimension.
-    * amps          P-length of peak amplitudes.
+        s = tuple([slice(mn,mx) for mn,mx in zip(bmin,bmax)])
+        scale = squish(spectrum[s],scale_axis)
+        scale = scale/scale[0]
+        scales.append(scale[1:])
+    
+    return scales
 
-    Returns: array containing simulated region
+
+def multi_fit_boxes(spectrum,lineshapes,params,amps,bounds,ampbounds,centers,
+                    clusters,box_width,error_flag,verb=True):
+    """
+    
+
 
     """
-    # parse the user-friendly input into a format digestable by s_NDregion
-    
-    # parse the shape
-    ndim = len(shape)
-    
-    # parse the lineshape parameters
-    if len(lineshapes) != ndim:
-        raise ValueError("Incorrect number of lineshapes provided")
+    pbest = [[]]*len(params)
+    abest = [[]]*len(params)
+    iers  = [[]]*len(params) 
+    shape = spectrum.shape
 
     ls_classes = []
     for l in lineshapes:
@@ -48,40 +63,85 @@ def sim_NDregion(shape,lineshapes,params,amps):
         else:
             ls_classes.append(l)
 
-    # determind the number of parameters in each dimension.
-    dim_nparam = [c.nparam(l) for l,c in zip(shape,ls_classes)]
+    cIDs = set(clusters)    # cluster values to loop over
 
-    # parse the params parameter
-    n_peaks = len(params)
-    p = []
-    for i,param in enumerate(params):
-        if len(param) != ndim:
-            err = "Incorrect number of parameters for peak %i"
-            raise ValueError(err%(i))
-        for j,dim_param in enumerate(param):
-            if len(dim_param) != dim_nparam[j]:
-                err = "Incorrect number of parameters in peak %i dimension %i"
-                raise ValueError(err%(i,j))
+    for cID in cIDs:
 
-            for g in dim_param:
-                p.append(g)
+        cpeaks = [i for i,v in enumerate(clusters) if v==cID]
 
-    # parse the amps parameter
-    if len(amps) != n_peaks:
-        raise ValueError("Incorrect number of amplitudes provided")
-    p = list(amps) + p # amplitudes appended to front of p
+        # select the parameter
+        cparams    = [params[i]    for i in cpeaks]
+        camps      = [amps[i]      for i in cpeaks]
+        cbounds    = [bounds[i]    for i in cpeaks]
+        campbounds = [ampbounds[i] for i in cpeaks]
+        ccenters   = [centers[i]   for i in cpeaks]
+    
+        # find the box edges
+        bcenters = np.round(np.array(ccenters).astype('int'))
+        bmin = bcenters-box_width
+        bmax = bcenters+box_width+1
 
-    # DEBUGGING
-    #print "p",p
-    #print "shape",shape
-    #print "ls_classes",ls_classes
-    #print "n_peaks",n_peaks
+        # correct for spectrum edges
+        for i in range(len(shape)): 
+            bmin[:,i][np.where(bmin[:,i] < 0) ] = 0
+        for i,v in enumerate(shape):
+            bmax[:,i][np.where(bmax[:,i] > v)] = v
 
-    return s_NDregion(p,shape,ls_classes,n_peaks)
+        # find the region limits
+        rmin = edge = np.array(bmin).min(0)
+        rmax = np.array(bmax).max(0)
 
+        # cut the spectrum
+        s = tuple([slice(mn,mx) for mn,mx in zip(rmin,rmax)])
+        region = spectrum[s]
+
+        # add edge to the box limits
+        ebmin = bmin - edge
+        ebmax = bmax - edge
+
+        # create the weight mask array
+        wmask = np.zeros(region.shape,dtype='bool')
+        for bmn,bmx in zip(ebmin,ebmax):
+            s = tuple([slice(mn,mx) for mn,mx in zip(bmn,bmx)])
+            wmask[s] = True
+
+        # add edges to the initial parameters
+        ecparams = [ [ ls.add_edge(p,(mn,mx)) for ls,mn,mx,p in
+                  zip(ls_classes,rmin,rmax,g)] for g in cparams ]
+    
+        ecbounds = [ [ zip(*[ls.add_edge(b,(mn,mx)) for b in zip(*db)]) 
+                 for ls,mn,mx,db in zip(ls_classes,rmin,rmax,pb) ] 
+                 for pb in cbounds ]
+
+        err = False
+    
+        ecpbest,acbest,ier = fit_NDregion(region,ls_classes,ecparams,
+                               camps,ecbounds,campbounds,wmask,err)
+     
+        # remove edges from best fit parameters
+        cpbest = [ [ ls.remove_edge(p,(mn,mx)) for ls,mn,mx,p in
+                zip(ls_classes,rmin,rmax,g)] for g in ecpbest]
+
+        if verb:
+            print "-----------------------"
+            print "cID:",cID,"ier:",ier
+            print "fit parameters:",cpbest
+            print "fit amplitudes",acbest
+
+
+        for i,pb,ab in zip(cpeaks,cpbest,acbest):
+            pbest[i]=pb
+            abest[i]=ab
+            iers[i] = ier
+
+    return pbest,abest,iers
+
+
+
+# User facing fit/simulation functions
 
 def fit_NDregion(region,lineshapes,guesses,amp_guesses,guesses_bounds=None,
-                 amp_bounds=None,error_flag=False,**kw):
+                 amp_bounds=None,wmask=None,error_flag=False,**kw):
     """
     Fit a N-dimensional region.
 
@@ -102,6 +162,11 @@ def fit_NDregion(region,lineshapes,guesses,amp_guesses,guesses_bounds=None,
                      direction.
     * amp_bounds     P-length list of bounds for the amplitude with format 
                      similar to guesses_bound.
+    * wmask          Array with same shape as region which is used to weight
+                     points in the err calculation, typically a boolean array
+                     is used to exclude certain points in the region.  Default
+                     of None will include all points in the region equally
+                     in the error calculation.
     * error_flag     Set to True to estimate errors for each lineshape 
                      parameter and amplitude.
 
@@ -212,10 +277,10 @@ def fit_NDregion(region,lineshapes,guesses,amp_guesses,guesses_bounds=None,
             
             if dim_bounds == None:
                 dim_bounds = [(None,None)]*dim_nparam[j]
-            
+           
             if len(dim_bounds) != dim_nparam[j]:
                 err = "Incorrect number of bounds for peak %i dimension %i"
-                ValueError(err%(i,j))
+                raise ValueError(err%(i,j))
 
             for k,b in enumerate(dim_bounds):    # parameter loop
                 if b == None:
@@ -250,7 +315,14 @@ def fit_NDregion(region,lineshapes,guesses,amp_guesses,guesses_bounds=None,
         to_add.append(b)
     p_bounds = to_add + p_bounds    # amplitude bound at front of p_bounds
 
-    
+    # parse the wmask parameter
+    if wmask == None:   # default is to include all points in region
+        wmask = np.ones(shape,dtype='bool')
+    if wmask.shape != shape:
+        err = "wmask has incorrect shape:"+str(wmask.shape)+   \
+              " should be "+str(shape)
+        raise ValueError(err)
+
     # DEBUGGING
     #print "--------------------------------"
     #print region
@@ -258,6 +330,10 @@ def fit_NDregion(region,lineshapes,guesses,amp_guesses,guesses_bounds=None,
     #print p0
     #print p_bounds
     #print n_peaks
+    #print dim_nparam
+    #print "================================="
+    #for i,j in zip(p0,p_bounds):
+    #    print i,j
 
     # include full_output=True when errors requested 
     if error_flag:
@@ -265,7 +341,7 @@ def fit_NDregion(region,lineshapes,guesses,amp_guesses,guesses_bounds=None,
 
     
     # perform fitting
-    r = f_NDregion(region,ls_classes,p0,p_bounds,n_peaks,**kw)
+    r = f_NDregion(region,ls_classes,p0,p_bounds,n_peaks,wmask,**kw)
 
     # DEBUGGING
     #print r
@@ -306,6 +382,73 @@ def fit_NDregion(region,lineshapes,guesses,amp_guesses,guesses_bounds=None,
     return param_best,amp_best,param_err,amp_err,ier
 
 
+
+
+def sim_NDregion(shape,lineshapes,params,amps):
+    """
+    Simulate a arbitrary dimensional region with one or more peaks.
+
+    Parameters:
+
+    * shape         tuple of region shape
+    * lineshapes    List of lineshapes by label (str) or a lineshape class.
+                    See fit_NDregion for additional documentation.
+    * params        P-length list (P is the number of peaks in region) of 
+                    N-length lists of tuples where each each tuple is 
+                    lineshape parameters for a given peak and dimension.
+    * amps          P-length of peak amplitudes.
+
+    Returns: array containing simulated region
+
+    """
+    # parse the user-friendly input into a format digestable by s_NDregion
+    
+    # parse the shape
+    ndim = len(shape)
+    
+    # parse the lineshape parameters
+    if len(lineshapes) != ndim:
+        raise ValueError("Incorrect number of lineshapes provided")
+
+    ls_classes = []
+    for l in lineshapes:
+        if type(l) is str:
+            ls_classes.append(ls_str2class(l))
+        else:
+            ls_classes.append(l)
+
+    # determind the number of parameters in each dimension.
+    dim_nparam = [c.nparam(l) for l,c in zip(shape,ls_classes)]
+
+    # parse the params parameter
+    n_peaks = len(params)
+    p = []
+    for i,param in enumerate(params):
+        if len(param) != ndim:
+            err = "Incorrect number of parameters for peak %i"
+            raise ValueError(err%(i))
+        for j,dim_param in enumerate(param):
+            if len(dim_param) != dim_nparam[j]:
+                err = "Incorrect number of parameters in peak %i dimension %i"
+                raise ValueError(err%(i,j))
+
+            for g in dim_param:
+                p.append(g)
+
+    # parse the amps parameter
+    if len(amps) != n_peaks:
+        raise ValueError("Incorrect number of amplitudes provided")
+    p = list(amps) + p # amplitudes appended to front of p
+
+    # DEBUGGING
+    #print "p",p
+    #print "shape",shape
+    #print "ls_classes",ls_classes
+    #print "n_peaks",n_peaks
+
+    return s_NDregion(p,shape,ls_classes,n_peaks)
+
+
 def make_slist(l,t_sizes):
     """
     Create a list of tuples of given sizes from a list
@@ -330,7 +473,7 @@ def split_list(l,N):
     return [l[div_points[i]:div_points[i+1]] for i in xrange(N)]
 
 
-def calc_errors(region,ls_classes,p,cov,n_peaks):
+def calc_errors(region,ls_classes,p,cov,n_peaks,wmask):
     """
     Calcuate the parameter errors from the Standard Errors of the Estimate.
 
@@ -347,7 +490,7 @@ def calc_errors(region,ls_classes,p,cov,n_peaks):
     """
 
     # calculate the residuals
-    resid = err_NDregion(p,region,region.shape,ls_classes,n_peaks)
+    resid = err_NDregion(p,region,region.shape,ls_classes,n_peaks,wmask)
     
     SS_err = np.power(resid,2).sum()    # Sum of squared residuals
     n = region.size # size of sample XXX not sure if this always makes sense
@@ -410,14 +553,14 @@ def s_single_NDregion(p,shape,ls_classes):
 
     return r.reshape(shape)
 
-def err_NDregion(p,region,shape,ls_classes,n_peaks):
+def err_NDregion(p,region,shape,ls_classes,n_peaks,wmask):
     """
     Error functions for a NDregion, called by f_NDregion function
     """
     sim_region = s_NDregion(list(p),shape,ls_classes,n_peaks)
-    return (region-sim_region).flatten()
+    return ((region-sim_region)*wmask).flatten()
 
-def f_NDregion(region,ls_classes,p0,p_bounds,n_peaks,**kw):
+def f_NDregion(region,ls_classes,p0,p_bounds,n_peaks,wmask,**kw):
     """
     Fit an arbitrary dimensional regions  containing one or more peaks 
     using a contrained Levenberg-Marquard optmization algorithm.
@@ -434,7 +577,7 @@ def f_NDregion(region,ls_classes,p0,p_bounds,n_peaks,**kw):
     passed to scipy.optimize.leastsq after variable transformation.
 
     """
-    args = (region,region.shape,ls_classes,n_peaks)
+    args = (region,region.shape,ls_classes,n_peaks,wmask)
     p_best = leastsqbound(err_NDregion,p0,bounds=p_bounds,args=args,**kw)
     return p_best
 

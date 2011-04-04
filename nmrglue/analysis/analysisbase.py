@@ -7,6 +7,74 @@ import numpy as np
 pi = np.pi
 
 
+dimension_names = ['A','Z','Y','X']
+
+# new utilities
+
+def recnames(dnames,ls_classes,Ms):
+    """
+    Determind the names of a records array provided lineshape classes, 
+    
+    Parameters:
+
+    dnames      List of dimension names.
+    ls_classes  List of lineshape classes.
+    Ms          List of lineshape lengths.
+    
+    Returns list of records array names (strings).
+    
+    """
+    names = []
+    for d,M,l in zip(dnames,Ms,ls_classes):
+        for p in l.pnames(M):
+            names.append(d+'_'+p)
+    return names
+
+# utility functions
+
+def find_limits(pts):
+    """ 
+    Find the limits which outline the provided list of points 
+    
+    Parameters:
+    * pts   List of points [(z0,y0,x0),(z1,y1,x1),...]
+
+    Returns (min,max) ie 
+    * min   array of minimum indices array([zmin,ymin,xmin]
+    * max   array of maximum indices array([zmin,ymin,xmin]
+    
+    """
+    arr_pts = np.array(pts)
+    return np.min(arr_pts,0),np.max(arr_pts,0)
+
+def limits2slice(limits):
+    """ 
+    Create a set of slice objects given list of min,max limits 
+    
+    Parameters:
+    * limits    Tuple of minimum and maximum indices
+
+    Returns: list of slices which will return points between limits.
+    
+    
+    """
+    mins,maxs = limits
+    return tuple([slice(i,j+1) for i,j in zip(mins,maxs)])
+
+def slice2limits(slices):
+    """
+    Create a tuple of min,max limits from a set of slices
+
+    Parameters:
+    
+    * slices: list of slices
+
+    Returns: Tuple of minimum and maximum indices
+    
+    """
+    mins = [s.start for s in slices]
+    maxs = [s.stop-1 for s in slices]
+    return mins,maxs
 
 def squish(r,axis):
     """
@@ -93,7 +161,7 @@ def linesh2pick(guesses,amp_guesses):
 # Lineshape classes
 
 # these classes are used to simulate and fit lineshapes
-# they should have 4 methods:
+# they should have 6 methods:
 # sim(self,M,p)     - Using parameters in p simulate a lineshape of length M.
 # nparams(self,M)   - Determind the number of parameters needed for a length M 
 #                     lineshape.
@@ -102,10 +170,29 @@ def linesh2pick(guesses,amp_guesses):
 #                     fitting
 # pnames(self,M)    - Give names to the parameters of a lineshape of length M.
 #
+# add_edge(self,p,(min,max))
+# remove_edge(self,p,(min,max))
+
 # and a name attribute givening a short name to the class
 
 # the gauss1D gives a well documented example which should be used to create
 # new lineshape classes as needed
+
+# lineshape router
+
+def ls_str2class(l):
+    """ Convert lineshape string to lineshape class """
+    if l == "gauss" or l == "g":
+        return gauss1D()
+    elif l == "lorentz" or l == "l":
+        return lorentz1D()
+    elif l == "scale" or l == "s":
+        return scale1D()
+    elif l == "peak" or l == "p":
+        return peak1D()
+    else:
+        raise ValueError("Unknown lineshape %s",(l))
+
 
 class gauss1D():
     """
@@ -146,6 +233,18 @@ class gauss1D():
         # give names to the two parameters
         return ("mu","sigma")
 
+    def add_edge(self,p,(min,max)):
+        # return parameters corrected for region limits (edges)
+        if p[0]==None:
+            return p
+        return p[0]-min,p[1]
+
+    def remove_edge(self,p,(min,max)):
+        # return parameters 'uncorrected' for region limits (edges)
+        if p[0]==None:
+            return p
+        return p[0]+min,p[1]
+
 class peak1D():
     """
     Peak lineshape class
@@ -157,7 +256,7 @@ class peak1D():
     name = "peak"
 
     def sim(self,M,p):
-        mu,fwhm
+        mu,fwhm = p
         sigma = fwhm/2.3548
         s2 = sigma**2
         return np.exp(-(np.arange(M)-mu)**2/(2*s2))/(np.sqrt(2*pi*s2))
@@ -172,6 +271,15 @@ class peak1D():
     def pnames(self,M):
         return ("mu","fwhm")
 
+    def add_edge(self,p,(min,max)):
+        if p[0]==None:
+            return p
+        return p[0]-min,p[1]
+
+    def remove_edge(self,p,(min,max)):
+        if p[0]==None:
+            return p
+        return p[0]+min,p[1]
 
 class lorentz1D():
     """
@@ -200,6 +308,18 @@ class lorentz1D():
     def pnames(self,M):
         return("x0","gamma")
 
+    def pcorrect(self,p,(min,max)):
+        return p[0]-min,p[1]
+
+    def add_edge(self,p,(min,max)):
+        if p[0]==None:
+            return p
+        return p[0]-min,p[1]
+
+    def remove_edge(self,p,(min,max)):
+        if p[0]==None:
+            return p
+        return p[0]+min,p[1]
 
 class scale1D():
     """
@@ -228,22 +348,13 @@ class scale1D():
         return sig[1:]/sig[0]
 
     def pnames(self,M):
-        return tuple(["a%i"%i for i in range(M)])
+        return tuple(["a%i"%i for i in range(1,M)])
+    
+    def add_edge(self,p,(min,max)):
+        return p
 
-# lineshape router
-
-def ls_str2class(l):
-    """ Convert lineshape string to lineshape class """
-    if l == "gauss" or l == "g":
-        return gauss1D()
-    elif l == "lorentz" or l == "l":
-        return lorentz1D()
-    elif l == "scale" or l == "s":
-        return scale1D()
-    elif l == "peak" or l == "p":
-        return peak1D()
-    else:
-        raise ValueError("Unknown lineshape %s",(l))
+    def remove_edge(self,p,(min,max)):
+        return p
 
 # basic lineshape analysis
 
@@ -309,53 +420,6 @@ def center_fwhm_bymoments(signal):
 
     return mu,sigma*2.3548
 
-
-
-# utility functions
-
-def find_limits(pts):
-    """ 
-    Find the limits which outline the provided list of points 
-    
-    Parameters:
-    * pts   List of points [(z0,y0,x0),(z1,y1,x1),...]
-
-    Returns (min,max) ie 
-    * min   array of minimum indices array([zmin,ymin,xmin]
-    * max   array of maximum indices array([zmin,ymin,xmin]
-    
-    """
-    arr_pts = np.array(pts)
-    return np.min(arr_pts,0),np.max(arr_pts,0)
-
-def limits2slice(limits):
-    """ 
-    Create a set of slice objects given list of min,max limits 
-    
-    Parameters:
-    * limits    Tuple of minimum and maximum indices
-
-    Returns: list of slices which will return points between limits.
-    
-    
-    """
-    mins,maxs = limits
-    return [slice(i,j+1) for i,j in zip(mins,maxs)]
-
-def slice2limits(slices):
-    """
-    Create a tuple of min,max limits from a set of slices
-
-    Parameters:
-    
-    * slices: list of slices
-
-    Returns: Tuple of minimum and maximum indices
-    
-    """
-    mins = [s.start for s in slices]
-    maxs = [s.stop-1 for s in slices]
-    return mins,maxs
 
 
 # Windowing classes
