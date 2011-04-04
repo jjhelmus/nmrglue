@@ -12,18 +12,92 @@ pi = np.pi
 
 # lineshape classes translator
 from analysisbase import ls_str2class,squish
-from nmrglue.fileio import table 
+
+from ..fileio import table
+
+
+# table packing/unpacking
+
+def add_to_table(rec,columns,column_names):
+    """
+    Add (append) multiple columns to a record array
+
+    Parameters:
+    
+    * rec           Records array (table).
+    * columns       List of columns data to append to table.
+    * column_names  List of names of columns.
+
+    Returns: rec (Records array with columns added)
+
+    """
+    for col,col_name in zip(columns,column_names):
+        rec = table.append_column(rec,col,name=col_name)
+    return rec
+
+def pack_table(pbest,abest,iers,rec,param_columns,amp_column,ier_column=None):
+    """
+    Pack fitting parameters into table
+
+    Parameters:
+
+    * pbest         List of best-fit parameters.  See fit_NDregion for format.
+    * abest         List of best-fit amplitudes.
+    * iers          List of fitting error return values.
+    * rec           Records array (table) to save fitting parameters into.
+    * param_columns List of parameter columns in rec. (format same as pbest)
+    * amp_columns   Name of amplitude column in rec.
+    * ier_column    Name of column in rec to save iers to, None to not save.
+
+    Return nothing, rec is updated in place.
+
+    """
+
+
+    # pack the amplitudes
+    rec[amp_column] = abest
+
+    # pack the parameters
+    for dbest,dcolumns in zip(zip(*pbest),param_columns):
+        for p,c in zip(zip(*dbest),dcolumns):
+            rec[c] = p
+
+    # pack the iers
+    if ier_column!=None:
+        rec[ier_column] = iers
+
+def unpack_table(rec,param_columns,amp_column):
+    """
+    Unpack initial fitting parameters from a table
+
+    Parameters:
+
+    * rec           Records array (table) holding parameters.
+    * param_columns List of column names which hold lineshape parameters.  
+                    See fit_NDregion for format.
+    * amp_column    Name of columns in rec holding initial amplitudes.
+
+    Returns: params,amps
+
+    """
+    params = zip( *[zip(*[rec[c] for c in dc]) for dc in param_columns])
+    amps = rec[amp_column]
+    return params,amps
+
+
 
 def estimate_scales(spectrum,centers,box_width,scale_axis=0):
     """
-    Estimate scale parameter for boxes in spectrum
+    Estimate scale parameter for peaks in a spectrum
 
     Parameters:
     
     * spectrum      Slicable spectral data.
-    * centers       List of box center tuples.
-    * box_width     Tuple describing the widths of the box around peaks.
-    * scale_axis    Axis number which to estimate scale parameters.
+    * centers       List of N-tuples indicating peak centers.
+    * box_width     N-tuple indicating box width to add and subtract from
+                    peak centers to form region around peak to fit.
+    * scale_axis    Axis number to estimate scale parameters for.
+
     """
     shape = spectrum.shape
     bcenters = np.round(np.array(centers).astype('int'))
@@ -44,17 +118,67 @@ def estimate_scales(spectrum,centers,box_width,scale_axis=0):
     return scales
 
 
-def multi_fit_boxes(spectrum,lineshapes,params,amps,bounds,ampbounds,centers,
-                    clusters,box_width,error_flag,verb=True):
-    """
-    
+# User facing fit/simulation functions
 
+def fit_spectrum(spectrum,lineshapes,params,amps,bounds,ampbounds,centers,
+                    rIDs,box_width,error_flag,verb=True,**kw):
+    """
+    Fit a spectrum by region which contain one or more peaks.
+
+    Parameters:
+
+    * spectrum      Slicable spectral data.
+    * lineshape     List of lineshapes by label (str) or a lineshape class.
+                    See fit_NDregion for details.
+    * params        P-length list (P is the number of peaks in region) of 
+                    N-length lists of tuples where each each tuple is the 
+                    optimiztion starting parameters for a given peak and 
+                    dimension lineshape.
+    * amps          P-length list of amplitudes.
+    * bounds        List of bounds for parameter of same shape as params.  If
+                    none of the parameters in a given dimension have limits 
+                    None can be used, otherwise each dimension should have a 
+                    list/tuple of (min,max) or None for each parameter.  
+                    min or max may be None when there is no bound in a given 
+                    direction.
+    * ampbounds     P-length list of bounds for the amplitude with format 
+                    similar to bounds.
+    * centers       List of N-tuples indicating peak centers.
+    * rIDs          P-length list of region numbers (peak with the same
+                    region number are fit together).
+    * box_width     N-tuple indicating box width to add and subtract from
+                    peak centers to form region around peak to fit.
+    * error_flag    Set to True to estimate errors for each lineshape
+                    parameter and amplitude.
+    * verb          Set to True to print summary of each region fit, False
+                    supresses all printing.
+    * kw            Additional keywords passed to the scipy.optimize.leastsq
+                    function.
+    
+    Returns: param_best,amp_best,iers if error_flag is False
+             param_best,amp_best,param_err,amp_err,iers if error_flag is True
+        
+
+    * params_best   Optimal values for lineshape parameters with same format
+                    as params input parameter.
+    * amp_best      List of optimal peak amplitudes.
+    * param_err     Estimated lineshape parameter errors with same format
+                    as oarans inout parameter. (Optional)
+    * amp_err       Estimated peak amplitude errors.
+    * iers          List of interger flag from scipy.optimize.leastsq 
+                    indicating if the solution was found for a given peak.  
+                    1,2,3,4 indicates that a solution was found. Other indicate
+                    an error.
 
     """
     pbest = [[]]*len(params)
+    pbest_err = [[]]*len(params)
     abest = [[]]*len(params)
+    abest_err = [[]]*len(params) 
     iers  = [[]]*len(params) 
     shape = spectrum.shape
+
+
 
     ls_classes = []
     for l in lineshapes:
@@ -63,11 +187,11 @@ def multi_fit_boxes(spectrum,lineshapes,params,amps,bounds,ampbounds,centers,
         else:
             ls_classes.append(l)
 
-    cIDs = set(clusters)    # cluster values to loop over
+    cIDs = set(rIDs)    # region values to loop over
 
     for cID in cIDs:
 
-        cpeaks = [i for i,v in enumerate(clusters) if v==cID]
+        cpeaks = [i for i,v in enumerate(rIDs) if v==cID]
 
         # select the parameter
         cparams    = [params[i]    for i in cpeaks]
@@ -113,18 +237,25 @@ def multi_fit_boxes(spectrum,lineshapes,params,amps,bounds,ampbounds,centers,
                  for ls,mn,mx,db in zip(ls_classes,rmin,rmax,pb) ] 
                  for pb in cbounds ]
 
-        err = False
-    
-        ecpbest,acbest,ier = fit_NDregion(region,ls_classes,ecparams,
-                               camps,ecbounds,campbounds,wmask,err)
-     
+        # fit the region
+        t = fit_NDregion(region,ls_classes,ecparams,camps,ecbounds,campbounds,
+                         wmask,error_flag,**kw)
+        
+        if error_flag:
+           ecpbest,acbest,ecpbest_err,acbest_err,ier 
+           cpbest_err = [ [ ls.remove_edge(p,(mn,mx)) for ls,mn,mx,p in
+                        zip(ls_classes,rmin,rmax,g)] for g in ecpbest_err]
+        else:
+            ecpbest,acbest,ier = t
+        
+
         # remove edges from best fit parameters
         cpbest = [ [ ls.remove_edge(p,(mn,mx)) for ls,mn,mx,p in
                 zip(ls_classes,rmin,rmax,g)] for g in ecpbest]
 
         if verb:
             print "-----------------------"
-            print "cID:",cID,"ier:",ier
+            print "cID:",cID,"ier:",ier,"Peaks fit",cpeaks
             print "fit parameters:",cpbest
             print "fit amplitudes",acbest
 
@@ -134,14 +265,19 @@ def multi_fit_boxes(spectrum,lineshapes,params,amps,bounds,ampbounds,centers,
             abest[i]=ab
             iers[i] = ier
 
-    return pbest,abest,iers
+        if error_flag:
+            for i,pb,ab in zip(cpeaks,cpbest_err,acbest_err):
+                pbest_err[i]=pb
+                abest_err[i]=ab
+        
+    if error_flag==False:
+        return pbest,abest,iers
+    
+    return  pbest,abest,pbest_err,abest_err,iers
 
 
-
-# User facing fit/simulation functions
-
-def fit_NDregion(region,lineshapes,guesses,amp_guesses,guesses_bounds=None,
-                 amp_bounds=None,wmask=None,error_flag=False,**kw):
+def fit_NDregion(region,lineshapes,params,amps,bounds=None,
+                 ampbounds=None,wmask=None,error_flag=False,**kw):
     """
     Fit a N-dimensional region.
 
@@ -149,19 +285,19 @@ def fit_NDregion(region,lineshapes,guesses,amp_guesses,guesses_bounds=None,
     
     * region         N-dimensional region to fit.
     * lineshapes     List of lineshapes by label (str) or a lineshape class.
-    * guesses        P-length list (P is the number of peaks in region) of 
+    * params         P-length list (P is the number of peaks in region) of 
                      N-length lists of tuples where each each tuple is the 
                      optimiztion starting parameters for a given peak and 
                      dimension lineshape.
-    * amp_guesses    P-length list of amplitudes.
-    * guesses_bounds List of bounds for parameter of same shape as guesses.  If
+    * amps           P-length list of amplitudes.
+    * bounds         List of bounds for parameter of same shape as params.  If
                      none of the parameters in a given dimension have limits 
                      None can be used, otherwise each dimension should have a 
                      list/tuple of (min,max) or None for each parameter.  
                      min or max may be None when there is no bound in a given 
                      direction.
-    * amp_bounds     P-length list of bounds for the amplitude with format 
-                     similar to guesses_bound.
+    * ampbounds      P-length list of bounds for the amplitude with format 
+                     similar to bounds.
     * wmask          Array with same shape as region which is used to weight
                      points in the err calculation, typically a boolean array
                      is used to exclude certain points in the region.  Default
@@ -173,15 +309,19 @@ def fit_NDregion(region,lineshapes,guesses,amp_guesses,guesses_bounds=None,
     * kw             Additional keywords passed to the scipy.optimize.leastsq 
                      function.
 
-    Returns: param_best,amp_best,ier
+    Returns: param_best,amp_best,ier if error_flag is False
+             param_best,amp_best,param_err,amp_err,ier if error_flag is True
+        
 
     * params_best   Optimal values for lineshape parameters with same format
-                    as guesses input parameter.
+                    as params input parameter.
     * amp_best      List of optimal peak amplitudes.
+    * param_err     Estimated lineshape parameter errors with same format
+                    as oarans inout parameter. (Optional)
+    * amp_err       Estimated peak amplitude errors.
     * ier           Interger flag from scipy.optimize.leastsq indicating if
                     the solution was found.  1,2,3,4 indicates that a solution
                     was found.  Otherwise the solution was not found.
-
 
     Note on the lineshape parameter:
 
@@ -205,15 +345,8 @@ def fit_NDregion(region,lineshapes,guesses,amp_guesses,guesses_bounds=None,
     [ng.analysisbase.gauss1D(),ng.analysisbase.gauss1D()]
     
     An simple example of a lineshape class which simulates the function y=c:
+    XXX
 
-    class constant(): 
-        def sim(self,M,p):
-            c = p
-            return c*np.ones(M)
-        def nparam(self,M):
-            return 1
-
-    
     """
     # this function parses the user-friendly input into a format digestable
     # by f_NDregion, performs the fitting, then format the fitting results
@@ -237,12 +370,12 @@ def fit_NDregion(region,lineshapes,guesses,amp_guesses,guesses_bounds=None,
     # determind the number of parameter in each dimension
     dim_nparam = [c.nparam(l) for l,c in zip(shape,ls_classes)] 
 
-    # parse the guesses parameter
-    n_peaks = len(guesses)
+    # parse params
+    n_peaks = len(params)
     p0 = []
-    for i,guess in enumerate(guesses):  # peak loop
+    for i,guess in enumerate(params):  # peak loop
         if len(guess) != ndim:
-            err = "Incorrect number of guesses for peak %i"
+            err = "Incorrect number of params for peak %i"
             raise ValueError(err%(i))
         
         for j,dim_guess in enumerate(guess):    # dimension loop
@@ -255,16 +388,16 @@ def fit_NDregion(region,lineshapes,guesses,amp_guesses,guesses_bounds=None,
 
     
     # parse the bounds parameter
-    if guesses_bounds == None:   # No bounds 
+    if bounds == None:   # No bounds 
         peak_bounds = [[(None,None)]*i for i in dim_nparam]
-        guesses_bounds = [peak_bounds]*n_peaks
+        bounds = [peak_bounds]*n_peaks
 
-    if len(guesses_bounds) != n_peaks:
+    if len(bounds) != n_peaks:
         raise ("Incorrect number of parameter bounds provided")
 
     # build the parameter bound list to be passed to f_NDregion
     p_bounds = []
-    for i,peak_bounds in enumerate(guesses_bounds): # peak loop
+    for i,peak_bounds in enumerate(bounds): # peak loop
         
         if peak_bounds == None:
             peak_bounds = [[(None,None)]*i for i in dim_nparam]
@@ -292,20 +425,20 @@ def fit_NDregion(region,lineshapes,guesses,amp_guesses,guesses_bounds=None,
                 
                 p_bounds.append(b)
     
-    # parse the amp_guesses parameter
-    if len(amp_guesses) != n_peaks:
+    # parse amps parameter
+    if len(amps) != n_peaks:
         raise ValueError("Incorrect number of amplitude guesses provided")
-    p0 = list(amp_guesses) + p0 # amplitudes appended to front of p0
+    p0 = list(amps) + p0 # amplitudes appended to front of p0
    
-    # parse the amp_bounds parameter
-    if amp_bounds  == None:
-        amp_bounds = [(None,None)]*n_peaks
+    # parse ampbounds parameter
+    if ampbounds  == None:
+        ampbounds = [(None,None)]*n_peaks
 
-    if len(amp_bounds) != n_peaks:
+    if len(ampbounds) != n_peaks:
         raise ValueError("Incorrect number of amplitude bounds")
 
     to_add = []
-    for k,b in enumerate(amp_bounds):
+    for k,b in enumerate(ampbounds):
         if b == None:
             b = (None,None)
 

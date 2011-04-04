@@ -170,10 +170,11 @@ def linesh2pick(guesses,amp_guesses):
 #                     fitting
 # pnames(self,M)    - Give names to the parameters of a lineshape of length M.
 #
-# add_edge(self,p,(min,max))
-# remove_edge(self,p,(min,max))
+# add_edge(self,p,(min,max)) - take into account region limits at min,max
+#                              for parameters or bounds p.
+# remove_edge(self,p,(min,max)) - remove effects region limits min,max
+#                                 for parameters or bounds.
 
-# and a name attribute givening a short name to the class
 
 # the gauss1D gives a well documented example which should be used to create
 # new lineshape classes as needed
@@ -235,12 +236,13 @@ class gauss1D():
 
     def add_edge(self,p,(min,max)):
         # return parameters corrected for region limits (edges)
+        # must also be able to correct bounds for edges (so test for None)
         if p[0]==None:
             return p
         return p[0]-min,p[1]
 
     def remove_edge(self,p,(min,max)):
-        # return parameters 'uncorrected' for region limits (edges)
+        # return parameters/bounds 'uncorrected' for region limits (edges)
         if p[0]==None:
             return p
         return p[0]+min,p[1]
@@ -250,7 +252,6 @@ class peak1D():
     Peak lineshape class
 
     This is really a gaussian lineshape which takes a center,fwhm as parameters
-
     """
 
     name = "peak"
@@ -437,12 +438,11 @@ class ndwindow(object):
     lower index.
 
     Parameters
-    -----------
+    
     * size  Size of array to generate tuples of slices from.
     * wsize Size of the area to select from array (sub-array maximum size).
     
     Example
-    -------
 
     >>> a = np.arange(12).reshape(3,4)
     >>> for s in ndwindow(a.shape,(3,3))
@@ -521,14 +521,12 @@ class ndwindow_inside(object):
     the windows would extend past the array border.  All sub-arrays are
     equal sized (wsize).
 
-    Parameters
-    ----------
+    Parameters:
 
     * size  Size of array to generate tuples of slices from.
     * wsize Size of the area to select from array (widow size).
 
-    Example
-    -------
+    Example:
     
     >>> a = np.arange(9).reshape(3,3)
     >>> for s in ndwindow_inside(a.shape,(2,2):

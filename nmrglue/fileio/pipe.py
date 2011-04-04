@@ -1065,31 +1065,30 @@ def transpose_3D(dic,data,(a1,a2,a3)=(2,1,0) ):
 class iter3D(object):
     """ 
     Object which allows for graceful iteration over 3D NMRPipe files
-
+    
     iter3D.iter() returns a (dic,plane) tuple which can be written using
     the x.writeplane function.
-
+    
     When processing 3D files with iter3D object(s) the following dictionary 
     parameters may not have the same values as NMRPipe processing scripts 
     return:
-
+    
     FDSLICECOUNT and
     
     FDMAX,FDDISMAX,FDMIN,FDDISPMIN when FDSCALEFLAG == 0
-
-    Example:
-
-    #3D data processing:
-    xiter = iter3D("data/test%03d.fid","x","x")
-    for dic,YXplane in xiter:
-        # process X and Y axis
-        xiter.write("ft/test%03d.ft2",YXplane,dic)
     
-    ziter = iter3D("ft/test%03d.ft2","z","z")
-    for dic,XZplane in ziter:
-        # process Z axis
-        ziter.write("ft/test%03d.ft3",XZplane,dic)
+    Example::
 
+        #3D data processing
+        xiter = iter3D("data/test%03d.fid","x","x")
+        for dic,YXplane in xiter:
+            # process X and Y axis
+            xiter.write("ft/test%03d.ft2",YXplane,dic)
+        ziter = iter3D("ft/test%03d.ft2","z","z")
+        for dic,XZplane in ziter:
+            # process Z axis
+            ziter.write("ft/test%03d.ft3",XZplane,dic)
+    
     """
 
     def __init__(self,filemask,in_lead="x",out_lead="DEFAULT"):

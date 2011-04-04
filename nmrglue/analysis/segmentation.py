@@ -67,7 +67,6 @@ def find_downward(data,pt,thres,diag=False):
     Find points downward-connected to pt in data.
 
     Parameters:
-    -----------
 
     * data  2D array of data
     * pt    Starting point, top of peak, tuple.
@@ -75,7 +74,6 @@ def find_downward(data,pt,thres,diag=False):
     * diag  True or False to include diagonal neighbors in connection.
 
     Return: list of indicies of downward connected nodes.
-    -------
 
     """
     if type(pt) == int:
@@ -221,7 +219,6 @@ def find_upward(data,pt,thres,diag=False):
     Find points upward-connected to pt in data.
 
     Parameters:
-    -----------
 
     * data  2D array of data
     * pt    Starting point, bottom of peak, tuple.
@@ -229,7 +226,6 @@ def find_upward(data,pt,thres,diag=False):
     * diag  True or False to include diagonal neighbors in connection.
 
     Return: list of indicies of upward connected nodes.
-    -------
 
     """
     if type(pt) == int:
@@ -379,7 +375,6 @@ def find_connected(data,pt,thres,diag=False):
     Find points connected to pt in data.
 
     Parameters:
-    -----------
 
     * data  2D array of data
     * pt    Starting point, (top of peak).
@@ -387,7 +382,6 @@ def find_connected(data,pt,thres,diag=False):
     * diag  True or False to include diagonal neighbors in connection.
 
     Return: list of indicies of downward connected nodes.
-    -------
 
     """
     if type(pt) == int:
@@ -530,7 +524,6 @@ def find_nconnected(data,pt,thres,diag=False):
     Find points connected to pt in data below threshold.
 
     Parameters:
-    -----------
 
     * data  2D array of data
     * pt    Starting point, (top of peak).
@@ -538,7 +531,6 @@ def find_nconnected(data,pt,thres,diag=False):
     * diag  True or False to include diagonal neighbors in connection.
 
     Return: list of indicies of connected nodes.
-    -------
 
     """
     if type(pt) == int:

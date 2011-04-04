@@ -14,7 +14,7 @@ understanding of python is assumed which can be obtained by reading some
 of the `python documentation <http://docs.python.org/>`_.  The examples in 
 this tutorial can be run interactively from the python shell but the use of an
 enhanced python shell which provides non-blocking control of GUI threads, 
-for example  `ipython <http://ipython.scipy.org/moin/FrontPage>`_, is 
+for example  `ipython <http://ipython.scipy.org>`_, is 
 recommended when trying the examples which use matplotlib.  The sample data
 using in this tutorial is `available <http://XXX>`_ is you wish to follow 
 along with the same files.
@@ -479,7 +479,7 @@ A number of python plotting libraries exist which can be used in conjunction
 with nmrglue to produce publication quality figures.  matplotlib is one of
 the more popular libraries and has the ability to output to a number of 
 hardcopy formats as well as offering a robust interactive environment.  When
-using matplotlib interactively use of `ipython <http://ipython.scipy.org/>`_
+using matplotlib interactively use of `ipython`_
 or a similar shell is recommeneded although the standard python shell can be 
 used.  For example to create a simple plot of a 1D spectrum (if the ipython
 shell is used for this example use the ``-pylab`` switch) :

@@ -295,7 +295,7 @@ def poly_fd(data):
        of standard deviation (std) of noise
     6. Classification threshold set to 1.5*std
     7. Qualify each block in centered vector as baseline only 
-    (its std < thres) or not (std > thres)
+       (its std < thres) or not (std > thres)
     8. Fit baseline only points to polynomial and substract off
 
 

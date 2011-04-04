@@ -16,6 +16,7 @@ high level functions.
 .. autofunction:: internal2external
 .. autofunction:: external2internal
 .. autofunction:: internal2external_grad
+.. autofunction:: i2e_cov_x
 .. autofunction:: err
 .. autofunction:: calc_cov_x
 

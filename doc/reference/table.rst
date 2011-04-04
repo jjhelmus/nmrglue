@@ -9,7 +9,7 @@ High-Level Functions
 ---------------------
 
 
-These are the functions the majority of users will use from the table module.
+These are the functions most users will use from the table module.
 
 .. autofunction:: read
 .. autofunction:: write 

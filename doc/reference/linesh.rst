@@ -10,9 +10,13 @@ High-Level Functions
 
 These are the functions the majority of users will use from the linesh module.
 
+.. autofunction:: fit_spectrum
 .. autofunction:: fit_NDregion
 .. autofunction:: sim_NDregion
-
+.. autofunction:: add_to_table
+.. autofunction:: pack_table
+.. autofunction:: unpack_table
+.. autofunction:: estimate_scales
 
 
 Low-Level Functions
@@ -27,12 +31,5 @@ fitting may be interested in these functions.
 .. autofunction:: s_single_NDregion
 .. autofunction:: err_NDregion
 .. autofunction:: make_slist
-.. autofunction:: ls_str2class
 .. autofunction:: split_list
 
-Low-Level Classes
------------------
-
-.. autoclass:: gauss1D
-.. autoclass:: lorentz1D
-.. autoclass:: scale1D

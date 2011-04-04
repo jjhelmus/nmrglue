@@ -12,7 +12,6 @@ fileio modules
 
     bruker
     convert
-    glue
     fileiobase
     pipe
     sparky
@@ -38,8 +37,13 @@ analysis modules
 .. toctree::
     :maxdepth: 2
 
+    analysisbase
+    helpers
     leastsqbound
     linesh
+    peakpick
+    segmentation
+
 
 util modules
 ------------

@@ -9,27 +9,20 @@ High-Level Functions
 ---------------------
 
 
-These are the functions the majority of users will use from the sparky module.
+These are the functions most users will use from the sparky module.
 
 .. autofunction:: read
-.. autofunction:: read_2D
-.. autofunction:: read_3D
 .. autofunction:: read_lowmem
-.. autofunction:: read_lowmem_2D
-.. autofunction:: read_lowmem_3D
 .. autofunction:: write
-.. autofunction:: write_2D
-.. autofunction:: write_3D
+.. autofunction:: write_lowmem
 .. autofunction:: make_uc
 .. autofunction:: guess_udic
 .. autofunction:: create_dic
-.. autofunction:: datetime2dic
+.. autofunction:: datetime2dic 
 .. autofunction:: dic2datetime
-
 
 Low-Level Functions
 -------------------
-
 
 These functions are typically not used directly by users.  They are called by
 high level functions.  Developers and user who want fine control over sparky
@@ -37,25 +30,31 @@ files will be interested in these functions.
 
 .. autofunction:: create_data
 .. autofunction:: create_axisdic
+.. autofunction:: calc_tshape
+.. autofunction:: read_2D
+.. autofunction:: write_2D
+.. autofunction:: read_3D
+.. autofunction:: write_3D
+.. autofunction:: read_lowmem_2D
+.. autofunction:: read_lowmem_3D
 .. autofunction:: get_tilen
 .. autofunction:: get_tile
-.. autofunction:: get_data
-.. autofunction:: get_fileheader
-.. autofunction:: get_axisheader
 .. autofunction:: put_tile
+.. autofunction:: get_data
 .. autofunction:: put_data
-.. autofunction:: put_fileheader
-.. autofunction:: put_axisheader
 .. autofunction:: find_tilen_2d
-.. autofunction:: find_tilen_3d
 .. autofunction:: tile_data2d
-.. autofunction:: tile_data3d
 .. autofunction:: untile_data2D
+.. autofunction:: find_tilen_3d
+.. autofunction:: tile_data3d
 .. autofunction:: untile_data3D
-.. autofunction:: calc_tshape
+.. autofunction:: get_fileheader 
+.. autofunction:: put_fileheader 
 .. autofunction:: fileheader2dic
 .. autofunction:: dic2fileheader
-.. autofunction:: axisheader2dic
+.. autofunction:: get_axisheader
+.. autofunction:: put_axisheader
+.. autofunction:: axisheader2dic 
 .. autofunction:: dic2axisheader
 
 Low-Level Classes

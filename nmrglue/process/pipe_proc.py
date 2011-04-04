@@ -35,7 +35,7 @@ import scipy
 import scipy.signal
 
 # nmrglue modules
-from nmrglue.fileio import pipe,fileiobase
+from ..fileio import pipe,fileiobase
 import proc_base as p
 import proc_bl
 import proc_lp

@@ -265,8 +265,10 @@ def roll(data,pts=0.0,neg=False):
 
 def fsh(data,pts):
     """ 
-    Frequency Shift by Fourier Transform
-    
+    Frequency Shift by Fourier Transform (ifft->phase->fft)
+
+    Positive pts shift spectrum to the right, negative to the left.
+
     Parameters:
 
     * data  Array of spectral data.
@@ -283,6 +285,24 @@ def fsh(data,pts):
     # inplace version 
     return complexft(np.exp(-2.j*pi*pts*np.arange(s)/s,sig=data.dtype)*
            icomplexft(data))
+
+def fsh2(data,pts):
+    """
+    Frequency Shift by Fourier Transform (fft->phase->ifft)
+
+    Positive pts shift spectrum to the right, negative to the left.
+    Odd values of pts change sign of spectrum, even values keep it the same.
+
+    Parameters:
+
+    * data  Array of spectral data.
+    * pts   Number of points to frequency shift
+
+    """
+    s= float(data.shape[-1])
+    return icomplexft(np.exp(2.j*pi*pts*np.arange(s)/s,sig=data.dtype)*
+           complexft(data)) 
+
 
 ##############
 # Transforms #

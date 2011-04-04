@@ -23,7 +23,7 @@ the file with nmrglue.
 import numpy as np
 import os
 import fileiobase
-from nmrglue.process import proc_base
+from ..process import proc_base
 
 # data creation
 
@@ -614,6 +614,7 @@ def write_binary(filename,dic,data,overwrite=False,big=True):
     * overwrite     True to overwrite files, False to warn.
     * big           Endiness to write binary data with,
                     bigendian=True, little=False
+    
     No return.
 
     """
@@ -644,6 +645,7 @@ def write_binary_lowmem(filename,dic,data,overwrite=False,big=True):
     * overwrite     True to overwrite files, False to warn.
     * big           Endiness to write binary data with,
                     bigendian=True, little=False
+    
     No return.
     
     """

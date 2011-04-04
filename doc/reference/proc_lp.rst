@@ -41,7 +41,7 @@ Low-Level Functions
     cof2amp
     cof2phase
     make_D
-    make_d
+    make_little_d
     make_Dd
     make_mirror
     find_lpc

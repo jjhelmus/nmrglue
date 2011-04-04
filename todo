@@ -9,53 +9,40 @@ Global
 doc
 ---
 - check for typos/mis-spelling in all documents
-- script to copy over additional files (example code, figures, etc)
-- document proc_lp module
-- document peak_fit and peak_pick module
+- add link to raw data
 
 examples
 --------
 - full arrayed experiment processing examples
     - T1 measurements
     - TEDOR fitting
-- process 1,2,3D glue files (need glue module)
-- varian -> glue 1,2,3D (need glue module)
-- bruker -> glue 1,2,3D (need glue module)
+- Linear Prediction examples
+- Peak picking, fitting and segmenting examples.
 
 tests
 -----
-- convert to nose?
-- test_bruker.py
-- test_convert.py
-- test_pipe.py
-- test_varian.py
-- test_sparky.py
-- test_glue.py
-- test_pipe_proc.py
+- convert test_pipe_proc.py to nose:
+    
 
 nmrglue
 -------
 
-
     analysis
     --------
-    - test and add to peak_pick module
-    - test and add to peak_fit module
-    - decide on final folder structure
+    - rework peakpick module for regioning/tabling
 
     filio
     -----
-    - global nD low-memory object (and support in all modules)
-    - lowmem_2d in pipe module
     - ability to write slices to file in all modules (ala pipe.write_slice3d)
     - global iter3D object
-    - rewrite glue module with better dataset wrapping
-    - spinev module
-    - simpson module
+    - rewrite glue module with better dataset wrapping, make test.
+    - sparky_nd object?
+    - spinev module?
+    - simpson module?
 
     gui
     ---
-    - gui module with common gui functions.
+    - gui module with common gui functions?
 
     process
     ------
@@ -63,13 +50,10 @@ nmrglue
     - glue_proc module?
     - debug XXX in pipe_proc
     - more work on broken tests in test_pipe_proc
-    - proc_mem module (Maximum Entropy)
+    - proc_mem module (Maximum Entropy)?
     - add missing functions in pipe_proc
     - FWHT in proc_base
     - profile processing and optimize
-
-    util
-    ----
 
 
 Other thoughts

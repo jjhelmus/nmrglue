@@ -34,26 +34,26 @@ def lp(data,pred=1,slice=slice(None),order=8,mode="f",append="after",
 
     Parameters:
 
-    data        1D or 2D data (time domain in last axis).
-    pred        Number of points to predict along the last axis.
-    slice       slice object selecting region of each row to use in LP equation
-    order       Prediction order (Number of LP coefficients)
-    mode        Mode to generate LP filter ('f'-forward,'b'-backward,
+    * data      1D or 2D data (time domain in last axis).
+    * pred      Number of points to predict along the last axis.
+    * slice     slice object selecting region of each row to use in LP equation
+    * order     Prediction order (Number of LP coefficients)
+    * mode      Mode to generate LP filter ('f'-forward,'b'-backward,
                 fb-'forward-backward,'bf'-backward-forward)
-    extend      Extend before or after trace, ("before" or "after").
-    bad_roots   Type of roots which are bad and should be stabilized, 
+    * extend    Extend before or after trace, ("before" or "after").
+    * bad_roots Type of roots which are bad and should be stabilized, 
                 either those with "incr" or "decr" signals, set to None for 
                 no root stabilizing. Default of "auto" set root fixing 
                 based on LP mode. 
                 (mode=="f" or "fb" -> "incr", mode=="b" or "bf" -> "decr")
-    fix_mode    Method used to stabilize bad roots, "on" to move the roots 
+    * fix_mode  Method used to stabilize bad roots, "on" to move the roots 
                 onto the unit circle, "reflect" to reflect bad roots across 
                 the unit circle
-    mirror      None to process trace as provided, '0' or '180' forms a mirror
+    * mirror    None to process trace as provided, '0' or '180' forms a mirror
                 image of the sliced trace to calculate the LP filter.  '0'
                 should be used with data with no delay, '180' with data
                 with an initial half-point delay.
-    method      Method to use to calculate the LP filter, choose from
+    * method    Method to use to calculate the LP filter, choose from
                 'svd','qr','choleskey' or 'tls'.
 
 
@@ -136,30 +136,30 @@ def lp_tls(data,pred=1,slice=slice(None),order=8,mode="f",append="after",
 def lp_1d(trace,pred=1,slice=slice(None),order=8,mode="f",append="after",
     bad_roots="auto",fix_mode="on",mirror=None,method="svd"):
     """
-    Linear Prediction extrpolation of 1D data.
+    Linear Prediction extrapolation of 1D data.
 
     Parameter:
 
-    trace       1D trace of data, the FID.
-    pred        Number of points to predict.
-    slice       slice object selecting region of slice to use in LP equation.
-    order       Prediction order (Number of LP coefficients)
-    mode        Mode to generate LP filter (f-forward,b-backward,
+    * trace     1D trace of data, the FID.
+    * pred      Number of points to predict.
+    * slice     slice object selecting region of slice to use in LP equation.
+    * order     Prediction order (Number of LP coefficients)
+    * mode      Mode to generate LP filter (f-forward,b-backward,
                 fb-"forward-backward",bf-"backward-forward")
-    extend      Extend trace before or after trace, ("before" or "after").
-    bad_roots   Type of roots which are bad and should be stabilized, 
+    * extend    Extend trace before or after trace, ("before" or "after").
+    * bad_roots Type of roots which are bad and should be stabilized, 
                 either those with "incr" or "decr" signals, set to None for 
                 no root stabilizing. Default of "auto" set root fixing 
                 based on LP mode. 
                 (mode=="f" or "fb" -> "incr", mode=="b" or "bf" -> "decr")
-    fix_mode    Method used to stabilize bad roots, "on" to move the roots 
+    * fix_mode  Method used to stabilize bad roots, "on" to move the roots 
                 onto the unit circle, "reflect" to reflect bad roots across 
                 the unit circle
-    mirror      None to process trace as provided, '0' or '180' forms a mirror
+    * mirror    None to process trace as provided, '0' or '180' forms a mirror
                 image of the sliced trace to calculate the LP filter.  '0'
                 should be used with data with no delay, '180' with data
                 with an initial half-point delay.
-    method      Method to use to calculate the LP filter, choose from
+    * method    Method to use to calculate the LP filter, choose from
                 'svd','qr','choleskey' or 'tls'.
 
 
@@ -272,18 +272,18 @@ def lp2d(data,pred,P,M,mirror='0',fix_points=True,method='svd'):
 
     Parameters:
        
-    data        2D data (time domain for both axes).
-    pred        Number of points to predict along the last axis.
-    P           Prediction matrix length along the non-predicted (0) axis.
-    M           Prediction matrix length along the predicted (1) axis.
-    mirror      '0' or '180' indicating how the mirror image of the 
-                non-predicted axis should be formed. '0' indicated no delay, 
-                '180' for a half-point delay'
-    fix_points  Set to True to reduce predicted points with magnitude larger
-                than the largest data point. False leaved predicted points 
-                unaltered.
-    method      Method used to calculate the LP prediction matrix, choose from
-                'svd','qr','cholesky', or 'tls'
+    * data       2D data (time domain for both axes).
+    * pred       Number of points to predict along the last axis.
+    * P          Prediction matrix length along the non-predicted (0) axis.
+    * M          Prediction matrix length along the predicted (1) axis.
+    * mirror     '0' or '180' indicating how the mirror image of the 
+                 non-predicted axis should be formed. '0' indicated no delay, 
+                 '180' for a half-point delay'
+    * fix_points Set to True to reduce predicted points with magnitude larger
+                 than the largest data point. False leaved predicted points 
+                 unaltered.
+    * method     Method used to calculate the LP prediction matrix, choose from
+                 'svd','qr','cholesky', or 'tls'
 
     """
 
@@ -404,14 +404,14 @@ def cadzow(data,M,K,niter,min_var=False):
 
     Parameters:
 
-    data    1D or 2D data matrix.
-    M       Large prediction order.  For best results should be between 
-            K+5 and 2*K.
-    K       Reduced prediction order.
-    niter   Number if iteration of the Cadzow procedure to perform.   
-    min_var Set to True to adjust retained singular values using the minimum 
-            variance method, False does not correct the singular values and
-            is the Cadzow method.
+    * data      1D or 2D data matrix.
+    * M         Large prediction order.  For best results should be between 
+                K+5 and 2*K.
+    * K         Reduced prediction order.
+    * niter     Number if iteration of the Cadzow procedure to perform.   
+    * min_var   Set to True to adjust retained singular values using the 
+                minimum variance method, False does not correct the singular 
+                values andis the Cadzow method.
 
     Returns: array of enhanced data
 
@@ -492,30 +492,28 @@ def lp_model(trace,slice=slice(None),order=8,mode="f",mirror=None,method="svd",
 
     Parameter:
 
-    trace   1D trace of data, the FID.
-    slice   slice object selecting region of slice to use in LP equation.
-    order   Prediction order (Number of LP coefficients)
-    mirror  None to process trace as provided, '0' or '180' forms a mirror 
-            image of the sliced trace to calculate the LP filter.  '0' should
-            be used with data with no delay, '180' with data with an initial 
-            half-point delay.
-    mode    Mode to generate LP filter (f-forward,b-backward,
-    method  Method to use to calculate the LP filter, choose from
-            'svd','qr','choleskey','hsvd'.
-    full    Set to True to return amplitudes and phases calculated
-            by performing a least squares fitting. False returns only
+    * trace  1D trace of data, the FID.
+    * slice  slice object selecting region of slice to use in LP equation.
+    * order  Prediction order (Number of LP coefficients)
+    * mirror None to process trace as provided, '0' or '180' forms a mirror 
+             image of the sliced trace to calculate the LP filter.  '0' should
+             be used with data with no delay, '180' with data with an initial 
+             half-point delay.
+    * mode   Mode to generate LP filter (f-forward,b-backward,
+    * method Method to use to calculate the LP filter, choose from
+             'svd','qr','choleskey','hsvd'.
+    * full    Set to True to return amplitudes and phases calculated
+             by performing a least squares fitting. False returns only
              the damping (relaxation) factors and signal frequencies
 
 
-    Returns:    when full==False:  (damp,freq)
-                when full==True:   (damp,freq,amp,phase)
-        
-        Where:
+    Returns: when full==False:  (damp,freq)
+             when full==True:   (damp,freq,amp,phase)
 
-        damp    List of damping factors
-        freq    List of frequencies
-        amp     List of amplitudes
-        phase   List of phases
+    * damp    List of damping factors
+    * freq    List of frequencies
+    * amp     List of amplitudes
+    * phase   List of phases
 
     Notes: 
 
@@ -575,7 +573,7 @@ def lp_model(trace,slice=slice(None),order=8,mode="f",mirror=None,method="svd",
     # build the B matrix (a Vandermonde matrix) and solve for the coefficients
     poles = np.array(poles)
     B = np.row_stack([poles**(i) for i in range(len(x))])
-    z,resid,rank,s = scipy.linalg.lstsq(B,np.array(x))
+    z,resid,rank,s = np.linalg.lstsq(B,np.array(x))
 
     # Now the z_n = amp_n*exp(phase_n*i), use this to determind the amplitudes
     # and phases
@@ -626,7 +624,7 @@ def make_D(x,order,mode):
     else:
         raise ValueError("mode must be 'f' or 'b'")
 
-def make_d(x,order,mode):
+def make_little_d(x,order,mode):
     """
     make the LP equation d' vector (Da = d')
     """
@@ -642,7 +640,7 @@ def make_Dd(x,order,mode):
     """
     make the LP equation D matrix and d' vector (Da=d')
     """
-    return make_D(x,order,mode),make_d(x,order,mode)
+    return make_D(x,order,mode),make_little_d(x,order,mode)
 
 def make_mirror(x,mode):
     """
@@ -864,12 +862,12 @@ def find_lproots_hsvd(x,M,K,mode,zmethod='sm'):
 
     Parameters: 
 
-    x       1D trace of data, the FID.
-    M       Length (M+1) of data matrix to form
-    K       Reduced prediction order (number of signal roots)
-            K < min(M+1,len(x)-M)
-    mode    Mode to perform LP (f-forward,b-backward)
-    zmethod Method used to find Z' (lstsq-least squares, sm-Sherman-Morrison)
+    * x       1D trace of data, the FID.
+    * M       Length (M+1) of data matrix to form
+    * K       Reduced prediction order (number of signal roots)
+              K < min(M+1,len(x)-M)
+    * mode    Mode to perform LP (f-forward,b-backward)
+    * zmethod Method used to find Z' (lstsq-least squares, sm-Sherman-Morrison)
 
     Returns array of signal roots (poles)
     
@@ -935,10 +933,11 @@ def find_roots(a,mode="f"):
 
     Parameters:
         
-    a       LP coefficients
-    mode    "f" or "b" depending on the ordering of a, "f" assumes the
+    * a     LP coefficients
+    * mode  "f" or "b" depending on the ordering of a, "f" assumes the
             coefficients are stored m,m-1,...1; "b" are stores 1,2,...,m
             where m is the order of the Linear prediction.
+    
     """
     if mode not in ['f','b']:
         raise ValueError("mode must be 'f'or 'b'")
@@ -968,8 +967,8 @@ def find_coeff(poles,mode="f"):
     
     Parmeters:
     
-    poles   Array of LP roots
-    mode    "f" or "b"
+    * poles   Array of LP roots
+    * mode    "f" or "b"
 
     """
 
@@ -999,12 +998,12 @@ def fix_roots(poles,fix_roots="incr",fix_mode="reflect"):
 
     Parameters:
        
-    poles       Array of LP roots/poles.
-    fix_roots   "incr" or "decr" indicating which roots to remove (increasing
-                or decreasing signals.
-    fix_mode    Method to use when regularizing roots, "on" moves each bad
-                root onto the unit circle, "reflect" reflects the root over
-                the unit circle.
+    * poles      Array of LP roots/poles.
+    * fix_roots  "incr" or "decr" indicating which roots to remove (increasing
+                 or decreasing signals.
+    * fix_mode   Method to use when regularizing roots, "on" moves each bad
+                 root onto the unit circle, "reflect" reflects the root over
+                 the unit circle.
     """
 
     if fix_roots not in ["incr","decr"]:
@@ -1042,11 +1041,11 @@ def extrapolate(trace,a,pred,append):
 
     Parameters:
     
-    trace   1D vector to add points to
-    a       LP coefficients (ordered according to direction of extrapolation)
-    pred    Number of points to predict using LP prediction filter
-    append  "b" or "a" indicating if extrapolation should append before
-            or after known points.
+    * trace  1D vector to add points to
+    * a      LP coefficients (ordered according to direction of extrapolation)
+    * pred   Number of points to predict using LP prediction filter
+    * append "b" or "a" indicating if extrapolation should append before or 
+             after known points.
 
     """
     m = len(a)      # LP order
