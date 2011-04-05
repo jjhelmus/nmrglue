@@ -1,0 +1,6 @@
+nmrglue.process.proc_lp.find_lpc_bf
+===================================
+
+.. currentmodule:: nmrglue.process.proc_lp
+
+.. autofunction:: find_lpc_bf

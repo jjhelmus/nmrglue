@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>plotting example: plot_2d_spectrum &mdash; nmrglue v0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="nmrglue v0.1 documentation" href="../index.html" />
+    <link rel="up" title="Examples" href="index.html" />
+    <link rel="next" title="plotting example: plot_2d_spectrum_pts" href="plot_2d_spectrum_pts.html" />
+    <link rel="prev" title="plotting example: plot_2d_assignments" href="plot_2d_assignments.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="plot_2d_spectrum_pts.html" title="plotting example: plot_2d_spectrum_pts"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="plot_2d_assignments.html" title="plotting example: plot_2d_assignments"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">nmrglue v0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="plot_2d_assignments.html"
+                                  title="previous chapter">plotting example: plot_2d_assignments</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="plot_2d_spectrum_pts.html"
+                                  title="next chapter">plotting example: plot_2d_spectrum_pts</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/examples/plot_2d_spectrum.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="plotting-example-plot-2d-spectrum">
+<span id="plot-2d-spectrum"></span><h1>plotting example: plot_2d_spectrum<a class="headerlink" href="#plotting-example-plot-2d-spectrum" title="Permalink to this headline">¶</a></h1>
+<p>This example shows how to use nmrglue and
+<a class="reference external" href="http://matplotlib.sourceforge.net/index.html">matplotlib</a> to create figures
+for examining data or publication.  In this example a contour plot of the
+spectrum from a 2D NMRPipe file is created.  Slices are added in the 15N and
+13C dimension as well as sample peak labels.  <a class="reference external" href="plot_2d_spectrum_pts.html#plot-2d-spectrum-pts"><em>plotting example: plot_2d_spectrum_pts</em></a>
+is similar to this example but plotted on a point scale.</p>
+<p>[<a class="reference external" href="el/plotting/2d_spectrum/plot_spectrum.py">source code</a>]</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#! /usr/bin/env python</span>
+<span class="c"># Create contour plots of a 2D NMRPipe spectrum</span>
+
+<span class="kn">import</span> <span class="nn">nmrglue</span> <span class="kn">as</span> <span class="nn">ng</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.cm</span>
+
+<span class="c"># plot parameters</span>
+<span class="n">cmap</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Blues_r</span>    <span class="c"># contour map (colors to use for contours)</span>
+<span class="n">contour_start</span>   <span class="o">=</span> <span class="mi">30000</span>     <span class="c"># contour level start value</span>
+<span class="n">contour_num</span>     <span class="o">=</span> <span class="mi">20</span>        <span class="c"># number of contour levels</span>
+<span class="n">contour_factor</span>  <span class="o">=</span> <span class="mf">1.20</span>      <span class="c"># scaling factor between contour levels</span>
+
+<span class="c"># calculate contour levels</span>
+<span class="n">cl</span> <span class="o">=</span> <span class="p">[</span><span class="n">contour_start</span><span class="o">*</span><span class="n">contour_factor</span><span class="o">**</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">contour_num</span><span class="p">)]</span>
+
+<span class="c"># read in the data from a NMRPipe file</span>
+<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;../../common_data/2d_pipe/test.ft2&quot;</span><span class="p">)</span>
+
+<span class="c"># make ppm scales</span>
+<span class="n">uc_13c</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">make_uc</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ppm_13c</span> <span class="o">=</span> <span class="n">uc_13c</span><span class="o">.</span><span class="n">ppm_scale</span><span class="p">()</span>
+<span class="c">#ppm_13c = np.linspace(uc_13c.ppm(0),uc_13c.ppm(data.shape[1]-1),data.shape[1])</span>
+<span class="n">uc_15n</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">make_uc</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">ppm_15n</span> <span class="o">=</span> <span class="n">uc_15n</span><span class="o">.</span><span class="n">ppm_scale</span><span class="p">()</span>
+<span class="c">#ppm_15n = np.linspace(uc_15n.ppm(0),uc_15n.ppm(data.shape[0]-1),data.shape[0])</span>
+
+<span class="c"># create the figure</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+
+<span class="c"># plot the contours</span>
+<span class="n">etup</span> <span class="o">=</span> <span class="p">(</span><span class="n">ppm_13c</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">ppm_13c</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">ppm_15n</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">ppm_15n</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">cl</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="n">etup</span><span class="p">)</span>
+
+<span class="c"># add some labels</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">59.25</span><span class="p">,</span><span class="mf">104.0</span><span class="p">,</span><span class="s">&quot;T49&quot;</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">58.75</span><span class="p">,</span><span class="mi">106</span><span class="p">,</span><span class="s">&quot;T11&quot;</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+
+<span class="c"># plot slices in each direction</span>
+<span class="n">xslice</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">uc_15n</span><span class="p">(</span><span class="s">&quot;111.27 ppm&quot;</span><span class="p">),:]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ppm_13c</span><span class="p">,</span><span class="o">-</span><span class="n">xslice</span><span class="o">/</span><span class="mf">4.e4</span><span class="o">+</span><span class="mf">111.27</span><span class="p">)</span>
+<span class="n">yslice</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="n">uc_13c</span><span class="p">(</span><span class="s">&quot;62.0 ppm&quot;</span><span class="p">)]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">yslice</span><span class="o">/</span><span class="mf">2.e4</span><span class="o">+</span><span class="mf">62.0</span><span class="p">,</span><span class="n">ppm_15n</span><span class="p">)</span>
+
+<span class="c"># decorate the axes</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&quot;15N (ppm)&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&quot;13C (ppm)&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">&quot;Protein 2D NCa Spectrum&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span><span class="mi">40</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">135</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="c"># save the figure</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&quot;spectrum.png&quot;</span><span class="p">)</span> <span class="c"># change to .pdf, .ps, etc for different formats</span>
+</pre></div>
+</div>
+<p>Result:</p>
+<p>[<a class="reference external" href="el/plotting/2d_spectrum/spectrum.png">spectrum.png</a>]</p>
+<img alt="../_images/spectrum1.png" src="../_images/spectrum1.png" />
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="plot_2d_spectrum_pts.html" title="plotting example: plot_2d_spectrum_pts"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="plot_2d_assignments.html" title="plotting example: plot_2d_assignments"
+             >previous</a> |</li>
+        <li><a href="../index.html">nmrglue v0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Apr 05, 2011.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nmrglue.process.proc_lp.lp &mdash; nmrglue v0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="nmrglue v0.1 documentation" href="../../index.html" />
+    <link rel="up" title="nmrglue.proc_lp" href="../proc_lp.html" />
+    <link rel="next" title="nmrglue.process.proc_lp.lp_svd" href="nmrglue.process.proc_lp.lp_svd.html" />
+    <link rel="prev" title="nmrglue.process.proc_lp.extrapolate" href="nmrglue.process.proc_lp.extrapolate.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.proc_lp.lp_svd.html" title="nmrglue.process.proc_lp.lp_svd"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.proc_lp.extrapolate.html" title="nmrglue.process.proc_lp.extrapolate"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">nmrglue v0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../proc_lp.html" accesskey="U">nmrglue.proc_lp</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="nmrglue.process.proc_lp.extrapolate.html"
+                                  title="previous chapter">nmrglue.process.proc_lp.extrapolate</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="nmrglue.process.proc_lp.lp_svd.html"
+                                  title="next chapter">nmrglue.process.proc_lp.lp_svd</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../../_sources/reference/generated/nmrglue.process.proc_lp.lp.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="nmrglue-process-proc-lp-lp">
+<h1>nmrglue.process.proc_lp.lp<a class="headerlink" href="#nmrglue-process-proc-lp-lp" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="nmrglue.process.proc_lp.lp">
+<tt class="descclassname">nmrglue.process.proc_lp.</tt><tt class="descname">lp</tt><big>(</big><em>data</em>, <em>pred=1</em>, <em>slice=slice(None</em>, <em>None</em>, <em>None)</em>, <em>order=8</em>, <em>mode='f'</em>, <em>append='after'</em>, <em>bad_roots='auto'</em>, <em>fix_mode='on'</em>, <em>mirror=None</em>, <em>method='svd'</em><big>)</big><a class="headerlink" href="#nmrglue.process.proc_lp.lp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linear prediction extrapolation of 1D or 2D data.</p>
+<p>Parameters:</p>
+<ul>
+<li><p class="first">data      1D or 2D data (time domain in last axis).</p>
+</li>
+<li><p class="first">pred      Number of points to predict along the last axis.</p>
+</li>
+<li><p class="first">slice     slice object selecting region of each row to use in LP equation</p>
+</li>
+<li><p class="first">order     Prediction order (Number of LP coefficients)</p>
+</li>
+<li><dl class="first docutils">
+<dt>mode      Mode to generate LP filter (&#8216;f&#8217;-forward,&#8217;b&#8217;-backward,</dt>
+<dd><p class="first last">fb-&#8216;forward-backward,&#8217;bf&#8217;-backward-forward)</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">extend    Extend before or after trace, (&#8220;before&#8221; or &#8220;after&#8221;).</p>
+</li>
+<li><dl class="first docutils">
+<dt>bad_roots Type of roots which are bad and should be stabilized, </dt>
+<dd><p class="first last">either those with &#8220;incr&#8221; or &#8220;decr&#8221; signals, set to None for 
+no root stabilizing. Default of &#8220;auto&#8221; set root fixing 
+based on LP mode. 
+(mode==&#8221;f&#8221; or &#8220;fb&#8221; -&gt; &#8220;incr&#8221;, mode==&#8221;b&#8221; or &#8220;bf&#8221; -&gt; &#8220;decr&#8221;)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>fix_mode  Method used to stabilize bad roots, &#8220;on&#8221; to move the roots </dt>
+<dd><p class="first last">onto the unit circle, &#8220;reflect&#8221; to reflect bad roots across 
+the unit circle</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>mirror    None to process trace as provided, &#8216;0&#8217; or &#8216;180&#8217; forms a mirror</dt>
+<dd><p class="first last">image of the sliced trace to calculate the LP filter.  &#8216;0&#8217;
+should be used with data with no delay, &#8216;180&#8217; with data
+with an initial half-point delay.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>method    Method to use to calculate the LP filter, choose from</dt>
+<dd><p class="first last">&#8216;svd&#8217;,&#8217;qr&#8217;,&#8217;choleskey&#8217; or &#8216;tls&#8217;.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Notes:</p>
+<p>When given 2D data a series of 1D Linear predictions are made to
+each row in the array, extending each by pred points. To perform a 2D 
+linear prediction using a 2D prediction matrix use the lp2d functions.</p>
+<p>In forward-backward or backward-forward mode root stabilizing is done 
+on both sets of signal roots as calculated in the first mode direction.  
+After averaging the coefficient the roots are again stabilized.</p>
+<p>When the append parameter does not match the LP mode, for example
+if a backward linear prediction (mode=&#8217;b&#8217;) is used to predict points
+after the trace (append=&#8217;after&#8217;), any root fixing is done before reversing 
+the filter.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.proc_lp.lp_svd.html" title="nmrglue.process.proc_lp.lp_svd"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.proc_lp.extrapolate.html" title="nmrglue.process.proc_lp.extrapolate"
+             >previous</a> |</li>
+        <li><a href="../../index.html">nmrglue v0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../proc_lp.html" >nmrglue.proc_lp</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Apr 05, 2011.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+nmrglue.process.proc_base.ift
+=============================
+
+.. currentmodule:: nmrglue.process.proc_base
+
+.. autofunction:: ift

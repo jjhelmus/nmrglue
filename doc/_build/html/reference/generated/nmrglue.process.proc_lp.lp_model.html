@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nmrglue.process.proc_lp.lp_model &mdash; nmrglue v0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="nmrglue v0.1 documentation" href="../../index.html" />
+    <link rel="up" title="nmrglue.proc_lp" href="../proc_lp.html" />
+    <link rel="next" title="nmrglue.process.proc_lp.lp_1d" href="nmrglue.process.proc_lp.lp_1d.html" />
+    <link rel="prev" title="nmrglue.process.proc_lp.cadzow" href="nmrglue.process.proc_lp.cadzow.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.proc_lp.lp_1d.html" title="nmrglue.process.proc_lp.lp_1d"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.proc_lp.cadzow.html" title="nmrglue.process.proc_lp.cadzow"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">nmrglue v0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../proc_lp.html" accesskey="U">nmrglue.proc_lp</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="nmrglue.process.proc_lp.cadzow.html"
+                                  title="previous chapter">nmrglue.process.proc_lp.cadzow</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="nmrglue.process.proc_lp.lp_1d.html"
+                                  title="next chapter">nmrglue.process.proc_lp.lp_1d</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../../_sources/reference/generated/nmrglue.process.proc_lp.lp_model.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="nmrglue-process-proc-lp-lp-model">
+<h1>nmrglue.process.proc_lp.lp_model<a class="headerlink" href="#nmrglue-process-proc-lp-lp-model" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="nmrglue.process.proc_lp.lp_model">
+<tt class="descclassname">nmrglue.process.proc_lp.</tt><tt class="descname">lp_model</tt><big>(</big><em>trace</em>, <em>slice=slice(None</em>, <em>None</em>, <em>None)</em>, <em>order=8</em>, <em>mode='f'</em>, <em>mirror=None</em>, <em>method='svd'</em>, <em>full=False</em><big>)</big><a class="headerlink" href="#nmrglue.process.proc_lp.lp_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use Linear Prediction to model a 1D NMR signal.</p>
+<p>Parameter:</p>
+<ul>
+<li><p class="first">trace  1D trace of data, the FID.</p>
+</li>
+<li><p class="first">slice  slice object selecting region of slice to use in LP equation.</p>
+</li>
+<li><p class="first">order  Prediction order (Number of LP coefficients)</p>
+</li>
+<li><dl class="first docutils">
+<dt>mirror None to process trace as provided, &#8216;0&#8217; or &#8216;180&#8217; forms a mirror </dt>
+<dd><p class="first last">image of the sliced trace to calculate the LP filter.  &#8216;0&#8217; should
+be used with data with no delay, &#8216;180&#8217; with data with an initial 
+half-point delay.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">mode   Mode to generate LP filter (f-forward,b-backward,</p>
+</li>
+<li><dl class="first docutils">
+<dt>method Method to use to calculate the LP filter, choose from</dt>
+<dd><p class="first last">&#8216;svd&#8217;,&#8217;qr&#8217;,&#8217;choleskey&#8217;,&#8217;hsvd&#8217;.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>full    Set to True to return amplitudes and phases calculated</dt>
+<dd><p class="first last">by performing a least squares fitting. False returns only
+the damping (relaxation) factors and signal frequencies</p>
+</dd>
+</dl>
+</li>
+</ul>
+<dl class="docutils">
+<dt>Returns: when full==False:  (damp,freq)</dt>
+<dd>when full==True:   (damp,freq,amp,phase)</dd>
+</dl>
+<ul class="simple">
+<li>damp    List of damping factors</li>
+<li>freq    List of frequencies</li>
+<li>amp     List of amplitudes</li>
+<li>phase   List of phases</li>
+</ul>
+<p>Notes:</p>
+<p>When backward LP is used the signal roots are reflected before calculating
+model parameters.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.proc_lp.lp_1d.html" title="nmrglue.process.proc_lp.lp_1d"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.proc_lp.cadzow.html" title="nmrglue.process.proc_lp.cadzow"
+             >previous</a> |</li>
+        <li><a href="../../index.html">nmrglue v0.1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../proc_lp.html" >nmrglue.proc_lp</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Apr 05, 2011.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

@@ -17,9 +17,9 @@ def recnames(dnames,ls_classes,Ms):
     
     Parameters:
 
-    dnames      List of dimension names.
-    ls_classes  List of lineshape classes.
-    Ms          List of lineshape lengths.
+    * dnames      List of dimension names.
+    * ls_classes  List of lineshape classes.
+    * Ms          List of lineshape lengths.
     
     Returns list of records array names (strings).
     
@@ -37,9 +37,11 @@ def find_limits(pts):
     Find the limits which outline the provided list of points 
     
     Parameters:
+
     * pts   List of points [(z0,y0,x0),(z1,y1,x1),...]
 
-    Returns (min,max) ie 
+    Returns (min,max):
+
     * min   array of minimum indices array([zmin,ymin,xmin]
     * max   array of maximum indices array([zmin,ymin,xmin]
     
@@ -52,6 +54,7 @@ def limits2slice(limits):
     Create a set of slice objects given list of min,max limits 
     
     Parameters:
+    
     * limits    Tuple of minimum and maximum indices
 
     Returns: list of slices which will return points between limits.
@@ -135,7 +138,6 @@ def linesh2pick(guesses,amp_guesses):
     * amp_guesses   P-length list of amplitudes.
 
     Return: (centers,linewidths,amplitudes)
-
 
     * centers       Array of estimated peak locations, shape (n_peaks,ndim).
     * linewidths    Array of estimated peak linewidths, shape (n_peaks,ndim).
@@ -442,26 +444,26 @@ class ndwindow(object):
     * size  Size of array to generate tuples of slices from.
     * wsize Size of the area to select from array (sub-array maximum size).
     
-    Example
+    Example::
 
-    >>> a = np.arange(12).reshape(3,4)
-    >>> for s in ndwindow(a.shape,(3,3))
-    ...     print a[s]
-    [[0 1]
-     [4 5]]
-    [[0 1 2]
-     [4 5 6]]
-    [[1 2 3]
-     [5 6 7]]
-    [[2 3]
-     [6 7]]
-    [[0 1]
-     [4 5]
-     [8 9]]
-    [[ 0  1  2]
-     [ 4  5  6]
-     [ 8  9 10]]
-    etc.
+        >>> a = np.arange(12).reshape(3,4)
+        >>> for s in ndwindow(a.shape,(3,3))
+        ...     print a[s]
+        [[0 1]
+         [4 5]]
+        [[0 1 2]
+         [4 5 6]]
+        [[1 2 3]
+         [5 6 7]]
+        [[2 3]
+         [6 7]]
+        [[0 1]
+         [4 5]
+         [8 9]]
+        [[ 0  1  2]
+         [ 4  5  6]
+         [ 8  9 10]]
+        ...
 
     """
 
@@ -526,23 +528,23 @@ class ndwindow_inside(object):
     * size  Size of array to generate tuples of slices from.
     * wsize Size of the area to select from array (widow size).
 
-    Example:
+    Example::
     
-    >>> a = np.arange(9).reshape(3,3)
-    >>> for s in ndwindow_inside(a.shape,(2,2):
-    ...     print a[s]
-    [[0 1]
-     [4 5]]
-    [[1 2]
-     [5 6]]
-    [[2 3]
-     [6 7]]
-    [[4 5]
-     [8 9]]
-    [[ 5  6]
-     [ 9 10]]
-    [[ 6  7]
-     [10 11]]
+        >>> a = np.arange(9).reshape(3,3)
+        >>> for s in ndwindow_inside(a.shape,(2,2):
+        ...     print a[s]
+        [[0 1]
+         [4 5]]
+        [[1 2]
+         [5 6]]
+        [[2 3]
+         [6 7]]
+        [[4 5]
+         [8 9]]
+        [[ 5  6]
+         [ 9 10]]
+        [[ 6  7]
+         [10 11]]
 
     """
     def __init__(self,shape,wsize):

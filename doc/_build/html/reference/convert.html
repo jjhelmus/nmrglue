@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nmrglue.convert &mdash; nmrglue v0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="nmrglue v0.1 documentation" href="../index.html" />
+    <link rel="up" title="Reference Guide" href="index.html" />
+    <link rel="next" title="nmrglue.fileiobase" href="fileiobase.html" />
+    <link rel="prev" title="nmrglue.bruker" href="bruker.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="fileiobase.html" title="nmrglue.fileiobase"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="bruker.html" title="nmrglue.bruker"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">nmrglue v0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Reference Guide</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">nmrglue.convert</a><ul>
+<li><a class="reference external" href="#high-level-classes">High-Level Classes</a></li>
+<li><a class="reference external" href="#low-level-classes">Low-Level Classes</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="bruker.html"
+                                  title="previous chapter">nmrglue.bruker</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="fileiobase.html"
+                                  title="next chapter">nmrglue.fileiobase</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/reference/convert.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-nmrglue.fileio.convert">
+<h1>nmrglue.convert<a class="headerlink" href="#module-nmrglue.fileio.convert" title="Permalink to this headline">¶</a></h1>
+<p>Functions to convert between NMR file formats</p>
+<p>This modules is imported as nmrglue.convert and can be called as such.</p>
+<div class="section" id="high-level-classes">
+<h2>High-Level Classes<a class="headerlink" href="#high-level-classes" title="Permalink to this headline">¶</a></h2>
+<p>These are the classes most users will use from the convert module.</p>
+<dl class="class">
+<dt id="nmrglue.fileio.convert.converter">
+<em class="property">class </em><tt class="descclassname">nmrglue.fileio.convert.</tt><tt class="descname">converter</tt><a class="headerlink" href="#nmrglue.fileio.convert.converter" title="Permalink to this definition">¶</a></dt>
+<dd><p>The converter object allowes conversion between NMR file formats</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">vdic</span><span class="p">,</span><span class="n">vdata</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">varian</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;varian_dir&quot;</span><span class="p">)</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">convert</span><span class="o">.</span><span class="n">converter</span><span class="p">()</span>
+<span class="n">C</span><span class="o">.</span><span class="n">from_varian</span><span class="p">(</span><span class="n">vdic</span><span class="p">,</span><span class="n">vdata</span><span class="p">)</span>
+<span class="n">pdic</span><span class="p">,</span><span class="n">pdata</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">to_pipe</span><span class="p">()</span>
+<span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;test.fid&quot;</span><span class="p">,</span><span class="n">pdic</span><span class="p">,</span><span class="n">pdata</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="nmrglue.fileio.convert.converter.from_bruker">
+<tt class="descname">from_bruker</tt><big>(</big><em>dic</em>, <em>data</em>, <em>udic=None</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.convert.converter.from_bruker" title="Permalink to this definition">¶</a></dt>
+<dd>Load data and dictionary from Bruker ser/fid file</dd></dl>
+
+<dl class="method">
+<dt id="nmrglue.fileio.convert.converter.from_pipe">
+<tt class="descname">from_pipe</tt><big>(</big><em>dic</em>, <em>data</em>, <em>udic=None</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.convert.converter.from_pipe" title="Permalink to this definition">¶</a></dt>
+<dd>Load data and dictionary from NMRPipe pair</dd></dl>
+
+<dl class="method">
+<dt id="nmrglue.fileio.convert.converter.from_sparky">
+<tt class="descname">from_sparky</tt><big>(</big><em>dic</em>, <em>data</em>, <em>udic=None</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.convert.converter.from_sparky" title="Permalink to this definition">¶</a></dt>
+<dd>Load data and dictionary from Sparky pair</dd></dl>
+
+<dl class="method">
+<dt id="nmrglue.fileio.convert.converter.from_universal">
+<tt class="descname">from_universal</tt><big>(</big><em>dic</em>, <em>data</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.convert.converter.from_universal" title="Permalink to this definition">¶</a></dt>
+<dd>load data from universal dic,data pair</dd></dl>
+
+<dl class="method">
+<dt id="nmrglue.fileio.convert.converter.from_varian">
+<tt class="descname">from_varian</tt><big>(</big><em>dic</em>, <em>data</em>, <em>udic=None</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.convert.converter.from_varian" title="Permalink to this definition">¶</a></dt>
+<dd><p>load data and dictionary from varian fid pair</p>
+<p>Parameter:</p>
+<ul class="simple">
+<li>dic     Varian dictionary</li>
+<li>data    Varian data</li>
+<li>udic    Universal dictionary. If not provided is guessed.</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="nmrglue.fileio.convert.converter.to_bruker">
+<tt class="descname">to_bruker</tt><big>(</big><big>)</big><a class="headerlink" href="#nmrglue.fileio.convert.converter.to_bruker" title="Permalink to this definition">¶</a></dt>
+<dd>Return Bruker dic,data pair</dd></dl>
+
+<dl class="method">
+<dt id="nmrglue.fileio.convert.converter.to_pipe">
+<tt class="descname">to_pipe</tt><big>(</big><em>datetimeobj=datetime.datetime(2011</em>, <em>4</em>, <em>5</em>, <em>11</em>, <em>0</em>, <em>26</em>, <em>282664)</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.convert.converter.to_pipe" title="Permalink to this definition">¶</a></dt>
+<dd>Return NMRPipe dic,data pair</dd></dl>
+
+<dl class="method">
+<dt id="nmrglue.fileio.convert.converter.to_sparky">
+<tt class="descname">to_sparky</tt><big>(</big><em>datetimeobj=datetime.datetime(2011</em>, <em>4</em>, <em>5</em>, <em>11</em>, <em>0</em>, <em>26</em>, <em>282668)</em>, <em>user='user'</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.convert.converter.to_sparky" title="Permalink to this definition">¶</a></dt>
+<dd>Return sparky dic,data pair</dd></dl>
+
+<dl class="method">
+<dt id="nmrglue.fileio.convert.converter.to_universal">
+<tt class="descname">to_universal</tt><big>(</big><big>)</big><a class="headerlink" href="#nmrglue.fileio.convert.converter.to_universal" title="Permalink to this definition">¶</a></dt>
+<dd>Return universal dictionary and original data</dd></dl>
+
+<dl class="method">
+<dt id="nmrglue.fileio.convert.converter.to_varian">
+<tt class="descname">to_varian</tt><big>(</big><big>)</big><a class="headerlink" href="#nmrglue.fileio.convert.converter.to_varian" title="Permalink to this definition">¶</a></dt>
+<dd>Return Varian dic,data pair</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="low-level-classes">
+<h2>Low-Level Classes<a class="headerlink" href="#low-level-classes" title="Permalink to this headline">¶</a></h2>
+<p>These classes are typically not used directly by users.  They are used by
+high level functions.  Developers and user who want fine control over file
+conversion will be interested in these functions.</p>
+<dl class="class">
+<dt id="nmrglue.fileio.convert.udata_nd">
+<em class="property">class </em><tt class="descclassname">nmrglue.fileio.convert.</tt><tt class="descname">udata_nd</tt><big>(</big><em>edata</em>, <em>iproc</em>, <em>oproc</em>, <em>odtype</em>, <em>order=None</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.convert.udata_nd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrap other fileiobase.data_nd derived objects with input/output conversion
+when slices are requested.</p>
+<ul class="simple">
+<li>slicing operations return ndarray objects.</li>
+<li>can iterate over with expected results.</li>
+<li>transpose and swapaxes methods create a new objects with correct axes
+ordering.</li>
+<li>has ndim, shape, and dtype attributes.</li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="fileiobase.html" title="nmrglue.fileiobase"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="bruker.html" title="nmrglue.bruker"
+             >previous</a> |</li>
+        <li><a href="../index.html">nmrglue v0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Reference Guide</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Apr 05, 2011.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

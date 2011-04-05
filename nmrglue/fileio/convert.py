@@ -19,7 +19,7 @@ class converter(object):
 
     Example::
 
-        vdic,vdata = ng.varian.read("fid")
+        vdic,vdata = ng.varian.read("varian_dir")
         C = ng.convert.converter()
         C.from_varian(vdic,vdata)
         pdic,pdata = C.to_pipe()

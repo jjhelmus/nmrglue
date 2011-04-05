@@ -1,0 +1,6 @@
+nmrglue.process.proc_base.append_imag
+=====================================
+
+.. currentmodule:: nmrglue.process.proc_base
+
+.. autofunction:: append_imag

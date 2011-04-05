@@ -5,7 +5,7 @@ These functions try to mimic NMRPipe processing functions but many differences
 exist between to two implementations.  In particular when using this module:
 
  * hdr=True over-rides all values in the calling function. 
- * A di flag is not used, rather the di functions should be used to delete
+ * A di flag is not used, rather the di function should be used to delete
    the imaginary portion of a spectra.
  * x1,xn and other limits must be expressed in points.  spec2pnt or other unit 
    conversion functions should be used before calling the processing function 

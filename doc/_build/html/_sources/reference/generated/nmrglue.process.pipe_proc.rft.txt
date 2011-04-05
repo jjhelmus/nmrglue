@@ -1,0 +1,6 @@
+nmrglue.process.pipe_proc.rft
+=============================
+
+.. currentmodule:: nmrglue.process.pipe_proc
+
+.. autofunction:: rft

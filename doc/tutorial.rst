@@ -9,7 +9,7 @@ Introduction
 
 nmrglue is a python module for reading, writing, and interacting with the 
 spectral data stored in a number of common NMR data formats.  This tutorial 
-offers a quick overview of some of the features of nmrglue.  A basic 
+provides an overview of some of the features of nmrglue.  A basic 
 understanding of python is assumed which can be obtained by reading some
 of the `python documentation <http://docs.python.org/>`_.  The examples in 
 this tutorial can be run interactively from the python shell but the use of an
@@ -26,27 +26,26 @@ Reading NMR files
 nmrglue can read and write to a number of common NMR file formats.  To see 
 how simple this can be let's read a 2D NMRPipe file.
 
-
     >>> import nmrglue as ng
     >>> dic,data = ng.pipe.read("test.fid")
 
 Here we have imported the ``nmrglue`` module and opened the NMRPipe file 
 ``test.fid``.  nmrglue contains a number of modules for reading and writing NMR
 files and all of these modules have a ``read`` function which opens a file
-or directory containing NMR data reads in information into memory and returns 
-a 2-tuple containing a python dictionary with file and spectral parameters and 
-a `numpy <http://numpy.scipy.org/>`_ array object containing the numeric 
+or directory containing NMR data, reads in any necessary information,and loads 
+the spectral data into memory.  The ``read`` function returns a 2-tuple 
+containing a python dictionary with file and spectral parameters and a 
+`numpy <http://numpy.scipy.org/>`_ array object containing the numeric 
 spectral data.  Currently the following file formats are supported by nmrglue
 with the associated module:
 
 ======  ========================
 Module  File Format
 ======  ========================
-bruker  Bruker 
-glue    nmrglue univseral format
+bruker  Bruker
 pipe    NMRPipe
 sparky  Sparky
-varian  Varian
+varian  Varian/Agilent
 ======  ========================
 
 Examining the data object in more detail:
@@ -64,14 +63,15 @@ takes care of converting the raw data in the file into an array of appropiate
 type, dimensionality, and quadrature.  For complex data the last axis, 
 typically the direct dimension, is convert to a complex data type.  The other
 axes are not converted. 
-In some cases some of the information needed to represent the spectral data as
-a well formed numpy array is not stored in the file or the values determined 
+In some cases not all of the information needed to represent the spectral data 
+as a well formed numpy array is not stored in the file or the values determined 
 automatically are incorrect. In many of these cases this information can be 
-specified directly in the function call.  For example the ``read_fid`` 
-function in the ``varian`` module cannot distinguish between a 2D Varian 
-binary file and a 3D file and by default will open the file as a 2D array.  
-If the data is three dimensional the lenZ and lenY parameter should be 
-provided.  
+specified directly in the function call.  
+
+For example the ``read`` function in the ``varian`` module sometimes cannot 
+determine the shape or fid ordering of 3D files correctly.  These parameters 
+can be explicitly provided in the function call with the shape and torder
+keywords. See :ref:`varian_module` for details. 
 
 Universal dictionaries
 ======================
@@ -89,13 +89,13 @@ python dictionary:
 Here we see NMRPipe files stores the spectal width of the direct dimension 
 (50000.0 Hz) and the name of the indirect dimension (15N) as well as a number 
 of additional parameter.  
-Some file formats describe well the spectral data listing a large number of 
-parameters, other only a few.  Also the different format express the parameters
-in different units and under different names.  For user who are  familar with 
-the specific file format this is not a problem, the dictionary allows direct 
-access to these parameters.  If a more uniform listing of spectal parameter is 
-desired the ``guess_udic`` function can be used to create a 'universal' 
-dictionary.
+Some file formats describe well the spectral data, listing a large number of 
+parameters, other only a few.  In addition, the different format express the 
+parameters in different units and under different names.  For user who are 
+familar with the specific file format or working with only a single file type 
+this is not a problem, the dictionary allows direct access to these parameters.
+If a more uniform listing of spectal parameter is desired the ``guess_udic`` 
+function can be used to create a 'universal' dictionary.
 
     >>> udic = ng.pipe.guess_udic(dic,data)
     >>> udic.keys()
@@ -103,9 +103,9 @@ dictionary.
     >>>
 
 This 'universal' dictionary of spectral parameter contains only the most 
-fundamental of spectral parameters, the dimensionality of the data and a 
-dictionary of parameters for each axis numbered according to the data array
-ordering (the direct dimension is the highest numbered dimension).  The axis
+fundamental parameters, the dimensionality of the data and a dictionary of 
+parameters for each axis numbered according to the data array ordering 
+(the direct dimension is the highest numbered dimension).  The axis
 dictionaries contain the following keys:
 
 ========    ======================================================
@@ -113,18 +113,17 @@ Key         Description
 ========    ======================================================
 car         Carrier frequency in Hz.
 complex     True for complex data, False for magnitude data.
-encoding    Why data is encoded, 'states', 'tppi', 'direct', etc.
+encoding    How the data is encoded, 'states', 'tppi', etc.
 freq        True for frequency domain data, False for time domain.
 label       String descriping the axis name.
 obs         Observation frequency in MHz.
-size        Dimension size (R|I for highest axis, R+I for others)
+size        Dimension size (R|I for last axis, R+I for others)
 sw          Spectral width in Hz.
 time        True for time domain data, False got frequency domain.
 ========    ======================================================
 
 
 For our 2D NMRPipe file these parameter for the indirect dimension are:
-
 
     >>> for k,v in udic[0].iteritems(): print k,v
     ...
@@ -156,8 +155,7 @@ information about the data which was contained in the original file in order
 to provide a common description of NMR data.  Despite the universal 
 dictionaries limited information, together with the data array it is sufficient
 for most NMR tasks.  We will see later that the universal dictionary allows
-for conversions between file formats and serves as the underpinnings for a
-new file format.
+for conversions between file formats.
 
 
 Manipulating NMR data
@@ -167,10 +165,9 @@ Let us return again to the data array.  By providing direct access to the
 spectral data as a numpy array we can examine and manipulate this data using
 a number of simple methods as well as a number of functions.  Since
 the ``read`` function moves the data into memory all this data manipulation
-is done without effecting the original data file. Some simple examples follow.
+is done without effecting the original data file.
 
 We can use slices to examine single values in the array:
-
 
     >>> print data[0,0]
     (42.6003+139.717j)
@@ -256,8 +253,8 @@ functions.
 Writing NMR files
 =================
 
-Now that we have modified the original NMR data let's write our modification to
-a file.  nmrglue again makes this simple:
+Now that we have modified the original NMR data we can write our modification 
+to a file.  nmrglue again makes this simple:
 
     >>> ng.pipe.write("new_data.fid",dic,data)
 
@@ -265,7 +262,6 @@ Reading in both the original data and this new data we can see that they are
 different:
 
     >>> new_dic,new_data = ng.pipe.read("new_data.fid")
-    >>> ng.misc.isdatasimilar(orig_data,new_data,True)
     >>> ng.misc.isdatasimilar(orig_data,new_data)
     False
     >>> orig_data[0,0]
@@ -294,9 +290,9 @@ But this check can be by-passed with the overwrite parameter:
 The unit_conversion object
 ==========================
 
-In an eariler section we used the array index values for slicing the numpy 
-array.  For reference your data in more common NMR units nmrglue provides
-the ``unit_coversion`` object.  Use the ``make_uc`` function to create a 
+Eariler we used the array index values for slicing the numpy array.  For 
+reference your data in more common NMR units nmrglue provides the 
+``unit_coversion`` object.  Use the ``make_uc`` function to create a 
 ``unit_conversion`` object:
 
     >>> dic,data = ng.pipe.read("test.ft2")
@@ -359,17 +355,17 @@ Additional examples showing how to use nmrglue to convert between NMR file
 formats can be found in the :ref:`convert_examples`.
 
 
-Low memory reading of files
-===========================
+Low memory reading/writing of files
+===================================
 
 Up to this point we have read NMR data from files using the ``read`` function.
 This function reads the spectral data from a NMR file into the computers 
 memory.  For small data sets this is fine, modern computer have sufficient 
-RAM to store complete 1D and 2D NMR data sets and even a few copies of the
+RAM to store complete 1D and 2D NMR data sets and a few copies of the
 data while processing.  For 3D and larger dimensionality data set this is often
 not desired.  Reading in an entire 3D data set is not required when only a 
 small portion must be examined for viewing or processing.  With this in mind
-nmrglue provides method to read only portions of NMR data from files when
+nmrglue provides methods to read only a portions of NMR data from files when
 it is required.  This is accomplished by creating a new object which look
 very similar to numpy array but does not load data into memory.  
 Rather when a particular slice is requested the the object opens the 
@@ -378,10 +374,9 @@ array with the data.  In addition these objects have tranpose and swapaxes
 method and can be iterated over just as numpy arrays but without using 
 large amounts of memory.  The only limitation of these objects is that they 
 do not support assignment, so a slice must be taken before changing the value
-of data.  The fileIO modules all have some form of ``read_lowmem`` functions
-which return these low-memory objects.  For example reading the 2D sparky
-file we created earlier:
-
+of data.  The fileio sub-modules all have some form of ``read_lowmem`` 
+function which return these low-memory objects.  For example reading the 2D 
+sparky file we created earlier:
 
     >>> dic,data = ng.sparky.read_lowmem("sparky_file.ucsf")
     >>> type(data)
@@ -410,6 +405,10 @@ The data can be transposed as a numpy array:
 These low memory usage objects can be written to disk or used in to 
 load a ``conversion`` object just as if they were normal numpy arrays.
 
+Similar when large data sets are to be written to disk, it often does 
+not make sense to write the entire data set at once.  For this the 
+``write_lowmem`` functions in the fileIO submodules provide methods for
+trace-by-trace or similar writing.
 
 
 Processing data
@@ -420,9 +419,10 @@ algebra and signal processing functions can be applied to the data.  The
 functions in the `numpy <http://numpy.scipy.org/>`_
 and `scipy <http://www.scipy.org/>`_ modules offer a number of processing
 functions users might find useful.  nmrglue provides a number of common
-NMR functions in the :ref:`proc_base` module and baseline related functions
-in :ref:`proc_bl`. For example we perform some simple processing on our
-2D NMRPipe file (output supressed):
+NMR functions in the :ref:`proc_base` module, baseline related functions
+in :ref:`proc_bl`, and linear prediction functions in the :ref:`proc_lp`
+module.  For example we perform some simple processing on our 2D NMRPipe file 
+(output supressed):
 
     >>> dic,data = ng.pipe.read("test.fid")
     >>> ng.proc_base.ft(data)
@@ -430,13 +430,13 @@ in :ref:`proc_bl`. For example we perform some simple processing on our
     >>> ng.proc_base.neg_left(data)
     >>> ng.proc_bl.sol_sine(data)
 
-These functions process only NMR data, they do not
-update the spectral parameter associated with the NMR data.  Because these
+These functions process only the data, they do not
+update the spectral parameter associated with the data.  Because these
 values are key when examining NMR data we want functions which take into 
 account these parameter while processing.  nmrglue provides the 
 :ref:`pipe_proc` module for processing NMRPipe data while updating the
 spectral properties simulatanously.  Additional modules for processing 
-other file format are in the works.  Using ``pipe_proc`` is similar to
+other file format are being developed.  Using ``pipe_proc`` is similar to
 using NMRPipe itself.  For example to process the sample 2D NMRPipe file:
 
     >>> dic,data = ng.pipe.read("test.fid")
@@ -457,16 +457,17 @@ This processed file can then be written out
     >>> ng.pipe.write("2d_pipe.ft2",dic,data,overwrite=True)
 
 In the example above the entire data set was processed in memory.  All the
-processing functions were applied to a set of data stores in the computers
+processing functions were applied to a set of data stored in the computers
 RAM after which the entire 2D data set was written to disk.  For 1D and 2D
-data sets this is fine, but sd mentioned earlier many 3D and larger data sets
+data sets this is fine, but as mentioned earlier many 3D and larger data sets
 cannot be processed in this manner.  For a 3D file what is desired is that
 each 2D XY plane be read, processed and saved.  Then the ZX planes are read
 from this new file, the Z plane processed and these planes saved into the 
 final file.  In nmrglue this can be accomplished for NMRPipe files using the
 :ref:`iter3D object <pipe_iter3D>`.  Currently no other file format allows
-such processing.  An example of processing a 3D NMRPipe file using a 
-``iter3D`` object can be found in :ref:`process_pipe_3d`.
+such processing but development of these is planned.  
+An example of processing a 3D NMRPipe file using a ``iter3D`` object can be 
+found in :ref:`process_pipe_3d`.
 
 Additonal examples showing how to use nmrglue to process NMR data can be
 found in the :ref:`processing_examples`.
@@ -523,10 +524,14 @@ Additional resources
 ====================
 
 Detailed information about each module in nmrglue as well as the functions 
-provided by that module can be found in the nmrglue :ref:`reference_guide`.  In
-addition a number of :ref:`examples-index` using nmrglue to interact with 
-NMR data are avilable. Finally documentation for the following modules
-might be useful to users and developers of nmrglue:
+provided by that module can be found in the nmrglue :ref:`reference_guide` or
+by using Python build in help system:
+
+    >>> help(ng.pipe.read)
+    
+A number of :ref:`examples-index` using nmrglue to interact with 
+NMR data are avilable. Finally documentation for the following packages
+might be useful to users of nmrglue:
 
 * `numpy <http://numpy.scipy.org/>`_ 
 * `scipy <http://www.scipy.org/>`_ 

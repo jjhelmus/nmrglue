@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>convert example: bruker2pipe_3d &mdash; nmrglue v0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="nmrglue v0.1 documentation" href="../index.html" />
+    <link rel="up" title="Examples" href="index.html" />
+    <link rel="next" title="convert example: pipe2sparky_2d" href="pipe2sparky_2d.html" />
+    <link rel="prev" title="convert example: bruker2pipe_2d" href="bruker2pipe_2d.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="pipe2sparky_2d.html" title="convert example: pipe2sparky_2d"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="bruker2pipe_2d.html" title="convert example: bruker2pipe_2d"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">nmrglue v0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="bruker2pipe_2d.html"
+                                  title="previous chapter">convert example: bruker2pipe_2d</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="pipe2sparky_2d.html"
+                                  title="next chapter">convert example: pipe2sparky_2d</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/examples/bruker2pipe_3d.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="convert-example-bruker2pipe-3d">
+<span id="bruker2pipe-3d"></span><h1>convert example: bruker2pipe_3d<a class="headerlink" href="#convert-example-bruker2pipe-3d" title="Permalink to this headline">¶</a></h1>
+<p>This example shows how to use nmrglue to convert between the Bruker and NMRPipe
+file format for a 3D data set.  The last block of code lists the differences
+between this conversion and one performed with bruk2pipe. Note that the
+direct dimension digital filter is not removed in either conversion.</p>
+<p>[<a class="reference external" href="el/convert/bruker2pipe_3d.py">source code</a>]</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#! /usr/bin/env python</span>
+
+<span class="kn">import</span> <span class="nn">nmrglue</span> <span class="kn">as</span> <span class="nn">ng</span>
+
+<span class="c"># read in the varian data (any of the follow lines will work)</span>
+<span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">ng</span><span class="o">.</span><span class="n">bruker</span><span class="o">.</span><span class="n">read_lowmem</span><span class="p">(</span><span class="s">&quot;../common_data/3d_bruker&quot;</span><span class="p">)</span>
+
+<span class="c"># Set the parameters (many of these can be found in the procpar file</span>
+<span class="n">u</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">bruker</span><span class="o">.</span><span class="n">guess_udic</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
+<span class="c"># Direct Dimension</span>
+<span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s">&#39;size&#39;</span><span class="p">]</span>     <span class="o">=</span> <span class="mi">768</span>
+<span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s">&#39;complex&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="bp">True</span>
+<span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s">&#39;encoding&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;direct&#39;</span>
+<span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s">&#39;sw&#39;</span><span class="p">]</span>       <span class="o">=</span> <span class="mf">11061.947</span>
+<span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s">&#39;obs&#39;</span><span class="p">]</span>      <span class="o">=</span> <span class="mf">800.134</span>
+<span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s">&#39;car&#39;</span><span class="p">]</span>      <span class="o">=</span> <span class="mf">4.784</span><span class="o">*</span><span class="mf">800.134</span>
+<span class="n">u</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="s">&#39;label&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="s">&#39;1H&#39;</span>
+
+<span class="c"># First indirect dimension</span>
+<span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;size&#39;</span><span class="p">]</span>     <span class="o">=</span> <span class="mi">128</span>
+<span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;complex&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="bp">True</span>
+<span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;encoding&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;states&#39;</span>
+<span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;sw&#39;</span><span class="p">]</span>       <span class="o">=</span> <span class="mf">2500.000</span>
+<span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;obs&#39;</span><span class="p">]</span>      <span class="o">=</span> <span class="mf">81.086</span>
+<span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;car&#39;</span><span class="p">]</span>      <span class="o">=</span> <span class="mf">119.787</span><span class="o">*</span><span class="mf">81.086</span>
+<span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;label&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="s">&#39;15N&#39;</span>
+
+<span class="c"># Second indirect dimension</span>
+<span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;size&#39;</span><span class="p">]</span>     <span class="o">=</span> <span class="mi">116</span>
+<span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;complex&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="bp">True</span>
+<span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;encoding&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;states&#39;</span>
+<span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;sw&#39;</span><span class="p">]</span>       <span class="o">=</span> <span class="mf">5555.556</span>
+<span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;obs&#39;</span><span class="p">]</span>      <span class="o">=</span> <span class="mf">201.204</span>
+<span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;car&#39;</span><span class="p">]</span>      <span class="o">=</span> <span class="mf">55.743</span><span class="o">*</span><span class="mf">201.204</span>
+<span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;label&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="s">&#39;13C&#39;</span>
+
+
+<span class="c"># create the converter object and initilize with varian data</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">convert</span><span class="o">.</span><span class="n">converter</span><span class="p">()</span>
+<span class="n">C</span><span class="o">.</span><span class="n">from_bruker</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">u</span><span class="p">)</span>
+
+<span class="c"># create pipe data and then write it out</span>
+<span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;./data/3d_pipe</span><span class="si">%03d</span><span class="s">.fid&quot;</span><span class="p">,</span><span class="o">*</span><span class="n">C</span><span class="o">.</span><span class="n">to_pipe</span><span class="p">(),</span><span class="n">overwrite</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c"># check the conversion against NMRPipe (only check the 5th slice of 3D)</span>
+<span class="k">print</span> <span class="s">&quot;Conversion complete, listing differences between files:&quot;</span>
+<span class="n">pdic</span><span class="p">,</span><span class="n">pdata</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read_lowmem</span><span class="p">(</span><span class="s">&quot;./data/3d_pipe</span><span class="si">%03d</span><span class="s">.fid&quot;</span><span class="p">)</span>
+<span class="n">pdic2</span><span class="p">,</span><span class="n">pdata2</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read_lowmem</span><span class="p">(</span><span class="s">&quot;../common_data/3d_bruker/fid/test</span><span class="si">%03d</span><span class="s">.fid&quot;</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">ng</span><span class="o">.</span><span class="n">misc</span><span class="o">.</span><span class="n">pair_similar</span><span class="p">(</span><span class="n">pdic</span><span class="p">,</span><span class="n">pdata</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span><span class="n">pdic2</span><span class="p">,</span><span class="n">pdata2</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span><span class="n">verb</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pipe2sparky_2d.html" title="convert example: pipe2sparky_2d"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="bruker2pipe_2d.html" title="convert example: bruker2pipe_2d"
+             >previous</a> |</li>
+        <li><a href="../index.html">nmrglue v0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Apr 05, 2011.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

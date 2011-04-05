@@ -1,0 +1,564 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nmrglue.bruker &mdash; nmrglue v0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="nmrglue v0.1 documentation" href="../index.html" />
+    <link rel="up" title="Reference Guide" href="index.html" />
+    <link rel="next" title="nmrglue.convert" href="convert.html" />
+    <link rel="prev" title="Reference Guide" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="convert.html" title="nmrglue.convert"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Reference Guide"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">nmrglue v0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Reference Guide</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">nmrglue.bruker</a><ul>
+<li><a class="reference external" href="#high-level-functions">High-Level Functions</a></li>
+<li><a class="reference external" href="#low-level-functions">Low-Level Functions</a></li>
+<li><a class="reference external" href="#low-level-classes">Low-Level Classes</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="index.html"
+                                  title="previous chapter">Reference Guide</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="convert.html"
+                                  title="next chapter">nmrglue.convert</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/reference/bruker.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-nmrglue.fileio.bruker">
+<h1>nmrglue.bruker<a class="headerlink" href="#module-nmrglue.fileio.bruker" title="Permalink to this headline">¶</a></h1>
+<p>Functions for reading and writing Bruker binary (ser/fid) files, Bruker 
+JCAMP-DX parameter (acqus) files, and Bruker pulse program (pulseprogram) 
+files.</p>
+<p>Bruker binary files (ser/fid) store data as an array of int32s whose endiness 
+is determinded by the parameter BYTORDA (1 = big endian, 0 = little endian).
+Typically the direct dimension is digitally filtered. The exact method of
+removing this filter is unknown but an approximation is avaliable.</p>
+<p>Bruker JCAMP-DX files (acqus, etc) are text file which are described by the 
+<a class="reference external" href="http://www.jcamp-dx.org/">JCAMP-DX standard</a>.  Bruker parameters are 
+prefixed with a &#8216;$&#8217;.</p>
+<p>Bruker pulseprogram files are text files described in various Bruker manuals.
+Of special important are lines which describe external variable assignments 
+(surrounded by &#8220;&#8216;s), loops (begin with lo), phases (contain ip of dp) or 
+increments (contain id, dd, ipu or dpu).  These lines are parsed when reading
+the file with nmrglue.</p>
+<p>This modules is imported as nmrglue.bruker and can be called as such.</p>
+<div class="section" id="high-level-functions">
+<h2>High-Level Functions<a class="headerlink" href="#high-level-functions" title="Permalink to this headline">¶</a></h2>
+<p>These are the functions that most users will use from the bruker module.</p>
+<dl class="function">
+<dt id="nmrglue.fileio.bruker.read">
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">read</tt><big>(</big><em>dir='.'</em>, <em>bin_file=None</em>, <em>acqus_files=None</em>, <em>pprog_file=None</em>, <em>shape=None</em>, <em>cplex=None</em>, <em>big=None</em>, <em>read_prog=True</em>, <em>read_acqus=True</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read Bruker files in directory</p>
+<p>Parameters:</p>
+<ul>
+<li><p class="first">dir           Directory to read from.</p>
+</li>
+<li><p class="first">bin_file      Filename of binary file in directory.</p>
+</li>
+<li><p class="first">acqus_files   List of filename(s) of acqus parameter files in directory.</p>
+</li>
+<li><p class="first">pprog_file    Filename of pulseprogram in directory.</p>
+</li>
+<li><p class="first">shape         Shape of resulting data (tuple).</p>
+</li>
+<li><p class="first">cplex         Complexity of direct dimention (True/False).</p>
+</li>
+<li><dl class="first docutils">
+<dt>big           Endianness of binary file. Set to True for big-endian, </dt>
+<dd><p class="first last">False for little-endian and None to determind automatically</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">read_prog     True will read pulseprogram file, False prevents reading.</p>
+</li>
+<li><p class="first">read_acqus    True will read acqus file(s), False prevents reading.</p>
+</li>
+</ul>
+<p>Returns: dic,data</p>
+<p>Only the dir parameter must be defined, others will be determined 
+automatically if not specified.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.bruker.read_lowmem">
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">read_lowmem</tt><big>(</big><em>dir='.'</em>, <em>bin_file=None</em>, <em>acqus_files=None</em>, <em>pprog_file=None</em>, <em>shape=None</em>, <em>cplex=None</em>, <em>big=None</em>, <em>read_prog=True</em>, <em>read_acqus=True</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.read_lowmem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read Bruker files using minimal amounts of memory</p>
+<p>Parameters:</p>
+<ul>
+<li><p class="first">dir           Directory to read from.</p>
+</li>
+<li><p class="first">bin_file      Filename of binary file in directory.</p>
+</li>
+<li><p class="first">acqus_files   List of filename(s) of acqus parameter files in directory.</p>
+</li>
+<li><p class="first">pprog_file    Filename of pulseprogram in directory.</p>
+</li>
+<li><p class="first">shape         Shape of resulting data (tuple).</p>
+</li>
+<li><p class="first">cplex         Complexity of direct dimention (True/False).</p>
+</li>
+<li><dl class="first docutils">
+<dt>big           Endianness of binary file. Set to True for big-endian, </dt>
+<dd><p class="first last">False for little-endian and None to determind automatically</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">read_pprog    True will read pulseprogram file, False prevents reading.</p>
+</li>
+<li><p class="first">read_acqus    True will read acqus file(s), False prevents reading.</p>
+</li>
+</ul>
+<p>Returns: dic,data</p>
+<p>Only the dir parameter must be defined, others will be determined 
+automatically if not specified.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.bruker.write">
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">write</tt><big>(</big><em>dir</em>, <em>dic</em>, <em>data</em>, <em>bin_file=None</em>, <em>acqus_files=None</em>, <em>pprog_file=None</em>, <em>overwrite=False</em>, <em>big=None</em>, <em>write_prog=True</em>, <em>write_acqus=True</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write Bruker files</p>
+<p>Parameters:</p>
+<ul>
+<li><p class="first">dir           Directory to write to.</p>
+</li>
+<li><p class="first">dic           dictionary holding acqus_files and pprog_file parameters.</p>
+</li>
+<li><p class="first">data          array of data</p>
+</li>
+<li><p class="first">bin_file      Filename of binary file to write to in directory</p>
+</li>
+<li><p class="first">acqus_files   Filename(s) of acqus files in directory to write to.</p>
+</li>
+<li><p class="first">pprog_file    Filename of pulseprogram in directory.</p>
+</li>
+<li><p class="first">overwrite     True to overwrite files, False to warn.</p>
+</li>
+<li><dl class="first docutils">
+<dt>big           Endiness to write binary data with,</dt>
+<dd><p class="first last">bigendian=True, little=False, determined from dictionary
+if None.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">write_prog    True will write pulseprogram file, False does not.</p>
+</li>
+<li><p class="first">write_acqus   True will write acqus file(s), False does not.</p>
+</li>
+</ul>
+<p>No return.</p>
+<p>If any of bin_file,acqus_files or pprog_file are None the associated 
+file(s) will be determined automatically</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.bruker.write_lowmem">
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">write_lowmem</tt><big>(</big><em>dir</em>, <em>dic</em>, <em>data</em>, <em>bin_file=None</em>, <em>acqus_files=None</em>, <em>pprog_file=None</em>, <em>overwrite=False</em>, <em>big=None</em>, <em>write_prog=True</em>, <em>write_acqus=True</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.write_lowmem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write Bruker files trace by trace (low memory)</p>
+<p>Parameters:</p>
+<ul>
+<li><p class="first">dir           Directory to write to.</p>
+</li>
+<li><p class="first">dic           dictionary holding acqus_files and pprog_file parameters.</p>
+</li>
+<li><p class="first">data          array of data</p>
+</li>
+<li><p class="first">bin_file      Filename of binary file to write to in directory</p>
+</li>
+<li><p class="first">acqus_files   Filename(s) of acqus files in directory to write to.</p>
+</li>
+<li><p class="first">pprog_file    Filename of pulseprogram in directory.</p>
+</li>
+<li><p class="first">overwrite     True to overwrite files, False to warn.</p>
+</li>
+<li><dl class="first docutils">
+<dt>big           Endiness to write binary data with,</dt>
+<dd><p class="first last">bigendian=True, little=False</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">write_prog    True will write pulseprogram file, False does not.</p>
+</li>
+<li><p class="first">write_acqus   True will write acqus file(s), False does not.</p>
+</li>
+</ul>
+<p>No return.</p>
+<p>If any of bin_file,acqus_files or pprog_file are None the associated 
+file(s) will be determined automatically</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.bruker.read_binary">
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">read_binary</tt><big>(</big><em>filename</em>, <em>shape=1</em>, <em>cplex=True</em>, <em>big=True</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.read_binary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read Bruker binary data from file and return dic,data pair</p>
+<p>Parameters:</p>
+<ul>
+<li><p class="first">filename  Filename of Bruker binary file</p>
+</li>
+<li><p class="first">shape     Tuple describing shape of resulting file</p>
+</li>
+<li><p class="first">cplex     Flag indicating if direct dimension is complex</p>
+</li>
+<li><dl class="first docutils">
+<dt>big       Endianness of binary file, True for big-endian, False for </dt>
+<dd><p class="first last">little-endian</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns: dic,data.  dic contains &#8220;FILE_SIZE&#8221; key/value.</p>
+<p>If data cannot be reshaped 1D version of data will be returned</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.bruker.read_binary_lowmem">
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">read_binary_lowmem</tt><big>(</big><em>filename</em>, <em>shape=1</em>, <em>cplex=True</em>, <em>big=True</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.read_binary_lowmem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read Bruker binary data from file using minimal memory.</p>
+<p>Parameters:</p>
+<ul>
+<li><p class="first">filename  Filename of Bruker binary file</p>
+</li>
+<li><p class="first">shape     Tuple describing shape of resulting file</p>
+</li>
+<li><p class="first">cplex     Flag indicating if direct dimension is complex</p>
+</li>
+<li><dl class="first docutils">
+<dt>big       Endianness of binary file, True for big-endian, False for </dt>
+<dd><p class="first last">little-endian</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Returns: dic,data.  dic contains &#8220;FILE_SIZE&#8221; key/value.</p>
+<p>Raises ValueError if shape does not agree with file size</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.bruker.write_binary">
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">write_binary</tt><big>(</big><em>filename</em>, <em>dic</em>, <em>data</em>, <em>overwrite=False</em>, <em>big=True</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.write_binary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write Bruker binary data to file</p>
+<p>Parameters:</p>
+<ul>
+<li><p class="first">filename      Filename to write to.</p>
+</li>
+<li><p class="first">dic           dictionary holding acqus_files and pprog_file parameters.</p>
+</li>
+<li><p class="first">data          array of data</p>
+</li>
+<li><p class="first">overwrite     True to overwrite files, False to warn.</p>
+</li>
+<li><dl class="first docutils">
+<dt>big           Endiness to write binary data with,</dt>
+<dd><p class="first last">bigendian=True, little=False</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>No return.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.bruker.write_binary_lowmem">
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">write_binary_lowmem</tt><big>(</big><em>filename</em>, <em>dic</em>, <em>data</em>, <em>overwrite=False</em>, <em>big=True</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.write_binary_lowmem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write Bruker binary data to file trace by trace (using minimal memory).</p>
+<p>Parameters:</p>
+<ul>
+<li><p class="first">filename      Filename to write to.</p>
+</li>
+<li><p class="first">dic           dictionary holding acqus_files and pprog_file parameters.</p>
+</li>
+<li><p class="first">data          array of data</p>
+</li>
+<li><p class="first">overwrite     True to overwrite files, False to warn.</p>
+</li>
+<li><dl class="first docutils">
+<dt>big           Endiness to write binary data with,</dt>
+<dd><p class="first last">bigendian=True, little=False</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>No return.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.bruker.read_jcamp">
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">read_jcamp</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.read_jcamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a Bruker JCAMP-DX file into a dictionary</p>
+<p>Note: This is not a fully functional JCAMP-DX reader, it is only intended
+to read Bruker acqus (and similar) files</p>
+<p>Creates two special dictionary keys _coreheader and _comments</p>
+<p>Bruker parameter &#8220;$FOO&#8221; are extracted into strings, floats or lists
+and assigned to dic[&#8220;FOO&#8221;]</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.bruker.write_jcamp">
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">write_jcamp</tt><big>(</big><em>dic</em>, <em>filename</em>, <em>overwrite=False</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.write_jcamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a Bruker JCAMP-DX file from a dictionary</p>
+<p>Written file will differ slightly from bruker&#8217;s JCAMP-DX files in that all
+multi-value parameters will be written on multiple lines. Bruker is 
+inconsistent on what is written to a single line and what is not.  
+In addition line breaks may be slightly different but will always be 
+within JCAMP-DX specification.  Finally long floating point values
+may loose precision when writing.</p>
+<p>For example:</p>
+<blockquote>
+<p>##$QS= (0..7)83 83 83 83 83 83 83 22</p>
+<p>will be written as
+##$QS= (0..7)
+83 83 83 83 83 83 83 22</p>
+</blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.bruker.read_pprog">
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">read_pprog</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.read_pprog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a Bruker pulse program (pulseprogram) file for information</p>
+<p>Parameter:</p>
+<ul class="simple">
+<li>filename  name of pulseprogram file to read from</li>
+</ul>
+<p>Returns a dictionary with following keys:</p>
+<ul class="simple">
+<li>var       dictionary of variables assigned in pulseprogram</li>
+<li>incr      list of lists containing increment times</li>
+<li>loop      list of loop multipliers</li>
+<li>phase     list of lists containing phase elements</li>
+<li>ph_extra  list of lists containing comments at the end of phase lines</li>
+</ul>
+<p>The incr,phase and ph_extra lists match up with loop list.  For example 
+incr[0],phase[0] and ph_extra[0] are all increment and phase commands 
+with comments which occur during loop 0 which has loop[0] steps.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.bruker.write_pprog">
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">write_pprog</tt><big>(</big><em>filename</em>, <em>dic</em>, <em>overwrite=False</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.write_pprog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a minimal Bruker pulse program</p>
+<p>DO NOT TRY TO RUN THE RESULTING PULSE PROGRAM</p>
+<p>This pulse program should return the same dictionary when read using 
+read_pprog, nothing else.  The pulse program will be nonsense.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.bruker.remove_digital_filter">
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">remove_digital_filter</tt><big>(</big><em>dic</em>, <em>data</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.remove_digital_filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove the digial filter from Bruker data.</p>
+<p>Use rm_dig_filter to specify decim, dspfvs, and grpdly paraters.</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>dic   Dictionary of Bruker parameters</li>
+<li>data  array of data.</li>
+</ul>
+<p>Returns: array with digital filter removed</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.bruker.guess_udic">
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">guess_udic</tt><big>(</big><em>dic</em>, <em>data</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.guess_udic" title="Permalink to this definition">¶</a></dt>
+<dd>Guess parameters of universal dictionary from dic,data pair</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.bruker.create_dic">
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">create_dic</tt><big>(</big><em>udic</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.create_dic" title="Permalink to this definition">¶</a></dt>
+<dd>Create a bruker dictionary from a universal dictionary</dd></dl>
+
+</div>
+<div class="section" id="low-level-functions">
+<h2>Low-Level Functions<a class="headerlink" href="#low-level-functions" title="Permalink to this headline">¶</a></h2>
+<p>These functions are typically not used directly by users.  They are called by
+high level functions.  Developers and user who want fine control over bruker
+files will be interested in these functions.</p>
+<dl class="function">
+<dt id="nmrglue.fileio.bruker.create_data">
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">create_data</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.create_data" title="Permalink to this definition">¶</a></dt>
+<dd>Create a bruker data array (recast into a complex128 or int32)</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.bruker.create_acqus_dic">
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">create_acqus_dic</tt><big>(</big><em>adic</em>, <em>direct=False</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.create_acqus_dic" title="Permalink to this definition">¶</a></dt>
+<dd>Create a acqus dictionary for an universal axis dictionary.  Set 
+direct=True for direct dimension.</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.bruker.guess_shape">
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">guess_shape</tt><big>(</big><em>dic</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.guess_shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determind data shape and complexity from dictionary</p>
+<p>Returns: (shape,cplex)</p>
+<ul class="simple">
+<li>shape   Tuple representing shape of the binary file.</li>
+<li>cplex   Complexity of direct dimension.</li>
+</ul>
+<p>When dictionary does not contain enough information warning will be issued
+and (1),True is returned</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.bruker.get_data">
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">get_data</tt><big>(</big><em>f</em>, <em>big</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.get_data" title="Permalink to this definition">¶</a></dt>
+<dd>Get binary data from file object with given endiness</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.bruker.put_data">
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">put_data</tt><big>(</big><em>f</em>, <em>data</em>, <em>big=True</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.put_data" title="Permalink to this definition">¶</a></dt>
+<dd>Put data to file object with given endiness</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.bruker.complexify_data">
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">complexify_data</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.complexify_data" title="Permalink to this definition">¶</a></dt>
+<dd>Complexify data packed real,imag data</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.bruker.uncomplexify_data">
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">uncomplexify_data</tt><big>(</big><em>data_in</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.uncomplexify_data" title="Permalink to this definition">¶</a></dt>
+<dd>Uncomplexify data (pack real,imag) into a int32 array</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.bruker.rm_dig_filter">
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">rm_dig_filter</tt><big>(</big><em>data</em>, <em>decim</em>, <em>dspfvs</em>, <em>grpdly=0</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.rm_dig_filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove the digital filter from Bruker data.</p>
+<p>Use remove_digital_filter to find parameters from Bruker dictionary.</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>data      Array of data.</li>
+<li>decim     Decimation rate (Bruker DECIM parameter).</li>
+<li>dspfvs    Firmware version (Bruker DSPFVS parameter).</li>
+<li>grpdly    Group delay, when available.  (Bruker GRPDLY parameter).</li>
+</ul>
+<p>grpdly is not always needed, but when provided decim and dspfvs are 
+ignored.</p>
+<p>Returns: array with digital filter removed.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.bruker.parse_jcamp_line">
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">parse_jcamp_line</tt><big>(</big><em>line</em>, <em>f</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.parse_jcamp_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a single JCAMP-DX line</p>
+<p>Extract the Bruker parameter name and value from a line from a JCAMP-DX
+file.  This may entail reading additional lines from the fileobj f if the 
+parameter value extends over multiple lines.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.bruker.write_jcamp_pair">
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">write_jcamp_pair</tt><big>(</big><em>f</em>, <em>key</em>, <em>value</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.write_jcamp_pair" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write out a line of a JCAMP file</p>
+<p>a &#8216;line&#8217; might actually be more than one line for arrays</p>
+</dd></dl>
+
+</div>
+<div class="section" id="low-level-classes">
+<h2>Low-Level Classes<a class="headerlink" href="#low-level-classes" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nmrglue.fileio.bruker.bruker_nd">
+<em class="property">class </em><tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">bruker_nd</tt><big>(</big><em>filename</em>, <em>fshape</em>, <em>cplex</em>, <em>big</em>, <em>order=None</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.bruker_nd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Emulate a numpy.ndarray objects without loading data into memory for low
+memory reading of Bruker fid/ser files</p>
+<ul class="simple">
+<li>slicing operations return ndarray objects.</li>
+<li>can iterate over with expected results.</li>
+<li>transpose and swapaxes methods create a new objects with correct axes
+ordering.</li>
+<li>has ndim, shape, and dtype attributes.</li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="convert.html" title="nmrglue.convert"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Reference Guide"
+             >previous</a> |</li>
+        <li><a href="../index.html">nmrglue v0.1 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Reference Guide</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Apr 05, 2011.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>
