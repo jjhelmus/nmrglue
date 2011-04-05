@@ -16,8 +16,9 @@ this tutorial can be run interactively from the python shell but the use of an
 enhanced python shell which provides non-blocking control of GUI threads, 
 for example  `ipython <http://ipython.scipy.org>`_, is 
 recommended when trying the examples which use matplotlib.  The sample data
-using in this tutorial is `available <http://XXX>`_ is you wish to follow 
-along with the same files.
+using in this tutorial is 
+`available <http://code.google.com/p/nmrglue/downloads/list>`_ is you wish to 
+follow along with the same files.
 
 
 Reading NMR files

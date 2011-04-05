@@ -16,8 +16,9 @@ this tutorial can be run interactively from the python shell but the use of an
 enhanced python shell which provides non-blocking control of GUI threads, 
 for example  `ipython <http://ipython.scipy.org>`_, is 
 recommended when trying the examples which use matplotlib.  The sample data
-using in this tutorial is `available <http://XXX>`_ is you wish to follow 
-along with the same files.
+using in this tutorial is 
+`available <http://code.google.com/p/nmrglue/downloads/list>`_ is you wish to 
+follow along with the same files.
 
 
 Reading NMR files
@@ -89,7 +90,7 @@ python dictionary:
 Here we see NMRPipe files stores the spectal width of the direct dimension 
 (50000.0 Hz) and the name of the indirect dimension (15N) as well as a number 
 of additional parameter.  
-Some file formats describe well the spectral data listing a large number of 
+Some file formats describe well the spectral data, listing a large number of 
 parameters, other only a few.  In addition, the different format express the 
 parameters in different units and under different names.  For user who are 
 familar with the specific file format or working with only a single file type 
