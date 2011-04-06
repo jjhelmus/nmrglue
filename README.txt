@@ -1,26 +1,42 @@
-nmrglue 0.1 
+nmrglue 0.2 
 ===========
-
-This is the first public release of nmrglue.  Please feel free to test it and
-provide feedback.  For install instructions please see INSTALL.txt
 
 What is nmrglue?
 ----------------
 
-nmrglue is a Python module accessing a number of common NMR file formats in
-python as numpy array objects and a python dictionary of spectral parameters.
-nmrglue provides functions to read, writing, process and convert Bruker, 
-NMRPipe, Sparky, Varian, and its own internal file format.
+nmrglue is a module for working with NMR data in Python. When used with the
+numpy, scipy, and matplotlib packages nmrglue provides a robust interpreted
+environment for processing, analysing, and inspecting NMR data.
 
-Where to get it
----------------
+What can nmrglue do?
+--------------------
 
-Information on nmrglue can be found at code.google.com/p/nmrglue.  The website
-contains links to detailed documentation, code examples, and links to sample
-data.  
+nmrglue has the ability to read, write and convert between a number of common
+NMR file formats including Varian, Bruker, NMRPipe, and Sparky files. The
+files, which are represented in python as dictionaries of spectral parameters
+and Numpy array objects, can be easily examined, modified and processed as
+desired. 
 
-Requirements
-------------
+nmrglue provides a number of common functions for processing NMR data such as
+apodization, spectral shifting, Fourier and other transformations, baseline
+smoothing and flattening, and linear prediction. In addition new processing
+schemes can be implemented easily using the nmrglue provided functions and the
+multitude of numerical routines provided by the Numpy and Scipy packages. 
 
-nmrglue requires python 2.6, numpy 1.3.0 or later, scipy 0.7 or later and 
-h5py 1.2 or later if reading and writing to the glue format is desired. 
+When used in conjunction with the matplotlib (or other) python plotting
+library nmrglue can be used to create publication quality figures of NMR
+spectrum or examine data interactively.
+
+nmrglue can be used to analysis NMR data, with routines to perform peak
+picking, multidimensional lineshape fitting (peak fitting), and peak
+integration. New analysis methods can be rapidly developed and tested in
+Python or by integrating Fortran and C/C++ code.
+
+Citing nmrglue
+--------------
+
+The article describing nmrglue is still in preparation. For the time being
+please cite nmrglue as: 
+
+J. J. Helmus and C.P. Jaroniec, nmrglue, http://code.google.com/p/nmrglue, The
+Ohio State University.
