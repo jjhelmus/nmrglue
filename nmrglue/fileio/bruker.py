@@ -180,6 +180,10 @@ def read(dir=".",bin_file=None,acqus_files=None,pprog_file=None,shape=None,
     # determind shape and complexity for direct dim if needed
     if shape == None or cplex == None:
         gshape,gcplex = guess_shape(dic)
+        if gcplex==True:    # divide last dim by 2 if complex
+            t = list(gshape)
+            t[-1]=t[-1]/2
+            gshape = tuple(t)
     if shape == None:
         shape = gshape
     if cplex == None:
@@ -264,6 +268,10 @@ def read_lowmem(dir=".",bin_file=None,acqus_files=None,pprog_file=None,
     # determind shape and complexity for direct dim if needed
     if shape == None or cplex == None:
         gshape,gcplex = guess_shape(dic)
+        if gcplex==True:    # divide last dim by 2 if complex
+            t = list(gshape)
+            t[-1]=t[-1]/2
+            gshape = tuple(t)
     if shape == None:
         shape = gshape
     if cplex == None:
@@ -419,123 +427,145 @@ def write_lowmem(dir,dic,data,bin_file=None,acqus_files=None,pprog_file=None,
 
 
 def guess_shape(dic):
-    """ 
-    Determind data shape and complexity from dictionary
-    
+    """
+    Determine data shape and complexity from parameters in dictionary
+
     Returns: (shape,cplex)
 
-    * shape   Tuple representing shape of the binary file.
-    * cplex   Complexity of direct dimension.
+    * shape Tuple represeting shape of data in binary file (R+I for all dims) 
+    * cplex True for complex data in last (direct) dimension, false otherwise
 
-    When dictionary does not contain enough information warning will be issued
-    and (1),True is returned
-    
     """
-
-    # Clunkly and need some error checking for defaults, etc
-
-    # check to see if we have needed dictionary keys
-    if "pprog" not in dic or "acqus" not in dic or "FILE_SIZE" not in dic:
-        print "Warning: Cannot determind shape do to missing dictionary keys"
-        return (1),True
-
-    # unpack the dictionary
-    pd = dic["pprog"]
-    acqus = dic["acqus"]
-
-    # pprog error checks
-    if "loop" not in pd or "incr" not in pd:
-        print "Warning: Cannot determind shape do to bad pprog dictionary"
-        return (1),True
-
-    # unpack the pulse program dictionary
-    lp = pd["loop"]
-    ic = pd["incr"]
-
-    # acqus dictionary checks
-    if "AQ_mod" not in acqus or "TD" not in acqus:
-        print "Warning: Cannot determind shape do to bad acqus dictionary"
-        return (1),True
-
-    # determind the minimum dimentionality from acqus files
-    mindim=1
-    if dic.has_key('acqu2s'):
-        mindim=2
-    if dic.has_key('acqu3s'):
-        mindim=3
-    if dic.has_key('acqu4s'):
-        mindim=4
-
-    # figure out the dim size predicted from size of loop
-    # if greater than mindim set as ndim
-    loopdim = [0,2,2,2,3,3,4,4][len(lp)]
-    if loopdim>mindim:
-        ndim = loopdim
-    else:
-        ndim = mindim
+    # determine complexity of last (direct) dimension
+    try:
+        aq_mod = dic["acqus"]["AQ_mod"]
+    except KeyError:
+        aq_mod = 0
     
-    # create a empty shape list
-    shape = []
-
-    # Determind X dimension size (round TD up to nearest 256)
-    td = acqus["TD"]
-    x = int( np.ceil(td/256.)*256 )
-
-    # if Real (0) or Sequential (2) don't divide by two 
-    if acqus["AQ_mod"] == 0 or acqus["AQ_mod"] == 2:
-        shape.append(x)
+    if aq_mod == 0 or aq_mod == 2:
         cplex = False
-    else:
-        shape.append(x/2)
+    elif aq_mod == 1 or aq_mod == 3:
         cplex = True
+    else:
+        raise ValueError("Unknown Aquisition Mode")
 
-    # Determind Y dimension size if needed
-    if ndim >= 2:
-        y = 1       # default value
-        if dic.has_key("acqu2s") and dic["acqu2s"].has_key("TD"):
-            y = dic["acqu2s"]["TD"]
+    # file size
+    try:
+        fsize = dic["FILE_SIZE"]
+    except KeyError:
+        print "Warning: cannot determine shape do to missing FILE_SIZE key"
+        return (1,),True
     
-        if len(lp)==2 or len(lp)==4 or len(lp)==6:  # even number of loops
-            if lp[0]==2 and len(ic[0])==0 and len(ic[1])!=0:
-                y = 2*lp[1]
-        
-        if len(lp)%2==1:   # odd number of loops
-            if lp[1]==2 and len(ic[0])==0 and len(ic[1])==0 and len(ic[2])!=0:
-                y = 2*lp[2]
+    # extract td0,td1,td2,td3 from dictionaries
+    try:
+        td0 = float(dic["acqus"]["TD"])
+    except KeyError:
+        td0 = 1024   # default value
 
-        shape.append(y)
+    try:
+        td2 = int(dic["acqu2s"]["TD"])
+    except KeyError:
+        td2 = 0     # default value
 
-    # Determind Z dimension size if needed
-    if ndim >= 3:
-        
-        z = dic["FILE_SIZE"] / (x*y*4)
+    try:
+        td1 = float(dic["acqu3s"]["TD"])
+    except KeyError:
+        td1 = int(td2)   # default value
 
-        if len(lp)==4 or len(lp)==6:
-            if lp[2]==2 and len(ic[2])==0 and len(ic[3])!=0:
-                z = 2*lp[3]
-        
-        if len(lp)==5 or len(lp)==7:
-            if lp[3]==2 and len(ic[0])==0 and len(ic[3])==0 and len(ic[4])!=0:
-                z = 2*lp[4]
+    try:
+        td3 = int(dic["acqu4s"]["TD"])
+    except KeyError:
+        td3 = int(td1)     # default value
 
-        shape.append(z)
+    # last (direct) dimension is given by "TD" parameter in acqus file
+    # rounded up to nearest 256
+    # next-to-last dimension may be given by "TD" in acqu2s. In 3D+ data
+    # this is often the sum of the indirect dimensions
+    shape  = [0,0,td2,int(np.ceil(td0/256.)*256.)]
+    
+    # additional dimension given by data size
+    if shape[2] !=0 and shape[3] != 0:
+        shape[1] = fsize/(shape[3]*shape[2]*4)
+        shape[0] = fsize/(shape[3]*shape[2]*16*4)
+    
+    # if there in no pulse program parameters in dictionary return currect
+    # shape after removing zeros
+    if "pprog" not in dic or "loop" not in dic["pprog"]:
+        return tuple([int(i) for i in shape if i>=1]),cplex
 
-    # Determind A dimension size if needed
-    if ndim >=4:
-        
-        a = dic["FILE_SIZE"] / (x*y*16*4)
+    # if pulseprogram dictionary is missing loop or incr return current shape
+    pprog = dic["pprog"]
+    if "loop" not in pprog or "incr" not in pprog:
+        return tuple([int(i) for i in shape if i>=1]),cplex
 
-        if len(lp)==6 and lp[4]==2 and len(ic[4])==0 and len(ic[5])!=0:
-                a = 2*lp[5]
-        
-        if len(lp)==7:
-            if lp[5]==2 and len(ic[0])==0 and len(ic[5])==0 and len(ic[6])!=0:
-                a = 2*lp[6]
+    # determine indirect dimension sizes from pulseprogram parameters
+    loop = pprog["loop"]
+    loopn = len(loop)       # number of loops
+    li = [len(i) for i in pprog["incr"]] # length of incr lists
 
-        shape.append(a)
+    # replace td0,td1,td2,td3 in loop list
+    rep = {'td0':td0,'td1':td1,'td2':td2,'td3':td3}
+    for i,v in enumerate(loop):
+        if v in rep.keys():
+            loop[i] = rep[v]
+             
+    # size of indirect dimensions based on number of loops in pulse program
+    # there are two kinds of loops, active and passive.
+    # active loops are from indirect dimension increments, the corresponding
+    # incr lists should have non-zero length and the size of the dimension
+    # is twice that of the active loop size.
+    # passive loops are from phase cycles and similar elements, these should 
+    # have zero length incr lists and should be of length 2.  
 
+    # The following checks for these and updates the indirect dimension
+    # if the above is found.
+    
+    if loopn==1:    # 2D with no leading passive loops
+        if li[0]!=0:
+            shape[2] = loop[0]
+            shape = shape[-2:]
+    
+    elif loopn==2:  # 2D with one leading passive loop
+        if loop[0]==2 and li[0]==0 and li[1]!=0:
+            shape[2] = 2*loop[1]
+            shape = shape[-2:]
 
-    return tuple(shape[::-1]),cplex
+    elif loopn==3:  # 2D with two leading passive loops
+        if loop[0]==2 and loop[1]==2 and li[0]==0 and li[1]==0 and li[2]!=0:
+            shape[2] = 2*loop[2]
+            shape = shape[-2:]
+
+    elif loopn==4:  # 3D with one leading passive loop for each indirect dim
+        if loop[0]==2 and li[0]==0 and li[1]!=0:
+            shape[2] = 2*loop[1]
+        if loop[2]==2 and li[2]==0 and li[3]!=0:
+            shape[1] = 2*loop[3]
+            shape = shape[-3:]
+
+    elif loopn==5:  # 3D with two/one leading passive loops
+        if loop[1]==2 and li[0]==0 and li[1]==0 and li[2]!=0:
+            shape[2] = 2*loop[2]
+        if loop[3]==2 and li[0]==0 and li[3]==0 and li[4]!=0:
+            shape[1] = 2*loop[4]
+            shape = shape[-3:]
+
+    elif loopn==6:  # 4D with one leading passive loop for each indirect dim
+        if loop[0]==2 and li[0]==0 and li[1]!=0:
+            shape[2] = 2*loop[1]
+        if loop[2]==2 and li[2]==0 and li[3]!=0:
+            shape[1] = 2*loop[3]
+        if loop[4]==2 and li[4]==0 and li[5]!=0:
+            shape[0] = 2*loop[5]
+            
+    elif loopn==7:
+        if loop[1]==2 and li[0]==0 and li[1]==0 and li[2]!=0:
+            shape[2] = 2*loop[2]
+        if loop[3]==2 and li[0]==0 and li[3]==0 and li[4]!=0:
+            shape[1] = 2*loop[4]
+        if loop[5]==2 and li[0]==0 and lo[5]==0 and li[6]!=0:
+            shape[0] = 2*loop[6]
+
+    return tuple([int(i) for i in shape if i>=2]),cplex
 
 
 # Bruker binary (fid/ser) reading and writing
