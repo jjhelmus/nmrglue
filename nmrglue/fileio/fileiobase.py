@@ -138,10 +138,10 @@ class unit_conversion():
         else:
             raise ValueError("invalid unit type")
 
-        if self._cplx:
-            return pts+round(pts)
-        else:
-            return pts
+        #if self._cplx:
+        #    return pts+round(pts)
+        #else:
+        return pts
 
 
     def __pnt2unit(self,val,units):
@@ -150,8 +150,8 @@ class unit_conversion():
         """
         units = units.upper()
 
-        if self._cplx:
-            val = val-round(val)
+        #if self._cplx:
+        #    val = val-round(val)
 
         if units == "PPM":
             k = self.__pts2ppm(val)
@@ -553,9 +553,9 @@ class data_nd(object):
         if len(rlist) > self.ndim:
             raise IndexError,"invalid index"
 
-        # replace integers with slices
+        # replace none-slices with slice objects
         for i,v in enumerate(rlist):
-            if type(v) == int:
+            if type(v) != slice:
                 
                 # check for out of range indexes
                 if v >= self.shape[i]:
