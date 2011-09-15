@@ -5,80 +5,84 @@ Peak picking routines, lineshape parameter guessing, and related functions.
 
 # external modules
 import numpy as np
-import scipy
+import scipy.ndimage as ndimage
 
-# nmrglue analysis module imports
-from analysisbase import ndwindow_index,squish,find_limits,limits2slice
-from analysisbase import ls_str2class,pick2linesh,linesh2pick,slice2limits
+# analysisbase fuctions
+from analysisbase import ndwindow_index,valid_pt,ls_str2class
 
 # lineshape classes
 from analysisbase import peak1D,gauss1D,lorentz1D,scale1D
 
 # spectral segmentation functions
-from segmentation import find_downward,find_all_downward
-from segmentation import find_upward,find_all_upward
-from segmentation import find_connected,find_all_connected
-from segmentation import find_nconnected,find_all_nconnected
+from segmentation import find_all_downward, find_all_upward
+from segmentation import find_all_connected, find_all_nconnected 
 
-# Top level peak picking routine
+from ..fileio import table
 
-def pick(data,thres,msep=None,direction='both',algorithm="thres",
-         est_params=True,lineshapes=None):
+def pick(data,pthres,nthres=None,msep=None,algorithm='connected',
+            est_params=True,lineshapes=None,edge=None,diag=False,c_struc=None,
+            c_ndil=0,cluster=True,table=True,axis_names=['A','Z','Y','X']):
     """
-    Pick (find) peaks in a spectrum using a given algorithm.  
+    Pick (find) peaks in a spectral region. 
 
     Parameters:
 
-    * data          N-dimensional array.
-    * thres         Threshold value for minimum peak height.
+    * data          N-dimensional array to pick peaks in.
+    * pthres        Minimum peak height for positive peaks. Set to None to not
+                    detect positive peaks.
+    * nthres        Minimum peak height for negative peaks (typically a 
+                    negative value).  Set to None to not detect negative peaks.
     * msep          N-tuple of minimum peak seperations along each axis.
                     Must be defined if algorithm is 'thresh' or 'thresh-fast'
-    * direction     Direction of peaks, 'positive','negative', or 'both'
-                    or short cut values 'p','n','b'.
     * algorithm     Peak picking algorithm to use.  Options are 'thres',
                     'thres-fast', 'downward', or 'connected'
     * est_params    Set to True to perform a rough estimate of linewidths and
                     amplitude for all peaks picked.  False returns only the
-                    peak locations (centers)
+                    peak locations.
     * lineshapes    A list of lineshape classes or string shortcuts for each 
                     dimension.  If not specified Gaussian type lineshapes with 
                     a FWHM  linewidth parameter is assumed in each dimension.  
                     This parameter if only used if est_params is True.
+    * edge          Tuple to add to peak locations representing the edge of a
+                    slices region.  None skips this addition.
+    * diag          Set True to consider diagonal points to be  touching in 
+                    peak finding algorithm and clustering.
+    * c_struc       Structure element to use when applying dilation on segments
+                    before applying clustering algorithm. None will apply 
+                    default square structure with connectivity one will be 
+                    used.
+    * c_ndil        Number of dilations to perform on segments before applying
+                    clustering algorithm.
+    * cluster       Set True to cluster touching peaks.
+    * table         Set True to return turn a table.
+    * axis_names    List of axis names, the last n will be used for column
+                    name prefixes in table where n is the number of dimensions.
 
-    Returns:    centers,[linewidths,amplitudes]
+    Returns:    locations,[cluster_ids,[scales,amps]] or table
 
-    * centers       Array of estimated peak locations, shape (n_peaks,ndim).
-    * linewidths    Array of estimated peak linewidths, shape (n_peaks,ndim).
-    * amplitudes    Array of estimated peak amplitude, shape (n_peaks).
+    * locations
+    * cluster_ids
+    * scales
+    * amps
+
+    * table
 
     """
-    # parameter checking
+    ####################
+    # Check parameters #
+    ####################
     ndim = len(data.shape)
-
-    # check algorithm
-    if algorithm not in ['thres','thres-fast','downward','connected']:
-        raise ValueError('Invalid algorithm %s'%(algorithm))
     
-    # replace direction with shortcut value
-    direction = direction.lower()
-
-    if direction == 'both':
-        direction = 'b'
-    if direction == 'positive':
-        direction = 'p'
-    if direction == 'negative':
-        direction = 'n'
-
-    # check direction
-    if direction not in ['p','n','b']:
-        raise ValueError("invalid dir: %s"%(direction))
-
     # check msep
     if type(msep) == int:
         msep = (msep,)
     if algorithm in ['thres','thres-fast'] and len(msep) != ndim:
         raise ValueError("msep has incorrect length")
-    
+ 
+    # check algorithm
+    if algorithm not in ['thres','thres-fast','downward','connected']:
+        raise ValueError('Invalid algorithm %s'%(algorithm))
+   
     # check  lineshapes
     if est_params:
         # expand None
@@ -101,735 +105,430 @@ def pick(data,thres,msep=None,direction='both',algorithm="thres",
         if len(ls_classes) != ndim:
             raise ValueError("Incorrect number of lineshapes")
 
-    # find centers and segments if requested
-    if algorithm == 'thres':
-        centers = pick_thres(data,thres,msep,direction)
-    if algorithm == 'thres-fast':
-        centers = pick_thres_fast(data,thres,msep,direction)
-    if algorithm == 'downward':
-        if est_params:
-            centers,segments=pick_downward(data,thres,direction,seg_flag=True)
-        else:
-            centers = pick_downward(data,thres,direction,seg_flag=False)
-    if algorithm == 'connected':
-        if est_params:
-            centers,segments=pick_connected(data,thres,direction,seg_flag=True)
-        else:
-            centers = pick_connected(data,thres,direction,seg_flag=False)
+    if edge!=None and len(edge)!=ndim:
+        raise ValueError("edge has incorrect length")
 
-    # if full parameter estimation not requests return just the centers
+
+    #######################
+    # find positive peaks #
+    #######################
+    if pthres==None:    # no locations
+        ploc = []
+        pseq = []
+
+    elif est_params==True:  # find locations and segments
+        if algorithm == 'thres':
+            ploc,pseg = find_all_thres_fast(data,pthres,msep,True)
+        elif algorithm == 'thres-fast':
+            ploc,pseg = find_all_thres_fast(data,pthres,msep,True)
+        elif algorithm == 'downward':
+            ploc,pseg = find_all_downward(data,pthres,True,diag)
+        elif algorithm == 'connected':
+            ploc,pseg = find_all_connected(data,pthres,True,diag)
+        else:
+            raise ValueError('Invalid algorithm %s'%(algorithm))
+
+    else:   # find only locations 
+        if algorithm == 'thres':
+            ploc = find_all_thres_fast(data,pthres,msep,False)
+        elif algorithm == 'thres-fast':
+            ploc = find_all_thres_fast(data,pthres,msep,False)
+        elif algorithm == 'downward':
+            ploc = find_all_downward(data,pthres,False,diag)
+        elif algorithm == 'connected':
+            ploc = find_all_connected(data,pthres,False,diag)
+        else:
+            raise ValueError('Invalid algorithm %s'%(algorithm))
+    
+
+    #######################
+    # find negative peaks #
+    #######################
+    if nthres==None:    # no locations
+        nloc = []
+        nseg = []
+    
+    elif est_params==True:  # find locations and segments
+        if algorithm == 'thres':
+            nloc,nseg = find_all_nthres(data,nthres,msep,True)
+        elif algorithm == 'thres-fast':
+            nloc,nseg = find_all_nthres_fast(data,nthres,msep,True)
+        elif algorithm == 'downward':
+            nloc,nseg = find_all_upward(data,nthres,True,diag)
+        elif algorithm == 'connected':
+            nloc,nseg = find_all_nconnected(data,nthres,True,diag)
+        else:
+            raise ValueError('Invalid algorithm %s'%(algorithm))
+    
+    else:   # find only locations
+        if algorithm == 'thres':
+            nloc = find_all_nthres(data,nthres,msep,False)
+        elif algorithm == 'thres-fast':
+            nloc = find_all_nthres_fast(data,nthres,msep,False)
+        elif algorithm == 'downward':
+            nloc = find_all_upward(data,nthres,False,diag)
+        elif algorithm == 'connected':
+            nloc = find_all_nconnected(data,nthres,False,diag)
+        else:
+            raise ValueError('Invalid algorithm %s'%(algorithm))
+       
+    # combine the positive and negative peaks
+    locations = ploc+nloc
+
+    #########################################################
+    # return locations if no parameter estimation requested #
+    #########################################################
     if est_params==False:
-        return centers
-    
-    # estimate the linewidths and amplitudes
-    lw = np.zeros(centers.shape,dtype=float)
-    amp = np.zeros(len(centers),dtype=float)
-
-    if  algorithm in ['downward','connected']:   # we already have segments
-        for i,seg in enumerate(segments):
-            null,lw[i],amp[i]=guess_params_segment(data,seg,ls_classes)
-    
-    else:   # no segments, loop over the centers
-        for i,c in enumerate(centers):
-            if c.shape == ():
-                center = (c,)
+        if cluster:     # find clusters
+            cluster_ids = clusters(data,locations,pthres,nthres,c_struc,None,                              c_ndil)
+            locations = add_edge(locations,edge)
+            if table:
+                return pack_table(locations,cluster_ids,axis_names=axis_names)
             else:
-                center = tuple(c)
-
-            null,lw[i],amp[i]=guess_params_center(data,center,thres,ls_classes)
-
-    return centers,lw,amp
-
-
-# region finding and formatting
-
-def find_regions(data,centers,thres,linewidths=None,amplitudes=None,pad=None,
-    resolve=True):
-    """
-    Find regions in spectra containing peaks.
-
-    Parameters:
-
-    * data          N-dimensional array.
-    * centers       Array of peak centers.
-    * thres         Threshold value for segmenting.
-    * linewidths    Array of peak linewidths, optional.
-    * amplitudes    Array of peak amplitudes, optional.
-    * pad           Tuple of additional points to surround each region with. 
-    * resolve       True/False to resolve overlapping regions.
-
-    Returns: regions
-
-    * regions   List of dictionaries defining peak containing regions in the 
-                spectra.  Each region dictionary has the following keys:
-
-                * 'min'         Tuple of the minimum corner of the region.
-                * 'max'         Tuple of the maximum corner of the region.
-                * 'centers'     List of peak centers in the region.
-                * 'linewidths'  List of peak linewidths in the region.
-                * 'amplitudes'  List of peak amplitudes in the region.
+                return locations,cluster_ids
+        else:   # Do not determine clusters
+            locations = add_edge(locations,edge)
+            if table:
+                return pack_table(locations,axis_names=axis_names)
+            else:
+                return locations
     
-                The 'linewidths' and 'amplitude' keys are only created
-                if linewidths and amplitudes are passed to the function.
+    ##################################
+    # estimate scales and amplitudes #
+    ##################################
+    seg_slices = pseg+nseg
+    scales = [[]]*len(locations)
+    amps = [[]] * len(locations)
+    #scales = np.zeros(np.array(locations).shape,dtype=float)
+    #amps = np.zeros(len(locations),dtype=float)
 
-    """
-    lcen = list(centers)    # list of peak centers
+    for i,(l,seg_slice) in enumerate(zip(locations,seg_slices)):
+        null,scales[i],amps[i]=guess_params_slice(data,l,seg_slice,ls_classes)
     
-    if linewidths!=None:
-        if len(linewidths) != len(lcen):
-            s="Number of linewidths does not match the number of peaks"
-            raise ValueError(s)
-        llwd = list(linewidths) # list of linewidths
-        
-    if amplitudes!=None:
-        if len(amplitudes)!= len(lcen):
-            s="Number of amplitudes does not match the number of peaks"
-            raise ValueError(s)
-        lamp = list(amplitudes) # list of amplitudes
-
-    if pad!=None:
-        if len(pad)!=len(lcen[0]):
-            raise ValueError("pad has incorrect length")
-
-    regions = []    # list of spectral regions
-
-    while len(lcen)!=0: # loop until all peaks have been accounted for
-        
-        # pop off a peak center
-        pt = tuple(lcen.pop(0))
-        
-        # find the connected segment containing the peak
-        if data[pt] > 0:
-            seg = find_connected(data,pt,thres)
+    ########################################################
+    # return locations, scales and amplitudes as requested #
+    ########################################################
+    if cluster:
+        cluster_ids = clusters(data,locations,pthres,nthres,c_struc,None,c_ndil)
+        locations = add_edge(locations,edge)
+        if table:
+            return pack_table(locations,cluster_ids,scales,amps,axis_names)
         else:
-            seg = find_nconnected(data,pt,-thres)
-
-        # find limits surrounding the connected segment
-        limits = find_limits(seg)
-        
-        # create the current region dictionary
-        r = {'min':tuple(limits[0]),
-             'max':tuple(limits[1]),
-             'centers':[pt]}
-        
-        # find other peaks in region and add (from back to front)
-        to_add = pts_in_limits(lcen,limits)[::-1]
-        for new_pt in to_add:
-            r['centers'].append( tuple(lcen.pop(new_pt)) )
-
-        # add linewidths if needed.
-        if linewidths!=None:
-            lw = tuple(llwd.pop(0))
-            r['linewidths'] = [lw]
-        
-            for new_pt in to_add:
-                r['linewidths'].append( tuple(llwd.pop(new_pt)) )
-
-        # add amplitudes if needed.
-        if amplitudes!=None:
-            amp = lamp.pop(0)
-            r['amplitudes'] = [amp]
-
-            for new_pt in to_add:
-                r['amplitudes'].append( lamp.pop(new_pt))
-
-        # add the current region dictionary to the list of regions
-        regions.append(r)
-    
-    # pad the spectrum
-    if pad!=None:
-        regions = pad_regions(regions,pad,data.shape)
-    if resolve:
-        regions = resolve_region_overlap(regions)
-
-    return regions
-
-
-def regions2recarray(regions):
-    """
-    Convert a regions list to a records array
-    """
-
-    np.sum([len(r['centers']) for r in regions])
-
-def pad_regions(regions,pad,shape=None):
-    """
-    Add a pad to each region in regions list
-
-    Parameters:
-        
-    * regions   Region dictionary (is changed by this functions)
-    * pad       Tuple of value to pad on each side on region
-    * shape     Shape of spectrum dictionary points to
-
-    Returns: regions
-
-    """
-    for ir,r in enumerate(regions):
-
-        # minimum, do not allow to go below 0.
-        new_min = [max(i-j,0) for i,j in zip(r['min'],pad)]
-        
-        # maximum, do not allow to go above shape when provided)
-        if shape == None:
-            new_max =  [i+j for i,j in zip(r['max'],pad)]
-        else:
-            new_max = [min(i+j,k) for i,j,k in zip(r['max'],pad,shape)]
-
-        # replace old region limits with new limits
-        regions[ir]['min'] = tuple(new_min)
-        regions[ir]['max'] = tuple(new_max)
-        
-    return regions
-
-
-def resolve_region_overlap(regions):
-    """
-    Resolve overlapping regions
-    
-    Parameters:
-
-    * regions   Region dictionary (is changed by this functions)
-
-    Returns: regions
-
-    """
-    
-    # this is a Brute force method... not very efficient
-    done = False
-
-    while done != True:
-        # list of region limits
-        lms_list = [(r['min'],r['max']) for r in regions]
-
-        # DEBUG
-        #print "Number of Regions:",len(lms_list)
-
-        for lms in lms_list:
-            overlap = limits_in_limits(lms_list,lms)
-            if len(overlap)!=1:
-                # combine the overlapping regions
-                regions = combine_regions(regions,overlap)
-                # break the for loop, lms_list must be re-made
-                break
-        else:   # when the loop finishes completely, we are done!
-            done = True
-
-    return regions
-
-def combine_regions(regions,list_to_combine):
-    """
-    Combine regions in a list of regions to combine
-    """
-    # if only region is given, nothing must be done
-    if len(list_to_combine)==1:
-        return regions
-
-    # sort the list greatest to least
-    list_to_combine.sort(reverse=True)
-
-    # combine regions pair wise
-    while len(list_to_combine)!=1:
-
-        # region 1 (larger index)
-        nregion1 = list_to_combine.pop(0)
-        region1 = regions.pop(nregion1)
-        # region 2 (smaller index)
-        nregion2 = list_to_combine[0]
-        region2 = regions[nregion2]
-
-        regions[nregion2] = combine_2regions(region2,region1)
-
-    return regions
-
-def combine_2regions(r1,r2):
-    """ 
-    Combine two regions, r1 and r2, returns a new region dictionary
-    """
-    n = {}  # the new region
-    n['min'] = tuple([min(i,j) for i,j in zip(r1['min'],r2['min'])])
-    n['max'] = tuple([max(i,j) for i,j in zip(r1['max'],r2['max'])])
-    n['centers'] = r1['centers']+r2['centers']
-
-    if 'linewidths' in r1 and 'linewidths' in r2:
-        n['linewidths'] = r1['linewidths']+r2['linewidths']
-    
-    if 'amplitudes' in r1 and 'amplitudes' in r2:
-        n['amplitudes'] = r1['amplitudes']+r2['amplitudes']
-    
-    return n
-
-# limit overlap searching
-
-def limits_in_limits(lms_list,lms):
-    """
-    Find all limit tuples in lms_list which are overlapping with limits, lms.
-    
-    Returns a list of indicies of lms_list which overlap.
-
-    """
-    return [i for i,l in enumerate(lms_list) if is_overlappedND(l,lms)]
-
-
-def is_overlappedND(lms1,lms2):
-    """
-    Determind if regions defined by limit1 and limit2 overlap
-    """
-
-    # make a list of min,max pairs in each dimension
-    p1 = [(i,j) for i,j in zip(lms1[0],lms1[1])]
-    p2 = [(i,j) for i,j in zip(lms2[0],lms2[1])]
-
-    # the regions are overlapped only if all dimensions are overlapped
-    return (False not in [is_overlapped1D(i,j) for i,j in zip(p1,p2)])
-
-def is_overlapped1D((min1,max1),(min2,max2)):
-    """
-    Determine if two line segments are overlapped given limits of both
-    """
-    return (min1<=min2<=max1 or min2<=min1<=max2)
-
-
-def region2linesh(region):
-    """
-    Convert a region dictionary to linesh input
-
-    Parameters:
-
-    * region    Region dictionary which has linewidth and amplitude keys
-
-    Returns: (rslice,min,guesses,amp_guesses)
-
-    * rslice        Slice objects which will slice the array to give a region
-    * min           List of mimimum to add to the output
-    * guesses       linesh.fit_NDregion guesses input
-    * amp_guesses   linesh.fit_NDregion amp_guesses input
-
-    """
-    
-    if 'amplitudes' not in region:
-        raise ValueError("region must contain amplitude estimates")
-    if 'linewidths' not in region:
-        raise ValueError("region must contain linewidths estimates")
-
-    # create the slice object
-    rslice = limits2slice( (region['min'],region['max']) )
-
-    # create the peak amplitudes
-    amp_guesses = region['amplitudes']
-
-    # build the parameters list
-    min = region['min']
-    guesses = []
-    for cen,lws in zip(region['centers'],region['linewidths']):
-        guesses.append([(c-e,l) for c,l,e in zip(cen,lws,min)])
-
-    return rslice,guesses,amp_guesses
-
-
-
-
-def linesh2region(params_best,amp_best,rslice):
-    """
-    Convert linesh.fit_NDregion output to a region dictionary
-
-    Parameters:
-    
-    * params_best   fit_NDregion output
-    * amp_best      fit_NDregion output
-    * min           List of minimums to add to the output
-
-    Returns: region dictionary
-
-    """
-
-    
-    limits = slice2limits(rslice)
-    mins = limits[0]
-
-    # tuples for first parameters pluse minimum for each dimension 
-    # for each peak in the parameter list.
-    cns = [ tuple([d[0]+m for (d,m) in zip(p,mins)]) for p in params_best] 
-
-    # similar list comprehesions 
-    lws = [ tuple([d[1] for d in p]) for p in params_best ]
-
-    # create the region dictionary
-    return {'min':tuple(limits[0]),
-            'max':tuple(limits[1]),
-            'centers': cns,
-            'linewidths': lws,
-            'amplitudes':list(amp_best) }
-        
-
-def filter_by_distance(data,centers,msep,lineshapes=None,amplitudes=None):
-    """
-    Filter peaks which are nearby, keeping those with the largest intesity.
-
-    Parameters:
-        
-        * data          N-dimensional array.     
-        * centers       Array of estimated peak locations.
-        * msep          N-tuple of minimum peak seperations along each axis.
-        * linewidths    Array of estimated peak linewidths, optional.
-        * amplitudes    Array of estimated peak amplitude, optional.
-
-    Returns: centers,[linewidths,amplitudes]
-
-    """
-
-    keep = []
-    lcen = list(centers)
-
-    # loop over all peaks, this is inefficient as some points have already been
-    # checked in previous iterations, but it works and keeps the indexing nice.
-    for pt in centers:
-
-        # limits for seperation region
-        min = [(i-s) for i,s in zip(pt,msep)]
-        max = [(i+s) for i,s in zip(pt,msep)]
-    
-        # find all peak centers within region
-        cen_idx = pts_in_limits(centers,(min,max))
-        
-        # find the intensity (absolute value) at each peak center in region
-        data_idx = np.take(centers,cen_idx,axis=0)
-        vals = [np.abs(data[tuple(i)]) for i in data_idx]
-        
-        # the index of the major peak center has the largest intensity
-        major_idx = cen_idx[np.argmax(vals)]
-
-        keep.append(major_idx)   # add the major peak index to keep list
-        
-    # remove duplicates in keep
-    keep = list(set(keep))
-
-    # return the filtered results.
-    if lineshapes==None and amplitudes==None:
-        return centers.take(keep,axis=0)
-    if amplitudes==None:
-        return centers.take(keep,axis=0),lineshapes.take(keep,axis=0)
-    if lineshapes==None:
-        return centers.take(keep,axis=0),amplitudes.take(keep)
-    
-    return ( centers.take(keep,axis=0), lineshapes.take(keep,axis=0),
-             amplitudes.take(keep) )
-
-
-# peak searching
-
-def pts_in_limits(pts,lms):
-    """
-    Find all points in pts that are within a box defined by limits lms
-
-    Returns a list of indicies of pts which are within the box limits.
-    """
-    return [i for i,pt in enumerate(pts) if in_limits(pt,lms)]
-    
-
-def in_limits(pt,lms):
-    """
-    Return True/False depending on if point (pt) is in limits (lms).
-    """
-    return (False not in [min<=x<=max for x,min,max in zip(pt,lms[0],lms[1])])
-
-
-
-# parameter guessing functions
-
-def guess_params_center(data,center,thres,lineshapes):
-    """
-    Guess the parameter of a peak centered at center.
-
-    Parameters:
-
-    * data          Spectral data
-    * center        Location of peak center
-    * thres         Noise threshold 
-    * lineshapes    List of lineshape classes
-
-    Return: centers,linewidths,amplitudes
-
-    * centers   Array of estimated peak centers in each dimension.
-    * linewidth Array of estimated linewidths in each dimension
-    * amplitude Estimate of peak amplitude
-
-    """
-
-    # find the segment containing the peak
-    if data[center] > 0:
-        segment = find_downward(data,center,thres)
+            return locations,cluster_ids,scales,amps
     else:
-        segment = find_upward(data,center,-thres)
+        locations = add_edge(locations,edge)
+        if table:
+            return pack_table(locations,scales=scales,amps=amps,
+                              axis_names=axis_names)
+        else:
+            return locations,scales,amps
 
-    return guess_params_segment(data,segment,lineshapes)
-
-def guess_params_segment(data,segment,lineshapes):
+def add_edge(locations,edge):
     """
-    Guess the parameter of a peak in a provided segment.
+    Add edge to list of locations, returning a list of edge-added locations
+    """
+    if edge != None:
+        return [tuple([i+j for i,j in zip(edge,l)]) for l in locations]
+    return locations
+
+def clusters(data,locations,pthres,nthres,d_struc=None,l_struc=None,ndil=0):
+    """
+    Perform cluster analysis of peak locations
 
     Parameters:
 
-    * data          Spectral data
-    * segment       List of points in segment.
-    * lineshapes    List of lineshape classes
+    * data          Array of data which has been peak picked
+    * locations     List of peak locations
+    * pthres        Postive peak threshold or None for no postive peaks
+    * nthres        Negative peak threshold or None for no negative peaks
+    * d_struc       Structure of binary dilation to apply on segments before
+                    clustering.  None uses square connectivity 1 structure.
+    * l_struc       Structure to use for determining  segment connectivity
+                    in clustering.  None uses square connectivity 1 structure.
+    * dnil          Number of dilation to apply on segments before determining
+                    clusters.
 
-    Return: centers,linewidths,amplitudes
+    Returns:    cluster_ids
 
-    * centers   Array of estimated peak centers in each dimension.
-    * linewidth Array of estimated linewidths in each dimension
-    * amplitude Estimate of peak amplitude
+    * cluster_ids   List of cluster_ids for each location in locations list.
+
+    """
+    # make a binary array of regions above/below the noise thresholds
+    if pthres==None:    # negative peaks only
+        input = data < nthres
+    elif nthres==None:  # postive peaks only
+        input = data > pthres
+    else:               # both positive and negative
+        input = np.bitwise_or(data < nthres,data > pthres)
+    
+    # apply dialations to these segments
+    if ndil!=0:
+        input = ndimage.binary_dilation(input,d_struc,iterations=ndil)
+
+    # label this array, these are the clusters.
+    labeled_array,num_features = ndimage.label(input,l_struc)
+    
+    return [labeled_array[i] for i in locations]
+
+
+def pack_table(locations,cluster_ids=None,scales=None,amps=None,
+                axis_names=["A","Z","Y","X"]):
+    """
+    Create a table from peak information.
+
+    Parameters:
+
+    * locations     List of peak locations.
+    * cluster_ids   List of cluster numbers.
+    * scales        List of peak scales (linewidths).
+    * amps          List of peak amplitudes.
+    * axis_names    List of axis names, the last n will be used for column
+                    name prefixes where n is the number of dimensions.
+
+    If any of cluster_ids, scales, or amps in None the corresponding columns
+    will not be present in the table.
+
+    Returns: table
+
+    * table nmrglue table with column representing peak parameters.
+            locations are given column names like 'X_AXIS', 'Y_AXIS', etc
+            cluster_ids are given a column name of 'cID'
+            scales are given column names like 'X_LW','Y_LW'
+            amps are given a column name of 'VOL'
+
+    """
+    ndim = len(locations[0])
+    anames = axis_names[-ndim:]
+    
+    dt = [(a+"_AXIS",np.float) for a in anames]
+    rec = np.rec.array(locations,dtype=dt)
+
+    if cluster_ids != None:
+        rec = table.append_column(rec,cluster_ids,'cID','int')
+    
+    if scales != None:
+        names = [a+"_LW" for a in anames]
+        for n,c in zip(names,np.array(scales).T):
+            rec = table.append_column(rec,c,n,'float')
+    
+    if amps != None:
+        rec = table.append_column(rec,amps,'VOL','float')
+
+    return rec
+
+
+
+def guess_params_slice(data,location,seg_slice,ls_classes):
+    """
+    Guess the parameter of a peak in a segment given slices.
+
+    Parameters:
+
+    * data          Spectral data.
+    * seg_slice     List slices which slice data to given the desired segment.
+    * lineshapes    List of lineshape classes.
+
+    Return: location,scale,amp
+
+    * location  Peak location.
+    * scale     Peak scale.
+    * amp       Peak amplitude.
 
     """
 
     # find the rectangular region around the segment
-    limits = find_limits(segment)
-    region= data[limits2slice(limits)]
+    region= data[seg_slice]
+    edge = [s.start for s in seg_slice]
+    rlocation = [l-s.start for l,s in zip(location,seg_slice)]
 
     # amptide is estimated by the sum of all points in region
     amp = np.sum(region)
 
-    lw  = []    # list of linewidths
-    cen = []    # list of peak centers
+    scale  = []    # list of linewidths
+    nlocation = []    # list of peak centers
+
     # loop over the axes
-    for axis,ls in enumerate(lineshapes):
-        # create the 1D lineshape 
-        r = squish(np.copy(region),axis)
+    for axis,ls in enumerate(ls_classes):
+        # create the 1D lineshape
+        r = extract_1d(region,rlocation,axis)
         # estimate the linewidth
-        center,linewidth = ls.guessp(r)
-        lw.append(linewidth)
-        cen.append(center)
+        loc,sc = ls.guessp(r)
+        scale.append(float(sc))
+        nlocation.append(float(loc))
 
-    return np.array(cen),np.array(lw),amp
+    return tuple([l+e for l,e in zip(nlocation,edge)]),tuple(scale),amp
 
-#### Do not rewrite (should not know about lwclasses)
+def extract_1d(data,location,axis):
+    """
+    Extract a 1D slice from data along axis at location
+    """
+    s = [slice(v,v+1) for v in location]
+    s[axis] = slice(None,None)
+    return np.atleast_1d(np.squeeze(data[s]))
+
 
 # algorithm specific peak picking routines
 
-def pick_connected(data,thres,direction='both',seg_flag=False):
-    """
-    Peak pick a spectrum using the connected path algorithm.
-
-    Find peaks (local maxima/minima) in an arbitrary dimensional NMR spectra
-    above/below a given threshold and not part of an already defined
-    connected segment.
-
-    Parameters:
-
-    * data      N-dimensional array.
-    * thres     Threshold value for minimum peak height.
-    * direction Direction of peaks, 'positive','negative', or 'both'
-                or short cut values 'p','n','b'.
-    * seg_flag  Set True to return list of points in each segment, False to 
-                return only peak centers.
-
-    Return: centers,[segments]
-
-    * centers   array of peak locations with shape (n_peaks,ndim).
-    * segments  List of  all points in a given segment, optional with the 
-                seg_flag.
-
-    """
-    # replace with shortcut values
-    direction = direction.lower()
-
-    if direction == 'both':
-        direction = 'b'
-    if direction == 'positive':
-        direction = 'p'
-    if direction == 'negative':
-        direction = 'n'
-
-    if direction not in ['p','n','b']:
-        raise ValueError("invalid dir: %s"%(direction))
-
-    # positive peaks
-    if direction != 'n':
-        pcenters,psegments = find_all_connected(data,thres)
-    if direction == 'p':
-        if seg_flag:
-            return np.array(pcenters),psegments
-        else:
-            return np.array(pcenters)
-
-    # negative peaks
-    if direction !='p':
-        ncenters,nsegments = find_all_nconnected(data,-thres)
-    if direction == 'n':
-        if seg_flag:
-            return np.array(ncenters),nsegments
-        else:
-            return np.array(ncenters)
-    
-    # return both peaks
-    if seg_flag:
-        return np.array(pcenters+ncenters),psegments+nsegments
-    else:
-        return np.array(pcenters+ncenters)
-
-
-def pick_downward(data,thres,direction='both',seg_flag=False):
-    """
-    Peak pick a spectrum using a downward/upward path algorithm.
-
-    Find peaks (local maxima/minima) in an arbitrary dimensional NMR spectra
-    above/below a given threshold and not part of an already defined
-    downward/upward segment.
-
-    Parameters:
-
-    * data      N-dimensional array.
-    * thres     Threshold value for minimum peak height.
-    * direction Direction of peaks, 'positive','negative', or 'both'
-                or short cut values 'p','n','b'.
-    * seg_flag  Set True to return list of points in each segment, False to 
-                return only peak centers.
-
-    Return: centers,[segments]
-
-    * centers   array of peak locations with shape (n_peaks,ndim).
-    * segments  List of  all points in a given segment, optional with the 
-                seg_flag.
-
-    """
-    # replace with shortcut values
-    direction = direction.lower()
-
-    if direction == 'both':
-        direction = 'b'
-    if direction == 'positive':
-        direction = 'p'
-    if direction == 'negative':
-        direction = 'n'
-
-    if direction not in ['p','n','b']:
-        raise ValueError("invalid dir: %s"%(direction))
-
-    # positive peaks
-    if direction != 'n':
-        pcenters,psegments = find_all_downward(data,thres)
-    if direction == 'p':
-        if seg_flag:
-            return np.array(pcenters),psegments
-        else:
-            return np.array(pcenters)
-
-    # negative peaks
-    if direction !='p':
-        ncenters,nsegments = find_all_upward(data,-thres)
-    if direction == 'n':
-        if seg_flag:
-            return np.array(ncenters),nsegments
-        else:
-            return np.array(ncenters)
-    
-    # return both peaks
-    if seg_flag:
-        return np.array(pcenters+ncenters),psegments+nsegments
-    else:
-        return np.array(pcenters+ncenters)
-
-
-def pick_thres(data,thres,msep,direction='both'):
+def find_all_thres(data,thres,msep,find_segs=False):
     """
     Peak pick a spectrum using a threshhold-minimum distance algorithm.
     
-    Find peaks (local maxima/minima) in a arbitrary dimensional NMR spectra 
-    above/below a set threshold with a minimal distance between peaks.  When 
-    the spectrum is small and multiple copies can fit into RAM use the _fast 
-    version of this function.
+    Find peaks (local maxima) in a arbitrary dimensional NMR spectra above a 
+    set threshold with a minimal distance between peaks.  When the spectrum is 
+    small and multiple copies can fit into RAM use the _fast version of this 
+    function. Segments are found by finding the first point in each direction
+    along each dimension which is below the threshold.
 
     Parameters:
 
     * data      N-dimensional array.
     * thres     Threshold value for minimum peak height
     * msep      N-tuple of minimum peak seperations along each axis
-    * direction Direction of peaks, 'positive','negative', or 'both'
-                or short cut values 'p','n','b'.
+    * find_segs True or False to return a list of slices for the segments.
 
-    Returns: array of peak locations with shape (n_peaks,ndim)
+
+    Returns: locations,seg_slices
+    
+    * locations     List of indicies of peak locations
+    * seg_slices    List of slices which extract a region around each peak. 
 
     """
-    # replace with shortcut values
-    direction = direction.lower()
-
-    if direction == 'both':
-        direction = 'b'
-    if direction == 'positive':
-        direction = 'p'
-    if direction == 'negative':
-        direction = 'n'
-
-    if direction not in ['p','n','b']:
-        raise ValueError("invalid dir: %s"%(direction))
-
-    peaks = []  # create an empty list of peaks 
+    locations = []  # create an empty list of peak locations
     wsize = tuple([2*i+1 for i in msep])    #window size is 2*seperation+1
-
-    middle = np.floor((np.array(msep)-1)/2.)    # index of middle of window
-    ms = [slice(x,x+1) for x in middle]         # middle slice list
 
     # loop over the windows
     for idx,s in ndwindow_index(data.shape,wsize):
-        window = data[s]
-        max = window.max()
-        min = window.min()
-        #print idx
-        if max == data[idx] and max > thres and direction != 'n':
-            peaks.append(idx)
-        if min == data[idx] and min < -thres and direction != 'p':
-            peaks.append(idx)
+        max = data[s].max()
+        if max == data[idx] and max > thres:
+            locations.append(idx)
 
-    return np.array(peaks)
+    if find_segs:
+        seg_slices = find_pseg_slices(data,locations,thres)
+        return locations,seg_slices
+    else:
+        return locations
 
 
-def pick_thres_fast(data,thres,msep,direction="both"):
+def find_all_nthres(data,thres,msep,find_segs=False):
     """
-    Fast version of pick_thres functions
-
-    See peak_thres for call details
+    Peak pick a spectrum using a threshhold-minimum distance algorithm.
+    
+    Identical to find_all_thres except local minima are found below the
+    given threshold.  See find_all_thres for a description of the algorithm and
+    parameters.
 
     """
-    # replace with shortcut values
-    direction = direction.lower()
-
-    if direction == 'both':
-        direction = 'b'
-    if direction == 'positive':
-        direction = 'p'
-    if direction == 'negative':
-        direction = 'n'
-
-    if direction not in ['p','n','b']:
-        raise ValueError("invalid dir: %s"%(direction))
-
+    locations = []  # create an empty list of peak locations
     wsize = tuple([2*i+1 for i in msep])    #window size is 2*seperation+1
 
-    if direction != 'n':
-        # find local maxima mask
-        mx=scipy.ndimage.maximum_filter(data,size=wsize,mode='constant')==data
+    # loop over the windows
+    for idx,s in ndwindow_index(data.shape,wsize):
+        min = data[s].min()
+        if min == data[idx] and min < thres:
+            locations.append(idx)
+
+    if find_segs:
+        seg_slices = find_pseg_slices(data,locations,thres)
+        return locations,seg_slices
+    else:
+        return locations
+
+
+def find_all_thres_fast(data,thres,msep,find_segs=False):
+    """
+    Fast version of find_all_thres.
+    """
+    wsize = tuple([2*i+1 for i in msep])    #window size is 2*seperation+1
+
+    # find local maxima mask
+    mx=ndimage.maximum_filter(data,size=wsize,mode='constant')==data
    
-        # find positive threshold mask
-        pthres = np.ma.greater(data,thres)
+    # find positive threshold mask
+    pthres = np.ma.greater(data,thres)
     
-    if direction != 'p':
-        # find the local minimum mask
-        mn=scipy.ndimage.minimum_filter(data,size=wsize,mode='constant')==data
+    # peaks are bitwise and of maximum mask and threshold mask
+    locations = np.transpose(np.nonzero(np.bitwise_and(pthres,mx)))
+    locations = [tuple(i) for i in locations]
 
-        # find negative threshold mask
-        nthres = np.ma.less(data,-thres)
-
-    if direction == 'p':
-        # peaks are bitwise and of maximum mask and threshold mask
-        return np.transpose( np.nonzero( np.bitwise_and(pthres,mx) ) )
-    if direction == 'n':
-        # peaks are bitwise and of minimum mask and threshold mask
-        return np.transpose( np.nonzero( np.bitwise_and(nthres,mn) ) )
-
-    # peaks are bitwise or of above lists
-    return np.transpose( np.nonzero( np.bitwise_or(
-        np.bitwise_and(pthres,mx),
-        np.bitwise_and(nthres,mn) ) ) )
+    if find_segs:
+        seg_slices = [find_pseg_slice(data,l,thres) for l in locations]
+        return locations,seg_slices
+    else:
+        return locations
 
 
+def find_all_nthres_fast(data,thres,msep,find_segs=False):
+    """
+    Fast version of find_all_nthres_fast.
+    """
+    wsize = tuple([2*i+1 for i in msep])    #window size is 2*seperation+1
 
+    # find local maxima mask
+    mn=ndimage.minimum_filter(data,size=wsize,mode='constant')==data
+   
+    # find positive threshold mask
+    nthres = np.ma.less(data,thres)
+    
+    # peaks are bitwise and of maximum mask and threshold mask
+    locations = np.transpose(np.nonzero(np.bitwise_and(nthres,mn)))
+    locations = [tuple(i) for i in locations]
+
+    if find_segs:
+        seg_slices = [find_pseg_slice(data,l,thres) for l in locations]
+        return locations,seg_slices
+    else:
+        return locations
+
+
+def find_pseg_slice(data,location,thres):
+    """
+    Find slices which define a segment in data above thres starting a location
+    """
+    shape = data.shape
+    seg_slice = []
+    for dim,v in enumerate(location):
+        
+        # find start value
+        al = list(location)
+        start = v
+        while(valid_pt(al,shape) and data[tuple(al)]>thres):
+            start = start-1
+            al[dim] = start
+
+        # find stop value
+        al = list(location)
+        stop = v
+        while(valid_pt(al,shape) and data[tuple(al)]>thres):
+            stop = stop+1
+            al[dim] = stop
+        
+        seg_slice.append(slice(start+1,stop))
+
+    return seg_slice
+
+
+def find_nseg_slice(data,location,thres):
+    """
+    Find slices which define a segment in data below thres starting a location
+    """
+    shape = data.shape
+    seg_slice = []
+    for dim,v in enumerate(location):
+        
+        # find start value
+        al = list(location)
+        start = v
+        while(valid_pt(al,shape) and data[tuple(al)]<thres):
+            start = start-1
+            al[dim] = start
+
+        # find stop value
+        al = list(location)
+        stop = v
+        while(valid_pt(al,shape) and data[tuple(al)]<thres):
+            stop = stop+1
+            al[dim] = stop
+        
+        seg_slice.append(slice(start+1,stop))
+
+    return seg_slice

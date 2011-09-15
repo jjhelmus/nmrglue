@@ -6,29 +6,44 @@ several nmrglue.analysis modules
 import numpy as np
 pi = np.pi
 
+# helper functions
 
-dimension_names = ['A','Z','Y','X']
-
-# new utilities
-
-def recnames(dnames,ls_classes,Ms):
+def neighbors(pt,shape,structure):
     """
-    Determind the names of a records array provided lineshape classes, 
+    Generate a list of all neightbors to a point
     
     Parameters:
+        
+    * pt        index of the point to find neighbors of.
+    * shape     shape of the region.
+    * structure Structure element that defines connections.
 
-    * dnames      List of dimension names.
-    * ls_classes  List of lineshape classes.
-    * Ms          List of lineshape lengths.
-    
-    Returns list of records array names (strings).
-    
     """
-    names = []
-    for d,M,l in zip(dnames,Ms,ls_classes):
-        for p in l.pnames(M):
-            names.append(d+'_'+p)
-    return names
+    # set middle of structure to False
+    s = np.copy(structure)  # copy structure
+    middle = [int(np.floor(i/2.)) for i in s.shape] # find middle of structure
+    s.flat[np.ravel_multi_index(middle,s.shape)] = False
+    offsets = np.argwhere(s)-middle
+    
+    # loop over the offset adding all valid points to pts
+    pts = []
+    for offset in offsets:
+        npt = pt-offset
+        if valid_pt(npt,shape):
+            pts.append(tuple(npt))
+    return pts
+
+def valid_pt(pt,shape):
+    """ Determind if point is valid in a given shaped array"""
+    for i,j in zip(pt,shape):
+        if i < 0:   # index is not negative
+            return False
+        if i>=j:    # index is less than j
+            return False
+    return True
+
+
+dimension_names = ['A','Z','Y','X']
 
 # utility functions
 
@@ -92,73 +107,6 @@ def squish(r,axis):
     for i in range(N-1):
         r = r.sum(0)
     return r
-
-def pick2linesh(centers,linewidths,amplitudes):
-    """
-    Convert peakpick.pick output to linesh.fit_NDregion input
-
-    Parameters:
-
-    * centers       Array of estimated peak locations, shape (n_peaks,ndim).
-    * linewidths    Array of estimated peak linewidths, shape (n_peaks,ndim).
-    * amplitudes    Array of estimated peak amplitude, shape (n_peaks).
-
-
-    Return: guesses,amp_guesses
-
-    * guesses       P-length list (P is the number of peaks in region) of
-                    N-length lists of tuples where each each tuple is the
-                    optimiztion starting parameters for a given peak and
-                    dimension lineshape.
-    * amp_guesses   P-length list of amplitudes.
-
-
-    """
-
-    # convert center and linewidths
-    guesses = []
-    for cs,lws in zip(centers,linewidths):
-        guesses.append([(c,lw) for c,lw in zip(cs,lws)])
-    
-    # convert amplitudes
-    amp_guesses = list(amplitudes)
-
-    return guesses,amp_guesses
-
-def linesh2pick(guesses,amp_guesses):
-    """
-    Convert linesh.fit_NDregion input/output to peakpick.pick output
-
-    Parameters:
-    
-    * guesses       P-length list (P is the number of peaks in region) of
-                    N-length lists of tuples where each each tuple is the
-                    optimiztion starting parameters for a given peak and
-                    dimension lineshape.
-    * amp_guesses   P-length list of amplitudes.
-
-    Return: (centers,linewidths,amplitudes)
-
-    * centers       Array of estimated peak locations, shape (n_peaks,ndim).
-    * linewidths    Array of estimated peak linewidths, shape (n_peaks,ndim).
-    * amplitudes    Array of estimated peak amplitude, shape (n_peaks).
-
-    """
-
-    # convert guesses to centers and linewidths
-    linewidths = np.zeros( ( len(guesses),len(guesses[0]) ),dtype='float')
-    centers = np.zeros_like(linewidths)
-
-    for p_num,peak_params in enumerate(guesses):
-        for dim_num,dim_params in enumerate(peak_params):
-            centers[p_num,dim_num] = dim_params[0]
-            linewidths[p_num,dim_num] = dim_params[1]
-
-    # convert amplitudes
-    amplitudes  = np.array(amp_guesses)
-
-    return centers,linewidths,amplitudes
-
 
 # Lineshape classes
 
