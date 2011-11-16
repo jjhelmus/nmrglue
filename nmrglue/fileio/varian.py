@@ -520,7 +520,7 @@ def read_fid(filename,shape=None,torder='flat',read_blockhead=False):
 
     # if ntraces is not 1 use _ntraces version 
     if dic["ntraces"] != 1:
-        return read_fid_ntraces(filename,shape,read_blockhead)
+        return read_fid_ntraces(filename,shape,torder,read_blockhead)
 
     # data parameters
     dt = find_dtype(dic)
