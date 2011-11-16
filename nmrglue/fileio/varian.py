@@ -137,18 +137,18 @@ def create_pdic_param(name,values):
     Create a fake procpar dictionary element of name name, with values
     """
     dic = dict()
-    dic["Dgroup"]		= '1'
-    dic["Ggroup"]		= '2'
-    dic["active"]		= '1'
-    dic["basictype"]	= '1'
+    dic["Dgroup"]       = '1'
+    dic["Ggroup"]       = '2'
+    dic["active"]       = '1'
+    dic["basictype"]    = '1'
     dic["enumerable"]   = '0'
-    dic["intptr"]		= '64'
-    dic["maxvalue"]		= '32767'   # 2^15-1
-    dic["minvalue"]		= '0'
-    dic["name"] 		= name
-    dic["protection"]	= '0'
-    dic["stepsize"]		= '0'
-    dic["subtype"]		= '7'
+    dic["intptr"]       = '64'
+    dic["maxvalue"]     = '32767'   # 2^15-1
+    dic["minvalue"]     = '0'
+    dic["name"]         = name
+    dic["protection"]   = '0'
+    dic["stepsize"]     = '0'
+    dic["subtype"]      = '7'
     dic["values"]       = values
     return dic
 
@@ -956,7 +956,7 @@ def get_trace(f,pts,dt):
     return np.frombuffer(f.read(bsize),dt)
 
 def get_fileheader(f):
-	"""
+    """
     Unpack file header parameters into list.
 
     Reads the 32-byte file header from file and unpacks into a list.  Endiness
@@ -978,14 +978,14 @@ def get_fileheader(f):
     8   nbheaders   number of block headers per block (1)
     =   =========   ======================================
 
-	"""
-	# header is packed big-endian as 6 longs, 2 shorts, 1 long
-	return struct.unpack('>6lhhl',f.read(32))
+    """
+    # header is packed big-endian as 6 longs, 2 shorts, 1 long
+    return struct.unpack('>6lhhl',f.read(32))
 
 def get_blockheader(f):
-	"""
+    """
     Unpack block header parameters into a list.
-	
+    
     Reads the 28-byte block header from f and unpacks into a list.  Endiness
     is corrected as needed.
     
@@ -1007,19 +1007,19 @@ def get_blockheader(f):
 
     """
     # block header is packed big-endian as 4 shorts, 1 long, 4 floats
-	return struct.unpack('>4hl4f',f.read(28))
+    return struct.unpack('>4hl4f',f.read(28))
 
 def skip_blockheader(f):
-	""" 
+    """ 
     Read a block header but do not unpack
 
     This is a replacement for get_blockheader.  It skips f ahead 28 bytes.
-	"""
-	f.read(28)
-	return
+    """
+    f.read(28)
+    return
 
 def get_hyperheader(file):
-	""" 
+    """ 
     Unpack hypercomplex header parameters to a list.
 
     Reads the 28-bytes block header from file and unpacks into a list. Endiness
@@ -1041,9 +1041,9 @@ def get_hyperheader(file):
     8   f_spare2    Not Used
     =   ========    ================
 
-	"""
+    """
     # hypercomplex header is packed big-endian as 4 shorts, 1 long, 4 floats
-	return struct.unpack('>4hl4f',file.read(28))
+    return struct.unpack('>4hl4f',file.read(28))
 
 
 def put_block(f,trace,nbheaders,bh,hh=False):
@@ -1135,24 +1135,24 @@ def put_hyperheader(f,hh):
 #########################
 
 def hyperheader2dic(head):
-	""" 
+    """ 
     Convert a hypercomplex block header into a python dictionary.
-	"""
-	dic = dict()
-	dic["s_spare1"]	= head[0]
-	dic["status"]	= head[1]
-	dic["s_spare2"]	= head[2]
-	dic["s_spare3"]	= head[3]
-	dic["l_spare1"]	= head[4]
-	dic["lpval1"]	= head[5]
-	dic["rpval1"]	= head[6]
-	dic["f_spare1"]	= head[7]
-	dic["f_spare2"]	= head[8]
+    """
+    dic = dict()
+    dic["s_spare1"] = head[0]
+    dic["status"]   = head[1]
+    dic["s_spare2"] = head[2]
+    dic["s_spare3"] = head[3]
+    dic["l_spare1"] = head[4]
+    dic["lpval1"]   = head[5]
+    dic["rpval1"]   = head[6]
+    dic["f_spare1"] = head[7]
+    dic["f_spare2"] = head[8]
 
-	#unpack the status bits
-	dic["UHYPERCOMPLEX"] = (dic["status"] & 0x2) / 0x2
+    #unpack the status bits
+    dic["UHYPERCOMPLEX"] = (dic["status"] & 0x2) / 0x2
 
-	return dic
+    return dic
 
 
 def repack_hyperheader(dic):
@@ -1164,23 +1164,23 @@ def repack_hyperheader(dic):
 
 
 def dic2hyperheader(head):
-	"""	
+    """ 
     Convert a python dictionary into a hypercomplex block header list.
 
     Does not repack status from bit flags.
-	"""
-	head = [0] * 9	
-	head[0] = dic["s_spare1"]	 
-	head[1] = dic["status"]	 
-	head[2] = dic["s_spare2"]	 
-	head[3] = dic["s_spare3"]	 
-	head[4] = dic["l_spare1"]	 
-	head[5] = dic["lpval1"] 
-	head[6] = dic["rpval1"]	 
-	head[7] = dic["f_spare1"]	 
-	head[8] = dic["f_spare2"]	 
+    """
+    head = [0] * 9
+    head[0] = dic["s_spare1"] 
+    head[1] = dic["status"]  
+    head[2] = dic["s_spare2"]
+    head[3] = dic["s_spare3"] 
+    head[4] = dic["l_spare1"] 
+    head[5] = dic["lpval1"] 
+    head[6] = dic["rpval1"]  
+    head[7] = dic["f_spare1"] 
+    head[8] = dic["f_spare2"] 
 
-	return head
+    return head
 
 
 def make_blockheader(filedic=False,index=1):
@@ -1255,15 +1255,15 @@ def blockheader2dic(head):
 
     dic = dict()
 
-    dic["scale"] 	= head[0]
-    dic["status"]	= head[1]
-    dic["index"]	= head[2]
-    dic["mode"]	    = head[3]
-    dic["ctcount"]	= head[4]
-    dic["lpval"]	= head[5]
-    dic["rpval"]	= head[6]
-    dic["lvl"]	    = head[7]
-    dic["tlt"]	    = head[8]
+    dic["scale"]    = head[0]
+    dic["status"]   = head[1]
+    dic["index"]    = head[2]
+    dic["mode"]     = head[3]
+    dic["ctcount"]  = head[4]
+    dic["lpval"]    = head[5]
+    dic["rpval"]    = head[6]
+    dic["lvl"]      = head[7]
+    dic["tlt"]      = head[8]
     
     # unpack the status parameters  
     dic["S_DATA"]    = (dic["status"] & 0x1)/0x1
@@ -1273,28 +1273,28 @@ def blockheader2dic(head):
     dic["S_COMPLEX"] = (dic["status"] & 0x10)/0x10
     dic["S_HYPERCOMPLEX"]   = (dic["status"] & 0x20)/0x20
 
-    dic["MORE_BLOCKS"]	= (dic["status"] & 0x80)/0x80
-    dic["NP_CMPLX"]	 = (dic["status"] & 0x100)/0x100
-    dic["NF_CMPLX"]	 = (dic["status"] & 0x200)/0x200
-    dic["NI_CMPLX"]	 = (dic["status"] & 0x400)/0x400
-    dic["NI2_CMPLX"] = (dic["status"] & 0x800)/0x800
+    dic["MORE_BLOCKS"]  = (dic["status"] & 0x80)/0x80
+    dic["NP_CMPLX"]     = (dic["status"] & 0x100)/0x100
+    dic["NF_CMPLX"]     = (dic["status"] & 0x200)/0x200
+    dic["NI_CMPLX"]     = (dic["status"] & 0x400)/0x400
+    dic["NI2_CMPLX"]    = (dic["status"] & 0x800)/0x800
 
     # unpack the mode parameter
-    dic["NP_PHMODE"]	= (dic["mode"] & 0x1) / 0x1
-    dic["NP_AVMODE"]	= (dic["mode"] & 0x2) / 0x2
-    dic["NP_PWRMODE"]	= (dic["mode"] & 0x4) / 0x4
+    dic["NP_PHMODE"]    = (dic["mode"] & 0x1) / 0x1
+    dic["NP_AVMODE"]    = (dic["mode"] & 0x2) / 0x2
+    dic["NP_PWRMODE"]   = (dic["mode"] & 0x4) / 0x4
 
-    dic["NF_PHMODE"]	= (dic["mode"] & 0x10) / 0x10
-    dic["NF_AVMODE"]	= (dic["mode"] & 0x20) / 0x20
-    dic["NF_PWRMODE"]	= (dic["mode"] & 0x40) / 0x40
-    	
-    dic["NI_PHMODE"]	= (dic["mode"] & 0x100) / 0x100
-    dic["NI_AVMODE"]	= (dic["mode"] & 0x200) / 0x200
-    dic["NI_PWRMODE"]	= (dic["mode"] & 0x400) / 0x400 
+    dic["NF_PHMODE"]    = (dic["mode"] & 0x10) / 0x10
+    dic["NF_AVMODE"]    = (dic["mode"] & 0x20) / 0x20
+    dic["NF_PWRMODE"]   = (dic["mode"] & 0x40) / 0x40
+    
+    dic["NI_PHMODE"]    = (dic["mode"] & 0x100) / 0x100
+    dic["NI_AVMODE"]    = (dic["mode"] & 0x200) / 0x200
+    dic["NI_PWRMODE"]   = (dic["mode"] & 0x400) / 0x400 
 
-    dic["NI2_PHMODE"]	= (dic["mode"] & 0x1000) / 0x1000
-    dic["NI2_AVMODE"]	= (dic["mode"] & 0x2000) / 0x2000
-    dic["NI2_PWRMODE"]	= (dic["mode"] & 0x4000) / 0x4000
+    dic["NI2_PHMODE"]   = (dic["mode"] & 0x1000) / 0x1000
+    dic["NI2_AVMODE"]   = (dic["mode"] & 0x2000) / 0x2000
+    dic["NI2_PWRMODE"]  = (dic["mode"] & 0x4000) / 0x4000
 
     return dic
 
@@ -1320,59 +1320,59 @@ def repack_blockheader(dic):
 
 
 def dic2blockheader(dic):
-	""" 
+    """ 
     Convert a python dictionary into block header list.
 
     Does not repack status and mode from bit flags.
-	"""
+    """
 
-	head = [0] * 9
+    head = [0] * 9
 
-	head[0] = dic["scale"] 	
-	head[1] = dic["status"]	
-	head[2] = dic["index"]	
-	head[3] = dic["mode"]	
-	head[4] = dic["ctcount"]
-	head[5] = dic["lpval"]	
-	head[6] = dic["rpval"]	
-	head[7] = dic["lvl"]	
-	head[8] = dic["tlt"]	
-	
-	return head
+    head[0] = dic["scale"]  
+    head[1] = dic["status"] 
+    head[2] = dic["index"]
+    head[3] = dic["mode"]
+    head[4] = dic["ctcount"]
+    head[5] = dic["lpval"]
+    head[6] = dic["rpval"]
+    head[7] = dic["lvl"]
+    head[8] = dic["tlt"]
+
+    return head
 
 
 def fileheader2dic(head):
-	""" 
+    """ 
     Convert fileheader list into a python dictionary
-	"""
-	dic = dict()
+    """
+    dic = dict()
 
-	dic["nblocks"]	= head[0]
-	dic["ntraces"]	= head[1]
-	dic["np"]	= head[2]
-	dic["ebytes"]	= head[3]
-	dic["tbytes"]	= head[4]
-	dic["bbytes"]	= head[5]
-	dic["vers_id"]	= head[6]
-	dic["status"]	= head[7]
-	dic["nbheaders"]= head[8]
+    dic["nblocks"]  = head[0]
+    dic["ntraces"]  = head[1]
+    dic["np"]       = head[2]
+    dic["ebytes"]   = head[3]
+    dic["tbytes"]   = head[4]
+    dic["bbytes"]   = head[5]
+    dic["vers_id"]  = head[6]
+    dic["status"]   = head[7]
+    dic["nbheaders"]= head[8]
 
-	# unpack the status parameter
-	dic["S_DATA"]	= (dic["status"] & 0x1) / 0x1
-	dic["S_SPEC"]	= (dic["status"] & 0x2) / 0x2
-	dic["S_32"]	    = (dic["status"] & 0x4) / 0x4
-	dic["S_FLOAT"]	= (dic["status"] & 0x8) / 0x8
-	dic["S_COMPLEX"]= (dic["status"] & 0x10) / 0x10
-	dic["S_HYPERCOMPLEX"]	= (dic["status"] & 0x20) / 0x20
-	dic["S_ACQPAR"]	= (dic["status"] & 0x80) / 0x80
-	dic["S_SECND"]	= (dic["status"] & 0x100) / 0x100
-	dic["S_TRANSF"]	= (dic["status"] & 0x200) / 0x200
-	dic["S_NP"]	    = (dic["status"] & 0x800) / 0x800
-	dic["S_NF"]	    = (dic["status"] & 0x1000) / 0x1000
-	dic["S_NI"]	    = (dic["status"] & 0x2000) / 0x2000
-	dic["S_NI2"]	= (dic["status"] & 0x4000) / 0x4000
-	
-	return dic
+    # unpack the status parameter
+    dic["S_DATA"]           = (dic["status"] & 0x1) / 0x1
+    dic["S_SPEC"]           = (dic["status"] & 0x2) / 0x2
+    dic["S_32"]             = (dic["status"] & 0x4) / 0x4
+    dic["S_FLOAT"]          = (dic["status"] & 0x8) / 0x8
+    dic["S_COMPLEX"]        = (dic["status"] & 0x10) / 0x10
+    dic["S_HYPERCOMPLEX"]   = (dic["status"] & 0x20) / 0x20
+    dic["S_ACQPAR"]         = (dic["status"] & 0x80) / 0x80
+    dic["S_SECND"]          = (dic["status"] & 0x100) / 0x100
+    dic["S_TRANSF"]         = (dic["status"] & 0x200) / 0x200
+    dic["S_NP"]             = (dic["status"] & 0x800) / 0x800
+    dic["S_NF"]             = (dic["status"] & 0x1000) / 0x1000
+    dic["S_NI"]             = (dic["status"] & 0x2000) / 0x2000
+    dic["S_NI2"]            = (dic["status"] & 0x4000) / 0x4000
+    
+    return dic
 
 
 def repack_fileheader(dic):
@@ -1391,24 +1391,24 @@ def repack_fileheader(dic):
 
 
 def dic2fileheader(dic):
-	""" 
+    """ 
     Convert a python dictionary into a fileheader list
 
     Does not repack status from bit flags
-	"""
+    """
 
-	head = [0] * 9
- 	head[0]= dic["nblocks"]
-  	head[1]= dic["ntraces"]
-  	head[2]= dic["np"]
-  	head[3]= dic["ebytes"]
-  	head[4]= dic["tbytes"]
-  	head[5]= dic["bbytes"]
-  	head[6]= dic["vers_id"]
-  	head[7]= dic["status"]
-  	head[8]= dic["nbheaders"]
+    head = [0] * 9
+    head[0]= dic["nblocks"]
+    head[1]= dic["ntraces"]
+    head[2]= dic["np"]
+    head[3]= dic["ebytes"]
+    head[4]= dic["tbytes"]
+    head[5]= dic["bbytes"]
+    head[6]= dic["vers_id"]
+    head[7]= dic["status"]
+    head[8]= dic["nbheaders"]
 
-	return head
+    return head
 
 
 ##################
@@ -1530,22 +1530,22 @@ def interleave_data(data_in):
 # procpar functions
 
 def read_procpar(filename):
-	""" 
+    """ 
     Read a procpar file returning a python dictionary
-	"""
+    """
 
-	f = open(filename)
+    f = open(filename)
 
-	dic = dict()
+    dic = dict()
 
-	length = os.stat(filename).st_size
+    length = os.stat(filename).st_size
 
-	# test to see if end of file
-	while f.tell() != length:
-		p = get_parameter(f)
-		dic[p["name"]] = p
+    # test to see if end of file
+    while f.tell() != length:   
+        p = get_parameter(f)
+        dic[p["name"]] = p
 
-	return dic
+    return dic
 
 def get_parameter(f):
     """ 
@@ -1559,17 +1559,17 @@ def get_parameter(f):
     # read and decode the first line
     line = f.readline().split()
 
-    dic["name"] 		= line[0]
-    dic["subtype"]		= line[1]
-    dic["basictype"]	= line[2]
-    dic["maxvalue"]		= line[3]
-    dic["minvalue"]		= line[4]
-    dic["stepsize"]		= line[5]
-    dic["Ggroup"]		= line[6]
-    dic["Dgroup"]		= line[7]
-    dic["protection"]	= line[8]
-    dic["active"]		= line[9]
-    dic["intptr"]		= line[10]
+    dic["name"]         = line[0]
+    dic["subtype"]      = line[1]
+    dic["basictype"]    = line[2]
+    dic["maxvalue"]     = line[3]
+    dic["minvalue"]     = line[4]
+    dic["stepsize"]     = line[5]
+    dic["Ggroup"]       = line[6]
+    dic["Dgroup"]       = line[7]
+    dic["protection"]   = line[8]
+    dic["active"]       = line[9]
+    dic["intptr"]       = line[10]
 
     # read in the values of the parameter
     line = f.readline()
@@ -1578,12 +1578,12 @@ def get_parameter(f):
 
     values = []
 
-    if dic["basictype"] == "1":	# real values, only one line
+    if dic["basictype"] == "1":     # real values, only one line
         values = line.split()[1:]
 
-    elif dic["basictype"] == "2":	# strings, may have multiple lines
+    elif dic["basictype"] == "2":   # strings, may have multiple lines
 
-        values.append(line.split("\"")[1])	# split on "s
+        values.append(line.split("\"")[1])  # split on "s
 
         for i in range(num-1):
             values.append(f.readline().split("\"")[1])
@@ -1597,10 +1597,10 @@ def get_parameter(f):
 
     if dic["enumerable"] != "0":
 
-        if dic["basictype"] == "1":	# reals
+        if dic["basictype"] == "1":     # reals
             dic["enumerables"] = line.split()[1:]
 
-        elif dic["basictype"] == "2":	#strings		
+        elif dic["basictype"] == "2":   #strings
             dic["enumerables"] = line.split("\"")[1::2]
 
     return dic
@@ -1614,7 +1614,7 @@ def write_procpar(filename,dic,overwrite=False):
     # open the file for writing
     f = fileiobase.open_towrite(filename,overwrite=overwrite)
 
-    for key in dic.keys():	# loop over the parameters
+    for key in dic.keys():  # loop over the parameters
 
         d = dic[key]
         # print out the first line
@@ -1624,18 +1624,18 @@ def write_procpar(filename,dic,overwrite=False):
                    d["active"],d["intptr"]
 
         # print out the next line(s) (and more if strings)
-        if d["basictype"] == "1":	# real values, one line
+        if d["basictype"] == "1":   # real values, one line
 
             print >> f,len(d["values"]), # don't end the line
             for value in d["values"]:
-                print >>f,value,	# still not yet
-            print >> f,""	# now end the line
+                print >>f,value,    # still not yet
+            print >> f,""   # now end the line
 
-        elif d["basictype"] == "2":	# strings, may have multiple lines
+        elif d["basictype"] == "2":     # strings, may have multiple lines
 
-            print >> f,len(d["values"]),	# don't end the line
+            print >> f,len(d["values"]),    # don't end the line
             for value in d["values"]:
-                print >> f,'"'+value+'"'	# now end the line (for each string)
+                print >> f,'"'+value+'"' # now end the line (for each string)
 
         # print out the last line
         print >> f,d["enumerable"],
@@ -1648,14 +1648,14 @@ def write_procpar(filename,dic,overwrite=False):
                 elif d["basictype"] == "2": #strings
                     print >> f,'"'+e+'"',
 
-        print >> f,""	# end the enumerable line	
+        print >> f,""   # end the enumerable line
 
     f.close()
 
     return
 
 subtypes = ["undefined", "real", "string","delay","flag",
-	"frequency","pulse","integer"]
+    "frequency","pulse","integer"]
 
 basictypes = ["undefined","real","string"]
 

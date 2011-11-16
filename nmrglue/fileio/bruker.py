@@ -834,10 +834,10 @@ def get_trace(f,num_points,big):
 # data manipulation functions
 
 def complexify_data(data):
-	""" 
+    """ 
     Complexify data packed real,imag data
-	"""
-	return data[...,::2] + data[...,1::2]*1.j
+    """
+    return data[...,::2] + data[...,1::2]*1.j
 
 
 def uncomplexify_data(data_in):
