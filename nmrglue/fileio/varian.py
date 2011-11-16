@@ -550,7 +550,12 @@ def read_fid(filename,shape=None,torder='flat',read_blockhead=False):
  
     # reorder 3D/4D data
     if len(shape) >= 3:
-        return dic,reorder_data(data,shape,torder)
+        try:
+            return dic,reorder_data(data,shape,torder)
+        except:
+            print "Warning: data cannot be re-ordered, returning raw 2D data"
+            print "Provided shape: "+str(shape)+" torder: "+str(torder)
+            return dic,data
 
     try:
         data = data.reshape(shape)
