@@ -344,13 +344,21 @@ def find_torder(dic,shape):
     # 1 and 2D files are flat
     if ndim<3:
         return 'f'  # flat
-
+    
     if "array" not in dic:
         print "Warning: no array in dictionary, torder set to regular"
         return 'r'
 
+    # extract the array list
+    al =  dic['array']['values'][0].split(',')
+    
+    # remove one dimension if non-phase parameter is present in array list
+    if False in [s.startswith('phase') for s in al]:
+        ndim = ndim - 1
+        if ndim <3:
+            return 'f'  # flat
+
     if ndim==3:
-        al = dic["array"]["values"][0].split(",")
         if "phase" in al and "phase2" in al:
             if al.index("phase") > al.index("phase2"):
                 return 'r'  # regular
@@ -361,7 +369,6 @@ def find_torder(dic,shape):
             return 'r'
     
     if ndim==4:
-        al = dic["array"]["values"][0].split(",")
         if "phase" in al and "phase2" in al and "phase3" in al:
             if al.index("phase") > al.index("phase2") > al.index("phase3"):
                 return 'r'  # regular
@@ -374,7 +381,7 @@ def find_torder(dic,shape):
             print "Warning: missing phase order, torder set to regular"
             return 'r'
 
-    print "Warning: No trace ordering for",ndim,"dimension data"
+    print "Warning: No trace ordering for",ndim,"dimensional data"
     print "torder set to regular"
     return 'r'
 
@@ -1419,18 +1426,60 @@ def find_shape(pdic):
     """
     Determine the shape of a varian file from the procpar dictionary
     """
-    # direct dimension (R+I) is stored in np
-    # indirect dimension shapes (R|I) are stored in ni,ni2,ni3
-    # with the phase arrays stored as phase,phase2,phase3
+    # Varian files are typically either from imaging experiments or
+    # from NMR experiments.  For both the direct dimension (R+I) is stored in 
+    # the np parameters in the procpar file.  In addition an array may be 
+    # present.
+    
+    # Imaging experiments have a 'seqcon' parameter present in the procpar and
+    # have indirect dimension are set by nv, nv2, and nv3.
+
+    # NMR experiments has indirect dimension shapes (R|I) are stored in 
+    # ni,ni2,ni3 with the phase arrays stored as phase,phase2,phase3
+
+    # Thanks to the VeSPA project (http://scion.duhs.duke.edu/vespa/) for 
+    # information on imaging experiments
+
     try:
-        shape =[ int(int(pdic["np"]["values"][0])/2)]
+        shape =[int(pdic["np"]["values"][0]) // 2]
     except:
         # when shape finding fails issue warning and return None
         print "Warning: shape not found, may be incorrect"
         return None
 
+    # check for an array, we will deal only with the inner most array.
+    # When multiple parameters are arrayed the ordering of indirect dimension
+    # must also be known, which typically is not provided, so we will leave
+    # this edge case to the user.
+    if "array" in pdic:
+        array_name = pdic['array']['values'][0]
+        array_name = array_name.split(',')[-1]  # keep only innermost array
+        if array_name.startswith('phase')==False and array_name in pdic:
+            shape.insert(0,len(pdic[array_name]["values"]))
+        
+    # imaging files have a seqcon parameter
+    if 'seqcon' in pdic:
+        
+        if "nv" in pdic:
+            s = max(int(pdic["nv"]["values"][0]),1)
+            if s > 1:
+                shape.insert(0,s)
+        if "nv2" in pdic:
+            s = max(int(pdic["nv2"]["values"][0]),1)
+            if s > 1:
+                shape.insert(0,s)
+        
+        if "nv3" in pdic:
+            s = max(int(pdic["nv3"]["values"][0]),1)
+            if s > 1:
+                shape.insert(0,s)
+    
+        return tuple(shape)
+
+
+    # assume we have NMR data 
     if "ni" in pdic:
-        multi = 2
+        multi = 2       # assume R+I in cases where no phase parameter.
         if "phase" in pdic:
             multi = len(pdic["phase"]["values"])
         s = max(int(pdic["ni"]["values"][0]),1)
