@@ -33,12 +33,12 @@ def neighbors(pt,shape,structure):
             pts.append(tuple(npt))
     return pts
 
-def valid_pt(pt,shape):
+def valid_pt(pt, shape):
     """ Determind if point is valid in a given shaped array"""
-    for i,j in zip(pt,shape):
+    for i,j in zip(pt, shape):
         if i < 0:   # index is not negative
             return False
-        if i>=j:    # index is less than j
+        if i >= j:    # index is less than j
             return False
     return True
 
@@ -131,16 +131,20 @@ def squish(r,axis):
 
 # lineshape router
 
+ls_table = {
+    "gauss"   :  gauss1D,
+    "g"       :  gauss1D,
+    "lorentz" :  lorentz1D,
+    "l"       :  lorentz1D,
+    "scale"   :  scale1D,
+    "s"       :  scale1D,
+    "peak"    :  peak1D,
+    "p"       :  peak1D
+}
+
 def ls_str2class(l):
-    """ Convert lineshape string to lineshape class """
-    if l == "gauss" or l == "g":
-        return gauss1D()
-    elif l == "lorentz" or l == "l":
-        return lorentz1D()
-    elif l == "scale" or l == "s":
-        return scale1D()
-    elif l == "peak" or l == "p":
-        return peak1D()
+    if ls_table.has_key(l):
+        return ls_table[l]()
     else:
         raise ValueError("Unknown lineshape %s",(l))
 
@@ -168,34 +172,34 @@ class gauss1D():
         # simulate the lineshape
         return np.exp(-(np.arange(M)-mu)**2/(2*s2))/(np.sqrt(2*pi*s2))
 
-    def nparam(self,M):
+    def nparam(self, M):
         # return the number of parameters needed to simulate a M length 
         # gaussian (2: mu and sigma)
         return 2
 
-    def guessp(self,sig):
+    def guessp(self, sig):
         # estimate the lineshape parameters, these are rough estimates
         # find the center and full-width at half max
-        c,fwhm = center_fwhm(sig)
+        c, fwhm = center_fwhm(sig)
         # relate mu and sigma to the center and FWHM
-        return (c,fwhm/2.3548)
+        return (c, fwhm / 2.3548)
 
-    def pnames(self,M):
+    def pnames(self, M):
         # give names to the two parameters
-        return ("mu","sigma")
+        return ("mu", "sigma")
 
-    def add_edge(self,p,(min,max)):
+    def add_edge(self, p, (min, max)):
         # return parameters corrected for region limits (edges)
         # must also be able to correct bounds for edges (so test for None)
-        if p[0]==None:
+        if p[0] == None:
             return p
-        return p[0]-min,p[1]
+        return p[0] - min, p[1]
 
-    def remove_edge(self,p,(min,max)):
+    def remove_edge(self, p, (min,max)):
         # return parameters/bounds 'uncorrected' for region limits (edges)
-        if p[0]==None:
+        if p[0] == None:
             return p
-        return p[0]+min,p[1]
+        return p[0] + min, p[1]
 
 class peak1D():
     """
@@ -206,37 +210,37 @@ class peak1D():
 
     name = "peak"
 
-    def sim(self,M,p):
-        mu,fwhm = p
-        sigma = fwhm/2.3548
-        s2 = sigma**2
+    def sim(self, M, p):
+        mu, fwhm = p
+        sigma = fwhm / 2.3548
+        s2 = sigma ** 2
         return np.exp(-(np.arange(M)-mu)**2/(2*s2))/(np.sqrt(2*pi*s2))
 
-    def nparam(self,M):
+    def nparam(self, M):
         return 2
     
-    def guessp(self,sig):
-        c,fwhm=center_fwhm(sig)
-        return (c,fwhm)
+    def guessp(self, sig):
+        c, fwhm = center_fwhm(sig)
+        return (c, fwhm)
 
-    def pnames(self,M):
-        return ("mu","fwhm")
+    def pnames(self, M):
+        return ("mu", "fwhm")
 
-    def add_edge(self,p,(min,max)):
-        if p[0]==None:
+    def add_edge(self, p, (min, max)):
+        if p[0] == None:
             return p
-        return p[0]-min,p[1]
+        return p[0] - min, p[1]
 
-    def remove_edge(self,p,(min,max)):
-        if p[0]==None:
+    def remove_edge(self, p, (min, max)):
+        if p[0] == None:
             return p
-        return p[0]+min,p[1]
+        return p[0] + min, p[1]
 
 class lorentz1D():
     """
     Lorentzian lineshape class
 
-    Parameters (x0,g):
+    Parameters (x0, g):
 
     * x0    the center of the lorentzian.
     * gamma the scale parameter .
@@ -245,32 +249,32 @@ class lorentz1D():
 
     name = "lorentz"
 
-    def sim(self,M,p):
-        x0,gamma = p
+    def sim(self, M, p):
+        x0, gamma = p
         return 1./pi*1./(gamma**2 + (np.arange(M)-x0)**2)
 
-    def nparam(self,M):
+    def nparam(self, M):
         return 2
 
-    def guessp(self,sig):
-        c,fwhm = center_fwhm(sig)
-        return (c,fwhm/2.)
+    def guessp(self, sig):
+        c, fwhm = center_fwhm(sig)
+        return (c, fwhm / 2.)
 
-    def pnames(self,M):
-        return("x0","gamma")
+    def pnames(self, M):
+        return("x0", "gamma")
 
-    def pcorrect(self,p,(min,max)):
-        return p[0]-min,p[1]
+    def pcorrect(self, p, (min, max)):
+        return p[0] - min, p[1]
 
-    def add_edge(self,p,(min,max)):
-        if p[0]==None:
+    def add_edge(self, p, (min, max)):
+        if p[0] == None:
             return p
-        return p[0]-min,p[1]
+        return p[0] - min, p[1]
 
-    def remove_edge(self,p,(min,max)):
-        if p[0]==None:
+    def remove_edge(self, p, (min, max)):
+        if p[0] == None:
             return p
-        return p[0]+min,p[1]
+        return p[0] + min, p[1]
 
 class scale1D():
     """
