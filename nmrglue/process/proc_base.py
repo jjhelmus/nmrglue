@@ -283,8 +283,8 @@ def fsh(data,pts):
     # data = complexft(pdata)
 
     # inplace version 
-    return complexft(np.exp(-2.j*pi*pts*np.arange(s)/s,sig=data.dtype)*
-           icomplexft(data))
+    return fft_positive(np.exp(-2.j*pi*pts*np.arange(s)/s,sig=data.dtype)*
+           ifft_negative(data))
 
 def fsh2(data,pts):
     """
@@ -300,14 +300,13 @@ def fsh2(data,pts):
 
     """
     s= float(data.shape[-1])
-    return icomplexft(np.exp(2.j*pi*pts*np.arange(s)/s,sig=data.dtype)*
-           complexft(data)) 
+    return fft_positive(np.exp(2.j*pi*pts*np.arange(s)/s,sig=data.dtype)*
+           ifft_negative(data)) 
 
 
 ##############
 # Transforms #
 ##############
-
 
 def nmr_reorder(data):
     """ 
@@ -316,6 +315,12 @@ def nmr_reorder(data):
     s = data.shape[-1]
     return np.append(data[...,int(s/2)::-1],data[...,s:int(s/2):-1],axis=-1)
 
+def swap_halves(data):
+    """ 
+    Swap the halves of a spectrum
+    """
+    s = data.shape[-1]
+    return np.append(data[...,int(s/2):],data[...,:int(s/2)],axis=-1)
 
 # Fourier based Transforms
 def rft(x):
@@ -348,30 +353,84 @@ def irft(xp):
     x[...,-1]     = xp[...,s/2].real
     return x
 
-def complexft(data):
+
+# Fourier transforms (keep these ones)
+def fft(data):
     """ 
-    Complex FFT with NMR ordering of results 
+    Fourier transform, NMR ordering of results.
+
+    There are a number of definitions of the discrete Fourier transform
+    the version used in this function is:
+
+    A_k =  \sum_{m=0}^{n-1} a_m \exp\left\{-2\pi i{mk \over n}\right\}
+       \qquad k = 0,\ldots,n-1.
+
+    With the inverse DFT in the ifft function defined as:
+
+    .. math::
+    a_m = \frac{1}{n}\sum_{k=0}^{n-1}A_k\exp\left\{2\pi i{mk\over n}\right\}
+       \qquad n = 0,\ldots,n-1.
+
+    Two alternative definitions are also supported by nmrglue. First one in
+    which both the sum in the fft and ifft are multiplied by
+    :math: \frac{1}{\sqrt{n}} which results in a pair of transforms in which 
+    the total power contained in the the signals perform and after the 
+    transforms are equal.  This is the type transforms used in the 
+    Rowland NMR Toolkit. This type of transform is performed by the `fft_norm` 
+    and `ifft_norm` functions. 
+
+    The second definition changes the sign of the exponent to be positive while
+    keeping the normalization factors the same.  This type of transform is
+    performed by the NMRPipe processing package and the functions 
+    `fft_positive` and `ifft_positive`.
+
     """
-    # fft, recast, and reorder
-    return nmr_reorder(np.array(np.fft.fft(data),dtype=data.dtype))
+    return np.fft.fftshift(np.fft.fft(data, axis = -1).astype(data.dtype), -1)
 
-ft = complexft
+def fft_norm(data):
+    """
+    Fourier transform, total power preserved, NMR ordering of results
 
-def icomplexft(data):
+    This is similar to the transform performed by RNMRTK's FFT function
+    """
+    return fft(data) / np.sqrt(float(data.shape[-1]))
+
+def fft_positive(data):
     """ 
-    Complex Inverse FFT with NMR ordering of data
+    Fourier transform with positive exponential, NMR ordering of results
+
+    This is similar to the transform performed by NMRPipe's FFT function
     """
-    # fft and recast to correct dtype
-    size = data.shape[-1]
-    data = np.array(np.fft.ifft(data),dtype=data.dtype) 
-    # XXX see if this can be rewritten with nmr_reorder
-    # keep zero-freq term first, reverse rest of spectrum and sign alt.
-    data = np.roll(data,-1,axis=-1)[...,::-1]
-    data[...,1::2] = data[...,1::2]*-1.   
-    return data
+    # a positive exponential is the same as a IFFT, but we need to undo
+    # the 1/N scaling
+    s = float(data.shape[-1])
+    return np.fft.fftshift(np.fft.ifft(data, axis=-1).astype(data.dtype),-1)*s
 
-ift = icomplexft
+def ifft(data):
+    """ 
+    Inverse fourier transform, NMR ordering of results.
+    """
+    return np.fft.ifft(np.fft.ifftshift(data, -1), axis=-1).astype(data.dtype)
 
+def ifft_norm(data):
+    """ 
+    Inverse fourier transform, total power preserved, NMR ordering of results
+
+    This is similar to the transform performed by RNMRTK's IFFT function.
+    """
+    return ifft(data) * np.sqrt(float(data.shape[-1]))
+
+def ifft_positive(data):
+    """
+    Inverse fourier transform with positive exponential, NMR ordered results.
+
+    This is similar to the transform performed by NMRPipe's FFT function with
+    the -inv flag
+    """
+    # a inverse fft with positive exponential in the FFT definition is the
+    # same as a FFT with negative exponentials, but with a 1/N scaling factor
+    s = 1.0 / float(data.shape[-1])
+    return np.fft.fft(np.fft.ifftshift(data, -1), axis=-1).astype(data.dtype)*s 
 
 # Hadamard Transform functions
 

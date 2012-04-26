@@ -921,11 +921,11 @@ def ft(dic,data,auto=False,real=False,inv=False,alt=False,neg=False,
         data = data.astype("complex64")
 
     if inv: # inverse transform
-        data = p.icomplexft(data)
+        data = p.ifft_positive(data)
         if alt:
             data[...,1::2] = data[...,1::2]*-1
     else:
-        data = p.complexft(data)
+        data = p.fft_positive(data)
 
     if real:
         # return a complex array with double size
