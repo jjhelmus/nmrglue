@@ -1,6 +1,0 @@
-nmrglue.process.proc_base.set
-=============================
-
-.. currentmodule:: nmrglue.process.proc_base
-
-.. autofunction:: set

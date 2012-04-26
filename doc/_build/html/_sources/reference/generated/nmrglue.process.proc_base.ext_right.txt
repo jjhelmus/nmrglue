@@ -1,6 +1,0 @@
-nmrglue.process.proc_base.ext_right
-===================================
-
-.. currentmodule:: nmrglue.process.proc_base
-
-.. autofunction:: ext_right

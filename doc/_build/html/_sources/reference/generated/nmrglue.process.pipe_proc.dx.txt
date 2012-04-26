@@ -1,6 +1,0 @@
-nmrglue.process.pipe_proc.dx
-============================
-
-.. currentmodule:: nmrglue.process.pipe_proc
-
-.. autofunction:: dx

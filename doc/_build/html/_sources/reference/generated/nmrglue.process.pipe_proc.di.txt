@@ -1,6 +1,0 @@
-nmrglue.process.pipe_proc.di
-============================
-
-.. currentmodule:: nmrglue.process.pipe_proc
-
-.. autofunction:: di

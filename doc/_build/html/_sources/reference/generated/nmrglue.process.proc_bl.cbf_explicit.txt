@@ -1,6 +1,0 @@
-nmrglue.process.proc_bl.cbf_explicit
-====================================
-
-.. currentmodule:: nmrglue.process.proc_bl
-
-.. autofunction:: cbf_explicit

@@ -1,6 +1,0 @@
-nmrglue.process.proc_base.zd_boxcar
-===================================
-
-.. currentmodule:: nmrglue.process.proc_base
-
-.. autofunction:: zd_boxcar

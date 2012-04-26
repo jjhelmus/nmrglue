@@ -1,6 +1,0 @@
-nmrglue.process.proc_base.neg_edges
-===================================
-
-.. currentmodule:: nmrglue.process.proc_base
-
-.. autofunction:: neg_edges

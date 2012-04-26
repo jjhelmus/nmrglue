@@ -1,6 +1,0 @@
-nmrglue.process.pipe_proc.null
-==============================
-
-.. currentmodule:: nmrglue.process.pipe_proc
-
-.. autofunction:: null

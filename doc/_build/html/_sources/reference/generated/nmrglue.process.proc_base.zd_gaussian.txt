@@ -1,6 +1,0 @@
-nmrglue.process.proc_base.zd_gaussian
-=====================================
-
-.. currentmodule:: nmrglue.process.proc_base
-
-.. autofunction:: zd_gaussian

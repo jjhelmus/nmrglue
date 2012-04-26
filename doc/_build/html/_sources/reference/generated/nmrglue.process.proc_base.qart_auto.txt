@@ -1,6 +1,0 @@
-nmrglue.process.proc_base.qart_auto
-===================================
-
-.. currentmodule:: nmrglue.process.proc_base
-
-.. autofunction:: qart_auto

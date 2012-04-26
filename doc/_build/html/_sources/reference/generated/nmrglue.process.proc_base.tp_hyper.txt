@@ -1,6 +1,0 @@
-nmrglue.process.proc_base.tp_hyper
-==================================
-
-.. currentmodule:: nmrglue.process.proc_base
-
-.. autofunction:: tp_hyper

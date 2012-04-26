@@ -1,6 +1,0 @@
-nmrglue.process.pipe_proc.integ
-===============================
-
-.. currentmodule:: nmrglue.process.pipe_proc
-
-.. autofunction:: integ

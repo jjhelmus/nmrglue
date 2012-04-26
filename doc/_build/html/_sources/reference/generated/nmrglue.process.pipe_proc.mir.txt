@@ -1,6 +1,0 @@
-nmrglue.process.pipe_proc.mir
-=============================
-
-.. currentmodule:: nmrglue.process.pipe_proc
-
-.. autofunction:: mir

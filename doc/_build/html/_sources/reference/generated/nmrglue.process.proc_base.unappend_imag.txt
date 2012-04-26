@@ -1,6 +1,0 @@
-nmrglue.process.proc_base.unappend_imag
-=======================================
-
-.. currentmodule:: nmrglue.process.proc_base
-
-.. autofunction:: unappend_imag

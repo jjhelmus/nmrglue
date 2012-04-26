@@ -1,6 +1,0 @@
-nmrglue.process.proc_base.swap_ri
-=================================
-
-.. currentmodule:: nmrglue.process.proc_base
-
-.. autofunction:: swap_ri

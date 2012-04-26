@@ -1,6 +1,0 @@
-nmrglue.process.proc_lp.make_little_d
-=====================================
-
-.. currentmodule:: nmrglue.process.proc_lp
-
-.. autofunction:: make_little_d

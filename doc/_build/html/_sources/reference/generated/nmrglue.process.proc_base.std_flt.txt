@@ -1,6 +1,0 @@
-nmrglue.process.proc_base.std_flt
-=================================
-
-.. currentmodule:: nmrglue.process.proc_base
-
-.. autofunction:: std_flt
