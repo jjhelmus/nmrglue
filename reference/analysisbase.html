@@ -1,0 +1,388 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nmrglue.analysisbase &mdash; nmrglue v0.2 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="nmrglue v0.2 documentation" href="../index.html" />
+    <link rel="up" title="Reference Guide" href="index.html" />
+    <link rel="next" title="nmrglue.helpers" href="helpers.html" />
+    <link rel="prev" title="nmrglue.process.pipe_proc.ztp" href="generated/nmrglue.process.pipe_proc.ztp.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="helpers.html" title="nmrglue.helpers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.process.pipe_proc.ztp.html" title="nmrglue.process.pipe_proc.ztp"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Reference Guide</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">nmrglue.analysisbase</a><ul>
+<li><a class="reference external" href="#low-level-functions">Low-Level Functions</a></li>
+<li><a class="reference external" href="#low-level-classes">Low-Level Classes</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="generated/nmrglue.process.pipe_proc.ztp.html"
+                                  title="previous chapter">nmrglue.process.pipe_proc.ztp</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="helpers.html"
+                                  title="next chapter">nmrglue.helpers</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/reference/analysisbase.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-nmrglue.analysis.analysisbase">
+<h1>nmrglue.analysisbase<a class="headerlink" href="#module-nmrglue.analysis.analysisbase" title="Permalink to this headline">¶</a></h1>
+<p>analysisbase provides general purpose analysis functions and classes used by
+several nmrglue.analysis modules</p>
+<p>This modules is imported as nmrglue.analysisbase and can be called as such.</p>
+<div class="section" id="low-level-functions">
+<h2>Low-Level Functions<a class="headerlink" href="#low-level-functions" title="Permalink to this headline">¶</a></h2>
+<p>These functions are typically not used directly by users.  They are called by
+high level functions.</p>
+<dl class="function">
+<dt id="nmrglue.analysis.analysisbase.recnames">
+<tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">recnames</tt><big>(</big><em>dnames</em>, <em>ls_classes</em>, <em>Ms</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.analysisbase.recnames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determind the names of a records array provided lineshape classes,</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>dnames      List of dimension names.</li>
+<li>ls_classes  List of lineshape classes.</li>
+<li>Ms          List of lineshape lengths.</li>
+</ul>
+<p>Returns list of records array names (strings).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.analysisbase.find_limits">
+<tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">find_limits</tt><big>(</big><em>pts</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.analysisbase.find_limits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the limits which outline the provided list of points</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>pts   List of points [(z0,y0,x0),(z1,y1,x1),...]</li>
+</ul>
+<p>Returns (min,max):</p>
+<ul class="simple">
+<li>min   array of minimum indices array([zmin,ymin,xmin]</li>
+<li>max   array of maximum indices array([zmin,ymin,xmin]</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.analysisbase.limits2slice">
+<tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">limits2slice</tt><big>(</big><em>limits</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.analysisbase.limits2slice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a set of slice objects given list of min,max limits</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>limits    Tuple of minimum and maximum indices</li>
+</ul>
+<p>Returns: list of slices which will return points between limits.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.analysisbase.slice2limits">
+<tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">slice2limits</tt><big>(</big><em>slices</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.analysisbase.slice2limits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a tuple of min,max limits from a set of slices</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>slices: list of slices</li>
+</ul>
+<p>Returns: Tuple of minimum and maximum indices</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.analysisbase.squish">
+<tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">squish</tt><big>(</big><em>r</em>, <em>axis</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.analysisbase.squish" title="Permalink to this definition">¶</a></dt>
+<dd>Squish array r along axis - sum along all but one axis</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.analysisbase.pick2linesh">
+<tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">pick2linesh</tt><big>(</big><em>centers</em>, <em>linewidths</em>, <em>amplitudes</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.analysisbase.pick2linesh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert peakpick.pick output to linesh.fit_NDregion input</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>centers       Array of estimated peak locations, shape (n_peaks,ndim).</li>
+<li>linewidths    Array of estimated peak linewidths, shape (n_peaks,ndim).</li>
+<li>amplitudes    Array of estimated peak amplitude, shape (n_peaks).</li>
+</ul>
+<p>Return: guesses,amp_guesses</p>
+<ul>
+<li><dl class="first docutils">
+<dt>guesses       P-length list (P is the number of peaks in region) of</dt>
+<dd><p class="first last">N-length lists of tuples where each each tuple is the
+optimiztion starting parameters for a given peak and
+dimension lineshape.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">amp_guesses   P-length list of amplitudes.</p>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.analysisbase.linesh2pick">
+<tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">linesh2pick</tt><big>(</big><em>guesses</em>, <em>amp_guesses</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.analysisbase.linesh2pick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert linesh.fit_NDregion input/output to peakpick.pick output</p>
+<p>Parameters:</p>
+<ul>
+<li><dl class="first docutils">
+<dt>guesses       P-length list (P is the number of peaks in region) of</dt>
+<dd><p class="first last">N-length lists of tuples where each each tuple is the
+optimiztion starting parameters for a given peak and
+dimension lineshape.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">amp_guesses   P-length list of amplitudes.</p>
+</li>
+</ul>
+<p>Return: (centers,linewidths,amplitudes)</p>
+<ul class="simple">
+<li>centers       Array of estimated peak locations, shape (n_peaks,ndim).</li>
+<li>linewidths    Array of estimated peak linewidths, shape (n_peaks,ndim).</li>
+<li>amplitudes    Array of estimated peak amplitude, shape (n_peaks).</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.analysisbase.ls_str2class">
+<tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">ls_str2class</tt><big>(</big><em>l</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.analysisbase.ls_str2class" title="Permalink to this definition">¶</a></dt>
+<dd>Convert lineshape string to lineshape class</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.analysisbase.center_fwhm">
+<tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">center_fwhm</tt><big>(</big><em>signal</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.analysisbase.center_fwhm" title="Permalink to this definition">¶</a></dt>
+<dd>Estimate the center and full-width half max of a signal.</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.analysisbase.center_fwhm_bymoments">
+<tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">center_fwhm_bymoments</tt><big>(</big><em>signal</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.analysisbase.center_fwhm_bymoments" title="Permalink to this definition">¶</a></dt>
+<dd>Estimate the center and full-width half max of a signal using moments</dd></dl>
+
+</div>
+<div class="section" id="low-level-classes">
+<h2>Low-Level Classes<a class="headerlink" href="#low-level-classes" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="nmrglue.analysis.analysisbase.gauss1D">
+<em class="property">class </em><tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">gauss1D</tt><a class="headerlink" href="#nmrglue.analysis.analysisbase.gauss1D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gaussian (normal) lineshape class</p>
+<p>Parameters (mu,sigma):</p>
+<ul class="simple">
+<li>mu    mean (center of mean)</li>
+<li>sigma variance (width of distribution)</li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="nmrglue.analysis.analysisbase.peak1D">
+<em class="property">class </em><tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">peak1D</tt><a class="headerlink" href="#nmrglue.analysis.analysisbase.peak1D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Peak lineshape class</p>
+<p>This is really a gaussian lineshape which takes a center,fwhm as parameters</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nmrglue.analysis.analysisbase.lorentz1D">
+<em class="property">class </em><tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">lorentz1D</tt><a class="headerlink" href="#nmrglue.analysis.analysisbase.lorentz1D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lorentzian lineshape class</p>
+<p>Parameters (x0,g):</p>
+<ul class="simple">
+<li>x0    the center of the lorentzian.</li>
+<li>gamma the scale parameter .</li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="nmrglue.analysis.analysisbase.scale1D">
+<em class="property">class </em><tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">scale1D</tt><a class="headerlink" href="#nmrglue.analysis.analysisbase.scale1D" title="Permalink to this definition">¶</a></dt>
+<dd><p>One dimensional scale class</p>
+<p>Simulates a lineshape with functional form:</p>
+<p>1.0,a0,a1,a2,....</p>
+<p>Where a0, a1, ... are the parameters provided.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="nmrglue.analysis.analysisbase.ndwindow">
+<em class="property">class </em><tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">ndwindow</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>An N-dimentional iterator to slice arrays into windows.</p>
+<p>Given the shape of an array and a window size, an &#8216;ndwindow&#8217; instance
+iterators over tuples of slices which slice an the array into wsize 
+sub-arrays.  At each iteration, the index of the center of the sub-array 
+is incremented by one along the last dimension.  Array border are ignored
+so the resulting sub-array can be smaller than wsize.  If wsize contains
+even values the window is off center containing an additional point with 
+lower index.</p>
+<p>Parameters</p>
+<ul class="simple">
+<li>size  Size of array to generate tuples of slices from.</li>
+<li>wsize Size of the area to select from array (sub-array maximum size).</li>
+</ul>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">ndwindow</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">,(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">a</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>
+<span class="go">[[0 1]</span>
+<span class="go"> [4 5]]</span>
+<span class="go">[[0 1 2]</span>
+<span class="go"> [4 5 6]]</span>
+<span class="go">[[1 2 3]</span>
+<span class="go"> [5 6 7]]</span>
+<span class="go">[[2 3]</span>
+<span class="go"> [6 7]]</span>
+<span class="go">[[0 1]</span>
+<span class="go"> [4 5]</span>
+<span class="go"> [8 9]]</span>
+<span class="go">[[ 0  1  2]</span>
+<span class="go"> [ 4  5  6]</span>
+<span class="go"> [ 8  9 10]]</span>
+<span class="gp">...</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="nmrglue.analysis.analysisbase.ndwindow_index">
+<em class="property">class </em><tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">ndwindow_index</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>An N-dimensional interator object which returns the index of the window 
+center and a ndwindow slice array.</p>
+<p>Equivalent to:</p>
+<dl class="docutils">
+<dt>for slices,index in zip(np.ndindex(shape),ndwindow(shape,wshape)):</dt>
+<dd>return (index,slice)</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="nmrglue.analysis.analysisbase.ndwindow_inside">
+<em class="property">class </em><tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">ndwindow_inside</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow_inside" title="Permalink to this definition">¶</a></dt>
+<dd><p>An N-dimentional iterator to slice arrays into uniform size windows.</p>
+<p>Given the shape of an array and a window size, an &#8216;ndwindow_inside&#8217; 
+instance iterators over tuples of slices which slice an the array into 
+uniform size wsize sub-arrays.  At each iteration, the index of the top 
+left of the sub-array is incremented by one along the last dimension utill
+the windows would extend past the array border.  All sub-arrays are
+equal sized (wsize).</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>size  Size of array to generate tuples of slices from.</li>
+<li>wsize Size of the area to select from array (widow size).</li>
+</ul>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">ndwindow_inside</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">,(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">a</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>
+<span class="go">[[0 1]</span>
+<span class="go"> [4 5]]</span>
+<span class="go">[[1 2]</span>
+<span class="go"> [5 6]]</span>
+<span class="go">[[2 3]</span>
+<span class="go"> [6 7]]</span>
+<span class="go">[[4 5]</span>
+<span class="go"> [8 9]]</span>
+<span class="go">[[ 5  6]</span>
+<span class="go"> [ 9 10]]</span>
+<span class="go">[[ 6  7]</span>
+<span class="go"> [10 11]]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="nmrglue.analysis.analysisbase.ndwindow_inside_index">
+<em class="property">class </em><tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">ndwindow_inside_index</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow_inside_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>An N-dimensional interator object which returns the index of the window 
+top-left and a ndwindow_inside slice array.</p>
+<p>Similar to ndwindow_index but reports top left index of window.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="helpers.html" title="nmrglue.helpers"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.process.pipe_proc.ztp.html" title="nmrglue.process.pipe_proc.ztp"
+             >previous</a> |</li>
+        <li><a href="../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Reference Guide</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Apr 06, 2011.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

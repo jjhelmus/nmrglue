@@ -1,0 +1,397 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nmrglue.segmentation &mdash; nmrglue v0.2 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="nmrglue v0.2 documentation" href="../index.html" />
+    <link rel="up" title="Reference Guide" href="index.html" />
+    <link rel="next" title="nmrglue.misc" href="misc.html" />
+    <link rel="prev" title="nmrglue.peakpick" href="peakpick.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="misc.html" title="nmrglue.misc"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="peakpick.html" title="nmrglue.peakpick"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Reference Guide</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">nmrglue.segmentation</a><ul>
+<li><a class="reference external" href="#low-level-functions">Low-Level Functions</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="peakpick.html"
+                                  title="previous chapter">nmrglue.peakpick</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="misc.html"
+                                  title="next chapter">nmrglue.misc</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/reference/segmentation.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-nmrglue.analysis.segmentation">
+<h1>nmrglue.segmentation<a class="headerlink" href="#module-nmrglue.analysis.segmentation" title="Permalink to this headline">¶</a></h1>
+<p>segmentation - functions to perform segmentation of NMR spectrum.</p>
+<p>This modules is imported as nmrglue.segmentation and can be called as such.</p>
+<div class="section" id="low-level-functions">
+<h2>Low-Level Functions<a class="headerlink" href="#low-level-functions" title="Permalink to this headline">¶</a></h2>
+<p>These functions are typically not used directly by users.  They are called by
+high level functions.  Developers and user who want to segment spectra will
+be interested in these functions.</p>
+<dl class="function">
+<dt id="nmrglue.analysis.segmentation.neighbors">
+<tt class="descclassname">nmrglue.analysis.segmentation.</tt><tt class="descname">neighbors</tt><big>(</big><em>pt</em>, <em>shape</em>, <em>diag=False</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.segmentation.neighbors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a list of all neightbors to a point</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>pt        Index of the point to find neighbors of.</li>
+<li>shape     Shape of the region</li>
+<li>diag      True to include diagonal neightbors, False not to.</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.segmentation.valid_pt">
+<tt class="descclassname">nmrglue.analysis.segmentation.</tt><tt class="descname">valid_pt</tt><big>(</big><em>pt</em>, <em>shape</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.segmentation.valid_pt" title="Permalink to this definition">¶</a></dt>
+<dd>Determind if point is valid in a given shaped array</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.segmentation.find_downward">
+<tt class="descclassname">nmrglue.analysis.segmentation.</tt><tt class="descname">find_downward</tt><big>(</big><em>data</em>, <em>pt</em>, <em>thres</em>, <em>diag=False</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.segmentation.find_downward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find points downward-connected to pt in data.</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>data  2D array of data</li>
+<li>pt    Starting point, top of peak, tuple.</li>
+<li>thres Threshold, below this nodes are considered noise.</li>
+<li>diag  True or False to include diagonal neighbors in connection.</li>
+</ul>
+<p>Return: list of indicies of downward connected nodes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.segmentation.find_all_downward">
+<tt class="descclassname">nmrglue.analysis.segmentation.</tt><tt class="descname">find_all_downward</tt><big>(</big><em>data</em>, <em>thres</em>, <em>diag=False</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.segmentation.find_all_downward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find all downward-connected segments in data</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>data  Array of data</li>
+<li>thres Threshold, below this nodes are considered noise.</li>
+<li>diag  True or False to include diagonal neighbors in connection.</li>
+</ul>
+<p>Returns: (centers,segments)</p>
+<ul class="simple">
+<li>centers   List of indicies of local maximum in each segment</li>
+<li>segments  List of all points in a given segment</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.segmentation.map_downward">
+<tt class="descclassname">nmrglue.analysis.segmentation.</tt><tt class="descname">map_downward</tt><big>(</big><em>data</em>, <em>thres</em>, <em>diag=False</em>, <em>map_dtype='u2'</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.segmentation.map_downward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a map of downward-connected segments of data above threshold</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>data  Array of data</li>
+<li>thres Threshold, below this nodes are considered noise.</li>
+<li>diag  True or False to include diagonal neighbors in connection.</li>
+<li>map_dtype Dtype of map.</li>
+</ul>
+<p>Returns: map</p>
+<p>map is an array of integers indicating segments. 0 represents noise,1 the
+first segment, 2 the second, etc.  The index value of these regions
+can be found using np.where</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.segmentation.mark_dmap">
+<tt class="descclassname">nmrglue.analysis.segmentation.</tt><tt class="descname">mark_dmap</tt><big>(</big><em>mdata</em>, <em>map</em>, <em>pt</em>, <em>mark</em>, <em>diag</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.segmentation.mark_dmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mark downward-connected region on segment map starting at node pt</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>mdata Masked data array</li>
+<li>map   Array mapping out segments</li>
+<li>pt    Index of starting node</li>
+<li>mark  Integer to mark map with.</li>
+</ul>
+<p>Returns nothing but modified mdata mask and map</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.segmentation.find_upward">
+<tt class="descclassname">nmrglue.analysis.segmentation.</tt><tt class="descname">find_upward</tt><big>(</big><em>data</em>, <em>pt</em>, <em>thres</em>, <em>diag=False</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.segmentation.find_upward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find points upward-connected to pt in data.</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>data  2D array of data</li>
+<li>pt    Starting point, bottom of peak, tuple.</li>
+<li>thres Threshold, above this nodes are considered noise.</li>
+<li>diag  True or False to include diagonal neighbors in connection.</li>
+</ul>
+<p>Return: list of indicies of upward connected nodes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.segmentation.find_all_upward">
+<tt class="descclassname">nmrglue.analysis.segmentation.</tt><tt class="descname">find_all_upward</tt><big>(</big><em>data</em>, <em>thres</em>, <em>diag=False</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.segmentation.find_all_upward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find all upward-connected segments in data</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>data  Array of data</li>
+<li>thres Threshold, above this nodes are considered noise.</li>
+<li>diag  True or False to include diagonal neighbors in connection.</li>
+</ul>
+<p>Returns: (centers,segments)</p>
+<ul class="simple">
+<li>centers   List of indicies of local minima in each segment</li>
+<li>segments  List of all points in a given segment</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.segmentation.map_upward">
+<tt class="descclassname">nmrglue.analysis.segmentation.</tt><tt class="descname">map_upward</tt><big>(</big><em>data</em>, <em>thres</em>, <em>diag=False</em>, <em>map_dtype='u2'</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.segmentation.map_upward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a map of upward-connected segments of data below threshold</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>data  Array of data</li>
+<li>thres Threshold, above this nodes are considered noise.</li>
+<li>diag  True or False to include diagonal neighbors in connection.</li>
+<li>map_dtype Dtype of map.</li>
+</ul>
+<p>Returns: map</p>
+<p>map is an array of integers indicating segments. 0 represents noise,1 the
+first segment, 2 the second, etc.  The index value of these regions
+can be found using np.where</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.segmentation.mark_umap">
+<tt class="descclassname">nmrglue.analysis.segmentation.</tt><tt class="descname">mark_umap</tt><big>(</big><em>mdata</em>, <em>map</em>, <em>pt</em>, <em>mark</em>, <em>diag</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.segmentation.mark_umap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mark upward-connected region on segment map starting at node pt</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>mdata Masked data array</li>
+<li>map   Array mapping out segments</li>
+<li>pt    Index of starting node</li>
+<li>mark  Integer to mark map with.</li>
+</ul>
+<p>Returns nothing but modified mdata mask and map</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.segmentation.find_connected">
+<tt class="descclassname">nmrglue.analysis.segmentation.</tt><tt class="descname">find_connected</tt><big>(</big><em>data</em>, <em>pt</em>, <em>thres</em>, <em>diag=False</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.segmentation.find_connected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find points connected to pt in data.</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>data  2D array of data</li>
+<li>pt    Starting point, (top of peak).</li>
+<li>thres Threshold, below this nodes are considered noise.</li>
+<li>diag  True or False to include diagonal neighbors in connection.</li>
+</ul>
+<p>Return: list of indicies of downward connected nodes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.segmentation.find_all_connected">
+<tt class="descclassname">nmrglue.analysis.segmentation.</tt><tt class="descname">find_all_connected</tt><big>(</big><em>data</em>, <em>thres</em>, <em>diag=False</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.segmentation.find_all_connected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find all connected segments in data</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>data  Array of data</li>
+<li>thres Threshold, below this nodes are considered noise.</li>
+<li>diag  True or False to include diagonal neighbors in connection.</li>
+</ul>
+<p>Returns: (centers,segments)</p>
+<ul class="simple">
+<li>centers   List of indicies of local maximum in each segment</li>
+<li>segments  List of all points in a given segment</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.segmentation.map_connected">
+<tt class="descclassname">nmrglue.analysis.segmentation.</tt><tt class="descname">map_connected</tt><big>(</big><em>data</em>, <em>thres</em>, <em>diag=False</em>, <em>map_dtype='u2'</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.segmentation.map_connected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a map of connected segments of data above threshold</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>data  Array of data</li>
+<li>thres Threshold, below this nodes are considered noise.</li>
+<li>diag  True or False to include diagonal neighbors in connection.</li>
+<li>map_dtype Dtype of map.</li>
+</ul>
+<p>Returns: map</p>
+<p>map is an array of integers indicating segments. 0 represents noise,1 the
+first segment, 2 the second, etc.  The index value of these regions
+can be found using np.where</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.segmentation.mark_cmap">
+<tt class="descclassname">nmrglue.analysis.segmentation.</tt><tt class="descname">mark_cmap</tt><big>(</big><em>mdata</em>, <em>map</em>, <em>pt</em>, <em>mark</em>, <em>diag</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.segmentation.mark_cmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mark connected region on segment map starting at node pt</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>mdata Masked data array</li>
+<li>map   Array mapping out segments</li>
+<li>pt    Index of starting node</li>
+<li>mark  Integer to mark map with.</li>
+</ul>
+<p>Returns nothing but modified mdata mask and map</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.segmentation.find_nconnected">
+<tt class="descclassname">nmrglue.analysis.segmentation.</tt><tt class="descname">find_nconnected</tt><big>(</big><em>data</em>, <em>pt</em>, <em>thres</em>, <em>diag=False</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.segmentation.find_nconnected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find points connected to pt in data below threshold.</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>data  2D array of data</li>
+<li>pt    Starting point, (top of peak).</li>
+<li>thres Threshold, above this nodes are considered noise.</li>
+<li>diag  True or False to include diagonal neighbors in connection.</li>
+</ul>
+<p>Return: list of indicies of connected nodes.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.segmentation.find_all_nconnected">
+<tt class="descclassname">nmrglue.analysis.segmentation.</tt><tt class="descname">find_all_nconnected</tt><big>(</big><em>data</em>, <em>thres</em>, <em>diag=False</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.segmentation.find_all_nconnected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find all connected segments in data below threshold.</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>data  Array of data</li>
+<li>thres Threshold, above this nodes are considered noise.</li>
+<li>diag  True or False to include diagonal neighbors in connection.</li>
+</ul>
+<p>Returns: (centers,segments)</p>
+<ul class="simple">
+<li>centers   List of indicies of local maximum in each segment</li>
+<li>segments  List of all points in a given segment</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.segmentation.map_nconnected">
+<tt class="descclassname">nmrglue.analysis.segmentation.</tt><tt class="descname">map_nconnected</tt><big>(</big><em>data</em>, <em>thres</em>, <em>diag=False</em>, <em>map_dtype='u2'</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.segmentation.map_nconnected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a map of connected segments of data below threshold</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>data  Array of data</li>
+<li>thres Threshold, above this nodes are considered noise.</li>
+<li>diag  True or False to include diagonal neighbors in connection.</li>
+<li>map_dtype Dtype of map.</li>
+</ul>
+<p>Returns: map</p>
+<p>map is an array of integers indicating segments. 0 represents noise,1 the
+first segment, 2 the second, etc.  The index value of these regions
+can be found using np.where</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.analysis.segmentation.mark_nmap">
+<tt class="descclassname">nmrglue.analysis.segmentation.</tt><tt class="descname">mark_nmap</tt><big>(</big><em>mdata</em>, <em>map</em>, <em>pt</em>, <em>mark</em>, <em>diag</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.segmentation.mark_nmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mark negatively connected region on segment map starting at node pt</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>mdata Masked data array</li>
+<li>map   Array mapping out segments</li>
+<li>pt    Index of starting node</li>
+<li>mark  Integer to mark map with.</li>
+</ul>
+<p>Returns nothing but modified mdata mask and map</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="misc.html" title="nmrglue.misc"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="peakpick.html" title="nmrglue.peakpick"
+             >previous</a> |</li>
+        <li><a href="../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Reference Guide</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Apr 06, 2011.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

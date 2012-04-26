@@ -1,0 +1,6 @@
+nmrglue.process.pipe_proc.qart
+==============================
+
+.. currentmodule:: nmrglue.process.pipe_proc
+
+.. autofunction:: qart

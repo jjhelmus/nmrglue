@@ -1,0 +1,6 @@
+nmrglue.process.proc_base.bin2int
+=================================
+
+.. currentmodule:: nmrglue.process.proc_base
+
+.. autofunction:: bin2int

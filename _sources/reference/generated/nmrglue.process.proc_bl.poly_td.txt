@@ -1,0 +1,6 @@
+nmrglue.process.proc_bl.poly_td
+===============================
+
+.. currentmodule:: nmrglue.process.proc_bl
+
+.. autofunction:: poly_td

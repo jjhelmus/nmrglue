@@ -1,0 +1,6 @@
+nmrglue.process.proc_base.fsh
+=============================
+
+.. currentmodule:: nmrglue.process.proc_base
+
+.. autofunction:: fsh

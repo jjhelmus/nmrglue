@@ -1,0 +1,317 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nmrglue.table &mdash; nmrglue v0.2 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="nmrglue v0.2 documentation" href="../index.html" />
+    <link rel="up" title="Reference Guide" href="index.html" />
+    <link rel="next" title="nmrglue.varian" href="varian.html" />
+    <link rel="prev" title="nmrglue.sparky" href="sparky.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="varian.html" title="nmrglue.varian"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="sparky.html" title="nmrglue.sparky"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Reference Guide</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">nmrglue.table</a><ul>
+<li><a class="reference external" href="#high-level-functions">High-Level Functions</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="sparky.html"
+                                  title="previous chapter">nmrglue.sparky</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="varian.html"
+                                  title="next chapter">nmrglue.varian</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/reference/table.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-nmrglue.fileio.table">
+<h1>nmrglue.table<a class="headerlink" href="#module-nmrglue.fileio.table" title="Permalink to this headline">¶</a></h1>
+<p>nmrglue table functions</p>
+<p>nmrglue uses numpy records array as stores of various data (peak tables, 
+trajectories,etc).  This module provides functions to read and write records
+arrays from disk.  Formatting of the numeric values is left to Python&#8217;s str
+function and only the data type need be specified.  In addition this module
+contains functions to convert nmrglue&#8217;s comments to and from NMRPipe&#8217;s 
+pcomments,pformats lists.</p>
+<p>This modules is imported as nmrglue.pipe and can be called as such.</p>
+<div class="section" id="high-level-functions">
+<h2>High-Level Functions<a class="headerlink" href="#high-level-functions" title="Permalink to this headline">¶</a></h2>
+<p>These are the functions most users will use from the table module.</p>
+<dl class="function">
+<dt id="nmrglue.fileio.table.read">
+<tt class="descclassname">nmrglue.fileio.table.</tt><tt class="descname">read</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.table.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a table (.tbl) file.</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>filename  Name of table file to read</li>
+</ul>
+<p>Returns: (comments,rec)</p>
+<ul class="simple">
+<li>comments  List of comments (strings terminated with newline)</li>
+<li>rec       Records array with named fields.</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.table.write">
+<tt class="descclassname">nmrglue.fileio.table.</tt><tt class="descname">write</tt><big>(</big><em>filename</em>, <em>comments</em>, <em>rec</em>, <em>overwrite=False</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.table.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a nmrglue table to file (.tbl).</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>filename  Name of table file to write.</li>
+<li>comments  List of comments (strings terminated with newline).</li>
+<li>rec       Records array to write to file.</li>
+<li>overwrite Set True to overwrite file if it exists.</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.table.insert_row">
+<tt class="descclassname">nmrglue.fileio.table.</tt><tt class="descname">insert_row</tt><big>(</big><em>rec</em>, <em>N</em>, <em>row</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.table.insert_row" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert a row into a records array before row number N.</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>rec   Records array.</li>
+<li>N     Row number to insert new row before, integer.</li>
+<li>row   Tuple, etc which will be converted into a new row.</li>
+</ul>
+<p>Returns: new_rec (new records array with inserted row)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.table.append_row">
+<tt class="descclassname">nmrglue.fileio.table.</tt><tt class="descname">append_row</tt><big>(</big><em>rec</em>, <em>row</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.table.append_row" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append a row to the end of a records array</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>rec   Records array.</li>
+<li>row   Tuple, etc which will be converted into a new row.</li>
+</ul>
+<p>Returns: new_rec (new records array with appeneded row)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.table.delete_row">
+<tt class="descclassname">nmrglue.fileio.table.</tt><tt class="descname">delete_row</tt><big>(</big><em>rec</em>, <em>N</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.table.delete_row" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete row N from records array.</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>rec   Records array.</li>
+<li>N     Row number to delete, integer.</li>
+</ul>
+<p>Returns: new_rec (new records array with row deleted)</p>
+<p>Use reorder_rows to delete multiple rows in a single call.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.table.reorder_rows">
+<tt class="descclassname">nmrglue.fileio.table.</tt><tt class="descname">reorder_rows</tt><big>(</big><em>rec</em>, <em>new_order</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.table.reorder_rows" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reorder rows in a records array.</p>
+<p>This function can also be used to delete multiple rows from a records 
+array, only the rows in the new_order list are retained in the new records
+array.</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>rec   Records array.</li>
+<li>new_order List of row indices and order in new records array.</li>
+</ul>
+<p>Returns: new_rec (new records array with row reordered)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.table.insert_column">
+<tt class="descclassname">nmrglue.fileio.table.</tt><tt class="descname">insert_column</tt><big>(</big><em>rec</em>, <em>N</em>, <em>col</em>, <em>name=None</em>, <em>format=None</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.table.insert_column" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert a column into a records array before column number N.</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>rec       Records array.</li>
+<li>col       Array which will be converted into the new column.</li>
+<li>N         Number of the column to insert new column before.</li>
+<li>name      Name of the column (if Name must be given in col.dtype.names)</li>
+<li>format    Data type to convert the new column into before appending.</li>
+</ul>
+<p>Returns: new_rec (new records array with column inserted)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.table.append_column">
+<tt class="descclassname">nmrglue.fileio.table.</tt><tt class="descname">append_column</tt><big>(</big><em>rec</em>, <em>col</em>, <em>name=None</em>, <em>format=None</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.table.append_column" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append a column to the end of a records array.</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>rec       Records array.</li>
+<li>col       Array which will be converted into the new column.</li>
+<li>name      Name of the column (if Name must be given in col.dtype.names)</li>
+<li>format    Data type to convert the new column into before appending.</li>
+</ul>
+<p>Returns: new_rec (new records array with column appended)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.table.delete_column">
+<tt class="descclassname">nmrglue.fileio.table.</tt><tt class="descname">delete_column</tt><big>(</big><em>rec</em>, <em>N</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.table.delete_column" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a column from a records array</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>rec   Records array.</li>
+<li>N     Number of the column to delete.</li>
+</ul>
+<p>Returns: new_rec (new records array with column inserted)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.table.reorder_columns">
+<tt class="descclassname">nmrglue.fileio.table.</tt><tt class="descname">reorder_columns</tt><big>(</big><em>rec</em>, <em>new_order</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.table.reorder_columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reorder columns in a records array</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>rec           Records array.</li>
+<li>new_order     List of column indices to order in new records array.</li>
+</ul>
+<p>Returns: new_rec (new records array with columns reordered)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.table.pipe2glue">
+<tt class="descclassname">nmrglue.fileio.table.</tt><tt class="descname">pipe2glue</tt><big>(</big><em>pcomments</em>, <em>pformat</em>, <em>rec</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.table.pipe2glue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a NMRPipe table to nmrglue table</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>pcomments List of NMRPipe comment lines.</li>
+<li>pformats  List of NMRPipe table column formats strings.</li>
+<li>rec       Records array with named fields.</li>
+</ul>
+<p>Returns: comments,rec</p>
+<ul class="simple">
+<li>comments  List of comments</li>
+<li>rec       Records array with named fields.</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.table.glue2pipe">
+<tt class="descclassname">nmrglue.fileio.table.</tt><tt class="descname">glue2pipe</tt><big>(</big><em>comments</em>, <em>rec</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.table.glue2pipe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a nmrglue table to a NMRPipe table</p>
+<p>The pformats list is a guess from data type and precision in the records
+array.  You may want to edit this to your liking.</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>comments  List of comments</li>
+<li>rec       Records array with named fields.</li>
+</ul>
+<p>Returns: pcomments,pformat,rec</p>
+<ul class="simple">
+<li>pcomments List of NMRPipe comment lines.</li>
+<li>pformats  List of NMRPipe table column formats strings.</li>
+<li>rec       Records array with named fields.</li>
+</ul>
+</dd></dl>
+
+<dl class="function">
+<dt id="nmrglue.fileio.table.guess_pformat">
+<tt class="descclassname">nmrglue.fileio.table.</tt><tt class="descname">guess_pformat</tt><big>(</big><em>col</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.table.guess_pformat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Guess a NMRPipe table column format string given a column</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>col   Array from records array</li>
+</ul>
+<p>Returns string for formatting NMRPipe table</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="varian.html" title="nmrglue.varian"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="sparky.html" title="nmrglue.sparky"
+             >previous</a> |</li>
+        <li><a href="../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Reference Guide</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Apr 06, 2011.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

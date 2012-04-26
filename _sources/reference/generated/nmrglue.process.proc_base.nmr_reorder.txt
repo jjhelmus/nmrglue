@@ -1,0 +1,6 @@
+nmrglue.process.proc_base.nmr_reorder
+=====================================
+
+.. currentmodule:: nmrglue.process.proc_base
+
+.. autofunction:: nmr_reorder

@@ -1,0 +1,257 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nmrglue.proc_lp &mdash; nmrglue v0.2 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="nmrglue v0.2 documentation" href="../index.html" />
+    <link rel="up" title="Reference Guide" href="index.html" />
+    <link rel="next" title="nmrglue.process.proc_lp.lp" href="generated/nmrglue.process.proc_lp.lp.html" />
+    <link rel="prev" title="nmrglue.process.proc_bl.poly_fd" href="generated/nmrglue.process.proc_bl.poly_fd.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.process.proc_lp.lp.html" title="nmrglue.process.proc_lp.lp"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.process.proc_bl.poly_fd.html" title="nmrglue.process.proc_bl.poly_fd"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Reference Guide</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="../index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#">nmrglue.proc_lp</a><ul>
+<li><a class="reference external" href="#high-level-functions">High-Level Functions</a><ul>
+</ul>
+</li>
+<li><a class="reference external" href="#low-level-functions">Low-Level Functions</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="generated/nmrglue.process.proc_bl.poly_fd.html"
+                                  title="previous chapter">nmrglue.process.proc_bl.poly_fd</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="generated/nmrglue.process.proc_lp.lp.html"
+                                  title="next chapter">nmrglue.process.proc_lp.lp</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/reference/proc_lp.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-nmrglue.process.proc_lp">
+<span id="proc-lp"></span><h1>nmrglue.proc_lp<a class="headerlink" href="#module-nmrglue.process.proc_lp" title="Permalink to this headline">¶</a></h1>
+<p>Linear Prediction (LP) functions for extrapolating and modeling NMR signals</p>
+<p>This module is imported as nmrglue.proc_lp and can be called as such.</p>
+<div class="section" id="high-level-functions">
+<h2>High-Level Functions<a class="headerlink" href="#high-level-functions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="30%" />
+<col width="70%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a title="nmrglue.process.proc_lp.lp" class="reference external" href="generated/nmrglue.process.proc_lp.lp.html#nmrglue.process.proc_lp.lp"><tt class="xref docutils literal"><span class="pre">lp</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.lp_svd" class="reference external" href="generated/nmrglue.process.proc_lp.lp_svd.html#nmrglue.process.proc_lp.lp_svd"><tt class="xref docutils literal"><span class="pre">lp_svd</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.lp_qr" class="reference external" href="generated/nmrglue.process.proc_lp.lp_qr.html#nmrglue.process.proc_lp.lp_qr"><tt class="xref docutils literal"><span class="pre">lp_qr</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.lp_cho" class="reference external" href="generated/nmrglue.process.proc_lp.lp_cho.html#nmrglue.process.proc_lp.lp_cho"><tt class="xref docutils literal"><span class="pre">lp_cho</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.lp_tls" class="reference external" href="generated/nmrglue.process.proc_lp.lp_tls.html#nmrglue.process.proc_lp.lp_tls"><tt class="xref docutils literal"><span class="pre">lp_tls</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.lp2d" class="reference external" href="generated/nmrglue.process.proc_lp.lp2d.html#nmrglue.process.proc_lp.lp2d"><tt class="xref docutils literal"><span class="pre">lp2d</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.cadzow" class="reference external" href="generated/nmrglue.process.proc_lp.cadzow.html#nmrglue.process.proc_lp.cadzow"><tt class="xref docutils literal"><span class="pre">cadzow</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.lp_model" class="reference external" href="generated/nmrglue.process.proc_lp.lp_model.html#nmrglue.process.proc_lp.lp_model"><tt class="xref docutils literal"><span class="pre">lp_model</span></tt></a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>These functions are called by high-level function are and most uses will not
+use them in common processing scripts.</p>
+</div>
+<div class="section" id="low-level-functions">
+<h2>Low-Level Functions<a class="headerlink" href="#low-level-functions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="30%" />
+<col width="70%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a title="nmrglue.process.proc_lp.lp_1d" class="reference external" href="generated/nmrglue.process.proc_lp.lp_1d.html#nmrglue.process.proc_lp.lp_1d"><tt class="xref docutils literal"><span class="pre">lp_1d</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.extrapolate_2d" class="reference external" href="generated/nmrglue.process.proc_lp.extrapolate_2d.html#nmrglue.process.proc_lp.extrapolate_2d"><tt class="xref docutils literal"><span class="pre">extrapolate_2d</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.make_lp2d_Dd" class="reference external" href="generated/nmrglue.process.proc_lp.make_lp2d_Dd.html#nmrglue.process.proc_lp.make_lp2d_Dd"><tt class="xref docutils literal"><span class="pre">make_lp2d_Dd</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.cadzow_single" class="reference external" href="generated/nmrglue.process.proc_lp.cadzow_single.html#nmrglue.process.proc_lp.cadzow_single"><tt class="xref docutils literal"><span class="pre">cadzow_single</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.root2damp" class="reference external" href="generated/nmrglue.process.proc_lp.root2damp.html#nmrglue.process.proc_lp.root2damp"><tt class="xref docutils literal"><span class="pre">root2damp</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.root2freq" class="reference external" href="generated/nmrglue.process.proc_lp.root2freq.html#nmrglue.process.proc_lp.root2freq"><tt class="xref docutils literal"><span class="pre">root2freq</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.cof2amp" class="reference external" href="generated/nmrglue.process.proc_lp.cof2amp.html#nmrglue.process.proc_lp.cof2amp"><tt class="xref docutils literal"><span class="pre">cof2amp</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.cof2phase" class="reference external" href="generated/nmrglue.process.proc_lp.cof2phase.html#nmrglue.process.proc_lp.cof2phase"><tt class="xref docutils literal"><span class="pre">cof2phase</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.make_D" class="reference external" href="generated/nmrglue.process.proc_lp.make_D.html#nmrglue.process.proc_lp.make_D"><tt class="xref docutils literal"><span class="pre">make_D</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.make_little_d" class="reference external" href="generated/nmrglue.process.proc_lp.make_little_d.html#nmrglue.process.proc_lp.make_little_d"><tt class="xref docutils literal"><span class="pre">make_little_d</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.make_Dd" class="reference external" href="generated/nmrglue.process.proc_lp.make_Dd.html#nmrglue.process.proc_lp.make_Dd"><tt class="xref docutils literal"><span class="pre">make_Dd</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.make_mirror" class="reference external" href="generated/nmrglue.process.proc_lp.make_mirror.html#nmrglue.process.proc_lp.make_mirror"><tt class="xref docutils literal"><span class="pre">make_mirror</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.find_lpc" class="reference external" href="generated/nmrglue.process.proc_lp.find_lpc.html#nmrglue.process.proc_lp.find_lpc"><tt class="xref docutils literal"><span class="pre">find_lpc</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.find_lpc_svd" class="reference external" href="generated/nmrglue.process.proc_lp.find_lpc_svd.html#nmrglue.process.proc_lp.find_lpc_svd"><tt class="xref docutils literal"><span class="pre">find_lpc_svd</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.pinv_diagsvd" class="reference external" href="generated/nmrglue.process.proc_lp.pinv_diagsvd.html#nmrglue.process.proc_lp.pinv_diagsvd"><tt class="xref docutils literal"><span class="pre">pinv_diagsvd</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.find_lpc_qr" class="reference external" href="generated/nmrglue.process.proc_lp.find_lpc_qr.html#nmrglue.process.proc_lp.find_lpc_qr"><tt class="xref docutils literal"><span class="pre">find_lpc_qr</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.find_lpc_cholesky" class="reference external" href="generated/nmrglue.process.proc_lp.find_lpc_cholesky.html#nmrglue.process.proc_lp.find_lpc_cholesky"><tt class="xref docutils literal"><span class="pre">find_lpc_cholesky</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.find_lpc_tls" class="reference external" href="generated/nmrglue.process.proc_lp.find_lpc_tls.html#nmrglue.process.proc_lp.find_lpc_tls"><tt class="xref docutils literal"><span class="pre">find_lpc_tls</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.find_lpc_fb" class="reference external" href="generated/nmrglue.process.proc_lp.find_lpc_fb.html#nmrglue.process.proc_lp.find_lpc_fb"><tt class="xref docutils literal"><span class="pre">find_lpc_fb</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.find_lpc_bf" class="reference external" href="generated/nmrglue.process.proc_lp.find_lpc_bf.html#nmrglue.process.proc_lp.find_lpc_bf"><tt class="xref docutils literal"><span class="pre">find_lpc_bf</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.find_lproots_hsvd" class="reference external" href="generated/nmrglue.process.proc_lp.find_lproots_hsvd.html#nmrglue.process.proc_lp.find_lproots_hsvd"><tt class="xref docutils literal"><span class="pre">find_lproots_hsvd</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.find_roots" class="reference external" href="generated/nmrglue.process.proc_lp.find_roots.html#nmrglue.process.proc_lp.find_roots"><tt class="xref docutils literal"><span class="pre">find_roots</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.find_coeff" class="reference external" href="generated/nmrglue.process.proc_lp.find_coeff.html#nmrglue.process.proc_lp.find_coeff"><tt class="xref docutils literal"><span class="pre">find_coeff</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.reverse_filter" class="reference external" href="generated/nmrglue.process.proc_lp.reverse_filter.html#nmrglue.process.proc_lp.reverse_filter"><tt class="xref docutils literal"><span class="pre">reverse_filter</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.fix_roots" class="reference external" href="generated/nmrglue.process.proc_lp.fix_roots.html#nmrglue.process.proc_lp.fix_roots"><tt class="xref docutils literal"><span class="pre">fix_roots</span></tt></a></td>
+<td></td>
+</tr>
+<tr><td><a title="nmrglue.process.proc_lp.extrapolate" class="reference external" href="generated/nmrglue.process.proc_lp.extrapolate.html#nmrglue.process.proc_lp.extrapolate"><tt class="xref docutils literal"><span class="pre">extrapolate</span></tt></a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.process.proc_lp.lp.html" title="nmrglue.process.proc_lp.lp"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.process.proc_bl.poly_fd.html" title="nmrglue.process.proc_bl.poly_fd"
+             >previous</a> |</li>
+        <li><a href="../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Reference Guide</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Apr 06, 2011.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

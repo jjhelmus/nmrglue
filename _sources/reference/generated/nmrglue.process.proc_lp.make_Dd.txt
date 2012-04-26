@@ -1,0 +1,6 @@
+nmrglue.process.proc_lp.make_Dd
+===============================
+
+.. currentmodule:: nmrglue.process.proc_lp
+
+.. autofunction:: make_Dd

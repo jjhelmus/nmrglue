@@ -1,0 +1,155 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>process example: process_pipe_2d_tppi &mdash; nmrglue v0.2 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="nmrglue v0.2 documentation" href="../index.html" />
+    <link rel="up" title="Examples" href="index.html" />
+    <link rel="next" title="process example: process_pipe_3d" href="process_pipe_3d.html" />
+    <link rel="prev" title="process example: process_pipe_2d" href="process_pipe_2d.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="process_pipe_3d.html" title="process example: process_pipe_3d"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="process_pipe_2d.html" title="process example: process_pipe_2d"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="process_pipe_2d.html"
+                                  title="previous chapter">process example: process_pipe_2d</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="process_pipe_3d.html"
+                                  title="next chapter">process example: process_pipe_3d</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/examples/process_pipe_2d_tppi.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="process-example-process-pipe-2d-tppi">
+<span id="process-pipe-2d-tppi"></span><h1>process example: process_pipe_2d_tppi<a class="headerlink" href="#process-example-process-pipe-2d-tppi" title="Permalink to this headline">¶</a></h1>
+<p>This example shows how nmrglue can be used to process NMR data.  In this
+script a 2D time domain NMRPipe file is processing into a 2D NMRPipe
+frequency domain file. After processing the resulting file is compared to
+one processed with NMRPipe.</p>
+<p>[<a class="reference external" href="el/processing/process_pipe_2d_tppi.py">source code</a>]</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#! /usr/bin/env python</span>
+<span class="c"># XXX origin and center are incorrect</span>
+
+<span class="kn">import</span> <span class="nn">nmrglue</span> <span class="kn">as</span> <span class="nn">ng</span>
+
+<span class="c"># read in the file</span>
+<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;../common_data/2d_pipe_tppi/test.fid&quot;</span><span class="p">)</span>
+
+<span class="c"># process the direct dimension</span>
+<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">sp</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">off</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="mf">0.98</span><span class="p">,</span><span class="nb">pow</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">zf</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">auto</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">ft</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">auto</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">ps</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">p0</span><span class="o">=</span><span class="mf">151.0</span><span class="p">,</span><span class="n">p1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">di</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
+
+<span class="c"># process the indirect dimension</span>
+<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">tp</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
+<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">sp</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">off</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="mf">0.98</span><span class="p">,</span><span class="nb">pow</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">zf</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">auto</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">ft</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">auto</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">ps</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">p0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span><span class="n">p1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">di</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
+<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">rev</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">sw</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">tp</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
+
+<span class="c"># write out processed data</span>
+<span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;2d_pipe_tppi.ft2&quot;</span><span class="p">,</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">overwrite</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c"># check against a file processed with NMRPipe</span>
+<span class="n">dic1</span><span class="p">,</span><span class="n">data1</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;../common_data/2d_pipe_tppi/test.ft2&quot;</span><span class="p">)</span>
+<span class="n">dic2</span><span class="p">,</span><span class="n">data2</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;2d_pipe_tppi.ft2&quot;</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">ng</span><span class="o">.</span><span class="n">misc</span><span class="o">.</span><span class="n">pair_similar</span><span class="p">(</span><span class="n">dic1</span><span class="p">,</span><span class="n">data1</span><span class="p">,</span><span class="n">dic2</span><span class="p">,</span><span class="n">data2</span><span class="p">,</span><span class="n">verb</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="process_pipe_3d.html" title="process example: process_pipe_3d"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="process_pipe_2d.html" title="process example: process_pipe_2d"
+             >previous</a> |</li>
+        <li><a href="../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Apr 06, 2011.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

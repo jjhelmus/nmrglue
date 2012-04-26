@@ -1,0 +1,6 @@
+nmrglue.process.proc_base.smo
+=============================
+
+.. currentmodule:: nmrglue.process.proc_base
+
+.. autofunction:: smo

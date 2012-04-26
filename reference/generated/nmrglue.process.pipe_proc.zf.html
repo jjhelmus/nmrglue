@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nmrglue.process.pipe_proc.zf &mdash; nmrglue v0.2 documentation</title>
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.2',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="nmrglue v0.2 documentation" href="../../index.html" />
+    <link rel="up" title="nmrglue.pipe_proc" href="../pipe_proc.html" />
+    <link rel="next" title="nmrglue.process.pipe_proc.base" href="nmrglue.process.pipe_proc.base.html" />
+    <link rel="prev" title="nmrglue.process.pipe_proc.tp" href="nmrglue.process.pipe_proc.tp.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.pipe_proc.base.html" title="nmrglue.process.pipe_proc.base"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.pipe_proc.tp.html" title="nmrglue.process.pipe_proc.tp"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../pipe_proc.html" accesskey="U">nmrglue.pipe_proc</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="nmrglue.process.pipe_proc.tp.html"
+                                  title="previous chapter">nmrglue.process.pipe_proc.tp</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="nmrglue.process.pipe_proc.base.html"
+                                  title="next chapter">nmrglue.process.pipe_proc.base</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../../_sources/reference/generated/nmrglue.process.pipe_proc.zf.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="nmrglue-process-pipe-proc-zf">
+<h1>nmrglue.process.pipe_proc.zf<a class="headerlink" href="#nmrglue-process-pipe-proc-zf" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="nmrglue.process.pipe_proc.zf">
+<tt class="descclassname">nmrglue.process.pipe_proc.</tt><tt class="descname">zf</tt><big>(</big><em>dic</em>, <em>data</em>, <em>zf=1</em>, <em>pad='auto'</em>, <em>size='auto'</em>, <em>mid=False</em>, <em>inter=False</em>, <em>auto=False</em>, <em>inv=False</em><big>)</big><a class="headerlink" href="#nmrglue.process.pipe_proc.zf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Zero Fill</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>dic   Dictionary of NMRPipe parameters.</li>
+<li>data  array of spectral data.</li>
+</ul>
+<p>One (and only one) of the following should be defined:
+* zf    Number of times to double the size.
+* pad   Number of zeros to add.
+* size  Desired final size.</p>
+<p>Set these to True for desired operation (some override other parameters):
+* mid   Zero fill in middle.
+* inter Zero fill between points.
+* auto  Round final size to power of 2.
+* inv   Extract time domain data points.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.pipe_proc.base.html" title="nmrglue.process.pipe_proc.base"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.pipe_proc.tp.html" title="nmrglue.process.pipe_proc.tp"
+             >previous</a> |</li>
+        <li><a href="../../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../pipe_proc.html" >nmrglue.pipe_proc</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Apr 06, 2011.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,360 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fitting example: fitting_t1_data &mdash; nmrglue v0.2 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="nmrglue v0.2 documentation" href="../index.html" />
+    <link rel="up" title="Examples" href="index.html" />
+    <link rel="next" title="integration example: integrate_1d" href="integrate_1d.html" />
+    <link rel="prev" title="convert example: varian2pipe_3d" href="varian2pipe_3d.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="integrate_1d.html" title="integration example: integrate_1d"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="varian2pipe_3d.html" title="convert example: varian2pipe_3d"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="varian2pipe_3d.html"
+                                  title="previous chapter">convert example: varian2pipe_3d</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="integrate_1d.html"
+                                  title="next chapter">integration example: integrate_1d</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/examples/fitting_t1_data.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="fitting-example-fitting-t1-data">
+<span id="fitting-t1-data"></span><h1>fitting example: fitting_t1_data<a class="headerlink" href="#fitting-example-fitting-t1-data" title="Permalink to this headline">¶</a></h1>
+<p>This example shows how to use nmrglue and <a class="reference external" href="http://www.scipy.org/">scipy</a>
+optimize module to fit T1 relaxation trajectories.  Three scripts are used in
+the process.</p>
+<p>First the <tt class="docutils literal"><span class="pre">extract_trajs.py</span></tt> script reads in box limits from <tt class="docutils literal"><span class="pre">boxes.in</span></tt> and
+a list of spectra from <tt class="docutils literal"><span class="pre">spectra.in</span></tt>.  The script integrates each peak in each
+spectrum and writies the trajectory for each peak to disk as <tt class="docutils literal"><span class="pre">traj.npy</span></tt> in
+<a class="reference external" href="http://numpy.scipy.org/">numpy</a> <tt class="docutils literal"><span class="pre">.npy</span></tt> format.</p>
+<p>[<a class="reference external" href="el/fitting_data/t1_measurements/extract_trajs.py">extract_trajs.py</a>]</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#! /usr/bin/env python</span>
+<span class="c"># Scipt to extract trajectories from a series a 2D spectrum.</span>
+
+<span class="kn">import</span> <span class="nn">nmrglue</span> <span class="kn">as</span> <span class="nn">ng</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="c"># read in the integration limits and list of spectra</span>
+<span class="n">peak_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">recfromtxt</span><span class="p">(</span><span class="s">&quot;boxes.in&quot;</span><span class="p">)</span>
+<span class="n">spectra_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">recfromtxt</span><span class="p">(</span><span class="s">&quot;spectra.in&quot;</span><span class="p">)</span>
+
+<span class="c"># prepare the trajs records array</span>
+<span class="n">num_spec</span> <span class="o">=</span> <span class="n">spectra_list</span><span class="o">.</span><span class="n">size</span>
+<span class="n">num_peaks</span> <span class="o">=</span> <span class="n">peak_list</span><span class="o">.</span><span class="n">size</span>
+<span class="n">elist</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">num_spec</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="s">&quot;float&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">num_peaks</span><span class="p">)]</span>
+<span class="n">trajs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rec</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">elist</span><span class="p">,</span><span class="n">names</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">peak_list</span><span class="o">.</span><span class="n">f0</span><span class="p">))</span> 
+
+<span class="c"># loop over the spectra</span>
+<span class="k">for</span> <span class="n">sn</span><span class="p">,</span><span class="n">spectra</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">spectra_list</span><span class="p">):</span>
+    
+    <span class="c"># read in the data from a NMRPipe file</span>
+    <span class="k">print</span> <span class="s">&quot;Extracting from:&quot;</span><span class="p">,</span><span class="n">spectra</span>
+    <span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">spectra</span><span class="p">)</span>
+
+    <span class="c"># loop over the integration limits</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span><span class="n">x0</span><span class="p">,</span><span class="n">y0</span><span class="p">,</span><span class="n">x1</span><span class="p">,</span><span class="n">y1</span> <span class="ow">in</span> <span class="n">peak_list</span><span class="p">:</span>
+
+        <span class="c"># integrate the region and save in trajs record array</span>
+        <span class="k">if</span> <span class="n">x0</span><span class="o">&gt;</span><span class="n">x1</span><span class="p">:</span>   <span class="n">x0</span><span class="p">,</span><span class="n">x1</span> <span class="o">=</span> <span class="n">x1</span><span class="p">,</span><span class="n">x0</span>
+        <span class="k">if</span> <span class="n">y0</span><span class="o">&gt;</span><span class="n">y1</span><span class="p">:</span>   <span class="n">y0</span><span class="p">,</span><span class="n">y1</span> <span class="o">=</span> <span class="n">y1</span><span class="p">,</span><span class="n">y0</span>
+        <span class="n">trajs</span><span class="p">[</span><span class="n">name</span><span class="p">][</span><span class="n">sn</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">y0</span><span class="p">:</span><span class="n">y1</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">x0</span><span class="p">:</span><span class="n">x1</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+<span class="c"># normalize each trajectory</span>
+<span class="k">for</span> <span class="n">peak</span> <span class="ow">in</span> <span class="n">trajs</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">names</span><span class="p">:</span>
+    <span class="n">trajs</span><span class="p">[</span><span class="n">peak</span><span class="p">]</span> <span class="o">=</span> <span class="n">trajs</span><span class="p">[</span><span class="n">peak</span><span class="p">]</span><span class="o">/</span><span class="n">trajs</span><span class="p">[</span><span class="n">peak</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+<span class="c"># save the trajectories records array to disk</span>
+<span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s">&quot;traj.npy&quot;</span><span class="p">,</span><span class="n">trajs</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>[<a class="reference external" href="el/fitting_data/t1_measurements/boxes.in">boxes.in</a>]</p>
+<div class="highlight-python"><pre>#Peak    X0     Y0      X0      Y1     
+A20     4068    938     4079    913
+A24     3992    1013    4000    997
+A26     4065    962     4075    940
+A34     4009    985     4018    958
+A48     4028    1034    4036    1010
+C28     4035    1115    4044    1092
+D36     3994    987     4003    973
+D40     4076    802     4085    774
+D46     4155    899     4163    883
+D47     4053    967     4062    941
+E15     4162    1022    4170    996
+E19     4176    902     4185    875
+E27     4036    1084    4044    1054
+E42     4136    1055    4142    1026
+E56     4107    821     4115    794
+F30     4013    1060    4023    1031
+F52     4097    828     4105    799
+G09     4054    1249    4063    1220
+G14     4068    1331    4077    1304
+G38     4098    1254    4106    1227
+G41     4091    1283    4099    1259
+I06     4087    903     4096    884
+</pre>
+</div>
+<p>[<a class="reference external" href="el/fitting_data/t1_measurements/spectra.in">spectra.in</a>]</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">data</span><span class="o">/</span><span class="n">Ytau_100</span><span class="o">.</span><span class="n">fid</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">ft2</span>
+<span class="n">data</span><span class="o">/</span><span class="n">Ytau_100000</span><span class="o">.</span><span class="n">fid</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">ft2</span>
+<span class="n">data</span><span class="o">/</span><span class="n">Ytau_250000</span><span class="o">.</span><span class="n">fid</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">ft2</span>
+<span class="n">data</span><span class="o">/</span><span class="n">Ytau_500000</span><span class="o">.</span><span class="n">fid</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">ft2</span>
+<span class="n">data</span><span class="o">/</span><span class="n">Ytau_750000</span><span class="o">.</span><span class="n">fid</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">ft2</span>
+<span class="n">data</span><span class="o">/</span><span class="n">Ytau_1000000</span><span class="o">.</span><span class="n">fid</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">ft2</span>
+<span class="n">data</span><span class="o">/</span><span class="n">Ytau_1500000</span><span class="o">.</span><span class="n">fid</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">ft2</span>
+<span class="n">data</span><span class="o">/</span><span class="n">Ytau_2000000</span><span class="o">.</span><span class="n">fid</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">ft2</span>
+<span class="n">data</span><span class="o">/</span><span class="n">Ytau_3000000</span><span class="o">.</span><span class="n">fid</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">ft2</span>
+<span class="n">data</span><span class="o">/</span><span class="n">Ytau_4000000</span><span class="o">.</span><span class="n">fid</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">ft2</span>
+</pre></div>
+</div>
+<p>The second script <tt class="docutils literal"><span class="pre">fit_exp_leastsq.py</span></tt> reads in this <tt class="docutils literal"><span class="pre">traj.npy</span></tt> file and the
+T1 relaxation times associated with the spectra collected from <tt class="docutils literal"><span class="pre">time.dat</span></tt>.
+Each trajectory is fit using the least squares approach. Other optimization
+algorithms can be substituted with small changes to the code, see the
+<cite>scipy.optimize &lt;http://docs.scipy.org/doc/scipy/reference/optimize.html&gt;_</cite>
+documentation).  The resulting fits are saved to a <cite>fits.pickle</cite> file for
+easy reading into python as well as the human readable <tt class="docutils literal"><span class="pre">fits.txt</span></tt> file.</p>
+<p>[<a class="reference external" href="el/fitting_data/t1_measurements/fit_exp_leastsq.py">fit_exp_leastsq.py</a>]</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#! /usr/bin/env python</span>
+<span class="c"># fit a collection to T1 trajectories to a decaying exponential</span>
+
+<span class="kn">import</span> <span class="nn">scipy.optimize</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+
+<span class="c"># read in the trajectories and times</span>
+<span class="n">trajs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">&quot;traj.npy&quot;</span><span class="p">)</span>
+<span class="n">t1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">recfromtxt</span><span class="p">(</span><span class="s">&quot;time.dat&quot;</span><span class="p">)</span>
+
+
+<span class="c"># fitting function and residual calculation</span>
+<span class="k">def</span> <span class="nf">fit_func</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
+
+    <span class="n">A</span><span class="p">,</span><span class="n">R2</span> <span class="o">=</span> <span class="n">p</span>
+
+    <span class="c"># bound A between 0.98 and 1.02 (although fits do not reflect this)</span>
+    <span class="k">if</span> <span class="n">A</span><span class="o">&gt;</span><span class="mf">1.02</span><span class="p">:</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="mf">1.02</span>
+    <span class="k">if</span> <span class="n">A</span><span class="o">&lt;</span><span class="mf">0.98</span><span class="p">:</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="mf">0.98</span>
+
+    <span class="k">return</span> <span class="n">A</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">R2</span><span class="o">/</span><span class="mf">1.0e6</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">residuals</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">err</span> <span class="o">=</span> <span class="n">y</span><span class="o">-</span><span class="n">fit_func</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">err</span>
+
+<span class="n">p0</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">0.05</span><span class="p">]</span> <span class="c"># initial guess</span>
+
+<span class="n">fits</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="c"># loop over the peak trajectories</span>
+<span class="k">for</span> <span class="n">peak</span> <span class="ow">in</span> <span class="n">trajs</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">names</span><span class="p">:</span>
+
+    <span class="k">print</span> <span class="s">&quot;Fitting Peak:&quot;</span><span class="p">,</span><span class="n">peak</span>
+
+    <span class="c"># get the trajectory to fit</span>
+    <span class="n">traj</span> <span class="o">=</span> <span class="n">trajs</span><span class="p">[</span><span class="n">peak</span><span class="p">]</span>
+
+    <span class="c"># fit the trajectory using leastsq (fmin, etc can also be used)</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">leastsq</span><span class="p">(</span><span class="n">residuals</span><span class="p">,</span><span class="n">p0</span><span class="p">,</span><span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">traj</span><span class="p">,</span><span class="n">t1</span><span class="p">))</span>
+    <span class="n">fits</span><span class="p">[</span><span class="n">peak</span><span class="p">]</span> <span class="o">=</span> <span class="n">results</span>
+
+<span class="c"># pickle the fits </span>
+<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;fits.pickle&quot;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+<span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">fits</span><span class="p">,</span><span class="n">f</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="c"># output the fits nicely to file</span>
+<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;fits.txt&quot;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;#Peak</span><span class="se">\t</span><span class="s">A</span><span class="se">\t\t</span><span class="s">R2</span><span class="se">\t\t</span><span class="s">ier</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">fits</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\t</span><span class="s">&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\t</span><span class="s">&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\t</span><span class="s">&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>[<a class="reference external" href="el/fitting_data/t1_measurements/time.dat">time.dat</a>]</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># time in us</span>
+<span class="mi">100</span>
+<span class="mi">100000</span>
+<span class="mi">250000</span>
+<span class="mi">500000</span>
+<span class="mi">750000</span>
+<span class="mi">1000000</span>
+<span class="mi">1500000</span>
+<span class="mi">2000000</span>
+<span class="mi">3000000</span>
+<span class="mi">4000000</span>
+</pre></div>
+</div>
+<p>Results:</p>
+<p>[<a class="reference external" href="el/fitting_data/t1_measurements/fits.txt">fits.txt</a>]</p>
+<div class="highlight-python"><pre>#Peak	A		R2		ier
+E19	0.992583088163	0.165456904924	1
+D36	0.978162369609	0.150387170038	1
+E15	0.996022817946	0.0881391067001	1
+G41	0.884746148818	0.528402076365	1
+G09	0.993838313697	0.0974310406654	1
+E56	0.978642097098	0.153694397368	1
+D40	0.937320157503	0.32803199035	1
+A34	1.00238376034	0.152055981221	1
+E42	0.97955812576	0.201548076316	1
+E27	0.957068222368	0.290667669811	1
+F52	1.01437765462	0.063087299437	1
+G38	1.00575140025	0.127826452523	1
+C28	0.779226606115	0.680794315854	1
+F30	0.955609064219	0.258560125202	1
+G14	0.994898872827	0.108697405902	1
+D47	0.993890875485	0.101193820532	1
+D46	0.978622370865	0.074505374897	1
+A48	0.984906624566	0.125792739083	1
+A20	0.99998574293	0.102821608635	1
+A24	0.923616582091	0.408644672104	1
+A26	0.964157015536	0.252957335373	1
+I06	0.997427797051	0.0604968616212	1
+</pre>
+</div>
+<p>The last script <tt class="docutils literal"><span class="pre">pt.py</span></tt> reads in the fits, trajectories and T1
+relaxation times and plots the experimental points and best fit to a series
+of <tt class="docutils literal"><span class="pre">*_plot.png</span></tt> files.</p>
+<p>[<a class="reference external" href="el/fitting_data/t1_measurements/pt.py">pt.py</a>]</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#! /usr/bin/env python</span>
+<span class="c"># Plot trajectories and fitting results</span>
+
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="c"># the same fit_func as in fit_exp_leastsq.py</span>
+<span class="k">def</span> <span class="nf">fit_func</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
+
+    <span class="n">A</span><span class="p">,</span><span class="n">R2</span> <span class="o">=</span> <span class="n">p</span>
+
+    <span class="c"># bound A between 0.98 and 1.02 (although fits do not reflect this)</span>
+    <span class="k">if</span> <span class="n">A</span><span class="o">&gt;</span><span class="mf">1.02</span><span class="p">:</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="mf">1.02</span>
+    <span class="k">if</span> <span class="n">A</span><span class="o">&lt;</span><span class="mf">0.98</span><span class="p">:</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="mf">0.98</span>
+
+    <span class="k">return</span> <span class="n">A</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="n">R2</span><span class="o">/</span><span class="mf">1.0e6</span><span class="p">)</span>
+
+<span class="c"># read in the trajectories, fitting results, and times</span>
+<span class="n">fits</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="s">&quot;fits.pickle&quot;</span><span class="p">))</span>
+<span class="n">trajs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s">&quot;traj.npy&quot;</span><span class="p">)</span>
+<span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">recfromtxt</span><span class="p">(</span><span class="s">&quot;time.dat&quot;</span><span class="p">)</span>
+
+<span class="n">sim_times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">times</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">times</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="mi">2000</span><span class="p">)</span>
+
+<span class="c"># loop over the peaks</span>
+<span class="k">for</span> <span class="n">peak</span><span class="p">,</span><span class="n">params</span> <span class="ow">in</span> <span class="n">fits</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+
+    <span class="k">print</span> <span class="s">&quot;Plotting:&quot;</span><span class="p">,</span><span class="n">peak</span>
+    <span class="n">exp_traj</span> <span class="o">=</span> <span class="n">trajs</span><span class="p">[</span><span class="n">peak</span><span class="p">]</span>
+    <span class="n">sim_traj</span> <span class="o">=</span> <span class="n">fit_func</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">sim_times</span><span class="p">)</span>
+
+    <span class="c"># create the figure</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span><span class="n">exp_traj</span><span class="p">,</span><span class="s">&#39;or&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">sim_times</span><span class="p">,</span><span class="n">sim_traj</span><span class="p">,</span><span class="s">&#39;-k&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">peak</span><span class="p">)</span>
+
+    <span class="c"># save the figure</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">peak</span><span class="o">+</span><span class="s">&quot;_plot.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Results:</p>
+<p>[<a class="reference external" href="el/fitting_data/t1_measurements/A24_plot.png">A24_plot.png</a>]</p>
+<img alt="../_images/A24_plot.png" src="../_images/A24_plot.png" />
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="integrate_1d.html" title="integration example: integrate_1d"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="varian2pipe_3d.html" title="convert example: varian2pipe_3d"
+             >previous</a> |</li>
+        <li><a href="../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Apr 06, 2011.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+    </div>
+  </body>
+</html>

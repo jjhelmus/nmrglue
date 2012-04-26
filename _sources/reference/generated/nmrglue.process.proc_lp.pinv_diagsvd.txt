@@ -1,0 +1,6 @@
+nmrglue.process.proc_lp.pinv_diagsvd
+====================================
+
+.. currentmodule:: nmrglue.process.proc_lp
+
+.. autofunction:: pinv_diagsvd
