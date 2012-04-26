@@ -11,7 +11,8 @@ from leastsqbound import leastsqbound
 pi = np.pi
 
 # lineshape classes translator
-from analysisbase import ls_str2class,squish
+from analysisbase import squish
+from lineshapes1d import ls_str2class
 
 from ..fileio import table
 
@@ -232,7 +233,8 @@ def fit_spectrum(spectrum,lineshapes,params,amps,bounds,ampbounds,centers,
         # add edges to the initial parameters
         ecparams = [ [ ls.add_edge(p,(mn,mx)) for ls,mn,mx,p in
                   zip(ls_classes,rmin,rmax,g)] for g in cparams ]
-    
+   
+        # TODO make this better...
         ecbounds = [ [ zip(*[ls.add_edge(b,(mn,mx)) for b in zip(*db)]) 
                  for ls,mn,mx,db in zip(ls_classes,rmin,rmax,pb) ] 
                  for pb in cbounds ]
@@ -335,18 +337,19 @@ def fit_NDregion(region,lineshapes,params,amps,bounds=None,
 
     * 'g' or 'gauss'    Gaussian (normal) lineshape.
     * 'l' or 'lorentz'  Lorentzian lineshape.
+    * 'v' or 'voigt'    Voigt lineshape.
+    * 'pv' or 'pvoight' Pseudo Voigt lineshape
     * 's' or 'scale'    Scaled lineshape.
-    * 'p' or 'peak'     Gaussian lineshape which takes FWHM as a parameter.
+
+    The first four lineshapes (Gaussian, Lorentzian, Voigt and Pseudo Voigt)
+    all take a FWHM scale parameter.
 
     The following are all valid lineshapes parameters for a 2D Gaussian peak:
 
     ['g','g']
     ['gauss','gauss']
-    [ng.analysisbase.gauss1D(),ng.analysisbase.gauss1D()]
+    [ng.lineshapes1d.gauss(),ng.lineshapes1d.gauss()]
     
-    An simple example of a lineshape class which simulates the function y=c:
-    XXX
-
     """
     # this function parses the user-friendly input into a format digestable
     # by f_NDregion, performs the fitting, then format the fitting results

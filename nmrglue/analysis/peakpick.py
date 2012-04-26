@@ -8,10 +8,11 @@ import numpy as np
 import scipy.ndimage as ndimage
 
 # analysisbase fuctions
-from analysisbase import ndwindow_index,valid_pt,ls_str2class
+from analysisbase import ndwindow_index,valid_pt
 
 # lineshape classes
-from analysisbase import peak1D,gauss1D,lorentz1D,scale1D
+from lineshapes1d import gauss, ls_str2class
+
 
 # spectral segmentation functions
 from segmentation import find_all_downward, find_all_upward
@@ -87,7 +88,7 @@ def pick(data,pthres,nthres=None,msep=None,algorithm='connected',
     if est_params:
         # expand None
         if lineshapes == None:
-            lineshapes = [peak1D() for i in range(ndim)]
+            lineshapes = [gauss() for i in range(ndim)]
         ls_classes = []
         
         # replace strings
