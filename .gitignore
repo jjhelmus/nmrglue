@@ -1,0 +1,9 @@
+# Python bytecode
+*.pyc
+
+# vim swap files
+*.swp
+
+# Documentation intermediates
+doc/reference/generated
+doc/_build/doctrees
