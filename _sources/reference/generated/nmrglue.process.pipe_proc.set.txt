@@ -1,6 +1,6 @@
 nmrglue.process.pipe_proc.set
 =============================
 
-.. currentmodule:: nmrglue.process.pipe_proc
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: set
+.. automethod:: pipe_proc.set

@@ -1,6 +1,6 @@
 nmrglue.process.proc_base.roll
 ==============================
 
-.. currentmodule:: nmrglue.process.proc_base
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: roll
+.. automethod:: proc_base.roll

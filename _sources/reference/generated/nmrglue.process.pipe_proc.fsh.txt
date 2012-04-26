@@ -1,6 +1,6 @@
 nmrglue.process.pipe_proc.fsh
 =============================
 
-.. currentmodule:: nmrglue.process.pipe_proc
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: fsh
+.. automethod:: pipe_proc.fsh

@@ -1,6 +1,6 @@
 nmrglue.process.pipe_proc.shuf
 ==============================
 
-.. currentmodule:: nmrglue.process.pipe_proc
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: shuf
+.. automethod:: pipe_proc.shuf

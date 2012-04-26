@@ -1,6 +1,6 @@
 nmrglue.process.proc_bl.med
 ===========================
 
-.. currentmodule:: nmrglue.process.proc_bl
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: med
+.. automethod:: proc_bl.med

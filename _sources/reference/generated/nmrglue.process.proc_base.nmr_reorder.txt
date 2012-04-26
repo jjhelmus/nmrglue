@@ -1,6 +1,6 @@
 nmrglue.process.proc_base.nmr_reorder
 =====================================
 
-.. currentmodule:: nmrglue.process.proc_base
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: nmr_reorder
+.. automethod:: proc_base.nmr_reorder

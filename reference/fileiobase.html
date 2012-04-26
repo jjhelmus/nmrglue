@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -12,12 +14,13 @@
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '0.2',
-        COLLAPSE_MODINDEX: false,
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="nmrglue v0.2 documentation" href="../index.html" />
     <link rel="up" title="Reference Guide" href="index.html" />
@@ -32,8 +35,8 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="pipe.html" title="nmrglue.pipe"
              accesskey="N">next</a> |</li>
@@ -46,39 +49,39 @@
     </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-            <h3><a href="../index.html">Table Of Contents</a></h3>
-            <ul>
-<li><a class="reference external" href="#">nmrglue.fileiobase</a><ul>
-<li><a class="reference external" href="#low-level-functions">Low-Level Functions</a></li>
-<li><a class="reference external" href="#low-level-classes">Low-Level Classes</a></li>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">nmrglue.fileiobase</a><ul>
+<li><a class="reference internal" href="#low-level-functions">Low-Level Functions</a></li>
+<li><a class="reference internal" href="#low-level-classes">Low-Level Classes</a></li>
 </ul>
 </li>
 </ul>
 
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="convert.html"
-                                  title="previous chapter">nmrglue.convert</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="pipe.html"
-                                  title="next chapter">nmrglue.pipe</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="../_sources/reference/fileiobase.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="../search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="convert.html"
+                        title="previous chapter">nmrglue.convert</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pipe.html"
+                        title="next chapter">nmrglue.pipe</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/reference/fileiobase.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
 
@@ -88,7 +91,7 @@
           <div class="body">
             
   <div class="section" id="module-nmrglue.fileio.fileiobase">
-<h1>nmrglue.fileiobase<a class="headerlink" href="#module-nmrglue.fileio.fileiobase" title="Permalink to this headline">¶</a></h1>
+<span id="nmrglue-fileiobase"></span><h1>nmrglue.fileiobase<a class="headerlink" href="#module-nmrglue.fileio.fileiobase" title="Permalink to this headline">¶</a></h1>
 <p>fileiobase provides general purpose NMR file IO functions and classes
 used by multiple nmrglue.fileio modules</p>
 <p>This modules is imported as nmrglue.fileiobase and can be called as such.</p>
@@ -99,7 +102,8 @@ high level functions.</p>
 <dl class="function">
 <dt id="nmrglue.fileio.fileiobase.create_blank_udic">
 <tt class="descclassname">nmrglue.fileio.fileiobase.</tt><tt class="descname">create_blank_udic</tt><big>(</big><em>ndim</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.fileiobase.create_blank_udic" title="Permalink to this definition">¶</a></dt>
-<dd>Create a blank universal dictionary for a ndim-D spectrum</dd></dl>
+<dd><p>Create a blank universal dictionary for a ndim-D spectrum</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.fileiobase.open_towrite">
@@ -132,37 +136,43 @@ creates necessary directiories as needed.</p>
 <dl class="function">
 <dt id="nmrglue.fileio.fileiobase.index2trace_flat">
 <tt class="descclassname">nmrglue.fileio.fileiobase.</tt><tt class="descname">index2trace_flat</tt><big>(</big><em>shape</em>, <em>index</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.fileiobase.index2trace_flat" title="Permalink to this definition">¶</a></dt>
-<dd>Calculate trace number from shape and index of all indirect dimensions
-assuming a flat structure</dd></dl>
+<dd><p>Calculate trace number from shape and index of all indirect dimensions
+assuming a flat structure</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.fileiobase.trace2index_flat">
 <tt class="descclassname">nmrglue.fileio.fileiobase.</tt><tt class="descname">trace2index_flat</tt><big>(</big><em>shape</em>, <em>ntrace</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.fileiobase.trace2index_flat" title="Permalink to this definition">¶</a></dt>
-<dd>Calculate the index of a trace assuming a flat structure</dd></dl>
+<dd><p>Calculate the index of a trace assuming a flat structure</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.fileiobase.index2trace_opp">
 <tt class="descclassname">nmrglue.fileio.fileiobase.</tt><tt class="descname">index2trace_opp</tt><big>(</big><em>shape</em>, <em>index</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.fileiobase.index2trace_opp" title="Permalink to this definition">¶</a></dt>
-<dd>Calculate trace number from shape and index of all indirect dimensions
-assuming a phase ordering opposite the time increments.</dd></dl>
+<dd><p>Calculate trace number from shape and index of all indirect dimensions
+assuming a phase ordering opposite the time increments.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.fileiobase.trace2index_opp">
 <tt class="descclassname">nmrglue.fileio.fileiobase.</tt><tt class="descname">trace2index_opp</tt><big>(</big><em>shape</em>, <em>ntrace</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.fileiobase.trace2index_opp" title="Permalink to this definition">¶</a></dt>
-<dd>Calculate the index of a trace assuming opposite phase/time increment 
-ordering</dd></dl>
+<dd><p>Calculate the index of a trace assuming opposite phase/time increment 
+ordering</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.fileiobase.index2trace_reg">
 <tt class="descclassname">nmrglue.fileio.fileiobase.</tt><tt class="descname">index2trace_reg</tt><big>(</big><em>shape</em>, <em>index</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.fileiobase.index2trace_reg" title="Permalink to this definition">¶</a></dt>
-<dd>Calculate trace number from shape and index of all indirect dimensions
-assuming the same  phase and time ordering.</dd></dl>
+<dd><p>Calculate trace number from shape and index of all indirect dimensions
+assuming the same  phase and time ordering.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.fileiobase.trace2index_reg">
 <tt class="descclassname">nmrglue.fileio.fileiobase.</tt><tt class="descname">trace2index_reg</tt><big>(</big><em>shape</em>, <em>ntrace</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.fileiobase.trace2index_reg" title="Permalink to this definition">¶</a></dt>
-<dd>Calculate the index of a trace assuming the same phase/time increment 
-ordering</dd></dl>
+<dd><p>Calculate the index of a trace assuming the same phase/time increment 
+ordering</p>
+</dd></dl>
 
 </div>
 <div class="section" id="low-level-classes">
@@ -172,7 +182,8 @@ called by high level classes or functions.</p>
 <dl class="class">
 <dt id="nmrglue.fileio.fileiobase.unit_conversion">
 <em class="property">class </em><tt class="descclassname">nmrglue.fileio.fileiobase.</tt><tt class="descname">unit_conversion</tt><big>(</big><em>size</em>, <em>cplx</em>, <em>sw</em>, <em>obs</em>, <em>car</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.fileiobase.unit_conversion" title="Permalink to this definition">¶</a></dt>
-<dd>object provides methods to convert between common nmr units</dd></dl>
+<dd><p>object provides methods to convert between common nmr units</p>
+</dd></dl>
 
 <dl class="class">
 <dt id="nmrglue.fileio.fileiobase.data_nd">
@@ -203,7 +214,7 @@ new axes ordering</li>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
+          <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="pipe.html" title="nmrglue.pipe"
@@ -216,9 +227,9 @@ new axes ordering</li>
       </ul>
     </div>
     <div class="footer">
-      &copy; Copyright 2010, Jonathan J. Helmus.
-      Last updated on Apr 06, 2011.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+        &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Apr 26, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

@@ -1,6 +1,6 @@
 nmrglue.process.pipe_proc.tm
 ============================
 
-.. currentmodule:: nmrglue.process.pipe_proc
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: tm
+.. automethod:: pipe_proc.tm

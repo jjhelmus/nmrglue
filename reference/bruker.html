@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -12,12 +14,13 @@
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '0.2',
-        COLLAPSE_MODINDEX: false,
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="nmrglue v0.2 documentation" href="../index.html" />
     <link rel="up" title="Reference Guide" href="index.html" />
@@ -32,8 +35,8 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="convert.html" title="nmrglue.convert"
              accesskey="N">next</a> |</li>
@@ -46,40 +49,40 @@
     </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-            <h3><a href="../index.html">Table Of Contents</a></h3>
-            <ul>
-<li><a class="reference external" href="#">nmrglue.bruker</a><ul>
-<li><a class="reference external" href="#high-level-functions">High-Level Functions</a></li>
-<li><a class="reference external" href="#low-level-functions">Low-Level Functions</a></li>
-<li><a class="reference external" href="#low-level-classes">Low-Level Classes</a></li>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">nmrglue.bruker</a><ul>
+<li><a class="reference internal" href="#high-level-functions">High-Level Functions</a></li>
+<li><a class="reference internal" href="#low-level-functions">Low-Level Functions</a></li>
+<li><a class="reference internal" href="#low-level-classes">Low-Level Classes</a></li>
 </ul>
 </li>
 </ul>
 
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="index.html"
-                                  title="previous chapter">Reference Guide</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="convert.html"
-                                  title="next chapter">nmrglue.convert</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="../_sources/reference/bruker.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="../search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Reference Guide</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="convert.html"
+                        title="next chapter">nmrglue.convert</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/reference/bruker.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
 
@@ -89,7 +92,7 @@
           <div class="body">
             
   <div class="section" id="module-nmrglue.fileio.bruker">
-<h1>nmrglue.bruker<a class="headerlink" href="#module-nmrglue.fileio.bruker" title="Permalink to this headline">¶</a></h1>
+<span id="nmrglue-bruker"></span><h1>nmrglue.bruker<a class="headerlink" href="#module-nmrglue.fileio.bruker" title="Permalink to this headline">¶</a></h1>
 <p>Functions for reading and writing Bruker binary (ser/fid) files, Bruker 
 JCAMP-DX parameter (acqus) files, and Bruker pulse program (pulseprogram) 
 files.</p>
@@ -367,11 +370,11 @@ within JCAMP-DX specification.  Finally long floating point values
 may loose precision when writing.</p>
 <p>For example:</p>
 <blockquote>
-<p>##$QS= (0..7)83 83 83 83 83 83 83 22</p>
+<div><p>##$QS= (0..7)83 83 83 83 83 83 83 22</p>
 <p>will be written as
 ##$QS= (0..7)
 83 83 83 83 83 83 83 22</p>
-</blockquote>
+</div></blockquote>
 </dd></dl>
 
 <dl class="function">
@@ -420,12 +423,14 @@ read_pprog, nothing else.  The pulse program will be nonsense.</p>
 <dl class="function">
 <dt id="nmrglue.fileio.bruker.guess_udic">
 <tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">guess_udic</tt><big>(</big><em>dic</em>, <em>data</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.guess_udic" title="Permalink to this definition">¶</a></dt>
-<dd>Guess parameters of universal dictionary from dic,data pair</dd></dl>
+<dd><p>Guess parameters of universal dictionary from dic,data pair</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.bruker.create_dic">
 <tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">create_dic</tt><big>(</big><em>udic</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.create_dic" title="Permalink to this definition">¶</a></dt>
-<dd>Create a bruker dictionary from a universal dictionary</dd></dl>
+<dd><p>Create a bruker dictionary from a universal dictionary</p>
+</dd></dl>
 
 </div>
 <div class="section" id="low-level-functions">
@@ -436,46 +441,50 @@ files will be interested in these functions.</p>
 <dl class="function">
 <dt id="nmrglue.fileio.bruker.create_data">
 <tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">create_data</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.create_data" title="Permalink to this definition">¶</a></dt>
-<dd>Create a bruker data array (recast into a complex128 or int32)</dd></dl>
+<dd><p>Create a bruker data array (recast into a complex128 or int32)</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.bruker.create_acqus_dic">
 <tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">create_acqus_dic</tt><big>(</big><em>adic</em>, <em>direct=False</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.create_acqus_dic" title="Permalink to this definition">¶</a></dt>
-<dd>Create a acqus dictionary for an universal axis dictionary.  Set 
-direct=True for direct dimension.</dd></dl>
+<dd><p>Create a acqus dictionary for an universal axis dictionary.  Set 
+direct=True for direct dimension.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.bruker.guess_shape">
 <tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">guess_shape</tt><big>(</big><em>dic</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.guess_shape" title="Permalink to this definition">¶</a></dt>
-<dd><p>Determind data shape and complexity from dictionary</p>
+<dd><p>Determine data shape and complexity from parameters in dictionary</p>
 <p>Returns: (shape,cplex)</p>
 <ul class="simple">
-<li>shape   Tuple representing shape of the binary file.</li>
-<li>cplex   Complexity of direct dimension.</li>
+<li>shape Tuple represeting shape of data in binary file (R+I for all dims)</li>
+<li>cplex True for complex data in last (direct) dimension, false otherwise</li>
 </ul>
-<p>When dictionary does not contain enough information warning will be issued
-and (1),True is returned</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.bruker.get_data">
 <tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">get_data</tt><big>(</big><em>f</em>, <em>big</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.get_data" title="Permalink to this definition">¶</a></dt>
-<dd>Get binary data from file object with given endiness</dd></dl>
+<dd><p>Get binary data from file object with given endiness</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.bruker.put_data">
 <tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">put_data</tt><big>(</big><em>f</em>, <em>data</em>, <em>big=True</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.put_data" title="Permalink to this definition">¶</a></dt>
-<dd>Put data to file object with given endiness</dd></dl>
+<dd><p>Put data to file object with given endiness</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.bruker.complexify_data">
 <tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">complexify_data</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.complexify_data" title="Permalink to this definition">¶</a></dt>
-<dd>Complexify data packed real,imag data</dd></dl>
+<dd><p>Complexify data packed real,imag data</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.bruker.uncomplexify_data">
 <tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">uncomplexify_data</tt><big>(</big><em>data_in</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.bruker.uncomplexify_data" title="Permalink to this definition">¶</a></dt>
-<dd>Uncomplexify data (pack real,imag) into a int32 array</dd></dl>
+<dd><p>Uncomplexify data (pack real,imag) into a int32 array</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.bruker.rm_dig_filter">
@@ -543,7 +552,7 @@ ordering.</li>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
+          <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="convert.html" title="nmrglue.convert"
@@ -556,9 +565,9 @@ ordering.</li>
       </ul>
     </div>
     <div class="footer">
-      &copy; Copyright 2010, Jonathan J. Helmus.
-      Last updated on Apr 06, 2011.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+        &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Apr 26, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

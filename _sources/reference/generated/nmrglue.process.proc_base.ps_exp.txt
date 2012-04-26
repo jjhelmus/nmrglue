@@ -1,6 +1,6 @@
 nmrglue.process.proc_base.ps_exp
 ================================
 
-.. currentmodule:: nmrglue.process.proc_base
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: ps_exp
+.. automethod:: proc_base.ps_exp

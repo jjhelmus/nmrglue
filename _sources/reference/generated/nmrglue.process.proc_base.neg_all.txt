@@ -1,6 +1,6 @@
 nmrglue.process.proc_base.neg_all
 =================================
 
-.. currentmodule:: nmrglue.process.proc_base
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: neg_all
+.. automethod:: proc_base.neg_all

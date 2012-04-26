@@ -1,6 +1,6 @@
 nmrglue.process.pipe_proc.lp2d
 ==============================
 
-.. currentmodule:: nmrglue.process.pipe_proc
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: lp2d
+.. automethod:: pipe_proc.lp2d

@@ -1,6 +1,6 @@
 nmrglue.process.pipe_proc.apod
 ==============================
 
-.. currentmodule:: nmrglue.process.pipe_proc
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: apod
+.. automethod:: pipe_proc.apod

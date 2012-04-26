@@ -1,6 +1,6 @@
 nmrglue.process.proc_base.corr
 ==============================
 
-.. currentmodule:: nmrglue.process.proc_base
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: corr
+.. automethod:: proc_base.corr

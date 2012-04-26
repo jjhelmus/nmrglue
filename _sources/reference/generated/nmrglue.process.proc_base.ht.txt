@@ -1,6 +1,6 @@
 nmrglue.process.proc_base.ht
 ============================
 
-.. currentmodule:: nmrglue.process.proc_base
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: ht
+.. automethod:: proc_base.ht

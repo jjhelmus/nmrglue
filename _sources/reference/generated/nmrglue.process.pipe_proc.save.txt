@@ -1,6 +1,6 @@
 nmrglue.process.pipe_proc.save
 ==============================
 
-.. currentmodule:: nmrglue.process.pipe_proc
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: save
+.. automethod:: pipe_proc.save

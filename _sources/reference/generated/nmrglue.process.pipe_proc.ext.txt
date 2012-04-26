@@ -1,6 +1,6 @@
 nmrglue.process.pipe_proc.ext
 =============================
 
-.. currentmodule:: nmrglue.process.pipe_proc
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: ext
+.. automethod:: pipe_proc.ext

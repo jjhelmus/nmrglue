@@ -1,6 +1,6 @@
 nmrglue.process.pipe_proc.rev
 =============================
 
-.. currentmodule:: nmrglue.process.pipe_proc
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: rev
+.. automethod:: pipe_proc.rev

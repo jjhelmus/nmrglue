@@ -1,6 +1,6 @@
 nmrglue.process.proc_lp.lp2d
 ============================
 
-.. currentmodule:: nmrglue.process.proc_lp
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: lp2d
+.. automethod:: proc_lp.lp2d

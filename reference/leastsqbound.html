@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -12,12 +14,13 @@
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '0.2',
-        COLLAPSE_MODINDEX: false,
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="nmrglue v0.2 documentation" href="../index.html" />
     <link rel="up" title="Reference Guide" href="index.html" />
@@ -32,8 +35,8 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="linesh.html" title="nmrglue.linesh"
              accesskey="N">next</a> |</li>
@@ -46,38 +49,38 @@
     </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-            <h3><a href="../index.html">Table Of Contents</a></h3>
-            <ul>
-<li><a class="reference external" href="#">nmrglue.leastsqbound</a><ul>
-<li><a class="reference external" href="#low-level-functions">Low-Level Functions</a></li>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">nmrglue.leastsqbound</a><ul>
+<li><a class="reference internal" href="#low-level-functions">Low-Level Functions</a></li>
 </ul>
 </li>
 </ul>
 
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="helpers.html"
-                                  title="previous chapter">nmrglue.helpers</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="linesh.html"
-                                  title="next chapter">nmrglue.linesh</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="../_sources/reference/leastsqbound.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="../search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="helpers.html"
+                        title="previous chapter">nmrglue.helpers</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="linesh.html"
+                        title="next chapter">nmrglue.linesh</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/reference/leastsqbound.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
 
@@ -87,7 +90,7 @@
           <div class="body">
             
   <div class="section" id="module-nmrglue.analysis.leastsqbound">
-<h1>nmrglue.leastsqbound<a class="headerlink" href="#module-nmrglue.analysis.leastsqbound" title="Permalink to this headline">¶</a></h1>
+<span id="nmrglue-leastsqbound"></span><h1>nmrglue.leastsqbound<a class="headerlink" href="#module-nmrglue.analysis.leastsqbound" title="Permalink to this headline">¶</a></h1>
 <p>Constrained multivariate Levenberg-Marquardt optimization</p>
 <p>This module is imported as nmrglue.leastsqbound and can be called as such.</p>
 <div class="section" id="low-level-functions">
@@ -129,12 +132,14 @@ scipy.optimize.leastsq algorithm.</p>
 <dl class="function">
 <dt id="nmrglue.analysis.leastsqbound.internal2external">
 <tt class="descclassname">nmrglue.analysis.leastsqbound.</tt><tt class="descname">internal2external</tt><big>(</big><em>xi</em>, <em>bounds</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.leastsqbound.internal2external" title="Permalink to this definition">¶</a></dt>
-<dd>Convert a series of internal variables to external variables</dd></dl>
+<dd><p>Convert a series of internal variables to external variables</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.analysis.leastsqbound.external2internal">
 <tt class="descclassname">nmrglue.analysis.leastsqbound.</tt><tt class="descname">external2internal</tt><big>(</big><em>xe</em>, <em>bounds</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.leastsqbound.external2internal" title="Permalink to this definition">¶</a></dt>
-<dd>Convert a series of external variables to internal variables</dd></dl>
+<dd><p>Convert a series of external variables to internal variables</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.analysis.leastsqbound.internal2external_grad">
@@ -156,7 +161,8 @@ scipy.optimize.leastsq algorithm.</p>
 <dl class="function">
 <dt id="nmrglue.analysis.leastsqbound.calc_cov_x">
 <tt class="descclassname">nmrglue.analysis.leastsqbound.</tt><tt class="descname">calc_cov_x</tt><big>(</big><em>infodic</em>, <em>p</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.leastsqbound.calc_cov_x" title="Permalink to this definition">¶</a></dt>
-<dd>Calculate cov_x from fjac, ipvt and p as is done in leastsq</dd></dl>
+<dd><p>Calculate cov_x from fjac, ipvt and p as is done in leastsq</p>
+</dd></dl>
 
 </div>
 </div>
@@ -174,7 +180,7 @@ scipy.optimize.leastsq algorithm.</p>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
+          <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="linesh.html" title="nmrglue.linesh"
@@ -187,9 +193,9 @@ scipy.optimize.leastsq algorithm.</p>
       </ul>
     </div>
     <div class="footer">
-      &copy; Copyright 2010, Jonathan J. Helmus.
-      Last updated on Apr 06, 2011.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+        &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Apr 26, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

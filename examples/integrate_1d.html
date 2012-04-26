@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -12,12 +14,13 @@
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '0.2',
-        COLLAPSE_MODINDEX: false,
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="nmrglue v0.2 documentation" href="../index.html" />
     <link rel="up" title="Examples" href="index.html" />
@@ -32,8 +35,8 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="integrate_2d.html" title="integration example: integrate_2d"
              accesskey="N">next</a> |</li>
@@ -46,30 +49,30 @@
     </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="fitting_t1_data.html"
-                                  title="previous chapter">fitting example: fitting_t1_data</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="integrate_2d.html"
-                                  title="next chapter">integration example: integrate_2d</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="../_sources/examples/integrate_1d.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="../search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="fitting_t1_data.html"
+                        title="previous chapter">fitting example: fitting_t1_data</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="integrate_2d.html"
+                        title="next chapter">integration example: integrate_2d</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/integrate_1d.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
 
@@ -85,91 +88,11 @@ script reads in ppm peak limits from <tt class="docutils literal"><span class="p
 summation integral of each peak using the spectra contained in <tt class="docutils literal"><span class="pre">1d_data.ft</span></tt>.  The integration values are writting to <tt class="docutils literal"><span class="pre">area.out</span></tt> and a plot is make showing
 the integration limits and values overlayed on the spectra to <tt class="docutils literal"><span class="pre">plot.png</span></tt>.</p>
 <p>[<a class="reference external" href="el/integration/integrate_1d/integrate_1d.py">source code</a>]</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#! /usr/bin/env python</span>
-<span class="c"># Example scipt to show integration of a 1D spectrum</span>
-
-<span class="kn">import</span> <span class="nn">nmrglue</span> <span class="kn">as</span> <span class="nn">ng</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-
-<span class="c"># read in the data from a NMRPipe file</span>
-<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;1d_data.ft&quot;</span><span class="p">)</span>
-<span class="n">length</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-<span class="c"># read in the integration limits</span>
-<span class="n">peak_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">recfromtxt</span><span class="p">(</span><span class="s">&quot;limits.in&quot;</span><span class="p">)</span>
-
-<span class="c"># determind the ppm scale</span>
-<span class="n">uc</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">make_uc</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
-<span class="n">ppm_scale</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">uc</span><span class="o">.</span><span class="n">ppm</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="n">uc</span><span class="o">.</span><span class="n">ppm</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="n">data</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
-
-<span class="c"># plot the spectrum</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ppm_scale</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="s">&#39;k-&#39;</span><span class="p">)</span>
-
-<span class="c"># prepare the output file</span>
-<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;area.out&quot;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
-<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;#Name</span><span class="se">\t</span><span class="s">Start</span><span class="se">\t</span><span class="s">Stop</span><span class="se">\t</span><span class="s">Area</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
-
-<span class="c"># loop over the integration limits</span>
-<span class="k">for</span> <span class="n">name</span><span class="p">,</span><span class="n">start</span><span class="p">,</span><span class="n">end</span> <span class="ow">in</span> <span class="n">peak_list</span><span class="p">:</span>
-    <span class="nb">min</span> <span class="o">=</span> <span class="n">uc</span><span class="p">(</span><span class="n">start</span><span class="p">,</span><span class="s">&quot;ppm&quot;</span><span class="p">)</span>
-    <span class="nb">max</span> <span class="o">=</span> <span class="n">uc</span><span class="p">(</span><span class="n">end</span><span class="p">,</span><span class="s">&quot;ppm&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">min</span><span class="o">&gt;</span><span class="nb">max</span><span class="p">:</span>
-        <span class="nb">min</span><span class="p">,</span><span class="nb">max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">,</span><span class="nb">min</span>
-
-    <span class="c"># extract the peak</span>
-    <span class="n">peak</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="nb">min</span><span class="p">:</span><span class="nb">max</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">peak_scale</span> <span class="o">=</span> <span class="n">ppm_scale</span><span class="p">[</span><span class="nb">min</span><span class="p">:</span><span class="nb">max</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
-
-    <span class="c"># plot the integration lines, limits and name of peaks</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">peak_scale</span><span class="p">,</span><span class="n">peak</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span><span class="o">/</span><span class="mf">100.</span><span class="o">+</span><span class="n">peak</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span><span class="s">&#39;g-&#39;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">peak_scale</span><span class="p">,[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">peak_scale</span><span class="p">),</span><span class="s">&#39;r-&#39;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">peak_scale</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mf">0.5</span><span class="o">*</span><span class="n">peak</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">/</span><span class="mf">100.</span><span class="o">+</span><span class="n">peak</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span><span class="n">name</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
-
-    <span class="c"># write out the integration info</span>
-    <span class="n">tup</span> <span class="o">=</span> <span class="p">(</span> <span class="n">name</span><span class="p">,</span><span class="n">peak_scale</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">peak_scale</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">peak</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="p">)</span>
-    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%.3f</span><span class="se">\t</span><span class="si">%.3f</span><span class="se">\t</span><span class="si">%E</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">%</span><span class="n">tup</span><span class="p">)</span>
-
-<span class="c"># close the output file and save the plot</span>
-<span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">ppm_scale</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">ppm_scale</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&quot;plot.png&quot;</span><span class="p">)</span> <span class="c"># change this to plot.pdf, plot.ps, etc</span>
-</pre></div>
-</div>
 <p>[<a class="reference external" href="el/integration/integrate_1d/limits.in">input file</a>]</p>
-<div class="highlight-python"><pre>#Peak   Start   Stop
-CO1     183.40  178.97
-CO2     178.97  175.33
-# Now some more
-Ca      65.77   49.46
-Cb1     49.46   43.75     
-Cb2     43.75   39.00
-Cg1     37.73   33.86
-Cg2     33.86   32.00
-Cd1     32.00   29.62
-Cd2     29.62   26.98
-Ce      26.98   12.10
-</pre>
-</div>
 <p>Results:</p>
 <p>[<a class="reference external" href="el/integration/integrate_1d/area.out">output file</a>]</p>
-<div class="highlight-python"><pre>#Name	Start	Stop	Area
-CO1	183.395	178.976	2.884854E+08
-CO2	178.976	175.333	1.205766E+08
-Ca	65.774	49.457	4.906673E+08
-Cb1	49.457	43.750	3.062952E+08
-Cb2	43.750	38.991	2.336557E+08
-Cg1	37.729	33.868	3.073099E+08
-Cg2	33.868	31.998	1.470495E+08
-Cd1	31.998	29.618	4.963560E+08
-Cd2	29.618	26.972	3.168956E+08
-Ce	26.972	12.111	2.024605E+08
-</pre>
-</div>
 <p>[<a class="reference external" href="el/integration/integrate_1d/plot.png">figure</a>]</p>
-<img alt="../_images/plot.png" src="../_images/plot.png" />
+<img alt="examples/el/integration/integrate_1d/plot.png" src="examples/el/integration/integrate_1d/plot.png" />
 </div>
 
 
@@ -185,7 +108,7 @@ Ce	26.972	12.111	2.024605E+08
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
+          <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="integrate_2d.html" title="integration example: integrate_2d"
@@ -198,9 +121,9 @@ Ce	26.972	12.111	2.024605E+08
       </ul>
     </div>
     <div class="footer">
-      &copy; Copyright 2010, Jonathan J. Helmus.
-      Last updated on Apr 06, 2011.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+        &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Apr 26, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

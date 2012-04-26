@@ -1,6 +1,6 @@
 nmrglue.process.pipe_proc.sign
 ==============================
 
-.. currentmodule:: nmrglue.process.pipe_proc
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: sign
+.. automethod:: pipe_proc.sign

@@ -1,6 +1,6 @@
 nmrglue.process.pipe_proc.jmod
 ==============================
 
-.. currentmodule:: nmrglue.process.pipe_proc
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: jmod
+.. automethod:: pipe_proc.jmod

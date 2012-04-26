@@ -1,6 +1,6 @@
 nmrglue.process.proc_bl.poly_fd
 ===============================
 
-.. currentmodule:: nmrglue.process.proc_bl
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: poly_fd
+.. automethod:: proc_bl.poly_fd

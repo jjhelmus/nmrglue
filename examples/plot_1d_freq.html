@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -12,12 +14,13 @@
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '0.2',
-        COLLAPSE_MODINDEX: false,
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="nmrglue v0.2 documentation" href="../index.html" />
     <link rel="up" title="Examples" href="index.html" />
@@ -32,8 +35,8 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="plot_2d_boxes.html" title="plotting example: plot_2d_boxes"
              accesskey="N">next</a> |</li>
@@ -46,30 +49,30 @@
     </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="plot_1d_time.html"
-                                  title="previous chapter">plotting example: plot_1d_time</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="plot_2d_boxes.html"
-                                  title="next chapter">plotting example: plot_2d_boxes</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="../_sources/examples/plot_1d_freq.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="../search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="plot_1d_time.html"
+                        title="previous chapter">plotting example: plot_1d_time</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="plot_2d_boxes.html"
+                        title="next chapter">plotting example: plot_2d_boxes</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/plot_1d_freq.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
 
@@ -85,51 +88,9 @@
 for examining data or publication.  In this example the spectrum from a 1D
 NMRPipe file is plotted.</p>
 <p>[<a class="reference external" href="el/plotting/1d_spectrum/plot_1d_pipe_freq.py">source code</a>]</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#! /usr/bin/env python</span>
-<span class="c"># Create a 1D plot of NMRPipe data</span>
-
-<span class="kn">import</span> <span class="nn">nmrglue</span> <span class="kn">as</span> <span class="nn">ng</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-
-<span class="c"># read in the data from a NMRPipe file</span>
-<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;../../common_data/1d_pipe/test.ft&quot;</span><span class="p">)</span>
-
-<span class="c"># create a unit conversion object for the axis</span>
-<span class="n">uc</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">make_uc</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
-
-<span class="c"># plot the spectrum</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">uc</span><span class="o">.</span><span class="n">ppm_scale</span><span class="p">(),</span><span class="n">data</span><span class="p">,</span><span class="s">&#39;k-&#39;</span><span class="p">)</span>
-
-<span class="c"># annotate the figure</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s">&#39;CO region&#39;</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">173</span><span class="p">,</span><span class="mf">2.15e6</span><span class="p">),</span><span class="n">xycoords</span><span class="o">=</span><span class="s">&#39;data&#39;</span><span class="p">,</span>
-            <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span><span class="mi">20</span><span class="p">),</span><span class="n">textcoords</span><span class="o">=</span><span class="s">&#39;offset points&#39;</span><span class="p">,</span>
-            <span class="n">arrowprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">arrowstyle</span><span class="o">=</span><span class="s">&quot;-&gt;&quot;</span><span class="p">)</span> <span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">59</span><span class="p">,</span><span class="mf">1.55e6</span><span class="p">,</span><span class="s">&quot;alphatic region&quot;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span><span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="mi">70</span><span class="p">,</span><span class="mf">1.2e6</span><span class="p">),</span><span class="n">xycoords</span><span class="o">=</span><span class="s">&#39;data&#39;</span><span class="p">,</span>
-            <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mf">1.2e6</span><span class="p">),</span><span class="n">textcoords</span><span class="o">=</span><span class="s">&#39;data&#39;</span><span class="p">,</span>
-            <span class="n">arrowprops</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">arrowstyle</span><span class="o">=</span><span class="s">&quot;&lt;-&gt;&quot;</span><span class="p">,</span>
-                            <span class="n">connectionstyle</span><span class="o">=</span><span class="s">&quot;bar&quot;</span><span class="p">,</span>
-                            <span class="n">ec</span><span class="o">=</span><span class="s">&quot;k&quot;</span><span class="p">,</span>
-                            <span class="n">shrinkA</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">shrinkB</span><span class="o">=</span><span class="mi">5</span><span class="p">,))</span>
-
-
-<span class="c"># decorate axes</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([])</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">&quot;Protein 1D Spectrum&quot;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&quot;13C ppm&quot;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">80000</span><span class="p">,</span><span class="mi">2500000</span><span class="p">)</span>
-
-<span class="c"># save the figure</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&quot;spectrum.png&quot;</span><span class="p">)</span> <span class="c"># change this to .pdf, .ps, etc</span>
-</pre></div>
-</div>
 <p>Results:</p>
 <p>[<a class="reference external" href="el/plotting/1d_spectrum/spectrum.png">figure</a>]</p>
-<img alt="../_images/spectrum.png" src="../_images/spectrum.png" />
+<img alt="examples/el/plotting/1d_spectrum/spectrum.png" src="examples/el/plotting/1d_spectrum/spectrum.png" />
 </div>
 
 
@@ -145,7 +106,7 @@ NMRPipe file is plotted.</p>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
+          <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="plot_2d_boxes.html" title="plotting example: plot_2d_boxes"
@@ -158,9 +119,9 @@ NMRPipe file is plotted.</p>
       </ul>
     </div>
     <div class="footer">
-      &copy; Copyright 2010, Jonathan J. Helmus.
-      Last updated on Apr 06, 2011.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+        &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Apr 26, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

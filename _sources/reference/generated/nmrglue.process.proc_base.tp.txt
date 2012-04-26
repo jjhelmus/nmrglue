@@ -1,6 +1,6 @@
 nmrglue.process.proc_base.tp
 ============================
 
-.. currentmodule:: nmrglue.process.proc_base
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: tp
+.. automethod:: proc_base.tp

@@ -1,6 +1,6 @@
 nmrglue.process.proc_base.pack_complex
 ======================================
 
-.. currentmodule:: nmrglue.process.proc_base
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: pack_complex
+.. automethod:: proc_base.pack_complex

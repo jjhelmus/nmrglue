@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -12,12 +14,13 @@
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '0.2',
-        COLLAPSE_MODINDEX: false,
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="nmrglue v0.2 documentation" href="../index.html" />
     <link rel="up" title="Reference Guide" href="index.html" />
@@ -32,8 +35,8 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="peakpick.html" title="nmrglue.peakpick"
              accesskey="N">next</a> |</li>
@@ -46,39 +49,39 @@
     </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-            <h3><a href="../index.html">Table Of Contents</a></h3>
-            <ul>
-<li><a class="reference external" href="#">nmrglue.linesh</a><ul>
-<li><a class="reference external" href="#high-level-functions">High-Level Functions</a></li>
-<li><a class="reference external" href="#low-level-functions">Low-Level Functions</a></li>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">nmrglue.linesh</a><ul>
+<li><a class="reference internal" href="#high-level-functions">High-Level Functions</a></li>
+<li><a class="reference internal" href="#low-level-functions">Low-Level Functions</a></li>
 </ul>
 </li>
 </ul>
 
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="leastsqbound.html"
-                                  title="previous chapter">nmrglue.leastsqbound</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="peakpick.html"
-                                  title="next chapter">nmrglue.peakpick</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="../_sources/reference/linesh.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="../search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="leastsqbound.html"
+                        title="previous chapter">nmrglue.leastsqbound</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="peakpick.html"
+                        title="next chapter">nmrglue.peakpick</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/reference/linesh.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
 
@@ -88,7 +91,7 @@
           <div class="body">
             
   <div class="section" id="module-nmrglue.analysis.linesh">
-<h1>nmrglue.linesh<a class="headerlink" href="#module-nmrglue.analysis.linesh" title="Permalink to this headline">¶</a></h1>
+<span id="nmrglue-linesh"></span><h1>nmrglue.linesh<a class="headerlink" href="#module-nmrglue.analysis.linesh" title="Permalink to this headline">¶</a></h1>
 <p>Functions for fitting and simulating arbitrary dimensional lineshapes commonly
 found in NMR experiments</p>
 <p>This module is imported as nmrglue.linesh and can be called as such</p>
@@ -298,15 +301,16 @@ describe the lineshape. Currently the following strings are allowed:</p>
 <ul class="simple">
 <li>&#8216;g&#8217; or &#8216;gauss&#8217;    Gaussian (normal) lineshape.</li>
 <li>&#8216;l&#8217; or &#8216;lorentz&#8217;  Lorentzian lineshape.</li>
+<li>&#8216;v&#8217; or &#8216;voigt&#8217;    Voigt lineshape.</li>
+<li>&#8216;pv&#8217; or &#8216;pvoight&#8217; Pseudo Voigt lineshape</li>
 <li>&#8216;s&#8217; or &#8216;scale&#8217;    Scaled lineshape.</li>
-<li>&#8216;p&#8217; or &#8216;peak&#8217;     Gaussian lineshape which takes FWHM as a parameter.</li>
 </ul>
+<p>The first four lineshapes (Gaussian, Lorentzian, Voigt and Pseudo Voigt)
+all take a FWHM scale parameter.</p>
 <p>The following are all valid lineshapes parameters for a 2D Gaussian peak:</p>
 <p>[&#8216;g&#8217;,&#8217;g&#8217;]
 [&#8216;gauss&#8217;,&#8217;gauss&#8217;]
-[ng.analysisbase.gauss1D(),ng.analysisbase.gauss1D()]</p>
-<p>An simple example of a lineshape class which simulates the function y=c:
-XXX</p>
+[ng.lineshapes1d.gauss(),ng.lineshapes1d.gauss()]</p>
 </dd></dl>
 
 <dl class="function">
@@ -458,7 +462,8 @@ repeatly by s_NDregion to build up a full ND region.</p>
 <dl class="function">
 <dt id="nmrglue.analysis.linesh.err_NDregion">
 <tt class="descclassname">nmrglue.analysis.linesh.</tt><tt class="descname">err_NDregion</tt><big>(</big><em>p</em>, <em>region</em>, <em>shape</em>, <em>ls_classes</em>, <em>n_peaks</em>, <em>wmask</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.linesh.err_NDregion" title="Permalink to this definition">¶</a></dt>
-<dd>Error functions for a NDregion, called by f_NDregion function</dd></dl>
+<dd><p>Error functions for a NDregion, called by f_NDregion function</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.analysis.linesh.make_slist">
@@ -474,7 +479,8 @@ repeatly by s_NDregion to build up a full ND region.</p>
 <dl class="function">
 <dt id="nmrglue.analysis.linesh.split_list">
 <tt class="descclassname">nmrglue.analysis.linesh.</tt><tt class="descname">split_list</tt><big>(</big><em>l</em>, <em>N</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.linesh.split_list" title="Permalink to this definition">¶</a></dt>
-<dd>Split list l into N sublists of equal size</dd></dl>
+<dd><p>Split list l into N sublists of equal size</p>
+</dd></dl>
 
 </div>
 </div>
@@ -492,7 +498,7 @@ repeatly by s_NDregion to build up a full ND region.</p>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
+          <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="peakpick.html" title="nmrglue.peakpick"
@@ -505,9 +511,9 @@ repeatly by s_NDregion to build up a full ND region.</p>
       </ul>
     </div>
     <div class="footer">
-      &copy; Copyright 2010, Jonathan J. Helmus.
-      Last updated on Apr 06, 2011.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+        &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Apr 26, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

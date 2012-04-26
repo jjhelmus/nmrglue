@@ -1,6 +1,6 @@
 nmrglue.process.proc_base.mir_left
 ==================================
 
-.. currentmodule:: nmrglue.process.proc_base
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: mir_left
+.. automethod:: proc_base.mir_left

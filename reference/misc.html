@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -12,12 +14,13 @@
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '0.2',
-        COLLAPSE_MODINDEX: false,
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="nmrglue v0.2 documentation" href="../index.html" />
     <link rel="up" title="Reference Guide" href="index.html" />
@@ -32,8 +35,8 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="../examples/index.html" title="Examples"
              accesskey="N">next</a> |</li>
@@ -46,38 +49,38 @@
     </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-            <h3><a href="../index.html">Table Of Contents</a></h3>
-            <ul>
-<li><a class="reference external" href="#">nmrglue.misc</a><ul>
-<li><a class="reference external" href="#functions">Functions</a></li>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">nmrglue.misc</a><ul>
+<li><a class="reference internal" href="#functions">Functions</a></li>
 </ul>
 </li>
 </ul>
 
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="segmentation.html"
-                                  title="previous chapter">nmrglue.segmentation</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="../examples/index.html"
-                                  title="next chapter">Examples</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="../_sources/reference/misc.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="../search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="segmentation.html"
+                        title="previous chapter">nmrglue.segmentation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../examples/index.html"
+                        title="next chapter">Examples</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/reference/misc.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
 
@@ -87,14 +90,14 @@
           <div class="body">
             
   <div class="section" id="module-nmrglue.util.misc">
-<h1>nmrglue.misc<a class="headerlink" href="#module-nmrglue.util.misc" title="Permalink to this headline">¶</a></h1>
+<span id="nmrglue-misc"></span><h1>nmrglue.misc<a class="headerlink" href="#module-nmrglue.util.misc" title="Permalink to this headline">¶</a></h1>
 <p>Misc. functions</p>
 <p>This modules is imported as nmrglue.misc and can be called as such.</p>
 <div class="section" id="functions">
 <h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="nmrglue.util.misc.pair_similar">
-<tt class="descclassname">nmrglue.util.misc.</tt><tt class="descname">pair_similar</tt><big>(</big><em>dic1</em>, <em>data1</em>, <em>dic2</em>, <em>data2</em>, <em>verb=False</em>, <em>atol=0.10009999999999999</em>, <em>rtol=0.10009999999999999</em>, <em>dtol=0.10009999999999999</em><big>)</big><a class="headerlink" href="#nmrglue.util.misc.pair_similar" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.util.misc.</tt><tt class="descname">pair_similar</tt><big>(</big><em>dic1</em>, <em>data1</em>, <em>dic2</em>, <em>data2</em>, <em>verb=False</em>, <em>atol=0.1001</em>, <em>rtol=0.1001</em>, <em>dtol=0.1001</em><big>)</big><a class="headerlink" href="#nmrglue.util.misc.pair_similar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check a dic,data pair against a second dic,data pair for differences</p>
 <p>Returns tuple of Booleans indicating agreement between data and 
 dictionaries</p>
@@ -102,12 +105,13 @@ dictionaries</p>
 
 <dl class="function">
 <dt id="nmrglue.util.misc.isdatasimilar">
-<tt class="descclassname">nmrglue.util.misc.</tt><tt class="descname">isdatasimilar</tt><big>(</big><em>data1</em>, <em>data2</em>, <em>verb=False</em>, <em>atol=0.10009999999999999</em>, <em>rtol=0.10009999999999999</em><big>)</big><a class="headerlink" href="#nmrglue.util.misc.isdatasimilar" title="Permalink to this definition">¶</a></dt>
-<dd>Check that data is equal within tolerance</dd></dl>
+<tt class="descclassname">nmrglue.util.misc.</tt><tt class="descname">isdatasimilar</tt><big>(</big><em>data1</em>, <em>data2</em>, <em>verb=False</em>, <em>atol=0.1001</em>, <em>rtol=0.1001</em><big>)</big><a class="headerlink" href="#nmrglue.util.misc.isdatasimilar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check that data is equal within tolerance</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.util.misc.isdicsimilar">
-<tt class="descclassname">nmrglue.util.misc.</tt><tt class="descname">isdicsimilar</tt><big>(</big><em>dic1</em>, <em>dic2</em>, <em>verb=False</em>, <em>dtol=0.10009999999999999</em><big>)</big><a class="headerlink" href="#nmrglue.util.misc.isdicsimilar" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.util.misc.</tt><tt class="descname">isdicsimilar</tt><big>(</big><em>dic1</em>, <em>dic2</em>, <em>verb=False</em>, <em>dtol=0.1001</em><big>)</big><a class="headerlink" href="#nmrglue.util.misc.isdicsimilar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compare two dictionaries for differences</p>
 <p>float and int types compared within dtol
 lists and dictionaries checked recursively
@@ -116,7 +120,7 @@ all other checked by simple equivalence</p>
 
 <dl class="function">
 <dt id="nmrglue.util.misc.islistsimilar">
-<tt class="descclassname">nmrglue.util.misc.</tt><tt class="descname">islistsimilar</tt><big>(</big><em>l1</em>, <em>l2</em>, <em>verb=False</em>, <em>dtol=0.10009999999999999</em><big>)</big><a class="headerlink" href="#nmrglue.util.misc.islistsimilar" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.util.misc.</tt><tt class="descname">islistsimilar</tt><big>(</big><em>l1</em>, <em>l2</em>, <em>verb=False</em>, <em>dtol=0.1001</em><big>)</big><a class="headerlink" href="#nmrglue.util.misc.islistsimilar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compare two lists (or iterable) for differences</p>
 <p>see isdicsimilar</p>
 </dd></dl>
@@ -137,7 +141,7 @@ all other checked by simple equivalence</p>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
+          <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="../examples/index.html" title="Examples"
@@ -150,9 +154,9 @@ all other checked by simple equivalence</p>
       </ul>
     </div>
     <div class="footer">
-      &copy; Copyright 2010, Jonathan J. Helmus.
-      Last updated on Apr 06, 2011.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+        &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Apr 26, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -12,12 +14,13 @@
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '0.2',
-        COLLAPSE_MODINDEX: false,
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="nmrglue v0.2 documentation" href="../index.html" />
     <link rel="next" title="nmrglue.bruker" href="bruker.html" />
@@ -31,8 +34,8 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="bruker.html" title="nmrglue.bruker"
              accesskey="N">next</a> |</li>
@@ -44,49 +47,49 @@
     </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-            <h3><a href="../index.html">Table Of Contents</a></h3>
-            <ul>
-<li><a class="reference external" href="#">Reference Guide</a><ul>
-<li><a class="reference external" href="#fileio-modules">fileio modules</a><ul>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Reference Guide</a><ul>
+<li><a class="reference internal" href="#fileio-modules">fileio modules</a><ul>
 </ul>
 </li>
-<li><a class="reference external" href="#process-modules">process modules</a><ul>
+<li><a class="reference internal" href="#process-modules">process modules</a><ul>
 </ul>
 </li>
-<li><a class="reference external" href="#analysis-modules">analysis modules</a><ul>
+<li><a class="reference internal" href="#analysis-modules">analysis modules</a><ul>
 </ul>
 </li>
-<li><a class="reference external" href="#util-modules">util modules</a><ul>
+<li><a class="reference internal" href="#util-modules">util modules</a><ul>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="../tutorial.html"
-                                  title="previous chapter">Tutorial</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="bruker.html"
-                                  title="next chapter">nmrglue.bruker</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="../_sources/reference/index.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="../search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../tutorial.html"
+                        title="previous chapter">Tutorial</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="bruker.html"
+                        title="next chapter">nmrglue.bruker</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/reference/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
 
@@ -99,123 +102,131 @@
 <span id="id1"></span><h1>Reference Guide<a class="headerlink" href="#reference-guide" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="fileio-modules">
 <h2>fileio modules<a class="headerlink" href="#fileio-modules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference external" href="bruker.html">nmrglue.bruker</a><ul>
-<li class="toctree-l2"><a class="reference external" href="bruker.html#high-level-functions">High-Level Functions</a></li>
-<li class="toctree-l2"><a class="reference external" href="bruker.html#low-level-functions">Low-Level Functions</a></li>
-<li class="toctree-l2"><a class="reference external" href="bruker.html#low-level-classes">Low-Level Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bruker.html">nmrglue.bruker</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="bruker.html#high-level-functions">High-Level Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bruker.html#low-level-functions">Low-Level Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bruker.html#low-level-classes">Low-Level Classes</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="convert.html">nmrglue.convert</a><ul>
-<li class="toctree-l2"><a class="reference external" href="convert.html#high-level-classes">High-Level Classes</a></li>
-<li class="toctree-l2"><a class="reference external" href="convert.html#low-level-classes">Low-Level Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="convert.html">nmrglue.convert</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="convert.html#high-level-classes">High-Level Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="convert.html#low-level-classes">Low-Level Classes</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="fileiobase.html">nmrglue.fileiobase</a><ul>
-<li class="toctree-l2"><a class="reference external" href="fileiobase.html#low-level-functions">Low-Level Functions</a></li>
-<li class="toctree-l2"><a class="reference external" href="fileiobase.html#low-level-classes">Low-Level Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="fileiobase.html">nmrglue.fileiobase</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fileiobase.html#low-level-functions">Low-Level Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fileiobase.html#low-level-classes">Low-Level Classes</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="pipe.html">nmrglue.pipe</a><ul>
-<li class="toctree-l2"><a class="reference external" href="pipe.html#high-level-functions">High-Level Functions</a></li>
-<li class="toctree-l2"><a class="reference external" href="pipe.html#high-level-classes">High-Level Classes</a></li>
-<li class="toctree-l2"><a class="reference external" href="pipe.html#low-level-functions">Low-Level Functions</a></li>
-<li class="toctree-l2"><a class="reference external" href="pipe.html#low-level-classes">Low-Level Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipe.html">nmrglue.pipe</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pipe.html#high-level-functions">High-Level Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipe.html#high-level-classes">High-Level Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipe.html#low-level-functions">Low-Level Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipe.html#low-level-classes">Low-Level Classes</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="sparky.html">nmrglue.sparky</a><ul>
-<li class="toctree-l2"><a class="reference external" href="sparky.html#high-level-functions">High-Level Functions</a></li>
-<li class="toctree-l2"><a class="reference external" href="sparky.html#low-level-functions">Low-Level Functions</a></li>
-<li class="toctree-l2"><a class="reference external" href="sparky.html#low-level-classes">Low-Level Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sparky.html">nmrglue.sparky</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sparky.html#high-level-functions">High-Level Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sparky.html#low-level-functions">Low-Level Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sparky.html#low-level-classes">Low-Level Classes</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="table.html">nmrglue.table</a><ul>
-<li class="toctree-l2"><a class="reference external" href="table.html#high-level-functions">High-Level Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="table.html">nmrglue.table</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="table.html#high-level-functions">High-Level Functions</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="varian.html">nmrglue.varian</a><ul>
-<li class="toctree-l2"><a class="reference external" href="varian.html#high-level-functions">High-Level Functions</a></li>
-<li class="toctree-l2"><a class="reference external" href="varian.html#low-level-functions">Low-Level Functions</a></li>
-<li class="toctree-l2"><a class="reference external" href="varian.html#low-level-classes">Low-Level Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="varian.html">nmrglue.varian</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="varian.html#high-level-functions">High-Level Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="varian.html#low-level-functions">Low-Level Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="varian.html#low-level-classes">Low-Level Classes</a></li>
 </ul>
 </li>
 </ul>
+</div>
 </div>
 <div class="section" id="process-modules">
 <h2>process modules<a class="headerlink" href="#process-modules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference external" href="proc_base.html">nmrglue.proc_base</a><ul>
-<li class="toctree-l2"><a class="reference external" href="proc_base.html#apodization">Apodization</a></li>
-<li class="toctree-l2"><a class="reference external" href="proc_base.html#shifts">Shifts</a></li>
-<li class="toctree-l2"><a class="reference external" href="proc_base.html#transforms">Transforms</a></li>
-<li class="toctree-l2"><a class="reference external" href="proc_base.html#standard-nmr">Standard NMR</a></li>
-<li class="toctree-l2"><a class="reference external" href="proc_base.html#basic-utilities">Basic Utilities</a></li>
-<li class="toctree-l2"><a class="reference external" href="proc_base.html#misc">Misc</a></li>
-<li class="toctree-l2"><a class="reference external" href="proc_base.html#low-level-functions">Low-Level Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proc_base.html">nmrglue.proc_base</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="proc_base.html#apodization">Apodization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="proc_base.html#shifts">Shifts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="proc_base.html#transforms">Transforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="proc_base.html#standard-nmr">Standard NMR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="proc_base.html#basic-utilities">Basic Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="proc_base.html#misc">Misc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="proc_base.html#low-level-functions">Low-Level Functions</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="proc_bl.html">nmrglue.proc_bl</a><ul>
-<li class="toctree-l2"><a class="reference external" href="proc_bl.html#high-level-functions">High-Level Functions</a></li>
-<li class="toctree-l2"><a class="reference external" href="proc_bl.html#low-level-functions">Low-Level Functions</a></li>
-<li class="toctree-l2"><a class="reference external" href="proc_bl.html#notimplemented">NotImplemented</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proc_bl.html">nmrglue.proc_bl</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="proc_bl.html#high-level-functions">High-Level Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="proc_bl.html#low-level-functions">Low-Level Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="proc_bl.html#notimplemented">NotImplemented</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="proc_lp.html">nmrglue.proc_lp</a><ul>
-<li class="toctree-l2"><a class="reference external" href="proc_lp.html#high-level-functions">High-Level Functions</a></li>
-<li class="toctree-l2"><a class="reference external" href="proc_lp.html#low-level-functions">Low-Level Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proc_lp.html">nmrglue.proc_lp</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="proc_lp.html#high-level-functions">High-Level Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="proc_lp.html#low-level-functions">Low-Level Functions</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="pipe_proc.html">nmrglue.pipe_proc</a><ul>
-<li class="toctree-l2"><a class="reference external" href="pipe_proc.html#apodization">Apodization</a></li>
-<li class="toctree-l2"><a class="reference external" href="pipe_proc.html#shifts">Shifts</a></li>
-<li class="toctree-l2"><a class="reference external" href="pipe_proc.html#transforms">Transforms</a></li>
-<li class="toctree-l2"><a class="reference external" href="pipe_proc.html#standard-nmr">Standard NMR</a></li>
-<li class="toctree-l2"><a class="reference external" href="pipe_proc.html#baseline">Baseline</a></li>
-<li class="toctree-l2"><a class="reference external" href="pipe_proc.html#utilities">Utilities</a></li>
-<li class="toctree-l2"><a class="reference external" href="pipe_proc.html#misc">Misc</a></li>
-<li class="toctree-l2"><a class="reference external" href="pipe_proc.html#linear-prediction">Linear Prediction</a></li>
-<li class="toctree-l2"><a class="reference external" href="pipe_proc.html#not-implemented">Not Implemented</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipe_proc.html">nmrglue.pipe_proc</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pipe_proc.html#apodization">Apodization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipe_proc.html#shifts">Shifts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipe_proc.html#transforms">Transforms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipe_proc.html#standard-nmr">Standard NMR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipe_proc.html#baseline">Baseline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipe_proc.html#utilities">Utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipe_proc.html#misc">Misc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipe_proc.html#linear-prediction">Linear Prediction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipe_proc.html#not-implemented">Not Implemented</a></li>
 </ul>
 </li>
 </ul>
+</div>
 </div>
 <div class="section" id="analysis-modules">
 <h2>analysis modules<a class="headerlink" href="#analysis-modules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference external" href="analysisbase.html">nmrglue.analysisbase</a><ul>
-<li class="toctree-l2"><a class="reference external" href="analysisbase.html#low-level-functions">Low-Level Functions</a></li>
-<li class="toctree-l2"><a class="reference external" href="analysisbase.html#low-level-classes">Low-Level Classes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysisbase.html">nmrglue.analysisbase</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="analysisbase.html#low-level-functions">Low-Level Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="analysisbase.html#low-level-classes">Low-Level Classes</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="helpers.html">nmrglue.helpers</a><ul>
-<li class="toctree-l2"><a class="reference external" href="helpers.html#high-level-functions">High-Level Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="helpers.html">nmrglue.helpers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="helpers.html#high-level-functions">High-Level Functions</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="leastsqbound.html">nmrglue.leastsqbound</a><ul>
-<li class="toctree-l2"><a class="reference external" href="leastsqbound.html#low-level-functions">Low-Level Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="leastsqbound.html">nmrglue.leastsqbound</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="leastsqbound.html#low-level-functions">Low-Level Functions</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="linesh.html">nmrglue.linesh</a><ul>
-<li class="toctree-l2"><a class="reference external" href="linesh.html#high-level-functions">High-Level Functions</a></li>
-<li class="toctree-l2"><a class="reference external" href="linesh.html#low-level-functions">Low-Level Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="linesh.html">nmrglue.linesh</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="linesh.html#high-level-functions">High-Level Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="linesh.html#low-level-functions">Low-Level Functions</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="peakpick.html">nmrglue.peakpick</a><ul>
-<li class="toctree-l2"><a class="reference external" href="peakpick.html#high-level-functions">High-Level Functions</a></li>
-<li class="toctree-l2"><a class="reference external" href="peakpick.html#low-level-functions">Low-Level Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="peakpick.html">nmrglue.peakpick</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="peakpick.html#high-level-functions">High-Level Functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="peakpick.html#low-level-functions">Low-Level Functions</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference external" href="segmentation.html">nmrglue.segmentation</a><ul>
-<li class="toctree-l2"><a class="reference external" href="segmentation.html#low-level-functions">Low-Level Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="segmentation.html">nmrglue.segmentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="segmentation.html#low-level-functions">Low-Level Functions</a></li>
 </ul>
 </li>
 </ul>
 </div>
+</div>
 <div class="section" id="util-modules">
 <h2>util modules<a class="headerlink" href="#util-modules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference external" href="misc.html">nmrglue.misc</a></li>
+<li class="toctree-l1"><a class="reference internal" href="misc.html">nmrglue.misc</a></li>
 </ul>
+</div>
 </div>
 </div>
 
@@ -232,7 +243,7 @@
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
+          <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="bruker.html" title="nmrglue.bruker"
@@ -244,9 +255,9 @@
       </ul>
     </div>
     <div class="footer">
-      &copy; Copyright 2010, Jonathan J. Helmus.
-      Last updated on Apr 06, 2011.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+        &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Apr 26, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -12,12 +14,13 @@
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '0.2',
-        COLLAPSE_MODINDEX: false,
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="nmrglue v0.2 documentation" href="../index.html" />
     <link rel="up" title="Examples" href="index.html" />
@@ -32,8 +35,8 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="interactive_1d.html" title="interactive example: interactive_1d"
              accesskey="N">next</a> |</li>
@@ -46,30 +49,30 @@
     </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="integrate_1d.html"
-                                  title="previous chapter">integration example: integrate_1d</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="interactive_1d.html"
-                                  title="next chapter">interactive example: interactive_1d</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="../_sources/examples/integrate_2d.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="../search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="integrate_1d.html"
+                        title="previous chapter">integration example: integrate_1d</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="interactive_1d.html"
+                        title="next chapter">interactive example: interactive_1d</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/integrate_2d.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
 
@@ -84,65 +87,12 @@
 script reads in point limits from <tt class="docutils literal"><span class="pre">limits.in</span></tt> and takes a simple
 summation integral of all points in each box described.  The integrated
 volumes are writting to <tt class="docutils literal"><span class="pre">volumes.out</span></tt>.  For a method to graphically examine
-these limits see <a class="reference external" href="plot_2d_boxes.html#plot-2d-boxes"><em>plotting example: plot_2d_boxes</em></a>.  Similarly to check the peak
-assignments see <a class="reference external" href="plot_2d_assignments.html#plot-2d-assignments"><em>plotting example: plot_2d_assignments</em></a>.</p>
+these limits see <a class="reference internal" href="plot_2d_boxes.html#plot-2d-boxes"><em>plotting example: plot_2d_boxes</em></a>.  Similarly to check the peak
+assignments see <a class="reference internal" href="plot_2d_assignments.html#plot-2d-assignments"><em>plotting example: plot_2d_assignments</em></a>.</p>
 <p>[<a class="reference external" href="el/integration/integrate_2d/integrate_2d.py">source code</a>]</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#! /usr/bin/env python</span>
-<span class="c"># Example scipt to show integration of a 2D spectrum</span>
-
-<span class="kn">import</span> <span class="nn">nmrglue</span> <span class="kn">as</span> <span class="nn">ng</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-
-<span class="c"># read in the data from a NMRPipe file</span>
-<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;../../common_data/2d_pipe/test.ft2&quot;</span><span class="p">)</span>
-
-<span class="c"># read in the integration limits</span>
-<span class="n">peak_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">recfromtxt</span><span class="p">(</span><span class="s">&quot;limits.in&quot;</span><span class="p">)</span>
-
-<span class="c"># prepare the output file</span>
-<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;volumes.out&quot;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
-<span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;# Name</span><span class="se">\t</span><span class="s">Volume</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
-
-<span class="c"># loop over the integration limits</span>
-<span class="k">for</span> <span class="n">name</span><span class="p">,</span><span class="n">x0</span><span class="p">,</span><span class="n">y0</span><span class="p">,</span><span class="n">x1</span><span class="p">,</span><span class="n">y1</span> <span class="ow">in</span> <span class="n">peak_list</span><span class="p">:</span>
-
-    <span class="k">if</span> <span class="n">x0</span><span class="o">&gt;</span><span class="n">x1</span><span class="p">:</span>
-        <span class="n">x0</span><span class="p">,</span><span class="n">x1</span> <span class="o">=</span> <span class="n">x1</span><span class="p">,</span><span class="n">x0</span>
-    <span class="k">if</span> <span class="n">y0</span><span class="o">&gt;</span><span class="n">y1</span><span class="p">:</span>
-        <span class="n">y0</span><span class="p">,</span><span class="n">y1</span> <span class="o">=</span> <span class="n">y1</span><span class="p">,</span><span class="n">y0</span>
-
-    <span class="n">vol</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">y0</span><span class="p">:</span><span class="n">y1</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">x0</span><span class="p">:</span><span class="n">x1</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%.3f</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">%</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">vol</span><span class="p">))</span>
-
-<span class="c"># close the output file</span>
-<span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</pre></div>
-</div>
 <p>[<a class="reference external" href="el/integration/integrate_2d/limits.in">input file</a>]</p>
-<div class="highlight-python"><pre>#Peak   X0      Y0      X1      Y1
-# Peak defines 15N resonance in 2D NCO spectra.
-# Limits are in term of points from 0 to length-1.
-# These can determined from nmrDraw by subtracting 1 from the X and Y
-# values reported.
-#Peak   X0      Y0      X1      Y1
-T49     1992    1334    2003    1316
-T11     1996    1302    2008    1284
-# comments can appear anywhere in this file just start the line with #
-G14     2032    1314    2044    1293
-E15     2077    1025    2087    1004
-W43     2008    952     2019    933
-</pre>
-</div>
 <p>Results:</p>
 <p>[<a class="reference external" href="el/integration/integrate_2d/volumes.out">output file</a>]</p>
-<div class="highlight-python"><pre># Name	Volume
-T49	10194682.000
-T11	8478199.000
-G14	9677602.000
-E15	9187130.000
-W43	8778141.000
-</pre>
-</div>
 </div>
 
 
@@ -158,7 +108,7 @@ W43	8778141.000
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
+          <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="interactive_1d.html" title="interactive example: interactive_1d"
@@ -171,9 +121,9 @@ W43	8778141.000
       </ul>
     </div>
     <div class="footer">
-      &copy; Copyright 2010, Jonathan J. Helmus.
-      Last updated on Apr 06, 2011.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+        &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Apr 26, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

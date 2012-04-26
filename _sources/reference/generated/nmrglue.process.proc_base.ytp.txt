@@ -1,6 +1,6 @@
 nmrglue.process.proc_base.ytp
 =============================
 
-.. currentmodule:: nmrglue.process.proc_base
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: ytp
+.. automethod:: proc_base.ytp

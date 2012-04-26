@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -12,12 +14,13 @@
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '0.2',
-        COLLAPSE_MODINDEX: false,
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="nmrglue v0.2 documentation" href="../index.html" />
     <link rel="up" title="Reference Guide" href="index.html" />
@@ -32,8 +35,8 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="fileiobase.html" title="nmrglue.fileiobase"
              accesskey="N">next</a> |</li>
@@ -46,39 +49,39 @@
     </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-            <h3><a href="../index.html">Table Of Contents</a></h3>
-            <ul>
-<li><a class="reference external" href="#">nmrglue.convert</a><ul>
-<li><a class="reference external" href="#high-level-classes">High-Level Classes</a></li>
-<li><a class="reference external" href="#low-level-classes">Low-Level Classes</a></li>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">nmrglue.convert</a><ul>
+<li><a class="reference internal" href="#high-level-classes">High-Level Classes</a></li>
+<li><a class="reference internal" href="#low-level-classes">Low-Level Classes</a></li>
 </ul>
 </li>
 </ul>
 
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="bruker.html"
-                                  title="previous chapter">nmrglue.bruker</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="fileiobase.html"
-                                  title="next chapter">nmrglue.fileiobase</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="../_sources/reference/convert.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="../search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="bruker.html"
+                        title="previous chapter">nmrglue.bruker</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="fileiobase.html"
+                        title="next chapter">nmrglue.fileiobase</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/reference/convert.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
 
@@ -88,7 +91,7 @@
           <div class="body">
             
   <div class="section" id="module-nmrglue.fileio.convert">
-<h1>nmrglue.convert<a class="headerlink" href="#module-nmrglue.fileio.convert" title="Permalink to this headline">¶</a></h1>
+<span id="nmrglue-convert"></span><h1>nmrglue.convert<a class="headerlink" href="#module-nmrglue.fileio.convert" title="Permalink to this headline">¶</a></h1>
 <p>Functions to convert between NMR file formats</p>
 <p>This modules is imported as nmrglue.convert and can be called as such.</p>
 <div class="section" id="high-level-classes">
@@ -109,22 +112,26 @@
 <dl class="method">
 <dt id="nmrglue.fileio.convert.converter.from_bruker">
 <tt class="descname">from_bruker</tt><big>(</big><em>dic</em>, <em>data</em>, <em>udic=None</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.convert.converter.from_bruker" title="Permalink to this definition">¶</a></dt>
-<dd>Load data and dictionary from Bruker ser/fid file</dd></dl>
+<dd><p>Load data and dictionary from Bruker ser/fid file</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="nmrglue.fileio.convert.converter.from_pipe">
 <tt class="descname">from_pipe</tt><big>(</big><em>dic</em>, <em>data</em>, <em>udic=None</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.convert.converter.from_pipe" title="Permalink to this definition">¶</a></dt>
-<dd>Load data and dictionary from NMRPipe pair</dd></dl>
+<dd><p>Load data and dictionary from NMRPipe pair</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="nmrglue.fileio.convert.converter.from_sparky">
 <tt class="descname">from_sparky</tt><big>(</big><em>dic</em>, <em>data</em>, <em>udic=None</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.convert.converter.from_sparky" title="Permalink to this definition">¶</a></dt>
-<dd>Load data and dictionary from Sparky pair</dd></dl>
+<dd><p>Load data and dictionary from Sparky pair</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="nmrglue.fileio.convert.converter.from_universal">
 <tt class="descname">from_universal</tt><big>(</big><em>dic</em>, <em>data</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.convert.converter.from_universal" title="Permalink to this definition">¶</a></dt>
-<dd>load data from universal dic,data pair</dd></dl>
+<dd><p>load data from universal dic,data pair</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="nmrglue.fileio.convert.converter.from_varian">
@@ -141,27 +148,32 @@
 <dl class="method">
 <dt id="nmrglue.fileio.convert.converter.to_bruker">
 <tt class="descname">to_bruker</tt><big>(</big><big>)</big><a class="headerlink" href="#nmrglue.fileio.convert.converter.to_bruker" title="Permalink to this definition">¶</a></dt>
-<dd>Return Bruker dic,data pair</dd></dl>
+<dd><p>Return Bruker dic,data pair</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="nmrglue.fileio.convert.converter.to_pipe">
-<tt class="descname">to_pipe</tt><big>(</big><em>datetimeobj=datetime.datetime(2011</em>, <em>4</em>, <em>6</em>, <em>16</em>, <em>39</em>, <em>24</em>, <em>715461)</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.convert.converter.to_pipe" title="Permalink to this definition">¶</a></dt>
-<dd>Return NMRPipe dic,data pair</dd></dl>
+<tt class="descname">to_pipe</tt><big>(</big><em>datetimeobj=datetime.datetime(2012</em>, <em>4</em>, <em>26</em>, <em>16</em>, <em>24</em>, <em>30</em>, <em>378161)</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.convert.converter.to_pipe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return NMRPipe dic,data pair</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="nmrglue.fileio.convert.converter.to_sparky">
-<tt class="descname">to_sparky</tt><big>(</big><em>datetimeobj=datetime.datetime(2011</em>, <em>4</em>, <em>6</em>, <em>16</em>, <em>39</em>, <em>24</em>, <em>715465)</em>, <em>user='user'</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.convert.converter.to_sparky" title="Permalink to this definition">¶</a></dt>
-<dd>Return sparky dic,data pair</dd></dl>
+<tt class="descname">to_sparky</tt><big>(</big><em>datetimeobj=datetime.datetime(2012</em>, <em>4</em>, <em>26</em>, <em>16</em>, <em>24</em>, <em>30</em>, <em>378169)</em>, <em>user='user'</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.convert.converter.to_sparky" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return sparky dic,data pair</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="nmrglue.fileio.convert.converter.to_universal">
 <tt class="descname">to_universal</tt><big>(</big><big>)</big><a class="headerlink" href="#nmrglue.fileio.convert.converter.to_universal" title="Permalink to this definition">¶</a></dt>
-<dd>Return universal dictionary and original data</dd></dl>
+<dd><p>Return universal dictionary and original data</p>
+</dd></dl>
 
 <dl class="method">
 <dt id="nmrglue.fileio.convert.converter.to_varian">
 <tt class="descname">to_varian</tt><big>(</big><big>)</big><a class="headerlink" href="#nmrglue.fileio.convert.converter.to_varian" title="Permalink to this definition">¶</a></dt>
-<dd>Return Varian dic,data pair</dd></dl>
+<dd><p>Return Varian dic,data pair</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -201,7 +213,7 @@ ordering.</li>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
+          <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="fileiobase.html" title="nmrglue.fileiobase"
@@ -214,9 +226,9 @@ ordering.</li>
       </ul>
     </div>
     <div class="footer">
-      &copy; Copyright 2010, Jonathan J. Helmus.
-      Last updated on Apr 06, 2011.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+        &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Apr 26, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

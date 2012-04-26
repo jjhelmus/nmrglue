@@ -1,6 +1,6 @@
 nmrglue.process.pipe_proc.ebs
 =============================
 
-.. currentmodule:: nmrglue.process.pipe_proc
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: ebs
+.. automethod:: pipe_proc.ebs

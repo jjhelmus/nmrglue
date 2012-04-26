@@ -1,6 +1,6 @@
 nmrglue.process.pipe_proc.cbf
 =============================
 
-.. currentmodule:: nmrglue.process.pipe_proc
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: cbf
+.. automethod:: pipe_proc.cbf

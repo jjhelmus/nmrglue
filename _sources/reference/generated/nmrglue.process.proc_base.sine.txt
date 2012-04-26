@@ -1,6 +1,6 @@
 nmrglue.process.proc_base.sine
 ==============================
 
-.. currentmodule:: nmrglue.process.proc_base
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: sine
+.. automethod:: proc_base.sine

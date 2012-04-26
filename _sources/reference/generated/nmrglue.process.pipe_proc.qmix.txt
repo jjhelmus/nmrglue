@@ -1,6 +1,6 @@
 nmrglue.process.pipe_proc.qmix
 ==============================
 
-.. currentmodule:: nmrglue.process.pipe_proc
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: qmix
+.. automethod:: pipe_proc.qmix

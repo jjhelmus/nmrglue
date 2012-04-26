@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -12,12 +14,13 @@
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '0.2',
-        COLLAPSE_MODINDEX: false,
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="nmrglue v0.2 documentation" href="../index.html" />
     <link rel="up" title="Reference Guide" href="index.html" />
@@ -32,8 +35,8 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="sparky.html" title="nmrglue.sparky"
              accesskey="N">next</a> |</li>
@@ -46,41 +49,41 @@
     </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-            <h3><a href="../index.html">Table Of Contents</a></h3>
-            <ul>
-<li><a class="reference external" href="#">nmrglue.pipe</a><ul>
-<li><a class="reference external" href="#high-level-functions">High-Level Functions</a></li>
-<li><a class="reference external" href="#high-level-classes">High-Level Classes</a></li>
-<li><a class="reference external" href="#low-level-functions">Low-Level Functions</a></li>
-<li><a class="reference external" href="#low-level-classes">Low-Level Classes</a></li>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">nmrglue.pipe</a><ul>
+<li><a class="reference internal" href="#high-level-functions">High-Level Functions</a></li>
+<li><a class="reference internal" href="#high-level-classes">High-Level Classes</a></li>
+<li><a class="reference internal" href="#low-level-functions">Low-Level Functions</a></li>
+<li><a class="reference internal" href="#low-level-classes">Low-Level Classes</a></li>
 </ul>
 </li>
 </ul>
 
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="fileiobase.html"
-                                  title="previous chapter">nmrglue.fileiobase</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="sparky.html"
-                                  title="next chapter">nmrglue.sparky</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="../_sources/reference/pipe.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="../search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="fileiobase.html"
+                        title="previous chapter">nmrglue.fileiobase</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="sparky.html"
+                        title="next chapter">nmrglue.sparky</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/reference/pipe.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
 
@@ -90,7 +93,7 @@
           <div class="body">
             
   <div class="section" id="module-nmrglue.fileio.pipe">
-<h1>nmrglue.pipe<a class="headerlink" href="#module-nmrglue.fileio.pipe" title="Permalink to this headline">¶</a></h1>
+<span id="nmrglue-pipe"></span><h1>nmrglue.pipe<a class="headerlink" href="#module-nmrglue.fileio.pipe" title="Permalink to this headline">¶</a></h1>
 <p>Functions for reading and writing NMRPipe binary files and table (.tab) files</p>
 <p>NMRPipe file structure is described in the NMRPipe man pages and fdatap.h</p>
 <p>This modules is imported as nmrglue.pipe and can be called as such.</p>
@@ -141,7 +144,8 @@ stream files or an file may be written with an incorrect header.</p>
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.write_lowmem">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">write_lowmem</tt><big>(</big><em>filename</em>, <em>dic</em>, <em>data</em>, <em>overwrite=False</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.write_lowmem" title="Permalink to this definition">¶</a></dt>
-<dd>Write a NMRPipe file using minimal memory</dd></dl>
+<dd><p>Write a NMRPipe file using minimal memory</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.read_table">
@@ -176,16 +180,18 @@ stream files or an file may be written with an incorrect header.</p>
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.make_uc">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">make_uc</tt><big>(</big><em>dic</em>, <em>data</em>, <em>dim=-1</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.make_uc" title="Permalink to this definition">¶</a></dt>
-<dd>Make a unit conversion object</dd></dl>
+<dd><p>Make a unit conversion object</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.guess_udic">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">guess_udic</tt><big>(</big><em>dic</em>, <em>data</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.guess_udic" title="Permalink to this definition">¶</a></dt>
-<dd>Guess parameter of universal dictionary from dic,data pair</dd></dl>
+<dd><p>Guess parameter of universal dictionary from dic,data pair</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.create_dic">
-<tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">create_dic</tt><big>(</big><em>udic</em>, <em>datetimeobj=datetime.datetime(2011</em>, <em>4</em>, <em>6</em>, <em>16</em>, <em>39</em>, <em>24</em>, <em>713603)</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.create_dic" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">create_dic</tt><big>(</big><em>udic</em>, <em>datetimeobj=datetime.datetime(2012</em>, <em>4</em>, <em>26</em>, <em>16</em>, <em>24</em>, <em>30</em>, <em>369071)</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.create_dic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Crate a NMRPipe dictiony from universal dictionary</p>
 <p>Parameters:</p>
 <ul class="simple">
@@ -201,12 +207,14 @@ Also rounding of parameter is different than NMRPipe.</p>
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.datetime2dic">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">datetime2dic</tt><big>(</big><em>dt</em>, <em>dic</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.datetime2dic" title="Permalink to this definition">¶</a></dt>
-<dd>Add datatime object to dictionary</dd></dl>
+<dd><p>Add datatime object to dictionary</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.dic2datetime">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">dic2datetime</tt><big>(</big><em>dic</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.dic2datetime" title="Permalink to this definition">¶</a></dt>
-<dd>Create a datetime object from dictionary</dd></dl>
+<dd><p>Create a datetime object from dictionary</p>
+</dd></dl>
 
 </div>
 <div class="section" id="high-level-classes">
@@ -246,7 +254,8 @@ files will be interested in these functions.</p>
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.create_data">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">create_data</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.create_data" title="Permalink to this definition">¶</a></dt>
-<dd>Create a NMRPipe data array (recast into float32 or complex64)</dd></dl>
+<dd><p>Create a NMRPipe data array (recast into float32 or complex64)</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.add_axis_to_dic">
@@ -258,42 +267,50 @@ files will be interested in these functions.</p>
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.create_empty_dic">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">create_empty_dic</tt><big>(</big><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.create_empty_dic" title="Permalink to this definition">¶</a></dt>
-<dd>Creates a nmrpipe dictionary with default values</dd></dl>
+<dd><p>Creates a nmrpipe dictionary with default values</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.read_1D">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">read_1D</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.read_1D" title="Permalink to this definition">¶</a></dt>
-<dd>Read a 1D NMRPipe binary file returning a dic,data pair</dd></dl>
+<dd><p>Read a 1D NMRPipe binary file returning a dic,data pair</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.read_2D">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">read_2D</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.read_2D" title="Permalink to this definition">¶</a></dt>
-<dd>Read a 2D NMRPipe file or NMRPipe data stream returning a dic,data pair</dd></dl>
+<dd><p>Read a 2D NMRPipe file or NMRPipe data stream returning a dic,data pair</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.read_lowmem_2D">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">read_lowmem_2D</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.read_lowmem_2D" title="Permalink to this definition">¶</a></dt>
-<dd>Read a 2D NMRPipe file or NMRPipe data stream with minimal memory usage</dd></dl>
+<dd><p>Read a 2D NMRPipe file or NMRPipe data stream with minimal memory usage</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.read_stream">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">read_stream</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.read_stream" title="Permalink to this definition">¶</a></dt>
-<dd>Read a NMRPipe data stream (one file 3D or 4D files)</dd></dl>
+<dd><p>Read a NMRPipe data stream (one file 3D or 4D files)</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.read_lowmem_stream">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">read_lowmem_stream</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.read_lowmem_stream" title="Permalink to this definition">¶</a></dt>
-<dd>Read a NMRPipe data stream with minimal memory usage</dd></dl>
+<dd><p>Read a NMRPipe data stream with minimal memory usage</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.read_3D">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">read_3D</tt><big>(</big><em>filemask</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.read_3D" title="Permalink to this definition">¶</a></dt>
-<dd>Read a 3D NMRPipe binary file returning a dic,data pair.</dd></dl>
+<dd><p>Read a 3D NMRPipe binary file returning a dic,data pair.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.read_lowmem_3D">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">read_lowmem_3D</tt><big>(</big><em>filemask</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.read_lowmem_3D" title="Permalink to this definition">¶</a></dt>
-<dd>Read a 3D NMRPipe binary file with minimal memory usage.</dd></dl>
+<dd><p>Read a 3D NMRPipe binary file with minimal memory usage.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.read_4D">
@@ -316,24 +333,28 @@ should be used.</p>
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.write_single">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">write_single</tt><big>(</big><em>filename</em>, <em>dic</em>, <em>data</em>, <em>overwrite=False</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.write_single" title="Permalink to this definition">¶</a></dt>
-<dd>Write data to a single NMRPipe file from memory.  This write 1D and 2D 
+<dd><p>Write data to a single NMRPipe file from memory.  This write 1D and 2D 
 files completely as well as NMRPipe data streams. 2D planes of 3D and
-4D files should be written with this function.</dd></dl>
+4D files should be written with this function.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.write_3D">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">write_3D</tt><big>(</big><em>filemask</em>, <em>dic</em>, <em>data</em>, <em>overwrite=False</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.write_3D" title="Permalink to this definition">¶</a></dt>
-<dd>Write a standard multi-file 3D NMRPipe file</dd></dl>
+<dd><p>Write a standard multi-file 3D NMRPipe file</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.write_4D">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">write_4D</tt><big>(</big><em>filemask</em>, <em>dic</em>, <em>data</em>, <em>overwrite=False</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.write_4D" title="Permalink to this definition">¶</a></dt>
-<dd>Write a one or two index 4D NMRPipe file</dd></dl>
+<dd><p>Write a one or two index 4D NMRPipe file</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.write_lowmem_2D">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">write_lowmem_2D</tt><big>(</big><em>filename</em>, <em>dic</em>, <em>data</em>, <em>overwrite=False</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.write_lowmem_2D" title="Permalink to this definition">¶</a></dt>
-<dd>Write a 2D NMRPipe file using minimal memory (trace by trace)</dd></dl>
+<dd><p>Write a 2D NMRPipe file using minimal memory (trace by trace)</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.write_lowmem_3D">
@@ -346,7 +367,8 @@ files completely as well as NMRPipe data streams. 2D planes of 3D and
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.write_lowmem_3Ds">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">write_lowmem_3Ds</tt><big>(</big><em>filename</em>, <em>dic</em>, <em>data</em>, <em>overwrite=False</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.write_lowmem_3Ds" title="Permalink to this definition">¶</a></dt>
-<dd>Write 3D NMRPipe data stream file using minimal memory (trace by trace)</dd></dl>
+<dd><p>Write 3D NMRPipe data stream file using minimal memory (trace by trace)</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.write_lowmem_4D">
@@ -359,22 +381,26 @@ minimal memory (trace by trace).</p>
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.write_lowmem_4Ds">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">write_lowmem_4Ds</tt><big>(</big><em>filename</em>, <em>dic</em>, <em>data</em>, <em>overwrite=False</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.write_lowmem_4Ds" title="Permalink to this definition">¶</a></dt>
-<dd>Write 4D NMRPipe data stream file using minimal memory (trace by trace)</dd></dl>
+<dd><p>Write 4D NMRPipe data stream file using minimal memory (trace by trace)</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.put_fdata">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">put_fdata</tt><big>(</big><em>fh</em>, <em>fdata</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.put_fdata" title="Permalink to this definition">¶</a></dt>
-<dd>Put fdata to NMRPipe file described by file object fh</dd></dl>
+<dd><p>Put fdata to NMRPipe file described by file object fh</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.put_trace">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">put_trace</tt><big>(</big><em>fh</em>, <em>trace</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.put_trace" title="Permalink to this definition">¶</a></dt>
-<dd>Put 1D trace (real or complex) to NMRPipe file described by file object fh</dd></dl>
+<dd><p>Put 1D trace (real or complex) to NMRPipe file described by file object fh</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.put_data">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">put_data</tt><big>(</big><em>filename</em>, <em>fdata</em>, <em>data</em>, <em>overwrite=False</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.put_data" title="Permalink to this definition">¶</a></dt>
-<dd>Put fdata and data to 2D NMRPipe.</dd></dl>
+<dd><p>Put fdata and data to 2D NMRPipe.</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.write_slice_3D">
@@ -398,12 +424,14 @@ exists.</p>
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.pack_complex">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">pack_complex</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.pack_complex" title="Permalink to this definition">¶</a></dt>
-<dd>Pack inteleaved real,imag array into complex array</dd></dl>
+<dd><p>Pack inteleaved real,imag array into complex array</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.transpose_3D">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">transpose_3D</tt><big>(</big><em>dic</em>, <em>data</em>, <em>(a1</em>, <em>a2</em>, <em>a3)=(2</em>, <em>1</em>, <em>0)</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.transpose_3D" title="Permalink to this definition">¶</a></dt>
-<dd>Transpose pipe_3d object and dictionary</dd></dl>
+<dd><p>Transpose pipe_3d object and dictionary</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.find_shape">
@@ -419,12 +447,14 @@ complex.</p>
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.reshape_data">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">reshape_data</tt><big>(</big><em>data</em>, <em>shape</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.reshape_data" title="Permalink to this definition">¶</a></dt>
-<dd>Reshape data or return 1D data after warning</dd></dl>
+<dd><p>Reshape data or return 1D data after warning</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.unshape_data">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">unshape_data</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.unshape_data" title="Permalink to this definition">¶</a></dt>
-<dd>Returns 1D version of data</dd></dl>
+<dd><p>Returns 1D version of data</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.unappend_data">
@@ -451,22 +481,26 @@ with keys as given in fdatap.h</p>
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.dic2fdata">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">dic2fdata</tt><big>(</big><em>dic</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.dic2fdata" title="Permalink to this definition">¶</a></dt>
-<dd>Converts a NMRPipe dictionary into an array</dd></dl>
+<dd><p>Converts a NMRPipe dictionary into an array</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.get_fdata">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">get_fdata</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.get_fdata" title="Permalink to this definition">¶</a></dt>
-<dd>Get an array of length 512 holding NMRPipe header</dd></dl>
+<dd><p>Get an array of length 512 holding NMRPipe header</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.get_data">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">get_data</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.get_data" title="Permalink to this definition">¶</a></dt>
-<dd>Get array of data</dd></dl>
+<dd><p>Get array of data</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.get_fdata_data">
 <tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">get_fdata_data</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.pipe.get_fdata_data" title="Permalink to this definition">¶</a></dt>
-<dd>Get fdata and data array, returns (fdata,data)</dd></dl>
+<dd><p>Get fdata and data array, returns (fdata,data)</p>
+</dd></dl>
 
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.get_trace">
@@ -571,7 +605,7 @@ ordering.</li>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
+          <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="sparky.html" title="nmrglue.sparky"
@@ -584,9 +618,9 @@ ordering.</li>
       </ul>
     </div>
     <div class="footer">
-      &copy; Copyright 2010, Jonathan J. Helmus.
-      Last updated on Apr 06, 2011.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+        &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Apr 26, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

@@ -1,6 +1,6 @@
 nmrglue.process.proc_base.set_imag
 ==================================
 
-.. currentmodule:: nmrglue.process.proc_base
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: set_imag
+.. automethod:: proc_base.set_imag

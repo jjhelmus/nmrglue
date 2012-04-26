@@ -1,6 +1,6 @@
 nmrglue.process.pipe_proc.xyz2zyx
 =================================
 
-.. currentmodule:: nmrglue.process.pipe_proc
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: xyz2zyx
+.. automethod:: pipe_proc.xyz2zyx

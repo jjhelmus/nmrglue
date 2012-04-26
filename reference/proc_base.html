@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -12,12 +14,13 @@
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '0.2',
-        COLLAPSE_MODINDEX: false,
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="nmrglue v0.2 documentation" href="../index.html" />
     <link rel="up" title="Reference Guide" href="index.html" />
@@ -32,8 +35,8 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="generated/nmrglue.process.proc_base.em.html" title="nmrglue.process.proc_base.em"
              accesskey="N">next</a> |</li>
@@ -46,58 +49,58 @@
     </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-            <h3><a href="../index.html">Table Of Contents</a></h3>
-            <ul>
-<li><a class="reference external" href="#">nmrglue.proc_base</a><ul>
-<li><a class="reference external" href="#apodization">Apodization</a><ul>
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">nmrglue.proc_base</a><ul>
+<li><a class="reference internal" href="#apodization">Apodization</a><ul>
 </ul>
 </li>
-<li><a class="reference external" href="#shifts">Shifts</a><ul>
+<li><a class="reference internal" href="#shifts">Shifts</a><ul>
 </ul>
 </li>
-<li><a class="reference external" href="#transforms">Transforms</a><ul>
+<li><a class="reference internal" href="#transforms">Transforms</a><ul>
 </ul>
 </li>
-<li><a class="reference external" href="#standard-nmr">Standard NMR</a><ul>
+<li><a class="reference internal" href="#standard-nmr">Standard NMR</a><ul>
 </ul>
 </li>
-<li><a class="reference external" href="#basic-utilities">Basic Utilities</a><ul>
+<li><a class="reference internal" href="#basic-utilities">Basic Utilities</a><ul>
 </ul>
 </li>
-<li><a class="reference external" href="#misc">Misc</a><ul>
+<li><a class="reference internal" href="#misc">Misc</a><ul>
 </ul>
 </li>
-<li><a class="reference external" href="#low-level-functions">Low-Level Functions</a><ul>
+<li><a class="reference internal" href="#low-level-functions">Low-Level Functions</a><ul>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="varian.html"
-                                  title="previous chapter">nmrglue.varian</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="generated/nmrglue.process.proc_base.em.html"
-                                  title="next chapter">nmrglue.process.proc_base.em</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="../_sources/reference/proc_base.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="../search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="varian.html"
+                        title="previous chapter">nmrglue.varian</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="generated/nmrglue.process.proc_base.em.html"
+                        title="next chapter">nmrglue.process.proc_base.em</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/reference/proc_base.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
 
@@ -107,7 +110,7 @@
           <div class="body">
             
   <div class="section" id="module-nmrglue.process.proc_base">
-<span id="proc-base"></span><h1>nmrglue.proc_base<a class="headerlink" href="#module-nmrglue.process.proc_base" title="Permalink to this headline">¶</a></h1>
+<span id="nmrglue-proc-base"></span><span id="proc-base"></span><h1>nmrglue.proc_base<a class="headerlink" href="#module-nmrglue.process.proc_base" title="Permalink to this headline">¶</a></h1>
 <p>A large collection of NMR spectral processing functions which operate on the 
 last (-1) 2D arrays.  These functions are wrapped by other processing modules.
 All parameter are assumed to be in units of points unless otherwise noted.</p>
@@ -116,33 +119,33 @@ All parameter are assumed to be in units of points unless otherwise noted.</p>
 <h2>Apodization<a class="headerlink" href="#apodization" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="docutils">
 <colgroup>
-<col width="30%" />
-<col width="70%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr><td><a title="nmrglue.process.proc_base.em" class="reference external" href="generated/nmrglue.process.proc_base.em.html#nmrglue.process.proc_base.em"><tt class="xref docutils literal"><span class="pre">em</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.em.html#nmrglue.process.proc_base.em" title="nmrglue.process.proc_base.em"><tt class="xref py py-obj docutils literal"><span class="pre">em</span></tt></a>(data[,&nbsp;lb,&nbsp;inv])</td>
+<td>Exponential Apodization</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.gm" class="reference external" href="generated/nmrglue.process.proc_base.gm.html#nmrglue.process.proc_base.gm"><tt class="xref docutils literal"><span class="pre">gm</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.gm.html#nmrglue.process.proc_base.gm" title="nmrglue.process.proc_base.gm"><tt class="xref py py-obj docutils literal"><span class="pre">gm</span></tt></a>(data[,&nbsp;g1,&nbsp;g2,&nbsp;g3,&nbsp;inv])</td>
+<td>Lorentz-to-Gauss Apodization</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.gmb" class="reference external" href="generated/nmrglue.process.proc_base.gmb.html#nmrglue.process.proc_base.gmb"><tt class="xref docutils literal"><span class="pre">gmb</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.gmb.html#nmrglue.process.proc_base.gmb" title="nmrglue.process.proc_base.gmb"><tt class="xref py py-obj docutils literal"><span class="pre">gmb</span></tt></a>(data[,&nbsp;a,&nbsp;b,&nbsp;inv])</td>
+<td>Modified Gaussian Apodization</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.jmod" class="reference external" href="generated/nmrglue.process.proc_base.jmod.html#nmrglue.process.proc_base.jmod"><tt class="xref docutils literal"><span class="pre">jmod</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.jmod.html#nmrglue.process.proc_base.jmod" title="nmrglue.process.proc_base.jmod"><tt class="xref py py-obj docutils literal"><span class="pre">jmod</span></tt></a>(data[,&nbsp;e,&nbsp;off,&nbsp;end,&nbsp;inv])</td>
+<td>Exponentially Damped J-Modulation Apodization</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.sp" class="reference external" href="generated/nmrglue.process.proc_base.sp.html#nmrglue.process.proc_base.sp"><tt class="xref docutils literal"><span class="pre">sp</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.sp.html#nmrglue.process.proc_base.sp" title="nmrglue.process.proc_base.sp"><tt class="xref py py-obj docutils literal"><span class="pre">sp</span></tt></a>(data[,&nbsp;off,&nbsp;end,&nbsp;pow,&nbsp;inv])</td>
+<td>Shifted Sine-Bell Apodization</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.sine" class="reference external" href="generated/nmrglue.process.proc_base.sine.html#nmrglue.process.proc_base.sine"><tt class="xref docutils literal"><span class="pre">sine</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.sine.html#nmrglue.process.proc_base.sine" title="nmrglue.process.proc_base.sine"><tt class="xref py py-obj docutils literal"><span class="pre">sine</span></tt></a>(data[,&nbsp;off,&nbsp;end,&nbsp;pow,&nbsp;inv])</td>
+<td>Shifted Sine-Bell Apodization</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.tm" class="reference external" href="generated/nmrglue.process.proc_base.tm.html#nmrglue.process.proc_base.tm"><tt class="xref docutils literal"><span class="pre">tm</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.tm.html#nmrglue.process.proc_base.tm" title="nmrglue.process.proc_base.tm"><tt class="xref py py-obj docutils literal"><span class="pre">tm</span></tt></a>(data[,&nbsp;t1,&nbsp;t2,&nbsp;inv])</td>
+<td>Trapezoid Apodization</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.tri" class="reference external" href="generated/nmrglue.process.proc_base.tri.html#nmrglue.process.proc_base.tri"><tt class="xref docutils literal"><span class="pre">tri</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.tri.html#nmrglue.process.proc_base.tri" title="nmrglue.process.proc_base.tri"><tt class="xref py py-obj docutils literal"><span class="pre">tri</span></tt></a>(data[,&nbsp;loc,&nbsp;lHi,&nbsp;rHi,&nbsp;inv])</td>
+<td>Triangle Apodization</td>
 </tr>
 </tbody>
 </table>
@@ -151,24 +154,24 @@ All parameter are assumed to be in units of points unless otherwise noted.</p>
 <h2>Shifts<a class="headerlink" href="#shifts" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="docutils">
 <colgroup>
-<col width="30%" />
-<col width="70%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr><td><a title="nmrglue.process.proc_base.rs" class="reference external" href="generated/nmrglue.process.proc_base.rs.html#nmrglue.process.proc_base.rs"><tt class="xref docutils literal"><span class="pre">rs</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.rs.html#nmrglue.process.proc_base.rs" title="nmrglue.process.proc_base.rs"><tt class="xref py py-obj docutils literal"><span class="pre">rs</span></tt></a>(data[,&nbsp;pts])</td>
+<td>Right Shift and Zero Fill</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.ls" class="reference external" href="generated/nmrglue.process.proc_base.ls.html#nmrglue.process.proc_base.ls"><tt class="xref docutils literal"><span class="pre">ls</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.ls.html#nmrglue.process.proc_base.ls" title="nmrglue.process.proc_base.ls"><tt class="xref py py-obj docutils literal"><span class="pre">ls</span></tt></a>(data[,&nbsp;pts])</td>
+<td>Left shift and fill with zero</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.cs" class="reference external" href="generated/nmrglue.process.proc_base.cs.html#nmrglue.process.proc_base.cs"><tt class="xref docutils literal"><span class="pre">cs</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.cs.html#nmrglue.process.proc_base.cs" title="nmrglue.process.proc_base.cs"><tt class="xref py py-obj docutils literal"><span class="pre">cs</span></tt></a>(data[,&nbsp;pts,&nbsp;neg])</td>
+<td>Circular Shift</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.roll" class="reference external" href="generated/nmrglue.process.proc_base.roll.html#nmrglue.process.proc_base.roll"><tt class="xref docutils literal"><span class="pre">roll</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.roll.html#nmrglue.process.proc_base.roll" title="nmrglue.process.proc_base.roll"><tt class="xref py py-obj docutils literal"><span class="pre">roll</span></tt></a>(data[,&nbsp;pts,&nbsp;neg])</td>
+<td>Roll Axis</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.fsh" class="reference external" href="generated/nmrglue.process.proc_base.fsh.html#nmrglue.process.proc_base.fsh"><tt class="xref docutils literal"><span class="pre">fsh</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.fsh.html#nmrglue.process.proc_base.fsh" title="nmrglue.process.proc_base.fsh"><tt class="xref py py-obj docutils literal"><span class="pre">fsh</span></tt></a>(data,&nbsp;pts)</td>
+<td>Frequency Shift by Fourier Transform (ifft-&gt;phase-&gt;fft)</td>
 </tr>
 </tbody>
 </table>
@@ -177,33 +180,33 @@ All parameter are assumed to be in units of points unless otherwise noted.</p>
 <h2>Transforms<a class="headerlink" href="#transforms" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="docutils">
 <colgroup>
-<col width="30%" />
-<col width="70%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr><td><a title="nmrglue.process.proc_base.rft" class="reference external" href="generated/nmrglue.process.proc_base.rft.html#nmrglue.process.proc_base.rft"><tt class="xref docutils literal"><span class="pre">rft</span></tt></a></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.rft.html#nmrglue.process.proc_base.rft" title="nmrglue.process.proc_base.rft"><tt class="xref py py-obj docutils literal"><span class="pre">rft</span></tt></a>(x)</td>
+<td>Real Fourier Transform</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.irft.html#nmrglue.process.proc_base.irft" title="nmrglue.process.proc_base.irft"><tt class="xref py py-obj docutils literal"><span class="pre">irft</span></tt></a>(xp)</td>
+<td>Inverse Real Fourier transform</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">complexft</span></tt></td>
 <td></td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.irft" class="reference external" href="generated/nmrglue.process.proc_base.irft.html#nmrglue.process.proc_base.irft"><tt class="xref docutils literal"><span class="pre">irft</span></tt></a></td>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">ft</span></tt></td>
 <td></td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.complexft" class="reference external" href="generated/nmrglue.process.proc_base.complexft.html#nmrglue.process.proc_base.complexft"><tt class="xref docutils literal"><span class="pre">complexft</span></tt></a></td>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">icomplexft</span></tt></td>
 <td></td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.ft" class="reference external" href="generated/nmrglue.process.proc_base.ft.html#nmrglue.process.proc_base.ft"><tt class="xref docutils literal"><span class="pre">ft</span></tt></a></td>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">ift</span></tt></td>
 <td></td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.icomplexft" class="reference external" href="generated/nmrglue.process.proc_base.icomplexft.html#nmrglue.process.proc_base.icomplexft"><tt class="xref docutils literal"><span class="pre">icomplexft</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.ha.html#nmrglue.process.proc_base.ha" title="nmrglue.process.proc_base.ha"><tt class="xref py py-obj docutils literal"><span class="pre">ha</span></tt></a>(data)</td>
+<td>Hadamard Transform</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.ift" class="reference external" href="generated/nmrglue.process.proc_base.ift.html#nmrglue.process.proc_base.ift"><tt class="xref docutils literal"><span class="pre">ift</span></tt></a></td>
-<td></td>
-</tr>
-<tr><td><a title="nmrglue.process.proc_base.ha" class="reference external" href="generated/nmrglue.process.proc_base.ha.html#nmrglue.process.proc_base.ha"><tt class="xref docutils literal"><span class="pre">ha</span></tt></a></td>
-<td></td>
-</tr>
-<tr><td><a title="nmrglue.process.proc_base.ht" class="reference external" href="generated/nmrglue.process.proc_base.ht.html#nmrglue.process.proc_base.ht"><tt class="xref docutils literal"><span class="pre">ht</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.ht.html#nmrglue.process.proc_base.ht" title="nmrglue.process.proc_base.ht"><tt class="xref py py-obj docutils literal"><span class="pre">ht</span></tt></a>(data[,&nbsp;N])</td>
+<td>Hilbert Transform</td>
 </tr>
 </tbody>
 </table>
@@ -212,48 +215,48 @@ All parameter are assumed to be in units of points unless otherwise noted.</p>
 <h2>Standard NMR<a class="headerlink" href="#standard-nmr" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="docutils">
 <colgroup>
-<col width="30%" />
-<col width="70%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr><td><a title="nmrglue.process.proc_base.di" class="reference external" href="generated/nmrglue.process.proc_base.di.html#nmrglue.process.proc_base.di"><tt class="xref docutils literal"><span class="pre">di</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.di.html#nmrglue.process.proc_base.di" title="nmrglue.process.proc_base.di"><tt class="xref py py-obj docutils literal"><span class="pre">di</span></tt></a>(data)</td>
+<td>Delete Imaginary Data</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.ps" class="reference external" href="generated/nmrglue.process.proc_base.ps.html#nmrglue.process.proc_base.ps"><tt class="xref docutils literal"><span class="pre">ps</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.ps.html#nmrglue.process.proc_base.ps" title="nmrglue.process.proc_base.ps"><tt class="xref py py-obj docutils literal"><span class="pre">ps</span></tt></a>(data[,&nbsp;p0,&nbsp;p1,&nbsp;inv])</td>
+<td>Linear Phase Correction</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.ps_exp" class="reference external" href="generated/nmrglue.process.proc_base.ps_exp.html#nmrglue.process.proc_base.ps_exp"><tt class="xref docutils literal"><span class="pre">ps_exp</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.ps_exp.html#nmrglue.process.proc_base.ps_exp" title="nmrglue.process.proc_base.ps_exp"><tt class="xref py py-obj docutils literal"><span class="pre">ps_exp</span></tt></a>(data[,&nbsp;p0,&nbsp;tc,&nbsp;inv])</td>
+<td>Exponential Phase Correction</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.tp" class="reference external" href="generated/nmrglue.process.proc_base.tp.html#nmrglue.process.proc_base.tp"><tt class="xref docutils literal"><span class="pre">tp</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.tp.html#nmrglue.process.proc_base.tp" title="nmrglue.process.proc_base.tp"><tt class="xref py py-obj docutils literal"><span class="pre">tp</span></tt></a>(data)</td>
+<td>Transpose Data</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.ytp" class="reference external" href="generated/nmrglue.process.proc_base.ytp.html#nmrglue.process.proc_base.ytp"><tt class="xref docutils literal"><span class="pre">ytp</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.ytp.html#nmrglue.process.proc_base.ytp" title="nmrglue.process.proc_base.ytp"><tt class="xref py py-obj docutils literal"><span class="pre">ytp</span></tt></a>(data)</td>
+<td>Transpose Data</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.xy2yx" class="reference external" href="generated/nmrglue.process.proc_base.xy2yx.html#nmrglue.process.proc_base.xy2yx"><tt class="xref docutils literal"><span class="pre">xy2yx</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.xy2yx.html#nmrglue.process.proc_base.xy2yx" title="nmrglue.process.proc_base.xy2yx"><tt class="xref py py-obj docutils literal"><span class="pre">xy2yx</span></tt></a>(data)</td>
+<td>Transpose Data</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.tp_hyper" class="reference external" href="generated/nmrglue.process.proc_base.tp_hyper.html#nmrglue.process.proc_base.tp_hyper"><tt class="xref docutils literal"><span class="pre">tp_hyper</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.tp_hyper.html#nmrglue.process.proc_base.tp_hyper" title="nmrglue.process.proc_base.tp_hyper"><tt class="xref py py-obj docutils literal"><span class="pre">tp_hyper</span></tt></a>(data)</td>
+<td>Hypercomplex Tranpose</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.zf_inter" class="reference external" href="generated/nmrglue.process.proc_base.zf_inter.html#nmrglue.process.proc_base.zf_inter"><tt class="xref docutils literal"><span class="pre">zf_inter</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.zf_inter.html#nmrglue.process.proc_base.zf_inter" title="nmrglue.process.proc_base.zf_inter"><tt class="xref py py-obj docutils literal"><span class="pre">zf_inter</span></tt></a>(data[,&nbsp;pts])</td>
+<td>Zero Fill between points</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.zf_pad" class="reference external" href="generated/nmrglue.process.proc_base.zf_pad.html#nmrglue.process.proc_base.zf_pad"><tt class="xref docutils literal"><span class="pre">zf_pad</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.zf_pad.html#nmrglue.process.proc_base.zf_pad" title="nmrglue.process.proc_base.zf_pad"><tt class="xref py py-obj docutils literal"><span class="pre">zf_pad</span></tt></a>(data[,&nbsp;pad,&nbsp;mid])</td>
+<td>Zero Fill with pad zeros</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.zf" class="reference external" href="generated/nmrglue.process.proc_base.zf.html#nmrglue.process.proc_base.zf"><tt class="xref docutils literal"><span class="pre">zf</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.zf.html#nmrglue.process.proc_base.zf" title="nmrglue.process.proc_base.zf"><tt class="xref py py-obj docutils literal"><span class="pre">zf</span></tt></a>(data[,&nbsp;pad,&nbsp;mid])</td>
+<td>Zero Fill with pad zeros</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.zf_double" class="reference external" href="generated/nmrglue.process.proc_base.zf_double.html#nmrglue.process.proc_base.zf_double"><tt class="xref docutils literal"><span class="pre">zf_double</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.zf_double.html#nmrglue.process.proc_base.zf_double" title="nmrglue.process.proc_base.zf_double"><tt class="xref py py-obj docutils literal"><span class="pre">zf_double</span></tt></a>(data,&nbsp;n[,&nbsp;mid])</td>
+<td>Zero fill to double size n times</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.zf_size" class="reference external" href="generated/nmrglue.process.proc_base.zf_size.html#nmrglue.process.proc_base.zf_size"><tt class="xref docutils literal"><span class="pre">zf_size</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.zf_size.html#nmrglue.process.proc_base.zf_size" title="nmrglue.process.proc_base.zf_size"><tt class="xref py py-obj docutils literal"><span class="pre">zf_size</span></tt></a>(data,&nbsp;size[,&nbsp;mid])</td>
+<td>Zero fill to given size</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.zf_auto" class="reference external" href="generated/nmrglue.process.proc_base.zf_auto.html#nmrglue.process.proc_base.zf_auto"><tt class="xref docutils literal"><span class="pre">zf_auto</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.zf_auto.html#nmrglue.process.proc_base.zf_auto" title="nmrglue.process.proc_base.zf_auto"><tt class="xref py py-obj docutils literal"><span class="pre">zf_auto</span></tt></a>(data[,&nbsp;mid])</td>
+<td>Zero fill to next largest power of two</td>
 </tr>
 </tbody>
 </table>
@@ -262,162 +265,162 @@ All parameter are assumed to be in units of points unless otherwise noted.</p>
 <h2>Basic Utilities<a class="headerlink" href="#basic-utilities" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="docutils">
 <colgroup>
-<col width="30%" />
-<col width="70%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr><td><a title="nmrglue.process.proc_base.add" class="reference external" href="generated/nmrglue.process.proc_base.add.html#nmrglue.process.proc_base.add"><tt class="xref docutils literal"><span class="pre">add</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.add.html#nmrglue.process.proc_base.add" title="nmrglue.process.proc_base.add"><tt class="xref py py-obj docutils literal"><span class="pre">add</span></tt></a>(data[,&nbsp;r,&nbsp;i,&nbsp;c])</td>
+<td>Add Constant</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.add_ri" class="reference external" href="generated/nmrglue.process.proc_base.add_ri.html#nmrglue.process.proc_base.add_ri"><tt class="xref docutils literal"><span class="pre">add_ri</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.add_ri.html#nmrglue.process.proc_base.add_ri" title="nmrglue.process.proc_base.add_ri"><tt class="xref py py-obj docutils literal"><span class="pre">add_ri</span></tt></a>(data)</td>
+<td>Add real and imaginary data to real channel</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.dx" class="reference external" href="generated/nmrglue.process.proc_base.dx.html#nmrglue.process.proc_base.dx"><tt class="xref docutils literal"><span class="pre">dx</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.dx.html#nmrglue.process.proc_base.dx" title="nmrglue.process.proc_base.dx"><tt class="xref py py-obj docutils literal"><span class="pre">dx</span></tt></a>(data)</td>
+<td>Derivative by central difference</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.ext" class="reference external" href="generated/nmrglue.process.proc_base.ext.html#nmrglue.process.proc_base.ext"><tt class="xref docutils literal"><span class="pre">ext</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.ext.html#nmrglue.process.proc_base.ext" title="nmrglue.process.proc_base.ext"><tt class="xref py py-obj docutils literal"><span class="pre">ext</span></tt></a>(data[,&nbsp;x0,&nbsp;xn,&nbsp;y0,&nbsp;yn])</td>
+<td>Extract Region</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.ext_left" class="reference external" href="generated/nmrglue.process.proc_base.ext_left.html#nmrglue.process.proc_base.ext_left"><tt class="xref docutils literal"><span class="pre">ext_left</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.ext_left.html#nmrglue.process.proc_base.ext_left" title="nmrglue.process.proc_base.ext_left"><tt class="xref py py-obj docutils literal"><span class="pre">ext_left</span></tt></a>(data)</td>
+<td>Extract left half of spectrum</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.ext_right" class="reference external" href="generated/nmrglue.process.proc_base.ext_right.html#nmrglue.process.proc_base.ext_right"><tt class="xref docutils literal"><span class="pre">ext_right</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.ext_right.html#nmrglue.process.proc_base.ext_right" title="nmrglue.process.proc_base.ext_right"><tt class="xref py py-obj docutils literal"><span class="pre">ext_right</span></tt></a>(data)</td>
+<td>Extract right half of spectrum</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.ext_mid" class="reference external" href="generated/nmrglue.process.proc_base.ext_mid.html#nmrglue.process.proc_base.ext_mid"><tt class="xref docutils literal"><span class="pre">ext_mid</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.ext_mid.html#nmrglue.process.proc_base.ext_mid" title="nmrglue.process.proc_base.ext_mid"><tt class="xref py py-obj docutils literal"><span class="pre">ext_mid</span></tt></a>(data)</td>
+<td>Extract middle of spectrum</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.integ" class="reference external" href="generated/nmrglue.process.proc_base.integ.html#nmrglue.process.proc_base.integ"><tt class="xref docutils literal"><span class="pre">integ</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.integ.html#nmrglue.process.proc_base.integ" title="nmrglue.process.proc_base.integ"><tt class="xref py py-obj docutils literal"><span class="pre">integ</span></tt></a>(data)</td>
+<td>Integrate by cumulative sum</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.mc" class="reference external" href="generated/nmrglue.process.proc_base.mc.html#nmrglue.process.proc_base.mc"><tt class="xref docutils literal"><span class="pre">mc</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.mc.html#nmrglue.process.proc_base.mc" title="nmrglue.process.proc_base.mc"><tt class="xref py py-obj docutils literal"><span class="pre">mc</span></tt></a>(data)</td>
+<td>Modulus calculation</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.mc_pow" class="reference external" href="generated/nmrglue.process.proc_base.mc_pow.html#nmrglue.process.proc_base.mc_pow"><tt class="xref docutils literal"><span class="pre">mc_pow</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.mc_pow.html#nmrglue.process.proc_base.mc_pow" title="nmrglue.process.proc_base.mc_pow"><tt class="xref py py-obj docutils literal"><span class="pre">mc_pow</span></tt></a>(data)</td>
+<td>Modulus calculation (square of)</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.mir_left" class="reference external" href="generated/nmrglue.process.proc_base.mir_left.html#nmrglue.process.proc_base.mir_left"><tt class="xref docutils literal"><span class="pre">mir_left</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.mir_left.html#nmrglue.process.proc_base.mir_left" title="nmrglue.process.proc_base.mir_left"><tt class="xref py py-obj docutils literal"><span class="pre">mir_left</span></tt></a>(data)</td>
+<td>Append Mirror to left</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.mir_right" class="reference external" href="generated/nmrglue.process.proc_base.mir_right.html#nmrglue.process.proc_base.mir_right"><tt class="xref docutils literal"><span class="pre">mir_right</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.mir_right.html#nmrglue.process.proc_base.mir_right" title="nmrglue.process.proc_base.mir_right"><tt class="xref py py-obj docutils literal"><span class="pre">mir_right</span></tt></a>(data)</td>
+<td>Append Mirror to right</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.mir_center" class="reference external" href="generated/nmrglue.process.proc_base.mir_center.html#nmrglue.process.proc_base.mir_center"><tt class="xref docutils literal"><span class="pre">mir_center</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.mir_center.html#nmrglue.process.proc_base.mir_center" title="nmrglue.process.proc_base.mir_center"><tt class="xref py py-obj docutils literal"><span class="pre">mir_center</span></tt></a>(data)</td>
+<td>Append Mirror to center</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.mir_center_onepoint" class="reference external" href="generated/nmrglue.process.proc_base.mir_center_onepoint.html#nmrglue.process.proc_base.mir_center_onepoint"><tt class="xref docutils literal"><span class="pre">mir_center_onepoint</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.mir_center_onepoint.html#nmrglue.process.proc_base.mir_center_onepoint" title="nmrglue.process.proc_base.mir_center_onepoint"><tt class="xref py py-obj docutils literal"><span class="pre">mir_center_onepoint</span></tt></a>(data)</td>
+<td>Append mirror to center with one point shift (negate appended imag data)</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.mult" class="reference external" href="generated/nmrglue.process.proc_base.mult.html#nmrglue.process.proc_base.mult"><tt class="xref docutils literal"><span class="pre">mult</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.mult.html#nmrglue.process.proc_base.mult" title="nmrglue.process.proc_base.mult"><tt class="xref py py-obj docutils literal"><span class="pre">mult</span></tt></a>(data[,&nbsp;r,&nbsp;i,&nbsp;c])</td>
+<td>Multiply by a Constant</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.rev" class="reference external" href="generated/nmrglue.process.proc_base.rev.html#nmrglue.process.proc_base.rev"><tt class="xref docutils literal"><span class="pre">rev</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.rev.html#nmrglue.process.proc_base.rev" title="nmrglue.process.proc_base.rev"><tt class="xref py py-obj docutils literal"><span class="pre">rev</span></tt></a>(data)</td>
+<td>Reverse Data</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.set" class="reference external" href="generated/nmrglue.process.proc_base.set.html#nmrglue.process.proc_base.set"><tt class="xref docutils literal"><span class="pre">set</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.set.html#nmrglue.process.proc_base.set" title="nmrglue.process.proc_base.set"><tt class="xref py py-obj docutils literal"><span class="pre">set</span></tt></a>(data,&nbsp;c)</td>
+<td>Set Data to a Constant</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.set_complex" class="reference external" href="generated/nmrglue.process.proc_base.set_complex.html#nmrglue.process.proc_base.set_complex"><tt class="xref docutils literal"><span class="pre">set_complex</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.set_complex.html#nmrglue.process.proc_base.set_complex" title="nmrglue.process.proc_base.set_complex"><tt class="xref py py-obj docutils literal"><span class="pre">set_complex</span></tt></a>(data,&nbsp;v)</td>
+<td>Set real and imaginary portions of data to value</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.set_real" class="reference external" href="generated/nmrglue.process.proc_base.set_real.html#nmrglue.process.proc_base.set_real"><tt class="xref docutils literal"><span class="pre">set_real</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.set_real.html#nmrglue.process.proc_base.set_real" title="nmrglue.process.proc_base.set_real"><tt class="xref py py-obj docutils literal"><span class="pre">set_real</span></tt></a>(data,&nbsp;v)</td>
+<td>Set real portion of data to a constant.</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.set_imag" class="reference external" href="generated/nmrglue.process.proc_base.set_imag.html#nmrglue.process.proc_base.set_imag"><tt class="xref docutils literal"><span class="pre">set_imag</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.set_imag.html#nmrglue.process.proc_base.set_imag" title="nmrglue.process.proc_base.set_imag"><tt class="xref py py-obj docutils literal"><span class="pre">set_imag</span></tt></a>(data,&nbsp;v)</td>
+<td>Set imaginary portion of data to a constant.</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.ri2c" class="reference external" href="generated/nmrglue.process.proc_base.ri2c.html#nmrglue.process.proc_base.ri2c"><tt class="xref docutils literal"><span class="pre">ri2c</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.ri2c.html#nmrglue.process.proc_base.ri2c" title="nmrglue.process.proc_base.ri2c"><tt class="xref py py-obj docutils literal"><span class="pre">ri2c</span></tt></a>(data)</td>
+<td>Interleave real and imaginary data into a real array</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.interleave_complex" class="reference external" href="generated/nmrglue.process.proc_base.interleave_complex.html#nmrglue.process.proc_base.interleave_complex"><tt class="xref docutils literal"><span class="pre">interleave_complex</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.interleave_complex.html#nmrglue.process.proc_base.interleave_complex" title="nmrglue.process.proc_base.interleave_complex"><tt class="xref py py-obj docutils literal"><span class="pre">interleave_complex</span></tt></a>(data)</td>
+<td>Unpack complex data into interleaved real,imaginary array</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.unpack_complex" class="reference external" href="generated/nmrglue.process.proc_base.unpack_complex.html#nmrglue.process.proc_base.unpack_complex"><tt class="xref docutils literal"><span class="pre">unpack_complex</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.unpack_complex.html#nmrglue.process.proc_base.unpack_complex" title="nmrglue.process.proc_base.unpack_complex"><tt class="xref py py-obj docutils literal"><span class="pre">unpack_complex</span></tt></a>(data)</td>
+<td>Unpacks complex array into real array (interleaves values)</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.c2ri" class="reference external" href="generated/nmrglue.process.proc_base.c2ri.html#nmrglue.process.proc_base.c2ri"><tt class="xref docutils literal"><span class="pre">c2ri</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.c2ri.html#nmrglue.process.proc_base.c2ri" title="nmrglue.process.proc_base.c2ri"><tt class="xref py py-obj docutils literal"><span class="pre">c2ri</span></tt></a>(data)</td>
+<td>Seperate interleaved real,imaginary data into complex array</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.seperate_interleaved" class="reference external" href="generated/nmrglue.process.proc_base.seperate_interleaved.html#nmrglue.process.proc_base.seperate_interleaved"><tt class="xref docutils literal"><span class="pre">seperate_interleaved</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.seperate_interleaved.html#nmrglue.process.proc_base.seperate_interleaved" title="nmrglue.process.proc_base.seperate_interleaved"><tt class="xref py py-obj docutils literal"><span class="pre">seperate_interleaved</span></tt></a>(data)</td>
+<td>Seperate interleaved real,imaginary data into complex array</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.pack_complex" class="reference external" href="generated/nmrglue.process.proc_base.pack_complex.html#nmrglue.process.proc_base.pack_complex"><tt class="xref docutils literal"><span class="pre">pack_complex</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.pack_complex.html#nmrglue.process.proc_base.pack_complex" title="nmrglue.process.proc_base.pack_complex"><tt class="xref py py-obj docutils literal"><span class="pre">pack_complex</span></tt></a>(data)</td>
+<td>Packs interleaved real array into complex array</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.decode_States" class="reference external" href="generated/nmrglue.process.proc_base.decode_States.html#nmrglue.process.proc_base.decode_States"><tt class="xref docutils literal"><span class="pre">decode_States</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.decode_States.html#nmrglue.process.proc_base.decode_States" title="nmrglue.process.proc_base.decode_States"><tt class="xref py py-obj docutils literal"><span class="pre">decode_States</span></tt></a>(data)</td>
+<td>Decode data collected using States (seperate interleaved data)</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.ri2rr" class="reference external" href="generated/nmrglue.process.proc_base.ri2rr.html#nmrglue.process.proc_base.ri2rr"><tt class="xref docutils literal"><span class="pre">ri2rr</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.ri2rr.html#nmrglue.process.proc_base.ri2rr" title="nmrglue.process.proc_base.ri2rr"><tt class="xref py py-obj docutils literal"><span class="pre">ri2rr</span></tt></a>(data)</td>
+<td>Append imaginary data to end of real data, returning a  real array</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.append_imag" class="reference external" href="generated/nmrglue.process.proc_base.append_imag.html#nmrglue.process.proc_base.append_imag"><tt class="xref docutils literal"><span class="pre">append_imag</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.append_imag.html#nmrglue.process.proc_base.append_imag" title="nmrglue.process.proc_base.append_imag"><tt class="xref py py-obj docutils literal"><span class="pre">append_imag</span></tt></a>(data)</td>
+<td>Append imaginary data to end of real data, returning a  real array</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.rr2ri" class="reference external" href="generated/nmrglue.process.proc_base.rr2ri.html#nmrglue.process.proc_base.rr2ri"><tt class="xref docutils literal"><span class="pre">rr2ri</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.rr2ri.html#nmrglue.process.proc_base.rr2ri" title="nmrglue.process.proc_base.rr2ri"><tt class="xref py py-obj docutils literal"><span class="pre">rr2ri</span></tt></a>(data)</td>
+<td>Unappend real and imaginary data returing a complex array</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.unappend_imag" class="reference external" href="generated/nmrglue.process.proc_base.unappend_imag.html#nmrglue.process.proc_base.unappend_imag"><tt class="xref docutils literal"><span class="pre">unappend_imag</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.unappend_imag.html#nmrglue.process.proc_base.unappend_imag" title="nmrglue.process.proc_base.unappend_imag"><tt class="xref py py-obj docutils literal"><span class="pre">unappend_imag</span></tt></a>(data)</td>
+<td>Unappend real and imaginary data returing a complex array</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.exlr" class="reference external" href="generated/nmrglue.process.proc_base.exlr.html#nmrglue.process.proc_base.exlr"><tt class="xref docutils literal"><span class="pre">exlr</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.exlr.html#nmrglue.process.proc_base.exlr" title="nmrglue.process.proc_base.exlr"><tt class="xref py py-obj docutils literal"><span class="pre">exlr</span></tt></a>(data)</td>
+<td>Exchange left and right halves of array</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.exchange_lr" class="reference external" href="generated/nmrglue.process.proc_base.exchange_lr.html#nmrglue.process.proc_base.exchange_lr"><tt class="xref docutils literal"><span class="pre">exchange_lr</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.exchange_lr.html#nmrglue.process.proc_base.exchange_lr" title="nmrglue.process.proc_base.exchange_lr"><tt class="xref py py-obj docutils literal"><span class="pre">exchange_lr</span></tt></a>(data)</td>
+<td>Exchange left and right halves of array</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.rolr" class="reference external" href="generated/nmrglue.process.proc_base.rolr.html#nmrglue.process.proc_base.rolr"><tt class="xref docutils literal"><span class="pre">rolr</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.rolr.html#nmrglue.process.proc_base.rolr" title="nmrglue.process.proc_base.rolr"><tt class="xref py py-obj docutils literal"><span class="pre">rolr</span></tt></a>(data)</td>
+<td>Rotate left and right halves of array</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.rotate_lr" class="reference external" href="generated/nmrglue.process.proc_base.rotate_lr.html#nmrglue.process.proc_base.rotate_lr"><tt class="xref docutils literal"><span class="pre">rotate_lr</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.rotate_lr.html#nmrglue.process.proc_base.rotate_lr" title="nmrglue.process.proc_base.rotate_lr"><tt class="xref py py-obj docutils literal"><span class="pre">rotate_lr</span></tt></a>(data)</td>
+<td>Rotate left and right halves of array</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.swap" class="reference external" href="generated/nmrglue.process.proc_base.swap.html#nmrglue.process.proc_base.swap"><tt class="xref docutils literal"><span class="pre">swap</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.swap.html#nmrglue.process.proc_base.swap" title="nmrglue.process.proc_base.swap"><tt class="xref py py-obj docutils literal"><span class="pre">swap</span></tt></a>(data)</td>
+<td>Swap real and imaginary data</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.swap_ri" class="reference external" href="generated/nmrglue.process.proc_base.swap_ri.html#nmrglue.process.proc_base.swap_ri"><tt class="xref docutils literal"><span class="pre">swap_ri</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.swap_ri.html#nmrglue.process.proc_base.swap_ri" title="nmrglue.process.proc_base.swap_ri"><tt class="xref py py-obj docutils literal"><span class="pre">swap_ri</span></tt></a>(data)</td>
+<td>Swap real and imaginary data</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.bswap" class="reference external" href="generated/nmrglue.process.proc_base.bswap.html#nmrglue.process.proc_base.bswap"><tt class="xref docutils literal"><span class="pre">bswap</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.bswap.html#nmrglue.process.proc_base.bswap" title="nmrglue.process.proc_base.bswap"><tt class="xref py py-obj docutils literal"><span class="pre">bswap</span></tt></a>(data)</td>
+<td>Byteswap data</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.byte_swap" class="reference external" href="generated/nmrglue.process.proc_base.byte_swap.html#nmrglue.process.proc_base.byte_swap"><tt class="xref docutils literal"><span class="pre">byte_swap</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.byte_swap.html#nmrglue.process.proc_base.byte_swap" title="nmrglue.process.proc_base.byte_swap"><tt class="xref py py-obj docutils literal"><span class="pre">byte_swap</span></tt></a>(data)</td>
+<td>Byteswap data</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.neg_left" class="reference external" href="generated/nmrglue.process.proc_base.neg_left.html#nmrglue.process.proc_base.neg_left"><tt class="xref docutils literal"><span class="pre">neg_left</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.neg_left.html#nmrglue.process.proc_base.neg_left" title="nmrglue.process.proc_base.neg_left"><tt class="xref py py-obj docutils literal"><span class="pre">neg_left</span></tt></a>(data)</td>
+<td>Negate left half</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.neg_right" class="reference external" href="generated/nmrglue.process.proc_base.neg_right.html#nmrglue.process.proc_base.neg_right"><tt class="xref docutils literal"><span class="pre">neg_right</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.neg_right.html#nmrglue.process.proc_base.neg_right" title="nmrglue.process.proc_base.neg_right"><tt class="xref py py-obj docutils literal"><span class="pre">neg_right</span></tt></a>(data)</td>
+<td>Negate right half</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.neg_middle" class="reference external" href="generated/nmrglue.process.proc_base.neg_middle.html#nmrglue.process.proc_base.neg_middle"><tt class="xref docutils literal"><span class="pre">neg_middle</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.neg_middle.html#nmrglue.process.proc_base.neg_middle" title="nmrglue.process.proc_base.neg_middle"><tt class="xref py py-obj docutils literal"><span class="pre">neg_middle</span></tt></a>(data)</td>
+<td>Negate middle half</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.neg_edges" class="reference external" href="generated/nmrglue.process.proc_base.neg_edges.html#nmrglue.process.proc_base.neg_edges"><tt class="xref docutils literal"><span class="pre">neg_edges</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.neg_edges.html#nmrglue.process.proc_base.neg_edges" title="nmrglue.process.proc_base.neg_edges"><tt class="xref py py-obj docutils literal"><span class="pre">neg_edges</span></tt></a>(data)</td>
+<td>Negate edge half of spectra</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.neg_all" class="reference external" href="generated/nmrglue.process.proc_base.neg_all.html#nmrglue.process.proc_base.neg_all"><tt class="xref docutils literal"><span class="pre">neg_all</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.neg_all.html#nmrglue.process.proc_base.neg_all" title="nmrglue.process.proc_base.neg_all"><tt class="xref py py-obj docutils literal"><span class="pre">neg_all</span></tt></a>(data)</td>
+<td>Negate data</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.neg_real" class="reference external" href="generated/nmrglue.process.proc_base.neg_real.html#nmrglue.process.proc_base.neg_real"><tt class="xref docutils literal"><span class="pre">neg_real</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.neg_real.html#nmrglue.process.proc_base.neg_real" title="nmrglue.process.proc_base.neg_real"><tt class="xref py py-obj docutils literal"><span class="pre">neg_real</span></tt></a>(data)</td>
+<td>Negate real data</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.neg_imag" class="reference external" href="generated/nmrglue.process.proc_base.neg_imag.html#nmrglue.process.proc_base.neg_imag"><tt class="xref docutils literal"><span class="pre">neg_imag</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.neg_imag.html#nmrglue.process.proc_base.neg_imag" title="nmrglue.process.proc_base.neg_imag"><tt class="xref py py-obj docutils literal"><span class="pre">neg_imag</span></tt></a>(data)</td>
+<td>Negate imaginary data</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.neg_even" class="reference external" href="generated/nmrglue.process.proc_base.neg_even.html#nmrglue.process.proc_base.neg_even"><tt class="xref docutils literal"><span class="pre">neg_even</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.neg_even.html#nmrglue.process.proc_base.neg_even" title="nmrglue.process.proc_base.neg_even"><tt class="xref py py-obj docutils literal"><span class="pre">neg_even</span></tt></a>(data)</td>
+<td>Negate even points</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.neg_odd" class="reference external" href="generated/nmrglue.process.proc_base.neg_odd.html#nmrglue.process.proc_base.neg_odd"><tt class="xref docutils literal"><span class="pre">neg_odd</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.neg_odd.html#nmrglue.process.proc_base.neg_odd" title="nmrglue.process.proc_base.neg_odd"><tt class="xref py py-obj docutils literal"><span class="pre">neg_odd</span></tt></a>(data)</td>
+<td>Negate odd points</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.neg_alt" class="reference external" href="generated/nmrglue.process.proc_base.neg_alt.html#nmrglue.process.proc_base.neg_alt"><tt class="xref docutils literal"><span class="pre">neg_alt</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.neg_alt.html#nmrglue.process.proc_base.neg_alt" title="nmrglue.process.proc_base.neg_alt"><tt class="xref py py-obj docutils literal"><span class="pre">neg_alt</span></tt></a>(data)</td>
+<td>Negate alternate (odd) points</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.abs" class="reference external" href="generated/nmrglue.process.proc_base.abs.html#nmrglue.process.proc_base.abs"><tt class="xref docutils literal"><span class="pre">abs</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.abs.html#nmrglue.process.proc_base.abs" title="nmrglue.process.proc_base.abs"><tt class="xref py py-obj docutils literal"><span class="pre">abs</span></tt></a>(data)</td>
+<td>Replace data with absolute value of data (abs of real,imag seperately)</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.sign" class="reference external" href="generated/nmrglue.process.proc_base.sign.html#nmrglue.process.proc_base.sign"><tt class="xref docutils literal"><span class="pre">sign</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.sign.html#nmrglue.process.proc_base.sign" title="nmrglue.process.proc_base.sign"><tt class="xref py py-obj docutils literal"><span class="pre">sign</span></tt></a>(data)</td>
+<td>Replace data with sign (-1 or 1) of data (seperately on each channel)</td>
 </tr>
 </tbody>
 </table>
@@ -426,102 +429,102 @@ All parameter are assumed to be in units of points unless otherwise noted.</p>
 <h2>Misc<a class="headerlink" href="#misc" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="docutils">
 <colgroup>
-<col width="30%" />
-<col width="70%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr><td><a title="nmrglue.process.proc_base.coadd" class="reference external" href="generated/nmrglue.process.proc_base.coadd.html#nmrglue.process.proc_base.coadd"><tt class="xref docutils literal"><span class="pre">coadd</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.coadd.html#nmrglue.process.proc_base.coadd" title="nmrglue.process.proc_base.coadd"><tt class="xref py py-obj docutils literal"><span class="pre">coadd</span></tt></a>(data,&nbsp;clist[,&nbsp;axis])</td>
+<td>Coadd data</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.coad" class="reference external" href="generated/nmrglue.process.proc_base.coad.html#nmrglue.process.proc_base.coad"><tt class="xref docutils literal"><span class="pre">coad</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.coad.html#nmrglue.process.proc_base.coad" title="nmrglue.process.proc_base.coad"><tt class="xref py py-obj docutils literal"><span class="pre">coad</span></tt></a>(data,&nbsp;clist[,&nbsp;axis])</td>
+<td>Coadd data</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.thres" class="reference external" href="generated/nmrglue.process.proc_base.thres.html#nmrglue.process.proc_base.thres"><tt class="xref docutils literal"><span class="pre">thres</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.thres.html#nmrglue.process.proc_base.thres" title="nmrglue.process.proc_base.thres"><tt class="xref py py-obj docutils literal"><span class="pre">thres</span></tt></a>(data[,&nbsp;thres])</td>
+<td>Mark values less than thres as invalid (for use with filters)</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.conv" class="reference external" href="generated/nmrglue.process.proc_base.conv.html#nmrglue.process.proc_base.conv"><tt class="xref docutils literal"><span class="pre">conv</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.conv.html#nmrglue.process.proc_base.conv" title="nmrglue.process.proc_base.conv"><tt class="xref py py-obj docutils literal"><span class="pre">conv</span></tt></a>(data[,&nbsp;kern,&nbsp;m,&nbsp;c])</td>
+<td>Convolute data with kernel</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.convolute" class="reference external" href="generated/nmrglue.process.proc_base.convolute.html#nmrglue.process.proc_base.convolute"><tt class="xref docutils literal"><span class="pre">convolute</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.convolute.html#nmrglue.process.proc_base.convolute" title="nmrglue.process.proc_base.convolute"><tt class="xref py py-obj docutils literal"><span class="pre">convolute</span></tt></a>(data[,&nbsp;kern,&nbsp;m,&nbsp;c])</td>
+<td>Convolute data with kernel</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.corr" class="reference external" href="generated/nmrglue.process.proc_base.corr.html#nmrglue.process.proc_base.corr"><tt class="xref docutils literal"><span class="pre">corr</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.corr.html#nmrglue.process.proc_base.corr" title="nmrglue.process.proc_base.corr"><tt class="xref py py-obj docutils literal"><span class="pre">corr</span></tt></a>(data[,&nbsp;kern,&nbsp;m,&nbsp;c])</td>
+<td>Correlate data with kernel (weights)</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.correlate" class="reference external" href="generated/nmrglue.process.proc_base.correlate.html#nmrglue.process.proc_base.correlate"><tt class="xref docutils literal"><span class="pre">correlate</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.correlate.html#nmrglue.process.proc_base.correlate" title="nmrglue.process.proc_base.correlate"><tt class="xref py py-obj docutils literal"><span class="pre">correlate</span></tt></a>(data[,&nbsp;kern,&nbsp;m,&nbsp;c])</td>
+<td>Correlate data with kernel (weights)</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.filter_median" class="reference external" href="generated/nmrglue.process.proc_base.filter_median.html#nmrglue.process.proc_base.filter_median"><tt class="xref docutils literal"><span class="pre">filter_median</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.filter_median.html#nmrglue.process.proc_base.filter_median" title="nmrglue.process.proc_base.filter_median"><tt class="xref py py-obj docutils literal"><span class="pre">filter_median</span></tt></a>(data[,&nbsp;s,&nbsp;m,&nbsp;c])</td>
+<td>Apply median filter to data (real and imaginary seperately)</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.filter_min" class="reference external" href="generated/nmrglue.process.proc_base.filter_min.html#nmrglue.process.proc_base.filter_min"><tt class="xref docutils literal"><span class="pre">filter_min</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.filter_min.html#nmrglue.process.proc_base.filter_min" title="nmrglue.process.proc_base.filter_min"><tt class="xref py py-obj docutils literal"><span class="pre">filter_min</span></tt></a>(data[,&nbsp;s,&nbsp;m,&nbsp;c])</td>
+<td>Apply minimum filter to data (real and imaginary seperately)</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.filter_max" class="reference external" href="generated/nmrglue.process.proc_base.filter_max.html#nmrglue.process.proc_base.filter_max"><tt class="xref docutils literal"><span class="pre">filter_max</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.filter_max.html#nmrglue.process.proc_base.filter_max" title="nmrglue.process.proc_base.filter_max"><tt class="xref py py-obj docutils literal"><span class="pre">filter_max</span></tt></a>(data[,&nbsp;s,&nbsp;m,&nbsp;c])</td>
+<td>Apply maximum filter to data (real and imaginary seperately)</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.filter_percentile" class="reference external" href="generated/nmrglue.process.proc_base.filter_percentile.html#nmrglue.process.proc_base.filter_percentile"><tt class="xref docutils literal"><span class="pre">filter_percentile</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.filter_percentile.html#nmrglue.process.proc_base.filter_percentile" title="nmrglue.process.proc_base.filter_percentile"><tt class="xref py py-obj docutils literal"><span class="pre">filter_percentile</span></tt></a>(data[,&nbsp;s,&nbsp;m,&nbsp;c])</td>
+<td>Apply a percentile filter to data (real and imaginary seperately)</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.filter_rank" class="reference external" href="generated/nmrglue.process.proc_base.filter_rank.html#nmrglue.process.proc_base.filter_rank"><tt class="xref docutils literal"><span class="pre">filter_rank</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.filter_rank.html#nmrglue.process.proc_base.filter_rank" title="nmrglue.process.proc_base.filter_rank"><tt class="xref py py-obj docutils literal"><span class="pre">filter_rank</span></tt></a>(data[,&nbsp;s,&nbsp;m,&nbsp;c])</td>
+<td>Apply a rank filter to data (real and imaginary seperately)</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.filter_amin" class="reference external" href="generated/nmrglue.process.proc_base.filter_amin.html#nmrglue.process.proc_base.filter_amin"><tt class="xref docutils literal"><span class="pre">filter_amin</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.filter_amin.html#nmrglue.process.proc_base.filter_amin" title="nmrglue.process.proc_base.filter_amin"><tt class="xref py py-obj docutils literal"><span class="pre">filter_amin</span></tt></a>(data[,&nbsp;s,&nbsp;m,&nbsp;c])</td>
+<td>Apply absolute minimum filter to data (real and imaginary seperately)</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.filter_amax" class="reference external" href="generated/nmrglue.process.proc_base.filter_amax.html#nmrglue.process.proc_base.filter_amax"><tt class="xref docutils literal"><span class="pre">filter_amax</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.filter_amax.html#nmrglue.process.proc_base.filter_amax" title="nmrglue.process.proc_base.filter_amax"><tt class="xref py py-obj docutils literal"><span class="pre">filter_amax</span></tt></a>(data[,&nbsp;s,&nbsp;m,&nbsp;c])</td>
+<td>Apply absolute maximum filter to data (real and imaginary seperately)</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.filter_range" class="reference external" href="generated/nmrglue.process.proc_base.filter_range.html#nmrglue.process.proc_base.filter_range"><tt class="xref docutils literal"><span class="pre">filter_range</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.filter_range.html#nmrglue.process.proc_base.filter_range" title="nmrglue.process.proc_base.filter_range"><tt class="xref py py-obj docutils literal"><span class="pre">filter_range</span></tt></a>(data[,&nbsp;s,&nbsp;m,&nbsp;c])</td>
+<td>Apply range filter to data (real and imaginary seperately)</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.filter_avg" class="reference external" href="generated/nmrglue.process.proc_base.filter_avg.html#nmrglue.process.proc_base.filter_avg"><tt class="xref docutils literal"><span class="pre">filter_avg</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.filter_avg.html#nmrglue.process.proc_base.filter_avg" title="nmrglue.process.proc_base.filter_avg"><tt class="xref py py-obj docutils literal"><span class="pre">filter_avg</span></tt></a>(data[,&nbsp;s,&nbsp;m,&nbsp;c])</td>
+<td>Apply average filter to data (real and imaginary seperately)</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.filter_dev" class="reference external" href="generated/nmrglue.process.proc_base.filter_dev.html#nmrglue.process.proc_base.filter_dev"><tt class="xref docutils literal"><span class="pre">filter_dev</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.filter_dev.html#nmrglue.process.proc_base.filter_dev" title="nmrglue.process.proc_base.filter_dev"><tt class="xref py py-obj docutils literal"><span class="pre">filter_dev</span></tt></a>(data[,&nbsp;s,&nbsp;m,&nbsp;c])</td>
+<td>Apply Standard Deviation filter to data (real and imaginary seperately)</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.filter_sum" class="reference external" href="generated/nmrglue.process.proc_base.filter_sum.html#nmrglue.process.proc_base.filter_sum"><tt class="xref docutils literal"><span class="pre">filter_sum</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.filter_sum.html#nmrglue.process.proc_base.filter_sum" title="nmrglue.process.proc_base.filter_sum"><tt class="xref py py-obj docutils literal"><span class="pre">filter_sum</span></tt></a>(data[,&nbsp;s,&nbsp;m,&nbsp;c])</td>
+<td>Apply summation filter to data (real and imaginary seperately)</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.filter_generic" class="reference external" href="generated/nmrglue.process.proc_base.filter_generic.html#nmrglue.process.proc_base.filter_generic"><tt class="xref docutils literal"><span class="pre">filter_generic</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.filter_generic.html#nmrglue.process.proc_base.filter_generic" title="nmrglue.process.proc_base.filter_generic"><tt class="xref py py-obj docutils literal"><span class="pre">filter_generic</span></tt></a>(data,&nbsp;filter[,&nbsp;s,&nbsp;m,&nbsp;c])</td>
+<td>Apply generic filter to data (real and imaginary seperately)</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.nmr_reorder" class="reference external" href="generated/nmrglue.process.proc_base.nmr_reorder.html#nmrglue.process.proc_base.nmr_reorder"><tt class="xref docutils literal"><span class="pre">nmr_reorder</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.nmr_reorder.html#nmrglue.process.proc_base.nmr_reorder" title="nmrglue.process.proc_base.nmr_reorder"><tt class="xref py py-obj docutils literal"><span class="pre">nmr_reorder</span></tt></a>(data)</td>
+<td>Reorder spectrum after FT transform to NMR order (swap halves and reverse)</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.qart" class="reference external" href="generated/nmrglue.process.proc_base.qart.html#nmrglue.process.proc_base.qart"><tt class="xref docutils literal"><span class="pre">qart</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.qart.html#nmrglue.process.proc_base.qart" title="nmrglue.process.proc_base.qart"><tt class="xref py py-obj docutils literal"><span class="pre">qart</span></tt></a>(data[,&nbsp;a,&nbsp;f])</td>
+<td>Scale Quad Artifacts</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.qart_auto" class="reference external" href="generated/nmrglue.process.proc_base.qart_auto.html#nmrglue.process.proc_base.qart_auto"><tt class="xref docutils literal"><span class="pre">qart_auto</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.qart_auto.html#nmrglue.process.proc_base.qart_auto" title="nmrglue.process.proc_base.qart_auto"><tt class="xref py py-obj docutils literal"><span class="pre">qart_auto</span></tt></a>(data)</td>
+<td>Scale Quad artifacts by values from Gram-Schmidt orthogonalization</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.gram_schmidt" class="reference external" href="generated/nmrglue.process.proc_base.gram_schmidt.html#nmrglue.process.proc_base.gram_schmidt"><tt class="xref docutils literal"><span class="pre">gram_schmidt</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.gram_schmidt.html#nmrglue.process.proc_base.gram_schmidt" title="nmrglue.process.proc_base.gram_schmidt"><tt class="xref py py-obj docutils literal"><span class="pre">gram_schmidt</span></tt></a>(data)</td>
+<td>calculate Gram-Schmidt orthogonalization parameters.</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.qmix" class="reference external" href="generated/nmrglue.process.proc_base.qmix.html#nmrglue.process.proc_base.qmix"><tt class="xref docutils literal"><span class="pre">qmix</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.qmix.html#nmrglue.process.proc_base.qmix" title="nmrglue.process.proc_base.qmix"><tt class="xref py py-obj docutils literal"><span class="pre">qmix</span></tt></a>(data,&nbsp;carr)</td>
+<td>Mix input and output channels provided coefficient array</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.smo" class="reference external" href="generated/nmrglue.process.proc_base.smo.html#nmrglue.process.proc_base.smo"><tt class="xref docutils literal"><span class="pre">smo</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.smo.html#nmrglue.process.proc_base.smo" title="nmrglue.process.proc_base.smo"><tt class="xref py py-obj docutils literal"><span class="pre">smo</span></tt></a>(data,&nbsp;n)</td>
+<td>Smooth data</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.center" class="reference external" href="generated/nmrglue.process.proc_base.center.html#nmrglue.process.proc_base.center"><tt class="xref docutils literal"><span class="pre">center</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.center.html#nmrglue.process.proc_base.center" title="nmrglue.process.proc_base.center"><tt class="xref py py-obj docutils literal"><span class="pre">center</span></tt></a>(data,&nbsp;n)</td>
+<td>Center data</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.zd" class="reference external" href="generated/nmrglue.process.proc_base.zd.html#nmrglue.process.proc_base.zd"><tt class="xref docutils literal"><span class="pre">zd</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.zd.html#nmrglue.process.proc_base.zd" title="nmrglue.process.proc_base.zd"><tt class="xref py py-obj docutils literal"><span class="pre">zd</span></tt></a>(data,&nbsp;window[,&nbsp;x0,&nbsp;slope])</td>
+<td>Zero Diagonal band with generic window functions</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.zd_boxcar" class="reference external" href="generated/nmrglue.process.proc_base.zd_boxcar.html#nmrglue.process.proc_base.zd_boxcar"><tt class="xref docutils literal"><span class="pre">zd_boxcar</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.zd_boxcar.html#nmrglue.process.proc_base.zd_boxcar" title="nmrglue.process.proc_base.zd_boxcar"><tt class="xref py py-obj docutils literal"><span class="pre">zd_boxcar</span></tt></a>(data[,&nbsp;wide,&nbsp;x0,&nbsp;slope])</td>
+<td>Zero Diagonal band with boxcar function</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.zd_triangle" class="reference external" href="generated/nmrglue.process.proc_base.zd_triangle.html#nmrglue.process.proc_base.zd_triangle"><tt class="xref docutils literal"><span class="pre">zd_triangle</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.zd_triangle.html#nmrglue.process.proc_base.zd_triangle" title="nmrglue.process.proc_base.zd_triangle"><tt class="xref py py-obj docutils literal"><span class="pre">zd_triangle</span></tt></a>(data[,&nbsp;wide,&nbsp;x0,&nbsp;slope])</td>
+<td>Zero Diagonal band with triangle function</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.zd_sinebell" class="reference external" href="generated/nmrglue.process.proc_base.zd_sinebell.html#nmrglue.process.proc_base.zd_sinebell"><tt class="xref docutils literal"><span class="pre">zd_sinebell</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.zd_sinebell.html#nmrglue.process.proc_base.zd_sinebell" title="nmrglue.process.proc_base.zd_sinebell"><tt class="xref py py-obj docutils literal"><span class="pre">zd_sinebell</span></tt></a>(data[,&nbsp;wide,&nbsp;x0,&nbsp;slope])</td>
+<td>Zero Diagonal band with sinebell function</td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.zd_gaussian" class="reference external" href="generated/nmrglue.process.proc_base.zd_gaussian.html#nmrglue.process.proc_base.zd_gaussian"><tt class="xref docutils literal"><span class="pre">zd_gaussian</span></tt></a></td>
-<td></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.zd_gaussian.html#nmrglue.process.proc_base.zd_gaussian" title="nmrglue.process.proc_base.zd_gaussian"><tt class="xref py py-obj docutils literal"><span class="pre">zd_gaussian</span></tt></a>(data[,&nbsp;wide,&nbsp;x0,&nbsp;slope,&nbsp;g])</td>
+<td>Zero Diagonal band with gaussian function</td>
 </tr>
 </tbody>
 </table>
@@ -532,38 +535,38 @@ are included here for completeness.</p>
 <h2>Low-Level Functions<a class="headerlink" href="#low-level-functions" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="docutils">
 <colgroup>
-<col width="30%" />
-<col width="70%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr><td><a title="nmrglue.process.proc_base.int2bin" class="reference external" href="generated/nmrglue.process.proc_base.int2bin.html#nmrglue.process.proc_base.int2bin"><tt class="xref docutils literal"><span class="pre">int2bin</span></tt></a></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.int2bin.html#nmrglue.process.proc_base.int2bin" title="nmrglue.process.proc_base.int2bin"><tt class="xref py py-obj docutils literal"><span class="pre">int2bin</span></tt></a>(n[,&nbsp;digits])</td>
+<td>integer to binary string</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.bin2int.html#nmrglue.process.proc_base.bin2int" title="nmrglue.process.proc_base.bin2int"><tt class="xref py py-obj docutils literal"><span class="pre">bin2int</span></tt></a>(s)</td>
+<td>binary string to integer</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.gray.html#nmrglue.process.proc_base.gray" title="nmrglue.process.proc_base.gray"><tt class="xref py py-obj docutils literal"><span class="pre">gray</span></tt></a>(n)</td>
+<td>Calculate n-bit gray code</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.hadamard.html#nmrglue.process.proc_base.hadamard" title="nmrglue.process.proc_base.hadamard"><tt class="xref py py-obj docutils literal"><span class="pre">hadamard</span></tt></a>(n[,&nbsp;dtype])</td>
+<td>Returns Hadamard matrix of order n (a power of 2)</td>
+</tr>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.amin_flt.html#nmrglue.process.proc_base.amin_flt" title="nmrglue.process.proc_base.amin_flt"><tt class="xref py py-obj docutils literal"><span class="pre">amin_flt</span></tt></a>(arr)</td>
 <td></td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.bin2int" class="reference external" href="generated/nmrglue.process.proc_base.bin2int.html#nmrglue.process.proc_base.bin2int"><tt class="xref docutils literal"><span class="pre">bin2int</span></tt></a></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.amax_flt.html#nmrglue.process.proc_base.amax_flt" title="nmrglue.process.proc_base.amax_flt"><tt class="xref py py-obj docutils literal"><span class="pre">amax_flt</span></tt></a>(arr)</td>
 <td></td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.gray" class="reference external" href="generated/nmrglue.process.proc_base.gray.html#nmrglue.process.proc_base.gray"><tt class="xref docutils literal"><span class="pre">gray</span></tt></a></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.range_flt.html#nmrglue.process.proc_base.range_flt" title="nmrglue.process.proc_base.range_flt"><tt class="xref py py-obj docutils literal"><span class="pre">range_flt</span></tt></a>(arr)</td>
 <td></td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.hadamard" class="reference external" href="generated/nmrglue.process.proc_base.hadamard.html#nmrglue.process.proc_base.hadamard"><tt class="xref docutils literal"><span class="pre">hadamard</span></tt></a></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.avg_flt.html#nmrglue.process.proc_base.avg_flt" title="nmrglue.process.proc_base.avg_flt"><tt class="xref py py-obj docutils literal"><span class="pre">avg_flt</span></tt></a>(arr)</td>
 <td></td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.amin_flt" class="reference external" href="generated/nmrglue.process.proc_base.amin_flt.html#nmrglue.process.proc_base.amin_flt"><tt class="xref docutils literal"><span class="pre">amin_flt</span></tt></a></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.std_flt.html#nmrglue.process.proc_base.std_flt" title="nmrglue.process.proc_base.std_flt"><tt class="xref py py-obj docutils literal"><span class="pre">std_flt</span></tt></a>(arr)</td>
 <td></td>
 </tr>
-<tr><td><a title="nmrglue.process.proc_base.amax_flt" class="reference external" href="generated/nmrglue.process.proc_base.amax_flt.html#nmrglue.process.proc_base.amax_flt"><tt class="xref docutils literal"><span class="pre">amax_flt</span></tt></a></td>
-<td></td>
-</tr>
-<tr><td><a title="nmrglue.process.proc_base.range_flt" class="reference external" href="generated/nmrglue.process.proc_base.range_flt.html#nmrglue.process.proc_base.range_flt"><tt class="xref docutils literal"><span class="pre">range_flt</span></tt></a></td>
-<td></td>
-</tr>
-<tr><td><a title="nmrglue.process.proc_base.avg_flt" class="reference external" href="generated/nmrglue.process.proc_base.avg_flt.html#nmrglue.process.proc_base.avg_flt"><tt class="xref docutils literal"><span class="pre">avg_flt</span></tt></a></td>
-<td></td>
-</tr>
-<tr><td><a title="nmrglue.process.proc_base.std_flt" class="reference external" href="generated/nmrglue.process.proc_base.std_flt.html#nmrglue.process.proc_base.std_flt"><tt class="xref docutils literal"><span class="pre">std_flt</span></tt></a></td>
-<td></td>
-</tr>
-<tr><td><a title="nmrglue.process.proc_base.sum_flt" class="reference external" href="generated/nmrglue.process.proc_base.sum_flt.html#nmrglue.process.proc_base.sum_flt"><tt class="xref docutils literal"><span class="pre">sum_flt</span></tt></a></td>
+<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_base.sum_flt.html#nmrglue.process.proc_base.sum_flt" title="nmrglue.process.proc_base.sum_flt"><tt class="xref py py-obj docutils literal"><span class="pre">sum_flt</span></tt></a>(arr)</td>
 <td></td>
 </tr>
 </tbody>
@@ -584,7 +587,7 @@ are included here for completeness.</p>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
+          <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="generated/nmrglue.process.proc_base.em.html" title="nmrglue.process.proc_base.em"
@@ -597,9 +600,9 @@ are included here for completeness.</p>
       </ul>
     </div>
     <div class="footer">
-      &copy; Copyright 2010, Jonathan J. Helmus.
-      Last updated on Apr 06, 2011.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+        &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Apr 26, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

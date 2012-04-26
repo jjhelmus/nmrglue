@@ -1,6 +1,6 @@
 nmrglue.process.proc_lp.cof2amp
 ===============================
 
-.. currentmodule:: nmrglue.process.proc_lp
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: cof2amp
+.. automethod:: proc_lp.cof2amp

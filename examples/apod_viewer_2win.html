@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -12,12 +14,13 @@
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
         VERSION:     '0.2',
-        COLLAPSE_MODINDEX: false,
+        COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
     </script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="nmrglue v0.2 documentation" href="../index.html" />
     <link rel="up" title="Examples" href="index.html" />
@@ -32,8 +35,8 @@
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
-             accesskey="M">modules</a> |</li>
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
         <li class="right" >
           <a href="coadd_1d_pipe.html" title="coadd example: coadd_1d_pipe"
              accesskey="N">next</a> |</li>
@@ -46,30 +49,30 @@
     </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-            <h4>Previous topic</h4>
-            <p class="topless"><a href="apod_viewer_1win.html"
-                                  title="previous chapter">application example: apod_viewer_1win</a></p>
-            <h4>Next topic</h4>
-            <p class="topless"><a href="coadd_1d_pipe.html"
-                                  title="next chapter">coadd example: coadd_1d_pipe</a></p>
-            <h3>This Page</h3>
-            <ul class="this-page-menu">
-              <li><a href="../_sources/examples/apod_viewer_2win.txt"
-                     rel="nofollow">Show Source</a></li>
-            </ul>
-          <div id="searchbox" style="display: none">
-            <h3>Quick search</h3>
-              <form class="search" action="../search.html" method="get">
-                <input type="text" name="q" size="18" />
-                <input type="submit" value="Go" />
-                <input type="hidden" name="check_keywords" value="yes" />
-                <input type="hidden" name="area" value="default" />
-              </form>
-              <p class="searchtip" style="font-size: 90%">
-              Enter search terms or a module, class or function name.
-              </p>
-          </div>
-          <script type="text/javascript">$('#searchbox').show(0);</script>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="apod_viewer_1win.html"
+                        title="previous chapter">application example: apod_viewer_1win</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="coadd_1d_pipe.html"
+                        title="next chapter">coadd example: coadd_1d_pipe</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/apod_viewer_2win.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
 
@@ -87,344 +90,6 @@ additional python modules like
 <p>This application allows users to examine various NMRPipe apodization windows
 with different parameters.</p>
 <p>[<a class="reference external" href="el/sample_applications/apod_viewer_2win.py">source code</a>]</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">An example of using wxPython to build a GUI application using nmrglue</span>
-<span class="sd">This application displays the NMRPipe apodization windows</span>
-<span class="sd">&quot;&quot;&quot;</span>
-
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">nmrglue</span> <span class="kn">as</span> <span class="nn">ng</span>
-<span class="kn">import</span> <span class="nn">matplotlib</span>
-
-<span class="c"># uncomment the following to use wx rather than wxagg</span>
-<span class="c">#matplotlib.use(&#39;WX&#39;)</span>
-<span class="c">#from matplotlib.backends.backend_wx import FigureCanvasWx as FigureCanvas</span>
-
-<span class="c"># comment out the following to use wx rather than wxagg</span>
-<span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s">&#39;WXAgg&#39;</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">matplotlib.backends.backend_wxagg</span> <span class="kn">import</span> <span class="n">FigureCanvasWxAgg</span> <span class="k">as</span> <span class="n">FigureCanvas</span>
-
-<span class="kn">from</span> <span class="nn">matplotlib.backends.backend_wx</span> <span class="kn">import</span> <span class="n">NavigationToolbar2Wx</span>
-<span class="kn">from</span> <span class="nn">matplotlib.figure</span> <span class="kn">import</span> <span class="n">Figure</span>
-<span class="kn">import</span> <span class="nn">wx</span>
-
-<span class="n">apod_list</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;SP&quot;</span><span class="p">,</span><span class="s">&quot;EM&quot;</span><span class="p">,</span><span class="s">&quot;GM&quot;</span><span class="p">,</span><span class="s">&quot;GMB&quot;</span><span class="p">,</span><span class="s">&quot;TM&quot;</span><span class="p">,</span><span class="s">&quot;TRI&quot;</span><span class="p">,</span><span class="s">&quot;JMOD&quot;</span><span class="p">]</span>
-
-<span class="k">class</span> <span class="nc">ParameterFrame</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Frame</span><span class="p">):</span>
-    
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">parent</span><span class="p">,</span><span class="nb">id</span><span class="p">):</span>
-        <span class="n">wx</span><span class="o">.</span><span class="n">Frame</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">parent</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;Parameters&quot;</span><span class="p">,</span>
-            <span class="n">style</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">DEFAULT_DIALOG_STYLE</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">RESIZE_BORDER</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">qName1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;Type:&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">qName2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Choice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">choices</span><span class="o">=</span><span class="n">apod_list</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_CHOICE</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ApodChoose</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">qName2</span><span class="p">)</span>
-        
-        <span class="bp">self</span><span class="o">.</span><span class="n">q1_1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;q1:&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">q1_2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;0.0&quot;</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">q2_1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;q2:&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">q2_2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;1.0&quot;</span><span class="p">)</span>
-        
-        <span class="bp">self</span><span class="o">.</span><span class="n">q3_1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;q3:&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">q3_2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;1.0&quot;</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">c1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;c&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">c2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;1.0&quot;</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">start_1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;Start&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">start_2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;1.0&quot;</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">size_1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;Size&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">size_1</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">size_2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;1.0&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">size_2</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">inv</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">CheckBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;Invert&quot;</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">use_size</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">CheckBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;Custom Size&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_CHECKBOX</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">OnLimitCheck</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">use_size</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">points_1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;Number of Points:&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">points_2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;1000&quot;</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">sw_1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;Spectral Width:&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sw_2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;50000.&quot;</span><span class="p">)</span>
-
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">b1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="s">&quot;Draw&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_BUTTON</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">OnDraw</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">b1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">b1</span><span class="o">.</span><span class="n">SetDefault</span><span class="p">()</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">b2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="s">&quot;Clear&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_BUTTON</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">OnClear</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">b2</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">b2</span><span class="o">.</span><span class="n">SetDefault</span><span class="p">()</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">InitApod</span><span class="p">(</span><span class="s">&quot;SP&quot;</span><span class="p">)</span>
-
-        <span class="c"># layout</span>
-        <span class="n">apod_grid</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">GridSizer</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
-
-        <span class="n">apod_grid</span><span class="o">.</span><span class="n">AddMany</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">qName1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qName2</span><span class="p">,</span>
-                   <span class="bp">self</span><span class="o">.</span><span class="n">q1_1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q1_2</span><span class="p">,</span>
-                   <span class="bp">self</span><span class="o">.</span><span class="n">q2_1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q2_2</span><span class="p">,</span>
-                   <span class="bp">self</span><span class="o">.</span><span class="n">q3_1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q3_2</span><span class="p">,</span> 
-                   <span class="bp">self</span><span class="o">.</span><span class="n">c1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">c2</span><span class="p">,</span>
-                   <span class="bp">self</span><span class="o">.</span><span class="n">start_1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">start_2</span><span class="p">,</span>
-                   <span class="bp">self</span><span class="o">.</span><span class="n">size_1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">size_2</span><span class="p">,</span>
-                   <span class="bp">self</span><span class="o">.</span><span class="n">inv</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">use_size</span><span class="p">])</span>
-        
-        <span class="n">data_grid</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">GridSizer</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">data_grid</span><span class="o">.</span><span class="n">AddMany</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">points_1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">points_2</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">sw_1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_2</span><span class="p">])</span>
-
-
-        <span class="n">apod_box</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticBoxSizer</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">StaticBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>
-            <span class="s">&quot;Apodization Parameters&quot;</span><span class="p">))</span>
-        <span class="n">apod_box</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">apod_grid</span><span class="p">)</span>
-
-        <span class="n">data_box</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticBoxSizer</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">StaticBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>
-            <span class="s">&quot;Data Parameters&quot;</span><span class="p">))</span>
-        <span class="n">data_box</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">data_grid</span><span class="p">)</span>
-
-        <span class="n">button_box</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">GridSizer</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">button_box</span><span class="o">.</span><span class="n">AddMany</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">b1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">b2</span><span class="p">])</span>
-
-        <span class="n">mainbox</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">BoxSizer</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">VERTICAL</span><span class="p">)</span>
-        <span class="n">mainbox</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">apod_box</span><span class="p">)</span>
-        <span class="n">mainbox</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">data_box</span><span class="p">)</span>
-        <span class="n">mainbox</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">button_box</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">SetSizer</span><span class="p">(</span><span class="n">mainbox</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">Fit</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">SetMinSize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">GetSize</span><span class="p">())</span>
-
-    <span class="k">def</span> <span class="nf">OnLimitCheck</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">event</span><span class="p">):</span>
-        <span class="n">k</span><span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">IsChecked</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">size_1</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">size_2</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
-        <span class="n">points</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points_2</span><span class="o">.</span><span class="n">GetValue</span><span class="p">())</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">size_2</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">points</span><span class="p">))</span>
-
-    <span class="k">def</span> <span class="nf">ApodChoose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">event</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">InitApod</span><span class="p">(</span><span class="n">apod_list</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">qName2</span><span class="o">.</span><span class="n">GetCurrentSelection</span><span class="p">()])</span>
-
-    <span class="k">def</span> <span class="nf">InitApod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">qName</span><span class="p">):</span>
-        
-        <span class="k">if</span> <span class="n">qName</span> <span class="o">==</span> <span class="s">&quot;SP&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q1_1</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q1_1</span><span class="o">.</span><span class="n">SetLabel</span><span class="p">(</span><span class="s">&quot;off&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q1_2</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q1_2</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="s">&quot;0.0&quot;</span><span class="p">)</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">q2_1</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q2_1</span><span class="o">.</span><span class="n">SetLabel</span><span class="p">(</span><span class="s">&quot;end&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q2_2</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q2_2</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="s">&quot;1.0&quot;</span><span class="p">)</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">q3_1</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q3_1</span><span class="o">.</span><span class="n">SetLabel</span><span class="p">(</span><span class="s">&quot;pow&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q3_2</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q3_2</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="s">&quot;1.0&quot;</span><span class="p">)</span>
-
-        <span class="k">elif</span> <span class="n">qName</span> <span class="o">==</span> <span class="s">&quot;EM&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q1_1</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q1_1</span><span class="o">.</span><span class="n">SetLabel</span><span class="p">(</span><span class="s">&quot;lb (Hz)&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q1_2</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q1_2</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="s">&quot;0.0&quot;</span><span class="p">)</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">q2_1</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q2_2</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">q3_1</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q3_2</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
-
-        <span class="k">elif</span> <span class="n">qName</span> <span class="o">==</span> <span class="s">&quot;GM&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q1_1</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q1_1</span><span class="o">.</span><span class="n">SetLabel</span><span class="p">(</span><span class="s">&quot;g1 (Hz)&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q1_2</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q1_2</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="s">&quot;0.0&quot;</span><span class="p">)</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">q2_1</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q2_1</span><span class="o">.</span><span class="n">SetLabel</span><span class="p">(</span><span class="s">&quot;g2 (Hz)&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q2_2</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q2_2</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="s">&quot;0.0&quot;</span><span class="p">)</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">q3_1</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q3_1</span><span class="o">.</span><span class="n">SetLabel</span><span class="p">(</span><span class="s">&quot;g3&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q3_2</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q3_2</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="s">&quot;0.0&quot;</span><span class="p">)</span>
-
-        <span class="k">elif</span> <span class="n">qName</span> <span class="o">==</span> <span class="s">&quot;GMB&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q1_1</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q1_1</span><span class="o">.</span><span class="n">SetLabel</span><span class="p">(</span><span class="s">&quot;lb&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q1_2</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q1_2</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="s">&quot;0.0&quot;</span><span class="p">)</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">q2_1</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q2_1</span><span class="o">.</span><span class="n">SetLabel</span><span class="p">(</span><span class="s">&quot;gb&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q2_2</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q2_2</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="s">&quot;0.0&quot;</span><span class="p">)</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">q3_1</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q3_2</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
-
-        <span class="k">elif</span> <span class="n">qName</span> <span class="o">==</span> <span class="s">&quot;TM&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q1_1</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q1_1</span><span class="o">.</span><span class="n">SetLabel</span><span class="p">(</span><span class="s">&quot;t1&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q1_2</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q1_2</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="s">&quot;0.0&quot;</span><span class="p">)</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">q2_1</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q2_1</span><span class="o">.</span><span class="n">SetLabel</span><span class="p">(</span><span class="s">&quot;t2&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q2_2</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q2_2</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="s">&quot;0.0&quot;</span><span class="p">)</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">q3_1</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q3_2</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
-
-        <span class="k">elif</span> <span class="n">qName</span> <span class="o">==</span> <span class="s">&quot;TRI&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q1_1</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q1_1</span><span class="o">.</span><span class="n">SetLabel</span><span class="p">(</span><span class="s">&quot;loc&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q1_2</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="n">points</span> <span class="o">=</span> <span class="n">points</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points_2</span><span class="o">.</span><span class="n">GetValue</span><span class="p">())</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q1_2</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">points</span><span class="o">/</span><span class="mf">2.</span><span class="p">))</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">q2_1</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q2_1</span><span class="o">.</span><span class="n">SetLabel</span><span class="p">(</span><span class="s">&quot;lHi&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q2_2</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q2_2</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="s">&quot;0.0&quot;</span><span class="p">)</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">q3_1</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q3_1</span><span class="o">.</span><span class="n">SetLabel</span><span class="p">(</span><span class="s">&quot;rHi&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q3_2</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q3_2</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="s">&quot;0.0&quot;</span><span class="p">)</span>
-
-        <span class="k">elif</span> <span class="n">qName</span> <span class="o">==</span> <span class="s">&quot;JMOD&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q1_1</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q1_1</span><span class="o">.</span><span class="n">SetLabel</span><span class="p">(</span><span class="s">&quot;off&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q1_2</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q1_2</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="s">&quot;0.0&quot;</span><span class="p">)</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">q2_1</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q2_1</span><span class="o">.</span><span class="n">SetLabel</span><span class="p">(</span><span class="s">&quot;j (Hz)&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q2_2</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q2_2</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="s">&quot;0.0&quot;</span><span class="p">)</span>
-
-            <span class="bp">self</span><span class="o">.</span><span class="n">q3_1</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q3_1</span><span class="o">.</span><span class="n">SetLabel</span><span class="p">(</span><span class="s">&quot;lb (Hz)&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q3_2</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q3_2</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="s">&quot;0.0&quot;</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">OnDraw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">event</span><span class="p">):</span>
-        <span class="n">qName</span> <span class="o">=</span> <span class="n">apod_list</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">qName2</span><span class="o">.</span><span class="n">GetCurrentSelection</span><span class="p">()]</span>
-        <span class="n">q1</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q1_2</span><span class="o">.</span><span class="n">GetValue</span><span class="p">())</span>
-        <span class="n">q2</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q2_2</span><span class="o">.</span><span class="n">GetValue</span><span class="p">())</span>
-        <span class="n">q3</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q3_2</span><span class="o">.</span><span class="n">GetValue</span><span class="p">())</span>
-        <span class="n">c</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">c2</span><span class="o">.</span><span class="n">GetValue</span><span class="p">())</span>
-        <span class="n">start</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">start_2</span><span class="o">.</span><span class="n">GetValue</span><span class="p">())</span>
-        <span class="n">size</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size_2</span><span class="o">.</span><span class="n">GetValue</span><span class="p">())</span>
-        
-        <span class="n">inv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inv</span><span class="o">.</span><span class="n">GetValue</span><span class="p">()</span>
-        <span class="n">use_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_size</span><span class="o">.</span><span class="n">GetValue</span><span class="p">()</span>
-
-        <span class="n">points</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points_2</span><span class="o">.</span><span class="n">GetValue</span><span class="p">())</span>
-        <span class="n">sw</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_2</span><span class="o">.</span><span class="n">GetValue</span><span class="p">())</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">ApplyApod</span><span class="p">(</span><span class="n">qName</span><span class="p">,</span><span class="n">q1</span><span class="p">,</span><span class="n">q2</span><span class="p">,</span><span class="n">q3</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">start</span><span class="p">,</span><span class="n">size</span><span class="p">,</span><span class="n">inv</span><span class="p">,</span><span class="n">use_size</span><span class="p">,</span>
-        <span class="n">points</span><span class="p">,</span><span class="n">sw</span><span class="p">)</span>
-        
-    <span class="k">def</span> <span class="nf">OnClear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">event</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">ClearFigure</span><span class="p">()</span>
-
-<span class="k">class</span> <span class="nc">CanvasFrame</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Frame</span><span class="p">):</span>
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">wx</span><span class="o">.</span><span class="n">Frame</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&#39;Apodization Viewer&#39;</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">SetBackgroundColour</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">NamedColor</span><span class="p">(</span><span class="s">&quot;WHITE&quot;</span><span class="p">))</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span> <span class="o">=</span> <span class="n">Figure</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span> <span class="o">=</span> <span class="n">FigureCanvas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">toolbar</span> <span class="o">=</span> <span class="n">NavigationToolbar2Wx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">toolbar</span><span class="o">.</span><span class="n">Realize</span><span class="p">()</span>
-        
-        <span class="c"># open Parameter Dialog</span>
-        <span class="n">win</span> <span class="o">=</span> <span class="n">ParameterFrame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">win</span><span class="o">.</span><span class="n">Show</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-
-        <span class="c"># layout</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sizer</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">BoxSizer</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">VERTICAL</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">LEFT</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">TOP</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">GROW</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">toolbar</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">LEFT</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">EXPAND</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">SetSizer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sizer</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Fit</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">OnPaint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">ClearFigure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">cla</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">OnPaint</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">ApplyApod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">qName</span><span class="p">,</span><span class="n">q1</span><span class="p">,</span><span class="n">q2</span><span class="p">,</span><span class="n">q3</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">start</span><span class="p">,</span><span class="n">size</span><span class="p">,</span><span class="n">inv</span><span class="p">,</span><span class="n">use_size</span><span class="p">,</span><span class="n">points</span><span class="p">,</span><span class="n">sw</span><span class="p">):</span>
-       
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        print &quot;DEBUGGING INFOMATION&quot;</span>
-<span class="sd">        print &quot;ApplyApod Recieved:&quot;</span>
-<span class="sd">        print &quot;qName:&quot;,qName</span>
-<span class="sd">        print &quot;q1:&quot;,q1</span>
-<span class="sd">        print &quot;q2:&quot;,q2</span>
-<span class="sd">        print &quot;q3:&quot;,q3</span>
-<span class="sd">        print &quot;c:&quot;,c</span>
-<span class="sd">        print &quot;start:&quot;,start</span>
-<span class="sd">        print &quot;size:&quot;,size</span>
-<span class="sd">        print &quot;inv:&quot;,inv</span>
-<span class="sd">        print &quot;use_size:&quot;,use_size</span>
-<span class="sd">        print &quot;points:&quot;,points</span>
-<span class="sd">        print &quot;sw:&quot;,sw</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="c"># create the dictionary</span>
-        <span class="n">dic</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">fileiobase</span><span class="o">.</span><span class="n">create_blank_udic</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">dic</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&quot;sw&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sw</span>
-        <span class="n">dic</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&quot;size&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">points</span>
-
-        <span class="c"># create the data</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">points</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="s">&quot;complex&quot;</span><span class="p">)</span>
-
-        <span class="c"># convert to NMRPipe format</span>
-        <span class="n">C</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">convert</span><span class="o">.</span><span class="n">converter</span><span class="p">()</span>
-        <span class="n">C</span><span class="o">.</span><span class="n">from_universal</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
-        <span class="n">pdic</span><span class="p">,</span><span class="n">pdata</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">to_pipe</span><span class="p">()</span>
-
-
-        <span class="k">if</span> <span class="n">use_size</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
-            <span class="n">tsize</span> <span class="o">=</span> <span class="n">size</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">tsize</span> <span class="o">=</span> <span class="s">&#39;default&#39;</span>
-        <span class="n">null</span><span class="p">,</span><span class="n">apod_data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">apod</span><span class="p">(</span><span class="n">pdic</span><span class="p">,</span><span class="n">pdata</span><span class="p">,</span><span class="n">qName</span><span class="o">=</span><span class="n">qName</span><span class="p">,</span>
-        <span class="n">q1</span><span class="o">=</span><span class="n">q1</span><span class="p">,</span><span class="n">q2</span><span class="o">=</span><span class="n">q2</span><span class="p">,</span><span class="n">q3</span><span class="o">=</span><span class="n">q3</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span><span class="n">inv</span><span class="o">=</span><span class="n">inv</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="n">tsize</span><span class="p">,</span><span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">)</span>
-
-        <span class="c"># draw the window</span>
-        <span class="c">#self.axes.cla()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">apod_data</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">OnPaint</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="k">class</span> <span class="nc">App</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">App</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">OnInit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">frame</span> <span class="o">=</span> <span class="n">CanvasFrame</span><span class="p">()</span>
-        <span class="n">frame</span><span class="o">.</span><span class="n">Show</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">True</span>
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">App</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">app</span><span class="o">.</span><span class="n">MainLoop</span><span class="p">()</span>
-</pre></div>
-</div>
 </div>
 
 
@@ -440,7 +105,7 @@ with different parameters.</p>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../modindex.html" title="Global Module Index"
+          <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
           <a href="coadd_1d_pipe.html" title="coadd example: coadd_1d_pipe"
@@ -453,9 +118,9 @@ with different parameters.</p>
       </ul>
     </div>
     <div class="footer">
-      &copy; Copyright 2010, Jonathan J. Helmus.
-      Last updated on Apr 06, 2011.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.4.
+        &copy; Copyright 2010, Jonathan J. Helmus.
+      Last updated on Apr 26, 2012.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

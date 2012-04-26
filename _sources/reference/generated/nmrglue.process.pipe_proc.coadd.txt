@@ -1,6 +1,6 @@
 nmrglue.process.pipe_proc.coadd
 ===============================
 
-.. currentmodule:: nmrglue.process.pipe_proc
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: coadd
+.. automethod:: pipe_proc.coadd

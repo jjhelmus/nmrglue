@@ -1,6 +1,6 @@
 nmrglue.process.pipe_proc.zf
 ============================
 
-.. currentmodule:: nmrglue.process.pipe_proc
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: zf
+.. automethod:: pipe_proc.zf

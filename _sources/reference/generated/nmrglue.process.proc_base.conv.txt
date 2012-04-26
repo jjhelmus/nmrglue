@@ -1,6 +1,6 @@
 nmrglue.process.proc_base.conv
 ==============================
 
-.. currentmodule:: nmrglue.process.proc_base
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: conv
+.. automethod:: proc_base.conv

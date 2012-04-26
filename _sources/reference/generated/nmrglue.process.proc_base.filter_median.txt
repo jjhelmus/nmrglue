@@ -1,6 +1,6 @@
 nmrglue.process.proc_base.filter_median
 =======================================
 
-.. currentmodule:: nmrglue.process.proc_base
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: filter_median
+.. automethod:: proc_base.filter_median

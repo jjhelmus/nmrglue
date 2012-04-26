@@ -1,6 +1,6 @@
 nmrglue.process.pipe_proc.tri
 =============================
 
-.. currentmodule:: nmrglue.process.pipe_proc
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: tri
+.. automethod:: pipe_proc.tri

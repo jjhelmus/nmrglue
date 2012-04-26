@@ -1,6 +1,6 @@
 nmrglue.process.pipe_proc.sol
 =============================
 
-.. currentmodule:: nmrglue.process.pipe_proc
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: sol
+.. automethod:: pipe_proc.sol

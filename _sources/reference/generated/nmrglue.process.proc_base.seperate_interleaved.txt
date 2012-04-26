@@ -1,6 +1,6 @@
 nmrglue.process.proc_base.seperate_interleaved
 ==============================================
 
-.. currentmodule:: nmrglue.process.proc_base
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: seperate_interleaved
+.. automethod:: proc_base.seperate_interleaved

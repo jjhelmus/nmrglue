@@ -1,6 +1,6 @@
 nmrglue.process.pipe_proc.ft
 ============================
 
-.. currentmodule:: nmrglue.process.pipe_proc
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: ft
+.. automethod:: pipe_proc.ft

@@ -1,6 +1,6 @@
 nmrglue.process.proc_lp.lp_svd
 ==============================
 
-.. currentmodule:: nmrglue.process.proc_lp
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: lp_svd
+.. automethod:: proc_lp.lp_svd

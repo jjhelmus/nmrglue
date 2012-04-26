@@ -1,6 +1,6 @@
 nmrglue.process.proc_base.bswap
 ===============================
 
-.. currentmodule:: nmrglue.process.proc_base
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: bswap
+.. automethod:: proc_base.bswap

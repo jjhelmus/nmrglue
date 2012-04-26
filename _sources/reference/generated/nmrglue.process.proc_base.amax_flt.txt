@@ -1,6 +1,6 @@
 nmrglue.process.proc_base.amax_flt
 ==================================
 
-.. currentmodule:: nmrglue.process.proc_base
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: amax_flt
+.. automethod:: proc_base.amax_flt

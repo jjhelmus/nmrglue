@@ -1,6 +1,6 @@
 nmrglue.process.proc_lp.find_coeff
 ==================================
 
-.. currentmodule:: nmrglue.process.proc_lp
+.. currentmodule:: nmrglue.process
 
-.. autofunction:: find_coeff
+.. automethod:: proc_lp.find_coeff
