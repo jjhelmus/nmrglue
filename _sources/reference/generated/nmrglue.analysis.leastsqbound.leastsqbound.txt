@@ -1,0 +1,6 @@
+nmrglue.analysis.leastsqbound.leastsqbound
+==========================================
+
+.. currentmodule:: nmrglue.analysis.leastsqbound
+
+.. autofunction:: leastsqbound

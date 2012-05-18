@@ -1,0 +1,6 @@
+nmrglue.fileio.rnmrtk.read
+==========================
+
+.. currentmodule:: nmrglue.fileio.rnmrtk
+
+.. autofunction:: read

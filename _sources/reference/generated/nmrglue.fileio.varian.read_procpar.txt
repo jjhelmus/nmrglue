@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.read_procpar
+==================================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: read_procpar

@@ -1,0 +1,6 @@
+nmrglue.fileio.table.insert_column
+==================================
+
+.. currentmodule:: nmrglue.fileio.table
+
+.. autofunction:: insert_column

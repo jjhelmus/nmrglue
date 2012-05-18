@@ -1,0 +1,6 @@
+nmrglue.fileio.table.guess_pformat
+==================================
+
+.. currentmodule:: nmrglue.fileio.table
+
+.. autofunction:: guess_pformat

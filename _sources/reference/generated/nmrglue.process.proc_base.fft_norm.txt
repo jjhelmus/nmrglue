@@ -1,0 +1,6 @@
+nmrglue.process.proc_base.fft_norm
+==================================
+
+.. currentmodule:: nmrglue.process.proc_base
+
+.. autofunction:: fft_norm

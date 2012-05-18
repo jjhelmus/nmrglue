@@ -1,0 +1,6 @@
+nmrglue.fileio.sparky.write
+===========================
+
+.. currentmodule:: nmrglue.fileio.sparky
+
+.. autofunction:: write

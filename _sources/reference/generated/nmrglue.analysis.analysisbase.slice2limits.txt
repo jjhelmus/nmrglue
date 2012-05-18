@@ -1,0 +1,6 @@
+nmrglue.analysis.analysisbase.slice2limits
+==========================================
+
+.. currentmodule:: nmrglue.analysis.analysisbase
+
+.. autofunction:: slice2limits

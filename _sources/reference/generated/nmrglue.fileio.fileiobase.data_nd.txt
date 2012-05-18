@@ -1,0 +1,24 @@
+nmrglue.fileio.fileiobase.data_nd
+=================================
+
+.. currentmodule:: nmrglue.fileio.fileiobase
+
+.. autoclass:: data_nd
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~data_nd.__init__
+      ~data_nd.swapaxes
+      ~data_nd.transpose
+   
+   
+
+   
+   
+   

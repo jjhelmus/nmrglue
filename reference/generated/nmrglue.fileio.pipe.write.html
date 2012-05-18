@@ -1,0 +1,146 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nmrglue.fileio.pipe.write &mdash; nmrglue 0.3-dev documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.3-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.3-dev documentation" href="../../index.html" />
+    <link rel="up" title="nmrglue.pipe" href="../pipe.html" />
+    <link rel="next" title="nmrglue.fileio.pipe.read_lowmem" href="nmrglue.fileio.pipe.read_lowmem.html" />
+    <link rel="prev" title="nmrglue.fileio.pipe.read" href="nmrglue.fileio.pipe.read.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.fileio.pipe.read_lowmem.html" title="nmrglue.fileio.pipe.read_lowmem"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.fileio.pipe.read.html" title="nmrglue.fileio.pipe.read"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../pipe.html" accesskey="U">nmrglue.pipe</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="nmrglue-fileio-pipe-write">
+<h1>nmrglue.fileio.pipe.write<a class="headerlink" href="#nmrglue-fileio-pipe-write" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="nmrglue.fileio.pipe.write">
+<tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">write</tt><big>(</big><em>filename</em>, <em>dic</em>, <em>data</em>, <em>overwrite=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/pipe.py#L636"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.pipe.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a NMRPipe file</p>
+<p>For 3D data if filename has no &#8216;%&#8217; formatter then the data is written as a 
+3D NMRPipe data stream.  When the &#8216;%&#8217; formatter is provided the data is 
+written out as a standard NMRPipe 3D multi-file 3D.</p>
+<p>For 4D data, filename can have one, two or no &#8216;%&#8217; formatters resulting in
+a single index file (test%03d.ft), two index file(test%02d%03d.ft), or 
+one file data stream (test.ft4).</p>
+<p>dic[&#8220;FDPIPEFLAG&#8221;] is not changed or checked when writing, please check
+that this value is 0.0 for standard non-data stream files, and 1.0 for data
+stream files or an file may be written with an incorrect header.</p>
+<p>Set overwrite to True to overwrite files that exist.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="nmrglue.fileio.pipe.read.html"
+                        title="previous chapter">nmrglue.fileio.pipe.read</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="nmrglue.fileio.pipe.read_lowmem.html"
+                        title="next chapter">nmrglue.fileio.pipe.read_lowmem</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/reference/generated/nmrglue.fileio.pipe.write.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.fileio.pipe.read_lowmem.html" title="nmrglue.fileio.pipe.read_lowmem"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.fileio.pipe.read.html" title="nmrglue.fileio.pipe.read"
+             >previous</a> |</li>
+        <li><a href="../../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../pipe.html" >nmrglue.pipe</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2012, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

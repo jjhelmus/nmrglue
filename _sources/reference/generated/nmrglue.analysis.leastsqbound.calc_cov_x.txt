@@ -1,0 +1,6 @@
+nmrglue.analysis.leastsqbound.calc_cov_x
+========================================
+
+.. currentmodule:: nmrglue.analysis.leastsqbound
+
+.. autofunction:: calc_cov_x

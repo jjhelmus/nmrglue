@@ -1,0 +1,6 @@
+nmrglue.fileio.pipe.read_lowmem_3D
+==================================
+
+.. currentmodule:: nmrglue.fileio.pipe
+
+.. autofunction:: read_lowmem_3D

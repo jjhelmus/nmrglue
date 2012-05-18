@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.order_data
+================================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: order_data

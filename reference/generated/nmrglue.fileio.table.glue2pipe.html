@@ -1,0 +1,149 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nmrglue.fileio.table.glue2pipe &mdash; nmrglue 0.3-dev documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.3-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.3-dev documentation" href="../../index.html" />
+    <link rel="up" title="nmrglue.table" href="../table.html" />
+    <link rel="next" title="nmrglue.fileio.table.guess_pformat" href="nmrglue.fileio.table.guess_pformat.html" />
+    <link rel="prev" title="nmrglue.fileio.table.pipe2glue" href="nmrglue.fileio.table.pipe2glue.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.fileio.table.guess_pformat.html" title="nmrglue.fileio.table.guess_pformat"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.fileio.table.pipe2glue.html" title="nmrglue.fileio.table.pipe2glue"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../table.html" accesskey="U">nmrglue.table</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="nmrglue-fileio-table-glue2pipe">
+<h1>nmrglue.fileio.table.glue2pipe<a class="headerlink" href="#nmrglue-fileio-table-glue2pipe" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="nmrglue.fileio.table.glue2pipe">
+<tt class="descclassname">nmrglue.fileio.table.</tt><tt class="descname">glue2pipe</tt><big>(</big><em>comments</em>, <em>rec</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/table.py#L38"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.table.glue2pipe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a nmrglue table to a NMRPipe table</p>
+<p>The pformats list is a guess from data type and precision in the records
+array.  You may want to edit this to your liking.</p>
+<p>Parameters:</p>
+<ul class="simple">
+<li>comments  List of comments</li>
+<li>rec       Records array with named fields.</li>
+</ul>
+<p>Returns: pcomments,pformat,rec</p>
+<ul class="simple">
+<li>pcomments List of NMRPipe comment lines.</li>
+<li>pformats  List of NMRPipe table column formats strings.</li>
+<li>rec       Records array with named fields.</li>
+</ul>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="nmrglue.fileio.table.pipe2glue.html"
+                        title="previous chapter">nmrglue.fileio.table.pipe2glue</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="nmrglue.fileio.table.guess_pformat.html"
+                        title="next chapter">nmrglue.fileio.table.guess_pformat</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/reference/generated/nmrglue.fileio.table.glue2pipe.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.fileio.table.guess_pformat.html" title="nmrglue.fileio.table.guess_pformat"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.fileio.table.pipe2glue.html" title="nmrglue.fileio.table.pipe2glue"
+             >previous</a> |</li>
+        <li><a href="../../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../table.html" >nmrglue.table</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2012, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

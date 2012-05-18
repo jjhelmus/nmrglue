@@ -1,0 +1,6 @@
+nmrglue.analysis.leastsqbound.err
+=================================
+
+.. currentmodule:: nmrglue.analysis.leastsqbound
+
+.. autofunction:: err

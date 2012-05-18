@@ -1,0 +1,6 @@
+nmrglue.fileio.rnmrtk.find_shape
+================================
+
+.. currentmodule:: nmrglue.fileio.rnmrtk
+
+.. autofunction:: find_shape

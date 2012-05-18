@@ -1,0 +1,6 @@
+nmrglue.analysis.analysisbase.neighbors
+=======================================
+
+.. currentmodule:: nmrglue.analysis.analysisbase
+
+.. autofunction:: neighbors

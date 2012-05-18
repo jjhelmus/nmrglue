@@ -1,0 +1,6 @@
+nmrglue.fileio.fileiobase.create_blank_udic
+===========================================
+
+.. currentmodule:: nmrglue.fileio.fileiobase
+
+.. autofunction:: create_blank_udic

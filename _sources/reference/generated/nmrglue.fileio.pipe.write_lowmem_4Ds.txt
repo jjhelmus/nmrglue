@@ -1,0 +1,6 @@
+nmrglue.fileio.pipe.write_lowmem_4Ds
+====================================
+
+.. currentmodule:: nmrglue.fileio.pipe
+
+.. autofunction:: write_lowmem_4Ds

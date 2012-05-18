@@ -1,0 +1,6 @@
+nmrglue.fileio.sparky.dic2datetime
+==================================
+
+.. currentmodule:: nmrglue.fileio.sparky
+
+.. autofunction:: dic2datetime

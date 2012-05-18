@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.read_fid
+==============================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: read_fid

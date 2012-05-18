@@ -1,0 +1,6 @@
+nmrglue.fileio.rnmrtk.put_trace
+===============================
+
+.. currentmodule:: nmrglue.fileio.rnmrtk
+
+.. autofunction:: put_trace

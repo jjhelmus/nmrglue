@@ -1,0 +1,6 @@
+nmrglue.fileio.pipe.make_uc
+===========================
+
+.. currentmodule:: nmrglue.fileio.pipe
+
+.. autofunction:: make_uc

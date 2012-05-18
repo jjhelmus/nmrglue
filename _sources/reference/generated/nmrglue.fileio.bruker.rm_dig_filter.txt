@@ -1,0 +1,6 @@
+nmrglue.fileio.bruker.rm_dig_filter
+===================================
+
+.. currentmodule:: nmrglue.fileio.bruker
+
+.. autofunction:: rm_dig_filter

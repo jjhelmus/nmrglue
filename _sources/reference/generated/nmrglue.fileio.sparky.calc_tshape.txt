@@ -1,0 +1,6 @@
+nmrglue.fileio.sparky.calc_tshape
+=================================
+
+.. currentmodule:: nmrglue.fileio.sparky
+
+.. autofunction:: calc_tshape

@@ -1,0 +1,6 @@
+nmrglue.fileio.pipe.fdata2dic
+=============================
+
+.. currentmodule:: nmrglue.fileio.pipe
+
+.. autofunction:: fdata2dic

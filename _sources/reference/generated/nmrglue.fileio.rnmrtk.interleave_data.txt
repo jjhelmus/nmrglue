@@ -1,0 +1,6 @@
+nmrglue.fileio.rnmrtk.interleave_data
+=====================================
+
+.. currentmodule:: nmrglue.fileio.rnmrtk
+
+.. autofunction:: interleave_data

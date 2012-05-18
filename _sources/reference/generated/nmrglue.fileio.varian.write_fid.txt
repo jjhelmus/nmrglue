@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.write_fid
+===============================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: write_fid

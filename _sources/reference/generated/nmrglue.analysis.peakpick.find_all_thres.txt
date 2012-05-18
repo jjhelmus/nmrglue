@@ -1,0 +1,6 @@
+nmrglue.analysis.peakpick.find_all_thres
+========================================
+
+.. currentmodule:: nmrglue.analysis.peakpick
+
+.. autofunction:: find_all_thres

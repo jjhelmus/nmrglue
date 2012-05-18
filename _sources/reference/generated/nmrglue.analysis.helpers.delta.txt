@@ -1,0 +1,6 @@
+nmrglue.analysis.helpers.delta
+==============================
+
+.. currentmodule:: nmrglue.analysis.helpers
+
+.. autofunction:: delta

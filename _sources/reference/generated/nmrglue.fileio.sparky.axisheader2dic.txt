@@ -1,0 +1,6 @@
+nmrglue.fileio.sparky.axisheader2dic
+====================================
+
+.. currentmodule:: nmrglue.fileio.sparky
+
+.. autofunction:: axisheader2dic

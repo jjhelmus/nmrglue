@@ -1,0 +1,6 @@
+nmrglue.fileio.pipe.write
+=========================
+
+.. currentmodule:: nmrglue.fileio.pipe
+
+.. autofunction:: write

@@ -1,0 +1,6 @@
+nmrglue.fileio.sparky.untile_data2D
+===================================
+
+.. currentmodule:: nmrglue.fileio.sparky
+
+.. autofunction:: untile_data2D

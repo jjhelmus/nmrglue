@@ -1,0 +1,6 @@
+nmrglue.util.misc.isdicsimilar
+==============================
+
+.. currentmodule:: nmrglue.util.misc
+
+.. autofunction:: isdicsimilar

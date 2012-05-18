@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.guess_udic
+================================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: guess_udic

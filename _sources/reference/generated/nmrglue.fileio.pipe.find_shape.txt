@@ -1,0 +1,6 @@
+nmrglue.fileio.pipe.find_shape
+==============================
+
+.. currentmodule:: nmrglue.fileio.pipe
+
+.. autofunction:: find_shape

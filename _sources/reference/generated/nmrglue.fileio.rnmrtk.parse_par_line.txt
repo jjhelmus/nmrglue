@@ -1,0 +1,6 @@
+nmrglue.fileio.rnmrtk.parse_par_line
+====================================
+
+.. currentmodule:: nmrglue.fileio.rnmrtk
+
+.. autofunction:: parse_par_line

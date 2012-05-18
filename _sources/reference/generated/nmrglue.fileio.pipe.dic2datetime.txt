@@ -1,0 +1,6 @@
+nmrglue.fileio.pipe.dic2datetime
+================================
+
+.. currentmodule:: nmrglue.fileio.pipe
+
+.. autofunction:: dic2datetime

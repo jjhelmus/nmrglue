@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.get_fileheader
+====================================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: get_fileheader

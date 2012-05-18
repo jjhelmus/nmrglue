@@ -1,0 +1,6 @@
+nmrglue.fileio.sparky.tile_data2d
+=================================
+
+.. currentmodule:: nmrglue.fileio.sparky
+
+.. autofunction:: tile_data2d

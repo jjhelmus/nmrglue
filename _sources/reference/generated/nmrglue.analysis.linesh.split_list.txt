@@ -1,0 +1,6 @@
+nmrglue.analysis.linesh.split_list
+==================================
+
+.. currentmodule:: nmrglue.analysis.linesh
+
+.. autofunction:: split_list

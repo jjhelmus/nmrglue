@@ -1,0 +1,6 @@
+nmrglue.fileio.pipe.pack_complex
+================================
+
+.. currentmodule:: nmrglue.fileio.pipe
+
+.. autofunction:: pack_complex

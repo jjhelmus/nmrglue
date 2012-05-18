@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.torder2i2t
+================================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: torder2i2t

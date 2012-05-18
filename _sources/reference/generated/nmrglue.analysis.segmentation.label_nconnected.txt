@@ -1,0 +1,6 @@
+nmrglue.analysis.segmentation.label_nconnected
+==============================================
+
+.. currentmodule:: nmrglue.analysis.segmentation
+
+.. autofunction:: label_nconnected

@@ -1,0 +1,6 @@
+nmrglue.fileio.bruker.guess_shape
+=================================
+
+.. currentmodule:: nmrglue.fileio.bruker
+
+.. autofunction:: guess_shape

@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.create_pdic_param
+=======================================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: create_pdic_param

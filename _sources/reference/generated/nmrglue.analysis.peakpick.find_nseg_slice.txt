@@ -1,0 +1,6 @@
+nmrglue.analysis.peakpick.find_nseg_slice
+=========================================
+
+.. currentmodule:: nmrglue.analysis.peakpick
+
+.. autofunction:: find_nseg_slice

@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.put_hyperheader
+=====================================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: put_hyperheader

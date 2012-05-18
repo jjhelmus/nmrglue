@@ -1,0 +1,6 @@
+nmrglue.fileio.rnmrtk.write_par
+===============================
+
+.. currentmodule:: nmrglue.fileio.rnmrtk
+
+.. autofunction:: write_par

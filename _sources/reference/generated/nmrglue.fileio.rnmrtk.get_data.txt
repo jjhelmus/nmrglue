@@ -1,0 +1,6 @@
+nmrglue.fileio.rnmrtk.get_data
+==============================
+
+.. currentmodule:: nmrglue.fileio.rnmrtk
+
+.. autofunction:: get_data

@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.create_dic
+================================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: create_dic

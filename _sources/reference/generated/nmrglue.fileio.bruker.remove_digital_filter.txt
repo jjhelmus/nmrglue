@@ -1,0 +1,6 @@
+nmrglue.fileio.bruker.remove_digital_filter
+===========================================
+
+.. currentmodule:: nmrglue.fileio.bruker
+
+.. autofunction:: remove_digital_filter

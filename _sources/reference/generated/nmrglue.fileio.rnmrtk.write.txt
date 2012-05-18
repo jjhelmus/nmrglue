@@ -1,0 +1,6 @@
+nmrglue.fileio.rnmrtk.write
+===========================
+
+.. currentmodule:: nmrglue.fileio.rnmrtk
+
+.. autofunction:: write

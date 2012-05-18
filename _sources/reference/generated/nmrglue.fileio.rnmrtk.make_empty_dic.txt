@@ -1,0 +1,6 @@
+nmrglue.fileio.rnmrtk.make_empty_dic
+====================================
+
+.. currentmodule:: nmrglue.fileio.rnmrtk
+
+.. autofunction:: make_empty_dic

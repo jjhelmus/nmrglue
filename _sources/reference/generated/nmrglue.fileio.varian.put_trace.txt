@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.put_trace
+===============================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: put_trace

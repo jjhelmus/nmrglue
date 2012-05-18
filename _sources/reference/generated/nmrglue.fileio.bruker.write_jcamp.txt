@@ -1,0 +1,6 @@
+nmrglue.fileio.bruker.write_jcamp
+=================================
+
+.. currentmodule:: nmrglue.fileio.bruker
+
+.. autofunction:: write_jcamp

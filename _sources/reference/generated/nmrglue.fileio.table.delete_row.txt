@@ -1,0 +1,6 @@
+nmrglue.fileio.table.delete_row
+===============================
+
+.. currentmodule:: nmrglue.fileio.table
+
+.. autofunction:: delete_row

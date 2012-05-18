@@ -1,0 +1,6 @@
+nmrglue.util.misc.pair_similar
+==============================
+
+.. currentmodule:: nmrglue.util.misc
+
+.. autofunction:: pair_similar

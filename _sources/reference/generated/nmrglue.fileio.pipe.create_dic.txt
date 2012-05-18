@@ -1,0 +1,6 @@
+nmrglue.fileio.pipe.create_dic
+==============================
+
+.. currentmodule:: nmrglue.fileio.pipe
+
+.. autofunction:: create_dic
