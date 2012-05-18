@@ -24,9 +24,11 @@ the file with nmrglue.
 
 """
 
-import numpy as np
 import os
-import fileiobase
+
+import numpy as np
+
+from . import fileiobase
 from ..process import proc_base
 
 # data creation
@@ -36,16 +38,29 @@ def create_data(data):
     Create a bruker data array (recast into a complex128 or int32)
     """
     if np.iscomplexobj(data):
-        return np.array(data,dtype='complex128')
+        return np.array(data, dtype='complex128')
     else:
-        return np.array(data,dtype='int32')
+        return np.array(data, dtype='int32')
 
 
 # universal dictionary functions
 
-def guess_udic(dic,data):
+def guess_udic(dic, data):
     """ 
-    Guess parameters of universal dictionary from dic,data pair
+    Guess parameters of universal dictionary from dic, data pair.
+
+    Parameters
+    ----------
+    dic : dict
+        Dictionary of Bruker parameters.
+    data : ndarray
+        Array of NMR data.
+
+    Returns
+    -------
+    udic : dict
+        Universal dictionary of spectral parameters.
+
     """
     # XXX if pprog, acqus are in dic use them 
     
@@ -60,85 +75,99 @@ def guess_udic(dic,data):
 
 def create_dic(udic):
     """ 
-    Create a bruker dictionary from a universal dictionary
+    Create a Bruker parameter dictionary from a universal dictionary.
+
+    Parameters
+    ----------
+    udic : dict
+        Universal dictionary of spectral parameters.
+
+    Returns
+    -------
+    dic : dict
+        Dictionary of Bruker parameters.
+
     """
     ndim = udic['ndim']
 
     # determind the size in bytes
-    if udic[ndim-1]["complex"]:
+    if udic[ndim - 1]["complex"]:
         bytes = 8
     else:
         bytes = 4
 
     for k in xrange(ndim): 
-        bytes*=udic[k]["size"]
+        bytes *= udic[k]["size"]
 
-    dic= {"FILE_SIZE":bytes}
+    dic = {"FILE_SIZE":bytes}
 
     # create the pprog dictionary parameter
-    dic["pprog"] = {'incr': [[],[1]]*(ndim*2-2), 'loop': [2]*(ndim*2-2),
-                    'ph_extra': [[]]*(ndim*2-2),'phase': [[]]*(ndim*2-2),
+    dic["pprog"] = {'incr': [[], [1]] * (ndim*2-2), 
+                    'loop': [2] * (ndim * 2 - 2),
+                    'ph_extra': [[]] * (ndim * 2 - 2),
+                    'phase': [[]] * (ndim * 2 - 2),
                     'var': {}}
     
-    
     # create acqus dictionary parameters and fill in loop sizes
-    dic['acqus'] = create_acqus_dic(udic[ndim-1],direct=True)
+    dic['acqus'] = create_acqus_dic(udic[ndim - 1], direct=True)
     if ndim >= 2:
-        dic["acqu2s"] = create_acqus_dic(udic[ndim-2])
-        dic["pprog"]["loop"][1] = udic[ndim-2]["size"]/2
+        dic["acqu2s"] = create_acqus_dic(udic[ndim - 2])
+        dic["pprog"]["loop"][1] = udic[ndim - 2]["size"] / 2
     if ndim >= 3:
-        dic["acqu3s"] = create_acqus_dic(udic[ndim-3])
-        dic["pprog"]["loop"][3] = udic[ndim-3]["size"]/2
+        dic["acqu3s"] = create_acqus_dic(udic[ndim - 3])
+        dic["pprog"]["loop"][3] = udic[ndim - 3]["size"] / 2
     if ndim >= 4:
-        dic["acqu4s"] = create_acqus_dic(udic[ndim-4])
-        dic["pprog"]["loop"][5] = udic[ndim-4]["size"]/2
+        dic["acqu4s"] = create_acqus_dic(udic[ndim - 4])
+        dic["pprog"]["loop"][5] = udic[ndim - 4]["size"] / 2
     
     return dic
 
-def create_acqus_dic(adic,direct=False):
+def create_acqus_dic(adic, direct=False):
     """
-    Create a acqus dictionary for an universal axis dictionary.  Set 
-    direct=True for direct dimension.
+    Create a Bruker acqus dictionary from an Universal axis dictionary.  
+    Set direct=True for direct dimension.
     """
-
     if adic["complex"]:
         AQ_mod = 3
         if direct:
-            TD = int( np.ceil(adic["size"]/256.)*256 )*2
+            TD = int(np.ceil(adic["size"] / 256.) * 256 ) * 2
         else:
             TD = adic["size"]
     else:
         AQ_mod = 1
         if direct:
-            TD = int( np.ceil(adic["size"]/256.)*256 )
+            TD = int(np.ceil(adic["size"] / 256.) * 256)
         else:
             TD = adic["size"]
 
     s = '##NMRGLUE automatically created parameter file'
-    return {'_comments':[],'_coreheader':[s],'AQ_mod':AQ_mod,'TD':TD}
+    return {'_comments':[], '_coreheader':[s], 'AQ_mod':AQ_mod, 'TD':TD}
 
 
 # Global read/write function and related utilities
 
-def read(dir=".",bin_file=None,acqus_files=None,pprog_file=None,shape=None,
-         cplex=None,big=None,read_prog=True,read_acqus=True):
+def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
+        shape=None, cplex=None, big=None, read_prog=True, read_acqus=True):
     """ 
-    Read Bruker files in directory
+    Read Bruker files from a directory.
 
     Parameters
     ----------
     dir : str
-        Directory to read from
+        Directory to read from.
     bin_file : str, optional
-        Filename of binary file, if None looks for standard files.
+        Filename of binary file in directory. None uses standard files.
     acqus_files : list, optional
-        List of filename(s) of acqus parameter files in directory.
-    pprog_files : str, optional
-        Filename of pulse program in directory.
+        List of filename(s) of acqus parameter files in directory. None uses
+        standard files.
+    pprog_file : str, optional
+        Filename of pulse program in directory. None uses standard files.
     shape : tuple, optional
-        Shape of resulting data.
+        Shape of resulting data.  None will guess the shape from the spectral
+        parameters.
     cplex : bool, optional
-        True is direct dimension is complex, False otherwise.
+        True is direct dimension is complex, False otherwise. None will guess
+        quadrature from spectral parameters.
     big : bool or None, optional
         Endiness of binary file. True of big-endian, False for little-endian,
         None to determine endiness from acqus file(s).
@@ -150,28 +179,32 @@ def read(dir=".",bin_file=None,acqus_files=None,pprog_file=None,shape=None,
     Returns
     -------
     dic : dict
-        Dictionary of spectral parameters.
+        Dictionary of Bruker parameters.
     data : ndarray
-        NMR data.
+        Array of NMR data.
+
+    See Also
+    --------
+    read_lowmem : Low memory reading of Bruker files.
+    write : Write Bruker files.
 
     """
-
     if os.path.isdir(dir) != True:
-        raise IOError,"directory %s does not exist"%(dir)
+        raise IOError, "directory %s does not exist" % (dir)
 
     # determind parameter automatically
     if bin_file == None:
-        if os.path.isfile(os.path.join(dir,"fid")):
+        if os.path.isfile(os.path.join(dir, "fid")):
             bin_file = "fid"
-        elif os.path.isfile(os.path.join(dir,"ser")):
+        elif os.path.isfile(os.path.join(dir, "ser")):
             bin_file = "ser"
         else:
-            raise IOError,"no Bruker binary file could be found in %s"%(dir)
+            raise IOError,"No Bruker binary file could be found in %s" % (dir)
 
     if acqus_files == None:
         acqus_files = []
-        for f in ["acqus","acqu2s","acqu3s","acqu4s"]:
-            if os.path.isfile(os.path.join(dir,f)):
+        for f in ["acqus", "acqu2s", "acqu3s", "acqu4s"]:
+            if os.path.isfile(os.path.join(dir, f)):
                 acqus_files.append(f)
 
     if pprog_file == None:
@@ -183,21 +216,21 @@ def read(dir=".",bin_file=None,acqus_files=None,pprog_file=None,shape=None,
     # read the acqus_files and add to the dictionary
     if read_acqus:
         for f in acqus_files:
-            dic[f] = read_jcamp(os.path.join(dir,f))
+            dic[f] = read_jcamp(os.path.join(dir, f))
 
     # read the pulse program and add to the dictionary
     if read_prog:
-        dic["pprog"] = read_pprog(os.path.join(dir,pprog_file))
+        dic["pprog"] = read_pprog(os.path.join(dir, pprog_file))
 
     # determind file size and add to the dictionary
-    dic["FILE_SIZE"] = os.stat(os.path.join(dir,bin_file)).st_size
+    dic["FILE_SIZE"] = os.stat(os.path.join(dir, bin_file)).st_size
 
     # determind shape and complexity for direct dim if needed
     if shape == None or cplex == None:
-        gshape,gcplex = guess_shape(dic)
-        if gcplex==True:    # divide last dim by 2 if complex
+        gshape, gcplex = guess_shape(dic)
+        if gcplex == True:    # divide last dim by 2 if complex
             t = list(gshape)
-            t[-1]=t[-1]/2
+            t[-1] = t[-1] / 2
             gshape = tuple(t)
     if shape == None:
         shape = gshape
@@ -214,52 +247,48 @@ def read(dir=".",bin_file=None,acqus_files=None,pprog_file=None,shape=None,
                 big = False
 
     # read the binary file
-    f = os.path.join(dir,bin_file)
-    null,data = read_binary(f,shape=shape,cplex=cplex,big=big)
-    return dic,data
+    f = os.path.join(dir, bin_file)
+    null, data = read_binary(f, shape=shape, cplex=cplex, big=big)
+    return dic, data
 
 
-def read_lowmem(dir=".",bin_file=None,acqus_files=None,pprog_file=None,
-               shape=None,cplex=None,big=None,read_prog=True,read_acqus=True):
+def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
+        shape=None, cplex=None, big=None, read_prog=True, read_acqus=True):
     """ 
-    Read Bruker files using minimal amounts of memory 
+    Read Bruker files from a directory using minimal amounts of memory.
 
-    Parameters:
+    See :py:func:`read` for Parameters.
 
-    * dir           Directory to read from.
-    * bin_file      Filename of binary file in directory.
-    * acqus_files   List of filename(s) of acqus parameter files in directory.
-    * pprog_file    Filename of pulseprogram in directory.
-    * shape         Shape of resulting data (tuple).
-    * cplex         Complexity of direct dimention (True/False).
-    * big           Endianness of binary file. Set to True for big-endian, 
-                    False for little-endian and None to determind automatically
-    * read_pprog    True will read pulseprogram file, False prevents reading.
-    * read_acqus    True will read acqus file(s), False prevents reading.
+    Returns
+    -------
+    dic : dict
+        Dictionary of Bruker parameters.
+    data : array_like
+        Low memory object which can access NMR data on demand.
 
-    Returns: dic,data
-
-    Only the dir parameter must be defined, others will be determined 
-    automatically if not specified.
+    See Also
+    --------
+    read : Read Bruker files. 
+    write_lowmem : Write Bruker files using minimal amounts of memory.
 
     """
 
     if os.path.isdir(dir) != True:
-        raise IOError,"directory %s does not exist"%(dir)
+        raise IOError, "directory %s does not exist" % (dir)
 
     # determind parameter automatically
     if bin_file == None:
-        if os.path.isfile(os.path.join(dir,"fid")):
+        if os.path.isfile(os.path.join(dir, "fid")):
             bin_file = "fid"
-        elif os.path.isfile(os.path.join(dir,"ser")):
+        elif os.path.isfile(os.path.join(dir, "ser")):
             bin_file = "ser"
         else:
-            raise IOError,"no Bruker binary file could be found in %s"%(dir)
+            raise IOError, "no Bruker binary file could be found in %s" % (dir)
 
     if acqus_files == None:
         acqus_files = []
-        for f in ["acqus","acqu2s","acqu3s","acqu4s"]:
-            if os.path.isfile(os.path.join(dir,f)):
+        for f in ["acqus", "acqu2s", "acqu3s", "acqu4s"]:
+            if os.path.isfile(os.path.join(dir, f)):
                 acqus_files.append(f)
 
     if pprog_file == None:
@@ -271,21 +300,21 @@ def read_lowmem(dir=".",bin_file=None,acqus_files=None,pprog_file=None,
     # read the acqus_files and add to the dictionary
     if read_acqus:
         for f in acqus_files:
-            dic[f] = read_jcamp(os.path.join(dir,f))
+            dic[f] = read_jcamp(os.path.join(dir, f))
 
     # read the pulse program and add to the dictionary
     if read_prog:
-        dic["pprog"] = read_pprog(os.path.join(dir,pprog_file))
+        dic["pprog"] = read_pprog(os.path.join(dir, pprog_file))
 
     # determind file size and add to the dictionary
-    dic["FILE_SIZE"] = os.stat(os.path.join(dir,bin_file)).st_size
+    dic["FILE_SIZE"] = os.stat(os.path.join(dir, bin_file)).st_size
 
     # determind shape and complexity for direct dim if needed
     if shape == None or cplex == None:
-        gshape,gcplex = guess_shape(dic)
-        if gcplex==True:    # divide last dim by 2 if complex
+        gshape, gcplex = guess_shape(dic)
+        if gcplex == True:    # divide last dim by 2 if complex
             t = list(gshape)
-            t[-1]=t[-1]/2
+            t[-1] = t[-1] / 2
             gshape = tuple(t)
     if shape == None:
         shape = gshape
@@ -302,38 +331,48 @@ def read_lowmem(dir=".",bin_file=None,acqus_files=None,pprog_file=None,
                 big = False
 
     # read the binary file
-    f = os.path.join(dir,bin_file)
-    null,data = read_binary_lowmem(f,shape=shape,cplex=cplex,big=big)
-    return dic,data
+    f = os.path.join(dir, bin_file)
+    null, data = read_binary_lowmem(f, shape=shape, cplex=cplex, big=big)
+    return dic, data
 
 
-def write(dir,dic,data,bin_file=None,acqus_files=None,pprog_file=None,
-    overwrite=False,big=None,write_prog=True,write_acqus=True):
+def write(dir, dic, data, bin_file=None, acqus_files=None, pprog_file=None,
+        overwrite=False, big=None, write_prog=True, write_acqus=True):
     """ 
-    Write Bruker files 
+    Write Bruker files to disk.
 
-    Parameters:
-
-    * dir           Directory to write to.
-    * dic           dictionary holding acqus_files and pprog_file parameters.
-    * data          array of data
-    * bin_file      Filename of binary file to write to in directory
-    * acqus_files   Filename(s) of acqus files in directory to write to.
-    * pprog_file    Filename of pulseprogram in directory.
-    * overwrite     True to overwrite files, False to warn.
-    * big           Endiness to write binary data with,
-                    bigendian=True, little=False, determined from dictionary
-                    if None.
-    * write_prog    True will write pulseprogram file, False does not.
-    * write_acqus   True will write acqus file(s), False does not.
-
-    No return.
-
-    If any of bin_file,acqus_files or pprog_file are None the associated 
-    file(s) will be determined automatically
+    Parameters
+    ----------
+    dir : str
+        Directory to write files to.
+    dir : dict
+        Dictionary of Bruker parameters.
+    data : array_like
+        Array of NMR data
+    bin_file : str, optional
+        Filename of binary file in directory. None uses standard files.
+    acqus_files : list, optional
+        List of filename(s) of acqus parameter files in directory. None uses
+        standard files.
+    pprog_file : str, optional
+        Filename of pulse program in directory. None uses standard files.
+    overwrite : bool, optional
+        Set True to overwrite files, False will raise a Warning if files 
+        exist.
+    big : bool or None, optional
+        Endiness of binary file. True of big-endian, False for little-endian,
+        None to determine endiness from Bruker dictionary.
+    write_pprog : bool, optional
+        True to write the pulse program file, False prevents writing.
+    write_acqus : bool, optional
+        True to write the acqus files(s), False prevents writing.
+    
+    See Also
+    --------
+    write_lowmem : Write Bruker files using minimal amounts of memory.
+    read : Read Bruker files.
 
     """
-
     # determind parameters automatically
     if bin_file == None:
         if data.ndim == 1:
@@ -342,22 +381,21 @@ def write(dir,dic,data,bin_file=None,acqus_files=None,pprog_file=None,
             bin_file = "ser"
 
     if acqus_files == None:
-        acq = ["acqus","acqu2s","acqu3s","acqu4s"]
+        acq = ["acqus", "acqu2s", "acqu3s", "acqu4s"]
         acqus_files = [k for k in acq if dic.has_key(k)]
 
     if pprog_file == None:
         pprog_file = "pulseprogram"
 
-
     # write out the acqus files
     if write_acqus:
         for f in acqus_files:
-            write_jcamp(dic[f],os.path.join(dir,f),overwrite=overwrite)
+            write_jcamp(dic[f], os.path.join(dir, f), overwrite=overwrite)
 
     # write out the pulse program
     if write_prog:
-        write_pprog(os.path.join(dir,pprog_file),dic["pprog"],
-                    overwrite=overwrite)
+        write_pprog(os.path.join(dir, pprog_file), dic["pprog"], 
+                        overwrite=overwrite)
     
     # determind endianness (assume little-endian unless BYTORDA is 1)
     if big == None:
@@ -369,35 +407,23 @@ def write(dir,dic,data,bin_file=None,acqus_files=None,pprog_file=None,
                 big = False
 
     # write out the binary data
-    bin_full = os.path.join(dir,bin_file)
-    write_binary(bin_full,dic,data,big=big,overwrite=overwrite)
-
+    bin_full = os.path.join(dir, bin_file)
+    write_binary(bin_full, dic, data, big=big, overwrite=overwrite)
     return
 
 
-def write_lowmem(dir,dic,data,bin_file=None,acqus_files=None,pprog_file=None,
-    overwrite=False,big=None,write_prog=True,write_acqus=True):
+def write_lowmem(dir, dic, data, bin_file=None, acqus_files=None, 
+        pprog_file=None, overwrite=False, big=None, write_prog=True, 
+        write_acqus=True):
     """ 
-    Write Bruker files trace by trace (low memory)
+    Write Bruker files using minimal amounts of memory (trace by trace).
 
-    Parameters:
+    See :py:func:`write` for Parameters.
 
-    * dir           Directory to write to.
-    * dic           dictionary holding acqus_files and pprog_file parameters.
-    * data          array of data
-    * bin_file      Filename of binary file to write to in directory
-    * acqus_files   Filename(s) of acqus files in directory to write to.
-    * pprog_file    Filename of pulseprogram in directory.
-    * overwrite     True to overwrite files, False to warn.
-    * big           Endiness to write binary data with,
-                    bigendian=True, little=False
-    * write_prog    True will write pulseprogram file, False does not.
-    * write_acqus   True will write acqus file(s), False does not.
-
-    No return.
-
-    If any of bin_file,acqus_files or pprog_file are None the associated 
-    file(s) will be determined automatically
+    See Also
+    --------
+    write : Write Bruker files.
+    read_lowmem : Read Bruker files using minimal amounts of memory.
 
     """
     # determind parameters automatically
@@ -408,21 +434,20 @@ def write_lowmem(dir,dic,data,bin_file=None,acqus_files=None,pprog_file=None,
             bin_file = "ser"
 
     if acqus_files == None:
-        acq = ["acqus","acqu2s","acqu3s","acqu4s"]
+        acq = ["acqus", "acqu2s", "acqu3s", "acqu4s"]
         acqus_files = [k for k in acq if dic.has_key(k)]
 
     if pprog_file == None:
         pprog_file = "pulseprogram"
 
-
     # write out the acqus files
     if write_acqus:
         for f in acqus_files:
-            write_jcamp(dic[f],os.path.join(dir,f),overwrite=overwrite)
+            write_jcamp(dic[f], os.path.join(dir, f), overwrite=overwrite)
 
     # write out the pulse program
     if write_prog:
-        write_pprog(os.path.join(dir,pprog_file),dic["pprog"],
+        write_pprog(os.path.join(dir, pprog_file), dic["pprog"],
                     overwrite=overwrite)
 
     # determind endianness (assume little-endian unless BYTORDA is 1)
@@ -435,20 +460,20 @@ def write_lowmem(dir,dic,data,bin_file=None,acqus_files=None,pprog_file=None,
                 big = False
 
     # write out the binary data
-    bin_full = os.path.join(dir,bin_file)
-    write_binary_lowmem(bin_full,dic,data,big=big,overwrite=overwrite)
-
+    bin_full = os.path.join(dir, bin_file)
+    write_binary_lowmem(bin_full, dic, data, big=big, overwrite=overwrite)
     return
-
 
 def guess_shape(dic):
     """
-    Determine data shape and complexity from parameters in dictionary
+    Determine data shape and complexity from Bruker dictionary.
 
-    Returns: (shape,cplex)
-
-    * shape Tuple represeting shape of data in binary file (R+I for all dims) 
-    * cplex True for complex data in last (direct) dimension, false otherwise
+    Returns
+    -------
+    shape : tuple
+        Shape of data in Bruker binary file (R+I for all dimensions).
+    cplex : bool 
+        True for complex data in last (direct) dimension, False otherwise.
 
     """
     # determine complexity of last (direct) dimension
@@ -469,7 +494,7 @@ def guess_shape(dic):
         fsize = dic["FILE_SIZE"]
     except KeyError:
         print "Warning: cannot determine shape do to missing FILE_SIZE key"
-        return (1,),True
+        return (1,), True
     
     # extract td0,td1,td2,td3 from dictionaries
     try:
@@ -496,22 +521,22 @@ def guess_shape(dic):
     # rounded up to nearest 256
     # next-to-last dimension may be given by "TD" in acqu2s. In 3D+ data
     # this is often the sum of the indirect dimensions
-    shape  = [0,0,td2,int(np.ceil(td0/256.)*256.)]
+    shape  = [0, 0, td2, int(np.ceil(td0 / 256.)*256.)]
     
     # additional dimension given by data size
-    if shape[2] !=0 and shape[3] != 0:
-        shape[1] = fsize/(shape[3]*shape[2]*4)
-        shape[0] = fsize/(shape[3]*shape[2]*16*4)
+    if shape[2] != 0 and shape[3] != 0:
+        shape[1] = fsize / (shape[3] * shape[2] * 4)
+        shape[0] = fsize / (shape[3] * shape[2] * 16 * 4)
     
     # if there in no pulse program parameters in dictionary return currect
     # shape after removing zeros
     if "pprog" not in dic or "loop" not in dic["pprog"]:
-        return tuple([int(i) for i in shape if i>=1]),cplex
+        return tuple([int(i) for i in shape if i >= 1]), cplex
 
     # if pulseprogram dictionary is missing loop or incr return current shape
     pprog = dic["pprog"]
     if "loop" not in pprog or "incr" not in pprog:
-        return tuple([int(i) for i in shape if i>=1]),cplex
+        return tuple([int(i) for i in shape if i >= 1]), cplex
 
     # determine indirect dimension sizes from pulseprogram parameters
     loop = pprog["loop"]
@@ -519,8 +544,8 @@ def guess_shape(dic):
     li = [len(i) for i in pprog["incr"]] # length of incr lists
 
     # replace td0,td1,td2,td3 in loop list
-    rep = {'td0':td0,'td1':td1,'td2':td2,'td3':td3}
-    for i,v in enumerate(loop):
+    rep = {'td0' : td0, 'td1' : td1, 'td2' : td2, 'td3' : td3}
+    for i, v in enumerate(loop):
         if v in rep.keys():
             loop[i] = rep[v]
              
@@ -534,168 +559,181 @@ def guess_shape(dic):
 
     # The following checks for these and updates the indirect dimension
     # if the above is found.
-    
-    if loopn==1:    # 2D with no leading passive loops
-        if li[0]!=0:
+    if loopn == 1:    # 2D with no leading passive loops
+        if li[0] != 0:
             shape[2] = loop[0]
             shape = shape[-2:]
     
-    elif loopn==2:  # 2D with one leading passive loop
-        if loop[0]==2 and li[0]==0 and li[1]!=0:
-            shape[2] = 2*loop[1]
+    elif loopn == 2:  # 2D with one leading passive loop
+        if loop[0] == 2 and li[0] == 0 and li[1] != 0:
+            shape[2] = 2 * loop[1]
             shape = shape[-2:]
 
-    elif loopn==3:  # 2D with two leading passive loops
-        if loop[0]==2 and loop[1]==2 and li[0]==0 and li[1]==0 and li[2]!=0:
-            shape[2] = 2*loop[2]
+    elif loopn == 3:  # 2D with two leading passive loops
+        if (loop[0] == 2 and loop[1] == 2 and li[0] == 0 and li[1] == 0 
+            and li[2] != 0):
+            shape[2] = 2 * loop[2]
             shape = shape[-2:]
 
-    elif loopn==4:  # 3D with one leading passive loop for each indirect dim
-        if loop[0]==2 and li[0]==0 and li[1]!=0:
-            shape[2] = 2*loop[1]
-        if loop[2]==2 and li[2]==0 and li[3]!=0:
-            shape[1] = 2*loop[3]
+    elif loopn == 4:  # 3D with one leading passive loop for each indirect dim
+        if loop[0] == 2 and li[0] == 0 and li[1] != 0:
+            shape[2] = 2 * loop[1]
+        if loop[2] == 2 and li[2] == 0 and li[3] != 0:
+            shape[1] = 2 * loop[3]
             shape = shape[-3:]
 
-    elif loopn==5:  # 3D with two/one leading passive loops
-        if loop[1]==2 and li[0]==0 and li[1]==0 and li[2]!=0:
-            shape[2] = 2*loop[2]
-        if loop[3]==2 and li[0]==0 and li[3]==0 and li[4]!=0:
-            shape[1] = 2*loop[4]
+    elif loopn == 5:  # 3D with two/one leading passive loops
+        if loop[1] == 2 and li[0] == 0 and li[1] == 0 and li[2] != 0:
+            shape[2] = 2 * loop[2]
+        if loop[3] == 2 and li[0] == 0 and li[3] == 0 and li[4] != 0:
+            shape[1] = 2 * loop[4]
             shape = shape[-3:]
 
-    elif loopn==6:  # 4D with one leading passive loop for each indirect dim
-        if loop[0]==2 and li[0]==0 and li[1]!=0:
-            shape[2] = 2*loop[1]
-        if loop[2]==2 and li[2]==0 and li[3]!=0:
-            shape[1] = 2*loop[3]
-        if loop[4]==2 and li[4]==0 and li[5]!=0:
-            shape[0] = 2*loop[5]
+    elif loopn == 6:  # 4D with one leading passive loop for each indirect dim
+        if loop[0] == 2 and li[0] == 0 and li[1] != 0:
+            shape[2] = 2 * loop[1]
+        if loop[2] == 2 and li[2] == 0 and li[3] != 0:
+            shape[1] = 2 * loop[3]
+        if loop[4] == 2 and li[4] == 0 and li[5] != 0:
+            shape[0] = 2 * loop[5]
             
-    elif loopn==7:
-        if loop[1]==2 and li[0]==0 and li[1]==0 and li[2]!=0:
-            shape[2] = 2*loop[2]
-        if loop[3]==2 and li[0]==0 and li[3]==0 and li[4]!=0:
-            shape[1] = 2*loop[4]
-        if loop[5]==2 and li[0]==0 and lo[5]==0 and li[6]!=0:
-            shape[0] = 2*loop[6]
+    elif loopn == 7:
+        if loop[1] == 2 and li[0] == 0 and li[1] == 0 and li[2] != 0:
+            shape[2] = 2 * loop[2]
+        if loop[3] == 2 and li[0] == 0 and li[3] == 0 and li[4] != 0:
+            shape[1] = 2 * loop[4]
+        if loop[5] == 2 and li[0] == 0 and li[5] == 0 and li[6] != 0:
+            shape[0] = 2 * loop[6]
 
-    return tuple([int(i) for i in shape if i>=2]),cplex
-
+    return tuple([int(i) for i in shape if i >= 2]), cplex
 
 # Bruker binary (fid/ser) reading and writing
 
 
-def read_binary(filename,shape=(1),cplex=True,big=True):
+def read_binary(filename, shape=(1), cplex=True, big=True):
     """ 
     Read Bruker binary data from file and return dic,data pair
 
-    Parameters:
+    If data cannot be reshaped as described a 1D representation of the data 
+    will be returned after printing a warning message.
+    
+    Parameters
+    ----------
+    filename : str 
+        Filename of Bruker binary file.
+    shape : tuple
+        Tuple describing shape of resulting data.
+    cplex : bool
+        Flag indicating if direct dimension is complex.
+    big : bool
+        Endianness of binary file, True for big-endian, False for 
+        little-endian.
 
-    * filename  Filename of Bruker binary file
-    * shape     Tuple describing shape of resulting file
-    * cplex     Flag indicating if direct dimension is complex
-    * big       Endianness of binary file, True for big-endian, False for 
-                little-endian
+    Returns
+    -------
+    dic : dict
+        Dictionary containing "FILE_SIZE" key and value.
+    data : ndarray
+        Array of raw NMR data.
 
-    Returns: dic,data.  dic contains "FILE_SIZE" key/value.
-
-    If data cannot be reshaped 1D version of data will be returned
+    See Also
+    --------
+    read_binary_lowmem : Read Bruker binary file using minimal memory.
 
     """
-    
     # open the file and get the data
     f = open(filename)
-    data = get_data(f,big=big)
+    data = get_data(f, big=big)
 
     # complexify if needed
     if cplex:
         data = complexify_data(data)
 
     # create dictionary
-    dic = {"FILE_SIZE":os.stat(filename).st_size}
+    dic = {"FILE_SIZE" : os.stat(filename).st_size}
 
     # reshape if possible
     try:
-        return dic,data.reshape(shape)
+        return dic, data.reshape(shape)
 
     except ValueError:
-        print "Warning:",data.shape,"cannot be shaped into",shape
-        return dic,data
+        print "Warning:", data.shape, "cannot be shaped into", shape
+        return dic, data
 
-
-def read_binary_lowmem(filename,shape=(1),cplex=True,big=True):
+def read_binary_lowmem(filename, shape=(1), cplex=True, big=True):
     """ 
     Read Bruker binary data from file using minimal memory.
 
-    Parameters:
+    Raises ValueError if shape does not agree with file size.
+    See :py:func:`read_binary` for Parameters.
+    
+    Returns
+    -------
+    dic : dict
+        Dictionary containing "FILE_SIZE" key and value.
+    data : array_like
+        Low memory object which can access NMR data on demand.
 
-    * filename  Filename of Bruker binary file
-    * shape     Tuple describing shape of resulting file
-    * cplex     Flag indicating if direct dimension is complex
-    * big       Endianness of binary file, True for big-endian, False for 
-                little-endian
-
-    Returns: dic,data.  dic contains "FILE_SIZE" key/value.
-
-    Raises ValueError if shape does not agree with file size
+    See Also
+    --------
+    read_binary: Read Bruker binary file.
 
     """
     # create dictionary
-    dic = {"FILE_SIZE":os.stat(filename).st_size}
-    data = bruker_nd(filename,shape,cplex,big)
-    return dic,data
+    dic = {"FILE_SIZE" : os.stat(filename).st_size}
+    data = bruker_nd(filename, shape, cplex, big)
+    return dic, data
 
-
-def write_binary(filename,dic,data,overwrite=False,big=True):
+def write_binary(filename, dic, data, overwrite=False, big=True):
     """ 
-    Write Bruker binary data to file
+    Write Bruker binary data to file.
 
-    Parameters:
-
-    * filename      Filename to write to.
-    * dic           dictionary holding acqus_files and pprog_file parameters.
-    * data          array of data
-    * overwrite     True to overwrite files, False to warn.
-    * big           Endiness to write binary data with,
-                    bigendian=True, little=False
+    Parameters
+    ----------
+    filename : str
+        Filename to write to.
+    dic : dict
+        Dictionary of Bruker parameters.
+    data : ndarray
+        Array of NMR data.
+    overwrite : bool
+        True to overwrite files, False will raise a Warning if file exists.
+    big : bool
+        Endiness to write binary data with True of big-endian, False for
+        little-endian.
     
-    No return.
+    See Also
+    --------
+    write_binary_lowmem : Write Bruker binary data using minimal memory.
 
     """
     # open the file for writing
-    f = fileiobase.open_towrite(filename,overwrite=overwrite)
+    f = fileiobase.open_towrite(filename, overwrite=overwrite)
     
     # convert objec to an array if it is not already one...
     if type(data) != np.ndarray:
         data = np.array(data)
 
     if np.iscomplexobj(data):
-        put_data(f,uncomplexify_data(data),big)
+        put_data(f, uncomplexify_data(data), big)
     else:
-        put_data(f,data,big)
-        
+        put_data(f, data, big)
     f.close()
     return
 
-def write_binary_lowmem(filename,dic,data,overwrite=False,big=True):
+def write_binary_lowmem(filename, dic, data, overwrite=False, big=True):
     """ 
-    Write Bruker binary data to file trace by trace (using minimal memory).
+    Write Bruker binary data to file using minimal memory (trace by trace).
 
-    Parameters:
+    See :py:func:`write_binary` for Parameters.
 
-    * filename      Filename to write to.
-    * dic           dictionary holding acqus_files and pprog_file parameters.
-    * data          array of data
-    * overwrite     True to overwrite files, False to warn.
-    * big           Endiness to write binary data with,
-                    bigendian=True, little=False
-    
-    No return.
+    See Also
+    --------
+    write_binary : Write Bruker binary data to file.
     
     """
     # open the file for writing
-    f = fileiobase.open_towrite(filename,overwrite=overwrite)
+    f = fileiobase.open_towrite(filename, overwrite=overwrite)
 
     cplex = np.iscomplexobj(data)
 
@@ -703,9 +741,9 @@ def write_binary_lowmem(filename,dic,data,overwrite=False,big=True):
     for tup in np.ndindex(data.shape[:-1]):
         trace = data[tup]
         if cplex:
-            put_data(f,uncomplexify_data(trace),big)
+            put_data(f, uncomplexify_data(trace), big)
         else:
-            put_data(f,trace,big)
+            put_data(f, trace, big)
     f.close()
     return
 
@@ -714,8 +752,8 @@ def write_binary_lowmem(filename,dic,data,overwrite=False,big=True):
 
 class bruker_nd(fileiobase.data_nd):
     """
-    Emulate a numpy.ndarray objects without loading data into memory for low
-    memory reading of Bruker fid/ser files
+    Emulate a ndarray objects without loading data into memory for low memory 
+    reading of Bruker fid/ser files.
 
     * slicing operations return ndarray objects.
     * can iterate over with expected results.
@@ -723,24 +761,38 @@ class bruker_nd(fileiobase.data_nd):
       ordering.
     * has ndim, shape, and dtype attributes.
 
+    Parameters
+    ----------
+
+    filename : str
+        Filename of Bruker binary file.
+    fshape : tuple
+        Shape of NMR data.
+    cplex : bool
+        Flag indicating if direct dimension is complex.
+    big : bool
+        Endianess of data.  True for big-endian, False for little-endian.
+    order : tuple
+        Ordering of axis against file.
+
     """
 
-    def __init__(self,filename,fshape,cplex,big,order=None):
+    def __init__(self, filename, fshape, cplex, big, order=None):
         """
-        Create and set up
+        Create and set up object.
         """
         
         # check that size is correct
-        pts = reduce(lambda x,y: x*y, fshape)
+        pts = reduce(lambda x, y: x*y, fshape)
         if cplex:
-            if os.stat(filename).st_size != pts*4*2:
+            if os.stat(filename).st_size != pts * 4 * 2:
                 raise ValueError("shape does not agree with file size")
         else:
-            if os.stat(filename).st_size != pts*4:
+            if os.stat(filename).st_size != pts * 4:
                 raise ValueError("shape does not agree with file size")
 
         # check order
-        if order==None:
+        if order == None:
             order = range(len(fshape))
         
         # finalize
@@ -757,21 +809,19 @@ class bruker_nd(fileiobase.data_nd):
         
         self.__setdimandshape__()   # set ndim and shape attributes
 
-    def __fcopy__(self,order):
+    def __fcopy__(self, order):
         """ 
         Create a copy
         """
-
-        n = bruker_nd(self.filename,self.fshape,self.cplex,self.big,order)
+        n = bruker_nd(self.filename, self.fshape, self.cplex, self.big, order)
         return n
 
-    def __fgetitem__(self,slices):
+    def __fgetitem__(self, slices):
         """
         return ndarray of selected values
 
-        slices is a well formatted n-tuple of slices
+        slices is a well formatted tuple of slices
         """
-
         # seperate the last slice from the first slices
         lslice = slices[-1]
         fslice = slices[:-1]
@@ -781,30 +831,30 @@ class bruker_nd(fileiobase.data_nd):
         ffshape = self.fshape[:-1]
 
         # find the output size and make a in/out nd interator
-        osize,nd_iter = fileiobase.size_and_ndtofrom_iter(ffshape,fslice)
-        osize.append( len( range(lfshape)[lslice]) )
+        osize, nd_iter = fileiobase.size_and_ndtofrom_iter(ffshape, fslice)
+        osize.append(len(range(lfshape)[lslice]))
 
         # create an empty array to store the selected slices
-        out = np.empty(tuple(osize),dtype=self.dtype)
+        out = np.empty(tuple(osize), dtype=self.dtype)
 
-        f = open(self.filename,'r')
+        f = open(self.filename, 'r')
 
         # read in the data trace by trace
-        for out_index,in_index in nd_iter:
+        for out_index, in_index in nd_iter:
 
             # determine the trace number from the index
-            ntrace = fileiobase.index2trace_flat(ffshape,in_index)
+            ntrace = fileiobase.index2trace_flat(ffshape, in_index)
 
             # seek to the correct place in the file
             if self.cplex:
-                ts = ntrace * lfshape * 2* 4
+                ts = ntrace * lfshape * 2 * 4
                 f.seek(ts)
-                trace = get_trace(f,lfshape*2,self.big)
+                trace = get_trace(f, lfshape * 2, self.big)
                 trace = complexify_data(trace)
             else:
                 ts = ntrace * lfshape * 2
                 f.seek(ts)
-                trace = get_trace(f,lfshape,self.big)
+                trace = get_trace(f, lfshape, self.big)
  
             # save to output
             out[out_index] = trace[lslice]
@@ -813,60 +863,53 @@ class bruker_nd(fileiobase.data_nd):
 
 # binary get/put functions
 
-def get_data(f,big):
+def get_data(f, big):
     """ 
     Get binary data from file object with given endiness
     """
     if big == True:
-        return np.frombuffer(f.read(),dtype='>i4')
+        return np.frombuffer(f.read(), dtype='>i4')
     else:
-        return np.frombuffer(f.read(),dtype='<i4')
+        return np.frombuffer(f.read(), dtype='<i4')
 
-def put_data(f,data,big=True):
+def put_data(f, data, big=True):
     """ 
     Put data to file object with given endiness
     """
-
     if big:
         f.write(data.astype('>i4').tostring())
     else:
         f.write(data.astype('<i4').tostring())
-    
     return
 
-def get_trace(f,num_points,big):
+def get_trace(f, num_points, big):
     """ 
     Get trace of num_points from file with given endiness
     """
     if big == True:
-        bsize = num_points*np.dtype('>i4').itemsize
-        return np.frombuffer(f.read(bsize),dtype='>i4')
+        bsize = num_points * np.dtype('>i4').itemsize
+        return np.frombuffer(f.read(bsize), dtype='>i4')
     else:
-        bsize = num_points*np.dtype('<i4').itemsize
-        return np.frombuffer(f.read(bsize),dtype='<i4')
-
+        bsize = num_points * np.dtype('<i4').itemsize
+        return np.frombuffer(f.read(bsize), dtype='<i4')
 
 # data manipulation functions
 
 def complexify_data(data):
     """ 
-    Complexify data packed real,imag data
+    Complexify data packed real, imag.
     """
-    return data[...,::2] + data[...,1::2]*1.j
-
+    return data[..., ::2] + data[..., 1::2]*1.j
 
 def uncomplexify_data(data_in):
     """ 
     Uncomplexify data (pack real,imag) into a int32 array
     """
     size = list(data_in.shape)
-    size[-1] = size[-1]*2
-
-    data_out = np.empty(size,dtype="int32")
-
-    data_out[...,::2]  = data_in.real
-    data_out[...,1::2] = data_in.imag
-
+    size[-1] = size[-1] * 2
+    data_out = np.empty(size, dtype="int32")
+    data_out[..., ::2]  = data_in.real
+    data_out[..., 1::2] = data_in.imag
     return data_out
 
 
@@ -974,18 +1017,25 @@ bruker_dsp_table = {
     }
 
 
-def remove_digital_filter(dic,data):
+def remove_digital_filter(dic, data):
     """
     Remove the digial filter from Bruker data.
 
-    Use rm_dig_filter to specify decim, dspfvs, and grpdly paraters.
+    Parameters
+    ----------
+    dic : dict
+        Dictionary of Bruker parameters.
+    data : ndarray
+        Array of NMR data to remove digital filter from.
 
-    Parameters:
+    Returns
+    -------
+    ndata : ndarray
+        Array of NMR data with digital filter removed
 
-    * dic   Dictionary of Bruker parameters
-    * data  array of data.
-
-    Returns: array with digital filter removed
+    See Also
+    ---------
+    rm_dig_filter : Remove digital filter by specifying parameters.
 
     """
     if 'acqus' not in dic:
@@ -1004,30 +1054,34 @@ def remove_digital_filter(dic,data):
     else:
         grpdly = dic['acqus']['GRPDLY']
 
-    return rm_dig_filter(data,decim,dspfvs,grpdly)
-
-
+    return rm_dig_filter(data, decim, dspfvs, grpdly)
     
-def rm_dig_filter(data,decim,dspfvs,grpdly=0):
+def rm_dig_filter(data, decim, dspfvs, grpdly=0):
     """
     Remove the digital filter from Bruker data.
 
-    Use remove_digital_filter to find parameters from Bruker dictionary.
+    Parameters
+    ----------
+    data : ndarray
+        Array of NMR data to remove digital filter from.
+    decim : int 
+        Decimation rate (Bruker DECIM parameter).
+    dspfvs : int    
+        Firmware version (Bruker DSPFVS parameter).
+    grpdly : float, optional
+        Group delay. (Bruker GRPDLY parameter). When non-zero decom and 
+        dspfvs are ignored.
 
-    Parameters:
-    
-    * data      Array of data.
-    * decim     Decimation rate (Bruker DECIM parameter).
-    * dspfvs    Firmware version (Bruker DSPFVS parameter).
-    * grpdly    Group delay, when available.  (Bruker GRPDLY parameter).
+    Returns
+    -------
+    ndata : ndarray
+        Array of NMR data with digital filter removed.
 
-    grpdly is not always needed, but when provided decim and dspfvs are 
-    ignored.
-
-    Returns: array with digital filter removed.
+    See Also
+    --------
+    remove_digital_filter : Remove digital filter using Bruker dictionary.
 
     """
-    
     # This algorithm gives results similar but not exactly the same
     # as NMRPipe.  It was worked out by examining sample FID converted using
     # NMRPipe against spectra shifted with nmrglue's processing functions.  
@@ -1051,8 +1105,6 @@ def rm_dig_filter(data,decim,dspfvs,grpdly=0):
     #    6 points, reverse the remaining points, and add then to the beginning
     #    of the spectra.  If less that 6 points were removed, leave the FID 
     #    alone.
-          
-    
     if grpdly > 0:  # use group delay value if provided (not 0 or -1)
         phase = grpdly
     
@@ -1069,64 +1121,75 @@ def rm_dig_filter(data,decim,dspfvs,grpdly=0):
 
     # and the number of points to remove (skip) and add to the beginning
     skip = int(np.floor(phase+2.))  # round up two integers
-    add = int(max(skip-6,0))        # 6 less, or 0
+    add = int(max(skip-6, 0))        # 6 less, or 0
 
     # DEBUG 
     #print "phase: %f, skip: %i add: %i"%(phase,skip,add)
 
     # frequency shift
-    pdata = proc_base.fsh2(data,-phase)
+    pdata = proc_base.fsh2(data, -phase)
     
     # add points at the end of the specta to beginning
-    pdata[...,:add] = pdata[...,:add]+pdata[...,:-(add+1):-1]
+    pdata[..., :add] = pdata[..., :add]+pdata[..., :-(add+1):-1]
     # remove points at end of spectra
-    return pdata[...,:-skip]
+    return pdata[..., :-skip]
 
 
 # JCAMP-DX functions
 
 def read_jcamp(filename):
     """ 
-    Read a Bruker JCAMP-DX file into a dictionary
+    Read a Bruker JCAMP-DX file into a dictionary.
 
-    Note: This is not a fully functional JCAMP-DX reader, it is only intended
-    to read Bruker acqus (and similar) files
+    Creates two special dictionary keys _coreheader and _comments Bruker 
+    parameter "$FOO" are extracted into strings, floats or lists and assigned 
+    to dic["FOO"]
 
-    Creates two special dictionary keys _coreheader and _comments
+    Parameters
+    ----------
+    filename : str
+        Filename of Bruker JCAMP-DX file.
 
-    Bruker parameter "$FOO" are extracted into strings, floats or lists
-    and assigned to dic["FOO"]
+    Returns
+    -------
+    dic : dict
+        Dictionary of parameters in file.
+
+    See Also
+    --------
+    write_jcamp : Write a Bruker JCAMP-DX file.
+
+    Notes
+    -----
+    This is not a fully functional JCAMP-DX reader, it is only intended
+    to read Bruker acqus (and similar) files.
 
     """
-    dic = {"_coreheader":[],"_comments":[]} # create empty dictionary
-    f = open(filename,'r')
+    dic = {"_coreheader":[], "_comments":[]}    # create empty dictionary
+    f = open(filename, 'r')
 
     # loop until EOF
     while len(f.read(1)):
         
-        f.seek(-1,os.SEEK_CUR)  # rewind 1 byte
+        f.seek(-1, os.SEEK_CUR)  # rewind 1 byte
         line = f.readline().rstrip()    # read a line
 
         if line[:6] == "##END=":
             #print "End of file"
             break
-
         elif line[:2] == "$$":
             dic["_comments"].append(line)
-
         elif line[:2] == "##" and line[2] != "$":
             dic["_coreheader"].append(line)
-
         elif line[:3] == "##$":
-            key,value = parse_jcamp_line(line,f)
+            key, value = parse_jcamp_line(line, f)
             dic[key] = value
-
         else:
-            print "Warning: Extraneous line:",line
+            print "Warning: Extraneous line:", line
 
     return dic
 
-def parse_jcamp_line(line,f):
+def parse_jcamp_line(line, f):
     """ 
     Parse a single JCAMP-DX line
     
@@ -1138,17 +1201,17 @@ def parse_jcamp_line(line,f):
 
     # extract key= text from line
     key = line[3:line.index("=")]
-    text = line[line.index("=")+1:].lstrip()
+    text = line[line.index("=") + 1:].lstrip()
 
     if "<" in text:   # string
         while ">" not in text:      # grab additional text until ">" in string
-            text = text+"\n"+f.readline().rstrip() 
-        value = text.replace("<","").replace(">","")
+            text = text + "\n" + f.readline().rstrip() 
+        value = text.replace("<", "").replace(">", "")
 
     elif "(" in text: # array
-        num = int(line[line.index("..")+2:line.index(")")])+1
+        num = int(line[line.index("..")+2:line.index(")")]) + 1
         value = []
-        rline = line[line.index(")")+1:]
+        rline = line[line.index(")") + 1:]
 
         # extract value from remainer of line
         for t in rline.split():
@@ -1178,14 +1241,14 @@ def parse_jcamp_line(line,f):
         else:
             value = int(text)
 
-    return key,value
+    return key, value
 
 
-def write_jcamp(dic,filename,overwrite=False):
+def write_jcamp(dic, filename, overwrite=False):
     """ 
     Write a Bruker JCAMP-DX file from a dictionary
 
-    Written file will differ slightly from bruker's JCAMP-DX files in that all
+    Written file will differ slightly from Bruker's JCAMP-DX files in that all
     multi-value parameters will be written on multiple lines. Bruker is 
     inconsistent on what is written to a single line and what is not.  
     In addition line breaks may be slightly different but will always be 
@@ -1197,13 +1260,28 @@ def write_jcamp(dic,filename,overwrite=False):
         ##$QS= (0..7)83 83 83 83 83 83 83 22
         
         will be written as
+
         ##$QS= (0..7)
         83 83 83 83 83 83 83 22
+
+    Parameters
+    ----------
+    dic : dict
+        Dictionary of parameters to write
+    filename : str
+        Filename of JCAMP-DX file to write
+    overwrite : bool, optional
+        True to overwrite an existing file, False will raise a Warning if the
+        file already exists.
+
+    See Also
+    --------
+    read_jcamp : Read a Bruker JCAMP-DX file.
 
     """
  
     # open the file for writing
-    f = fileiobase.open_towrite(filename,overwrite=overwrite)
+    f = fileiobase.open_towrite(filename, overwrite=overwrite)
 
     # create a copy of the dictionary
     d = dict(dic)
@@ -1227,39 +1305,38 @@ def write_jcamp(dic,filename,overwrite=False):
 
     # write out each key,value pair
     for key in keys:
-       write_jcamp_pair(f,key,d[key])
+        write_jcamp_pair(f, key, d[key])
 
     # write ##END= and close the file
-    
     f.write("##END=")
     f.close()
 
 
-def write_jcamp_pair(f,key,value):
+def write_jcamp_pair(f, key, value):
     """ 
-    Write out a line of a JCAMP file
+    Write out a line of a JCAMP file.
 
-    a 'line' might actually be more than one line for arrays
+    a line might actually be more than one line of text for arrays.
     """
 
     # the parameter name and such
-    line = "##$"+key+"= "
+    line = "##$" + key + "= "
 
     if type(value) == float or type(value) == int:  # simple numbers
         line = line + repr(value)
 
     elif type(value) == str:        # string
-        line = line+"<"+value+">"
+        line = line + "<" + value + ">"
 
     elif type(value) == bool:   # yes or no
         if value:
-            line = line+"yes"
+            line = line + "yes"
         else:
-            line = line+"no"
+            line = line + "no"
         
     elif type(value) == list:   # lists
         # write out the current line
-        line = line+"(0.."+repr(len(value)-1)+")"
+        line = line + "(0.." + repr(len(value) - 1) + ")"
         f.write(line)
         f.write("\n")
         line = ""
@@ -1275,15 +1352,15 @@ def write_jcamp_pair(f,key,value):
 
             to_add = repr(v)
 
-            if len(line+" "+to_add) > 80:
+            if len(line + " " + to_add) > 80:
                 f.write(line)
                 f.write("\n")
                 line = ""
 
             if line != "":
-                line = line+to_add+" "
+                line = line + to_add+" "
             else:
-                line = to_add+" "
+                line = to_add + " "
 
     # write out the line and a newline character
     f.write(line)
@@ -1295,35 +1372,49 @@ def write_jcamp_pair(f,key,value):
 
 def read_pprog(filename):
     """ 
-    Parse a Bruker pulse program (pulseprogram) file for information
+    Read a Bruker pulse program (pulseprogram) file.
 
-    Parameter:
-
-    * filename  name of pulseprogram file to read from
-
-    Returns a dictionary with following keys:
-
-    * var       dictionary of variables assigned in pulseprogram
-    * incr      list of lists containing increment times
-    * loop      list of loop multipliers
-    * phase     list of lists containing phase elements
-    * ph_extra  list of lists containing comments at the end of phase lines
+    Resultsing dictionary contains the following keys:
+    
+    ========    ===========================================================
+    key         description
+    ========    ===========================================================
+    var         dictionary of variables assigned in pulseprogram
+    incr        list of lists containing increment times
+    loop        list of loop multipliers
+    phase       list of lists containing phase elements
+    ph_extra    list of lists containing comments at the end of phase lines
+    ========    ===========================================================
 
     The incr,phase and ph_extra lists match up with loop list.  For example 
     incr[0],phase[0] and ph_extra[0] are all increment and phase commands 
     with comments which occur during loop 0 which has loop[0] steps.
 
+    Parameters
+    ----------
+    filename : str
+        Filename of pulseprogram file to read from,
+
+    Returns
+    -------
+    dic : dict
+        A dictionary with keys described above.
+    
+    See Also
+    --------
+    write_pprog : Write a Bruker pulse program to file.
+
     """
     
     # open the file
-    f = open(filename,'r')
+    f = open(filename, 'r')
 
     # initilize lists and dictionaries
     var = dict()
     loop = []
-    incr = [ [] ]
-    phase = [ [] ]
-    ph_extra = [ [] ]
+    incr = [[]]
+    phase = [[]]
+    ph_extra = [[]]
 
     # loop over lines in pulseprogram looking for loops, increment, 
     # assigments and phase commands
@@ -1339,7 +1430,7 @@ def read_pprog(filename):
 
         # remove label from text when first word is all digits or 
         # has "," as the last element
-        if len(text.split())!=0:
+        if len(text.split()) != 0:
             s = text.split()[0]
             if s.isdigit() or s[-1] == ",":
                 text = text[len(s):].strip()
@@ -1358,8 +1449,8 @@ def read_pprog(filename):
                 text = text.strip("\"")
                 t = text.split("=")
                 if len(t) >= 2:
-                    key,value = t[0],t[1]
-                    var[key]=value
+                    key, value = t[0], t[1]
+                    var[key] = value
                     #print line,"--Assignment"
                 else:
                     pass
@@ -1400,7 +1491,7 @@ def read_pprog(filename):
             phase[len(loop)].append(int(text.split()[1][2:]))
 
             # find the first space after "ip" and read past there
-            last = text.find(" ",text.index("ip"))
+            last = text.find(" ", text.index("ip"))
             if last == -1:
                 ph_extra[len(loop)].append("")
             else:
@@ -1418,52 +1509,66 @@ def read_pprog(filename):
     ph_extra.pop()
 
     # convert loop to numbers if possible
-    for i,t in enumerate(loop):
-
+    for i, t in enumerate(loop):
         if t.isdigit():
             loop[i] = int(t)
         else:
             if var.has_key(t) and var[t].isdigit():
-               loop[i] = int(var[t]) 
+                loop[i] = int(var[t]) 
 
     # create the output dictionary
-    dic = {"var":var,"incr":incr,"loop":loop,"phase":phase,"ph_extra":ph_extra}
+    dic = {"var":var, "incr":incr, "loop":loop, "phase":phase, 
+            "ph_extra":ph_extra}
 
     return dic
 
-def write_pprog(filename,dic,overwrite=False):
+def write_pprog(filename, dic, overwrite=False):
     """ 
-    Write a minimal Bruker pulse program 
+    Write a minimal Bruker pulse program to file.
     
-    DO NOT TRY TO RUN THE RESULTING PULSE PROGRAM
+    **DO NOT TRY TO RUN THE RESULTING PULSE PROGRAM**
 
     This pulse program should return the same dictionary when read using 
     read_pprog, nothing else.  The pulse program will be nonsense.
     
+    Parameters
+    ----------
+    filename : str
+        Filename of file to write pulse program to.
+    dic : dict
+        Dictionary of pulse program parameters.
+    overwrite : bool, optional
+        True to overwrite an existing file, False will raise a Warning if the
+        file already exists.
+
+    See Also
+    --------
+    read_pprog : Read a Bruker pulse program.
+
     """
     
     # open the file for writing
-    f = fileiobase.open_towrite(filename,overwrite=overwrite) 
+    f = fileiobase.open_towrite(filename, overwrite=overwrite) 
 
     # write a comment
     f.write("; Minimal Bruker pulseprogram created by write_pprog\n")
 
     # write our the variables
-    for k,v in dic["var"].iteritems():
-        f.write("\""+k+"="+v+"\"\n")
+    for k, v in dic["var"].iteritems():
+        f.write("\"" + k + "=" + v + "\"\n")
     
     # write out each loop
-    for i,steps in enumerate(dic["loop"]):
+    for i, steps in enumerate(dic["loop"]):
         
         # write our the increments
         for v in dic["incr"][i]:
-            f.write("d01 id"+str(v)+"\n")
+            f.write("d01 id" + str(v) + "\n")
             
         # write out the phases
-        for v,w in zip(dic["phase"][i],dic["ph_extra"][i]):
-            f.write("d01 ip"+str(v)+" "+str(w)+"\n")
+        for v, w in zip(dic["phase"][i], dic["ph_extra"][i]):
+            f.write("d01 ip" + str(v) + " " + str(w) + "\n")
 
-        f.write("lo to 0 times "+str(steps)+"\n")
+        f.write("lo to 0 times " + str(steps) + "\n")
 
     # close the file
     f.close()
