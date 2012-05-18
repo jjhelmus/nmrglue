@@ -9,6 +9,6 @@ simple interactive environment for examining a 2D spectrum from a NMRPipe
 file.  
 
 
-[`source code <el/interactive/2d_interactive/2d_interactive.py>`_]
+[:download:`source code <../../../examples/interactive/2d_interactive/2d_interactive.py>`]
 
-.. literalinclude:: el/interactive/2d_interactive/2d_interactive.py
+.. literalinclude:: ../../../examples/interactive/2d_interactive/2d_interactive.py

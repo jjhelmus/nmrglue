@@ -7,8 +7,8 @@ nmrglue.proc_lp
 
 This module is imported as nmrglue.proc_lp and can be called as such.
 
-High-Level Functions
---------------------
+User Functions
+--------------
 
 .. autosummary::
     :toctree: generated/
@@ -23,11 +23,12 @@ High-Level Functions
     lp_model
 
 
-These functions are called by high-level function are and most uses will not
-use them in common processing scripts.
 
-Low-Level Functions
+Developer Functions
 -------------------
+
+These functions are called by high-level function are and most users will not
+use them in common processing scripts.  Developers may be interested in them.
 
 .. autosummary::
     :toctree: generated/

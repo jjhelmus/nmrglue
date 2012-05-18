@@ -9,11 +9,12 @@ fileio modules
 
 .. toctree::
     :maxdepth: 2
-
+    
     bruker
     convert
     fileiobase
     pipe
+    rnmrtk
     sparky
     table
     varian
@@ -30,16 +31,16 @@ process modules
     pipe_proc
 
 
-
 analysis modules
 ----------------
 
 .. toctree::
     :maxdepth: 2
-
+    
     analysisbase
     helpers
     leastsqbound
+    lineshapes1d
     linesh
     peakpick
     segmentation
@@ -50,5 +51,5 @@ util modules
 
 .. toctree::
     :maxdepth: 1
-
+    
     misc

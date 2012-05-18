@@ -1,6 +1,6 @@
 nmrglue.process.proc_base.mir_center_onepoint
 =============================================
 
-.. currentmodule:: nmrglue.process
+.. currentmodule:: nmrglue.process.proc_base
 
-.. automethod:: proc_base.mir_center_onepoint
+.. autofunction:: mir_center_onepoint

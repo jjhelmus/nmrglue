@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nmrglue.process.pipe_proc.lp &mdash; nmrglue v0.2 documentation</title>
-    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <title>nmrglue.process.pipe_proc.lp &mdash; nmrglue 0.3-dev documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.2',
+        VERSION:     '0.3-dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +25,8 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="nmrglue v0.2 documentation" href="../../index.html" />
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.3-dev documentation" href="../../index.html" />
     <link rel="up" title="nmrglue.pipe_proc" href="../pipe_proc.html" />
     <link rel="next" title="nmrglue.process.pipe_proc.lpc" href="nmrglue.process.pipe_proc.lpc.html" />
     <link rel="prev" title="nmrglue.process.pipe_proc.zd" href="nmrglue.process.pipe_proc.zd.html" /> 
@@ -38,44 +42,19 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="nmrglue.process.pipe_proc.lpc.html" title="nmrglue.process.pipe_proc.lpc"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="nmrglue.process.pipe_proc.zd.html" title="nmrglue.process.pipe_proc.zd"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
           <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
           <li><a href="../pipe_proc.html" accesskey="U">nmrglue.pipe_proc</a> &raquo;</li> 
       </ul>
-    </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="nmrglue.process.pipe_proc.zd.html"
-                        title="previous chapter">nmrglue.process.pipe_proc.zd</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="nmrglue.process.pipe_proc.lpc.html"
-                        title="next chapter">nmrglue.process.pipe_proc.lpc</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../../_sources/reference/generated/nmrglue.process.pipe_proc.lp.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" size="18" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
@@ -84,9 +63,9 @@
             
   <div class="section" id="nmrglue-process-pipe-proc-lp">
 <h1>nmrglue.process.pipe_proc.lp<a class="headerlink" href="#nmrglue-process-pipe-proc-lp" title="Permalink to this headline">¶</a></h1>
-<dl class="staticmethod">
+<dl class="function">
 <dt id="nmrglue.process.pipe_proc.lp">
-<em class="property">static </em><tt class="descclassname">pipe_proc.</tt><tt class="descname">lp</tt><big>(</big><em>dic</em>, <em>data</em>, <em>pred='default'</em>, <em>x1='default'</em>, <em>xn='default'</em>, <em>ord=8</em>, <em>mode='f'</em>, <em>append='after'</em>, <em>bad_roots='auto'</em>, <em>mirror=None</em>, <em>fix_mode='on'</em>, <em>method='tls'</em><big>)</big><a class="headerlink" href="#nmrglue.process.pipe_proc.lp" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.process.pipe_proc.</tt><tt class="descname">lp</tt><big>(</big><em>dic</em>, <em>data</em>, <em>pred='default'</em>, <em>x1='default'</em>, <em>xn='default'</em>, <em>ord=8</em>, <em>mode='f'</em>, <em>append='after'</em>, <em>bad_roots='auto'</em>, <em>mirror=None</em>, <em>fix_mode='on'</em>, <em>method='tls'</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/pipe_proc.py#L2250"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.pipe_proc.lp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Linear Prediction</p>
 <p>Parameters are slightly different than NMRPipe.</p>
 <p>Parameters:</p>
@@ -155,6 +134,34 @@ the unit circle.</p>
           </div>
         </div>
       </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="nmrglue.process.pipe_proc.zd.html"
+                        title="previous chapter">nmrglue.process.pipe_proc.zd</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="nmrglue.process.pipe_proc.lpc.html"
+                        title="next chapter">nmrglue.process.pipe_proc.lpc</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/reference/generated/nmrglue.process.pipe_proc.lp.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
       <div class="clearer"></div>
     </div>
     <div class="related">
@@ -167,20 +174,22 @@ the unit circle.</p>
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="nmrglue.process.pipe_proc.lpc.html" title="nmrglue.process.pipe_proc.lpc"
              >next</a> |</li>
         <li class="right" >
           <a href="nmrglue.process.pipe_proc.zd.html" title="nmrglue.process.pipe_proc.zd"
              >previous</a> |</li>
-        <li><a href="../../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
           <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
           <li><a href="../pipe_proc.html" >nmrglue.pipe_proc</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2010, Jonathan J. Helmus.
-      Last updated on Apr 26, 2012.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+        &copy; Copyright 2010-2012, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

@@ -10,16 +10,16 @@ for examining data or publication.  In this example the box limits used in
 plotted with the box limits indicated by the dark dashed line.  To check peak
 assignments see :ref:`plot_2d_assignments`.
 
-[`source code <el/plotting/2d_boxes/plot_boxes.py>`_]
+[:download:`source code <../../../examples/plotting/2d_boxes/plot_boxes.py>`]
 
-.. literalinclude:: el/plotting/2d_boxes/plot_boxes.py
+.. literalinclude:: ../../../examples/plotting/2d_boxes/plot_boxes.py
 
-[`input file <el/plotting/2d_boxes/limits.in>`_]
+[:download:`input file <../../../examples/plotting/2d_boxes/limits.in>`]
 
-.. literalinclude:: el/plotting/2d_boxes/limits.in
+.. literalinclude:: ../../../examples/plotting/2d_boxes/limits.in
 
 Sample Figure
 
-[`T11.png <el/plotting/2d_boxes/T11.png>`_]
+[:download:`T11.png <../../../examples/plotting/2d_boxes/T11.png>`]
 
-.. image:: el/plotting/2d_boxes/T11.png
+.. image:: ../../../examples/plotting/2d_boxes/T11.png

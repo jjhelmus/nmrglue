@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nmrglue.proc_bl &mdash; nmrglue v0.2 documentation</title>
-    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <title>nmrglue.proc_bl &mdash; nmrglue 0.3-dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.2',
+        VERSION:     '0.3-dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +25,8 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="nmrglue v0.2 documentation" href="../index.html" />
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.3-dev documentation" href="../index.html" />
     <link rel="up" title="Reference Guide" href="index.html" />
     <link rel="next" title="nmrglue.process.proc_bl.base" href="generated/nmrglue.process.proc_bl.base.html" />
     <link rel="prev" title="nmrglue.process.proc_base.sum_flt" href="generated/nmrglue.process.proc_base.sum_flt.html" /> 
@@ -38,27 +42,99 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="generated/nmrglue.process.proc_bl.base.html" title="nmrglue.process.proc_bl.base"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="generated/nmrglue.process.proc_base.sum_flt.html" title="nmrglue.process.proc_base.sum_flt"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+        <li><a href="../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Reference Guide</a> &raquo;</li> 
       </ul>
-    </div>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-nmrglue.process.proc_bl">
+<span id="nmrglue-proc-bl"></span><span id="proc-bl"></span><h1>nmrglue.proc_bl<a class="headerlink" href="#module-nmrglue.process.proc_bl" title="Permalink to this headline">¶</a></h1>
+<p>A collection of NMR processing functions for filtering, smoothing, and 
+correcting spectral baselines.</p>
+<p>This module is imported as nmrglue.proc_bl and can be called as such.</p>
+<div class="section" id="user-functions">
+<h2>User Functions<a class="headerlink" href="#user-functions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.proc_bl.base.html#nmrglue.process.proc_bl.base" title="nmrglue.process.proc_bl.base"><tt class="xref py py-obj docutils literal"><span class="pre">base</span></tt></a>(data,&nbsp;nl[,&nbsp;nw])</td>
+<td>Linear (first-order) Baseline Correction based on node list.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.proc_bl.cbf.html#nmrglue.process.proc_bl.cbf" title="nmrglue.process.proc_bl.cbf"><tt class="xref py py-obj docutils literal"><span class="pre">cbf</span></tt></a>(data[,&nbsp;last,&nbsp;apply])</td>
+<td>Constant Baseline correction</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.proc_bl.cbf_explicit.html#nmrglue.process.proc_bl.cbf_explicit" title="nmrglue.process.proc_bl.cbf_explicit"><tt class="xref py py-obj docutils literal"><span class="pre">cbf_explicit</span></tt></a>(data[,&nbsp;calc,&nbsp;apply])</td>
+<td>Constant Baseline - explicit region</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.proc_bl.med.html#nmrglue.process.proc_bl.med" title="nmrglue.process.proc_bl.med"><tt class="xref py py-obj docutils literal"><span class="pre">med</span></tt></a>(data[,&nbsp;mw,&nbsp;sf,&nbsp;sigma])</td>
+<td>Median baseline correction</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.proc_bl.sol_general.html#nmrglue.process.proc_bl.sol_general" title="nmrglue.process.proc_bl.sol_general"><tt class="xref py py-obj docutils literal"><span class="pre">sol_general</span></tt></a>(data,&nbsp;filter[,&nbsp;w,&nbsp;mode])</td>
+<td>Solvent filter with generic filter.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.proc_bl.sol_boxcar.html#nmrglue.process.proc_bl.sol_boxcar" title="nmrglue.process.proc_bl.sol_boxcar"><tt class="xref py py-obj docutils literal"><span class="pre">sol_boxcar</span></tt></a>(data[,&nbsp;w,&nbsp;mode])</td>
+<td>Solvent filter with boxcar filter.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.proc_bl.sol_sine.html#nmrglue.process.proc_bl.sol_sine" title="nmrglue.process.proc_bl.sol_sine"><tt class="xref py py-obj docutils literal"><span class="pre">sol_sine</span></tt></a>(data[,&nbsp;w,&nbsp;mode])</td>
+<td>Solvent filter with sine-bell filter.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.proc_bl.sol_sine2.html#nmrglue.process.proc_bl.sol_sine2" title="nmrglue.process.proc_bl.sol_sine2"><tt class="xref py py-obj docutils literal"><span class="pre">sol_sine2</span></tt></a>(data[,&nbsp;w,&nbsp;mode])</td>
+<td>Solvent filter with square sine-bell filter.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.proc_bl.sol_gaussian.html#nmrglue.process.proc_bl.sol_gaussian" title="nmrglue.process.proc_bl.sol_gaussian"><tt class="xref py py-obj docutils literal"><span class="pre">sol_gaussian</span></tt></a>(data[,&nbsp;w,&nbsp;mode])</td>
+<td>Solvent filter with square gaussian filter.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="developer-functions">
+<h2>Developer Functions<a class="headerlink" href="#developer-functions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.proc_bl.calc_bl_linear.html#nmrglue.process.proc_bl.calc_bl_linear" title="nmrglue.process.proc_bl.calc_bl_linear"><tt class="xref py py-obj docutils literal"><span class="pre">calc_bl_linear</span></tt></a>(x,&nbsp;nl[,&nbsp;nw])</td>
+<td>Calculate a baseline using linear approximation between nodes</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.proc_bl.calc_bl_med.html#nmrglue.process.proc_bl.calc_bl_med" title="nmrglue.process.proc_bl.calc_bl_med"><tt class="xref py py-obj docutils literal"><span class="pre">calc_bl_med</span></tt></a>(x,&nbsp;mw,&nbsp;sf,&nbsp;sigma)</td>
+<td>Calculate a baseline using median baseline correction.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">nmrglue.proc_bl</a><ul>
-<li><a class="reference internal" href="#high-level-functions">High-Level Functions</a><ul>
+<li><a class="reference internal" href="#user-functions">User Functions</a><ul>
 </ul>
 </li>
-<li><a class="reference internal" href="#low-level-functions">Low-Level Functions</a><ul>
-</ul>
-</li>
-<li><a class="reference internal" href="#notimplemented">NotImplemented</a><ul>
+<li><a class="reference internal" href="#developer-functions">Developer Functions</a><ul>
 </ul>
 </li>
 </ul>
@@ -79,7 +155,7 @@
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -89,99 +165,6 @@
     </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body">
-            
-  <div class="section" id="module-nmrglue.process.proc_bl">
-<span id="nmrglue-proc-bl"></span><span id="proc-bl"></span><h1>nmrglue.proc_bl<a class="headerlink" href="#module-nmrglue.process.proc_bl" title="Permalink to this headline">¶</a></h1>
-<p>A collection of NMR processing functions for filtering, smoothing, and 
-correcting spectral baselines.</p>
-<p>This module is imported as nmrglue.proc_bl and can be called as such.</p>
-<div class="section" id="high-level-functions">
-<h2>High-Level Functions<a class="headerlink" href="#high-level-functions" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_bl.base.html#nmrglue.process.proc_bl.base" title="nmrglue.process.proc_bl.base"><tt class="xref py py-obj docutils literal"><span class="pre">base</span></tt></a>(data,&nbsp;nl[,&nbsp;nw])</td>
-<td>Linear (first-order) Baseline Correction based on node list.</td>
-</tr>
-<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_bl.cbf.html#nmrglue.process.proc_bl.cbf" title="nmrglue.process.proc_bl.cbf"><tt class="xref py py-obj docutils literal"><span class="pre">cbf</span></tt></a>(data,&nbsp;None[,&nbsp;last,&nbsp;apply])</td>
-<td>Constant Baseline correction</td>
-</tr>
-<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_bl.cbf_explicit.html#nmrglue.process.proc_bl.cbf_explicit" title="nmrglue.process.proc_bl.cbf_explicit"><tt class="xref py py-obj docutils literal"><span class="pre">cbf_explicit</span></tt></a>(data,&nbsp;None,&nbsp;None[,&nbsp;calc,&nbsp;apply])</td>
-<td>Constant Baseline - explicit region</td>
-</tr>
-<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_bl.med.html#nmrglue.process.proc_bl.med" title="nmrglue.process.proc_bl.med"><tt class="xref py py-obj docutils literal"><span class="pre">med</span></tt></a>(data[,&nbsp;mw,&nbsp;sf,&nbsp;sigma])</td>
-<td>Median baseline correction</td>
-</tr>
-<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_bl.sol_general.html#nmrglue.process.proc_bl.sol_general" title="nmrglue.process.proc_bl.sol_general"><tt class="xref py py-obj docutils literal"><span class="pre">sol_general</span></tt></a>(data,&nbsp;filter[,&nbsp;w,&nbsp;mode])</td>
-<td>Solvent filter with generic filter.</td>
-</tr>
-<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_bl.sol_boxcar.html#nmrglue.process.proc_bl.sol_boxcar" title="nmrglue.process.proc_bl.sol_boxcar"><tt class="xref py py-obj docutils literal"><span class="pre">sol_boxcar</span></tt></a>(data[,&nbsp;w,&nbsp;mode])</td>
-<td>Solvent filter with boxcar filter.</td>
-</tr>
-<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_bl.sol_sine.html#nmrglue.process.proc_bl.sol_sine" title="nmrglue.process.proc_bl.sol_sine"><tt class="xref py py-obj docutils literal"><span class="pre">sol_sine</span></tt></a>(data[,&nbsp;w,&nbsp;mode])</td>
-<td>Solvent filter with sine-bell filter.</td>
-</tr>
-<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_bl.sol_sine2.html#nmrglue.process.proc_bl.sol_sine2" title="nmrglue.process.proc_bl.sol_sine2"><tt class="xref py py-obj docutils literal"><span class="pre">sol_sine2</span></tt></a>(data[,&nbsp;w,&nbsp;mode])</td>
-<td>Solvent filter with square sine-bell filter.</td>
-</tr>
-<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_bl.sol_gaussian.html#nmrglue.process.proc_bl.sol_gaussian" title="nmrglue.process.proc_bl.sol_gaussian"><tt class="xref py py-obj docutils literal"><span class="pre">sol_gaussian</span></tt></a>(data[,&nbsp;w,&nbsp;mode])</td>
-<td>Solvent filter with square gaussian filter.</td>
-</tr>
-</tbody>
-</table>
-<p>These functions are called by high-level function are and most uses will not
-use them in common processing scripts.</p>
-</div>
-<div class="section" id="low-level-functions">
-<h2>Low-Level Functions<a class="headerlink" href="#low-level-functions" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_bl.calc_bl_linear.html#nmrglue.process.proc_bl.calc_bl_linear" title="nmrglue.process.proc_bl.calc_bl_linear"><tt class="xref py py-obj docutils literal"><span class="pre">calc_bl_linear</span></tt></a>(x,&nbsp;nl[,&nbsp;nw])</td>
-<td>Calculate a baseline using linear approximation between nodes</td>
-</tr>
-<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_bl.calc_bl_med.html#nmrglue.process.proc_bl.calc_bl_med" title="nmrglue.process.proc_bl.calc_bl_med"><tt class="xref py py-obj docutils literal"><span class="pre">calc_bl_med</span></tt></a>(x,&nbsp;mw,&nbsp;sf,&nbsp;sigma)</td>
-<td>Calculate a baseline using median baseline correction.</td>
-</tr>
-</tbody>
-</table>
-<p>These functions are not implemented (yet) in nmrglue.  There are here as
-shells for later implementation.</p>
-</div>
-<div class="section" id="notimplemented">
-<h2>NotImplemented<a class="headerlink" href="#notimplemented" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_bl.poly_td.html#nmrglue.process.proc_bl.poly_td" title="nmrglue.process.proc_bl.poly_td"><tt class="xref py py-obj docutils literal"><span class="pre">poly_td</span></tt></a>(data)</td>
-<td>Polynomial time domain solvent subtraction</td>
-</tr>
-<tr><td><a class="reference internal" href="generated/nmrglue.process.proc_bl.poly_fd.html#nmrglue.process.proc_bl.poly_fd" title="nmrglue.process.proc_bl.poly_fd"><tt class="xref py py-obj docutils literal"><span class="pre">poly_fd</span></tt></a>(data)</td>
-<td>Polynomial frequency domain baseline correction</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-
-
-          </div>
         </div>
       </div>
       <div class="clearer"></div>
@@ -196,19 +179,21 @@ shells for later implementation.</p>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="generated/nmrglue.process.proc_bl.base.html" title="nmrglue.process.proc_bl.base"
              >next</a> |</li>
         <li class="right" >
           <a href="generated/nmrglue.process.proc_base.sum_flt.html" title="nmrglue.process.proc_base.sum_flt"
              >previous</a> |</li>
-        <li><a href="../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+        <li><a href="../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
           <li><a href="index.html" >Reference Guide</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2010, Jonathan J. Helmus.
-      Last updated on Apr 26, 2012.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+        &copy; Copyright 2010-2012, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

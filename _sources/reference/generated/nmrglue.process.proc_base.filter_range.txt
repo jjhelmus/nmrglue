@@ -1,6 +1,6 @@
 nmrglue.process.proc_base.filter_range
 ======================================
 
-.. currentmodule:: nmrglue.process
+.. currentmodule:: nmrglue.process.proc_base
 
-.. automethod:: proc_base.filter_range
+.. autofunction:: filter_range

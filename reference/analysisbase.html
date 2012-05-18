@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nmrglue.analysisbase &mdash; nmrglue v0.2 documentation</title>
-    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <title>nmrglue.analysisbase &mdash; nmrglue 0.3-dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.2',
+        VERSION:     '0.3-dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,9 +25,10 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="nmrglue v0.2 documentation" href="../index.html" />
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.3-dev documentation" href="../index.html" />
     <link rel="up" title="Reference Guide" href="index.html" />
-    <link rel="next" title="nmrglue.helpers" href="helpers.html" />
+    <link rel="next" title="nmrglue.analysis.analysisbase.neighbors" href="generated/nmrglue.analysis.analysisbase.neighbors.html" />
     <link rel="prev" title="nmrglue.process.pipe_proc.ztp" href="generated/nmrglue.process.pipe_proc.ztp.html" /> 
   </head>
   <body>
@@ -38,52 +42,18 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="helpers.html" title="nmrglue.helpers"
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.analysis.analysisbase.neighbors.html" title="nmrglue.analysis.analysisbase.neighbors"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="generated/nmrglue.process.pipe_proc.ztp.html" title="nmrglue.process.pipe_proc.ztp"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+        <li><a href="../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Reference Guide</a> &raquo;</li> 
       </ul>
-    </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">nmrglue.analysisbase</a><ul>
-<li><a class="reference internal" href="#low-level-functions">Low-Level Functions</a></li>
-<li><a class="reference internal" href="#low-level-classes">Low-Level Classes</a></li>
-</ul>
-</li>
-</ul>
-
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="generated/nmrglue.process.pipe_proc.ztp.html"
-                        title="previous chapter">nmrglue.process.pipe_proc.ztp</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="helpers.html"
-                        title="next chapter">nmrglue.helpers</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/reference/analysisbase.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" size="18" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
@@ -95,155 +65,105 @@
 <p>analysisbase provides general purpose analysis functions and classes used by
 several nmrglue.analysis modules</p>
 <p>This modules is imported as nmrglue.analysisbase and can be called as such.</p>
-<div class="section" id="low-level-functions">
-<h2>Low-Level Functions<a class="headerlink" href="#low-level-functions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="developer-functions">
+<h2>Developer Functions<a class="headerlink" href="#developer-functions" title="Permalink to this headline">¶</a></h2>
 <p>These functions are typically not used directly by users.  They are called by
 high level functions.</p>
-<dl class="function">
-<dt id="nmrglue.analysis.analysisbase.find_limits">
-<tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">find_limits</tt><big>(</big><em>pts</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.analysisbase.find_limits" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find the limits which outline the provided list of points</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>pts   List of points [(z0,y0,x0),(z1,y1,x1),...]</li>
-</ul>
-<p>Returns (min,max):</p>
-<ul class="simple">
-<li>min   array of minimum indices array([zmin,ymin,xmin]</li>
-<li>max   array of maximum indices array([zmin,ymin,xmin]</li>
-</ul>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.analysis.analysisbase.limits2slice">
-<tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">limits2slice</tt><big>(</big><em>limits</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.analysisbase.limits2slice" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a set of slice objects given list of min,max limits</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>limits    Tuple of minimum and maximum indices</li>
-</ul>
-<p>Returns: list of slices which will return points between limits.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.analysis.analysisbase.slice2limits">
-<tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">slice2limits</tt><big>(</big><em>slices</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.analysisbase.slice2limits" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a tuple of min,max limits from a set of slices</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>slices: list of slices</li>
-</ul>
-<p>Returns: Tuple of minimum and maximum indices</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.analysis.analysisbase.squish">
-<tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">squish</tt><big>(</big><em>r</em>, <em>axis</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.analysisbase.squish" title="Permalink to this definition">¶</a></dt>
-<dd><p>Squish array r along axis - sum along all but one axis</p>
-</dd></dl>
-
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.analysisbase.neighbors.html#nmrglue.analysis.analysisbase.neighbors" title="nmrglue.analysis.analysisbase.neighbors"><tt class="xref py py-obj docutils literal"><span class="pre">neighbors</span></tt></a>(pt,&nbsp;shape,&nbsp;structure)</td>
+<td>Generate a list of all neightbors to a point</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.analysisbase.valid_pt.html#nmrglue.analysis.analysisbase.valid_pt" title="nmrglue.analysis.analysisbase.valid_pt"><tt class="xref py py-obj docutils literal"><span class="pre">valid_pt</span></tt></a>(pt,&nbsp;shape)</td>
+<td>Determind if point is valid in a given shaped array</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.analysisbase.find_limits.html#nmrglue.analysis.analysisbase.find_limits" title="nmrglue.analysis.analysisbase.find_limits"><tt class="xref py py-obj docutils literal"><span class="pre">find_limits</span></tt></a>(pts)</td>
+<td>Find the limits which outline the provided list of points</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.analysisbase.limits2slice.html#nmrglue.analysis.analysisbase.limits2slice" title="nmrglue.analysis.analysisbase.limits2slice"><tt class="xref py py-obj docutils literal"><span class="pre">limits2slice</span></tt></a>(limits)</td>
+<td>Create a set of slice objects given list of min,max limits</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.analysisbase.slice2limits.html#nmrglue.analysis.analysisbase.slice2limits" title="nmrglue.analysis.analysisbase.slice2limits"><tt class="xref py py-obj docutils literal"><span class="pre">slice2limits</span></tt></a>(slices)</td>
+<td>Create a tuple of min,max limits from a set of slices</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.analysisbase.squish.html#nmrglue.analysis.analysisbase.squish" title="nmrglue.analysis.analysisbase.squish"><tt class="xref py py-obj docutils literal"><span class="pre">squish</span></tt></a>(r,&nbsp;axis)</td>
+<td>Squish array r along axis - sum along all but one axis</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div class="section" id="low-level-classes">
-<h2>Low-Level Classes<a class="headerlink" href="#low-level-classes" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="nmrglue.analysis.analysisbase.ndwindow">
-<em class="property">class </em><tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">ndwindow</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow" title="Permalink to this definition">¶</a></dt>
-<dd><p>An N-dimentional iterator to slice arrays into windows.</p>
-<p>Given the shape of an array and a window size, an &#8216;ndwindow&#8217; instance
-iterators over tuples of slices which slice an the array into wsize 
-sub-arrays.  At each iteration, the index of the center of the sub-array 
-is incremented by one along the last dimension.  Array border are ignored
-so the resulting sub-array can be smaller than wsize.  If wsize contains
-even values the window is off center containing an additional point with 
-lower index.</p>
-<p>Parameters</p>
-<ul class="simple">
-<li>size  Size of array to generate tuples of slices from.</li>
-<li>wsize Size of the area to select from array (sub-array maximum size).</li>
-</ul>
-<p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">ndwindow</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">,(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
-<span class="gp">... </span>    <span class="k">print</span> <span class="n">a</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>
-<span class="go">[[0 1]</span>
-<span class="go"> [4 5]]</span>
-<span class="go">[[0 1 2]</span>
-<span class="go"> [4 5 6]]</span>
-<span class="go">[[1 2 3]</span>
-<span class="go"> [5 6 7]]</span>
-<span class="go">[[2 3]</span>
-<span class="go"> [6 7]]</span>
-<span class="go">[[0 1]</span>
-<span class="go"> [4 5]</span>
-<span class="go"> [8 9]]</span>
-<span class="go">[[ 0  1  2]</span>
-<span class="go"> [ 4  5  6]</span>
-<span class="go"> [ 8  9 10]]</span>
-<span class="gp">...</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="class">
-<dt id="nmrglue.analysis.analysisbase.ndwindow_index">
-<em class="property">class </em><tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">ndwindow_index</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow_index" title="Permalink to this definition">¶</a></dt>
-<dd><p>An N-dimensional interator object which returns the index of the window 
-center and a ndwindow slice array.</p>
-<p>Equivalent to:</p>
-<dl class="docutils">
-<dt>for slices,index in zip(np.ndindex(shape),ndwindow(shape,wshape)):</dt>
-<dd>return (index,slice)</dd>
-</dl>
-</dd></dl>
-
-<dl class="class">
-<dt id="nmrglue.analysis.analysisbase.ndwindow_inside">
-<em class="property">class </em><tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">ndwindow_inside</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow_inside" title="Permalink to this definition">¶</a></dt>
-<dd><p>An N-dimentional iterator to slice arrays into uniform size windows.</p>
-<p>Given the shape of an array and a window size, an &#8216;ndwindow_inside&#8217; 
-instance iterators over tuples of slices which slice an the array into 
-uniform size wsize sub-arrays.  At each iteration, the index of the top 
-left of the sub-array is incremented by one along the last dimension utill
-the windows would extend past the array border.  All sub-arrays are
-equal sized (wsize).</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>size  Size of array to generate tuples of slices from.</li>
-<li>wsize Size of the area to select from array (widow size).</li>
-</ul>
-<p>Example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">ndwindow_inside</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">,(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">):</span>
-<span class="gp">... </span>    <span class="k">print</span> <span class="n">a</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>
-<span class="go">[[0 1]</span>
-<span class="go"> [4 5]]</span>
-<span class="go">[[1 2]</span>
-<span class="go"> [5 6]]</span>
-<span class="go">[[2 3]</span>
-<span class="go"> [6 7]]</span>
-<span class="go">[[4 5]</span>
-<span class="go"> [8 9]]</span>
-<span class="go">[[ 5  6]</span>
-<span class="go"> [ 9 10]]</span>
-<span class="go">[[ 6  7]</span>
-<span class="go"> [10 11]]</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="class">
-<dt id="nmrglue.analysis.analysisbase.ndwindow_inside_index">
-<em class="property">class </em><tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">ndwindow_inside_index</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow_inside_index" title="Permalink to this definition">¶</a></dt>
-<dd><p>An N-dimensional interator object which returns the index of the window 
-top-left and a ndwindow_inside slice array.</p>
-<p>Similar to ndwindow_index but reports top left index of window.</p>
-</dd></dl>
-
+<div class="section" id="developer-classes">
+<h2>Developer Classes<a class="headerlink" href="#developer-classes" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.analysisbase.ndwindow.html#nmrglue.analysis.analysisbase.ndwindow" title="nmrglue.analysis.analysisbase.ndwindow"><tt class="xref py py-obj docutils literal"><span class="pre">ndwindow</span></tt></a>(shape,&nbsp;wsize)</td>
+<td>An N-dimentional iterator to slice arrays into windows.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.analysisbase.ndwindow_index.html#nmrglue.analysis.analysisbase.ndwindow_index" title="nmrglue.analysis.analysisbase.ndwindow_index"><tt class="xref py py-obj docutils literal"><span class="pre">ndwindow_index</span></tt></a>(shape,&nbsp;wsize)</td>
+<td>An N-dimensional interator object which returns the index of the window</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.analysisbase.ndwindow_inside.html#nmrglue.analysis.analysisbase.ndwindow_inside" title="nmrglue.analysis.analysisbase.ndwindow_inside"><tt class="xref py py-obj docutils literal"><span class="pre">ndwindow_inside</span></tt></a>(shape,&nbsp;wsize)</td>
+<td>An N-dimentional iterator to slice arrays into uniform size windows.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.analysisbase.ndwindow_inside_index.html#nmrglue.analysis.analysisbase.ndwindow_inside_index" title="nmrglue.analysis.analysisbase.ndwindow_inside_index"><tt class="xref py py-obj docutils literal"><span class="pre">ndwindow_inside_index</span></tt></a>(shape,&nbsp;wsize)</td>
+<td>An N-dimensional interator object which returns the index of the window</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 
 
           </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">nmrglue.analysisbase</a><ul>
+<li><a class="reference internal" href="#developer-functions">Developer Functions</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#developer-classes">Developer Classes</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="generated/nmrglue.process.pipe_proc.ztp.html"
+                        title="previous chapter">nmrglue.process.pipe_proc.ztp</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="generated/nmrglue.analysis.analysisbase.neighbors.html"
+                        title="next chapter">nmrglue.analysis.analysisbase.neighbors</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/reference/analysisbase.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -258,19 +178,21 @@ top-left and a ndwindow_inside slice array.</p>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="helpers.html" title="nmrglue.helpers"
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.analysis.analysisbase.neighbors.html" title="nmrglue.analysis.analysisbase.neighbors"
              >next</a> |</li>
         <li class="right" >
           <a href="generated/nmrglue.process.pipe_proc.ztp.html" title="nmrglue.process.pipe_proc.ztp"
              >previous</a> |</li>
-        <li><a href="../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+        <li><a href="../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
           <li><a href="index.html" >Reference Guide</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2010, Jonathan J. Helmus.
-      Last updated on Apr 26, 2012.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+        &copy; Copyright 2010-2012, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

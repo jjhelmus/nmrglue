@@ -1,6 +1,6 @@
 nmrglue.process.proc_bl.sol_sine2
 =================================
 
-.. currentmodule:: nmrglue.process
+.. currentmodule:: nmrglue.process.proc_bl
 
-.. automethod:: proc_bl.sol_sine2
+.. autofunction:: sol_sine2

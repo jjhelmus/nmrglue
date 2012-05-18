@@ -9,6 +9,6 @@ frequency domain file. After processing the resulting file is compared to
 one processed with NMRPipe.
 
 
-[`source code <el/processing/process_pipe_2d_tppi.py>`_]
+[:download:`source code <../../../examples/processing/process_pipe_2d_tppi.py>`]
 
-.. literalinclude:: el/processing/process_pipe_2d_tppi.py
+.. literalinclude:: ../../../examples/processing/process_pipe_2d_tppi.py

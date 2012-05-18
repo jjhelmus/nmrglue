@@ -1,6 +1,6 @@
 nmrglue.process.proc_lp.make_mirror
 ===================================
 
-.. currentmodule:: nmrglue.process
+.. currentmodule:: nmrglue.process.proc_lp
 
-.. automethod:: proc_lp.make_mirror
+.. autofunction:: make_mirror

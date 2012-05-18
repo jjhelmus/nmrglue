@@ -10,6 +10,6 @@ an innermost parameter interleaved.  The full experimental data in the
 The data shape, array size and additional files to copy to the new directories 
 must be determined by the user.
 
-[`source code <el/unarray/unarray_2d_bruker/unarray.py>`_]
+[:download:`source code <../../../examples/unarray/unarray_2d_bruker/unarray.py>`]
 
-.. literalinclude:: el/unarray/unarray_2d_bruker/unarray.py
+.. literalinclude:: ../../../examples/unarray/unarray_2d_bruker/unarray.py

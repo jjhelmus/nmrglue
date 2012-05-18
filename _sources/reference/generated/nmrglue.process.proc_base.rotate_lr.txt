@@ -1,6 +1,6 @@
 nmrglue.process.proc_base.rotate_lr
 ===================================
 
-.. currentmodule:: nmrglue.process
+.. currentmodule:: nmrglue.process.proc_base
 
-.. automethod:: proc_base.rotate_lr
+.. autofunction:: rotate_lr

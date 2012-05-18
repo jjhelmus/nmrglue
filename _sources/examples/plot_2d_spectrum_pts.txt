@@ -10,12 +10,12 @@ spectrum from a 2D NMRPipe file is created.  Slices are added in the 15N and
 13C dimension as well as sample peak labels.  :ref:`plot_2d_spectrum`
 is similar to this example but plotted on a ppm scale.
 
-[`source code <el/plotting/2d_spectrum/plot_spectrum_pts.py>`_]
+[:download:`source code <../../../examples/plotting/2d_spectrum/plot_spectrum_pts.py>`]
 
-.. literalinclude:: el/plotting/2d_spectrum/plot_spectrum_pts.py
+.. literalinclude:: ../../../examples/plotting/2d_spectrum/plot_spectrum_pts.py
 
 Result:
 
-[`spectrum.png <el/plotting/2d_spectrum/spectrum_pts.png>`_]
+[:download:`spectrum.png <../../../examples/plotting/2d_spectrum/spectrum_pts.png>`]
 
-.. image:: el/plotting/2d_spectrum/spectrum_pts.png
+.. image:: ../../../examples/plotting/2d_spectrum/spectrum_pts.png

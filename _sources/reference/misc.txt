@@ -8,8 +8,11 @@ This modules is imported as nmrglue.misc and can be called as such.
 Functions
 ---------
 
-.. autofunction:: pair_similar
-.. autofunction:: isdatasimilar
-.. autofunction:: isdicsimilar
-.. autofunction:: islistsimilar
+.. autosummary::
+    :toctree: generated/
+    
+    pair_similar
+    isdatasimilar
+    isdicsimilar
+    islistsimilar
 

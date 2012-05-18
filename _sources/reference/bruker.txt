@@ -5,49 +5,67 @@ nmrglue.bruker
 
 This modules is imported as nmrglue.bruker and can be called as such.
 
-High-Level Functions
----------------------
+User Information
+----------------
 
-These are the functions that most users will use from the bruker module.
+User Functions
+^^^^^^^^^^^^^^
 
-.. autofunction:: read
-.. autofunction:: read_lowmem
-.. autofunction:: write
-.. autofunction:: write_lowmem
-.. autofunction:: read_binary
-.. autofunction:: read_binary_lowmem
-.. autofunction:: write_binary
-.. autofunction:: write_binary_lowmem
-.. autofunction:: read_jcamp
-.. autofunction:: write_jcamp
-.. autofunction:: read_pprog
-.. autofunction:: write_pprog
-.. autofunction:: remove_digital_filter
-.. autofunction:: guess_udic
-.. autofunction:: create_dic
+These are functions which are targetted for users of nmrglue.
 
+.. autosummary::
+    :toctree: generated/
 
-Low-Level Functions
--------------------
-
-
-These functions are typically not used directly by users.  They are called by
-high level functions.  Developers and user who want fine control over bruker
-files will be interested in these functions.
-
-.. autofunction:: create_data
-.. autofunction:: create_acqus_dic
-.. autofunction:: guess_shape
-.. autofunction:: get_data
-.. autofunction:: put_data
-.. autofunction:: complexify_data
-.. autofunction:: uncomplexify_data
-.. autofunction:: rm_dig_filter
-.. autofunction:: parse_jcamp_line
-.. autofunction:: write_jcamp_pair
+    read
+    write
+    remove_digital_filter
+    read_lowmem
+    write_lowmem
+    read_binary
+    write_binary
+    read_binary_lowmem
+    write_binary_lowmem
+    read_jcamp
+    write_jcamp
+    read_pprog
+    write_pprog
+    guess_udic
+    create_dic                
 
 
-Low-Level Classes
------------------
 
-.. autoclass:: bruker_nd
+Developer Infomation
+--------------------
+
+.. include:: ../../../nmrglue/fileio/bruker.py
+    :start-line: 6
+    :end-line: 24 
+
+Developer Functions
+^^^^^^^^^^^^^^^^^^^
+
+These functions are typically not used directly by users.  Developers who want 
+fine control over Bruker files may be interested in these functions.
+
+.. autosummary::
+    :toctree: generated/
+
+    create_data
+    create_acqus_dic
+    guess_shape
+    get_data
+    put_data
+    complexify_data
+    uncomplexify_data
+    rm_dig_filter
+    parse_jcamp_line
+    write_jcamp_pair
+
+
+Developer Classes
+^^^^^^^^^^^^^^^^^
+
+.. autosummary::
+    :toctree: generated/
+
+    bruker_nd

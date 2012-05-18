@@ -5,17 +5,16 @@ nmrglue.helpers
 
 This modules is imported as nmrglue.helpers and can be called as such.
 
-High-Level Functions
----------------------
+User Functions
+--------------
 
+.. autosummary::
+    :toctree: generated/
 
-These are the functions most users will use from the helpers module.
-
-.. autofunction:: delta
-.. autofunction:: limit
-.. autofunction:: scale_params
-.. autofunction:: no_limits
-.. autofunction:: no_limits_amp
-.. autofunction:: super_zip
-.. autofunction:: scale_columns
-
+    delta
+    limit
+    scale_params
+    no_limits
+    no_limits_amp
+    super_zip
+    scale_columns

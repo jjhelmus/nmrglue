@@ -5,28 +5,28 @@ nmrglue.segmentation
 
 This modules is imported as nmrglue.segmentation and can be called as such.
 
-Low-Level Functions
+Developer Functions
 -------------------
 
-These functions are typically not used directly by users.  They are called by
-high level functions.  Developers and user who want to segment spectra will 
-be interested in these functions.
+These functions are typically not used directly by users.  Developers who 
+want to segment spectra will be interested in these functions.
 
-.. autofunction:: neighbors
-.. autofunction:: valid_pt
-.. autofunction:: find_downward
-.. autofunction:: find_all_downward
-.. autofunction:: map_downward
-.. autofunction:: mark_dmap
-.. autofunction:: find_upward
-.. autofunction:: find_all_upward
-.. autofunction:: map_upward
-.. autofunction:: mark_umap
-.. autofunction:: find_connected
-.. autofunction:: find_all_connected
-.. autofunction:: map_connected
-.. autofunction:: mark_cmap
-.. autofunction:: find_nconnected
-.. autofunction:: find_all_nconnected
-.. autofunction:: map_nconnected
-.. autofunction:: mark_nmap
+.. autosummary::
+    :toctree: generated/
+
+    label_connected
+    find_all_connected
+    label_nconnected
+    find_all_nconnected
+    mark_dseg
+    label_downward_seg
+    label_downward
+    find_all_downward
+    mark_useg
+    label_upward_seg
+    label_upward
+    find_all_upward
+    find_downward
+    find_connected
+    find_nconnected
+    find_upward 

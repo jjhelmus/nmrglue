@@ -1,6 +1,6 @@
 nmrglue.process.proc_base.neg_imag
 ==================================
 
-.. currentmodule:: nmrglue.process
+.. currentmodule:: nmrglue.process.proc_base
 
-.. automethod:: proc_base.neg_imag
+.. autofunction:: neg_imag

@@ -9,6 +9,6 @@ between this conversion and one performed with bruk2pipe. Note that the
 direct dimension digital filter is not removed in either conversion.
 
 
-[`source code <el/convert/bruker2pipe_2d.py>`_]
+[:download:`source code <../../../examples/convert/bruker2pipe_2d.py>`]
 
-.. literalinclude:: el/convert/bruker2pipe_2d.py
+.. literalinclude:: ../../../examples/convert/bruker2pipe_2d.py

@@ -43,10 +43,12 @@ Transforms
 
     rft
     irft
-    complexft
-    ft
-    icomplexft
-    ift
+    fft
+    fft_norm
+    fft_positive
+    ifft
+    ifft_norm
+    ifft_positive
     ha
     ht
 
@@ -166,12 +168,11 @@ Misc
     zd_sinebell
     zd_gaussian
 
-
-The following are functions called by high-level processing functions.  They
-are included here for completeness.
-
 Low-Level Functions
 -------------------
+The following are functions called by other processing functions.  They
+are included here for completeness.
+
 .. autosummary::
     :toctree: generated/
 

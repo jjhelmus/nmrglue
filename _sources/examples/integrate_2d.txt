@@ -11,17 +11,17 @@ these limits see :ref:`plot_2d_boxes`.  Similarly to check the peak
 assignments see :ref:`plot_2d_assignments`.
 
 
-[`source code <el/integration/integrate_2d/integrate_2d.py>`_]
+[:download:`source code <../../../examples/integration/integrate_2d/integrate_2d.py>`]
 
-.. literalinclude:: el/integration/integrate_2d/integrate_2d.py
+.. literalinclude:: ../../../examples/integration/integrate_2d/integrate_2d.py
 
 
-[`input file <el/integration/integrate_2d/limits.in>`_]
+[:download:`input file <../../../examples/integration/integrate_2d/limits.in>`]
 
-.. literalinclude:: el/integration/integrate_2d/limits.in
+.. literalinclude:: ../../../examples/integration/integrate_2d/limits.in
 
 Results:
 
-[`output file <el/integration/integrate_2d/volumes.out>`_]
+[:download:`output file <../../../examples/integration/integrate_2d/volumes.out>`]
 
-.. literalinclude:: el/integration/integrate_2d/volumes.out
+.. literalinclude:: ../../../examples/integration/integrate_2d/volumes.out

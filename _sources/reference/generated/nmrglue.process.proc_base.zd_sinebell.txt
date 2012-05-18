@@ -1,6 +1,6 @@
 nmrglue.process.proc_base.zd_sinebell
 =====================================
 
-.. currentmodule:: nmrglue.process
+.. currentmodule:: nmrglue.process.proc_base
 
-.. automethod:: proc_base.zd_sinebell
+.. autofunction:: zd_sinebell

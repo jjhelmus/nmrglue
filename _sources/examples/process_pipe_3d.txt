@@ -10,6 +10,6 @@ loop over XY and ZX planes.After processing the resulting file is compared to
 one processed with NMRPipe.
 
 
-[`source code <el/processing/process_pipe_3d.py>`_]
+[:download:`source code <../../../examples/processing/process_pipe_3d.py>`]
 
-.. literalinclude:: el/processing/process_pipe_3d.py
+.. literalinclude:: ../../../examples/processing/process_pipe_3d.py

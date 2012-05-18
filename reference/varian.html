@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nmrglue.varian &mdash; nmrglue v0.2 documentation</title>
-    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <title>nmrglue.varian &mdash; nmrglue 0.3-dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.2',
+        VERSION:     '0.3-dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,10 +25,11 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="nmrglue v0.2 documentation" href="../index.html" />
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.3-dev documentation" href="../index.html" />
     <link rel="up" title="Reference Guide" href="index.html" />
-    <link rel="next" title="nmrglue.proc_base" href="proc_base.html" />
-    <link rel="prev" title="nmrglue.table" href="table.html" /> 
+    <link rel="next" title="nmrglue.fileio.varian.read" href="generated/nmrglue.fileio.varian.read.html" />
+    <link rel="prev" title="nmrglue.fileio.table.guess_pformat" href="generated/nmrglue.fileio.table.guess_pformat.html" /> 
   </head>
   <body>
     <div class="related">
@@ -38,33 +42,271 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="proc_base.html" title="nmrglue.proc_base"
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.fileio.varian.read.html" title="nmrglue.fileio.varian.read"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="table.html" title="nmrglue.table"
+          <a href="generated/nmrglue.fileio.table.guess_pformat.html" title="nmrglue.fileio.table.guess_pformat"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+        <li><a href="../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Reference Guide</a> &raquo;</li> 
       </ul>
-    </div>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-nmrglue.fileio.varian">
+<span id="nmrglue-varian"></span><span id="varian-module"></span><h1>nmrglue.varian<a class="headerlink" href="#module-nmrglue.fileio.varian" title="Permalink to this headline">¶</a></h1>
+<p>Functions for reading and writing Agilent/Varian binary (fid) files and 
+parameter (procpar) files.</p>
+<p>This modules is imported as nmrglue.varian and can be called as such.</p>
+<div class="section" id="user-information">
+<h2>User Information<a class="headerlink" href="#user-information" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="user-functions">
+<h3>User Functions<a class="headerlink" href="#user-functions" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.read.html#nmrglue.fileio.varian.read" title="nmrglue.fileio.varian.read"><tt class="xref py py-obj docutils literal"><span class="pre">read</span></tt></a>([dir,&nbsp;fid_file,&nbsp;procpar_file,&nbsp;...])</td>
+<td>Read Varian files in a directory.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.write.html#nmrglue.fileio.varian.write" title="nmrglue.fileio.varian.write"><tt class="xref py py-obj docutils literal"><span class="pre">write</span></tt></a>(dir,&nbsp;dic,&nbsp;data[,&nbsp;fid_file,&nbsp;...])</td>
+<td>Write Varian files to a directory.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.write_lowmem.html#nmrglue.fileio.varian.write_lowmem" title="nmrglue.fileio.varian.write_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">write_lowmem</span></tt></a>(dir,&nbsp;dic,&nbsp;data[,&nbsp;fid_file,&nbsp;...])</td>
+<td>Write Varian files to a directory using minimal memory</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.read_lowmem.html#nmrglue.fileio.varian.read_lowmem" title="nmrglue.fileio.varian.read_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">read_lowmem</span></tt></a>([dir,&nbsp;fid_file,&nbsp;procpar_file,&nbsp;...])</td>
+<td>Read Varian files in a directory using minimal memory.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.read_fid.html#nmrglue.fileio.varian.read_fid" title="nmrglue.fileio.varian.read_fid"><tt class="xref py py-obj docutils literal"><span class="pre">read_fid</span></tt></a>(filename[,&nbsp;shape,&nbsp;torder,&nbsp;...])</td>
+<td>Read a Varian binary (fid) file.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.write_fid.html#nmrglue.fileio.varian.write_fid" title="nmrglue.fileio.varian.write_fid"><tt class="xref py py-obj docutils literal"><span class="pre">write_fid</span></tt></a>(filename,&nbsp;dic,&nbsp;data[,&nbsp;torder,&nbsp;...])</td>
+<td>Write a Varian binary (fid) file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.read_fid_lowmem.html#nmrglue.fileio.varian.read_fid_lowmem" title="nmrglue.fileio.varian.read_fid_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">read_fid_lowmem</span></tt></a>(filename[,&nbsp;shape,&nbsp;torder,&nbsp;...])</td>
+<td>Read a Varian binary (fid) file.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.write_fid_lowmem.html#nmrglue.fileio.varian.write_fid_lowmem" title="nmrglue.fileio.varian.write_fid_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">write_fid_lowmem</span></tt></a>(filename,&nbsp;dic,&nbsp;data[,&nbsp;...])</td>
+<td>Write a Varian binary (fid) file trace by trace (low memory)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.read_fid_ntraces.html#nmrglue.fileio.varian.read_fid_ntraces" title="nmrglue.fileio.varian.read_fid_ntraces"><tt class="xref py py-obj docutils literal"><span class="pre">read_fid_ntraces</span></tt></a>(filename[,&nbsp;shape,&nbsp;torder,&nbsp;...])</td>
+<td>Read a Varian binary (fid) file possibility having multiple traces per</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.read_procpar.html#nmrglue.fileio.varian.read_procpar" title="nmrglue.fileio.varian.read_procpar"><tt class="xref py py-obj docutils literal"><span class="pre">read_procpar</span></tt></a>(filename)</td>
+<td>Read a procpar file returning a python dictionary</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.write_procpar.html#nmrglue.fileio.varian.write_procpar" title="nmrglue.fileio.varian.write_procpar"><tt class="xref py py-obj docutils literal"><span class="pre">write_procpar</span></tt></a>(filename,&nbsp;dic[,&nbsp;overwrite])</td>
+<td>Write a varian procpar file from python dictionary</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.guess_udic.html#nmrglue.fileio.varian.guess_udic" title="nmrglue.fileio.varian.guess_udic"><tt class="xref py py-obj docutils literal"><span class="pre">guess_udic</span></tt></a>(dic,&nbsp;data)</td>
+<td>Guess parameter of universal dictionary from dic,data</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.create_dic.html#nmrglue.fileio.varian.create_dic" title="nmrglue.fileio.varian.create_dic"><tt class="xref py py-obj docutils literal"><span class="pre">create_dic</span></tt></a>(udic)</td>
+<td>Create a Varian dictionary from a universal dictionary</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="developer-infomation">
+<h2>Developer Infomation<a class="headerlink" href="#developer-infomation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="agilent-varian-file-format">
+<h3>Agilent/Varian file format<a class="headerlink" href="#agilent-varian-file-format" title="Permalink to this headline">¶</a></h3>
+<p>Both the Agilent/Varian binary and parameter formats are documented in:</p>
+<ul class="simple">
+<li>Varain MR News 2005-04-18 Importing Binary VnmrJ / VNMR FIDs into Third Party Software and VnmrJ / VNMR FID Data Format</li>
+<li>VnmrJ User Programming - Chapter 5: Parameters and Data</li>
+</ul>
+<p>These are available (as of 04/2011) online from
+<a class="reference external" href="http://agilent.com">Agilent</a>.</p>
+</div>
+<div class="section" id="developer-functions">
+<h3>Developer Functions<a class="headerlink" href="#developer-functions" title="Permalink to this headline">¶</a></h3>
+<p>These functions are typically not used directly by users.  Developers who
+want fine control over Agilent/Varian files will be interested in these
+functions.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.create_data.html#nmrglue.fileio.varian.create_data" title="nmrglue.fileio.varian.create_data"><tt class="xref py py-obj docutils literal"><span class="pre">create_data</span></tt></a>(data)</td>
+<td>Create a Varian data array (recast into complex64 array)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.create_pdic_param.html#nmrglue.fileio.varian.create_pdic_param" title="nmrglue.fileio.varian.create_pdic_param"><tt class="xref py py-obj docutils literal"><span class="pre">create_pdic_param</span></tt></a>(name,&nbsp;values)</td>
+<td>Create a fake procpar dictionary element of name name, with values</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.find_torder.html#nmrglue.fileio.varian.find_torder" title="nmrglue.fileio.varian.find_torder"><tt class="xref py py-obj docutils literal"><span class="pre">find_torder</span></tt></a>(dic,&nbsp;shape)</td>
+<td>Find the torder from the procpar dictionary</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.torder2i2t.html#nmrglue.fileio.varian.torder2i2t" title="nmrglue.fileio.varian.torder2i2t"><tt class="xref py py-obj docutils literal"><span class="pre">torder2i2t</span></tt></a>(torder)</td>
+<td>Convert torder to index2trace function</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.torder2t2i.html#nmrglue.fileio.varian.torder2t2i" title="nmrglue.fileio.varian.torder2t2i"><tt class="xref py py-obj docutils literal"><span class="pre">torder2t2i</span></tt></a>(torder)</td>
+<td>Convert torder to trace2index functions</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.reorder_data.html#nmrglue.fileio.varian.reorder_data" title="nmrglue.fileio.varian.reorder_data"><tt class="xref py py-obj docutils literal"><span class="pre">reorder_data</span></tt></a>(data,&nbsp;shape,&nbsp;torder)</td>
+<td>Reorder data (raw from disk) packed with torder and shape</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.order_data.html#nmrglue.fileio.varian.order_data" title="nmrglue.fileio.varian.order_data"><tt class="xref py py-obj docutils literal"><span class="pre">order_data</span></tt></a>(data,&nbsp;torder)</td>
+<td>Order data for writing to disk</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.get_nblocks.html#nmrglue.fileio.varian.get_nblocks" title="nmrglue.fileio.varian.get_nblocks"><tt class="xref py py-obj docutils literal"><span class="pre">get_nblocks</span></tt></a>(f,&nbsp;nblocks,&nbsp;pts,&nbsp;nbheaders,&nbsp;dt,&nbsp;...)</td>
+<td>Read n blocks from a Varian binary file.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.get_block.html#nmrglue.fileio.varian.get_block" title="nmrglue.fileio.varian.get_block"><tt class="xref py py-obj docutils literal"><span class="pre">get_block</span></tt></a>(f,&nbsp;pts,&nbsp;nbheaders,&nbsp;dt[,&nbsp;...])</td>
+<td>Read a block from Varian binary file.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.get_nblocks_ntraces.html#nmrglue.fileio.varian.get_nblocks_ntraces" title="nmrglue.fileio.varian.get_nblocks_ntraces"><tt class="xref py py-obj docutils literal"><span class="pre">get_nblocks_ntraces</span></tt></a>(f,&nbsp;nblocks,&nbsp;ntraces,&nbsp;...)</td>
+<td>Read n blocks from a Varian binary file which may have multiple traces</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.get_block_ntraces.html#nmrglue.fileio.varian.get_block_ntraces" title="nmrglue.fileio.varian.get_block_ntraces"><tt class="xref py py-obj docutils literal"><span class="pre">get_block_ntraces</span></tt></a>(f,&nbsp;ntraces,&nbsp;pts,&nbsp;nbheaders,&nbsp;dt)</td>
+<td>Read a block from Varian binary file which may have multiple traces per</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.get_trace.html#nmrglue.fileio.varian.get_trace" title="nmrglue.fileio.varian.get_trace"><tt class="xref py py-obj docutils literal"><span class="pre">get_trace</span></tt></a>(f,&nbsp;pts,&nbsp;dt)</td>
+<td>Read trace of pts points of dtype dt from Varian binary file</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.get_fileheader.html#nmrglue.fileio.varian.get_fileheader" title="nmrglue.fileio.varian.get_fileheader"><tt class="xref py py-obj docutils literal"><span class="pre">get_fileheader</span></tt></a>(f)</td>
+<td>Unpack file header parameters into list.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.get_blockheader.html#nmrglue.fileio.varian.get_blockheader" title="nmrglue.fileio.varian.get_blockheader"><tt class="xref py py-obj docutils literal"><span class="pre">get_blockheader</span></tt></a>(f)</td>
+<td>Unpack block header parameters into a list.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.skip_blockheader.html#nmrglue.fileio.varian.skip_blockheader" title="nmrglue.fileio.varian.skip_blockheader"><tt class="xref py py-obj docutils literal"><span class="pre">skip_blockheader</span></tt></a>(f)</td>
+<td>Read a block header but do not unpack</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.get_hyperheader.html#nmrglue.fileio.varian.get_hyperheader" title="nmrglue.fileio.varian.get_hyperheader"><tt class="xref py py-obj docutils literal"><span class="pre">get_hyperheader</span></tt></a>(file)</td>
+<td>Unpack hypercomplex header parameters to a list.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.put_block.html#nmrglue.fileio.varian.put_block" title="nmrglue.fileio.varian.put_block"><tt class="xref py py-obj docutils literal"><span class="pre">put_block</span></tt></a>(f,&nbsp;trace,&nbsp;nbheaders,&nbsp;bh[,&nbsp;hh])</td>
+<td>Put blockheader(s) and trace to file</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.put_trace.html#nmrglue.fileio.varian.put_trace" title="nmrglue.fileio.varian.put_trace"><tt class="xref py py-obj docutils literal"><span class="pre">put_trace</span></tt></a>(f,&nbsp;trace)</td>
+<td>Write trace to file f.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.put_fileheader.html#nmrglue.fileio.varian.put_fileheader" title="nmrglue.fileio.varian.put_fileheader"><tt class="xref py py-obj docutils literal"><span class="pre">put_fileheader</span></tt></a>(f,&nbsp;fh)</td>
+<td>Write fileheader list to file (32-bytes written)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.put_blockheader.html#nmrglue.fileio.varian.put_blockheader" title="nmrglue.fileio.varian.put_blockheader"><tt class="xref py py-obj docutils literal"><span class="pre">put_blockheader</span></tt></a>(f,&nbsp;bh)</td>
+<td>Write blockheader list to file (28-bytes written)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.put_hyperheader.html#nmrglue.fileio.varian.put_hyperheader" title="nmrglue.fileio.varian.put_hyperheader"><tt class="xref py py-obj docutils literal"><span class="pre">put_hyperheader</span></tt></a>(f,&nbsp;hh)</td>
+<td>Write hyperheader list to file (28-bytes written)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.hyperheader2dic.html#nmrglue.fileio.varian.hyperheader2dic" title="nmrglue.fileio.varian.hyperheader2dic"><tt class="xref py py-obj docutils literal"><span class="pre">hyperheader2dic</span></tt></a>(head)</td>
+<td>Convert a hypercomplex block header into a python dictionary.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.repack_hyperheader.html#nmrglue.fileio.varian.repack_hyperheader" title="nmrglue.fileio.varian.repack_hyperheader"><tt class="xref py py-obj docutils literal"><span class="pre">repack_hyperheader</span></tt></a>(dic)</td>
+<td>Repack hyperheader dictionary bit flag parameters into status.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.dic2hyperheader.html#nmrglue.fileio.varian.dic2hyperheader" title="nmrglue.fileio.varian.dic2hyperheader"><tt class="xref py py-obj docutils literal"><span class="pre">dic2hyperheader</span></tt></a>(head)</td>
+<td>Convert a python dictionary into a hypercomplex block header list.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.make_blockheader.html#nmrglue.fileio.varian.make_blockheader" title="nmrglue.fileio.varian.make_blockheader"><tt class="xref py py-obj docutils literal"><span class="pre">make_blockheader</span></tt></a>([filedic,&nbsp;index])</td>
+<td>Make a generic blockheader dictionary with a given block index.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.blockheader2dic.html#nmrglue.fileio.varian.blockheader2dic" title="nmrglue.fileio.varian.blockheader2dic"><tt class="xref py py-obj docutils literal"><span class="pre">blockheader2dic</span></tt></a>(head)</td>
+<td>Convert a block header list into a python dictionary.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.repack_blockheader.html#nmrglue.fileio.varian.repack_blockheader" title="nmrglue.fileio.varian.repack_blockheader"><tt class="xref py py-obj docutils literal"><span class="pre">repack_blockheader</span></tt></a>(dic)</td>
+<td>Repack blockheader dic bit flag parameters into status and mode.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.dic2blockheader.html#nmrglue.fileio.varian.dic2blockheader" title="nmrglue.fileio.varian.dic2blockheader"><tt class="xref py py-obj docutils literal"><span class="pre">dic2blockheader</span></tt></a>(dic)</td>
+<td>Convert a python dictionary into block header list.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.fileheader2dic.html#nmrglue.fileio.varian.fileheader2dic" title="nmrglue.fileio.varian.fileheader2dic"><tt class="xref py py-obj docutils literal"><span class="pre">fileheader2dic</span></tt></a>(head)</td>
+<td>Convert fileheader list into a python dictionary</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.repack_fileheader.html#nmrglue.fileio.varian.repack_fileheader" title="nmrglue.fileio.varian.repack_fileheader"><tt class="xref py py-obj docutils literal"><span class="pre">repack_fileheader</span></tt></a>(dic)</td>
+<td>Repack blockheader dic bit flag parameters into status and mode.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.dic2fileheader.html#nmrglue.fileio.varian.dic2fileheader" title="nmrglue.fileio.varian.dic2fileheader"><tt class="xref py py-obj docutils literal"><span class="pre">dic2fileheader</span></tt></a>(dic)</td>
+<td>Convert a python dictionary into a fileheader list</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.find_shape.html#nmrglue.fileio.varian.find_shape" title="nmrglue.fileio.varian.find_shape"><tt class="xref py py-obj docutils literal"><span class="pre">find_shape</span></tt></a>(pdic)</td>
+<td>Determine the shape of a varian file from the procpar dictionary</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.find_cdtype.html#nmrglue.fileio.varian.find_cdtype" title="nmrglue.fileio.varian.find_cdtype"><tt class="xref py py-obj docutils literal"><span class="pre">find_cdtype</span></tt></a>(dic)</td>
+<td>Find the complex dtype from a dictionary</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.find_dtype.html#nmrglue.fileio.varian.find_dtype" title="nmrglue.fileio.varian.find_dtype"><tt class="xref py py-obj docutils literal"><span class="pre">find_dtype</span></tt></a>(dic)</td>
+<td>Find the dtype from a dictionary</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.uninterleave_data.html#nmrglue.fileio.varian.uninterleave_data" title="nmrglue.fileio.varian.uninterleave_data"><tt class="xref py py-obj docutils literal"><span class="pre">uninterleave_data</span></tt></a>(data)</td>
+<td>Unpack interleaved real,imag data</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.interleave_data.html#nmrglue.fileio.varian.interleave_data" title="nmrglue.fileio.varian.interleave_data"><tt class="xref py py-obj docutils literal"><span class="pre">interleave_data</span></tt></a>(data_in)</td>
+<td>Interleave real, imag data</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.get_parameter.html#nmrglue.fileio.varian.get_parameter" title="nmrglue.fileio.varian.get_parameter"><tt class="xref py py-obj docutils literal"><span class="pre">get_parameter</span></tt></a>(f)</td>
+<td>Reads a procpar parameter from a file object</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="developer-classes">
+<h3>Developer Classes<a class="headerlink" href="#developer-classes" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.varian.fid_nd.html#nmrglue.fileio.varian.fid_nd" title="nmrglue.fileio.varian.fid_nd"><tt class="xref py py-obj docutils literal"><span class="pre">fid_nd</span></tt></a>(filename,&nbsp;i2t_func[,&nbsp;fshape,&nbsp;order])</td>
+<td>Emulate a numpy.ndarray objects without loading data into memory for low</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">nmrglue.varian</a><ul>
-<li><a class="reference internal" href="#high-level-functions">High-Level Functions</a></li>
-<li><a class="reference internal" href="#low-level-functions">Low-Level Functions</a></li>
-<li><a class="reference internal" href="#low-level-classes">Low-Level Classes</a></li>
+<li><a class="reference internal" href="#user-information">User Information</a><ul>
+<li><a class="reference internal" href="#user-functions">User Functions</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#developer-infomation">Developer Infomation</a><ul>
+<li><a class="reference internal" href="#agilent-varian-file-format">Agilent/Varian file format</a></li>
+<li><a class="reference internal" href="#developer-functions">Developer Functions</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#developer-classes">Developer Classes</a><ul>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="table.html"
-                        title="previous chapter">nmrglue.table</a></p>
+  <p class="topless"><a href="generated/nmrglue.fileio.table.guess_pformat.html"
+                        title="previous chapter">nmrglue.fileio.table.guess_pformat</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="proc_base.html"
-                        title="next chapter">nmrglue.proc_base</a></p>
+  <p class="topless"><a href="generated/nmrglue.fileio.varian.read.html"
+                        title="next chapter">nmrglue.fileio.varian.read</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/reference/varian.txt"
@@ -73,7 +315,7 @@
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -83,811 +325,6 @@
     </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body">
-            
-  <div class="section" id="module-nmrglue.fileio.varian">
-<span id="nmrglue-varian"></span><span id="varian-module"></span><h1>nmrglue.varian<a class="headerlink" href="#module-nmrglue.fileio.varian" title="Permalink to this headline">¶</a></h1>
-<p>Functions for reading and writing Varian binary (fid) files and Varian 
-parameter (procpar) files.</p>
-<p>Both file formats are documented in:</p>
-<ul class="simple">
-<li>Varain MR News 2005-04-18 Importing Binary VnmrJ / VNMR FIDs into Third Party Software and VnmrJ / VNMR FID Data Format</li>
-<li>VnmrJ User Programming - Chapter 5: Parameters and Data</li>
-</ul>
-<p>These are available (as of 04/2011) online from 
-<a class="reference external" href="http://agilent.com">Agilent</a>.</p>
-<p>This modules is imported as nmrglue.varian and can be called as such.</p>
-<div class="section" id="high-level-functions">
-<h2>High-Level Functions<a class="headerlink" href="#high-level-functions" title="Permalink to this headline">¶</a></h2>
-<p>These are the functions most users will use from the varian module.</p>
-<dl class="function">
-<dt id="nmrglue.fileio.varian.read">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">read</tt><big>(</big><em>dir='.'</em>, <em>fid_file='fid'</em>, <em>procpar_file='procpar'</em>, <em>read_blockhead=False</em>, <em>shape=None</em>, <em>torder=None</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.read" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read Varian files in a directory.</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>dir               Directory holding Varian data.</li>
-<li>fid_file          Name of fid file in directory.</li>
-<li>procpar_file      Name of procpar file in directory.</li>
-<li>read_blockhead    Set True to read blockheader(s). False otherwise.</li>
-<li>shape             Shape of data, None tries to finds this automatically.</li>
-<li>torder            Trace order (None for automatic). See read function.</li>
-</ul>
-<p>Returns: dic,data</p>
-<p>Note in torder parameter:</p>
-<p>torder is a parameter describing how the traces on disk should be 
-re-organized to form the data matrix.  In many cases this can be determined
-automatically by examining the order of phase parameters in the procpar
-file, which is what is done if torder is set to None, but in some cases 
-it must be explicitly provided.  Three common cases are:</p>
-<p>Regular ordering (d3,d2,phase2,phase) which can be specificed by setting
-torder to &#8216;regular&#8217; or &#8216;r&#8217;.</p>
-<p>Opposite ordering (d3,d2,phase,phase2) which can be specified by setting
-torder to &#8216;opposite&#8217; or &#8216;o&#8217;.</p>
-<p>Flat ordering, the way data is on organized on disk, no reordering is 
-performed. 1D and 2D file can be read in this manner.  Specify by setting 
-torder to &#8216;flat&#8217; or &#8216;f&#8217;.</p>
-<p>In addition a function which maps indirect dimension index tuples to/from
-trace number as stored on disk can be provided.  For reading this function
-should take 2 arguments (shape,index_tuple) and return an integer trace
-number.  For writing this function should again take 2 arguments 
-(shape,trace_number) and return the indirect dimension index tuple for the
-given trace.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.read_lowmem">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">read_lowmem</tt><big>(</big><em>dir='.'</em>, <em>fid_file='fid'</em>, <em>procpar_file='procpar'</em>, <em>read_blockhead=False</em>, <em>shape=None</em>, <em>torder=None</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.read_lowmem" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read Varian files in a directory using minimal memory.</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>dir               Directory holding Varian data.</li>
-<li>fid_file          Name of fid file in directory.</li>
-<li>procpar_file      Name of procpar file in directory.</li>
-<li>read_blockhead    Set True to head blockheader(s). False otherwise.</li>
-<li>shape             Shape of data, None tries to finds this automatically.</li>
-<li>torder            Trace order (None for automatic). See read function.</li>
-</ul>
-<p>Returns: dic,data</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.write">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">write</tt><big>(</big><em>dir</em>, <em>dic</em>, <em>data</em>, <em>fid_file='fid'</em>, <em>procpar_file='procpar'</em>, <em>torder=None</em>, <em>repack=False</em>, <em>overwrite=False</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.write" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write Varian files to a directory.</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>dir               Directory to write to.</li>
-<li>dic               Python dictionary of file parameters.</li>
-<li>data              Array of spectral data to write.</li>
-<li>fid_file          Name of fid file to write to.</li>
-<li>procpar_file      Name of procpar file to write to.</li>
-<li>torder            Trace order (None for automatic). See read function.</li>
-<li>repack            True/False to repack file and block headers.</li>
-<li>overwrite         True/False to overwrite existing file.</li>
-</ul>
-<p>No return value.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.write_lowmem">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">write_lowmem</tt><big>(</big><em>dir</em>, <em>dic</em>, <em>data</em>, <em>fid_file='fid'</em>, <em>procpar_file='procpar'</em>, <em>torder=None</em>, <em>repack=False</em>, <em>overwrite=False</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.write_lowmem" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write Varian files to a directory using minimal memory</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>dir               Directory to write to.</li>
-<li>dic               Python dictionary of file parameters.</li>
-<li>data              Array of spectral data to write.</li>
-<li>fid_file          Name of fid file to write to.</li>
-<li>procpar_file      Name of procpar file to write to.</li>
-<li>torder            Trace order (None for automatic). See read function.</li>
-<li>repack            True/False to repack file and block headers.</li>
-<li>overwrite         True/False to overwrite existing file.</li>
-</ul>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.read_fid">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">read_fid</tt><big>(</big><em>filename</em>, <em>shape=None</em>, <em>torder='flat'</em>, <em>read_blockhead=False</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.read_fid" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read a Varian binary (fid) file.</p>
-<p>Parameters:</p>
-<ul>
-<li><p class="first">filename          Varian binary file (fid) to read.</p>
-</li>
-<li><p class="first">shape             Shape of the Varian fid file.</p>
-</li>
-<li><p class="first">torder            Trace order. See read function.</p>
-</li>
-<li><dl class="first docutils">
-<dt>read_blockhead    Set to True to read the Varian blockheaders(s) into</dt>
-<dd><p class="first last">the returned dictionary. False ignores them.</p>
-</dd>
-</dl>
-</li>
-</ul>
-<p>Returns: dic,data</p>
-<p>If shape is not provided file is read as a 2D.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.read_fid_lowmem">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">read_fid_lowmem</tt><big>(</big><em>filename</em>, <em>shape=None</em>, <em>torder='flat'</em>, <em>read_blockhead=False</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.read_fid_lowmem" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read a Varian binary (fid) file.</p>
-<p>Parameters:</p>
-<ul>
-<li><p class="first">filename          Varian binary file (fid) to read.</p>
-</li>
-<li><p class="first">shape             Shape of the Varian fid file.</p>
-</li>
-<li><p class="first">torder            Trace order. See read function.</p>
-</li>
-<li><dl class="first docutils">
-<dt>read_blockhead    Set to True to read the Varian blockheaders(s) into</dt>
-<dd><p class="first last">the returned dictionary. False ignores them.</p>
-</dd>
-</dl>
-</li>
-</ul>
-<p>Returns: dic,data</p>
-<p>If shape is not provided file is read as a 2D.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.read_fid_ntraces">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">read_fid_ntraces</tt><big>(</big><em>filename</em>, <em>shape=None</em>, <em>torder='flat'</em>, <em>read_blockhead=False</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.read_fid_ntraces" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read a Varian binary (fid) file possibility having multiple traces per 
-block.</p>
-<p>Parameters:</p>
-<ul>
-<li><p class="first">filename          Varian binary file (fid) to read.</p>
-</li>
-<li><p class="first">shape             Shape of the Varian fid file.</p>
-</li>
-<li><p class="first">torder            Trace order. See read function.</p>
-</li>
-<li><dl class="first docutils">
-<dt>read_blockhead    Set to True to read the varian blockheaders(s) into</dt>
-<dd><p class="first last">the returned dictionary. False ignores them.</p>
-</dd>
-</dl>
-</li>
-</ul>
-<p>Returns: dic,data</p>
-<p>If shape is not provided file is read as a 2D.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.write_fid">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">write_fid</tt><big>(</big><em>filename</em>, <em>dic</em>, <em>data</em>, <em>torder='flat'</em>, <em>repack=False</em>, <em>overwrite=False</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.write_fid" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write a Varian binary (fid) file</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>filename  Name of fid file to write to.</li>
-<li>dic       Python dictionary of file parameters.</li>
-<li>data      Array of spectral data to write.</li>
-<li>torder    Trace order (None for automatic). See read function.</li>
-<li>repack    True/False to repack file and block headers.</li>
-<li>overwrite True/False to overwrite existing file.</li>
-</ul>
-<p>No return value.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.write_fid_lowmem">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">write_fid_lowmem</tt><big>(</big><em>filename</em>, <em>dic</em>, <em>data</em>, <em>torder='f'</em>, <em>repack=False</em>, <em>overwrite=False</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.write_fid_lowmem" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write a Varian binary (fid) file trace by trace (low memory)</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>filename  Name of fid file to write to.</li>
-<li>dic       Python dictionary of file parameters.</li>
-<li>data      Array of spectral data to write.</li>
-<li>torder    Trace order (None for automatic). See read function.</li>
-<li>repack    True/False to repack file and block headers.</li>
-<li>overwrite True/False to overwrite existing file.</li>
-</ul>
-<p>No return value.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.read_procpar">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">read_procpar</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.read_procpar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read a procpar file returning a python dictionary</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.write_procpar">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">write_procpar</tt><big>(</big><em>filename</em>, <em>dic</em>, <em>overwrite=False</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.write_procpar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write a varian procpar file from python dictionary</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.guess_udic">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">guess_udic</tt><big>(</big><em>dic</em>, <em>data</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.guess_udic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Guess parameter of universal dictionary from dic,data</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.create_dic">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">create_dic</tt><big>(</big><em>udic</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.create_dic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a Varian dictionary from a universal dictionary</p>
-</dd></dl>
-
-</div>
-<div class="section" id="low-level-functions">
-<h2>Low-Level Functions<a class="headerlink" href="#low-level-functions" title="Permalink to this headline">¶</a></h2>
-<p>These functions are typically not used directly by users.  They are called by
-high level functions.  Developers and user who want fine control over varian
-files will be interested in these functions.</p>
-<dl class="function">
-<dt id="nmrglue.fileio.varian.create_data">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">create_data</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.create_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a Varian data array (recast into complex64 array)</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.create_pdic_param">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">create_pdic_param</tt><big>(</big><em>name</em>, <em>values</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.create_pdic_param" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a fake procpar dictionary element of name name, with values</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.find_torder">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">find_torder</tt><big>(</big><em>dic</em>, <em>shape</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.find_torder" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find the torder from the procpar dictionary</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>dic   procpar dictionary.</li>
-<li>shape Shape of</li>
-</ul>
-<p>Returns: torder (file trace ordering string shortcut)</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.torder2i2t">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">torder2i2t</tt><big>(</big><em>torder</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.torder2i2t" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert torder to index2trace function</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.torder2t2i">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">torder2t2i</tt><big>(</big><em>torder</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.torder2t2i" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert torder to trace2index functions</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.reorder_data">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">reorder_data</tt><big>(</big><em>data</em>, <em>shape</em>, <em>torder</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.reorder_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reorder data (raw from disk) packed with torder and shape</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>data  Data (2D) array, ordered as on disk.</li>
-<li>shape True shape of data</li>
-<li>toder Trace order. See read function.</li>
-</ul>
-<p>Returns: data (data with shape shape and ordered correctly)</p>
-<p>No error checking is done to see if data and shape contain the same
-number of values.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.order_data">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">order_data</tt><big>(</big><em>data</em>, <em>torder</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.order_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Order data for writing to disk</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>data      Data array</li>
-<li>torder    Trace order. See read function.</li>
-</ul>
-<p>Returns: data (2D array ordered for writing to disk)</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.get_nblocks">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">get_nblocks</tt><big>(</big><em>f</em>, <em>nblocks</em>, <em>pts</em>, <em>nbheaders</em>, <em>dt</em>, <em>read_blockhead</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.get_nblocks" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read n blocks from a Varian binary file.</p>
-<p>Parameters:</p>
-<ul>
-<li><p class="first">f                 File object of varian binaruy file</p>
-</li>
-<li><p class="first">nblocks           Number of blocks to read</p>
-</li>
-<li><p class="first">pts               Number of points per trace</p>
-</li>
-<li><p class="first">nbheaders         Number of block headers in each block</p>
-</li>
-<li><p class="first">dt                Data type of data in binary file (real)</p>
-</li>
-<li><dl class="first docutils">
-<dt>read_blockhead    True to read the Varian blockheaders(s) into</dt>
-<dd><p class="first last">the returned dictionary. False ignores them.</p>
-</dd>
-</dl>
-</li>
-</ul>
-<p>Returns: dic,data if read_blockhead is True, data if False</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.get_block">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">get_block</tt><big>(</big><em>f</em>, <em>pts</em>, <em>nbheaders</em>, <em>dt</em>, <em>read_blockhead=False</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.get_block" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read a block from Varian binary file.</p>
-<p>Parameters:</p>
-<ul>
-<li><p class="first">f                 File object of varian binaruy file.</p>
-</li>
-<li><p class="first">pts               Number of points per trace.</p>
-</li>
-<li><p class="first">nbheaders         Number of block headers in each block</p>
-</li>
-<li><p class="first">dt                Data type of data in binary file (real).</p>
-</li>
-<li><dl class="first docutils">
-<dt>read_blockhead    Set to True to read the varian blockheaders(s) into</dt>
-<dd><p class="first last">the returned dictionary. False ignores them.</p>
-</dd>
-</dl>
-</li>
-</ul>
-<p>Returns: dic,data if read_blockhead is True, data if False</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.get_nblocks_ntraces">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">get_nblocks_ntraces</tt><big>(</big><em>f</em>, <em>nblocks</em>, <em>ntraces</em>, <em>pts</em>, <em>nbheaders</em>, <em>dt</em>, <em>read_blockhead</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.get_nblocks_ntraces" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read n blocks from a Varian binary file which may have multiple traces
-per block.</p>
-<p>Parameters:</p>
-<ul>
-<li><p class="first">f                 File object of Varian binary file to read from.</p>
-</li>
-<li><p class="first">nblocks           Number of blocks to read.</p>
-</li>
-<li><p class="first">ntraces           Number of traces per block.</p>
-</li>
-<li><p class="first">pts               Number of points per trace.</p>
-</li>
-<li><p class="first">nbheaders         Number of block headers in each block.</p>
-</li>
-<li><p class="first">dt                Data type of data in binary file (real).</p>
-</li>
-<li><dl class="first docutils">
-<dt>read_blockhead    Set to True to read the varian blockheaders(s) into</dt>
-<dd><p class="first last">the returned dictionary. False ignores them.</p>
-</dd>
-</dl>
-</li>
-</ul>
-<p>Returns: dic,data if read_blockhead is True, data if False</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.get_block_ntraces">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">get_block_ntraces</tt><big>(</big><em>f</em>, <em>ntraces</em>, <em>pts</em>, <em>nbheaders</em>, <em>dt</em>, <em>read_blockhead=False</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.get_block_ntraces" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read a block from Varian binary file which may have multiple traces per 
-block.</p>
-<p>Parameters:</p>
-<ul>
-<li><p class="first">f                 File object of Varian binary file to read from.</p>
-</li>
-<li><p class="first">ntraces           Number of traces per block.</p>
-</li>
-<li><p class="first">pts               Number of points per trace.</p>
-</li>
-<li><p class="first">nbheaders         Number of block headers in each block.</p>
-</li>
-<li><p class="first">dt                Data type of data in binary file (real).</p>
-</li>
-<li><dl class="first docutils">
-<dt>read_blockhead    Set to True to read the varian blockheaders(s) into</dt>
-<dd><p class="first last">the returned dictionary. False ignores them.</p>
-</dd>
-</dl>
-</li>
-</ul>
-<p>Returns: dic,data if read_blockhead is True, data if False.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.get_trace">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">get_trace</tt><big>(</big><em>f</em>, <em>pts</em>, <em>dt</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.get_trace" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read trace of pts points of dtype dt from Varian binary file</p>
-<p>Does not correct Endiness as dt should handle this</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.get_fileheader">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">get_fileheader</tt><big>(</big><em>f</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.get_fileheader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Unpack file header parameters into list.</p>
-<p>Reads the 32-byte file header from file and unpacks into a list.  Endiness
-is corrected as needed.</p>
-<p>Returned list contents:</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="2%" />
-<col width="19%" />
-<col width="79%" />
-</colgroup>
-<thead valign="bottom">
-<tr><th class="head">N</th>
-<th class="head">Variable</th>
-<th class="head">Description</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr><td>0</td>
-<td>nblocks</td>
-<td>data blocks in file</td>
-</tr>
-<tr><td>1</td>
-<td>ntraces</td>
-<td>traces per block</td>
-</tr>
-<tr><td>2</td>
-<td>np</td>
-<td>elements per trace</td>
-</tr>
-<tr><td>3</td>
-<td>ebytes</td>
-<td>bytes per element</td>
-</tr>
-<tr><td>4</td>
-<td>tbytes</td>
-<td>bytes per trace</td>
-</tr>
-<tr><td>5</td>
-<td>bbytes</td>
-<td>bytes per block</td>
-</tr>
-<tr><td>6</td>
-<td>vers_id</td>
-<td>software version, file_id status bits</td>
-</tr>
-<tr><td>7</td>
-<td>status</td>
-<td>status of whole file</td>
-</tr>
-<tr><td>8</td>
-<td>nbheaders</td>
-<td>number of block headers per block (1)</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.get_blockheader">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">get_blockheader</tt><big>(</big><em>f</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.get_blockheader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Unpack block header parameters into a list.</p>
-<p>Reads the 28-byte block header from f and unpacks into a list.  Endiness
-is corrected as needed.</p>
-<p>Returned list contents:</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="3%" />
-<col width="24%" />
-<col width="73%" />
-</colgroup>
-<thead valign="bottom">
-<tr><th class="head">N</th>
-<th class="head">Variable</th>
-<th class="head">Description</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr><td>0</td>
-<td>scale</td>
-<td>scaling factor</td>
-</tr>
-<tr><td>1</td>
-<td>status</td>
-<td>status of data in block</td>
-</tr>
-<tr><td>2</td>
-<td>index</td>
-<td>block index</td>
-</tr>
-<tr><td>3</td>
-<td>mode</td>
-<td>block mode</td>
-</tr>
-<tr><td>4</td>
-<td>ctcount</td>
-<td>ct value of FID</td>
-</tr>
-<tr><td>5</td>
-<td>lpval</td>
-<td>left phase</td>
-</tr>
-<tr><td>6</td>
-<td>rpval</td>
-<td>right phase</td>
-</tr>
-<tr><td>7</td>
-<td>lvl</td>
-<td>level drift correction</td>
-</tr>
-<tr><td>8</td>
-<td>tlt</td>
-<td>tilt drift correction</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.skip_blockheader">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">skip_blockheader</tt><big>(</big><em>f</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.skip_blockheader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read a block header but do not unpack</p>
-<p>This is a replacement for get_blockheader.  It skips f ahead 28 bytes.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.get_hyperheader">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">get_hyperheader</tt><big>(</big><em>file</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.get_hyperheader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Unpack hypercomplex header parameters to a list.</p>
-<p>Reads the 28-bytes block header from file and unpacks into a list. Endiness
-is corrected as needed.</p>
-<p>Returned list contents:</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="4%" />
-<col width="32%" />
-<col width="64%" />
-</colgroup>
-<thead valign="bottom">
-<tr><th class="head">N</th>
-<th class="head">Variable</th>
-<th class="head">Description</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr><td>0</td>
-<td>s_spare1</td>
-<td>Not Used</td>
-</tr>
-<tr><td>1</td>
-<td>status</td>
-<td>status of block</td>
-</tr>
-<tr><td>2</td>
-<td>s_spare2</td>
-<td>Not Used</td>
-</tr>
-<tr><td>3</td>
-<td>s_spart3</td>
-<td>Not Used</td>
-</tr>
-<tr><td>4</td>
-<td>l_spare1</td>
-<td>Not Used</td>
-</tr>
-<tr><td>5</td>
-<td>lpval1</td>
-<td>2D left phase</td>
-</tr>
-<tr><td>6</td>
-<td>rpval1</td>
-<td>2D right phase</td>
-</tr>
-<tr><td>7</td>
-<td>f_spare1</td>
-<td>Not Used</td>
-</tr>
-<tr><td>8</td>
-<td>f_spare2</td>
-<td>Not Used</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.put_block">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">put_block</tt><big>(</big><em>f</em>, <em>trace</em>, <em>nbheaders</em>, <em>bh</em>, <em>hh=False</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.put_block" title="Permalink to this definition">¶</a></dt>
-<dd><p>Put blockheader(s) and trace to file</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>f         File object to write to.</li>
-<li>trace     Trace to write to block.</li>
-<li>nbheaders Number of block headers.</li>
-<li>bh        Blockheader list.</li>
-<li>hh        Hyperheader list (if required).</li>
-</ul>
-<p>when nbheaders &gt; 2, additional headers are written as all zeros.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.put_trace">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">put_trace</tt><big>(</big><em>f</em>, <em>trace</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.put_trace" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write trace to file f.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.put_fileheader">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">put_fileheader</tt><big>(</big><em>f</em>, <em>fh</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.put_fileheader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write fileheader list to file (32-bytes written)</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>f     file object</li>
-<li>fh    fileheader list (length 9)</li>
-</ul>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.put_blockheader">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">put_blockheader</tt><big>(</big><em>f</em>, <em>bh</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.put_blockheader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write blockheader list to file (28-bytes written)</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>f     file object</li>
-<li>bh    blockheaders list, length 9</li>
-</ul>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.put_hyperheader">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">put_hyperheader</tt><big>(</big><em>f</em>, <em>hh</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.put_hyperheader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write hyperheader list to file (28-bytes written)</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>f     file object</li>
-<li>hh    hyperheader list, length 9</li>
-</ul>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.hyperheader2dic">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">hyperheader2dic</tt><big>(</big><em>head</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.hyperheader2dic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a hypercomplex block header into a python dictionary.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.repack_hyperheader">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">repack_hyperheader</tt><big>(</big><em>dic</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.repack_hyperheader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Repack hyperheader dictionary bit flag parameters into status.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.dic2hyperheader">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">dic2hyperheader</tt><big>(</big><em>head</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.dic2hyperheader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a python dictionary into a hypercomplex block header list.</p>
-<p>Does not repack status from bit flags.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.make_blockheader">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">make_blockheader</tt><big>(</big><em>filedic=False</em>, <em>index=1</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.make_blockheader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make a generic blockheader dictionary with a given block index.</p>
-<p>filedic can be provided for status flags, if not provided creates 
-header for float32 data</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.blockheader2dic">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">blockheader2dic</tt><big>(</big><em>head</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.blockheader2dic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a block header list into a python dictionary.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.repack_blockheader">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">repack_blockheader</tt><big>(</big><em>dic</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.repack_blockheader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Repack blockheader dic bit flag parameters into status and mode.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.dic2blockheader">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">dic2blockheader</tt><big>(</big><em>dic</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.dic2blockheader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a python dictionary into block header list.</p>
-<p>Does not repack status and mode from bit flags.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.fileheader2dic">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">fileheader2dic</tt><big>(</big><em>head</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.fileheader2dic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert fileheader list into a python dictionary</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.repack_fileheader">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">repack_fileheader</tt><big>(</big><em>dic</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.repack_fileheader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Repack blockheader dic bit flag parameters into status and mode.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.dic2fileheader">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">dic2fileheader</tt><big>(</big><em>dic</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.dic2fileheader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert a python dictionary into a fileheader list</p>
-<p>Does not repack status from bit flags</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.find_shape">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">find_shape</tt><big>(</big><em>pdic</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.find_shape" title="Permalink to this definition">¶</a></dt>
-<dd><p>Determine the shape of a varian file from the procpar dictionary</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.find_cdtype">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">find_cdtype</tt><big>(</big><em>dic</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.find_cdtype" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find the complex dtype from a dictionary</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.find_dtype">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">find_dtype</tt><big>(</big><em>dic</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.find_dtype" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find the dtype from a dictionary</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.uninterleave_data">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">uninterleave_data</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.uninterleave_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Unpack interleaved real,imag data</p>
-<table border="1" class="docutils">
-<colgroup>
-<col width="45%" />
-<col width="55%" />
-</colgroup>
-<thead valign="bottom">
-<tr><th class="head">data dtype</th>
-<th class="head">Return dtype</th>
-</tr>
-</thead>
-<tbody valign="top">
-<tr><td>int16</td>
-<td>&#8216;complex64&#8217;</td>
-</tr>
-<tr><td>float32</td>
-<td>&#8216;complex64&#8217;</td>
-</tr>
-<tr><td>int32</td>
-<td>&#8216;complex128&#8217;</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.interleave_data">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">interleave_data</tt><big>(</big><em>data_in</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.interleave_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Interleave real, imag data</p>
-<p>Does not check if resulting dtype is a valid varian dtype</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.varian.get_parameter">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">get_parameter</tt><big>(</big><em>f</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.get_parameter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reads a procpar parameter from a file object</p>
-<p>Returns a dictionary with the attributes of the parameter</p>
-</dd></dl>
-
-</div>
-<div class="section" id="low-level-classes">
-<h2>Low-Level Classes<a class="headerlink" href="#low-level-classes" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="nmrglue.fileio.varian.fid_nd">
-<em class="property">class </em><tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">fid_nd</tt><big>(</big><em>filename</em>, <em>i2t_func</em>, <em>fshape=None</em>, <em>order=None</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.varian.fid_nd" title="Permalink to this definition">¶</a></dt>
-<dd><p>Emulate a numpy.ndarray objects without loading data into memory for low
-memory reading of Varian fid files (one trace per block)</p>
-<ul class="simple">
-<li>slicing operations return ndarray objects.</li>
-<li>can iterate over with expected results.</li>
-<li>transpose and swapaxes methods create a new objects with correct axes
-ordering.</li>
-<li>has ndim, shape, and dtype attributes.</li>
-</ul>
-</dd></dl>
-
-</div>
-</div>
-
-
-          </div>
         </div>
       </div>
       <div class="clearer"></div>
@@ -902,19 +339,21 @@ ordering.</li>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="proc_base.html" title="nmrglue.proc_base"
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.fileio.varian.read.html" title="nmrglue.fileio.varian.read"
              >next</a> |</li>
         <li class="right" >
-          <a href="table.html" title="nmrglue.table"
+          <a href="generated/nmrglue.fileio.table.guess_pformat.html" title="nmrglue.fileio.table.guess_pformat"
              >previous</a> |</li>
-        <li><a href="../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+        <li><a href="../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
           <li><a href="index.html" >Reference Guide</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2010, Jonathan J. Helmus.
-      Last updated on Apr 26, 2012.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+        &copy; Copyright 2010-2012, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

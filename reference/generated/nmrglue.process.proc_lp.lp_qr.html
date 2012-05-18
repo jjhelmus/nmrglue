@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nmrglue.process.proc_lp.lp_qr &mdash; nmrglue v0.2 documentation</title>
-    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <title>nmrglue.process.proc_lp.lp_qr &mdash; nmrglue 0.3-dev documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.2',
+        VERSION:     '0.3-dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +25,8 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="nmrglue v0.2 documentation" href="../../index.html" />
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.3-dev documentation" href="../../index.html" />
     <link rel="up" title="nmrglue.proc_lp" href="../proc_lp.html" />
     <link rel="next" title="nmrglue.process.proc_lp.lp_cho" href="nmrglue.process.proc_lp.lp_cho.html" />
     <link rel="prev" title="nmrglue.process.proc_lp.lp_svd" href="nmrglue.process.proc_lp.lp_svd.html" /> 
@@ -38,16 +42,40 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="nmrglue.process.proc_lp.lp_cho.html" title="nmrglue.process.proc_lp.lp_cho"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="nmrglue.process.proc_lp.lp_svd.html" title="nmrglue.process.proc_lp.lp_svd"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
           <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
           <li><a href="../proc_lp.html" accesskey="U">nmrglue.proc_lp</a> &raquo;</li> 
       </ul>
-    </div>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="nmrglue-process-proc-lp-lp-qr">
+<h1>nmrglue.process.proc_lp.lp_qr<a class="headerlink" href="#nmrglue-process-proc-lp-lp-qr" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="nmrglue.process.proc_lp.lp_qr">
+<tt class="descclassname">nmrglue.process.proc_lp.</tt><tt class="descname">lp_qr</tt><big>(</big><em>data</em>, <em>pred=1</em>, <em>slice=slice(None</em>, <em>None</em>, <em>None)</em>, <em>order=8</em>, <em>mode='f'</em>, <em>append='after'</em>, <em>bad_roots='auto'</em>, <em>fix_mode='on'</em>, <em>mirror=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_lp.py#L104"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_lp.lp_qr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linear Prediction extrapolation of 1D or 2D data using QR decomposition.</p>
+<p>See lp functions for parameters</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
@@ -64,7 +92,7 @@
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -74,27 +102,6 @@
     </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body">
-            
-  <div class="section" id="nmrglue-process-proc-lp-lp-qr">
-<h1>nmrglue.process.proc_lp.lp_qr<a class="headerlink" href="#nmrglue-process-proc-lp-lp-qr" title="Permalink to this headline">¶</a></h1>
-<dl class="staticmethod">
-<dt id="nmrglue.process.proc_lp.lp_qr">
-<em class="property">static </em><tt class="descclassname">proc_lp.</tt><tt class="descname">lp_qr</tt><big>(</big><em>data</em>, <em>pred=1</em>, <em>slice=slice(None</em>, <em>None</em>, <em>None)</em>, <em>order=8</em>, <em>mode='f'</em>, <em>append='after'</em>, <em>bad_roots='auto'</em>, <em>fix_mode='on'</em>, <em>mirror=None</em><big>)</big><a class="headerlink" href="#nmrglue.process.proc_lp.lp_qr" title="Permalink to this definition">¶</a></dt>
-<dd><p>Linear Prediction extrapolation of 1D or 2D data using QR decomposition.</p>
-<p>See lp functions for parameters</p>
-</dd></dl>
-
-</div>
-
-
-          </div>
         </div>
       </div>
       <div class="clearer"></div>
@@ -109,20 +116,22 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="nmrglue.process.proc_lp.lp_cho.html" title="nmrglue.process.proc_lp.lp_cho"
              >next</a> |</li>
         <li class="right" >
           <a href="nmrglue.process.proc_lp.lp_svd.html" title="nmrglue.process.proc_lp.lp_svd"
              >previous</a> |</li>
-        <li><a href="../../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
           <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
           <li><a href="../proc_lp.html" >nmrglue.proc_lp</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2010, Jonathan J. Helmus.
-      Last updated on Apr 26, 2012.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+        &copy; Copyright 2010-2012, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

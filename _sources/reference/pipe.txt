@@ -5,88 +5,99 @@ nmrglue.pipe
 
 This modules is imported as nmrglue.pipe and can be called as such.
 
-High-Level Functions
----------------------
+User Information
+----------------
 
-These are the functions most users will use from the pipe module.
+User Functions
+^^^^^^^^^^^^^^
 
-.. autofunction:: read
-.. autofunction:: read_lowmem
-.. autofunction:: write 
-.. autofunction:: write_lowmem
-.. autofunction:: read_table
-.. autofunction:: write_table
-.. autofunction:: make_uc
-.. autofunction:: guess_udic
-.. autofunction:: create_dic
-.. autofunction:: datetime2dic
-.. autofunction:: dic2datetime
+.. autosummary::
+    :toctree: generated/
 
+    read
+    write 
+    read_lowmem
+    write_lowmem
+    read_table
+    write_table
+    make_uc
+    guess_udic
+    create_dic
+    datetime2dic
+    dic2datetime
 
-
-High-Level Classes
--------------------
-
-
-These are the classes most users will use from the pipe module.
+User Classes
+^^^^^^^^^^^^
 
 .. _pipe_iter3D:
 
-.. autoclass:: iter3D
+.. autosummary::
+    :toctree: generated/
+
+    iter3D
+
+Developer Information
+---------------------
+
+.. include:: ../../../nmrglue/fileio/pipe.py
+    :start-line: 4
+    :end-line: 5
+
+Developer Functions
+^^^^^^^^^^^^^^^^^^^
+
+These functions are typically not used directly by users.  Developers who want
+fine control over NMRPipe files may be interested in these functions.
+
+.. autosummary::
+    :toctree: generated/
+
+    create_data
+    add_axis_to_dic
+    create_empty_dic
+    read_1D
+    read_2D 
+    read_lowmem_2D
+    read_stream
+    read_lowmem_stream
+    read_3D
+    read_lowmem_3D
+    read_4D
+    read_lowmem_4D
+    write_single
+    write_3D
+    write_4D
+    write_lowmem_2D
+    write_lowmem_3D
+    write_lowmem_3Ds 
+    write_lowmem_4D
+    write_lowmem_4Ds
+    put_fdata
+    put_trace 
+    put_data
+    write_slice_3D
+    pack_complex
+    transpose_3D 
+    find_shape
+    reshape_data
+    unshape_data 
+    unappend_data
+    append_data
+    fdata2dic
+    dic2fdata 
+    get_fdata
+    get_data
+    get_fdata_data
+    get_trace
 
 
-Low-Level Functions
--------------------
+Developer Classes
+^^^^^^^^^^^^^^^^^
+.. autosummary::
+    :toctree: generated/
 
-
-These functions are typically not used directly by users.  They are called by
-high level functions.  Developers and user who want fine control over pipe
-files will be interested in these functions.
-
-.. autofunction:: create_data
-.. autofunction:: add_axis_to_dic
-.. autofunction:: create_empty_dic
-.. autofunction:: read_1D
-.. autofunction:: read_2D 
-.. autofunction:: read_lowmem_2D
-.. autofunction:: read_stream
-.. autofunction:: read_lowmem_stream
-.. autofunction:: read_3D
-.. autofunction:: read_lowmem_3D
-.. autofunction:: read_4D
-.. autofunction:: read_lowmem_4D
-.. autofunction:: write_single
-.. autofunction:: write_3D
-.. autofunction:: write_4D
-.. autofunction:: write_lowmem_2D
-.. autofunction:: write_lowmem_3D
-.. autofunction:: write_lowmem_3Ds 
-.. autofunction:: write_lowmem_4D
-.. autofunction:: write_lowmem_4Ds
-.. autofunction:: put_fdata
-.. autofunction:: put_trace 
-.. autofunction:: put_data
-.. autofunction:: write_slice_3D
-.. autofunction:: pack_complex
-.. autofunction:: transpose_3D 
-.. autofunction:: find_shape
-.. autofunction:: reshape_data
-.. autofunction:: unshape_data 
-.. autofunction:: unappend_data
-.. autofunction:: append_data
-.. autofunction:: fdata2dic
-.. autofunction:: dic2fdata 
-.. autofunction:: get_fdata
-.. autofunction:: get_data
-.. autofunction:: get_fdata_data
-.. autofunction:: get_trace
-
-
-Low-Level Classes
------------------
-
-.. autoclass:: pipe_2d
-.. autoclass:: pipe_3d
-.. autoclass:: pipestream_3d
-.. autoclass:: pipe_4d
-.. autoclass:: pipestream_4d
+    pipe_2d
+    pipe_3d
+    pipestream_3d
+    pipe_4d
+    pipestream_4d

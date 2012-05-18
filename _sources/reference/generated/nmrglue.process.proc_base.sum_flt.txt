@@ -1,6 +1,6 @@
 nmrglue.process.proc_base.sum_flt
 =================================
 
-.. currentmodule:: nmrglue.process
+.. currentmodule:: nmrglue.process.proc_base
 
-.. automethod:: proc_base.sum_flt
+.. autofunction:: sum_flt

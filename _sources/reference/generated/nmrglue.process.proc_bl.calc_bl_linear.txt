@@ -1,6 +1,6 @@
 nmrglue.process.proc_bl.calc_bl_linear
 ======================================
 
-.. currentmodule:: nmrglue.process
+.. currentmodule:: nmrglue.process.proc_bl
 
-.. automethod:: proc_bl.calc_bl_linear
+.. autofunction:: calc_bl_linear

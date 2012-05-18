@@ -1,6 +1,6 @@
 nmrglue.process.proc_base.xy2yx
 ===============================
 
-.. currentmodule:: nmrglue.process
+.. currentmodule:: nmrglue.process.proc_base
 
-.. automethod:: proc_base.xy2yx
+.. autofunction:: xy2yx

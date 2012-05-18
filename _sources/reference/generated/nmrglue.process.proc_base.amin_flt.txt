@@ -1,6 +1,6 @@
 nmrglue.process.proc_base.amin_flt
 ==================================
 
-.. currentmodule:: nmrglue.process
+.. currentmodule:: nmrglue.process.proc_base
 
-.. automethod:: proc_base.amin_flt
+.. autofunction:: amin_flt

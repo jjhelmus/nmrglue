@@ -5,31 +5,29 @@ nmrglue.analysisbase
 
 This modules is imported as nmrglue.analysisbase and can be called as such.
 
-Low-Level Functions
+Developer Functions
 -------------------
 
 These functions are typically not used directly by users.  They are called by
 high level functions.
 
-.. autofunction:: recnames
-.. autofunction:: find_limits
-.. autofunction:: limits2slice
-.. autofunction:: slice2limits
-.. autofunction:: squish
-.. autofunction:: pick2linesh
-.. autofunction:: linesh2pick
-.. autofunction:: ls_str2class
-.. autofunction:: center_fwhm 
-.. autofunction:: center_fwhm_bymoments
+.. autosummary:: 
+    :toctree: generated/
+    
+    neighbors
+    valid_pt
+    find_limits
+    limits2slice
+    slice2limits
+    squish
 
-Low-Level Classes
+Developer Classes
 -----------------
 
-.. autoclass:: gauss1D
-.. autoclass:: peak1D 
-.. autoclass:: lorentz1D 
-.. autoclass:: scale1D
-.. autoclass:: ndwindow 
-.. autoclass:: ndwindow_index
-.. autoclass:: ndwindow_inside
-.. autoclass:: ndwindow_inside_index
+.. autosummary::
+    :toctree: generated/
+
+    ndwindow
+    ndwindow_index
+    ndwindow_inside
+    ndwindow_inside_index

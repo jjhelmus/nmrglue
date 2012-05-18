@@ -10,16 +10,16 @@ for examining data or publication.  In this example the assignments used in
 with the boxes and assignments is created.  To examine the box limit more
 closely see :ref:`plot_2d_boxes`.
 
-[`source code <el/plotting/2d_boxes/plot_assignments.py>`_]
+[:download:`source code <../../../examples/plotting/2d_boxes/plot_assignments.py>`]
 
-.. literalinclude:: el/plotting/2d_boxes/plot_assignments.py
+.. literalinclude:: ../../../examples/plotting/2d_boxes/plot_assignments.py
 
-[`input file <el/plotting/2d_boxes/limits.in>`_]
+[:download:`input file <../../../examples/plotting/2d_boxes/limits.in>`]
 
-.. literalinclude:: el/plotting/2d_boxes/limits.in
+.. literalinclude:: ../../../examples/plotting/2d_boxes/limits.in
 
 Result:
 
-[`assignments.png <el/plotting/2d_boxes/assignments.png>`_]
+[:download:`assignments.png <../../../examples/plotting/2d_boxes/assignments.png>`]
 
-.. image:: el/plotting/2d_boxes/assignments.png
+.. image:: ../../../examples/plotting/2d_boxes/assignments.png

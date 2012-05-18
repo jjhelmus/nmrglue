@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>process example: process_pipe_1d &mdash; nmrglue v0.2 documentation</title>
-    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <title>process example: process_pipe_1d &mdash; nmrglue 0.3-dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.2',
+        VERSION:     '0.3-dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +25,8 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="nmrglue v0.2 documentation" href="../index.html" />
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.3-dev documentation" href="../index.html" />
     <link rel="up" title="Examples" href="index.html" />
     <link rel="next" title="process example: process_pipe_2d" href="process_pipe_2d.html" />
     <link rel="prev" title="plotting example: plot_2d_spectrum_pts" href="plot_2d_spectrum_pts.html" /> 
@@ -38,15 +42,60 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="process_pipe_2d.html" title="process example: process_pipe_2d"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="plot_2d_spectrum_pts.html" title="plotting example: plot_2d_spectrum_pts"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+        <li><a href="../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Examples</a> &raquo;</li> 
       </ul>
-    </div>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="process-example-process-pipe-1d">
+<span id="process-pipe-1d"></span><h1>process example: process_pipe_1d<a class="headerlink" href="#process-example-process-pipe-1d" title="Permalink to this headline">¶</a></h1>
+<p>This example shows how nmrglue can be used to process NMR data.  In this
+script a 1D time domain NMRPipe file is processing into a 1D NMRPipe
+frequency domain file.  After processing the resulting file is compared to
+one processed with NMRPipe.</p>
+<p>[<a class="reference download internal" href="../_downloads/process_pipe_1d.py"><tt class="xref download docutils literal"><span class="pre">source</span> <span class="pre">code</span></tt></a>]</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#! /usr/bin/env python</span>
+
+<span class="kn">import</span> <span class="nn">nmrglue</span> <span class="kn">as</span> <span class="nn">ng</span>
+
+<span class="c"># read in the file</span>
+<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;../common_data/1d_pipe/test.fid&quot;</span><span class="p">)</span>
+
+<span class="c"># process the direct dimension</span>
+<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">sp</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">off</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span><span class="n">end</span><span class="o">=</span><span class="mf">0.98</span><span class="p">,</span><span class="nb">pow</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">zf</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">auto</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">ft</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">auto</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">ps</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">p0</span><span class="o">=-</span><span class="mf">17.7</span><span class="p">,</span><span class="n">p1</span><span class="o">=-</span><span class="mf">36.0</span><span class="p">)</span>
+<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">di</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
+
+<span class="c"># write out processed data</span>
+<span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;1d_pipe.ft&quot;</span><span class="p">,</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">overwrite</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c"># check against a file processed with NMRPipe</span>
+<span class="n">dic1</span><span class="p">,</span><span class="n">data1</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;../common_data/1d_pipe/test.ft&quot;</span><span class="p">)</span>
+<span class="n">dic2</span><span class="p">,</span><span class="n">data2</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;1d_pipe.ft&quot;</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">ng</span><span class="o">.</span><span class="n">misc</span><span class="o">.</span><span class="n">pair_similar</span><span class="p">(</span><span class="n">dic1</span><span class="p">,</span><span class="n">data1</span><span class="p">,</span><span class="n">dic2</span><span class="p">,</span><span class="n">data2</span><span class="p">,</span><span class="n">verb</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
@@ -63,7 +112,7 @@
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -73,25 +122,6 @@
     </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body">
-            
-  <div class="section" id="process-example-process-pipe-1d">
-<span id="process-pipe-1d"></span><h1>process example: process_pipe_1d<a class="headerlink" href="#process-example-process-pipe-1d" title="Permalink to this headline">¶</a></h1>
-<p>This example shows how nmrglue can be used to process NMR data.  In this
-script a 1D time domain NMRPipe file is processing into a 1D NMRPipe
-frequency domain file.  After processing the resulting file is compared to
-one processed with NMRPipe.</p>
-<p>[<a class="reference external" href="el/processing/process_pipe_1d.py">source code</a>]</p>
-</div>
-
-
-          </div>
         </div>
       </div>
       <div class="clearer"></div>
@@ -106,19 +136,21 @@ one processed with NMRPipe.</p>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="process_pipe_2d.html" title="process example: process_pipe_2d"
              >next</a> |</li>
         <li class="right" >
           <a href="plot_2d_spectrum_pts.html" title="plotting example: plot_2d_spectrum_pts"
              >previous</a> |</li>
-        <li><a href="../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+        <li><a href="../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
           <li><a href="index.html" >Examples</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2010, Jonathan J. Helmus.
-      Last updated on Apr 26, 2012.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+        &copy; Copyright 2010-2012, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

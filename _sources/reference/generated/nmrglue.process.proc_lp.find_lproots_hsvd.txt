@@ -1,6 +1,6 @@
 nmrglue.process.proc_lp.find_lproots_hsvd
 =========================================
 
-.. currentmodule:: nmrglue.process
+.. currentmodule:: nmrglue.process.proc_lp
 
-.. automethod:: proc_lp.find_lproots_hsvd
+.. autofunction:: find_lproots_hsvd

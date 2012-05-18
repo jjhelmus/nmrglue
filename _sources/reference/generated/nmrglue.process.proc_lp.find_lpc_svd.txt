@@ -1,6 +1,6 @@
 nmrglue.process.proc_lp.find_lpc_svd
 ====================================
 
-.. currentmodule:: nmrglue.process
+.. currentmodule:: nmrglue.process.proc_lp
 
-.. automethod:: proc_lp.find_lpc_svd
+.. autofunction:: find_lpc_svd

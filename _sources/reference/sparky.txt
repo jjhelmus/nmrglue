@@ -5,60 +5,75 @@ nmrglue.sparky
 
 This modules is imported as nmrglue.sparky and can be called as such.
 
-High-Level Functions
+User Information
+----------------
+
+User Functions
+^^^^^^^^^^^^^^
+
+.. autosummary::
+    :toctree: generated/
+
+    read
+    write
+    read_lowmem
+    write_lowmem
+    make_uc
+    guess_udic
+    create_dic
+    datetime2dic 
+    dic2datetime
+
+Developer Information
 ---------------------
 
+.. include:: ../../../nmrglue/fileio/sparky.py
+    :start-line: 4
+    :end-line: 8
 
-These are the functions most users will use from the sparky module.
+Developer Functions
+^^^^^^^^^^^^^^^^^^^
 
-.. autofunction:: read
-.. autofunction:: read_lowmem
-.. autofunction:: write
-.. autofunction:: write_lowmem
-.. autofunction:: make_uc
-.. autofunction:: guess_udic
-.. autofunction:: create_dic
-.. autofunction:: datetime2dic 
-.. autofunction:: dic2datetime
+These functions are typically not used directly by users.  Developers who 
+want fine control over Sparky files may be interested in these functions.
 
-Low-Level Functions
--------------------
+.. autosummary::
+    :toctree: generated/
 
-These functions are typically not used directly by users.  They are called by
-high level functions.  Developers and user who want fine control over sparky
-files will be interested in these functions.
+    create_data
+    create_axisdic
+    calc_tshape
+    read_2D
+    write_2D
+    read_3D
+    write_3D
+    read_lowmem_2D
+    read_lowmem_3D
+    get_tilen
+    get_tile
+    put_tile
+    get_data
+    put_data
+    find_tilen_2d
+    tile_data2d
+    untile_data2D
+    find_tilen_3d
+    tile_data3d
+    untile_data3D
+    get_fileheader 
+    put_fileheader 
+    fileheader2dic
+    dic2fileheader
+    get_axisheader
+    put_axisheader
+    axisheader2dic 
+    dic2axisheader
 
-.. autofunction:: create_data
-.. autofunction:: create_axisdic
-.. autofunction:: calc_tshape
-.. autofunction:: read_2D
-.. autofunction:: write_2D
-.. autofunction:: read_3D
-.. autofunction:: write_3D
-.. autofunction:: read_lowmem_2D
-.. autofunction:: read_lowmem_3D
-.. autofunction:: get_tilen
-.. autofunction:: get_tile
-.. autofunction:: put_tile
-.. autofunction:: get_data
-.. autofunction:: put_data
-.. autofunction:: find_tilen_2d
-.. autofunction:: tile_data2d
-.. autofunction:: untile_data2D
-.. autofunction:: find_tilen_3d
-.. autofunction:: tile_data3d
-.. autofunction:: untile_data3D
-.. autofunction:: get_fileheader 
-.. autofunction:: put_fileheader 
-.. autofunction:: fileheader2dic
-.. autofunction:: dic2fileheader
-.. autofunction:: get_axisheader
-.. autofunction:: put_axisheader
-.. autofunction:: axisheader2dic 
-.. autofunction:: dic2axisheader
+Developer Classes
+^^^^^^^^^^^^^^^^^
 
-Low-Level Classes
------------------
-
-.. autoclass:: sparky_2d
-.. autoclass:: sparky_3d
+.. autosummary::
+    :toctree: generated/
+    
+    sparky_2d
+    sparky_3d

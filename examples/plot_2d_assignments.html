@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>plotting example: plot_2d_assignments &mdash; nmrglue v0.2 documentation</title>
-    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <title>plotting example: plot_2d_assignments &mdash; nmrglue 0.3-dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.2',
+        VERSION:     '0.3-dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,7 +25,8 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="nmrglue v0.2 documentation" href="../index.html" />
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.3-dev documentation" href="../index.html" />
     <link rel="up" title="Examples" href="index.html" />
     <link rel="next" title="plotting example: plot_2d_spectrum" href="plot_2d_spectrum.html" />
     <link rel="prev" title="plotting example: plot_2d_boxes" href="plot_2d_boxes.html" /> 
@@ -38,15 +42,108 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="plot_2d_spectrum.html" title="plotting example: plot_2d_spectrum"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="plot_2d_boxes.html" title="plotting example: plot_2d_boxes"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+        <li><a href="../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Examples</a> &raquo;</li> 
       </ul>
-    </div>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="plotting-example-plot-2d-assignments">
+<span id="plot-2d-assignments"></span><h1>plotting example: plot_2d_assignments<a class="headerlink" href="#plotting-example-plot-2d-assignments" title="Permalink to this headline">¶</a></h1>
+<p>This example shows how to use nmrglue and
+<a class="reference external" href="http://matplotlib.sourceforge.net/index.html">matplotlib</a> to create figures
+for examining data or publication.  In this example the assignments used in
+<a class="reference internal" href="integrate_2d.html#integrate-2d"><em>integration example: integrate_2d</em></a> are graphically examined.  A contour plot of the spectrum
+with the boxes and assignments is created.  To examine the box limit more
+closely see <a class="reference internal" href="plot_2d_boxes.html#plot-2d-boxes"><em>plotting example: plot_2d_boxes</em></a>.</p>
+<p>[<a class="reference download internal" href="../_downloads/plot_assignments.py"><tt class="xref download docutils literal"><span class="pre">source</span> <span class="pre">code</span></tt></a>]</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#! /usr/bin/env python</span>
+<span class="c"># Create contour plots of a spectrum with each peak in limits.in labeled</span>
+
+<span class="kn">import</span> <span class="nn">nmrglue</span> <span class="kn">as</span> <span class="nn">ng</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.cm</span>
+
+<span class="c"># plot parameters</span>
+<span class="n">cmap</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Blues_r</span>    <span class="c"># contour map (colors to use for contours)</span>
+<span class="n">contour_start</span>   <span class="o">=</span> <span class="mi">30000</span>     <span class="c"># contour level start value</span>
+<span class="n">contour_num</span>     <span class="o">=</span> <span class="mi">20</span>        <span class="c"># number of contour levels</span>
+<span class="n">contour_factor</span>  <span class="o">=</span> <span class="mf">1.20</span>      <span class="c"># scaling factor between contour levels</span>
+<span class="n">textsize</span> <span class="o">=</span> <span class="mi">6</span>       <span class="c"># text size of labels</span>
+
+<span class="c"># calculate contour levels</span>
+<span class="n">cl</span> <span class="o">=</span> <span class="p">[</span><span class="n">contour_start</span><span class="o">*</span><span class="n">contour_factor</span><span class="o">**</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">contour_num</span><span class="p">)]</span>
+
+<span class="c"># read in the data from a NMRPipe file</span>
+<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;../../common_data/2d_pipe/test.ft2&quot;</span><span class="p">)</span>
+
+<span class="c"># read in the integration limits</span>
+<span class="n">peak_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">recfromtxt</span><span class="p">(</span><span class="s">&quot;limits.in&quot;</span><span class="p">)</span>
+
+<span class="c"># create the figure</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+
+<span class="c"># plot the contours</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">cl</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="c"># loop over the peaks</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span><span class="n">x0</span><span class="p">,</span><span class="n">y0</span><span class="p">,</span><span class="n">x1</span><span class="p">,</span><span class="n">y1</span> <span class="ow">in</span> <span class="n">peak_list</span><span class="p">:</span>
+
+    <span class="k">if</span> <span class="n">x0</span><span class="o">&gt;</span><span class="n">x1</span><span class="p">:</span>
+        <span class="n">x0</span><span class="p">,</span><span class="n">x1</span> <span class="o">=</span> <span class="n">x1</span><span class="p">,</span><span class="n">x0</span>
+    <span class="k">if</span> <span class="n">y0</span><span class="o">&gt;</span><span class="n">y1</span><span class="p">:</span>
+        <span class="n">y0</span><span class="p">,</span><span class="n">y1</span> <span class="o">=</span> <span class="n">y1</span><span class="p">,</span><span class="n">y0</span>
+
+    <span class="c"># plot a box around each peak and label</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x0</span><span class="p">,</span><span class="n">x1</span><span class="p">,</span><span class="n">x1</span><span class="p">,</span><span class="n">x0</span><span class="p">,</span><span class="n">x0</span><span class="p">],[</span><span class="n">y0</span><span class="p">,</span><span class="n">y0</span><span class="p">,</span><span class="n">y1</span><span class="p">,</span><span class="n">y1</span><span class="p">,</span><span class="n">y0</span><span class="p">],</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x1</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">y0</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="n">textsize</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+    
+<span class="c"># set limits</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">1900</span><span class="p">,</span><span class="mi">2200</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">750</span><span class="p">,</span><span class="mi">1400</span><span class="p">)</span>
+
+<span class="c"># save the figure</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&quot;assignments.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>[<a class="reference download internal" href="../_downloads/limits2.in"><tt class="xref download docutils literal"><span class="pre">input</span> <span class="pre">file</span></tt></a>]</p>
+<div class="highlight-python"><pre>#Peak   X0      Y0      X1      Y1
+# Peak defines 15N resonance in 2D NCO spectra.
+# Limits are in term of points from 0 to length-1.
+# These can determined from nmrDraw by subtracting 1 from the X and Y
+# values reported.
+#Peak   X0      Y0      X1      Y1
+T49     1992    1334    2003    1316
+T11     1996    1302    2008    1284
+# comments can appear anywhere in this file just start the line with #
+G14     2032    1314    2044    1293
+E15     2077    1025    2087    1004
+W43     2008    952     2019    933
+</pre>
+</div>
+<p>Result:</p>
+<p>[<a class="reference download internal" href="../_downloads/assignments.png"><tt class="xref download docutils literal"><span class="pre">assignments.png</span></tt></a>]</p>
+<img alt="../_images/assignments.png" src="../_images/assignments.png" />
+</div>
+
+
+          </div>
+        </div>
+      </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
@@ -63,7 +160,7 @@
 <div id="searchbox" style="display: none">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" size="18" />
+      <input type="text" name="q" />
       <input type="submit" value="Go" />
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
@@ -73,31 +170,6 @@
     </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
-
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body">
-            
-  <div class="section" id="plotting-example-plot-2d-assignments">
-<span id="plot-2d-assignments"></span><h1>plotting example: plot_2d_assignments<a class="headerlink" href="#plotting-example-plot-2d-assignments" title="Permalink to this headline">¶</a></h1>
-<p>This example shows how to use nmrglue and
-<a class="reference external" href="http://matplotlib.sourceforge.net/index.html">matplotlib</a> to create figures
-for examining data or publication.  In this example the assignments used in
-<a class="reference internal" href="integrate_2d.html#integrate-2d"><em>integration example: integrate_2d</em></a> are graphically examined.  A contour plot of the spectrum
-with the boxes and assignments is created.  To examine the box limit more
-closely see <a class="reference internal" href="plot_2d_boxes.html#plot-2d-boxes"><em>plotting example: plot_2d_boxes</em></a>.</p>
-<p>[<a class="reference external" href="el/plotting/2d_boxes/plot_assignments.py">source code</a>]</p>
-<p>[<a class="reference external" href="el/plotting/2d_boxes/limits.in">input file</a>]</p>
-<p>Result:</p>
-<p>[<a class="reference external" href="el/plotting/2d_boxes/assignments.png">assignments.png</a>]</p>
-<img alt="examples/el/plotting/2d_boxes/assignments.png" src="examples/el/plotting/2d_boxes/assignments.png" />
-</div>
-
-
-          </div>
         </div>
       </div>
       <div class="clearer"></div>
@@ -112,19 +184,21 @@ closely see <a class="reference internal" href="plot_2d_boxes.html#plot-2d-boxes
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
           <a href="plot_2d_spectrum.html" title="plotting example: plot_2d_spectrum"
              >next</a> |</li>
         <li class="right" >
           <a href="plot_2d_boxes.html" title="plotting example: plot_2d_boxes"
              >previous</a> |</li>
-        <li><a href="../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+        <li><a href="../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
           <li><a href="index.html" >Examples</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2010, Jonathan J. Helmus.
-      Last updated on Apr 26, 2012.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+        &copy; Copyright 2010-2012, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

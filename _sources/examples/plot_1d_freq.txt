@@ -8,13 +8,13 @@ This example shows how to use nmrglue and
 for examining data or publication.  In this example the spectrum from a 1D 
 NMRPipe file is plotted.
 
-[`source code <el/plotting/1d_spectrum/plot_1d_pipe_freq.py>`_]
+[:download:`source code <../../../examples/plotting/1d_spectrum/plot_1d_pipe_freq.py>`]
 
-.. literalinclude:: el/plotting/1d_spectrum/plot_1d_pipe_freq.py
+.. literalinclude:: ../../../examples/plotting/1d_spectrum/plot_1d_pipe_freq.py
 
 
 Results:
 
-[`figure <el/plotting/1d_spectrum/spectrum.png>`_]
+[:download:`figure <../../../examples/plotting/1d_spectrum/spectrum.png>`]
 
-.. image:: el/plotting/1d_spectrum/spectrum.png
+.. image:: ../../../examples/plotting/1d_spectrum/spectrum.png

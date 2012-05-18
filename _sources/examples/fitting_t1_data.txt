@@ -12,17 +12,17 @@ a list of spectra from ``spectra.in``.  The script integrates each peak in each
 spectrum and writies the trajectory for each peak to disk as ``traj.npy`` in 
 `numpy <http://numpy.scipy.org/>`_ ``.npy`` format.
 
-[`extract_trajs.py <el/fitting_data/t1_measurements/extract_trajs.py>`_]
+[:download:`extract_trajs.py <../../../examples/fitting_data/t1_measurements/extract_trajs.py>`]
 
-.. literalinclude:: el/fitting_data/t1_measurements/extract_trajs.py
+.. literalinclude:: ../../../examples/fitting_data/t1_measurements/extract_trajs.py
 
-[`boxes.in <el/fitting_data/t1_measurements/boxes.in>`_]
+[:download:`boxes.in <../../../examples/fitting_data/t1_measurements/boxes.in>`]
 
-.. literalinclude:: el/fitting_data/t1_measurements/boxes.in
+.. literalinclude:: ../../../examples/fitting_data/t1_measurements/boxes.in
 
-[`spectra.in <el/fitting_data/t1_measurements/spectra.in>`_]
+[:download:`spectra.in <../../../examples/fitting_data/t1_measurements/spectra.in>`]
 
-.. literalinclude:: el/fitting_data/t1_measurements/spectra.in
+.. literalinclude:: ../../../examples/fitting_data/t1_measurements/spectra.in
 
 
 The second script ``fit_exp_leastsq.py`` reads in this ``traj.npy`` file and the
@@ -34,31 +34,31 @@ documentation).  The resulting fits are saved to a `fits.pickle` file for
 easy reading into python as well as the human readable ``fits.txt`` file. 
 
 
-[`fit_exp_leastsq.py <el/fitting_data/t1_measurements/fit_exp_leastsq.py>`_]
+[:download:`fit_exp_leastsq.py <../../../examples/fitting_data/t1_measurements/fit_exp_leastsq.py>`]
 
-.. literalinclude:: el/fitting_data/t1_measurements/fit_exp_leastsq.py
+.. literalinclude:: ../../../examples/fitting_data/t1_measurements/fit_exp_leastsq.py
 
-[`time.dat <el/fitting_data/t1_measurements/time.dat>`_]
+[:download:`time.dat <../../../examples/fitting_data/t1_measurements/time.dat>`]
 
-.. literalinclude:: el/fitting_data/t1_measurements/time.dat
+.. literalinclude:: ../../../examples/fitting_data/t1_measurements/time.dat
 
 Results: 
 
-[`fits.txt <el/fitting_data/t1_measurements/fits.txt>`_]
+[:download:`fits.txt <../../../examples/fitting_data/t1_measurements/fits.txt>`]
 
-.. literalinclude:: el/fitting_data/t1_measurements/fits.txt
+.. literalinclude:: ../../../examples/fitting_data/t1_measurements/fits.txt
 
 The last script ``pt.py`` reads in the fits, trajectories and T1 
 relaxation times and plots the experimental points and best fit to a series 
 of ``*_plot.png`` files.
 
 
-[`pt.py <el/fitting_data/t1_measurements/pt.py>`_]
+[:download:`pt.py <../../../examples/fitting_data/t1_measurements/pt.py>`]
 
-.. literalinclude:: el/fitting_data/t1_measurements/pt.py
+.. literalinclude:: ../../../examples/fitting_data/t1_measurements/pt.py
 
 Results:
 
-[`A24_plot.png <el/fitting_data/t1_measurements/A24_plot.png>`_]
+[:download:`A24_plot.png <../../../examples/fitting_data/t1_measurements/A24_plot.png>`]
 
-.. image:: el/fitting_data/t1_measurements/A24_plot.png
+.. image:: ../../../examples/fitting_data/t1_measurements/A24_plot.png

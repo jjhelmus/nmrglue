@@ -5,23 +5,26 @@ nmrglue.table
 
 This modules is imported as nmrglue.pipe and can be called as such.
 
-High-Level Functions
----------------------
+User Information
+----------------
 
+User Functions
+^^^^^^^^^^^^^^
 
-These are the functions most users will use from the table module.
+.. autosummary::
+    :toctree: generated/
 
-.. autofunction:: read
-.. autofunction:: write 
-.. autofunction:: insert_row
-.. autofunction:: append_row 
-.. autofunction:: delete_row
-.. autofunction:: reorder_rows
-.. autofunction:: insert_column
-.. autofunction:: append_column
-.. autofunction:: delete_column
-.. autofunction:: reorder_columns
-.. autofunction:: pipe2glue
-.. autofunction:: glue2pipe
-.. autofunction:: guess_pformat
+    read
+    write 
+    insert_row
+    append_row 
+    delete_row
+    reorder_rows
+    insert_column
+    append_column
+    delete_column
+    reorder_columns
+    pipe2glue
+    glue2pipe
+    guess_pformat
 

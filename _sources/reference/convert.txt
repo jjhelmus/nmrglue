@@ -5,20 +5,24 @@ nmrglue.convert
 
 This modules is imported as nmrglue.convert and can be called as such.
 
-High-Level Classes
----------------------
+User Information
+----------------
 
-These are the classes most users will use from the convert module.
+User Classes
+^^^^^^^^^^^^
+
+This class is targetted for users of nmrglue.
 
 .. autoclass:: converter
     :members:
 
+Developer Information
+---------------------
 
-Low-Level Classes
------------------
+Developer Classes
+^^^^^^^^^^^^^^^^^
 
-These classes are typically not used directly by users.  They are used by
-high level functions.  Developers and user who want fine control over file
-conversion will be interested in these functions.
+These classes are typically not used directly by users.  Developers who want
+fine control over file conversion will be interested in these classes
 
 .. autoclass:: udata_nd

@@ -8,6 +8,6 @@ script a 1D time domain NMRPipe file is processing into a 1D NMRPipe
 frequency domain file.  After processing the resulting file is compared to
 one processed with NMRPipe.
 
-[`source code <el/processing/process_pipe_1d.py>`_]
+[:download:`source code <../../../examples/processing/process_pipe_1d.py>`]
 
-.. literalinclude:: el/processing/process_pipe_1d.py
+.. literalinclude:: ../../../examples/processing/process_pipe_1d.py

@@ -1,6 +1,6 @@
 nmrglue.process.proc_base.zd_triangle
 =====================================
 
-.. currentmodule:: nmrglue.process
+.. currentmodule:: nmrglue.process.proc_base
 
-.. automethod:: proc_base.zd_triangle
+.. autofunction:: zd_triangle

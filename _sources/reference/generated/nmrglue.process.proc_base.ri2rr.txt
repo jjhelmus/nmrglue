@@ -1,6 +1,6 @@
 nmrglue.process.proc_base.ri2rr
 ===============================
 
-.. currentmodule:: nmrglue.process
+.. currentmodule:: nmrglue.process.proc_base
 
-.. automethod:: proc_base.ri2rr
+.. autofunction:: ri2rr

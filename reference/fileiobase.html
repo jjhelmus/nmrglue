@@ -3,17 +3,20 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
+
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nmrglue.fileiobase &mdash; nmrglue v0.2 documentation</title>
-    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <title>nmrglue.fileiobase &mdash; nmrglue 0.3-dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.2',
+        VERSION:     '0.3-dev',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -22,9 +25,10 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <link rel="top" title="nmrglue v0.2 documentation" href="../index.html" />
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.3-dev documentation" href="../index.html" />
     <link rel="up" title="Reference Guide" href="index.html" />
-    <link rel="next" title="nmrglue.pipe" href="pipe.html" />
+    <link rel="next" title="nmrglue.fileio.fileiobase.create_blank_udic" href="generated/nmrglue.fileio.fileiobase.create_blank_udic.html" />
     <link rel="prev" title="nmrglue.convert" href="convert.html" /> 
   </head>
   <body>
@@ -38,52 +42,18 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pipe.html" title="nmrglue.pipe"
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.fileio.fileiobase.create_blank_udic.html" title="nmrglue.fileio.fileiobase.create_blank_udic"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="convert.html" title="nmrglue.convert"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+        <li><a href="../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Reference Guide</a> &raquo;</li> 
       </ul>
-    </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">nmrglue.fileiobase</a><ul>
-<li><a class="reference internal" href="#low-level-functions">Low-Level Functions</a></li>
-<li><a class="reference internal" href="#low-level-classes">Low-Level Classes</a></li>
-</ul>
-</li>
-</ul>
-
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="convert.html"
-                        title="previous chapter">nmrglue.convert</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="pipe.html"
-                        title="next chapter">nmrglue.pipe</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/reference/fileiobase.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" size="18" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
@@ -95,114 +65,125 @@
 <p>fileiobase provides general purpose NMR file IO functions and classes
 used by multiple nmrglue.fileio modules</p>
 <p>This modules is imported as nmrglue.fileiobase and can be called as such.</p>
-<div class="section" id="low-level-functions">
-<h2>Low-Level Functions<a class="headerlink" href="#low-level-functions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="developer-information">
+<h2>Developer Information<a class="headerlink" href="#developer-information" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="developer-functions">
+<h3>Developer Functions<a class="headerlink" href="#developer-functions" title="Permalink to this headline">¶</a></h3>
 <p>These functions are typically not used directly by users.  They are called by
 high level functions.</p>
-<dl class="function">
-<dt id="nmrglue.fileio.fileiobase.create_blank_udic">
-<tt class="descclassname">nmrglue.fileio.fileiobase.</tt><tt class="descname">create_blank_udic</tt><big>(</big><em>ndim</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.fileiobase.create_blank_udic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a blank universal dictionary for a ndim-D spectrum</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.fileiobase.open_towrite">
-<tt class="descclassname">nmrglue.fileio.fileiobase.</tt><tt class="descname">open_towrite</tt><big>(</big><em>filename</em>, <em>overwrite=False</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.fileiobase.open_towrite" title="Permalink to this definition">¶</a></dt>
-<dd><p>Open filename for writing and return file object</p>
-<p>Function checks if file exists (and raises IOError if overwrite=False) and
-creates necessary directiories as needed.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.fileiobase.ndfrom_iter">
-<tt class="descclassname">nmrglue.fileio.fileiobase.</tt><tt class="descname">ndfrom_iter</tt><big>(</big><em>shape</em>, <em>slices</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.fileiobase.ndfrom_iter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.fileiobase.ndto_iter">
-<tt class="descclassname">nmrglue.fileio.fileiobase.</tt><tt class="descname">ndto_iter</tt><big>(</big><em>shape</em>, <em>slices</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.fileiobase.ndto_iter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.fileiobase.ndtofrom_iter">
-<tt class="descclassname">nmrglue.fileio.fileiobase.</tt><tt class="descname">ndtofrom_iter</tt><big>(</big><em>shape</em>, <em>slices</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.fileiobase.ndtofrom_iter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.fileiobase.size_and_ndtofrom_iter">
-<tt class="descclassname">nmrglue.fileio.fileiobase.</tt><tt class="descname">size_and_ndtofrom_iter</tt><big>(</big><em>shape</em>, <em>slices</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.fileiobase.size_and_ndtofrom_iter" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.fileiobase.index2trace_flat">
-<tt class="descclassname">nmrglue.fileio.fileiobase.</tt><tt class="descname">index2trace_flat</tt><big>(</big><em>shape</em>, <em>index</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.fileiobase.index2trace_flat" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate trace number from shape and index of all indirect dimensions
-assuming a flat structure</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.fileiobase.trace2index_flat">
-<tt class="descclassname">nmrglue.fileio.fileiobase.</tt><tt class="descname">trace2index_flat</tt><big>(</big><em>shape</em>, <em>ntrace</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.fileiobase.trace2index_flat" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the index of a trace assuming a flat structure</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.fileiobase.index2trace_opp">
-<tt class="descclassname">nmrglue.fileio.fileiobase.</tt><tt class="descname">index2trace_opp</tt><big>(</big><em>shape</em>, <em>index</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.fileiobase.index2trace_opp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate trace number from shape and index of all indirect dimensions
-assuming a phase ordering opposite the time increments.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.fileiobase.trace2index_opp">
-<tt class="descclassname">nmrglue.fileio.fileiobase.</tt><tt class="descname">trace2index_opp</tt><big>(</big><em>shape</em>, <em>ntrace</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.fileiobase.trace2index_opp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the index of a trace assuming opposite phase/time increment 
-ordering</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.fileiobase.index2trace_reg">
-<tt class="descclassname">nmrglue.fileio.fileiobase.</tt><tt class="descname">index2trace_reg</tt><big>(</big><em>shape</em>, <em>index</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.fileiobase.index2trace_reg" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate trace number from shape and index of all indirect dimensions
-assuming the same  phase and time ordering.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="nmrglue.fileio.fileiobase.trace2index_reg">
-<tt class="descclassname">nmrglue.fileio.fileiobase.</tt><tt class="descname">trace2index_reg</tt><big>(</big><em>shape</em>, <em>ntrace</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.fileiobase.trace2index_reg" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the index of a trace assuming the same phase/time increment 
-ordering</p>
-</dd></dl>
-
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.fileiobase.create_blank_udic.html#nmrglue.fileio.fileiobase.create_blank_udic" title="nmrglue.fileio.fileiobase.create_blank_udic"><tt class="xref py py-obj docutils literal"><span class="pre">create_blank_udic</span></tt></a>(ndim)</td>
+<td>Create a blank universal dictionary for a ndim-D spectrum</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.fileiobase.open_towrite.html#nmrglue.fileio.fileiobase.open_towrite" title="nmrglue.fileio.fileiobase.open_towrite"><tt class="xref py py-obj docutils literal"><span class="pre">open_towrite</span></tt></a>(filename[,&nbsp;overwrite])</td>
+<td>Open filename for writing and return file object</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.fileiobase.ndfrom_iter.html#nmrglue.fileio.fileiobase.ndfrom_iter" title="nmrglue.fileio.fileiobase.ndfrom_iter"><tt class="xref py py-obj docutils literal"><span class="pre">ndfrom_iter</span></tt></a>(shape,&nbsp;slices)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.fileiobase.ndto_iter.html#nmrglue.fileio.fileiobase.ndto_iter" title="nmrglue.fileio.fileiobase.ndto_iter"><tt class="xref py py-obj docutils literal"><span class="pre">ndto_iter</span></tt></a>(shape,&nbsp;slices)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.fileiobase.ndtofrom_iter.html#nmrglue.fileio.fileiobase.ndtofrom_iter" title="nmrglue.fileio.fileiobase.ndtofrom_iter"><tt class="xref py py-obj docutils literal"><span class="pre">ndtofrom_iter</span></tt></a>(shape,&nbsp;slices)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.fileiobase.size_and_ndtofrom_iter.html#nmrglue.fileio.fileiobase.size_and_ndtofrom_iter" title="nmrglue.fileio.fileiobase.size_and_ndtofrom_iter"><tt class="xref py py-obj docutils literal"><span class="pre">size_and_ndtofrom_iter</span></tt></a>(shape,&nbsp;slices)</td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.fileiobase.index2trace_flat.html#nmrglue.fileio.fileiobase.index2trace_flat" title="nmrglue.fileio.fileiobase.index2trace_flat"><tt class="xref py py-obj docutils literal"><span class="pre">index2trace_flat</span></tt></a>(shape,&nbsp;index)</td>
+<td>Calculate trace number from shape and index of all indirect dimensions</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.fileiobase.trace2index_flat.html#nmrglue.fileio.fileiobase.trace2index_flat" title="nmrglue.fileio.fileiobase.trace2index_flat"><tt class="xref py py-obj docutils literal"><span class="pre">trace2index_flat</span></tt></a>(shape,&nbsp;ntrace)</td>
+<td>Calculate the index of a trace assuming a flat structure</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.fileiobase.index2trace_opp.html#nmrglue.fileio.fileiobase.index2trace_opp" title="nmrglue.fileio.fileiobase.index2trace_opp"><tt class="xref py py-obj docutils literal"><span class="pre">index2trace_opp</span></tt></a>(shape,&nbsp;index)</td>
+<td>Calculate trace number from shape and index of all indirect dimensions</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.fileiobase.trace2index_opp.html#nmrglue.fileio.fileiobase.trace2index_opp" title="nmrglue.fileio.fileiobase.trace2index_opp"><tt class="xref py py-obj docutils literal"><span class="pre">trace2index_opp</span></tt></a>(shape,&nbsp;ntrace)</td>
+<td>Calculate the index of a trace assuming opposite phase/time increment</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.fileiobase.index2trace_reg.html#nmrglue.fileio.fileiobase.index2trace_reg" title="nmrglue.fileio.fileiobase.index2trace_reg"><tt class="xref py py-obj docutils literal"><span class="pre">index2trace_reg</span></tt></a>(shape,&nbsp;index)</td>
+<td>Calculate trace number from shape and index of all indirect dimensions</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.fileiobase.trace2index_reg.html#nmrglue.fileio.fileiobase.trace2index_reg" title="nmrglue.fileio.fileiobase.trace2index_reg"><tt class="xref py py-obj docutils literal"><span class="pre">trace2index_reg</span></tt></a>(shape,&nbsp;ntrace)</td>
+<td>Calculate the index of a trace assuming the same phase/time increment</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div class="section" id="low-level-classes">
-<h2>Low-Level Classes<a class="headerlink" href="#low-level-classes" title="Permalink to this headline">¶</a></h2>
-<p>These classes are typically not used directly by users.  They are extended or
-called by high level classes or functions.</p>
-<dl class="class">
-<dt id="nmrglue.fileio.fileiobase.unit_conversion">
-<em class="property">class </em><tt class="descclassname">nmrglue.fileio.fileiobase.</tt><tt class="descname">unit_conversion</tt><big>(</big><em>size</em>, <em>cplx</em>, <em>sw</em>, <em>obs</em>, <em>car</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.fileiobase.unit_conversion" title="Permalink to this definition">¶</a></dt>
-<dd><p>object provides methods to convert between common nmr units</p>
-</dd></dl>
-
-<dl class="class">
-<dt id="nmrglue.fileio.fileiobase.data_nd">
-<em class="property">class </em><tt class="descclassname">nmrglue.fileio.fileiobase.</tt><tt class="descname">data_nd</tt><big>(</big><em>order</em><big>)</big><a class="headerlink" href="#nmrglue.fileio.fileiobase.data_nd" title="Permalink to this definition">¶</a></dt>
-<dd><p>data_nd emulates numpy.ndarray object without loading data into memory</p>
-<ul class="simple">
-<li>slicing operations return ndarray objects</li>
-<li>can iterate over with expected results</li>
-<li>transpose and swapaxes functions create a new data_nd object with the
-new axes ordering</li>
-<li>has ndim, shape, and dtype attributes.</li>
-</ul>
-</dd></dl>
-
+<div class="section" id="developer-classes">
+<h3>Developer Classes<a class="headerlink" href="#developer-classes" title="Permalink to this headline">¶</a></h3>
+<p>These classes are typically not used directly by users.  Developers may be
+interested in these classes.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.fileiobase.unit_conversion.html#nmrglue.fileio.fileiobase.unit_conversion" title="nmrglue.fileio.fileiobase.unit_conversion"><tt class="xref py py-obj docutils literal"><span class="pre">unit_conversion</span></tt></a>(size,&nbsp;cplx,&nbsp;sw,&nbsp;obs,&nbsp;car)</td>
+<td>object provides methods to convert between common nmr units</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.fileiobase.data_nd.html#nmrglue.fileio.fileiobase.data_nd" title="nmrglue.fileio.fileiobase.data_nd"><tt class="xref py py-obj docutils literal"><span class="pre">data_nd</span></tt></a>(order)</td>
+<td>data_nd emulates numpy.ndarray object without loading data into memory</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </div>
 
 
           </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">nmrglue.fileiobase</a><ul>
+<li><a class="reference internal" href="#developer-information">Developer Information</a><ul>
+<li><a class="reference internal" href="#developer-functions">Developer Functions</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#developer-classes">Developer Classes</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="convert.html"
+                        title="previous chapter">nmrglue.convert</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="generated/nmrglue.fileio.fileiobase.create_blank_udic.html"
+                        title="next chapter">nmrglue.fileio.fileiobase.create_blank_udic</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/reference/fileiobase.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
@@ -217,19 +198,21 @@ new axes ordering</li>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pipe.html" title="nmrglue.pipe"
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.fileio.fileiobase.create_blank_udic.html" title="nmrglue.fileio.fileiobase.create_blank_udic"
              >next</a> |</li>
         <li class="right" >
           <a href="convert.html" title="nmrglue.convert"
              >previous</a> |</li>
-        <li><a href="../index.html">nmrglue v0.2 documentation</a> &raquo;</li>
+        <li><a href="../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
           <li><a href="index.html" >Reference Guide</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2010, Jonathan J. Helmus.
-      Last updated on Apr 26, 2012.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+        &copy; Copyright 2010-2012, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
 </html>

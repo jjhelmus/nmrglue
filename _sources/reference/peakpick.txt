@@ -5,39 +5,37 @@ nmrglue.peakpick
 
 This modules is imported as nmrglue.peakpick and can be called as such.
 
-High-Level Functions
----------------------
+User Functions
+--------------
+
+.. autosummary::
+    :toctree: generated/
+
+    pick
 
 
-These are the functions most users will use from the peakpick module.
-
-.. autofunction:: pick 
-
-Low-Level Functions
+Developer Functions
 -------------------
 
-These functions are typically not used directly by users.  They are called by
-high level functions.  Developers and user who want fine control over peak
-picking will be interested in these functions.
+These functions are typically not used directly by users.  Developers who 
+want fine control over peak picking will be interested in these functions.
 
-.. autofunction:: find_regions
-.. autofunction:: regions2recarray
-.. autofunction:: pad_regions
-.. autofunction:: resolve_region_overlap
-.. autofunction:: combine_regions
-.. autofunction:: combine_2regions
-.. autofunction:: limits_in_limits
-.. autofunction:: is_overlappedND
-.. autofunction:: is_overlapped1D
-.. autofunction:: region2linesh
-.. autofunction:: linesh2region
-.. autofunction:: filter_by_distance
-.. autofunction:: pts_in_limits
-.. autofunction:: in_limits
-.. autofunction:: guess_params_center
-.. autofunction:: guess_params_segment
-.. autofunction:: pick_connected
-.. autofunction:: pick_downward
-.. autofunction:: pick_thres
-.. autofunction:: pick_thres_fast
+.. autosummary::
+    :toctree: generated/
 
+    add_edge
+    clusters
+    pack_table
+    guess_params_slice
+    extract_1d
+    find_all_thres
+    find_all_nthres
+    find_all_thres_fast
+    find_all_nthres_fast
+    find_pseg_slice
+    find_nseg_slice
+    
+    
+    
+    
+    

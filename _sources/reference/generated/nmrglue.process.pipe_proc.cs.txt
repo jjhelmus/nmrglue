@@ -1,6 +1,6 @@
 nmrglue.process.pipe_proc.cs
 ============================
 
-.. currentmodule:: nmrglue.process
+.. currentmodule:: nmrglue.process.pipe_proc
 
-.. automethod:: pipe_proc.cs
+.. autofunction:: cs

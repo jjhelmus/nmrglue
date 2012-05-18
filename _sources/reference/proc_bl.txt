@@ -7,8 +7,8 @@ nmrglue.proc_bl
 
 This module is imported as nmrglue.proc_bl and can be called as such.
 
-High-Level Functions
---------------------
+User Functions
+--------------
 
 .. autosummary::
     :toctree: generated/
@@ -23,10 +23,7 @@ High-Level Functions
     sol_sine2
     sol_gaussian
 
-These functions are called by high-level function are and most uses will not
-use them in common processing scripts.
-
-Low-Level Functions
+Developer Functions
 -------------------
 
 .. autosummary::
@@ -34,15 +31,3 @@ Low-Level Functions
 
     calc_bl_linear
     calc_bl_med
-
-These functions are not implemented (yet) in nmrglue.  There are here as
-shells for later implementation.
-
-NotImplemented
---------------
-
-.. autosummary::
-    :toctree: generated/
-
-    poly_td
-    poly_fd

@@ -9,6 +9,6 @@ The last block of code lists the differences between this conversion and one
 performed with var2pipe.
 
 
-[`source code <el/convert/varian2pipe_2d_tppi.py>`_]
+[:download:`source code <../../../examples/convert/varian2pipe_2d_tppi.py>`]
 
-.. literalinclude:: el/convert/varian2pipe_2d_tppi.py
+.. literalinclude:: ../../../examples/convert/varian2pipe_2d_tppi.py

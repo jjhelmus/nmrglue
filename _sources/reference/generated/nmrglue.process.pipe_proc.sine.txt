@@ -1,6 +1,6 @@
 nmrglue.process.pipe_proc.sine
 ==============================
 
-.. currentmodule:: nmrglue.process
+.. currentmodule:: nmrglue.process.pipe_proc
 
-.. automethod:: pipe_proc.sine
+.. autofunction:: sine

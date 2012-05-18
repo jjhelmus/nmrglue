@@ -12,6 +12,6 @@ This application allows users to examine various NMRPipe apodization windows
 with different parameters.
 
 
-[`source code <el/sample_applications/apod_viewer_2win.py>`_]
+[:download:`source code <../../../examples/sample_applications/apod_viewer_2win.py>`]
 
-.. literalinclude:: el/sample_applications/apod_viewer_2win.py
+.. literalinclude:: ../../../examples/sample_applications/apod_viewer_2win.py

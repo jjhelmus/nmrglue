@@ -1,6 +1,6 @@
 nmrglue.process.proc_bl.sol_gaussian
 ====================================
 
-.. currentmodule:: nmrglue.process
+.. currentmodule:: nmrglue.process.proc_bl
 
-.. automethod:: proc_bl.sol_gaussian
+.. autofunction:: sol_gaussian
