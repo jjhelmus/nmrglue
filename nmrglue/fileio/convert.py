@@ -1,29 +1,39 @@
 """
 Functions to convert between NMR file formats
-
 """
 
-import numpy as np
 import datetime
 
-# modules from nmrglue
-import pipe
-import varian
-import bruker
-import sparky
-import fileiobase
+import numpy as np
+
+from . import pipe
+from . import varian
+from . import bruker
+from . import sparky
+from . import fileiobase
 
 class converter(object):
     """
-    The converter object allowes conversion between NMR file formats
+    Object which allows conversion between NMR file formats, including low
+    memory data objects.
 
-    Example::
+    Conversion between NMR file formats with this class involves three steps.
+    First a new converter object must be created.  Then the converter must be
+    loaded with data using a ``from_`` method.  Finally, the dictionary and 
+    data representation of a NMR data in the desired format is extracted using
+    a ``to_`` method.  This can then be written to disk.
 
-        vdic,vdata = ng.varian.read("varian_dir")
+    Example conversion::
+
+        vdic, vdata = ng.varian.read("varian_dir")
         C = ng.convert.converter()
-        C.from_varian(vdic,vdata)
-        pdic,pdata = C.to_pipe()
-        ng.pipe.write("test.fid",pdic,pdata)
+        C.from_varian(vdic, vdata)
+        pdic, pdata = C.to_pipe()
+        ng.pipe.write("test.fid", pdic, pdata)
+
+    Spectral parameters can be provided directly by passing a Universal
+    dictionary to any of the ``from_`` methods.  If not provided the spectral
+    parameters are guessed from the file format's dictionary of parameters.   
 
     """
     def __init__(self):
@@ -33,7 +43,6 @@ class converter(object):
         pass
 
     # utility functions
-
     def __returndata(self):
         """ 
         Return data or emulated data after error checking
@@ -49,14 +58,14 @@ class converter(object):
         if "_oproc" not in self.__dict__:
             raise IOError("converter not loaded with processing parameters")
         if "_odtype" not in self.__dict__:
-            raise IOError("converter not loaded output dtype")
+            raise IOError("converter not loaded with output dtype")
 
         # Warnings
         if self._data.dtype.kind != np.dtype(self._odtype).kind:
             print "Warning: Incompatiable dtypes, conversion not recommended"
 
         # Return data
-        if isinstance(self._data,np.ndarray):   # in memory data
+        if isinstance(self._data, np.ndarray):   # in memory data
             return self.__procdata()
 
         else:   # return emulated data
@@ -64,13 +73,12 @@ class converter(object):
             oproc = self._oproc
             odtype = self._odtype
             order = self._data.order
-            return udata_nd(self._data,iproc,oproc,odtype,order)
+            return udata_nd(self._data, iproc, oproc, odtype, order)
 
     def __procdata(self):
         """ 
         Process data as indicated by flags
         """
-
         # copy the data
         data = np.copy(self._data)
 
@@ -78,41 +86,47 @@ class converter(object):
         # sign alt. indirect dimension
         if data.ndim >= 2 and "alt_id_sign" in self._iproc:
             #data[1::2] = -data[1::2]
-            s = [slice(None,None,None)]*data.ndim
+            s = [slice(None, None, None)] * data.ndim
             for i in range(data.ndim-1):
-                s[i] = slice(1,None,2)
+                s[i] = slice(1, None, 2)
                 data[s] = -data[s]
-                s[i] = slice(None,None,None)
+                s[i] = slice(None, None, None)
 
         if "realfactor" in self._iproc:
-            data.real = data.real*self._iproc['realfactor']
+            data.real = data.real * self._iproc['realfactor']
             
         if "imagfactor" in self._iproc:
-            data.imag = data.imag*self._iproc['imagfactor']
+            data.imag = data.imag * self._iproc['imagfactor']
 
         # processing for output 
         # sign alt. indirect dimension
         if data.ndim >= 2 and "alt_id_sign" in self._oproc:
-            s = [slice(None,None,None)]*data.ndim
+            s = [slice(None, None, None)] * data.ndim
             for i in range(data.ndim-1):
-                s[i] = slice(1,None,2)
+                s[i] = slice(1, None, 2)
                 data[s] = -data[s]
-                s[i] = slice(None,None,None)
+                s[i] = slice(None, None, None)
 
         if "realfactor" in self._oproc:
-            data.real = data.real*self._oproc['realfactor']
+            data.real = data.real * self._oproc['realfactor']
             
         if "imagfactor" in self._oproc:
-            data.imag = data.imag*self._oproc['imagfactor']
+            data.imag = data.imag * self._oproc['imagfactor']
 
         return data.astype(self._odtype)
 
-
     # IMPORTERS (from_*)
-
-    def from_universal(self,dic,data):
+    def from_universal(self, dic, data):
         """ 
-        load data from universal dic,data pair
+        Load converter with Universal data.
+
+        Parameters
+        ----------
+        dic : dict
+            Dictionary of universal parameters.
+        data : array_like
+            NMR data.
+
         """
         # set data
         self._data = data
@@ -121,34 +135,46 @@ class converter(object):
         # set the dictionary
         self._udic = dic
 
-    def from_varian(self,dic,data,udic=None):
+    def from_varian(self, dic, data, udic=None):
         """ 
-        load data and dictionary from varian fid pair
+        Load converter with Agilent/Varian data.
 
-        Parameter:
-
-        * dic     Varian dictionary
-        * data    Varian data
-        * udic    Universal dictionary. If not provided is guessed.
-
+        Parameters
+        ----------
+        dic : dict
+            Dictionary of Agilent/Varian parameters.
+        data : array_like
+            NMR data.
+        udic : dict, optional
+            Universal dictionary, if not provided will be guesses from dic.
+        
         """
         # set data
         self._data = data
         if udic != None and udic[0]['encoding'].lower() == "tppi":
             self._iproc = {"imagfactor":-1.0}
         else:   # states, etc needs sign alt. of indirect dim.
-            self._iproc = {"alt_id_sign":True,"imagfactor":-1.0}
+            self._iproc = {"alt_id_sign":True, "imagfactor":-1.0}
 
         # set the universal dictionary
         if udic != None:
             self._udic = udic
         else:
-            self._udic = varian.guess_udic(dic,data) 
+            self._udic = varian.guess_udic(dic, data) 
 
-
-    def from_pipe(self,dic,data,udic=None):
+    def from_pipe(self, dic, data, udic=None):
         """ 
-        Load data and dictionary from NMRPipe pair
+        Load converter with NMRPipe data.
+
+        Parameters
+        ----------
+        dic : dict
+            Dictionary of NMRPipe parameters.
+        data : array_like
+            NMR data.
+        udic : dict, optional
+            Universal dictionary, if not provided will be guesses from dic.
+        
         """
         # set data
         self._data = data
@@ -158,12 +184,21 @@ class converter(object):
         if udic != None:
             self._udic = udic
         else:
-            self._udic = pipe.guess_udic(dic,data)
+            self._udic = pipe.guess_udic(dic, data)
 
-
-    def from_sparky(self,dic,data,udic=None):
+    def from_sparky(self, dic, data, udic=None):
         """ 
-        Load data and dictionary from Sparky pair
+        Load converter with Sparky data.
+
+        Parameters
+        ----------
+        dic : dict
+            Dictionary of Sparky parameters.
+        data : array_like
+            NMR data.
+        udic : dict, optional
+            Universal dictionary, if not provided will be guesses from dic.
+        
         """
         # set data
         self._data = data
@@ -173,12 +208,21 @@ class converter(object):
         if udic != None:
             self._udic = udic
         else:
-            self._udic = sparky.guess_udic(dic,data)
+            self._udic = sparky.guess_udic(dic, data)
 
-
-    def from_bruker(self,dic,data,udic=None):
+    def from_bruker(self, dic, data, udic=None):
         """ 
-        Load data and dictionary from Bruker ser/fid file
+        Load converter with Bruker data.
+
+        Parameters
+        ----------
+        dic : dict
+            Dictionary of Bruker parameters.
+        data : array_like
+            NMR data.
+        udic : dict, optional
+            Universal dictionary, if not provided will be guesses from dic.
+        
         """
         # set data
         self._data = data
@@ -188,14 +232,20 @@ class converter(object):
         if udic != None:
             self._udic = udic
         else:
-            self._udic = bruker.guess_udic(dic,data)
+            self._udic = bruker.guess_udic(dic, data)
 
-    
     # EXPORTERS (to_*)
-
     def to_universal(self):
         """ 
-        Return universal dictionary and original data
+        Return Universal format data.
+
+        Returns
+        -------
+        dic : dict
+            Dictionary of Universal parameters.
+        data : array_like
+            NMR data in format as provided.
+
         """
         # create dictionary
         dic = dict(self._udic)
@@ -204,57 +254,100 @@ class converter(object):
         self._oproc = {}
         self._odtype = self._data.dtype
 
-        return dic,self.__returndata()
+        return dic, self.__returndata()
 
-
-    def to_pipe(self,datetimeobj=datetime.datetime.now()):
+    def to_pipe(self, datetimeobj=datetime.datetime.now()):
         """ 
-        Return NMRPipe dic,data pair
+        Return NMRPipe format data.
+
+        Parameters
+        ----------
+        datetime : datetime object, optional
+            Datetime object to include in the NMRPipe parameters.  The current
+            date and time is used by default.
+
+        Returns
+        -------
+        dic : dict
+            Dictionary of NMRPipe parameters.
+        data : array_like
+            NMR data in NMRPipe format.
+
         """
         # create dictionary
-        dic = pipe.create_dic(self._udic,datetimeobj)
+        dic = pipe.create_dic(self._udic, datetimeobj)
 
         # add processing flags for output
         self._oproc = {}
-        if self._udic[self._udic["ndim"]-1]["complex"]:
+        if self._udic[self._udic["ndim"] - 1]["complex"]:
             self._odtype = "complex64"
         else:
             self._odtype = "float32"
 
-        return dic,self.__returndata()
-
+        return dic, self.__returndata()
 
     def to_varian(self):
         """ 
-        Return Varian dic,data pair
+        Return Agilent/Varian format data.
+
+        Returns
+        -------
+        dic : dict
+            Dictionary of Agilent/Varian parameters.
+        data : array_like
+            NMR data in Agilent/Varian format.
+
         """
         # create dictionary
         dic = varian.create_dic(self._udic)
 
         # add processing flags for output
-        self._oproc = {"alt_id_sign":True,"imagfactor":-1.0}
+        self._oproc = {"alt_id_sign":True, "imagfactor":-1.0}
         self._odtype = "complex64"
 
-        return dic,self.__returndata()
+        return dic, self.__returndata()
 
+    def to_sparky(self, datetimeobj=datetime.datetime.now(), user='user'):
+        """
+        Return Sparky format data.
 
-    def to_sparky(self,datetimeobj=datetime.datetime.now(),user='user'):
-        """ 
-        Return sparky dic,data pair
+        Parameters
+        ----------
+        datetime : datetime object, optional
+            Datetime object to include in the Sparky parameters.  The current
+            date and time is used by default.
+        user : str, optional
+            Username to include in the Sparky parameters. 'user' is the 
+            default.
+
+        Returns
+        -------
+        dic : dict
+            Dictionary of Sparky parameters.
+        data : array_like
+            NMR data in Sparky format.
+        
         """
         # create dictionary
-        dic = sparky.create_dic(self._udic,datetimeobj,user)
+        dic = sparky.create_dic(self._udic, datetimeobj, user)
 
         # add processing flags for output
         self._oproc = {}
         self._odtype = "float32"
 
-        return dic,self.__returndata()
-
+        return dic, self.__returndata()
 
     def to_bruker(self):
         """ 
-        Return Bruker dic,data pair
+        Return Bruker format data.
+
+        Returns
+        -------
+        dic : dict
+            Dictionary of Bruker parameters.
+        data : array_like
+            NMR data in Bruker format.
+
         """
         # create dictionary
         dic = bruker.create_dic(self._udic)
@@ -263,7 +356,8 @@ class converter(object):
         self._oproc = {}
         self._odtype = "complex128"
 
-        return dic,self.__returndata()
+        return dic, self.__returndata()
+
 
 class udata_nd(fileiobase.data_nd):
     """
@@ -276,9 +370,34 @@ class udata_nd(fileiobase.data_nd):
       ordering.
     * has ndim, shape, and dtype attributes.
 
+    Parameters
+    ----------
+    edata : fileiobase.data_nd derived object
+        Data object to wrap.
+    iproc : dict
+        Dictionary of processing required by input format.
+    oproc :
+        Dictionary of processing required by output format.
+    odtype : dtype
+        Output dtype.
+    order : tuple
+        Axis ordering relative to input data.
+    
+    Notes
+    -----
+    The iproc and oproc dictionary can contains the following keys and values.
+
+    ===========     ==========  ==========================================
+    key             value       Description
+    ===========     ==========  ==========================================
+    alt_id_sign     True/False  True alternates signs along indirect dims.
+    realfactor      float       Real channel scaling factor.
+    imagfactor      float       Imaginary channel scaling factor.
+    ===========     ==========  ==========================================
+
     """
     
-    def __init__(self,edata,iproc,oproc,odtype,order=None):
+    def __init__(self, edata, iproc, oproc, odtype, order=None):
         """
         create and set up
         """
@@ -294,14 +413,14 @@ class udata_nd(fileiobase.data_nd):
         self.dtype = odtype
         self.__setdimandshape__()   # set ndim and shape attributes
 
-    def __fcopy__(self,order):
+    def __fcopy__(self, order):
         """
         Create a copy
         """
-        n = udata_nd(self.edata,self._iproc,self._oproc,self._odtype,order)
+        n = udata_nd(self.edata, self._iproc, self._oproc, self._odtype, order)
         return n
 
-    def __fgetitem__(self,slices):
+    def __fgetitem__(self, slices):
         """
         Return ndarray of selected values
 
@@ -314,36 +433,34 @@ class udata_nd(fileiobase.data_nd):
             if "alt_id_sign" not in self._oproc:    # skip if in both
                 fslice = slices[:-1]
                 ffshape = self.fshape[:-1]
-                nd_iter = fileiobase.ndtofrom_iter(ffshape,fslice)
-                for out_index,in_index in nd_iter:
+                nd_iter = fileiobase.ndtofrom_iter(ffshape, fslice)
+                for out_index, in_index in nd_iter:
                     # negate the trace if there is an odd number of 
                     # odd number indices in the slice
-                    if np.mod(in_index,2).sum()%2 == 1: 
+                    if np.mod(in_index, 2).sum() % 2 == 1: 
                         data[out_index] = -data[out_index]
 
 
         if "realfactor" in self._iproc:
-            data.real = data.real*self._iproc['realfactor']
+            data.real = data.real * self._iproc['realfactor']
         if "imagfactor" in self._iproc:
-            data.imag = data.imag*self._iproc['imagfactor']
+            data.imag = data.imag * self._iproc['imagfactor']
 
         # output processing
         if "alt_id_sign" in self._oproc:
             if "alt_id_sign" not in self._iproc:
                 fslice = slices[:-1]
                 ffshape = self.fshape[:-1]
-                nd_iter = fileiobase.ndtofrom_iter(ffshape,fslice)
-                for out_index,in_index in nd_iter:
+                nd_iter = fileiobase.ndtofrom_iter(ffshape, fslice)
+                for out_index, in_index in nd_iter:
                     # negate the trace if there is an odd number of 
                     # odd number indices in the slice
-                    if np.mod(in_index,2).sum()%2 == 1: 
+                    if np.mod(in_index, 2).sum() % 2 == 1: 
                         data[out_index] = -data[out_index]
 
-           
-
         if "realfactor" in self._oproc:
-            data.real = data.real*self._oproc['realfactor']
+            data.real = data.real * self._oproc['realfactor']
         if "imagfactor" in self._oproc:
-            data.imag = data.imag*self._oproc['imagfactor']
+            data.imag = data.imag * self._oproc['imagfactor']
         
         return data.astype(self._odtype)
