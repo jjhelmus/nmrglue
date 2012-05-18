@@ -354,36 +354,39 @@ def irft(xp):
     return x
 
 
-# Fourier transforms (keep these ones)
+# Fourier transforms
 def fft(data):
     """ 
     Fourier transform, NMR ordering of results.
-
+    
     There are a number of definitions of the discrete Fourier transform
-    the version used in this function is:
-
-    A_k =  \sum_{m=0}^{n-1} a_m \exp\left\{-2\pi i{mk \over n}\right\}
-       \qquad k = 0,\ldots,n-1.
-
-    With the inverse DFT in the ifft function defined as:
+    the version used in this function is as follows. 
 
     .. math::
-    a_m = \frac{1}{n}\sum_{k=0}^{n-1}A_k\exp\left\{2\pi i{mk\over n}\right\}
-       \qquad n = 0,\ldots,n-1.
 
+        A_k = \\sum_{m=0}^{n-1} a_m \\exp\\left\\{-2\\pi i{mk \\over n}
+        \\right\\}\\qquad k = 0,\\ldots,n-1. 
+        
+    With the inverse DFT in the ifft function defined as follows.
+
+    .. math::
+
+        a_m= \\frac{1}{n} \\sum_{k=0}^{n-1} A_k \\exp \\left\\ {2\\pi
+        i {mk\\over n} \\right\\} \\qquad n = 0,\\ldots,n-1.
+        
     Two alternative definitions are also supported by nmrglue. First one in
     which both the sum in the fft and ifft are multiplied by
-    :math: \frac{1}{\sqrt{n}} which results in a pair of transforms in which 
-    the total power contained in the the signals perform and after the 
+    :math:`\\frac{1}{\\sqrt{n}}` which results in a pair of transforms in 
+    which the total power contained in the the signals perform and after the
     transforms are equal.  This is the type transforms used in the 
     Rowland NMR Toolkit. This type of transform is performed by the `fft_norm` 
     and `ifft_norm` functions. 
-
+    
     The second definition changes the sign of the exponent to be positive while
     keeping the normalization factors the same.  This type of transform is
     performed by the NMRPipe processing package and the functions 
     `fft_positive` and `ifft_positive`.
-
+    
     """
     return np.fft.fftshift(np.fft.fft(data, axis = -1).astype(data.dtype), -1)
 
@@ -392,6 +395,7 @@ def fft_norm(data):
     Fourier transform, total power preserved, NMR ordering of results
 
     This is similar to the transform performed by RNMRTK's FFT function
+    
     """
     return fft(data) / np.sqrt(float(data.shape[-1]))
 
@@ -400,6 +404,7 @@ def fft_positive(data):
     Fourier transform with positive exponential, NMR ordering of results
 
     This is similar to the transform performed by NMRPipe's FFT function
+    
     """
     # a positive exponential is the same as a IFFT, but we need to undo
     # the 1/N scaling
@@ -407,9 +412,7 @@ def fft_positive(data):
     return np.fft.fftshift(np.fft.ifft(data, axis=-1).astype(data.dtype),-1)*s
 
 def ifft(data):
-    """ 
-    Inverse fourier transform, NMR ordering of results.
-    """
+    """ Inverse fourier transform, NMR ordering of results."""
     return np.fft.ifft(np.fft.ifftshift(data, -1), axis=-1).astype(data.dtype)
 
 def ifft_norm(data):
@@ -417,6 +420,7 @@ def ifft_norm(data):
     Inverse fourier transform, total power preserved, NMR ordering of results
 
     This is similar to the transform performed by RNMRTK's IFFT function.
+    
     """
     return ifft(data) * np.sqrt(float(data.shape[-1]))
 
@@ -426,6 +430,7 @@ def ifft_positive(data):
 
     This is similar to the transform performed by NMRPipe's FFT function with
     the -inv flag
+
     """
     # a inverse fft with positive exponential in the FFT definition is the
     # same as a FFT with negative exponentials, but with a 1/N scaling factor

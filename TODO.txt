@@ -1,0 +1,82 @@
+Items to do before article is published
+=======================================
+
+1. Update inline documentation on all user functions and classes to match scipy
+documentation standards.  Add Unit tests for all modules which use nose.  Make
+data needed for these unit tests available for download.
+
+Module          Documentation       Unit Tests          Notes
+------          -------------       ----------          -----
+bruker
+convert
+fileiobase
+glue
+pipe
+rnmrtk
+sparky
+table
+varian
+pipe_proc
+proc_base
+proc_bl
+proc_lp
+analysisbase
+helpers
+leastsqbound
+lineshapes1d
+linesh
+peakpick
+segmentation
+misc
+
+2. Check over documentation examples, prune, update and add as needed.  Add
+links to raw data.  Add examples of spectral analysis (peak picking, lineshape
+fitting).  Add T1 measurements and TEDOR fitting?  Linear prediction, peak
+picking, fitting and segmentation examples.
+
+3. Rewrite tutorial, include mention of analysis module.
+
+4. Write unit tests for all major submodules and make data needed for unit tests
+available for download.  All tests should use nose.
+
+5. Release version 0.3, check installer on Linux, Windows, and OS-X.  Update
+install script, grep for XXX in all files and update pyPI record.
+
+6. Add documentation to Readthedocs?
+
+
+To Do and other updates post journal article.
+=============================================
+
+Idea list broken down by directory.
+
+nmrglue
+-------
+
+    filio
+    -----
+    - ability to write slices to file in all modules (ala pipe.write_slice3d)
+    - global iter3D object
+    - sparky_nd object?
+    - spinev module?
+    - simpson module?
+
+    gui
+    ---
+    - gui module with common gui functions?
+
+    process
+    ------
+    - test and document proc_lp module and lp/lpc/lp2d in pipe_proc module.
+    - glue_proc module?
+    - debug XXX in pipe_proc
+    - more work on broken tests in test_pipe_proc
+    - proc_mem module (Maximum Entropy)?
+    - add missing functions in pipe_proc
+    - FWHT in proc_base
+    - profile processing and optimize
+
+
+Other thoughts
+--------------
+- Unix like commands (coadd_pipe, unarray_varian, ...)

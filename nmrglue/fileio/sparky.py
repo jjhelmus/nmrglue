@@ -1,19 +1,18 @@
 """
 Functions for reading and writing sparky (.ucsf) files.
-
+"""
+__developer_info__ = """
 Information on the sparky file format can be found online at:
 http://www.cgl.ucsf.edu/home/sparky/manual/files.html
-and in the source file ucsffile.cc .
+and in the source file ucsffile.cc.
 
 """
-
 
 import numpy as np
 import struct
 import os
 import fileiobase
 import datetime
-
 
 # unit conversion function
 

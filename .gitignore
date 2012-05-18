@@ -5,5 +5,6 @@
 *.swp
 
 # Documentation intermediates
-doc/reference/generated
-doc/_build/doctrees
+doc/source/reference/generated
+doc/build
+old_doc

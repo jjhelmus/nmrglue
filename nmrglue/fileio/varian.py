@@ -1,8 +1,13 @@
 """
-Functions for reading and writing Varian binary (fid) files and Varian 
+Functions for reading and writing Agilent/Varian binary (fid) files and 
 parameter (procpar) files.
+"""
 
-Both file formats are documented in:
+__developer_doc__ = """
+Agilent/Varian file format
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Both the Agilent/Varian binary and parameter formats are documented in:
 
 * Varain MR News 2005-04-18 Importing Binary VnmrJ / VNMR FIDs into Third Party Software and VnmrJ / VNMR FID Data Format
 * VnmrJ User Programming - Chapter 5: Parameters and Data

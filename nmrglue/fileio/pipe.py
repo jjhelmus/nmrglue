@@ -1,8 +1,8 @@
 """
 Functions for reading and writing NMRPipe binary files and table (.tab) files
-
+"""
+"""
 NMRPipe file structure is described in the NMRPipe man pages and fdatap.h
-
 """ 
 
 # standard library modules
@@ -1095,11 +1095,19 @@ class iter3D(object):
         """
         Create a iter3D object
 
-        Parameters:
-        * filemask  string with single formatter (%) of NMRPipe files to read
-        * in_lead   Axis name ('x','y','z') of last (1st) axis in outputed 2D 
-        * out_lead  Axis name ('x','y','z') of axis to be written typically
-                    this is the same as in_lead
+        Parameters
+        ----------
+        filemask : str
+            String file with single formatter (%) which represents which
+            indicates which NMRPipe file to read.
+        in_lead : ('x', 'y', 'z'), optional
+            Axis name of last (1st) axis in outputted 2D
+        out_lead : ('x', 'y', 'z', 'DEFAULT'), optional
+            Axis name of axis to be written, typically this is the same as
+            in_load, which is the used if 'DEFAULT' is given.
+
+        Notes
+        -----
 
         =======     ===============
         In-lead     Iterated Planes

@@ -2,6 +2,10 @@
 Functions for reading and writing Bruker binary (ser/fid) files, Bruker 
 JCAMP-DX parameter (acqus) files, and Bruker pulse program (pulseprogram) 
 files.
+"""
+__developer_info__ = """
+Bruker file format information
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Bruker binary files (ser/fid) store data as an array of int32s whose endiness 
 is determinded by the parameter BYTORDA (1 = big endian, 0 = little endian).
@@ -121,23 +125,34 @@ def read(dir=".",bin_file=None,acqus_files=None,pprog_file=None,shape=None,
     """ 
     Read Bruker files in directory
 
-    Parameters:
+    Parameters
+    ----------
+    dir : str
+        Directory to read from
+    bin_file : str, optional
+        Filename of binary file, if None looks for standard files.
+    acqus_files : list, optional
+        List of filename(s) of acqus parameter files in directory.
+    pprog_files : str, optional
+        Filename of pulse program in directory.
+    shape : tuple, optional
+        Shape of resulting data.
+    cplex : bool, optional
+        True is direct dimension is complex, False otherwise.
+    big : bool or None, optional
+        Endiness of binary file. True of big-endian, False for little-endian,
+        None to determine endiness from acqus file(s).
+    read_pprog : bool, optional
+        True to read pulse program, False prevents reading.
+    read_acqus : bool, optional
+        True to read acqus files(s), False prevents reading.
 
-    * dir           Directory to read from.
-    * bin_file      Filename of binary file in directory.
-    * acqus_files   List of filename(s) of acqus parameter files in directory.
-    * pprog_file    Filename of pulseprogram in directory.
-    * shape         Shape of resulting data (tuple).
-    * cplex         Complexity of direct dimention (True/False).
-    * big           Endianness of binary file. Set to True for big-endian, 
-                    False for little-endian and None to determind automatically
-    * read_prog     True will read pulseprogram file, False prevents reading.
-    * read_acqus    True will read acqus file(s), False prevents reading.
-
-    Returns: dic,data
-
-    Only the dir parameter must be defined, others will be determined 
-    automatically if not specified.
+    Returns
+    -------
+    dic : dict
+        Dictionary of spectral parameters.
+    data : ndarray
+        NMR data.
 
     """
 
