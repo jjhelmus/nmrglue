@@ -54,8 +54,9 @@ copyright = u'2010-2012, Jonathan J. Helmus'
 # built documents.
 #
 # The short X.Y version.
-import nmrglue
-version = nmrglue.__version__
+#import nmrglue
+#version = nmrglue.__version__
+version = '0.3-dev'
 # The full version, including alpha/beta/rc tags.
 release = version
 
