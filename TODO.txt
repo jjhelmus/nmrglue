@@ -42,8 +42,6 @@ available for download.  All tests should use nose.
 5. Release version 0.3, check installer on Linux, Windows, and OS-X.  Update
 install script, grep for XXX in all files and update pyPI record.
 
-6. Add documentation to Readthedocs?
-
 
 To Do and other updates post journal article.
 =============================================
