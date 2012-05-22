@@ -14,19 +14,19 @@ want to segment spectra will be interested in these functions.
 .. autosummary::
     :toctree: generated/
 
-    label_connected
     find_all_connected
-    label_nconnected
     find_all_nconnected
-    mark_dseg
-    label_downward_seg
-    label_downward
     find_all_downward
-    mark_useg
-    label_upward_seg
+    find_all_upward 
+    label_connected
+    label_nconnected
+    label_downward
     label_upward
-    find_all_upward
     find_downward
     find_connected
     find_nconnected
     find_upward 
+    mark_dseg
+    label_downward_seg
+    mark_useg
+    label_upward_seg
