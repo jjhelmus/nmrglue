@@ -65,25 +65,33 @@
 <h1>nmrglue.fileio.bruker.read_binary_lowmem<a class="headerlink" href="#nmrglue-fileio-bruker-read-binary-lowmem" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.bruker.read_binary_lowmem">
-<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">read_binary_lowmem</tt><big>(</big><em>filename</em>, <em>shape=1</em>, <em>cplex=True</em>, <em>big=True</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/bruker.py#L627"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.bruker.read_binary_lowmem" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">read_binary_lowmem</tt><big>(</big><em>filename</em>, <em>shape=1</em>, <em>cplex=True</em>, <em>big=True</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/bruker.py#L663"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.bruker.read_binary_lowmem" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read Bruker binary data from file using minimal memory.</p>
-<p>Parameters:</p>
-<ul>
-<li><p class="first">filename  Filename of Bruker binary file</p>
-</li>
-<li><p class="first">shape     Tuple describing shape of resulting file</p>
-</li>
-<li><p class="first">cplex     Flag indicating if direct dimension is complex</p>
-</li>
-<li><dl class="first docutils">
-<dt>big       Endianness of binary file, True for big-endian, False for </dt>
-<dd><p class="first last">little-endian</p>
-</dd>
+<p>Raises ValueError if shape does not agree with file size.
+See <a class="reference internal" href="nmrglue.fileio.bruker.read_binary.html#nmrglue.fileio.bruker.read_binary" title="nmrglue.fileio.bruker.read_binary"><tt class="xref py py-func docutils literal"><span class="pre">read_binary()</span></tt></a> for Parameters.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary containing &#8220;FILE_SIZE&#8221; key and value.</p>
+</div></blockquote>
+<p><strong>data</strong> : array_like</p>
+<blockquote class="last">
+<div><p>Low memory object which can access NMR data on demand.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.fileio.bruker.read_binary.html#nmrglue.fileio.bruker.read_binary" title="nmrglue.fileio.bruker.read_binary"><tt class="xref py py-obj docutils literal"><span class="pre">read_binary</span></tt></a></dt>
+<dd>Read Bruker binary file.</dd>
 </dl>
-</li>
-</ul>
-<p>Returns: dic,data.  dic contains &#8220;FILE_SIZE&#8221; key/value.</p>
-<p>Raises ValueError if shape does not agree with file size</p>
+</div>
 </dd></dl>
 
 </div>

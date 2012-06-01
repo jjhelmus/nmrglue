@@ -65,16 +65,42 @@
 <h1>nmrglue.fileio.sparky.write_lowmem<a class="headerlink" href="#nmrglue-fileio-sparky-write-lowmem" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.sparky.write_lowmem">
-<tt class="descclassname">nmrglue.fileio.sparky.</tt><tt class="descname">write_lowmem</tt><big>(</big><em>filename</em>, <em>dic</em>, <em>data</em>, <em>overwrite=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/sparky.py#L257"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.sparky.write_lowmem" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write a sparky file tile by tile (low memory)</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>filename  Name of file to write to.</li>
-<li>data      Data array.</li>
-<li>dic       Sparky parameter dictionary.</li>
-<li>overwrite Set to True to overwrite existing file.</li>
-</ul>
-<p>No return</p>
+<tt class="descclassname">nmrglue.fileio.sparky.</tt><tt class="descname">write_lowmem</tt><big>(</big><em>filename</em>, <em>dic</em>, <em>data</em>, <em>overwrite=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/sparky.py#L336"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.sparky.write_lowmem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a Sparky using minimum amounts of memory (tile by tile)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>Filename of Sparky file to write to.</p>
+</div></blockquote>
+<p><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of Sparky parameters.</p>
+</div></blockquote>
+<p><strong>data</strong> : array_like.</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>overwrite</strong> : bool, optional</p>
+<blockquote class="last">
+<div><p>Set True to overwrite files, False will raise a Warning if the file
+exists.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.fileio.sparky.write.html#nmrglue.fileio.sparky.write" title="nmrglue.fileio.sparky.write"><tt class="xref py py-obj docutils literal"><span class="pre">write</span></tt></a></dt>
+<dd>Write a Sparky file.</dd>
+<dt><a class="reference internal" href="nmrglue.fileio.sparky.read_lowmem.html#nmrglue.fileio.sparky.read_lowmem" title="nmrglue.fileio.sparky.read_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">read_lowmem</span></tt></a></dt>
+<dd>Read a Sparky file using mimimal amounts of memory.</dd>
+</dl>
+</div>
 </dd></dl>
 
 </div>

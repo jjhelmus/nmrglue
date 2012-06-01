@@ -65,23 +65,39 @@
 <h1>nmrglue.analysis.linesh.estimate_scales<a class="headerlink" href="#nmrglue-analysis-linesh-estimate-scales" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.analysis.linesh.estimate_scales">
-<tt class="descclassname">nmrglue.analysis.linesh.</tt><tt class="descname">estimate_scales</tt><big>(</big><em>spectrum</em>, <em>centers</em>, <em>box_width</em>, <em>scale_axis=0</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/linesh.py#L90"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.linesh.estimate_scales" title="Permalink to this definition">¶</a></dt>
-<dd><p>Estimate scale parameter for peaks in a spectrum</p>
-<p>Parameters:</p>
-<ul>
-<li><p class="first">spectrum      Slicable spectral data.</p>
-</li>
-<li><p class="first">centers       List of N-tuples indicating peak centers.</p>
-</li>
-<li><dl class="first docutils">
-<dt>box_width     N-tuple indicating box width to add and subtract from</dt>
-<dd><p class="first last">peak centers to form region around peak to fit.</p>
-</dd>
-</dl>
-</li>
-<li><p class="first">scale_axis    Axis number to estimate scale parameters for.</p>
-</li>
-</ul>
+<tt class="descclassname">nmrglue.analysis.linesh.</tt><tt class="descname">estimate_scales</tt><big>(</big><em>spectrum</em>, <em>centers</em>, <em>box_width</em>, <em>scale_axis=0</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/linesh.py#L104"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.linesh.estimate_scales" title="Permalink to this definition">¶</a></dt>
+<dd><p>Estimate scale parameter for peaks in a spectrum.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>spectrum</strong> : array_like</p>
+<blockquote>
+<div><p>NMR spectral data. ndarray or emulated type which can be sliced.</p>
+</div></blockquote>
+<p><strong>centers</strong> : list</p>
+<blockquote>
+<div><p>List of N-tuples indicating peak centers.</p>
+</div></blockquote>
+<p><strong>box_width</strong> : tuple</p>
+<blockquote>
+<div><p>N-tuple indicating box width to add and subtract from peak centers to
+form region around peak to fit.</p>
+</div></blockquote>
+<p><strong>scale_axis</strong> : int</p>
+<blockquote>
+<div><p>Axis number to estimate scale parameters for.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>scales</strong> : list</p>
+<blockquote class="last">
+<div><p>List of estimated scale parameters.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

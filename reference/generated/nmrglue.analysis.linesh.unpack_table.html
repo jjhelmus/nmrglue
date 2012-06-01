@@ -65,22 +65,40 @@
 <h1>nmrglue.analysis.linesh.unpack_table<a class="headerlink" href="#nmrglue-analysis-linesh-unpack-table" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.analysis.linesh.unpack_table">
-<tt class="descclassname">nmrglue.analysis.linesh.</tt><tt class="descname">unpack_table</tt><big>(</big><em>rec</em>, <em>param_columns</em>, <em>amp_column</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/linesh.py#L70"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.linesh.unpack_table" title="Permalink to this definition">¶</a></dt>
-<dd><p>Unpack initial fitting parameters from a table</p>
-<p>Parameters:</p>
-<ul>
-<li><p class="first">rec           Records array (table) holding parameters.</p>
-</li>
-<li><dl class="first docutils">
-<dt>param_columns List of column names which hold lineshape parameters.  </dt>
-<dd><p class="first last">See fit_NDregion for format.</p>
-</dd>
-</dl>
-</li>
-<li><p class="first">amp_column    Name of columns in rec holding initial amplitudes.</p>
-</li>
-</ul>
-<p>Returns: params,amps</p>
+<tt class="descclassname">nmrglue.analysis.linesh.</tt><tt class="descname">unpack_table</tt><big>(</big><em>rec</em>, <em>param_columns</em>, <em>amp_column</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/linesh.py#L77"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.linesh.unpack_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unpack initial fitting parameters from a table.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>rec</strong> : recarray</p>
+<blockquote>
+<div><p>Records array (table) holding parameters.</p>
+</div></blockquote>
+<p><strong>param_columns</strong> : list</p>
+<blockquote>
+<div><p>List of column names which hold lineshape parameters.  See
+<a class="reference internal" href="nmrglue.analysis.linesh.fit_NDregion.html#nmrglue.analysis.linesh.fit_NDregion" title="nmrglue.analysis.linesh.fit_NDregion"><tt class="xref py py-func docutils literal"><span class="pre">fit_NDregion()</span></tt></a> for format.</p>
+</div></blockquote>
+<p><strong>amp_column</strong> : str</p>
+<blockquote>
+<div><p>Name of columns in rec holding initial amplitudes.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>params</strong> : list</p>
+<blockquote>
+<div><p>List of initial parameter in the format required for
+<a class="reference internal" href="nmrglue.analysis.linesh.fit_NDregion.html#nmrglue.analysis.linesh.fit_NDregion" title="nmrglue.analysis.linesh.fit_NDregion"><tt class="xref py py-func docutils literal"><span class="pre">fit_NDregion()</span></tt></a>.</p>
+</div></blockquote>
+<p><strong>amps</strong> : list</p>
+<blockquote class="last">
+<div><p>List of initial peak amplitudes.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

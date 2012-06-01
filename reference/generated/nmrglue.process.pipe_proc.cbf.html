@@ -65,19 +65,54 @@
 <h1>nmrglue.process.pipe_proc.cbf<a class="headerlink" href="#nmrglue-process-pipe-proc-cbf" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.pipe_proc.cbf">
-<tt class="descclassname">nmrglue.process.pipe_proc.</tt><tt class="descname">cbf</tt><big>(</big><em>dic</em>, <em>data</em>, <em>last=10</em>, <em>reg=False</em>, <em>slice=slice(None</em>, <em>None</em>, <em>None)</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/pipe_proc.py#L1317"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.pipe_proc.cbf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Constant Baseline correction</p>
-<p>Parameters ref and slice should be python slice objects if explicit
-correction is desired (recall python arrays start at 0 not 1).  The
-noseq and nodmx parameters are not implemented.</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>dic   Dictionary of NMRPipe parameters.</li>
-<li>data  array of spectral data.</li>
-<li>last  Percent of trace to use for calculating correction.</li>
-<li>reg   Slice object describing X-axis region(s) to apply correction to.</li>
-<li>slice Slice object describing Y-axis region(s) to apply correction to.</li>
-</ul>
+<tt class="descclassname">nmrglue.process.pipe_proc.</tt><tt class="descname">cbf</tt><big>(</big><em>dic</em>, <em>data</em>, <em>last=10</em>, <em>reg=False</em>, <em>slice=slice(None</em>, <em>None</em>, <em>None)</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/pipe_proc.py#L1650"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.pipe_proc.cbf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constant baseline correction.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of NMRPipe parameters.</p>
+</div></blockquote>
+<p><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>last</strong> : float</p>
+<blockquote>
+<div><p>Percentage of trace to use in calculating baseline correction.</p>
+</div></blockquote>
+<p><strong>reg</strong> : slice object, optional</p>
+<blockquote>
+<div><p>Python slice object describing region(s) from which to calculate the
+baseline correction. If False (default) the last parameter will be used
+to calculate the correction.</p>
+</div></blockquote>
+<p><strong>slice</strong> : slice object</p>
+<blockquote>
+<div><p>Python slice describing regions to apply the baseline correction
+to.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of updated NMRPipe parameters.</p>
+</div></blockquote>
+<p><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Array of NMR data with a constant baseline correction applied.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The parameters of this function differ significantly from NMRPipe&#8217;s cbf
+function.  The parameters <cite>ref</cite> and <cite>slice</cite> are Python slice objects 
+if explicit correction regions are desired.  The <cite>noseq</cite> and <cite>nodmx</cite> 
+parameters are not implemented.</p>
 </dd></dl>
 
 </div>

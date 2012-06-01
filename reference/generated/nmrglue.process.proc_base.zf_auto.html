@@ -65,13 +65,30 @@
 <h1>nmrglue.process.proc_base.zf_auto<a class="headerlink" href="#nmrglue-process-proc-base-zf-auto" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_base.zf_auto">
-<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">zf_auto</tt><big>(</big><em>data</em>, <em>mid=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L698"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.zf_auto" title="Permalink to this definition">¶</a></dt>
-<dd><p>Zero fill to next largest power of two</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>data  Array of spectral data.</li>
-<li>mid   Set to True to zero fill in middle of data.</li>
-</ul>
+<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">zf_auto</tt><big>(</big><em>data</em>, <em>mid=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L1047"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.zf_auto" title="Permalink to this definition">¶</a></dt>
+<dd><p>Zero fill to next largest power of two.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>mid</strong> : bool</p>
+<blockquote>
+<div><p>True to zero fill in the middle of data.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Zero filled array of NMR data.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

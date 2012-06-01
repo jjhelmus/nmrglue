@@ -65,16 +65,42 @@
 <h1>nmrglue.process.proc_base.zd_gaussian<a class="headerlink" href="#nmrglue-process-proc-base-zd-gaussian" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_base.zd_gaussian">
-<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">zd_gaussian</tt><big>(</big><em>data</em>, <em>wide=1.0</em>, <em>x0=0.0</em>, <em>slope=1.0</em>, <em>g=1</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L1696"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.zd_gaussian" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">zd_gaussian</tt><big>(</big><em>data</em>, <em>wide=1.0</em>, <em>x0=0.0</em>, <em>slope=1.0</em>, <em>g=1</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L2441"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.zd_gaussian" title="Permalink to this definition">¶</a></dt>
 <dd><p>Zero Diagonal band with gaussian function</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>data  Array of spectral data.</li>
-<li>wide  Diagonal band half width in points.</li>
-<li>x0    Diagonal starting location in points.</li>
-<li>slope Diagonal slope.</li>
-<li>g     Gauss width.</li>
-</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>wide</strong> : int</p>
+<blockquote>
+<div><p>Diagonal band half width in points.</p>
+</div></blockquote>
+<p><strong>x0</strong> : int</p>
+<blockquote>
+<div><p>Starting location of diagonal band in points.</p>
+</div></blockquote>
+<p><strong>slope</strong> : float</p>
+<blockquote>
+<div><p>Slope of diagonal band.</p>
+</div></blockquote>
+<p><strong>g</strong> : float</p>
+<blockquote>
+<div><p>Width of Gaussian function.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Array of NMR data with diagonal band set to zero.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

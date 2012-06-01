@@ -65,14 +65,34 @@
 <h1>nmrglue.fileio.pipe.read_lowmem<a class="headerlink" href="#nmrglue-fileio-pipe-read-lowmem" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.read_lowmem">
-<tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">read_lowmem</tt><big>(</big><em>filename</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/pipe.py#L484"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.pipe.read_lowmem" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read a NMRPipe binary file with minimal memory usage.</p>
-<p>For standard multi-file 3D/4D NMRPipe data sets, filename should be a
-filemask (for example &#8220;/ft/test%03d.ft3&#8221;) with a &#8220;%&#8221; formatter.  If only
-one file of a 3D/4D data set is provided only that 2D slice of the data is
-read (for example &#8220;/ft/test001.ft3&#8221; results in a 2D data set being read).</p>
-<p>NMRPipe data streams stored as files (one file 3D/4D data sets made using
-xyz2pipe) can be read by providing the file name of the stream.</p>
+<tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">read_lowmem</tt><big>(</big><em>filename</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/pipe.py#L515"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.pipe.read_lowmem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a NMRPipe file with minimal memory usage.</p>
+<p>See <a class="reference internal" href="nmrglue.fileio.pipe.read.html#nmrglue.fileio.pipe.read" title="nmrglue.fileio.pipe.read"><tt class="xref py py-func docutils literal"><span class="pre">read()</span></tt></a> for Parameters and information.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of NMRPipe parameters.</p>
+</div></blockquote>
+<p><strong>data</strong> : array_like</p>
+<blockquote class="last">
+<div><p>Low memory object which can access NMR data on demand.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.fileio.pipe.read.html#nmrglue.fileio.pipe.read" title="nmrglue.fileio.pipe.read"><tt class="xref py py-obj docutils literal"><span class="pre">read</span></tt></a></dt>
+<dd>Read NMRPipe files.</dd>
+<dt><a class="reference internal" href="nmrglue.fileio.pipe.write_lowmem.html#nmrglue.fileio.pipe.write_lowmem" title="nmrglue.fileio.pipe.write_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">write_lowmem</span></tt></a></dt>
+<dd>Write NMRPipe files using minimal amounts of memory.</dd>
+</dl>
+</div>
 </dd></dl>
 
 </div>

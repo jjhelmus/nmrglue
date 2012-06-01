@@ -179,7 +179,6 @@ are included here for completeness.
     int2bin
     bin2int
     gray
-    hadamard
     amin_flt
     amax_flt
     range_flt

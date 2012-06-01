@@ -65,9 +65,9 @@
 <h1>nmrglue.fileio.bruker.write_jcamp<a class="headerlink" href="#nmrglue-fileio-bruker-write-jcamp" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.bruker.write_jcamp">
-<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">write_jcamp</tt><big>(</big><em>dic</em>, <em>filename</em>, <em>overwrite=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/bruker.py#L1184"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.bruker.write_jcamp" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">write_jcamp</tt><big>(</big><em>dic</em>, <em>filename</em>, <em>overwrite=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/bruker.py#L1247"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.bruker.write_jcamp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write a Bruker JCAMP-DX file from a dictionary</p>
-<p>Written file will differ slightly from bruker&#8217;s JCAMP-DX files in that all
+<p>Written file will differ slightly from Bruker&#8217;s JCAMP-DX files in that all
 multi-value parameters will be written on multiple lines. Bruker is 
 inconsistent on what is written to a single line and what is not.  
 In addition line breaks may be slightly different but will always be 
@@ -76,10 +76,38 @@ may loose precision when writing.</p>
 <p>For example:</p>
 <blockquote>
 <div><p>##$QS= (0..7)83 83 83 83 83 83 83 22</p>
-<p>will be written as
-##$QS= (0..7)
+<p>will be written as</p>
+<p>##$QS= (0..7)
 83 83 83 83 83 83 83 22</p>
 </div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of parameters to write</p>
+</div></blockquote>
+<p><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>Filename of JCAMP-DX file to write</p>
+</div></blockquote>
+<p><strong>overwrite</strong> : bool, optional</p>
+<blockquote class="last">
+<div><p>True to overwrite an existing file, False will raise a Warning if the
+file already exists.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.fileio.bruker.read_jcamp.html#nmrglue.fileio.bruker.read_jcamp" title="nmrglue.fileio.bruker.read_jcamp"><tt class="xref py py-obj docutils literal"><span class="pre">read_jcamp</span></tt></a></dt>
+<dd>Read a Bruker JCAMP-DX file.</dd>
+</dl>
+</div>
 </dd></dl>
 
 </div>

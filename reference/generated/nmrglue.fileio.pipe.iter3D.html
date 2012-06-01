@@ -65,15 +65,17 @@
 <h1>nmrglue.fileio.pipe.iter3D<a class="headerlink" href="#nmrglue-fileio-pipe-iter3d" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="nmrglue.fileio.pipe.iter3D">
-<em class="property">class </em><tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">iter3D</tt><big>(</big><em>filemask</em>, <em>in_lead='x'</em>, <em>out_lead='DEFAULT'</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/pipe.py#L1065"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.pipe.iter3D" title="Permalink to this definition">¶</a></dt>
-<dd><p>Object which allows for graceful iteration over 3D NMRPipe files</p>
+<em class="property">class </em><tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">iter3D</tt><big>(</big><em>filemask</em>, <em>in_lead='x'</em>, <em>out_lead='DEFAULT'</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/pipe.py#L1179"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.pipe.iter3D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Object which allows for graceful iteration over 3D NMRPipe files.</p>
 <p>iter3D.iter() returns a (dic,plane) tuple which can be written using
 the x.writeplane function.</p>
 <p>When processing 3D files with iter3D object(s) the following dictionary 
 parameters may not have the same values as NMRPipe processing scripts 
 return:</p>
-<p>FDSLICECOUNT and</p>
-<p>FDMAX,FDDISMAX,FDMIN,FDDISPMIN when FDSCALEFLAG == 0</p>
+<ul class="simple">
+<li>FDSLICECOUNT</li>
+<li>FDMAX,FDDISMAX,FDMIN,FDDISPMIN when FDSCALEFLAG == 0</li>
+</ul>
 <p>Example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#3D data processing</span>
 <span class="n">xiter</span> <span class="o">=</span> <span class="n">iter3D</span><span class="p">(</span><span class="s">&quot;data/test</span><span class="si">%03d</span><span class="s">.fid&quot;</span><span class="p">,</span><span class="s">&quot;x&quot;</span><span class="p">,</span><span class="s">&quot;x&quot;</span><span class="p">)</span>
@@ -88,7 +90,7 @@ return:</p>
 </div>
 <dl class="method">
 <dt id="nmrglue.fileio.pipe.iter3D.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>filemask</em>, <em>in_lead='x'</em>, <em>out_lead='DEFAULT'</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/pipe.py#L1094"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.pipe.iter3D.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>filemask</em>, <em>in_lead='x'</em>, <em>out_lead='DEFAULT'</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/pipe.py#L1206"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.pipe.iter3D.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a iter3D object</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -148,13 +150,13 @@ in_load, which is the used if &#8216;DEFAULT&#8217; is given.</p>
 <td>Create a iter3D object</td>
 </tr>
 <tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">next</span></tt>()</td>
-<td>Return the next dic,plane or raise StopIteration</td>
+<td>Return the next dic, plane or raise StopIteration</td>
 </tr>
 <tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">reinitialize</span></tt>()</td>
-<td>Restart iterator at first dic,plane</td>
+<td>Restart iterator at first dic,plane.</td>
 </tr>
 <tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">write</span></tt>(filemask,&nbsp;plane,&nbsp;dic)</td>
-<td>Write out current plane</td>
+<td>Write out current plane.</td>
 </tr>
 </tbody>
 </table>

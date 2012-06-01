@@ -65,11 +65,41 @@
 <h1>nmrglue.util.misc.isdicsimilar<a class="headerlink" href="#nmrglue-util-misc-isdicsimilar" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.util.misc.isdicsimilar">
-<tt class="descclassname">nmrglue.util.misc.</tt><tt class="descname">isdicsimilar</tt><big>(</big><em>dic1</em>, <em>dic2</em>, <em>verb=False</em>, <em>dtol=0.1001</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/util/misc.py#L45"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.util.misc.isdicsimilar" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.util.misc.</tt><tt class="descname">isdicsimilar</tt><big>(</big><em>dic1</em>, <em>dic2</em>, <em>verb=False</em>, <em>dtol=0.1001</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/util/misc.py#L84"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.util.misc.isdicsimilar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compare two dictionaries for differences</p>
-<p>float and int types compared within dtol
-lists and dictionaries checked recursively
-all other checked by simple equivalence</p>
+<p>Float and int types compared within dtol. Lists and dictionaries are 
+checked recursively all other checked by simple equivalence</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dic1</strong> : dict</p>
+<blockquote>
+<div><p>First dictionary of NMR parameters.</p>
+</div></blockquote>
+<p><strong>dic2</strong> : dict</p>
+<blockquote>
+<div><p>Second dictionary of NMR parameters</p>
+</div></blockquote>
+<p><strong>verb</strong> : bool, optional</p>
+<blockquote>
+<div><p>Set True for verbose reporting.</p>
+</div></blockquote>
+<p><strong>dtol</strong> : float, optional</p>
+<blockquote>
+<div><p>Maximum allowable difference between int and float elements if dic1 
+and dic2.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>r1</strong> : bool</p>
+<blockquote class="last">
+<div><p>True is dic1 and dic2 are similar, False if they differ.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

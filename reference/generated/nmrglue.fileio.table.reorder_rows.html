@@ -65,17 +65,36 @@
 <h1>nmrglue.fileio.table.reorder_rows<a class="headerlink" href="#nmrglue-fileio-table-reorder-rows" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.table.reorder_rows">
-<tt class="descclassname">nmrglue.fileio.table.</tt><tt class="descname">reorder_rows</tt><big>(</big><em>rec</em>, <em>new_order</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/table.py#L228"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.table.reorder_rows" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reorder rows in a records array.</p>
+<tt class="descclassname">nmrglue.fileio.table.</tt><tt class="descname">reorder_rows</tt><big>(</big><em>rec</em>, <em>new_order</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/table.py#L256"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.table.reorder_rows" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reorder or delete rows in a records array.</p>
 <p>This function can also be used to delete multiple rows from a records 
 array, only the rows in the new_order list are retained in the new records
 array.</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>rec   Records array.</li>
-<li>new_order List of row indices and order in new records array.</li>
-</ul>
-<p>Returns: new_rec (new records array with row reordered)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>rec</strong> : recarray</p>
+<blockquote>
+<div><p>Records array.</p>
+</div></blockquote>
+<p><strong>new_order</strong> : list</p>
+<blockquote>
+<div><p>List of row indices and order in new records array.  Only the rows in
+this list are retained in the new records array.  Therefore this
+function can also be used to delete multiple rows from a records 
+array.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>new_rec</strong> : recarray</p>
+<blockquote class="last">
+<div><p>New records array with rows reordered.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

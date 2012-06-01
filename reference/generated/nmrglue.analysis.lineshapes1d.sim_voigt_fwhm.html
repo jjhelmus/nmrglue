@@ -28,7 +28,7 @@
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="nmrglue 0.3-dev documentation" href="../../index.html" />
     <link rel="up" title="nmrglue.lineshapes1d" href="../lineshapes1d.html" />
-    <link rel="next" title="nmrglue.analysis.lineshapes1d.sim_voigt_sigmagamma" href="nmrglue.analysis.lineshapes1d.sim_voigt_sigmagamma.html" />
+    <link rel="next" title="nmrglue.analysis.lineshapes1d.sim_pvoigt_fwhm" href="nmrglue.analysis.lineshapes1d.sim_pvoigt_fwhm.html" />
     <link rel="prev" title="nmrglue.analysis.lineshapes1d.sim_lorentz_fwhm" href="nmrglue.analysis.lineshapes1d.sim_lorentz_fwhm.html" /> 
   </head>
   <body>
@@ -45,7 +45,7 @@
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="nmrglue.analysis.lineshapes1d.sim_voigt_sigmagamma.html" title="nmrglue.analysis.lineshapes1d.sim_voigt_sigmagamma"
+          <a href="nmrglue.analysis.lineshapes1d.sim_pvoigt_fwhm.html" title="nmrglue.analysis.lineshapes1d.sim_pvoigt_fwhm"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="nmrglue.analysis.lineshapes1d.sim_lorentz_fwhm.html" title="nmrglue.analysis.lineshapes1d.sim_lorentz_fwhm"
@@ -65,11 +65,11 @@
 <h1>nmrglue.analysis.lineshapes1d.sim_voigt_fwhm<a class="headerlink" href="#nmrglue-analysis-lineshapes1d-sim-voigt-fwhm" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.analysis.lineshapes1d.sim_voigt_fwhm">
-<tt class="descclassname">nmrglue.analysis.lineshapes1d.</tt><tt class="descname">sim_voigt_fwhm</tt><big>(</big><em>x</em>, <em>x0</em>, <em>fwhm_g</em>, <em>fwhm_l</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/lineshapes1d.py#L102"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.lineshapes1d.sim_voigt_fwhm" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.analysis.lineshapes1d.</tt><tt class="descname">sim_voigt_fwhm</tt><big>(</big><em>x</em>, <em>x0</em>, <em>fwhm_g</em>, <em>fwhm_l</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/lineshapes1d.py#L135"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.lineshapes1d.sim_voigt_fwhm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simulate a Voigt lineshape with unit height at the center.</p>
 <p>Simulates discrete points of the continuous Voigt profile with unit height
-at the center.  Full-width at half-maximum (FWHM) of each component are used
-as the scale parameters for the Gaussian and Lorentzian distribution.</p>
+at the center.  Full-width at half-maximum (FWHM) of each component are 
+used as the scale parameters for the Gaussian and Lorentzian distribution.</p>
 <p>Functional Form:</p>
 <blockquote>
 <div>f(x; x0, fwhm_g, fwhm_l) = Re[w(z)] / Re[(w(z0)]</div></blockquote>
@@ -78,13 +78,36 @@ as the scale parameters for the Gaussian and Lorentzian distribution.</p>
 <div>z = sqrt(ln(2)) * (2 * (x - x0) + 1j * fwhm_l) / fwhm_g
 z0 = sqrt(ln(2)) * 1j * fwhm_l / fwhm_g
 w(z) is the complex error function of z</div></blockquote>
-<p>Parameters</p>
-<ul class="simple">
-<li>x         Array of values at which to evalutate distribution.</li>
-<li>x0        Center of the distribution.</li>
-<li>fwhm_g    Full-width at half-maximum of the Gaussian component.</li>
-<li>fwhm_l    Full-width at half-maximum of the Lorentzian component.</li>
-</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>x</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of values at which to evalutate distribution.</p>
+</div></blockquote>
+<p><strong>x0</strong> : float</p>
+<blockquote>
+<div><p>Center of the distribution.</p>
+</div></blockquote>
+<p><strong>fwhm_g</strong> : float</p>
+<blockquote>
+<div><p>Full-width at half-maximum of the Gaussian component.</p>
+</div></blockquote>
+<p><strong>fwhm_l</strong> : float</p>
+<blockquote>
+<div><p>Full-width at half-maximum of the Lorentzian component.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>f</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Distribution evaluated at points in x.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -99,8 +122,8 @@ w(z) is the complex error function of z</div></blockquote>
   <p class="topless"><a href="nmrglue.analysis.lineshapes1d.sim_lorentz_fwhm.html"
                         title="previous chapter">nmrglue.analysis.lineshapes1d.sim_lorentz_fwhm</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="nmrglue.analysis.lineshapes1d.sim_voigt_sigmagamma.html"
-                        title="next chapter">nmrglue.analysis.lineshapes1d.sim_voigt_sigmagamma</a></p>
+  <p class="topless"><a href="nmrglue.analysis.lineshapes1d.sim_pvoigt_fwhm.html"
+                        title="next chapter">nmrglue.analysis.lineshapes1d.sim_pvoigt_fwhm</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/reference/generated/nmrglue.analysis.lineshapes1d.sim_voigt_fwhm.txt"
@@ -136,7 +159,7 @@ w(z) is the complex error function of z</div></blockquote>
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="nmrglue.analysis.lineshapes1d.sim_voigt_sigmagamma.html" title="nmrglue.analysis.lineshapes1d.sim_voigt_sigmagamma"
+          <a href="nmrglue.analysis.lineshapes1d.sim_pvoigt_fwhm.html" title="nmrglue.analysis.lineshapes1d.sim_pvoigt_fwhm"
              >next</a> |</li>
         <li class="right" >
           <a href="nmrglue.analysis.lineshapes1d.sim_lorentz_fwhm.html" title="nmrglue.analysis.lineshapes1d.sim_lorentz_fwhm"

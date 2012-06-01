@@ -65,26 +65,36 @@
 <h1>nmrglue.process.proc_lp.fix_roots<a class="headerlink" href="#nmrglue-process-proc-lp-fix-roots" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_lp.fix_roots">
-<tt class="descclassname">nmrglue.process.proc_lp.</tt><tt class="descname">fix_roots</tt><big>(</big><em>poles</em>, <em>fix_roots='incr'</em>, <em>fix_mode='reflect'</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_lp.py#L995"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_lp.fix_roots" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fix (stabilize) LP roots</p>
-<p>Parameters:</p>
-<ul>
-<li><p class="first">poles      Array of LP roots/poles.</p>
-</li>
-<li><dl class="first docutils">
-<dt>fix_roots  &#8220;incr&#8221; or &#8220;decr&#8221; indicating which roots to remove (increasing</dt>
-<dd><p class="first last">or decreasing signals.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt>fix_mode   Method to use when regularizing roots, &#8220;on&#8221; moves each bad</dt>
-<dd><p class="first last">root onto the unit circle, &#8220;reflect&#8221; reflects the root over
-the unit circle.</p>
-</dd>
-</dl>
-</li>
-</ul>
+<tt class="descclassname">nmrglue.process.proc_lp.</tt><tt class="descname">fix_roots</tt><big>(</big><em>poles</em>, <em>fix_roots='incr'</em>, <em>fix_mode='reflect'</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_lp.py#L1084"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_lp.fix_roots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fix (stabilize) LP roots.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>poles</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of LP roots (poles).</p>
+</div></blockquote>
+<p><strong>fix_roots</strong> : {&#8216;incr&#8217;, &#8216;decr&#8217;}</p>
+<blockquote>
+<div><p>Type of roots which to consider bad and to stabilize.  Either those
+with increasing signals &#8216;incr&#8217; or decreasing signals &#8216;decr&#8217;.</p>
+</div></blockquote>
+<p><strong>fix_mode</strong> : {&#8216;on&#8217;, &#8216;reflect&#8217;}</p>
+<blockquote>
+<div><p>Method used to stabilize bad roots, &#8216;on&#8217; to move the roots onto the 
+unit circle, &#8216;reflect&#8217; to reflect bad roots across the unit circle.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>npoles</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Array of stabilized LP roots (poles).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

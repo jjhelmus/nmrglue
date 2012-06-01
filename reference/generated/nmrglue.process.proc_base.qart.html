@@ -65,19 +65,35 @@
 <h1>nmrglue.process.proc_base.qart<a class="headerlink" href="#nmrglue-process-proc-base-qart" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_base.qart">
-<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">qart</tt><big>(</big><em>data</em>, <em>a=0.0</em>, <em>f=0.0</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L1483"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.qart" title="Permalink to this definition">¶</a></dt>
-<dd><p>Scale Quad Artifacts</p>
-<dl class="docutils">
-<dt>Functional Form:</dt>
-<dd>R&#8217; = R
-I&#8217; = (1+a)*I + f*R</dd>
-</dl>
-<p>Parameters:</p>
-<ul class="simple">
-<li>data  Array of spectral data.</li>
-<li>a     Amplitude adjustment.</li>
-<li>f     Phase adjustment.</li>
-</ul>
+<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">qart</tt><big>(</big><em>data</em>, <em>a=0.0</em>, <em>f=0.0</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L2164"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.qart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scale Quad Artifacts.</p>
+<p>Replaces imaginary data with (1 + a) * data.imag + f * data.real</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>a</strong> : float</p>
+<blockquote>
+<div><p>Amplitude adjustment.</p>
+</div></blockquote>
+<p><strong>f</strong> : float</p>
+<blockquote>
+<div><p>Phase adjustment.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndata: ndarray</strong> :</p>
+<blockquote class="last">
+<div><p>Array of NMR data with quadrature artifacts scaled.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

@@ -14,22 +14,23 @@ want to segment spectra will be interested in these functions.
 .. autosummary::
     :toctree: generated/
 
-    sim_gauss_sigma
     sim_gauss_fwhm
-    sim_lorentz_gamma
     sim_lorentz_fwhm
     sim_voigt_fwhm
-    sim_voigt_sigmagamma
     sim_pvoigt_fwhm
+    sim_gauss_sigma
+    sim_lorentz_gamma
+    sim_voigt_sigmagamma
     ls_str2class
     center_fwhm
     center_fwhm_bymoments
 
-.. Developer Classes
-   -----------------
+Developer Classes
+-----------------
 
-.. Comment autosummary::     These currently cause problems, skipping
+.. autosummary::
     :toctree: generated/
+
     location_scale
     gauss_sigma
     gauss_fwhm

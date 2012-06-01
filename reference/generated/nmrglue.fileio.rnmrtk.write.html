@@ -65,30 +65,47 @@
 <h1>nmrglue.fileio.rnmrtk.write<a class="headerlink" href="#nmrglue-fileio-rnmrtk-write" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.rnmrtk.write">
-<tt class="descclassname">nmrglue.fileio.rnmrtk.</tt><tt class="descname">write</tt><big>(</big><em>file</em>, <em>dic</em>, <em>data</em>, <em>par_file=None</em>, <em>overwrite=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/rnmrtk.py#L124"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.rnmrtk.write" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write RNMRTK data to disk</p>
-<p>Parameters:</p>
-<ul>
-<li><p class="first">file  RNMRTK file name (.sec).</p>
-</li>
-<li><p class="first">dic   Python dictionary containing RNMRTK parameters</p>
-</li>
-<li><p class="first">data  Spectral data (numpy array)</p>
-</li>
-<li><dl class="first docutils">
-<dt>par_file  Name of RNMRTK parameter file, if non-standard filename</dt>
-<dd><p class="first last">desired.  If None the last four characters of file are changed 
-to .par and this as used as the parameter filename.</p>
-</dd>
+<tt class="descclassname">nmrglue.fileio.rnmrtk.</tt><tt class="descname">write</tt><big>(</big><em>filename</em>, <em>dic</em>, <em>data</em>, <em>par_file=None</em>, <em>overwrite=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/rnmrtk.py#L201"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.rnmrtk.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write RNMRTK files.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>Filename of RNMRTK file to write to (.sec).</p>
+</div></blockquote>
+<p><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of RNMRTK parameters.</p>
+</div></blockquote>
+<p><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>par_file</strong> : str or None, optional</p>
+<blockquote>
+<div><p>Filename of RNMRTK parameter file. If None (default) a the last four
+characters of <cite>file</cite> are changed to .par.</p>
+</div></blockquote>
+<p><strong>overwrite</strong> : bool, optional</p>
+<blockquote class="last">
+<div><p>True to overwrite existing files. False will raises a Warning if the
+file exists.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.fileio.rnmrtk.write_lowmem.html#nmrglue.fileio.rnmrtk.write_lowmem" title="nmrglue.fileio.rnmrtk.write_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">write_lowmem</span></tt></a></dt>
+<dd>Write RNMRTK files using minimal amounts of memory.</dd>
+<dt><a class="reference internal" href="nmrglue.fileio.rnmrtk.read.html#nmrglue.fileio.rnmrtk.read" title="nmrglue.fileio.rnmrtk.read"><tt class="xref py py-obj docutils literal"><span class="pre">read</span></tt></a></dt>
+<dd>Read RNMRTK files.</dd>
 </dl>
-</li>
-<li><dl class="first docutils">
-<dt>overwrite Set True to overwrite existing files, False raises error if </dt>
-<dd><p class="first last">files exist.</p>
-</dd>
-</dl>
-</li>
-</ul>
+</div>
 </dd></dl>
 
 </div>

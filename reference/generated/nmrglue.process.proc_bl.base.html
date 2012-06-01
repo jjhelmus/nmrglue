@@ -65,14 +65,36 @@
 <h1>nmrglue.process.proc_bl.base<a class="headerlink" href="#nmrglue-process-proc-bl-base" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_bl.base">
-<tt class="descclassname">nmrglue.process.proc_bl.</tt><tt class="descname">base</tt><big>(</big><em>data</em>, <em>nl</em>, <em>nw=0</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_bl.py#L13"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_bl.base" title="Permalink to this definition">¶</a></dt>
-<dd><p>Linear (first-order) Baseline Correction based on node list.</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>data  Array of spectral data.</li>
-<li>nl    List of baseline nodes.</li>
-<li>nw    Node half-width in points.</li>
-</ul>
+<tt class="descclassname">nmrglue.process.proc_bl.</tt><tt class="descname">base</tt><big>(</big><em>data</em>, <em>nl</em>, <em>nw=0</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_bl.py#L12"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_bl.base" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linear (first-order) baseline correction based on node list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : 1D or 2D ndarray</p>
+<blockquote>
+<div><p>Array of 1D or 2D NMR data.</p>
+</div></blockquote>
+<p><strong>nl</strong> : list</p>
+<blockquote>
+<div><p>List of baseline nodes.</p>
+</div></blockquote>
+<p><strong>nw</strong> : float, optional</p>
+<blockquote>
+<div><p>Node half-width in points.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>NMR data with first order baseline correction appied.  For 2D data
+baseline correction is applied for each trace along the last 
+dimension.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

@@ -62,7 +62,7 @@
             
   <div class="section" id="module-nmrglue.fileio.rnmrtk">
 <span id="nmrglue-rnmrtk"></span><h1>nmrglue.rnmrtk<a class="headerlink" href="#module-nmrglue.fileio.rnmrtk" title="Permalink to this headline">¶</a></h1>
-<p>Fuctions for reading and writing Rowland NMR Toolkit files</p>
+<p>Fuctions for reading and writing Rowland NMR Toolkit (RNMRTK) files</p>
 <p>This modules is imported as nmrglue.rnmrtk and can be called as such.</p>
 <div class="section" id="user-information">
 <h2>User Information<a class="headerlink" href="#user-information" title="Permalink to this headline">¶</a></h2>
@@ -74,38 +74,38 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.read.html#nmrglue.fileio.rnmrtk.read" title="nmrglue.fileio.rnmrtk.read"><tt class="xref py py-obj docutils literal"><span class="pre">read</span></tt></a>(file[,&nbsp;par_file])</td>
-<td>Read a RNMRTK file, returning a dic,data pair</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.read.html#nmrglue.fileio.rnmrtk.read" title="nmrglue.fileio.rnmrtk.read"><tt class="xref py py-obj docutils literal"><span class="pre">read</span></tt></a>(filename[,&nbsp;par_file])</td>
+<td>Read RNMRTK files.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.write.html#nmrglue.fileio.rnmrtk.write" title="nmrglue.fileio.rnmrtk.write"><tt class="xref py py-obj docutils literal"><span class="pre">write</span></tt></a>(file,&nbsp;dic,&nbsp;data[,&nbsp;par_file,&nbsp;overwrite])</td>
-<td>Write RNMRTK data to disk</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.write.html#nmrglue.fileio.rnmrtk.write" title="nmrglue.fileio.rnmrtk.write"><tt class="xref py py-obj docutils literal"><span class="pre">write</span></tt></a>(filename,&nbsp;dic,&nbsp;data[,&nbsp;par_file,&nbsp;overwrite])</td>
+<td>Write RNMRTK files.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.write_lowmem.html#nmrglue.fileio.rnmrtk.write_lowmem" title="nmrglue.fileio.rnmrtk.write_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">write_lowmem</span></tt></a>(file,&nbsp;dic,&nbsp;data[,&nbsp;par_file,&nbsp;...])</td>
-<td></td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.write_lowmem.html#nmrglue.fileio.rnmrtk.write_lowmem" title="nmrglue.fileio.rnmrtk.write_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">write_lowmem</span></tt></a>(filename,&nbsp;dic,&nbsp;data[,&nbsp;...])</td>
+<td>Write RNMRTK files using minimal amounts of memory (trace by trace).</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.read_lowmem.html#nmrglue.fileio.rnmrtk.read_lowmem" title="nmrglue.fileio.rnmrtk.read_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">read_lowmem</span></tt></a>(file[,&nbsp;par_file])</td>
-<td></td>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.read_lowmem.html#nmrglue.fileio.rnmrtk.read_lowmem" title="nmrglue.fileio.rnmrtk.read_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">read_lowmem</span></tt></a>(filename[,&nbsp;par_file])</td>
+<td>Read RNMRTK files with minimal memory usage</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.read_sec.html#nmrglue.fileio.rnmrtk.read_sec" title="nmrglue.fileio.rnmrtk.read_sec"><tt class="xref py py-obj docutils literal"><span class="pre">read_sec</span></tt></a>(file,&nbsp;dtype,&nbsp;shape,&nbsp;complex)</td>
-<td>Read spectral data from a RNMRTK file</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.read_sec.html#nmrglue.fileio.rnmrtk.read_sec" title="nmrglue.fileio.rnmrtk.read_sec"><tt class="xref py py-obj docutils literal"><span class="pre">read_sec</span></tt></a>(filename,&nbsp;dtype,&nbsp;shape,&nbsp;cplex)</td>
+<td>Read a RNMRTK parameter .par file.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.write_sec.html#nmrglue.fileio.rnmrtk.write_sec" title="nmrglue.fileio.rnmrtk.write_sec"><tt class="xref py py-obj docutils literal"><span class="pre">write_sec</span></tt></a>(file,&nbsp;data[,&nbsp;dtype,&nbsp;overwrite])</td>
-<td>Write spectral data to a RNMRTK .sec file</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.write_sec.html#nmrglue.fileio.rnmrtk.write_sec" title="nmrglue.fileio.rnmrtk.write_sec"><tt class="xref py py-obj docutils literal"><span class="pre">write_sec</span></tt></a>(filename,&nbsp;data[,&nbsp;dtype,&nbsp;overwrite])</td>
+<td>Write a RNMRTK .sec file.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.read_par.html#nmrglue.fileio.rnmrtk.read_par" title="nmrglue.fileio.rnmrtk.read_par"><tt class="xref py py-obj docutils literal"><span class="pre">read_par</span></tt></a>(file)</td>
-<td>Parse a RNMRTK parameter file</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.read_par.html#nmrglue.fileio.rnmrtk.read_par" title="nmrglue.fileio.rnmrtk.read_par"><tt class="xref py py-obj docutils literal"><span class="pre">read_par</span></tt></a>(filename)</td>
+<td>Parse a RNMRTK parameter (.par) file.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.write_par.html#nmrglue.fileio.rnmrtk.write_par" title="nmrglue.fileio.rnmrtk.write_par"><tt class="xref py py-obj docutils literal"><span class="pre">write_par</span></tt></a>(par_file,&nbsp;dic,&nbsp;overwrite)</td>
-<td>Write a RNMRTK parameter file</td>
+<td>Write a RNMRTK parameter file (.par).</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.make_uc.html#nmrglue.fileio.rnmrtk.make_uc" title="nmrglue.fileio.rnmrtk.make_uc"><tt class="xref py py-obj docutils literal"><span class="pre">make_uc</span></tt></a>(dic,&nbsp;data[,&nbsp;dim])</td>
-<td>Make a unit conversion object</td>
+<td>Creat a unit conversion object</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.guess_udic.html#nmrglue.fileio.rnmrtk.guess_udic" title="nmrglue.fileio.rnmrtk.guess_udic"><tt class="xref py py-obj docutils literal"><span class="pre">guess_udic</span></tt></a>(dic,&nbsp;data)</td>
-<td>Guess parameters of a universal dictionary from dic,data pair</td>
+<td>Guess parameters of a universal dictionary from a dic, data pair.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.create_dic.html#nmrglue.fileio.rnmrtk.create_dic" title="nmrglue.fileio.rnmrtk.create_dic"><tt class="xref py py-obj docutils literal"><span class="pre">create_dic</span></tt></a>(udic)</td>
-<td>Create a RNMRTK dictionary from a universal dictionary</td>
+<td>Create a RNMRTK dictionary from a universal dictionary.</td>
 </tr>
 </tbody>
 </table>
@@ -127,32 +127,32 @@ functions.</p>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.create_data.html#nmrglue.fileio.rnmrtk.create_data" title="nmrglue.fileio.rnmrtk.create_data"><tt class="xref py py-obj docutils literal"><span class="pre">create_data</span></tt></a>(data)</td>
 <td>Create a RNMRTK data array (recast into float32 or complex64)</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.get_data.html#nmrglue.fileio.rnmrtk.get_data" title="nmrglue.fileio.rnmrtk.get_data"><tt class="xref py py-obj docutils literal"><span class="pre">get_data</span></tt></a>(file,&nbsp;dtype)</td>
-<td>Get spectral data from a RNMRTK file</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.get_data.html#nmrglue.fileio.rnmrtk.get_data" title="nmrglue.fileio.rnmrtk.get_data"><tt class="xref py py-obj docutils literal"><span class="pre">get_data</span></tt></a>(filename,&nbsp;dtype)</td>
+<td>Get spectral data from a RNMRTK file.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.get_trace.html#nmrglue.fileio.rnmrtk.get_trace" title="nmrglue.fileio.rnmrtk.get_trace"><tt class="xref py py-obj docutils literal"><span class="pre">get_trace</span></tt></a>(f,&nbsp;num_points,&nbsp;big)</td>
-<td></td>
+<td>Get a trace from an open RNMRTK file.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.put_trace.html#nmrglue.fileio.rnmrtk.put_trace" title="nmrglue.fileio.rnmrtk.put_trace"><tt class="xref py py-obj docutils literal"><span class="pre">put_trace</span></tt></a>(f,&nbsp;trace)</td>
-<td></td>
+<td>Put a trace to an open RNMRTK file.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.uninterleave_data.html#nmrglue.fileio.rnmrtk.uninterleave_data" title="nmrglue.fileio.rnmrtk.uninterleave_data"><tt class="xref py py-obj docutils literal"><span class="pre">uninterleave_data</span></tt></a>(data)</td>
-<td>Remove interleaving of real/imag data in last dimension of data</td>
+<td>Remove interleaving of real.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.interleave_data.html#nmrglue.fileio.rnmrtk.interleave_data" title="nmrglue.fileio.rnmrtk.interleave_data"><tt class="xref py py-obj docutils literal"><span class="pre">interleave_data</span></tt></a>(data)</td>
-<td>Interleave read, imag data in data</td>
+<td>Interleave real, imag data in data</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.find_shape.html#nmrglue.fileio.rnmrtk.find_shape" title="nmrglue.fileio.rnmrtk.find_shape"><tt class="xref py py-obj docutils literal"><span class="pre">find_shape</span></tt></a>(dic)</td>
-<td>Determine the data shape (R+I for all dims) from a dictionary</td>
+<td>Determine the data shape (R+I for all dims) from a RNMRTK dictionary.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.permute_dic.html#nmrglue.fileio.rnmrtk.permute_dic" title="nmrglue.fileio.rnmrtk.permute_dic"><tt class="xref py py-obj docutils literal"><span class="pre">permute_dic</span></tt></a>(dic,&nbsp;plist)</td>
 <td>Permute all parameters in dictionary according to plist (4 element list)</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.parse_par_line.html#nmrglue.fileio.rnmrtk.parse_par_line" title="nmrglue.fileio.rnmrtk.parse_par_line"><tt class="xref py py-obj docutils literal"><span class="pre">parse_par_line</span></tt></a>(line,&nbsp;dic)</td>
-<td></td>
+<td>Parse a line from a RNMRTK parameter file (.par).</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.make_empty_dic.html#nmrglue.fileio.rnmrtk.make_empty_dic" title="nmrglue.fileio.rnmrtk.make_empty_dic"><tt class="xref py py-obj docutils literal"><span class="pre">make_empty_dic</span></tt></a>()</td>
-<td>Make an empty rnmrtk parameter dictionary</td>
+<td>Make an empty RNMRTK parameter dictionary.</td>
 </tr>
 </tbody>
 </table>
@@ -166,7 +166,7 @@ functions.</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.rnmrtk_nd.html#nmrglue.fileio.rnmrtk.rnmrtk_nd" title="nmrglue.fileio.rnmrtk.rnmrtk_nd"><tt class="xref py py-obj docutils literal"><span class="pre">rnmrtk_nd</span></tt></a>(filename,&nbsp;fshape,&nbsp;cplex,&nbsp;big[,&nbsp;order])</td>
-<td>Emulate a numpy.ndarray objects without loading data into memory for low</td>
+<td>Emulate a ndarray objects without loading data into memory for low memory</td>
 </tr>
 </tbody>
 </table>

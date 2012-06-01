@@ -65,26 +65,44 @@
 <h1>nmrglue.fileio.bruker.write_binary<a class="headerlink" href="#nmrglue-fileio-bruker-write-binary" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.bruker.write_binary">
-<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">write_binary</tt><big>(</big><em>filename</em>, <em>dic</em>, <em>data</em>, <em>overwrite=False</em>, <em>big=True</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/bruker.py#L650"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.bruker.write_binary" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write Bruker binary data to file</p>
-<p>Parameters:</p>
-<ul>
-<li><p class="first">filename      Filename to write to.</p>
-</li>
-<li><p class="first">dic           dictionary holding acqus_files and pprog_file parameters.</p>
-</li>
-<li><p class="first">data          array of data</p>
-</li>
-<li><p class="first">overwrite     True to overwrite files, False to warn.</p>
-</li>
-<li><dl class="first docutils">
-<dt>big           Endiness to write binary data with,</dt>
-<dd><p class="first last">bigendian=True, little=False</p>
-</dd>
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">write_binary</tt><big>(</big><em>filename</em>, <em>dic</em>, <em>data</em>, <em>overwrite=False</em>, <em>big=True</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/bruker.py#L687"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.bruker.write_binary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write Bruker binary data to file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>Filename to write to.</p>
+</div></blockquote>
+<p><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of Bruker parameters.</p>
+</div></blockquote>
+<p><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>overwrite</strong> : bool</p>
+<blockquote>
+<div><p>True to overwrite files, False will raise a Warning if file exists.</p>
+</div></blockquote>
+<p><strong>big</strong> : bool</p>
+<blockquote class="last">
+<div><p>Endiness to write binary data with True of big-endian, False for
+little-endian.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.fileio.bruker.write_binary_lowmem.html#nmrglue.fileio.bruker.write_binary_lowmem" title="nmrglue.fileio.bruker.write_binary_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">write_binary_lowmem</span></tt></a></dt>
+<dd>Write Bruker binary data using minimal memory.</dd>
 </dl>
-</li>
-</ul>
-<p>No return.</p>
+</div>
 </dd></dl>
 
 </div>

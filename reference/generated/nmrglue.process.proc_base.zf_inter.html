@@ -65,11 +65,31 @@
 <h1>nmrglue.process.proc_base.zf_inter<a class="headerlink" href="#nmrglue-process-proc-base-zf-inter" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_base.zf_inter">
-<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">zf_inter</tt><big>(</big><em>data</em>, <em>pts=1</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L632"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.zf_inter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Zero Fill between points</p>
-<p>Parameters:
-* data    Array of spectral data.
-* pts     number zeros between points</p>
+<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">zf_inter</tt><big>(</big><em>data</em>, <em>pts=1</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L949"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.zf_inter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Zero fill between points.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>pts</strong> : int</p>
+<blockquote>
+<div><p>Number zeros to add between points.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Array of NMR data to which <cite>pts</cite> zero have been added between all
+points.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

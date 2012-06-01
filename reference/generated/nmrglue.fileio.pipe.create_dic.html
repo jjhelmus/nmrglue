@@ -65,17 +65,33 @@
 <h1>nmrglue.fileio.pipe.create_dic<a class="headerlink" href="#nmrglue-fileio-pipe-create-dic" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.create_dic">
-<tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">create_dic</tt><big>(</big><em>udic</em>, <em>datetimeobj=datetime.datetime(2012</em>, <em>5</em>, <em>18</em>, <em>10</em>, <em>5</em>, <em>22</em>, <em>448151)</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/pipe.py#L234"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.pipe.create_dic" title="Permalink to this definition">¶</a></dt>
-<dd><p>Crate a NMRPipe dictiony from universal dictionary</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>udic        Universal dictionary</li>
-<li>datetimeobj datetime object</li>
-<li>user        Name of user</li>
-</ul>
-<p>Does not update dictionary keys that are unknown such as MIN/MAX,
-apodization and processing parameters, sizes in none-current domain. 
-Also rounding of parameter is different than NMRPipe.</p>
+<tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">create_dic</tt><big>(</big><em>udic</em>, <em>datetimeobj=datetime.datetime(2012</em>, <em>6</em>, <em>1</em>, <em>17</em>, <em>36</em>, <em>30</em>, <em>619284)</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/pipe.py#L260"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.pipe.create_dic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Crate a NMRPipe parameter dictionary from universal dictionary</p>
+<p>This function does not update the dictionary keys that are unknown such as 
+MIN/MAX, apodization and processing parameters, and sizes in none-current 
+domain. Also rounding of parameter is different than NMRPipe.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>udic</strong> : dict</p>
+<blockquote>
+<div><p>Universal dictionary of spectral parameters.</p>
+</div></blockquote>
+<p><strong>datetimeobj</strong> : datetime object, optional</p>
+<blockquote>
+<div><p>Datetime to record in NMRPipe dictionary</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
+<blockquote class="last">
+<div><p>Dictionary NMRPipe parameters.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

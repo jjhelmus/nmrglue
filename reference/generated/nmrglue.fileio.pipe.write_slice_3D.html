@@ -65,21 +65,49 @@
 <h1>nmrglue.fileio.pipe.write_slice_3D<a class="headerlink" href="#nmrglue-fileio-pipe-write-slice-3d" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.write_slice_3D">
-<tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">write_slice_3D</tt><big>(</big><em>filemask</em>, <em>dic</em>, <em>data</em>, <em>shape</em>, <em>(sz</em>, <em>sy</em>, <em>sx)</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/pipe.py#L896"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.pipe.write_slice_3D" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write a slice of a 3D data array to file</p>
-<p>Opens (or if necessary creates) 2D NMRPipe file(s) to write 
-data, where total 3D file size is given by shape.</p>
-<p>Parameters:
-* filemask      String with single formatting operator (%)
-* data          3D array of data
-* dic           Dictionary to write when/if files are created
-* shape         3-tuple of integers indicating the overall matrix shape
-* (sz,sy,sx)    3-tuple of slice object which specify location of data</p>
+<tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">write_slice_3D</tt><big>(</big><em>filemask</em>, <em>dic</em>, <em>data</em>, <em>shape</em>, <em>(sz</em>, <em>sy</em>, <em>sx)</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/pipe.py#L1013"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.pipe.write_slice_3D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a slice of a 3D data array to file.</p>
+<p>Opens (or if necessary creates) a 2D NMRPipe file(s) to write 
+data, where the total 3D file size is given by shape.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filemask</strong> : str</p>
+<blockquote>
+<div><p>String of NMRPipe file with single formatting operator (%).</p>
+</div></blockquote>
+<p><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of NMRPipe parameters.</p>
+</div></blockquote>
+<p><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>3D array of NMR data.</p>
+</div></blockquote>
+<p><strong>shape</strong> : tuple</p>
+<blockquote>
+<div><p>Tuple of 3 integers indicating the overall matrix shape.</p>
+</div></blockquote>
+<p><strong>(sz, sy, sx)</strong> : slices</p>
+<blockquote class="last">
+<div><p>Slice objects which specify the location of the to be written data.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.fileio.pipe.iter3D.html#nmrglue.fileio.pipe.iter3D" title="nmrglue.fileio.pipe.iter3D"><tt class="xref py py-obj docutils literal"><span class="pre">iter3D</span></tt></a></dt>
+<dd>Users should use this object, not this function.</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
 <p>This function memmaps 2D NMRPipe files for speed. It only writes 
 dictionaries to file when created, leaving them unmodified if the file
-exists.</p>
-<p>Only error checking is that data is 3D.</p>
-<p>Users are not expected to use this function, rather use the iter3D object</p>
+exists. Only error checking is that data is 3D.</p>
 </dd></dl>
 
 </div>

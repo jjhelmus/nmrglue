@@ -65,22 +65,72 @@
 <h1>nmrglue.process.pipe_proc.gm<a class="headerlink" href="#nmrglue-process-pipe-proc-gm" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.pipe_proc.gm">
-<tt class="descclassname">nmrglue.process.pipe_proc.</tt><tt class="descname">gm</tt><big>(</big><em>dic</em>, <em>data</em>, <em>g1=0.0</em>, <em>g2=0.0</em>, <em>g3=0.0</em>, <em>c=1.0</em>, <em>start=1</em>, <em>size='default'</em>, <em>inv=False</em>, <em>one=False</em>, <em>hdr=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/pipe_proc.py#L274"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.pipe_proc.gm" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.process.pipe_proc.</tt><tt class="descname">gm</tt><big>(</big><em>dic</em>, <em>data</em>, <em>g1=0.0</em>, <em>g2=0.0</em>, <em>g3=0.0</em>, <em>c=1.0</em>, <em>start=1</em>, <em>size='default'</em>, <em>inv=False</em>, <em>one=False</em>, <em>hdr=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/pipe_proc.py#L327"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.pipe_proc.gm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Lorentz-to-Gauss apodization</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>dic   Dictionary of NMRPipe parameters.</li>
-<li>data  array of spectral data.</li>
-<li>g1    Inverse exponential width in Hz</li>
-<li>g2    Gaussian broaden width in Hz</li>
-<li>g3    Location of Gauss maximum (0.0 to 1.0)</li>
-<li>c     First point scale value.</li>
-<li>start Number of points in apodization window. Default is full size.</li>
-<li>size  Starting location of apodization window.</li>
-<li>inv   True for inverse apodization, False for normal apodization.</li>
-<li>one   True leaves points outside of window as is, False zeros them.</li>
-<li>hdr   True to read apodization parameters from Header.</li>
-</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of NMRPipe parameters.</p>
+</div></blockquote>
+<p><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>g1</strong> : float</p>
+<blockquote>
+<div><p>Inversion exponential width in Hz.</p>
+</div></blockquote>
+<p><strong>g2</strong> : float</p>
+<blockquote>
+<div><p>Gaussian broadening width in Hz</p>
+</div></blockquote>
+<p><strong>g3</strong> : float</p>
+<blockquote>
+<div><p>Location of Gaussian maximum, should be between 0.0 and 1.0.</p>
+</div></blockquote>
+<p><strong>c</strong> : float</p>
+<blockquote>
+<div><p>First point scale value.</p>
+</div></blockquote>
+<p><strong>start</strong> : int, optional</p>
+<blockquote>
+<div><p>Starting location of apodization window. Default is the first point, 1.</p>
+</div></blockquote>
+<p><strong>size</strong> : int, optional</p>
+<blockquote>
+<div><p>Size of the apodization window. Default (&#8216;default&#8217;) is the full size of
+the active dimension.</p>
+</div></blockquote>
+<p><strong>inv</strong> : bool, optional</p>
+<blockquote>
+<div><p>True for inverse apodization, False for normal apodization.</p>
+</div></blockquote>
+<p><strong>one</strong> : bool, optional</p>
+<blockquote>
+<div><p>True to set points outside of window to 1. False leaves points outside 
+the apodization window as is.</p>
+</div></blockquote>
+<p><strong>hdr</strong> : bool, optional</p>
+<blockquote>
+<div><p>True to read apodization parameters from the the parameters in dic.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of updated NMRPipe parameters.</p>
+</div></blockquote>
+<p><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Array of NMR data with lorentz-to-gauss apodization applied.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

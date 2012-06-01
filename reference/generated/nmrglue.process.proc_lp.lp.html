@@ -67,65 +67,86 @@
 <dt id="nmrglue.process.proc_lp.lp">
 <tt class="descclassname">nmrglue.process.proc_lp.</tt><tt class="descname">lp</tt><big>(</big><em>data</em>, <em>pred=1</em>, <em>slice=slice(None</em>, <em>None</em>, <em>None)</em>, <em>order=8</em>, <em>mode='f'</em>, <em>append='after'</em>, <em>bad_roots='auto'</em>, <em>fix_mode='on'</em>, <em>mirror=None</em>, <em>method='svd'</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_lp.py#L30"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_lp.lp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Linear prediction extrapolation of 1D or 2D data.</p>
-<p>Parameters:</p>
-<ul>
-<li><p class="first">data      1D or 2D data (time domain in last axis).</p>
-</li>
-<li><p class="first">pred      Number of points to predict along the last axis.</p>
-</li>
-<li><p class="first">slice     slice object selecting region of each row to use in LP equation</p>
-</li>
-<li><p class="first">order     Prediction order (Number of LP coefficients)</p>
-</li>
-<li><dl class="first docutils">
-<dt>mode      Mode to generate LP filter (&#8216;f&#8217;-forward,&#8217;b&#8217;-backward,</dt>
-<dd><p class="first last">fb-&#8216;forward-backward,&#8217;bf&#8217;-backward-forward)</p>
-</dd>
-</dl>
-</li>
-<li><p class="first">extend    Extend before or after trace, (&#8220;before&#8221; or &#8220;after&#8221;).</p>
-</li>
-<li><dl class="first docutils">
-<dt>bad_roots Type of roots which are bad and should be stabilized, </dt>
-<dd><p class="first last">either those with &#8220;incr&#8221; or &#8220;decr&#8221; signals, set to None for 
-no root stabilizing. Default of &#8220;auto&#8221; set root fixing 
-based on LP mode. 
-(mode==&#8221;f&#8221; or &#8220;fb&#8221; -&gt; &#8220;incr&#8221;, mode==&#8221;b&#8221; or &#8220;bf&#8221; -&gt; &#8220;decr&#8221;)</p>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt>fix_mode  Method used to stabilize bad roots, &#8220;on&#8221; to move the roots </dt>
-<dd><p class="first last">onto the unit circle, &#8220;reflect&#8221; to reflect bad roots across 
-the unit circle</p>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt>mirror    None to process trace as provided, &#8216;0&#8217; or &#8216;180&#8217; forms a mirror</dt>
-<dd><p class="first last">image of the sliced trace to calculate the LP filter.  &#8216;0&#8217;
-should be used with data with no delay, &#8216;180&#8217; with data
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>1D or 2D NMR data with the last (-1) axis in the time domain.</p>
+</div></blockquote>
+<p><strong>pred</strong> : int</p>
+<blockquote>
+<div><p>Number of points to predict along the last axis.</p>
+</div></blockquote>
+<p><strong>slice</strong> : slice object, optional</p>
+<blockquote>
+<div><p>Slice object which selects the region along the last axis to use in LP 
+equation.  The default (slice(None)) will use all points.</p>
+</div></blockquote>
+<p><strong>order</strong> : int</p>
+<blockquote>
+<div><p>Prediction order, number of LP coefficients calculated.</p>
+</div></blockquote>
+<p><strong>mode</strong> : {&#8216;f&#8217;, &#8216;b&#8217;, &#8216;fb&#8217; or &#8216;bf&#8217;}</p>
+<blockquote>
+<div><p>Mode to generate LP filter. &#8216;f&#8217; for forward,&#8217;b&#8217; for backward, fb for 
+&#8216;forward-backward and &#8216;bf&#8217; for backward-forward.</p>
+</div></blockquote>
+<p><strong>extend</strong> : {&#8216;before&#8217;, &#8216;after&#8217;}</p>
+<blockquote>
+<div><p>Location to extend the data, either &#8216;before&#8217; the current data, or
+&#8216;after&#8217; the existing data. This is independent of the <cite>mode</cite> parameter.</p>
+</div></blockquote>
+<p><strong>bad_roots</strong> : {&#8216;incr&#8217;, &#8216;decr&#8217;, None, &#8216;auto&#8217;}</p>
+<blockquote>
+<div><p>Type of roots which to consider bad and to stabilize.  Option are those
+with increasing signals &#8216;incr&#8217; or decreasing signals &#8216;decr&#8217;.  None will
+perform no root stabiliting.  The default (&#8216;auto&#8217;) will set the
+parameter based on the <cite>mode</cite> parameter.  &#8216;f&#8217; or &#8216;fb&#8217; <cite>mode</cite> will 
+results in a &#8216;incr&#8217; <cite>bad_roots</cite> parameter, &#8216;b&#8217; or &#8216;bf` in &#8216;decr&#8217;</p>
+</div></blockquote>
+<p><strong>fix_mode</strong> : {&#8216;on&#8217;, &#8216;reflect&#8217;}</p>
+<blockquote>
+<div><p>Method used to stabilize bad roots, &#8216;on&#8217; to move the roots onto the 
+unit circle, &#8216;reflect&#8217; to reflect bad roots across the unit circle. 
+This parameter is ignored when <cite>bad_roots</cite> is None.</p>
+</div></blockquote>
+<p><strong>mirror</strong> : {None, &#8216;0&#8217;, &#8216;180&#8217;}</p>
+<blockquote>
+<div><p>Mode to form mirror image of data before processing.  None will 
+process the data trace as provided (no mirror image). &#8216;0&#8217; or &#8216;180&#8217; 
+forms a mirror image of the sliced trace to calculate the LP filter.  
+&#8216;0&#8217; should be used with data with no delay, &#8216;180&#8217; with data
 with an initial half-point delay.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt>method    Method to use to calculate the LP filter, choose from</dt>
-<dd><p class="first last">&#8216;svd&#8217;,&#8217;qr&#8217;,&#8217;choleskey&#8217; or &#8216;tls&#8217;.</p>
-</dd>
-</dl>
-</li>
-</ul>
-<p>Notes:</p>
-<p>When given 2D data a series of 1D Linear predictions are made to
+</div></blockquote>
+<p><strong>method</strong> : {&#8216;svd&#8217;, &#8216;qr&#8217;, &#8216;choleskey&#8217;, &#8216;tls&#8217;}</p>
+<blockquote>
+<div><p>Method to use to calculate the LP filter. Choices are a SVD (&#8216;svd&#8217;), QR
+(&#8216;qr&#8217;), or Choleskey (&#8216;choleskey&#8217;) decomposition, or Total Least 
+Squares (&#8216;tls&#8217;).</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>NMR data with <cite>pred</cite> number of points linear predicted and appended to
+the original data.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>When given 2D data a series of 1D linear predictions are made to
 each row in the array, extending each by pred points. To perform a 2D 
-linear prediction using a 2D prediction matrix use the lp2d functions.</p>
+linear prediction using a 2D prediction matrix use <a class="reference internal" href="nmrglue.process.proc_lp.lp2d.html#nmrglue.process.proc_lp.lp2d" title="nmrglue.process.proc_lp.lp2d"><tt class="xref py py-func docutils literal"><span class="pre">lp2d()</span></tt></a>.</p>
 <p>In forward-backward or backward-forward mode root stabilizing is done 
 on both sets of signal roots as calculated in the first mode direction.  
 After averaging the coefficient the roots are again stabilized.</p>
 <p>When the append parameter does not match the LP mode, for example
 if a backward linear prediction (mode=&#8217;b&#8217;) is used to predict points
-after the trace (append=&#8217;after&#8217;), any root fixing is done before reversing 
+after the trace (append=&#8217;after&#8217;), any root fixing is done before reversing
 the filter.</p>
 </dd></dl>
 

@@ -65,35 +65,38 @@
 <h1>nmrglue.fileio.bruker.read<a class="headerlink" href="#nmrglue-fileio-bruker-read" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.bruker.read">
-<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">read</tt><big>(</big><em>dir='.'</em>, <em>bin_file=None</em>, <em>acqus_files=None</em>, <em>pprog_file=None</em>, <em>shape=None</em>, <em>cplex=None</em>, <em>big=None</em>, <em>read_prog=True</em>, <em>read_acqus=True</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/bruker.py#L123"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.bruker.read" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read Bruker files in directory</p>
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">read</tt><big>(</big><em>dir='.'</em>, <em>bin_file=None</em>, <em>acqus_files=None</em>, <em>pprog_file=None</em>, <em>shape=None</em>, <em>cplex=None</em>, <em>big=None</em>, <em>read_prog=True</em>, <em>read_acqus=True</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/bruker.py#L149"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.bruker.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read Bruker files from a directory.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dir</strong> : str</p>
 <blockquote>
-<div><p>Directory to read from</p>
+<div><p>Directory to read from.</p>
 </div></blockquote>
 <p><strong>bin_file</strong> : str, optional</p>
 <blockquote>
-<div><p>Filename of binary file, if None looks for standard files.</p>
+<div><p>Filename of binary file in directory. None uses standard files.</p>
 </div></blockquote>
 <p><strong>acqus_files</strong> : list, optional</p>
 <blockquote>
-<div><p>List of filename(s) of acqus parameter files in directory.</p>
+<div><p>List of filename(s) of acqus parameter files in directory. None uses
+standard files.</p>
 </div></blockquote>
-<p><strong>pprog_files</strong> : str, optional</p>
+<p><strong>pprog_file</strong> : str, optional</p>
 <blockquote>
-<div><p>Filename of pulse program in directory.</p>
+<div><p>Filename of pulse program in directory. None uses standard files.</p>
 </div></blockquote>
 <p><strong>shape</strong> : tuple, optional</p>
 <blockquote>
-<div><p>Shape of resulting data.</p>
+<div><p>Shape of resulting data.  None will guess the shape from the spectral
+parameters.</p>
 </div></blockquote>
 <p><strong>cplex</strong> : bool, optional</p>
 <blockquote>
-<div><p>True is direct dimension is complex, False otherwise.</p>
+<div><p>True is direct dimension is complex, False otherwise. None will guess
+quadrature from spectral parameters.</p>
 </div></blockquote>
 <p><strong>big</strong> : bool or None, optional</p>
 <blockquote>
@@ -112,16 +115,25 @@ None to determine endiness from acqus file(s).</p>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
 <blockquote>
-<div><p>Dictionary of spectral parameters.</p>
+<div><p>Dictionary of Bruker parameters.</p>
 </div></blockquote>
 <p><strong>data</strong> : ndarray</p>
 <blockquote class="last">
-<div><p>NMR data.</p>
+<div><p>Array of NMR data.</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.fileio.bruker.read_lowmem.html#nmrglue.fileio.bruker.read_lowmem" title="nmrglue.fileio.bruker.read_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">read_lowmem</span></tt></a></dt>
+<dd>Low memory reading of Bruker files.</dd>
+<dt><a class="reference internal" href="nmrglue.fileio.bruker.write.html#nmrglue.fileio.bruker.write" title="nmrglue.fileio.bruker.write"><tt class="xref py py-obj docutils literal"><span class="pre">write</span></tt></a></dt>
+<dd>Write Bruker files.</dd>
+</dl>
+</div>
 </dd></dl>
 
 </div>

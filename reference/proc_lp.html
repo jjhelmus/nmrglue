@@ -62,7 +62,7 @@
             
   <div class="section" id="module-nmrglue.process.proc_lp">
 <span id="nmrglue-proc-lp"></span><span id="proc-lp"></span><h1>nmrglue.proc_lp<a class="headerlink" href="#module-nmrglue.process.proc_lp" title="Permalink to this headline">¶</a></h1>
-<p>Linear Prediction (LP) functions for extrapolating and modeling NMR signals</p>
+<p>Linear Prediction (LP) functions for extrapolating and modeling NMR signals.</p>
 <p>This module is imported as nmrglue.proc_lp and can be called as such.</p>
 <div class="section" id="user-functions">
 <h2>User Functions<a class="headerlink" href="#user-functions" title="Permalink to this headline">¶</a></h2>
@@ -82,7 +82,7 @@
 <td>Linear Prediction extrapolation of 1D or 2D data using QR decomposition.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.proc_lp.lp_cho.html#nmrglue.process.proc_lp.lp_cho" title="nmrglue.process.proc_lp.lp_cho"><tt class="xref py py-obj docutils literal"><span class="pre">lp_cho</span></tt></a>(data[,&nbsp;pred,&nbsp;slice,&nbsp;order,&nbsp;mode,&nbsp;...])</td>
-<td>Linear Prediction extrapolation of 1D or 2D data using Cholesky decomp.</td>
+<td>Linear Prediction extrapolation of 1D or 2D data using Cholesky</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.proc_lp.lp_tls.html#nmrglue.process.proc_lp.lp_tls" title="nmrglue.process.proc_lp.lp_tls"><tt class="xref py py-obj docutils literal"><span class="pre">lp_tls</span></tt></a>(data[,&nbsp;pred,&nbsp;slice,&nbsp;order,&nbsp;mode,&nbsp;...])</td>
 <td>Linear Prediction extrapolation of 1D or 2D data using Total Least Squares.</td>
@@ -94,13 +94,25 @@
 <td>Perform a (row wise) Cadzow-like signal enhancement on 1D or 2D data.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.proc_lp.lp_model.html#nmrglue.process.proc_lp.lp_model" title="nmrglue.process.proc_lp.lp_model"><tt class="xref py py-obj docutils literal"><span class="pre">lp_model</span></tt></a>(trace[,&nbsp;slice,&nbsp;order,&nbsp;mode,&nbsp;...])</td>
-<td>Use Linear Prediction to model a 1D NMR signal.</td>
+<td>Use Linear Prediction to model 1D NMR time domain data.</td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="developer-functions">
 <h2>Developer Functions<a class="headerlink" href="#developer-functions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="notes">
+<h3>Notes<a class="headerlink" href="#notes" title="Permalink to this headline">¶</a></h3>
+<p>This module contains functions for performing linear prediction on NMR  data.
+The algorithms used were selected for simplicity to show how linear prediction
+works not for computational speed nor stability.  Locations where significant
+improvements can be made to improve speed or stability are indicated with
+SPEED and STABILITY within the source code with discussion following.</p>
+<p>The notation for the Linear Prediction equation, coefficients, roots, etc.
+closely match those in &#8220;NMR Data Processing&#8221; by Hoch snd Stern. This book was
+references for many of the algorithms in this module.</p>
+<p>Reduced order LP-SVD and LP-TLS methods are not implemented but should
+be easy to add if desired.  See <a class="reference internal" href="generated/nmrglue.process.proc_lp.find_lproots_hsvd.html#nmrglue.process.proc_lp.find_lproots_hsvd" title="nmrglue.process.proc_lp.find_lproots_hsvd"><tt class="xref py py-func docutils literal"><span class="pre">find_lproots_hsvd()</span></tt></a> for an example.</p>
 <p>These functions are called by high-level function are and most users will not
 use them in common processing scripts.  Developers may be interested in them.</p>
 <table border="1" class="longtable docutils">
@@ -113,10 +125,10 @@ use them in common processing scripts.  Developers may be interested in them.</p
 <td>Linear Prediction extrapolation of 1D data.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.proc_lp.extrapolate_2d.html#nmrglue.process.proc_lp.extrapolate_2d" title="nmrglue.process.proc_lp.extrapolate_2d"><tt class="xref py py-obj docutils literal"><span class="pre">extrapolate_2d</span></tt></a>(x,&nbsp;C,&nbsp;pred,&nbsp;fix_points,&nbsp;mirror)</td>
-<td>Extrapolate points along the 1st axis using lp2d algorithm</td>
+<td>Extrapolate points along the 1st axis using the lp2d algorithm.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.proc_lp.make_lp2d_Dd.html#nmrglue.process.proc_lp.make_lp2d_Dd" title="nmrglue.process.proc_lp.make_lp2d_Dd"><tt class="xref py py-obj docutils literal"><span class="pre">make_lp2d_Dd</span></tt></a>(x,&nbsp;P,&nbsp;M[,&nbsp;mode])</td>
-<td>Form the lp2d equation matrix and vector</td>
+<td>Form the lp2d equation matrix and vector.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.proc_lp.cadzow_single.html#nmrglue.process.proc_lp.cadzow_single" title="nmrglue.process.proc_lp.cadzow_single"><tt class="xref py py-obj docutils literal"><span class="pre">cadzow_single</span></tt></a>(x,&nbsp;M,&nbsp;K[,&nbsp;min_var])</td>
 <td>Perform a single iteration of Cadzow signal enhancement on a 1D vector</td>
@@ -134,10 +146,10 @@ use them in common processing scripts.  Developers may be interested in them.</p
 <td>Calculate a signal phase from a model coefficient</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.proc_lp.make_D.html#nmrglue.process.proc_lp.make_D" title="nmrglue.process.proc_lp.make_D"><tt class="xref py py-obj docutils literal"><span class="pre">make_D</span></tt></a>(x,&nbsp;order,&nbsp;mode)</td>
-<td>make the LP equation D matrix (Da = d&#8217;)</td>
+<td>Make the LP equation D matrix (Da = d&#8217;)</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.proc_lp.make_little_d.html#nmrglue.process.proc_lp.make_little_d" title="nmrglue.process.proc_lp.make_little_d"><tt class="xref py py-obj docutils literal"><span class="pre">make_little_d</span></tt></a>(x,&nbsp;order,&nbsp;mode)</td>
-<td>make the LP equation d&#8217; vector (Da = d&#8217;)</td>
+<td>Make the LP equation d&#8217; vector (Da = d&#8217;)</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.proc_lp.make_Dd.html#nmrglue.process.proc_lp.make_Dd" title="nmrglue.process.proc_lp.make_Dd"><tt class="xref py py-obj docutils literal"><span class="pre">make_Dd</span></tt></a>(x,&nbsp;order,&nbsp;mode)</td>
 <td>make the LP equation D matrix and d&#8217; vector (Da=d&#8217;)</td>
@@ -146,22 +158,22 @@ use them in common processing scripts.  Developers may be interested in them.</p
 <td>Make a mirror image trace.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.proc_lp.find_lpc.html#nmrglue.process.proc_lp.find_lpc" title="nmrglue.process.proc_lp.find_lpc"><tt class="xref py py-obj docutils literal"><span class="pre">find_lpc</span></tt></a>(D,&nbsp;d,&nbsp;method)</td>
-<td>Find linear prediction filter using a provided method</td>
+<td>Find linear prediction filter using a provided method.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.proc_lp.find_lpc_svd.html#nmrglue.process.proc_lp.find_lpc_svd" title="nmrglue.process.proc_lp.find_lpc_svd"><tt class="xref py py-obj docutils literal"><span class="pre">find_lpc_svd</span></tt></a>(D,&nbsp;d)</td>
-<td>find linear prediction filter using single value decomposition</td>
+<td>Find linear prediction filter using single value decomposition.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.proc_lp.pinv_diagsvd.html#nmrglue.process.proc_lp.pinv_diagsvd" title="nmrglue.process.proc_lp.pinv_diagsvd"><tt class="xref py py-obj docutils literal"><span class="pre">pinv_diagsvd</span></tt></a>(s,&nbsp;m,&nbsp;L)</td>
 <td>Construct the pseudo-inverse of the sigma matrix from singular values</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.proc_lp.find_lpc_qr.html#nmrglue.process.proc_lp.find_lpc_qr" title="nmrglue.process.proc_lp.find_lpc_qr"><tt class="xref py py-obj docutils literal"><span class="pre">find_lpc_qr</span></tt></a>(D,&nbsp;d)</td>
-<td>find linear prediction filter using QR decomposition</td>
+<td>Find linear prediction filter using QR decomposition.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.proc_lp.find_lpc_cholesky.html#nmrglue.process.proc_lp.find_lpc_cholesky" title="nmrglue.process.proc_lp.find_lpc_cholesky"><tt class="xref py py-obj docutils literal"><span class="pre">find_lpc_cholesky</span></tt></a>(D,&nbsp;d)</td>
-<td>find linear prediction filter using a Cholesky decomposition</td>
+<td>Find linear prediction filter using a Cholesky decomposition.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.proc_lp.find_lpc_tls.html#nmrglue.process.proc_lp.find_lpc_tls" title="nmrglue.process.proc_lp.find_lpc_tls"><tt class="xref py py-obj docutils literal"><span class="pre">find_lpc_tls</span></tt></a>(D,&nbsp;d)</td>
-<td>find linear prediction filter using the Total Least Squares method</td>
+<td>Find linear prediction filter using the Total Least Squares method</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.proc_lp.find_lpc_fb.html#nmrglue.process.proc_lp.find_lpc_fb" title="nmrglue.process.proc_lp.find_lpc_fb"><tt class="xref py py-obj docutils literal"><span class="pre">find_lpc_fb</span></tt></a>(x,&nbsp;order,&nbsp;bad_roots,&nbsp;fix_mode,&nbsp;...)</td>
 <td>Determind LP coefficient using forward-backward linear prediction.</td>
@@ -173,22 +185,23 @@ use them in common processing scripts.  Developers may be interested in them.</p
 <td>Find LP roots (poles) using the HSVD method</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.proc_lp.find_roots.html#nmrglue.process.proc_lp.find_roots" title="nmrglue.process.proc_lp.find_roots"><tt class="xref py py-obj docutils literal"><span class="pre">find_roots</span></tt></a>(a[,&nbsp;mode])</td>
-<td>Find LP roots (poles) from a set of LP coefficients</td>
+<td>Find LP roots (poles) from a set of LP coefficients.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.proc_lp.find_coeff.html#nmrglue.process.proc_lp.find_coeff" title="nmrglue.process.proc_lp.find_coeff"><tt class="xref py py-obj docutils literal"><span class="pre">find_coeff</span></tt></a>(poles[,&nbsp;mode])</td>
-<td>Find LP coefficients from a set of LP roots (poles)</td>
+<td>Find LP coefficients from a set of LP roots (poles).</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.proc_lp.reverse_filter.html#nmrglue.process.proc_lp.reverse_filter" title="nmrglue.process.proc_lp.reverse_filter"><tt class="xref py py-obj docutils literal"><span class="pre">reverse_filter</span></tt></a>(a,&nbsp;mode)</td>
-<td>Reverse a filter (ie change forward LP to backwards LP)</td>
+<td>Reverse a filter (change forward LP to backwards LP).</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.proc_lp.fix_roots.html#nmrglue.process.proc_lp.fix_roots" title="nmrglue.process.proc_lp.fix_roots"><tt class="xref py py-obj docutils literal"><span class="pre">fix_roots</span></tt></a>(poles[,&nbsp;fix_roots,&nbsp;fix_mode])</td>
-<td>Fix (stabilize) LP roots</td>
+<td>Fix (stabilize) LP roots.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.proc_lp.extrapolate.html#nmrglue.process.proc_lp.extrapolate" title="nmrglue.process.proc_lp.extrapolate"><tt class="xref py py-obj docutils literal"><span class="pre">extrapolate</span></tt></a>(trace,&nbsp;a,&nbsp;pred,&nbsp;append)</td>
-<td>Extrapolate points using LP prediction filter</td>
+<td>Extrapolate points using LP prediction filter.</td>
 </tr>
 </tbody>
 </table>
+</div>
 </div>
 </div>
 
@@ -205,6 +218,9 @@ use them in common processing scripts.  Developers may be interested in them.</p
 </ul>
 </li>
 <li><a class="reference internal" href="#developer-functions">Developer Functions</a><ul>
+<li><a class="reference internal" href="#notes">Notes</a><ul>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

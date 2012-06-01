@@ -65,41 +65,52 @@
 <h1>nmrglue.analysis.peakpick.clusters<a class="headerlink" href="#nmrglue-analysis-peakpick-clusters" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.analysis.peakpick.clusters">
-<tt class="descclassname">nmrglue.analysis.peakpick.</tt><tt class="descname">clusters</tt><big>(</big><em>data</em>, <em>locations</em>, <em>pthres</em>, <em>nthres</em>, <em>d_struc=None</em>, <em>l_struc=None</em>, <em>ndil=0</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/peakpick.py#L235"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.peakpick.clusters" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform cluster analysis of peak locations</p>
-<p>Parameters:</p>
-<ul>
-<li><p class="first">data          Array of data which has been peak picked</p>
-</li>
-<li><p class="first">locations     List of peak locations</p>
-</li>
-<li><p class="first">pthres        Postive peak threshold or None for no postive peaks</p>
-</li>
-<li><p class="first">nthres        Negative peak threshold or None for no negative peaks</p>
-</li>
-<li><dl class="first docutils">
-<dt>d_struc       Structure of binary dilation to apply on segments before</dt>
-<dd><p class="first last">clustering.  None uses square connectivity 1 structure.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt>l_struc       Structure to use for determining  segment connectivity</dt>
-<dd><p class="first last">in clustering.  None uses square connectivity 1 structure.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt>dnil          Number of dilation to apply on segments before determining</dt>
-<dd><p class="first last">clusters.</p>
-</dd>
-</dl>
-</li>
-</ul>
-<p>Returns:    cluster_ids</p>
-<ul class="simple">
-<li>cluster_ids   List of cluster_ids for each location in locations list.</li>
-</ul>
+<tt class="descclassname">nmrglue.analysis.peakpick.</tt><tt class="descname">clusters</tt><big>(</big><em>data</em>, <em>locations</em>, <em>pthres</em>, <em>nthres</em>, <em>d_struc=None</em>, <em>l_struc=None</em>, <em>ndil=0</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/peakpick.py#L243"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.peakpick.clusters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform cluster analysis of peak locations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of data which has been peak picked.</p>
+</div></blockquote>
+<p><strong>locations</strong> : list</p>
+<blockquote>
+<div><p>List of peak locations.</p>
+</div></blockquote>
+<p><strong>pthres</strong> : float</p>
+<blockquote>
+<div><p>Postive peak threshold. None for no postive peaks.</p>
+</div></blockquote>
+<p><strong>nthres</strong> : float</p>
+<blockquote>
+<div><p>Negative peak threshold. None for no negative peaks.</p>
+</div></blockquote>
+<p><strong>d_struc</strong> : ndarray, optional</p>
+<blockquote>
+<div><p>Structure of binary dilation to apply on segments before clustering.
+None uses a square structure with connectivity of one.</p>
+</div></blockquote>
+<p><strong>l_struc</strong> : ndarray, optional</p>
+<blockquote>
+<div><p>Structure to use for determining segment connectivity in clustering.  
+None uses square structure with connectivity of one.</p>
+</div></blockquote>
+<p><strong>dnil</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of dilation to apply on segments before determining clusters.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>cluster_ids</strong> : list</p>
+<blockquote class="last">
+<div><p>List of cluster number corresponding to peak locations.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

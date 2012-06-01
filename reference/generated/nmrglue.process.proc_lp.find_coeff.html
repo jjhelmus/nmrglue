@@ -65,13 +65,31 @@
 <h1>nmrglue.process.proc_lp.find_coeff<a class="headerlink" href="#nmrglue-process-proc-lp-find-coeff" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_lp.find_coeff">
-<tt class="descclassname">nmrglue.process.proc_lp.</tt><tt class="descname">find_coeff</tt><big>(</big><em>poles</em>, <em>mode='f'</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_lp.py#L964"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_lp.find_coeff" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find LP coefficients from a set of LP roots (poles)</p>
-<p>Parmeters:</p>
-<ul class="simple">
-<li>poles   Array of LP roots</li>
-<li>mode    &#8220;f&#8221; or &#8220;b&#8221;</li>
-</ul>
+<tt class="descclassname">nmrglue.process.proc_lp.</tt><tt class="descname">find_coeff</tt><big>(</big><em>poles</em>, <em>mode='f'</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_lp.py#L1046"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_lp.find_coeff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find LP coefficients from a set of LP roots (poles).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>poles</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of LP roots (poles)</p>
+</div></blockquote>
+<p><strong>mode</strong> : {&#8216;f&#8217;, &#8216;b&#8217;}</p>
+<blockquote>
+<div><p>Mode in which LP coefficients should be returned.  &#8216;f&#8217; for coefficients
+ordered m, m - 1,..., 1. &#8216;b&#8217; for coefficients ordered 1, 2, ...., m.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>c</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>LP coefficients ordered according to <cite>mode</cite>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

@@ -65,17 +65,39 @@
 <h1>nmrglue.process.proc_bl.med<a class="headerlink" href="#nmrglue-process-proc-bl-med" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_bl.med">
-<tt class="descclassname">nmrglue.process.proc_bl.</tt><tt class="descname">med</tt><big>(</big><em>data</em>, <em>mw=24</em>, <em>sf=16</em>, <em>sigma=5.0</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_bl.py#L105"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_bl.med" title="Permalink to this definition">¶</a></dt>
-<dd><p>Median baseline correction</p>
-<p>Algorith described in:
-Friedrichs, M.S. JBNMR 1995 5 147-153.</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>data  Array of spectral data.</li>
-<li>mw    Median Window size in pts.</li>
-<li>sf    Smooth window size in pts.</li>
-<li>sigma Standard-deviation of Gaussian in convolution</li>
-</ul>
+<tt class="descclassname">nmrglue.process.proc_bl.</tt><tt class="descname">med</tt><big>(</big><em>data</em>, <em>mw=24</em>, <em>sf=16</em>, <em>sigma=5.0</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_bl.py#L137"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_bl.med" title="Permalink to this definition">¶</a></dt>
+<dd><p>Median baseline correction.</p>
+<p>Algorith described in: Friedrichs, M.S. JBNMR 1995 5 147-153.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : 1D or 2D ndarray</p>
+<blockquote>
+<div><p>Array of 1D or 2D NMR data.</p>
+</div></blockquote>
+<p><strong>mw</strong> : float</p>
+<blockquote>
+<div><p>Median window size in pts.</p>
+</div></blockquote>
+<p><strong>sf</strong> : float</p>
+<blockquote>
+<div><p>Smooth window size in pts.</p>
+</div></blockquote>
+<p><strong>sigma</strong> : float</p>
+<blockquote>
+<div><p>Standard-deviation of convoluted Gaussian window.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndata</strong> : 1D or 2D ndarray</p>
+<blockquote class="last">
+<div><p>NMR data with the median baseline subtracted.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

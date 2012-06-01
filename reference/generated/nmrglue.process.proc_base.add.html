@@ -65,15 +65,40 @@
 <h1>nmrglue.process.proc_base.add<a class="headerlink" href="#nmrglue-process-proc-base-add" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_base.add">
-<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">add</tt><big>(</big><em>data</em>, <em>r=0.0</em>, <em>i=0.0</em>, <em>c=0.0</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L716"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.add" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add Constant</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>data  Array of spectral data.</li>
-<li>r     Constant to add to read channel.</li>
-<li>i     Constant to add to imaginary channel.</li>
-<li>c     Constant to add to both channels.</li>
-</ul>
+<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">add</tt><big>(</big><em>data</em>, <em>r=0.0</em>, <em>i=0.0</em>, <em>c=0.0</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L1072"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add constant.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>r</strong> : float</p>
+<blockquote>
+<div><p>Constant to add to real data.</p>
+</div></blockquote>
+<p><strong>i</strong> : float</p>
+<blockquote>
+<div><p>Constant to add to imaginary data, ignored if no data does not have
+imaginary data.</p>
+</div></blockquote>
+<p><strong>c</strong> : float</p>
+<blockquote>
+<div><p>Constant to add to both real and imaginary data.  This constant is only
+added to the real data if no imaginary data is present.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Array of NMR data with constant added.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

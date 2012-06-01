@@ -65,26 +65,47 @@
 <h1>nmrglue.fileio.varian.get_block<a class="headerlink" href="#nmrglue-fileio-varian-get-block" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.varian.get_block">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">get_block</tt><big>(</big><em>f</em>, <em>pts</em>, <em>nbheaders</em>, <em>dt</em>, <em>read_blockhead=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/varian.py#L848"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.varian.get_block" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read a block from Varian binary file.</p>
-<p>Parameters:</p>
-<ul>
-<li><p class="first">f                 File object of varian binaruy file.</p>
-</li>
-<li><p class="first">pts               Number of points per trace.</p>
-</li>
-<li><p class="first">nbheaders         Number of block headers in each block</p>
-</li>
-<li><p class="first">dt                Data type of data in binary file (real).</p>
-</li>
-<li><dl class="first docutils">
-<dt>read_blockhead    Set to True to read the varian blockheaders(s) into</dt>
-<dd><p class="first last">the returned dictionary. False ignores them.</p>
-</dd>
-</dl>
-</li>
-</ul>
-<p>Returns: dic,data if read_blockhead is True, data if False</p>
+<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">get_block</tt><big>(</big><em>f</em>, <em>pts</em>, <em>nbheaders</em>, <em>dt</em>, <em>read_blockhead=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/varian.py#L1030"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.varian.get_block" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a single block from Agilent/Varian binary file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>f</strong> : file object</p>
+<blockquote>
+<div><p>File object of open Agilent/Varian binary file.</p>
+</div></blockquote>
+<p><strong>pts</strong> : int</p>
+<blockquote>
+<div><p>Number of points per trace.</p>
+</div></blockquote>
+<p><strong>nbheaders</strong> : int</p>
+<blockquote>
+<div><p>Number of block header in each block.</p>
+</div></blockquote>
+<p><strong>dt</strong> : dtype</p>
+<blockquote>
+<div><p>Data type of data in binary file (real type).</p>
+</div></blockquote>
+<p><strong>read_blockheaders</strong> : bool, optional.</p>
+<blockquote>
+<div><p>True to read the blockheader(s) and return them in the returned
+dictionary.  False (default) ignores blockheader, reading over them.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict, optional</p>
+<blockquote>
+<div><p>Dictionary of blockheaders, only returned if read_blockheaders is True.</p>
+</div></blockquote>
+<p><strong>data</strong> : ndarray of size</p>
+<blockquote class="last">
+<div><p>Array of read block.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

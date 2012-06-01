@@ -65,39 +65,99 @@
 <h1>nmrglue.process.pipe_proc.apod<a class="headerlink" href="#nmrglue-process-pipe-proc-apod" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.pipe_proc.apod">
-<tt class="descclassname">nmrglue.process.pipe_proc.</tt><tt class="descname">apod</tt><big>(</big><em>dic</em>, <em>data</em>, <em>qName=None</em>, <em>q1=1.0</em>, <em>q2=1.0</em>, <em>q3=1.0</em>, <em>c=1.0</em>, <em>start=1</em>, <em>size='default'</em>, <em>inv=False</em>, <em>one=False</em>, <em>hdr=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/pipe_proc.py#L154"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.pipe_proc.apod" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generic Apodization</p>
-<p>Parameters:</p>
-<ul>
-<li><p class="first">dic   Dictionary of NMRPipe parameters.</p>
-</li>
-<li><p class="first">data  array of spectral data.</p>
-</li>
-<li><p class="first">qName Apodization function name: SP, EM, GM, GMB, TM, TRI, JMOD.</p>
-</li>
-<li><p class="first">q1    First parameter for apodization.</p>
-</li>
-<li><p class="first">q2    Second parameter for apodization.</p>
-</li>
-<li><p class="first">q3    Third parameter for apodization.</p>
-</li>
-<li><p class="first">c     First point scale value.</p>
-</li>
-<li><p class="first">start Number of points in apodization window.</p>
-</li>
-<li><p class="first">size  Starting location of apodization window. Default is full size.</p>
-</li>
-<li><p class="first">inv   True for inverse apodization, False for normal apodization.</p>
-</li>
-<li><dl class="first docutils">
-<dt>one   True to set points outside of window to 1.</dt>
-<dd><p class="first last">False leaves points outside of window as is.</p>
-</dd>
+<tt class="descclassname">nmrglue.process.pipe_proc.</tt><tt class="descname">apod</tt><big>(</big><em>dic</em>, <em>data</em>, <em>qName=None</em>, <em>q1=1.0</em>, <em>q2=1.0</em>, <em>q3=1.0</em>, <em>c=1.0</em>, <em>start=1</em>, <em>size='default'</em>, <em>inv=False</em>, <em>one=False</em>, <em>hdr=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/pipe_proc.py#L167"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.pipe_proc.apod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generic apodization.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of NMRPipe parameters.</p>
+</div></blockquote>
+<p><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>qName</strong> : {&#8216;SP&#8217;, &#8216;EM&#8217;, &#8216;GM&#8217;, &#8216;GMB&#8217;, &#8216;TM&#8217;, &#8216;TRI&#8217;, &#8216;JMOD&#8217;}</p>
+<blockquote>
+<div><p>Abbreviation of apodization function the apply. See the specific
+apodization function for a description.</p>
+</div></blockquote>
+<p><strong>q1</strong> : float</p>
+<blockquote>
+<div><p>First apodization function parameter. See specific apodization function
+for details.</p>
+</div></blockquote>
+<p><strong>q2</strong> : float</p>
+<blockquote>
+<div><p>Second apodization function parameter. See specific apodization function
+for details.</p>
+</div></blockquote>
+<p><strong>q3</strong> : float</p>
+<blockquote>
+<div><p>Third apodization function parameter. See specific apodization function
+for details.</p>
+</div></blockquote>
+<p><strong>c</strong> : float</p>
+<blockquote>
+<div><p>First point scale value.</p>
+</div></blockquote>
+<p><strong>start</strong> : int, optional</p>
+<blockquote>
+<div><p>Starting location of apodization window. Default is the first point, 1.</p>
+</div></blockquote>
+<p><strong>size</strong> : int, optional</p>
+<blockquote>
+<div><p>Size of the apodization window. Default (&#8216;default&#8217;) is the full size of
+the active dimension.</p>
+</div></blockquote>
+<p><strong>inv</strong> : bool, optional</p>
+<blockquote>
+<div><p>True for inverse apodization, False for normal apodization.</p>
+</div></blockquote>
+<p><strong>one</strong> : bool, optional</p>
+<blockquote>
+<div><p>True to set points outside of window to 1. False leaves points outside 
+the apodization window as is.</p>
+</div></blockquote>
+<p><strong>hdr</strong> : bool, optional</p>
+<blockquote>
+<div><p>True to read apodization parameters from the the parameters in dic.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of updated NMRPipe parameters.</p>
+</div></blockquote>
+<p><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Array of NMR data with apodization applied.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.process.pipe_proc.em.html#nmrglue.process.pipe_proc.em" title="nmrglue.process.pipe_proc.em"><tt class="xref py py-obj docutils literal"><span class="pre">em</span></tt></a></dt>
+<dd>Exponential apodization.</dd>
+<dt><a class="reference internal" href="nmrglue.process.pipe_proc.gm.html#nmrglue.process.pipe_proc.gm" title="nmrglue.process.pipe_proc.gm"><tt class="xref py py-obj docutils literal"><span class="pre">gm</span></tt></a></dt>
+<dd>Lorentz-to-Gauss apodization.</dd>
+<dt><a class="reference internal" href="nmrglue.process.pipe_proc.gmb.html#nmrglue.process.pipe_proc.gmb" title="nmrglue.process.pipe_proc.gmb"><tt class="xref py py-obj docutils literal"><span class="pre">gmb</span></tt></a></dt>
+<dd>Modified Gaussian apodization.</dd>
+<dt><a class="reference internal" href="nmrglue.process.pipe_proc.jmod.html#nmrglue.process.pipe_proc.jmod" title="nmrglue.process.pipe_proc.jmod"><tt class="xref py py-obj docutils literal"><span class="pre">jmod</span></tt></a></dt>
+<dd>Exponentially damped J-modulation apodization.</dd>
+<dt><a class="reference internal" href="nmrglue.process.pipe_proc.sp.html#nmrglue.process.pipe_proc.sp" title="nmrglue.process.pipe_proc.sp"><tt class="xref py py-obj docutils literal"><span class="pre">sp</span></tt></a></dt>
+<dd>Sine bell apodization.</dd>
+<dt><a class="reference internal" href="nmrglue.process.pipe_proc.tm.html#nmrglue.process.pipe_proc.tm" title="nmrglue.process.pipe_proc.tm"><tt class="xref py py-obj docutils literal"><span class="pre">tm</span></tt></a></dt>
+<dd>Trapezoid apodization.</dd>
+<dt><a class="reference internal" href="nmrglue.process.pipe_proc.tri.html#nmrglue.process.pipe_proc.tri" title="nmrglue.process.pipe_proc.tri"><tt class="xref py py-obj docutils literal"><span class="pre">tri</span></tt></a></dt>
+<dd>Triangular apodization.</dd>
 </dl>
-</li>
-<li><p class="first">hdr   True to read apodization parameters from Header.</p>
-</li>
-</ul>
+</div>
 </dd></dl>
 
 </div>

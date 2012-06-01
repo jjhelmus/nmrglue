@@ -65,39 +65,50 @@
 <h1>nmrglue.analysis.peakpick.pack_table<a class="headerlink" href="#nmrglue-analysis-peakpick-pack-table" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.analysis.peakpick.pack_table">
-<tt class="descclassname">nmrglue.analysis.peakpick.</tt><tt class="descname">pack_table</tt><big>(</big><em>locations, cluster_ids=None, scales=None, amps=None, axis_names=['A', 'Z', 'Y', 'X']</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/peakpick.py#L275"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.peakpick.pack_table" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.analysis.peakpick.</tt><tt class="descname">pack_table</tt><big>(</big><em>locations, cluster_ids=None, scales=None, amps=None, axis_names=['A', 'Z', 'Y', 'X']</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/peakpick.py#L290"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.peakpick.pack_table" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a table from peak information.</p>
-<p>Parameters:</p>
-<ul>
-<li><p class="first">locations     List of peak locations.</p>
-</li>
-<li><p class="first">cluster_ids   List of cluster numbers.</p>
-</li>
-<li><p class="first">scales        List of peak scales (linewidths).</p>
-</li>
-<li><p class="first">amps          List of peak amplitudes.</p>
-</li>
-<li><dl class="first docutils">
-<dt>axis_names    List of axis names, the last n will be used for column</dt>
-<dd><p class="first last">name prefixes where n is the number of dimensions.</p>
-</dd>
-</dl>
-</li>
-</ul>
-<p>If any of cluster_ids, scales, or amps in None the corresponding columns
-will not be present in the table.</p>
-<p>Returns: table</p>
-<ul>
-<li><dl class="first docutils">
-<dt>table nmrglue table with column representing peak parameters.</dt>
-<dd><p class="first last">locations are given column names like &#8216;X_AXIS&#8217;, &#8216;Y_AXIS&#8217;, etc
-cluster_ids are given a column name of &#8216;cID&#8217;
-scales are given column names like &#8216;X_LW&#8217;,&#8217;Y_LW&#8217;
-amps are given a column name of &#8216;VOL&#8217;</p>
-</dd>
-</dl>
-</li>
-</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>locations</strong> : list</p>
+<blockquote>
+<div><p>List of peak locations.</p>
+</div></blockquote>
+<p><strong>cluster_ids</strong> : list, optional</p>
+<blockquote>
+<div><p>List of cluster numbers. None will not include cluster number in the
+table.</p>
+</div></blockquote>
+<p><strong>scales</strong> : list, optional</p>
+<blockquote>
+<div><p>List of peak scales (linewidths). None will not include peak scales in
+the table.</p>
+</div></blockquote>
+<p><strong>amps</strong> : list, optional</p>
+<blockquote>
+<div><p>List of peak amplitudes. None will not include peak amplitudes in the
+table.</p>
+</div></blockquote>
+<p><strong>axis_names</strong> : list, optional</p>
+<blockquote>
+<div><p>List of axis names, the last n will be used for column name prefixes 
+where n is the number of dimensions.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>table</strong> : recarray</p>
+<blockquote class="last">
+<div><p>nmrglue table with column representing peak parameters. Peak locations 
+are given column names like &#8216;X_AXIS&#8217;, &#8216;Y_AXIS&#8217;, etc. Cluster_ids are 
+given a column name of &#8216;cID&#8217;. Peak scales (linewidths) are given 
+column names like &#8216;X_LW&#8217;,&#8217;Y_LW&#8217;.  Peak amplitudes are given a column 
+name of &#8216;VOL&#8217;.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

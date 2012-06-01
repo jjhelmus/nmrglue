@@ -65,13 +65,24 @@
 <h1>nmrglue.fileio.bruker.guess_shape<a class="headerlink" href="#nmrglue-fileio-bruker-guess-shape" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.bruker.guess_shape">
-<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">guess_shape</tt><big>(</big><em>dic</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/bruker.py#L444"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.bruker.guess_shape" title="Permalink to this definition">¶</a></dt>
-<dd><p>Determine data shape and complexity from parameters in dictionary</p>
-<p>Returns: (shape,cplex)</p>
-<ul class="simple">
-<li>shape Tuple represeting shape of data in binary file (R+I for all dims)</li>
-<li>cplex True for complex data in last (direct) dimension, false otherwise</li>
-</ul>
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">guess_shape</tt><big>(</big><em>dic</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/bruker.py#L467"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.bruker.guess_shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine data shape and complexity from Bruker dictionary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>shape</strong> : tuple</p>
+<blockquote>
+<div><p>Shape of data in Bruker binary file (R+I for all dimensions).</p>
+</div></blockquote>
+<p><strong>cplex</strong> : bool</p>
+<blockquote class="last">
+<div><p>True for complex data in last (direct) dimension, False otherwise.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

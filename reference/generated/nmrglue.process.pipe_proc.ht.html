@@ -65,18 +65,53 @@
 <h1>nmrglue.process.pipe_proc.ht<a class="headerlink" href="#nmrglue-process-pipe-proc-ht" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.pipe_proc.ht">
-<tt class="descclassname">nmrglue.process.pipe_proc.</tt><tt class="descname">ht</tt><big>(</big><em>dic</em>, <em>data</em>, <em>mode='ps0-0'</em>, <em>zf=False</em>, <em>td=False</em>, <em>auto=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/pipe_proc.py#L1017"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.pipe_proc.ht" title="Permalink to this definition">¶</a></dt>
-<dd><p>Hilbert Transform</p>
-<p>&#8220;ps90-180&#8221; mirror image mode gives different results than NMRPipe.</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>dic   Dictionary of NMRPipe parameters.</li>
-<li>data  array of spectral data.</li>
-<li>mode  &#8220;ps0-0&#8221; or &#8220;ps90-180&#8221; for mirror image mode</li>
-<li>zf    Zero fill for speed</li>
-<li>td    Set time-domain parameter to Size/2</li>
-<li>auto  Set True to select mode and zf parameter automatically.</li>
-</ul>
+<tt class="descclassname">nmrglue.process.pipe_proc.</tt><tt class="descname">ht</tt><big>(</big><em>dic</em>, <em>data</em>, <em>mode='ps0-0'</em>, <em>zf=False</em>, <em>td=False</em>, <em>auto=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/pipe_proc.py#L1272"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.pipe_proc.ht" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hilbert transform.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of NMRPipe parameters.</p>
+</div></blockquote>
+<p><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>mode</strong> : {&#8216;ps0-0&#8217;, &#8216;ps90-180&#8217;}</p>
+<blockquote>
+<div><p>Mirror image mode.</p>
+</div></blockquote>
+<p><strong>zf</strong> : bool</p>
+<blockquote>
+<div><p>True to zero fill before transform for speed.</p>
+</div></blockquote>
+<p><strong>td</strong> : bool</p>
+<blockquote>
+<div><p>True to set the time-domain parameter to half size.</p>
+</div></blockquote>
+<p><strong>auto</strong> : bool</p>
+<blockquote>
+<div><p>True to select mode and zf parameters automatically from dic.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of updated NMRPipe parameters.</p>
+</div></blockquote>
+<p><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Array of NMR data which has been Hilbert transformed.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>&#8220;ps90-180&#8221; mirror image mode gives different results than NMRPipe&#8217;s HT
+function.</p>
 </dd></dl>
 
 </div>

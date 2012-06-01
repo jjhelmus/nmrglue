@@ -65,36 +65,108 @@
 <h1>nmrglue.fileio.varian.read<a class="headerlink" href="#nmrglue-fileio-varian-read" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.varian.read">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">read</tt><big>(</big><em>dir='.'</em>, <em>fid_file='fid'</em>, <em>procpar_file='procpar'</em>, <em>read_blockhead=False</em>, <em>shape=None</em>, <em>torder=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/varian.py#L164"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.varian.read" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read Varian files in a directory.</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>dir               Directory holding Varian data.</li>
-<li>fid_file          Name of fid file in directory.</li>
-<li>procpar_file      Name of procpar file in directory.</li>
-<li>read_blockhead    Set True to read blockheader(s). False otherwise.</li>
-<li>shape             Shape of data, None tries to finds this automatically.</li>
-<li>torder            Trace order (None for automatic). See read function.</li>
-</ul>
-<p>Returns: dic,data</p>
-<p>Note in torder parameter:</p>
-<p>torder is a parameter describing how the traces on disk should be 
-re-organized to form the data matrix.  In many cases this can be determined
-automatically by examining the order of phase parameters in the procpar
-file, which is what is done if torder is set to None, but in some cases 
+<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">read</tt><big>(</big><em>dir='.'</em>, <em>fid_file='fid'</em>, <em>procpar_file='procpar'</em>, <em>read_blockhead=False</em>, <em>shape=None</em>, <em>torder=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/varian.py#L189"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.varian.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read Agilent/Varian files in a directory.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dir</strong> : str, optional</p>
+<blockquote>
+<div><p>Directory holding Agilent/Varian data. Default is the current working 
+directory.</p>
+</div></blockquote>
+<p><strong>fid_file</strong> : str, optional</p>
+<blockquote>
+<div><p>Filename of binary (fid) file in directory.</p>
+</div></blockquote>
+<p><strong>procpar_file</strong> : str, optional</p>
+<blockquote>
+<div><p>Filename of procpar file in directory.</p>
+</div></blockquote>
+<p><strong>read_blockhead</strong> : bool, optional</p>
+<blockquote>
+<div><p>True to read blockheader(s) and return then in the Agilent/Varian
+parameter dictionary. False (default) does not perform this reading.</p>
+</div></blockquote>
+<p><strong>shape</strong> : tuple of ints, optional</p>
+<blockquote>
+<div><p>Shape of data in binary file. None (default)  will attempt to finds 
+this automatically.</p>
+</div></blockquote>
+<p><strong>torder</strong> : {None, &#8216;r&#8217;, &#8216;o&#8217;, &#8216;f&#8217; or a Python function} , optional</p>
+<blockquote>
+<div><p>Description of the mapping of traces in the file to the NMR data 
+matrix. None (the default) will attempt to find this automatically 
+which is typically fine for most NMR experiments. See below for
+additional details.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of Agilent/Varian parameters.</p>
+</div></blockquote>
+<p><strong>data</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Array of NMR data</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.fileio.varian.read_lowmem.html#nmrglue.fileio.varian.read_lowmem" title="nmrglue.fileio.varian.read_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">read_lowmem</span></tt></a></dt>
+<dd>Read Agilent/Varian files using mimimal amounts of memory.</dd>
+<dt><a class="reference internal" href="nmrglue.fileio.varian.write.html#nmrglue.fileio.varian.write" title="nmrglue.fileio.varian.write"><tt class="xref py py-obj docutils literal"><span class="pre">write</span></tt></a></dt>
+<dd>Write Agilent/Varian files.</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>The torder parameter describes how the traces on disk should be 
+re-organized to form the NMR data matrix.  In most cases this can be 
+determined automatically by examining the order of phase parameters in the
+procpar file.  This is done if torder is set to None.  In some cases 
 it must be explicitly provided.  Three common cases are:</p>
-<p>Regular ordering (d3,d2,phase2,phase) which can be specificed by setting
-torder to &#8216;regular&#8217; or &#8216;r&#8217;.</p>
-<p>Opposite ordering (d3,d2,phase,phase2) which can be specified by setting
-torder to &#8216;opposite&#8217; or &#8216;o&#8217;.</p>
-<p>Flat ordering, the way data is on organized on disk, no reordering is 
-performed. 1D and 2D file can be read in this manner.  Specify by setting 
-torder to &#8216;flat&#8217; or &#8216;f&#8217;.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="11%" />
+<col width="31%" />
+<col width="24%" />
+<col width="33%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Ordering of arrays</th>
+<th class="head">torder</th>
+<th class="head">Notes</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>regular</td>
+<td>d3, d2, phase2, phase</td>
+<td>&#8216;regular&#8217; or &#8216;r&#8217;</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-odd"><td>opposite</td>
+<td>d3, d2, phase, phase2</td>
+<td>&#8216;opposite&#8217; or &#8216;o&#8217;</td>
+<td>&nbsp;</td>
+</tr>
+<tr class="row-even"><td>flat</td>
+<td>As data exists in file</td>
+<td>&#8216;flat&#8217; or &#8216;f&#8217;</td>
+<td>Valid for 1D or 2D data</td>
+</tr>
+</tbody>
+</table>
 <p>In addition a function which maps indirect dimension index tuples to/from
-trace number as stored on disk can be provided.  For reading this function
-should take 2 arguments (shape,index_tuple) and return an integer trace
-number.  For writing this function should again take 2 arguments 
-(shape,trace_number) and return the indirect dimension index tuple for the
+trace numbers as stored on disk can be provided.  For reading this 
+function should take 2 arguments: shape, index_tuple and return an integer 
+trace number.  For writing this function should again take 2 arguments: 
+shape,trace_number and return the indirect dimension index tuple for the
 given trace.</p>
 </dd></dl>
 

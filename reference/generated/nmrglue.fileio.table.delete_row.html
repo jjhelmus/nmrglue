@@ -65,15 +65,37 @@
 <h1>nmrglue.fileio.table.delete_row<a class="headerlink" href="#nmrglue-fileio-table-delete-row" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.table.delete_row">
-<tt class="descclassname">nmrglue.fileio.table.</tt><tt class="descname">delete_row</tt><big>(</big><em>rec</em>, <em>N</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/table.py#L211"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.table.delete_row" title="Permalink to this definition">¶</a></dt>
-<dd><p>Delete row N from records array.</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>rec   Records array.</li>
-<li>N     Row number to delete, integer.</li>
-</ul>
-<p>Returns: new_rec (new records array with row deleted)</p>
-<p>Use reorder_rows to delete multiple rows in a single call.</p>
+<tt class="descclassname">nmrglue.fileio.table.</tt><tt class="descname">delete_row</tt><big>(</big><em>rec</em>, <em>N</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/table.py#L233"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.table.delete_row" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a row from a records array.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>rec</strong> : recarray</p>
+<blockquote>
+<div><p>Records array.</p>
+</div></blockquote>
+<p><strong>N</strong> : int</p>
+<blockquote>
+<div><p>Row number to delete.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>new_rec</strong> : recarray</p>
+<blockquote class="last">
+<div><p>New records array with row deleted.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.fileio.table.reorder_rows.html#nmrglue.fileio.table.reorder_rows" title="nmrglue.fileio.table.reorder_rows"><tt class="xref py py-obj docutils literal"><span class="pre">reorder_rows</span></tt></a></dt>
+<dd>delete multiple rows in a single call.</dd>
+</dl>
+</div>
 </dd></dl>
 
 </div>

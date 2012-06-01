@@ -65,13 +65,30 @@
 <h1>nmrglue.process.proc_base.thres<a class="headerlink" href="#nmrglue-process-proc-base-thres" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_base.thres">
-<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">thres</tt><big>(</big><em>data</em>, <em>thres=0.0</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L1201"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.thres" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">thres</tt><big>(</big><em>data</em>, <em>thres=0.0</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L1710"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.thres" title="Permalink to this definition">¶</a></dt>
 <dd><p>Mark values less than thres as invalid (for use with filters)</p>
-<p>Parameter:</p>
-<ul class="simple">
-<li>data  Array of spectral data.</li>
-<li>thres Threshold value.</li>
-</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>thres</strong> : float</p>
+<blockquote>
+<div><p>Threshold value.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndata</strong> : masked ndarray</p>
+<blockquote class="last">
+<div><p>Masked array of NMR data with values less than thres masked.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

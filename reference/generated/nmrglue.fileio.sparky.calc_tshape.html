@@ -65,11 +65,30 @@
 <h1>nmrglue.fileio.sparky.calc_tshape<a class="headerlink" href="#nmrglue-fileio-sparky-calc-tshape" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.sparky.calc_tshape">
-<tt class="descclassname">nmrglue.fileio.sparky.</tt><tt class="descname">calc_tshape</tt><big>(</big><em>shape</em>, <em>kbyte_max=128</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/sparky.py#L172"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.sparky.calc_tshape" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate tile shape from data shape</p>
-<p>shape is a tuple representing the data shape (data.shape)
-kbyte_max determined the largest tile size in Kbytes</p>
-<p>Algorithm divides each dimention by 2 until under kbyte_max tile size.</p>
+<tt class="descclassname">nmrglue.fileio.sparky.</tt><tt class="descname">calc_tshape</tt><big>(</big><em>shape</em>, <em>kbyte_max=128</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/sparky.py#L202"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.sparky.calc_tshape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate a tile shape from data shape.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>shape</strong> : tuple</p>
+<blockquote>
+<div><p>Shape of NMR data (data.shape).</p>
+</div></blockquote>
+<p><strong>kbyte_max</strong> : float or int</p>
+<blockquote>
+<div><p>Maximum tile size in Kilobytes.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>tshape</strong> : tuple</p>
+<blockquote class="last">
+<div><p>Shape of tile.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

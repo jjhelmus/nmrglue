@@ -62,7 +62,7 @@
             
   <div class="section" id="module-nmrglue.fileio.pipe">
 <span id="nmrglue-pipe"></span><h1>nmrglue.pipe<a class="headerlink" href="#module-nmrglue.fileio.pipe" title="Permalink to this headline">¶</a></h1>
-<p>Functions for reading and writing NMRPipe binary files and table (.tab) files</p>
+<p>Functions for reading and writing NMRPipe files and table (.tab) files</p>
 <p>This modules is imported as nmrglue.pipe and can be called as such.</p>
 <div class="section" id="user-information">
 <h2>User Information<a class="headerlink" href="#user-information" title="Permalink to this headline">¶</a></h2>
@@ -75,16 +75,16 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.read.html#nmrglue.fileio.pipe.read" title="nmrglue.fileio.pipe.read"><tt class="xref py py-obj docutils literal"><span class="pre">read</span></tt></a>(filename)</td>
-<td>Read a NMRPipe binary file returning a dic,data pair.</td>
+<td>Read a NMRPipe file.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.write.html#nmrglue.fileio.pipe.write" title="nmrglue.fileio.pipe.write"><tt class="xref py py-obj docutils literal"><span class="pre">write</span></tt></a>(filename,&nbsp;dic,&nbsp;data[,&nbsp;overwrite])</td>
-<td>Write a NMRPipe file</td>
+<td>Write a NMRPipe file to disk.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.read_lowmem.html#nmrglue.fileio.pipe.read_lowmem" title="nmrglue.fileio.pipe.read_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">read_lowmem</span></tt></a>(filename)</td>
-<td>Read a NMRPipe binary file with minimal memory usage.</td>
+<td>Read a NMRPipe file with minimal memory usage.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.write_lowmem.html#nmrglue.fileio.pipe.write_lowmem" title="nmrglue.fileio.pipe.write_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">write_lowmem</span></tt></a>(filename,&nbsp;dic,&nbsp;data[,&nbsp;overwrite])</td>
-<td>Write a NMRPipe file using minimal memory</td>
+<td>Write a NMRPipe file to disk using minimal memory (trace by trace).</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.read_table.html#nmrglue.fileio.pipe.read_table" title="nmrglue.fileio.pipe.read_table"><tt class="xref py py-obj docutils literal"><span class="pre">read_table</span></tt></a>(filename)</td>
 <td>Read a NMRPipe database table (.tab) file.</td>
@@ -93,19 +93,19 @@
 <td>Write a NMRPipe database table (.tab) file.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.make_uc.html#nmrglue.fileio.pipe.make_uc" title="nmrglue.fileio.pipe.make_uc"><tt class="xref py py-obj docutils literal"><span class="pre">make_uc</span></tt></a>(dic,&nbsp;data[,&nbsp;dim])</td>
-<td>Make a unit conversion object</td>
+<td>Create a unit conversion object</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.guess_udic.html#nmrglue.fileio.pipe.guess_udic" title="nmrglue.fileio.pipe.guess_udic"><tt class="xref py py-obj docutils literal"><span class="pre">guess_udic</span></tt></a>(dic,&nbsp;data)</td>
-<td>Guess parameter of universal dictionary from dic,data pair</td>
+<td>Guess parameters of universal dictionary from dic, data pair.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.create_dic.html#nmrglue.fileio.pipe.create_dic" title="nmrglue.fileio.pipe.create_dic"><tt class="xref py py-obj docutils literal"><span class="pre">create_dic</span></tt></a>(udic[,&nbsp;datetimeobj])</td>
-<td>Crate a NMRPipe dictiony from universal dictionary</td>
+<td>Crate a NMRPipe parameter dictionary from universal dictionary</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.datetime2dic.html#nmrglue.fileio.pipe.datetime2dic" title="nmrglue.fileio.pipe.datetime2dic"><tt class="xref py py-obj docutils literal"><span class="pre">datetime2dic</span></tt></a>(dt,&nbsp;dic)</td>
-<td>Add datatime object to dictionary</td>
+<td>Add datatime object to a NMRPipe dictionary</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.dic2datetime.html#nmrglue.fileio.pipe.dic2datetime" title="nmrglue.fileio.pipe.dic2datetime"><tt class="xref py py-obj docutils literal"><span class="pre">dic2datetime</span></tt></a>(dic)</td>
-<td>Create a datetime object from dictionary</td>
+<td>Create a datetime object from a NMRPipe dictionary</td>
 </tr>
 </tbody>
 </table>
@@ -119,7 +119,7 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.iter3D.html#nmrglue.fileio.pipe.iter3D" title="nmrglue.fileio.pipe.iter3D"><tt class="xref py py-obj docutils literal"><span class="pre">iter3D</span></tt></a>(filemask[,&nbsp;in_lead,&nbsp;out_lead])</td>
-<td>Object which allows for graceful iteration over 3D NMRPipe files</td>
+<td>Object which allows for graceful iteration over 3D NMRPipe files.</td>
 </tr>
 </tbody>
 </table>
@@ -142,109 +142,109 @@ fine control over NMRPipe files may be interested in these functions.</p>
 <td>Create a NMRPipe data array (recast into float32 or complex64)</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.add_axis_to_dic.html#nmrglue.fileio.pipe.add_axis_to_dic" title="nmrglue.fileio.pipe.add_axis_to_dic"><tt class="xref py py-obj docutils literal"><span class="pre">add_axis_to_dic</span></tt></a>(dic,&nbsp;adic,&nbsp;n)</td>
-<td>Add an axis to NMRPipe dictionary</td>
+<td>Add an axis dictionary (adic) to a NMRPipe dictionary (dic) as axis n.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.create_empty_dic.html#nmrglue.fileio.pipe.create_empty_dic" title="nmrglue.fileio.pipe.create_empty_dic"><tt class="xref py py-obj docutils literal"><span class="pre">create_empty_dic</span></tt></a>()</td>
-<td>Creates a nmrpipe dictionary with default values</td>
+<td>Creates a NMRPipe dictionary with default values</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.read_1D.html#nmrglue.fileio.pipe.read_1D" title="nmrglue.fileio.pipe.read_1D"><tt class="xref py py-obj docutils literal"><span class="pre">read_1D</span></tt></a>(filename)</td>
-<td>Read a 1D NMRPipe binary file returning a dic,data pair</td>
+<td>Read a 1D NMRPipe file.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.read_2D.html#nmrglue.fileio.pipe.read_2D" title="nmrglue.fileio.pipe.read_2D"><tt class="xref py py-obj docutils literal"><span class="pre">read_2D</span></tt></a>(filename)</td>
-<td>Read a 2D NMRPipe file or NMRPipe data stream returning a dic,data pair</td>
+<td>Read a 2D NMRPipe file or NMRPipe data stream.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.read_lowmem_2D.html#nmrglue.fileio.pipe.read_lowmem_2D" title="nmrglue.fileio.pipe.read_lowmem_2D"><tt class="xref py py-obj docutils literal"><span class="pre">read_lowmem_2D</span></tt></a>(filename)</td>
-<td>Read a 2D NMRPipe file or NMRPipe data stream with minimal memory usage</td>
+<td>Read a 2D NMRPipe file or NMRPipe data stream using minimal memory.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.read_stream.html#nmrglue.fileio.pipe.read_stream" title="nmrglue.fileio.pipe.read_stream"><tt class="xref py py-obj docutils literal"><span class="pre">read_stream</span></tt></a>(filename)</td>
-<td>Read a NMRPipe data stream (one file 3D or 4D files)</td>
+<td>Read a NMRPipe data stream (one file 3D or 4D files).</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.read_lowmem_stream.html#nmrglue.fileio.pipe.read_lowmem_stream" title="nmrglue.fileio.pipe.read_lowmem_stream"><tt class="xref py py-obj docutils literal"><span class="pre">read_lowmem_stream</span></tt></a>(filename)</td>
-<td>Read a NMRPipe data stream with minimal memory usage</td>
+<td>Read a NMRPipe data stream using minimal memory.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.read_3D.html#nmrglue.fileio.pipe.read_3D" title="nmrglue.fileio.pipe.read_3D"><tt class="xref py py-obj docutils literal"><span class="pre">read_3D</span></tt></a>(filemask)</td>
-<td>Read a 3D NMRPipe binary file returning a dic,data pair.</td>
+<td>Read a 3D NMRPipe file.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.read_lowmem_3D.html#nmrglue.fileio.pipe.read_lowmem_3D" title="nmrglue.fileio.pipe.read_lowmem_3D"><tt class="xref py py-obj docutils literal"><span class="pre">read_lowmem_3D</span></tt></a>(filemask)</td>
-<td>Read a 3D NMRPipe binary file with minimal memory usage.</td>
+<td>Read a 3D NMRPipe file using minimal memory.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.read_4D.html#nmrglue.fileio.pipe.read_4D" title="nmrglue.fileio.pipe.read_4D"><tt class="xref py py-obj docutils literal"><span class="pre">read_4D</span></tt></a>(filemask)</td>
-<td>Read a 3D NMRPipe binary file returning a dic,data pair.</td>
+<td>Read a 3D NMRPipe file.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.read_lowmem_4D.html#nmrglue.fileio.pipe.read_lowmem_4D" title="nmrglue.fileio.pipe.read_lowmem_4D"><tt class="xref py py-obj docutils literal"><span class="pre">read_lowmem_4D</span></tt></a>(filemask)</td>
-<td>Read a NMRPipe binary file with minimal memory usage.</td>
+<td>Read a NMRPipe file using minimal memory.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.write_single.html#nmrglue.fileio.pipe.write_single" title="nmrglue.fileio.pipe.write_single"><tt class="xref py py-obj docutils literal"><span class="pre">write_single</span></tt></a>(filename,&nbsp;dic,&nbsp;data[,&nbsp;overwrite])</td>
-<td>Write data to a single NMRPipe file from memory.  This write 1D and 2D</td>
+<td>Write data to a single NMRPipe file from memory.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.write_3D.html#nmrglue.fileio.pipe.write_3D" title="nmrglue.fileio.pipe.write_3D"><tt class="xref py py-obj docutils literal"><span class="pre">write_3D</span></tt></a>(filemask,&nbsp;dic,&nbsp;data[,&nbsp;overwrite])</td>
 <td>Write a standard multi-file 3D NMRPipe file</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.write_4D.html#nmrglue.fileio.pipe.write_4D" title="nmrglue.fileio.pipe.write_4D"><tt class="xref py py-obj docutils literal"><span class="pre">write_4D</span></tt></a>(filemask,&nbsp;dic,&nbsp;data[,&nbsp;overwrite])</td>
-<td>Write a one or two index 4D NMRPipe file</td>
+<td>Write a one or two index 4D NMRPipe file.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.write_lowmem_2D.html#nmrglue.fileio.pipe.write_lowmem_2D" title="nmrglue.fileio.pipe.write_lowmem_2D"><tt class="xref py py-obj docutils literal"><span class="pre">write_lowmem_2D</span></tt></a>(filename,&nbsp;dic,&nbsp;data[,&nbsp;overwrite])</td>
 <td>Write a 2D NMRPipe file using minimal memory (trace by trace)</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.write_lowmem_3D.html#nmrglue.fileio.pipe.write_lowmem_3D" title="nmrglue.fileio.pipe.write_lowmem_3D"><tt class="xref py py-obj docutils literal"><span class="pre">write_lowmem_3D</span></tt></a>(filename,&nbsp;dic,&nbsp;data[,&nbsp;overwrite])</td>
-<td>Write a standard multi-file 3D NMRPipe file using minimal memory</td>
+<td>Write a standard multi-file 3D NMRPipe file using minimal memory.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.write_lowmem_3Ds.html#nmrglue.fileio.pipe.write_lowmem_3Ds" title="nmrglue.fileio.pipe.write_lowmem_3Ds"><tt class="xref py py-obj docutils literal"><span class="pre">write_lowmem_3Ds</span></tt></a>(filename,&nbsp;dic,&nbsp;data[,&nbsp;...])</td>
 <td>Write 3D NMRPipe data stream file using minimal memory (trace by trace)</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.write_lowmem_4D.html#nmrglue.fileio.pipe.write_lowmem_4D" title="nmrglue.fileio.pipe.write_lowmem_4D"><tt class="xref py py-obj docutils literal"><span class="pre">write_lowmem_4D</span></tt></a>(filename,&nbsp;dic,&nbsp;data[,&nbsp;overwrite])</td>
-<td>Write a standard multi-file (single or double index 4D NMRPipe file using</td>
+<td>Write a multi-file (single or double index) 4D NMRPipe file using</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.write_lowmem_4Ds.html#nmrglue.fileio.pipe.write_lowmem_4Ds" title="nmrglue.fileio.pipe.write_lowmem_4Ds"><tt class="xref py py-obj docutils literal"><span class="pre">write_lowmem_4Ds</span></tt></a>(filename,&nbsp;dic,&nbsp;data[,&nbsp;...])</td>
 <td>Write 4D NMRPipe data stream file using minimal memory (trace by trace)</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.put_fdata.html#nmrglue.fileio.pipe.put_fdata" title="nmrglue.fileio.pipe.put_fdata"><tt class="xref py py-obj docutils literal"><span class="pre">put_fdata</span></tt></a>(fh,&nbsp;fdata)</td>
-<td>Put fdata to NMRPipe file described by file object fh</td>
+<td>Put NMR data, fdata, to a NMRPipe file described by file object fh.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.put_trace.html#nmrglue.fileio.pipe.put_trace" title="nmrglue.fileio.pipe.put_trace"><tt class="xref py py-obj docutils literal"><span class="pre">put_trace</span></tt></a>(fh,&nbsp;trace)</td>
-<td>Put 1D trace (real or complex) to NMRPipe file described by file object fh</td>
+<td>Put a trace (real or complex) to NMRPipe file described by file object fh.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.put_data.html#nmrglue.fileio.pipe.put_data" title="nmrglue.fileio.pipe.put_data"><tt class="xref py py-obj docutils literal"><span class="pre">put_data</span></tt></a>(filename,&nbsp;fdata,&nbsp;data[,&nbsp;overwrite])</td>
 <td>Put fdata and data to 2D NMRPipe.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.write_slice_3D.html#nmrglue.fileio.pipe.write_slice_3D" title="nmrglue.fileio.pipe.write_slice_3D"><tt class="xref py py-obj docutils literal"><span class="pre">write_slice_3D</span></tt></a>(filemask,&nbsp;dic,&nbsp;data,&nbsp;shape,&nbsp;...)</td>
-<td>Write a slice of a 3D data array to file</td>
+<td>Write a slice of a 3D data array to file.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.pack_complex.html#nmrglue.fileio.pipe.pack_complex" title="nmrglue.fileio.pipe.pack_complex"><tt class="xref py py-obj docutils literal"><span class="pre">pack_complex</span></tt></a>(data)</td>
-<td>Pack inteleaved real,imag array into complex array</td>
+<td>Pack inteleaved real,imag array into complex array.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.transpose_3D.html#nmrglue.fileio.pipe.transpose_3D" title="nmrglue.fileio.pipe.transpose_3D"><tt class="xref py py-obj docutils literal"><span class="pre">transpose_3D</span></tt></a>(dic,&nbsp;data,&nbsp;(a1,&nbsp;a2,&nbsp;a3)=(2,&nbsp;1,&nbsp;0))</td>
 <td>Transpose pipe_3d object and dictionary</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.find_shape.html#nmrglue.fileio.pipe.find_shape" title="nmrglue.fileio.pipe.find_shape"><tt class="xref py py-obj docutils literal"><span class="pre">find_shape</span></tt></a>(dic)</td>
-<td>Find the shape (tuple) of data in a NMRPipe file from dictionary</td>
+<td>Find the shape (tuple) of data in a NMRPipe file from parameters.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.reshape_data.html#nmrglue.fileio.pipe.reshape_data" title="nmrglue.fileio.pipe.reshape_data"><tt class="xref py py-obj docutils literal"><span class="pre">reshape_data</span></tt></a>(data,&nbsp;shape)</td>
-<td>Reshape data or return 1D data after warning</td>
+<td>Reshape data or return 1D data after warning.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.unshape_data.html#nmrglue.fileio.pipe.unshape_data" title="nmrglue.fileio.pipe.unshape_data"><tt class="xref py py-obj docutils literal"><span class="pre">unshape_data</span></tt></a>(data)</td>
-<td>Returns 1D version of data</td>
+<td>Return 1D version of data.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.unappend_data.html#nmrglue.fileio.pipe.unappend_data" title="nmrglue.fileio.pipe.unappend_data"><tt class="xref py py-obj docutils literal"><span class="pre">unappend_data</span></tt></a>(data)</td>
-<td>Returns complex data with last axis (-1) unappended</td>
+<td>Return complex data with last axis (-1) unappended.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.append_data.html#nmrglue.fileio.pipe.append_data" title="nmrglue.fileio.pipe.append_data"><tt class="xref py py-obj docutils literal"><span class="pre">append_data</span></tt></a>(data)</td>
-<td>Return data with last axis (-1) appeneded</td>
+<td>Return data with last axis (-1) appeneded.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.fdata2dic.html#nmrglue.fileio.pipe.fdata2dic" title="nmrglue.fileio.pipe.fdata2dic"><tt class="xref py py-obj docutils literal"><span class="pre">fdata2dic</span></tt></a>(fdata)</td>
-<td>Convert a fdata array to fdata dictionary</td>
+<td>Convert a fdata array to fdata dictionary.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.dic2fdata.html#nmrglue.fileio.pipe.dic2fdata" title="nmrglue.fileio.pipe.dic2fdata"><tt class="xref py py-obj docutils literal"><span class="pre">dic2fdata</span></tt></a>(dic)</td>
-<td>Converts a NMRPipe dictionary into an array</td>
+<td>Converts a NMRPipe dictionary into an array.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.get_fdata.html#nmrglue.fileio.pipe.get_fdata" title="nmrglue.fileio.pipe.get_fdata"><tt class="xref py py-obj docutils literal"><span class="pre">get_fdata</span></tt></a>(filename)</td>
-<td>Get an array of length 512 holding NMRPipe header</td>
+<td>Get an array of length 512-bytes holding NMRPipe header.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.get_data.html#nmrglue.fileio.pipe.get_data" title="nmrglue.fileio.pipe.get_data"><tt class="xref py py-obj docutils literal"><span class="pre">get_data</span></tt></a>(filename)</td>
 <td>Get array of data</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.get_fdata_data.html#nmrglue.fileio.pipe.get_fdata_data" title="nmrglue.fileio.pipe.get_fdata_data"><tt class="xref py py-obj docutils literal"><span class="pre">get_fdata_data</span></tt></a>(filename)</td>
-<td>Get fdata and data array, returns (fdata,data)</td>
+<td>Get fdata and data array, return (fdata, data)</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.get_trace.html#nmrglue.fileio.pipe.get_trace" title="nmrglue.fileio.pipe.get_trace"><tt class="xref py py-obj docutils literal"><span class="pre">get_trace</span></tt></a>(fhandle,&nbsp;ntrace,&nbsp;pts,&nbsp;bswap,&nbsp;cplex)</td>
 <td>Get a single trace from a NMRPipe file</td>
@@ -261,19 +261,19 @@ fine control over NMRPipe files may be interested in these functions.</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.pipe_2d.html#nmrglue.fileio.pipe.pipe_2d" title="nmrglue.fileio.pipe.pipe_2d"><tt class="xref py py-obj docutils literal"><span class="pre">pipe_2d</span></tt></a>(filename[,&nbsp;order])</td>
-<td>Emulate a numpy.ndarray objects without loading data into memory for low</td>
+<td>Emulate a ndarray objects without loading data into memory for low memory</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.pipe_3d.html#nmrglue.fileio.pipe.pipe_3d" title="nmrglue.fileio.pipe.pipe_3d"><tt class="xref py py-obj docutils literal"><span class="pre">pipe_3d</span></tt></a>(filemask[,&nbsp;order,&nbsp;fcheck])</td>
-<td>Emulate a numpy.ndarray objects without loading data into memory for low</td>
+<td>Emulate a ndarray objects without loading data into memory for low memory</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.pipestream_3d.html#nmrglue.fileio.pipe.pipestream_3d" title="nmrglue.fileio.pipe.pipestream_3d"><tt class="xref py py-obj docutils literal"><span class="pre">pipestream_3d</span></tt></a>(filename[,&nbsp;order])</td>
-<td>Emulate a numpy.ndarray objects without loading data into memory for low</td>
+<td>Emulate a ndarray objects without loading data into memory for low memory</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.pipe_4d.html#nmrglue.fileio.pipe.pipe_4d" title="nmrglue.fileio.pipe.pipe_4d"><tt class="xref py py-obj docutils literal"><span class="pre">pipe_4d</span></tt></a>(filemask[,&nbsp;order,&nbsp;fcheck])</td>
-<td>Emulate a numpy.ndarray objects without loading data into memory for low</td>
+<td>Emulate a ndarray objects without loading data into memory for low memory</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.pipe.pipestream_4d.html#nmrglue.fileio.pipe.pipestream_4d" title="nmrglue.fileio.pipe.pipestream_4d"><tt class="xref py py-obj docutils literal"><span class="pre">pipestream_4d</span></tt></a>(filename[,&nbsp;order])</td>
-<td>Emulate a numpy.ndarray objects without loading data into memory for low</td>
+<td>Emulate a ndarray objects without loading data into memory for low memory</td>
 </tr>
 </tbody>
 </table>

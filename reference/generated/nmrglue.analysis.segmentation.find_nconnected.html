@@ -65,16 +65,38 @@
 <h1>nmrglue.analysis.segmentation.find_nconnected<a class="headerlink" href="#nmrglue-analysis-segmentation-find-nconnected" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.analysis.segmentation.find_nconnected">
-<tt class="descclassname">nmrglue.analysis.segmentation.</tt><tt class="descname">find_nconnected</tt><big>(</big><em>data</em>, <em>pt</em>, <em>thres</em>, <em>diag=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/segmentation.py#L433"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.segmentation.find_nconnected" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.analysis.segmentation.</tt><tt class="descname">find_nconnected</tt><big>(</big><em>data</em>, <em>pt</em>, <em>thres</em>, <em>diag=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/segmentation.py#L460"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.segmentation.find_nconnected" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find points connected to pt in data below threshold.</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>data  2D array of data</li>
-<li>pt    Starting point, (top of peak).</li>
-<li>thres Threshold, above this nodes are considered noise.</li>
-<li>diag  True or False to include diagonal neighbors in connection.</li>
-</ul>
-<p>Return: list of indicies of connected nodes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of data.</p>
+</div></blockquote>
+<p><strong>pt</strong> : tuple of ints</p>
+<blockquote>
+<div><p>Starting point of peak.</p>
+</div></blockquote>
+<p><strong>thres</strong> : float</p>
+<blockquote>
+<div><p>Threshold, above this nodes are considered noise.</p>
+</div></blockquote>
+<p><strong>diag</strong> : bool, optional</p>
+<blockquote>
+<div><p>True to include diagonal neighbors in connection.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>nodes</strong> : list</p>
+<blockquote class="last">
+<div><p>Indicies of connected nodes.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

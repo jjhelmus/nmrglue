@@ -65,15 +65,39 @@
 <h1>nmrglue.process.proc_base.mult<a class="headerlink" href="#nmrglue-process-proc-base-mult" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_base.mult">
-<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">mult</tt><big>(</big><em>data</em>, <em>r=1.0</em>, <em>i=1.0</em>, <em>c=1.0</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L847"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.mult" title="Permalink to this definition">¶</a></dt>
-<dd><p>Multiply by a Constant</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>data  Array of spectral data.</li>
-<li>r     Constant to multiply real channel by.</li>
-<li>i     Constant to multiply imaginary channel by.</li>
-<li>c     Constant to multiply both channels by.</li>
-</ul>
+<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">mult</tt><big>(</big><em>data</em>, <em>r=1.0</em>, <em>i=1.0</em>, <em>c=1.0</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L1294"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.mult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multiply by a constant.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>r</strong> : float</p>
+<blockquote>
+<div><p>Constant to multiply real channel by.</p>
+</div></blockquote>
+<p><strong>i</strong> : float</p>
+<blockquote>
+<div><p>Constant to multiply imaginary channel by. If data has no imaginary
+component, this parameter is ignored.</p>
+</div></blockquote>
+<p><strong>c</strong> : float</p>
+<blockquote>
+<div><p>Constant to multiply both channels by.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Array of NMR data which has been multiplied by a constant.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

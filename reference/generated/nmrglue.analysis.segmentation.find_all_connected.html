@@ -28,8 +28,8 @@
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="nmrglue 0.3-dev documentation" href="../../index.html" />
     <link rel="up" title="nmrglue.segmentation" href="../segmentation.html" />
-    <link rel="next" title="nmrglue.analysis.segmentation.label_nconnected" href="nmrglue.analysis.segmentation.label_nconnected.html" />
-    <link rel="prev" title="nmrglue.analysis.segmentation.label_connected" href="nmrglue.analysis.segmentation.label_connected.html" /> 
+    <link rel="next" title="nmrglue.analysis.segmentation.find_all_nconnected" href="nmrglue.analysis.segmentation.find_all_nconnected.html" />
+    <link rel="prev" title="nmrglue.analysis.segmentation.label_upward_seg" href="nmrglue.analysis.segmentation.label_upward_seg.html" /> 
   </head>
   <body>
     <div class="related">
@@ -45,10 +45,10 @@
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="nmrglue.analysis.segmentation.label_nconnected.html" title="nmrglue.analysis.segmentation.label_nconnected"
+          <a href="nmrglue.analysis.segmentation.find_all_nconnected.html" title="nmrglue.analysis.segmentation.find_all_nconnected"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="nmrglue.analysis.segmentation.label_connected.html" title="nmrglue.analysis.segmentation.label_connected"
+          <a href="nmrglue.analysis.segmentation.label_upward_seg.html" title="nmrglue.analysis.segmentation.label_upward_seg"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
           <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
@@ -66,25 +66,42 @@
 <dl class="function">
 <dt id="nmrglue.analysis.segmentation.find_all_connected">
 <tt class="descclassname">nmrglue.analysis.segmentation.</tt><tt class="descname">find_all_connected</tt><big>(</big><em>data</em>, <em>thres</em>, <em>find_segs=False</em>, <em>diag=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/segmentation.py#L23"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.segmentation.find_all_connected" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find all connected segments in data</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>data  Array of data to perform segmentation on.</li>
-<li>thres Threshold, below this nodes are considered noise.</li>
-<li>find_segs  True or False to return a list of slices for the segments.</li>
-<li>diag  True or False to include diagonal neighbors in connection.</li>
-</ul>
-<p>Returns: locations,[seg_slices]</p>
-<ul>
-<li><p class="first">locations     List of indicies of local maximum in each segment.</p>
-</li>
-<li><dl class="first docutils">
-<dt>seg_slices    List of slices which extract a given segment from the data.</dt>
-<dd><p class="first last">Only returned when fig_segs is True.</p>
-</dd>
-</dl>
-</li>
-</ul>
+<dd><p>Find all connected segments.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Data to perform segmentation on.</p>
+</div></blockquote>
+<p><strong>thres</strong> : float</p>
+<blockquote>
+<div><p>Threshold, below this nodes are considered noise.</p>
+</div></blockquote>
+<p><strong>find_segs</strong> : bool, optional</p>
+<blockquote>
+<div><p>True to return a list of slices for the segments.</p>
+</div></blockquote>
+<p><strong>diag</strong> : bool</p>
+<blockquote>
+<div><p>True to include diagonal neighbors in connection.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>locations</strong> : list</p>
+<blockquote>
+<div><p>List of indicies of local maximum in each segment.</p>
+</div></blockquote>
+<p><strong>seg_slices</strong> : list, optional</p>
+<blockquote class="last">
+<div><p>List of slices which extract a given segment from the data. Only 
+returned when fig_segs is True.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -96,11 +113,11 @@
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="nmrglue.analysis.segmentation.label_connected.html"
-                        title="previous chapter">nmrglue.analysis.segmentation.label_connected</a></p>
+  <p class="topless"><a href="nmrglue.analysis.segmentation.label_upward_seg.html"
+                        title="previous chapter">nmrglue.analysis.segmentation.label_upward_seg</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="nmrglue.analysis.segmentation.label_nconnected.html"
-                        title="next chapter">nmrglue.analysis.segmentation.label_nconnected</a></p>
+  <p class="topless"><a href="nmrglue.analysis.segmentation.find_all_nconnected.html"
+                        title="next chapter">nmrglue.analysis.segmentation.find_all_nconnected</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/reference/generated/nmrglue.analysis.segmentation.find_all_connected.txt"
@@ -136,10 +153,10 @@
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="nmrglue.analysis.segmentation.label_nconnected.html" title="nmrglue.analysis.segmentation.label_nconnected"
+          <a href="nmrglue.analysis.segmentation.find_all_nconnected.html" title="nmrglue.analysis.segmentation.find_all_nconnected"
              >next</a> |</li>
         <li class="right" >
-          <a href="nmrglue.analysis.segmentation.label_connected.html" title="nmrglue.analysis.segmentation.label_connected"
+          <a href="nmrglue.analysis.segmentation.label_upward_seg.html" title="nmrglue.analysis.segmentation.label_upward_seg"
              >previous</a> |</li>
         <li><a href="../../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
           <li><a href="../index.html" >Reference Guide</a> &raquo;</li>

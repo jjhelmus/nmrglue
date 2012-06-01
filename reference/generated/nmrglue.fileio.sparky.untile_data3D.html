@@ -65,19 +65,34 @@
 <h1>nmrglue.fileio.sparky.untile_data3D<a class="headerlink" href="#nmrglue-fileio-sparky-untile-data3d" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.sparky.untile_data3D">
-<tt class="descclassname">nmrglue.fileio.sparky.</tt><tt class="descname">untile_data3D</tt><big>(</big><em>data</em>, <em>(lentZ</em>, <em>lentY</em>, <em>lentX)</em>, <em>(lenZ</em>, <em>lenY</em>, <em>lenX)</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/sparky.py#L974"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.sparky.untile_data3D" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reorganize tiled sparky data into 3D data</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>data    1D numpy array of tile data</li>
-<li>lentZ   size of tile in Z (w1) dim</li>
-<li>lentY   size of tile in Y (w2) dim</li>
-<li>lentX   size of tile in X (w3) dim</li>
-<li>lenZ    size of data in Z dim</li>
-<li>lenY    size of data in Y dim</li>
-<li>lenX    size of data in X dim</li>
-</ul>
-<p>Returns 3D np.array of floats with size (lenZ,lenY,lenX)</p>
+<tt class="descclassname">nmrglue.fileio.sparky.</tt><tt class="descname">untile_data3D</tt><big>(</big><em>data</em>, <em>(lentZ</em>, <em>lentY</em>, <em>lentX)</em>, <em>(lenZ</em>, <em>lenY</em>, <em>lenX)</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/sparky.py#L1115"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.sparky.untile_data3D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rearrange 3D tiled/Sparky formatted data into standard format.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : 1D ndarray</p>
+<blockquote>
+<div><p>Tiled/Sparky formatted 2D NMR data.</p>
+</div></blockquote>
+<p><strong>(lentZ, lentY, lentX)</strong> : tuple of ints</p>
+<blockquote>
+<div><p>Size of tile</p>
+</div></blockquote>
+<p><strong>(lenZ, lenY, lenX)</strong> : tuple of ints</p>
+<blockquote>
+<div><p>Size of NMR data.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>sdata</strong> : 3D ndarray</p>
+<blockquote class="last">
+<div><p>NMR data, untiled/standard format.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

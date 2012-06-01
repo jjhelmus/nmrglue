@@ -65,9 +65,9 @@
 <h1>nmrglue.fileio.rnmrtk.rnmrtk_nd<a class="headerlink" href="#nmrglue-fileio-rnmrtk-rnmrtk-nd" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="nmrglue.fileio.rnmrtk.rnmrtk_nd">
-<em class="property">class </em><tt class="descclassname">nmrglue.fileio.rnmrtk.</tt><tt class="descname">rnmrtk_nd</tt><big>(</big><em>filename</em>, <em>fshape</em>, <em>cplex</em>, <em>big</em>, <em>order=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/rnmrtk.py#L274"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.rnmrtk.rnmrtk_nd" title="Permalink to this definition">¶</a></dt>
-<dd><p>Emulate a numpy.ndarray objects without loading data into memory for low
-memory reading of Bruker fid/ser files</p>
+<em class="property">class </em><tt class="descclassname">nmrglue.fileio.rnmrtk.</tt><tt class="descname">rnmrtk_nd</tt><big>(</big><em>filename</em>, <em>fshape</em>, <em>cplex</em>, <em>big</em>, <em>order=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/rnmrtk.py#L422"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.rnmrtk.rnmrtk_nd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Emulate a ndarray objects without loading data into memory for low memory 
+reading of RNMRTK files.</p>
 <ul class="simple">
 <li>slicing operations return ndarray objects.</li>
 <li>can iterate over with expected results.</li>
@@ -75,9 +75,37 @@ memory reading of Bruker fid/ser files</p>
 ordering.</li>
 <li>has ndim, shape, and dtype attributes.</li>
 </ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>Filename of RNMRTK file (.sec) to read.</p>
+</div></blockquote>
+<p><strong>fshape</strong> : tuple of ints</p>
+<blockquote>
+<div><p>Shape of data in file.</p>
+</div></blockquote>
+<p><strong>cplex</strong> : bool</p>
+<blockquote>
+<div><p>True if the last (fast) axis is complex.</p>
+</div></blockquote>
+<p><strong>big</strong> : bool</p>
+<blockquote>
+<div><p>True for big-endian data, False for little-endian.</p>
+</div></blockquote>
+<p><strong>order</strong> : tuple</p>
+<blockquote class="last">
+<div><p>Ordering of axes against file. None for (0, 1, 2, ...).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="nmrglue.fileio.rnmrtk.rnmrtk_nd.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>filename</em>, <em>fshape</em>, <em>cplex</em>, <em>big</em>, <em>order=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/rnmrtk.py#L287"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.rnmrtk.rnmrtk_nd.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>filename</em>, <em>fshape</em>, <em>cplex</em>, <em>big</em>, <em>order=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/rnmrtk.py#L448"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.rnmrtk.rnmrtk_nd.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create and set up</p>
 </dd></dl>
 
@@ -92,10 +120,10 @@ ordering.</li>
 <td>Create and set up</td>
 </tr>
 <tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">swapaxes</span></tt>(axis1,&nbsp;axis2)</td>
-<td>Return data_nd object with axis1 and axis2 interchanged</td>
+<td>Return object with <cite>axis1</cite> and <cite>axis2</cite> interchanged.</td>
 </tr>
 <tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">transpose</span></tt>(*axes)</td>
-<td>Permute the dimensions of the array</td>
+<td>Return object with axes transposed.</td>
 </tr>
 </tbody>
 </table>

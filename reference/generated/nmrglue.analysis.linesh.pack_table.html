@@ -65,19 +65,46 @@
 <h1>nmrglue.analysis.linesh.pack_table<a class="headerlink" href="#nmrglue-analysis-linesh-pack-table" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.analysis.linesh.pack_table">
-<tt class="descclassname">nmrglue.analysis.linesh.</tt><tt class="descname">pack_table</tt><big>(</big><em>pbest</em>, <em>abest</em>, <em>iers</em>, <em>rec</em>, <em>param_columns</em>, <em>amp_column</em>, <em>ier_column=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/linesh.py#L39"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.linesh.pack_table" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.analysis.linesh.</tt><tt class="descname">pack_table</tt><big>(</big><em>pbest</em>, <em>abest</em>, <em>iers</em>, <em>rec</em>, <em>param_columns</em>, <em>amp_column</em>, <em>ier_column=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/linesh.py#L40"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.linesh.pack_table" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pack fitting parameters into table</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>pbest         List of best-fit parameters.  See fit_NDregion for format.</li>
-<li>abest         List of best-fit amplitudes.</li>
-<li>iers          List of fitting error return values.</li>
-<li>rec           Records array (table) to save fitting parameters into.</li>
-<li>param_columns List of parameter columns in rec. (format same as pbest)</li>
-<li>amp_columns   Name of amplitude column in rec.</li>
-<li>ier_column    Name of column in rec to save iers to, None to not save.</li>
-</ul>
-<p>Return nothing, rec is updated in place.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>pbest</strong> : list</p>
+<blockquote>
+<div><p>List of best-fit parameters.  See <a class="reference internal" href="nmrglue.analysis.linesh.fit_NDregion.html#nmrglue.analysis.linesh.fit_NDregion" title="nmrglue.analysis.linesh.fit_NDregion"><tt class="xref py py-func docutils literal"><span class="pre">fit_NDregion()</span></tt></a> for format.</p>
+</div></blockquote>
+<p><strong>abest</strong> : list</p>
+<blockquote>
+<div><p>List of best-fit amplitudes.</p>
+</div></blockquote>
+<p><strong>iers</strong> : list</p>
+<blockquote>
+<div><p>List of fitting error return values.</p>
+</div></blockquote>
+<p><strong>rec</strong> : recarray</p>
+<blockquote>
+<div><p>Records array (table) to save fitting parameters into. Updated with
+fitting parameter in place.</p>
+</div></blockquote>
+<p><strong>param_columns</strong> : list</p>
+<blockquote>
+<div><p>List of parameter columns in rec. Format is the same as pbest.</p>
+</div></blockquote>
+<p><strong>amp_columns</strong> : str</p>
+<blockquote>
+<div><p>Name of amplitude column in rec.</p>
+</div></blockquote>
+<p><strong>ier_column</strong> : str or None, optional</p>
+<blockquote class="last">
+<div><p>Name of column in rec to save iers to. None will not record this in the
+table.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

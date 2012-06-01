@@ -65,19 +65,46 @@
 <h1>nmrglue.process.proc_base.sine<a class="headerlink" href="#nmrglue-process-proc-base-sine" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_base.sine">
-<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">sine</tt><big>(</big><em>data</em>, <em>off=0</em>, <em>end=1.0</em>, <em>pow=1.0</em>, <em>inv=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L114"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.sine" title="Permalink to this definition">¶</a></dt>
-<dd><p>Shifted Sine-Bell Apodization</p>
-<p>Functional form:</p>
+<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">sine</tt><big>(</big><em>data</em>, <em>off=0</em>, <em>end=1.0</em>, <em>pow=1.0</em>, <em>inv=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L162"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.sine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shifted sine-bell apodization</p>
+<p>Functional form of apodization window:</p>
+<div class="math">
+\[sp(x_i) = \sin(\frac{pi * off + pi * (end - off) * i}
+                      {size - 1})^{pow}\]</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
 <blockquote>
-<div>sp(x_i) = sin( (pi*off + pi*(end-off)*i/(size-1) )**pow</div></blockquote>
-<p>Parameters:</p>
-<ul class="simple">
-<li>data  Array of spectral data.</li>
-<li>start Start of Sine-Bell as percent of vector (0.0 -&gt; 1.0)</li>
-<li>end   End of Sine-Bell as percent of vector (0.0 -&gt; 1.0 )</li>
-<li>pow   Power of Sine-Bell</li>
-<li>inv   Set True for inverse apodization.</li>
-</ul>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>off</strong> : float</p>
+<blockquote>
+<div><p>Offset start of sine-bell as a percentage of the trace (0 -&gt; 1).</p>
+</div></blockquote>
+<p><strong>end</strong> : float</p>
+<blockquote>
+<div><p>End of of sine-bell as a percentage of the trace (0 -&gt; 1).</p>
+</div></blockquote>
+<p><strong>pow</strong> : float</p>
+<blockquote>
+<div><p>Power to raise sine-bell to.</p>
+</div></blockquote>
+<p><strong>inv</strong> : bool, optional</p>
+<blockquote>
+<div><p>True for inverse apodization.  False (default) for standard.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Array of NMR data with apodization applied.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

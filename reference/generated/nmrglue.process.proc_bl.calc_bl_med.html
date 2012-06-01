@@ -65,15 +65,39 @@
 <h1>nmrglue.process.proc_bl.calc_bl_med<a class="headerlink" href="#nmrglue-process-proc-bl-calc-bl-med" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_bl.calc_bl_med">
-<tt class="descclassname">nmrglue.process.proc_bl.</tt><tt class="descname">calc_bl_med</tt><big>(</big><em>x</em>, <em>mw</em>, <em>sf</em>, <em>sigma</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_bl.py#L128"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_bl.calc_bl_med" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.process.proc_bl.</tt><tt class="descname">calc_bl_med</tt><big>(</big><em>x</em>, <em>mw</em>, <em>sf</em>, <em>sigma</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_bl.py#L167"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_bl.calc_bl_med" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate a baseline using median baseline correction.</p>
-<p>Algorithm described in:
-Friedrichs, M.S. JBNMR 1995 5 147-153</p>
-<p>Parameter:</p>
-<p>x       1D data
-mw      Median Window size in pts.
-sf      Smooth window size in pts.
-sigma   Standard-deviation of Gaussian in convolution.</p>
+<p>Algorithm described in: Friedrichs, M.S. JBNMR 1995 5 147-153</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>x</strong> : 1D ndarray</p>
+<blockquote>
+<div><p>One dimensional NMR data</p>
+</div></blockquote>
+<p><strong>mw</strong> : float</p>
+<blockquote>
+<div><p>Median window size in pts.</p>
+</div></blockquote>
+<p><strong>sf</strong> : float</p>
+<blockquote>
+<div><p>Smooth window size in pts.</p>
+</div></blockquote>
+<p><strong>sigma</strong> : float</p>
+<blockquote>
+<div><p>Standard-deviation of convoluted Gaussian window.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>baseline</strong> : 1D ndarray</p>
+<blockquote class="last">
+<div><p>Baseline calculated using median baseline correction</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

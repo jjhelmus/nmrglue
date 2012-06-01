@@ -65,51 +65,74 @@
 <h1>nmrglue.process.proc_lp.lp_model<a class="headerlink" href="#nmrglue-process-proc-lp-lp-model" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_lp.lp_model">
-<tt class="descclassname">nmrglue.process.proc_lp.</tt><tt class="descname">lp_model</tt><big>(</big><em>trace</em>, <em>slice=slice(None</em>, <em>None</em>, <em>None)</em>, <em>order=8</em>, <em>mode='f'</em>, <em>mirror=None</em>, <em>method='svd'</em>, <em>full=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_lp.py#L487"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_lp.lp_model" title="Permalink to this definition">¶</a></dt>
-<dd><p>Use Linear Prediction to model a 1D NMR signal.</p>
-<p>Parameter:</p>
-<ul>
-<li><p class="first">trace  1D trace of data, the FID.</p>
-</li>
-<li><p class="first">slice  slice object selecting region of slice to use in LP equation.</p>
-</li>
-<li><p class="first">order  Prediction order (Number of LP coefficients)</p>
-</li>
-<li><dl class="first docutils">
-<dt>mirror None to process trace as provided, &#8216;0&#8217; or &#8216;180&#8217; forms a mirror </dt>
-<dd><p class="first last">image of the sliced trace to calculate the LP filter.  &#8216;0&#8217; should
-be used with data with no delay, &#8216;180&#8217; with data with an initial 
-half-point delay.</p>
-</dd>
-</dl>
-</li>
-<li><p class="first">mode   Mode to generate LP filter (f-forward,b-backward,</p>
-</li>
-<li><dl class="first docutils">
-<dt>method Method to use to calculate the LP filter, choose from</dt>
-<dd><p class="first last">&#8216;svd&#8217;,&#8217;qr&#8217;,&#8217;choleskey&#8217;,&#8217;hsvd&#8217;.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt>full    Set to True to return amplitudes and phases calculated</dt>
-<dd><p class="first last">by performing a least squares fitting. False returns only
-the damping (relaxation) factors and signal frequencies</p>
-</dd>
-</dl>
-</li>
-</ul>
-<dl class="docutils">
-<dt>Returns: when full==False:  (damp,freq)</dt>
-<dd>when full==True:   (damp,freq,amp,phase)</dd>
-</dl>
-<ul class="simple">
-<li>damp    List of damping factors</li>
-<li>freq    List of frequencies</li>
-<li>amp     List of amplitudes</li>
-<li>phase   List of phases</li>
-</ul>
-<p>Notes:</p>
+<tt class="descclassname">nmrglue.process.proc_lp.</tt><tt class="descname">lp_model</tt><big>(</big><em>trace</em>, <em>slice=slice(None</em>, <em>None</em>, <em>None)</em>, <em>order=8</em>, <em>mode='f'</em>, <em>mirror=None</em>, <em>method='svd'</em>, <em>full=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_lp.py#L542"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_lp.lp_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use Linear Prediction to model 1D NMR time domain data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>trace</strong> : 1D ndarray</p>
+<blockquote>
+<div><p>One dimensional time domain NMR data to model.</p>
+</div></blockquote>
+<p><strong>slice</strong> : slice object, optional</p>
+<blockquote>
+<div><p>Slice object which selects the region along the last axis to use in LP 
+equation.  The default, slice(None), will use all points.</p>
+</div></blockquote>
+<p><strong>order</strong> : int</p>
+<blockquote>
+<div><p>Prediction order, number of LP coefficients calculated.</p>
+</div></blockquote>
+<p><strong>mode</strong> : {&#8216;f&#8217;, &#8216;b&#8217;}</p>
+<blockquote>
+<div><p>Mode to generate LP filter. &#8216;f&#8217; for forward,&#8217;b&#8217; for backward.</p>
+</div></blockquote>
+<p><strong>mirror</strong> : {None, &#8216;0&#8217;, &#8216;180&#8217;}</p>
+<blockquote>
+<div><p>Mode to form mirror image of data before processing.  None will 
+process the data trace as provided (no mirror image). &#8216;0&#8217; or &#8216;180&#8217; 
+forms a mirror image of the sliced trace to calculate the LP filter.  
+&#8216;0&#8217; should be used with data with no delay, &#8216;180&#8217; with data
+with an initial half-point delay.</p>
+</div></blockquote>
+<p><strong>method</strong> : {&#8216;svd&#8217;, &#8216;qr&#8217;, &#8216;choleskey&#8217;, &#8216;tls&#8217;}</p>
+<blockquote>
+<div><p>Method to use to calculate the LP filter. Choices are a SVD (&#8216;svd&#8217;), QR
+(&#8216;qr&#8217;), or Choleskey (&#8216;choleskey&#8217;) decomposition, or Hankel SVD
+(&#8216;hsvd&#8217;).</p>
+</div></blockquote>
+<p><strong>full</strong> : bool</p>
+<blockquote>
+<div><p>True to return amplitudes and phases calculated by performing a least
+squares fitting to the data after LP modeling.  False will return only
+the damping (relaxation) factors and signal frequencies.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>damp</strong> : list</p>
+<blockquote>
+<div><p>List of damping (relaxation) factors found from LP modeling.</p>
+</div></blockquote>
+<p><strong>freq</strong> : list</p>
+<blockquote>
+<div><p>List of signal frequencies found from LP modeling.</p>
+</div></blockquote>
+<p><strong>amp</strong> : list, optional</p>
+<blockquote>
+<div><p>List of signal amplitudes found by least squares fitting of data after
+LP modeling, only returned when <cite>full</cite> parameter is True.</p>
+</div></blockquote>
+<p><strong>phase</strong> : list, optional.</p>
+<blockquote class="last">
+<div><p>List of signal phases found by least squares fitting of data after LP
+modeling, only returned when <cite>full</cite> parameter is True.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
 <p>When backward LP is used the signal roots are reflected before calculating
 model parameters.</p>
 </dd></dl>

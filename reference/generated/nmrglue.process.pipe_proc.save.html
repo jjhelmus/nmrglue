@@ -65,16 +65,46 @@
 <h1>nmrglue.process.pipe_proc.save<a class="headerlink" href="#nmrglue-process-pipe-proc-save" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.pipe_proc.save">
-<tt class="descclassname">nmrglue.process.pipe_proc.</tt><tt class="descname">save</tt><big>(</big><em>dic</em>, <em>data</em>, <em>name</em>, <em>overwrite=True</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/pipe_proc.py#L2160"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.pipe_proc.save" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save Current Vector</p>
-<p>The resulting FDPIPECOUNT header parameter does not NMRPipe&#8217;s.</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>dic   Dictionary of NMRPipe parameters.</li>
-<li>data  array of spectral data.</li>
-<li>name  Name of file to write to.</li>
-<li>overwrite Set True to overwrite existing files.</li>
-</ul>
+<tt class="descclassname">nmrglue.process.pipe_proc.</tt><tt class="descname">save</tt><big>(</big><em>dic</em>, <em>data</em>, <em>name</em>, <em>overwrite=True</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/pipe_proc.py#L2782"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.pipe_proc.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the current vector.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of NMRPipe parameters.</p>
+</div></blockquote>
+<p><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>name</strong> : str</p>
+<blockquote>
+<div><p>Filename to save vector to.</p>
+</div></blockquote>
+<p><strong>overwrite</strong> : bool</p>
+<blockquote>
+<div><p>True will overwrite existing files, False will raise a Warning if the
+file already exists.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of updated NMRPipe parameters.</p>
+</div></blockquote>
+<p><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Unmodified array of NMR data.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The resulting FDPIPECOUNT header parameter does not match the one created
+using NMRPipe&#8217;s SAVE function.</p>
 </dd></dl>
 
 </div>

@@ -65,23 +65,65 @@
 <h1>nmrglue.fileio.bruker.read_pprog<a class="headerlink" href="#nmrglue-fileio-bruker-read-pprog" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.bruker.read_pprog">
-<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">read_pprog</tt><big>(</big><em>filename</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/bruker.py#L1296"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.bruker.read_pprog" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parse a Bruker pulse program (pulseprogram) file for information</p>
-<p>Parameter:</p>
-<ul class="simple">
-<li>filename  name of pulseprogram file to read from</li>
-</ul>
-<p>Returns a dictionary with following keys:</p>
-<ul class="simple">
-<li>var       dictionary of variables assigned in pulseprogram</li>
-<li>incr      list of lists containing increment times</li>
-<li>loop      list of loop multipliers</li>
-<li>phase     list of lists containing phase elements</li>
-<li>ph_extra  list of lists containing comments at the end of phase lines</li>
-</ul>
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">read_pprog</tt><big>(</big><em>filename</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/bruker.py#L1373"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.bruker.read_pprog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a Bruker pulse program (pulseprogram) file.</p>
+<p>Resultsing dictionary contains the following keys:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="12%" />
+<col width="88%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">key</th>
+<th class="head">description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>var</td>
+<td>dictionary of variables assigned in pulseprogram</td>
+</tr>
+<tr class="row-odd"><td>incr</td>
+<td>list of lists containing increment times</td>
+</tr>
+<tr class="row-even"><td>loop</td>
+<td>list of loop multipliers</td>
+</tr>
+<tr class="row-odd"><td>phase</td>
+<td>list of lists containing phase elements</td>
+</tr>
+<tr class="row-even"><td>ph_extra</td>
+<td>list of lists containing comments at the end of phase lines</td>
+</tr>
+</tbody>
+</table>
 <p>The incr,phase and ph_extra lists match up with loop list.  For example 
 incr[0],phase[0] and ph_extra[0] are all increment and phase commands 
 with comments which occur during loop 0 which has loop[0] steps.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>Filename of pulseprogram file to read from,</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
+<blockquote class="last">
+<div><p>A dictionary with keys described above.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.fileio.bruker.write_pprog.html#nmrglue.fileio.bruker.write_pprog" title="nmrglue.fileio.bruker.write_pprog"><tt class="xref py py-obj docutils literal"><span class="pre">write_pprog</span></tt></a></dt>
+<dd>Write a Bruker pulse program to file.</dd>
+</dl>
+</div>
 </dd></dl>
 
 </div>

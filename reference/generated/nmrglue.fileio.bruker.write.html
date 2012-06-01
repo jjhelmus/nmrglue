@@ -65,39 +65,68 @@
 <h1>nmrglue.fileio.bruker.write<a class="headerlink" href="#nmrglue-fileio-bruker-write" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.bruker.write">
-<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">write</tt><big>(</big><em>dir</em>, <em>dic</em>, <em>data</em>, <em>bin_file=None</em>, <em>acqus_files=None</em>, <em>pprog_file=None</em>, <em>overwrite=False</em>, <em>big=None</em>, <em>write_prog=True</em>, <em>write_acqus=True</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/bruker.py#L310"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.bruker.write" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write Bruker files</p>
-<p>Parameters:</p>
-<ul>
-<li><p class="first">dir           Directory to write to.</p>
-</li>
-<li><p class="first">dic           dictionary holding acqus_files and pprog_file parameters.</p>
-</li>
-<li><p class="first">data          array of data</p>
-</li>
-<li><p class="first">bin_file      Filename of binary file to write to in directory</p>
-</li>
-<li><p class="first">acqus_files   Filename(s) of acqus files in directory to write to.</p>
-</li>
-<li><p class="first">pprog_file    Filename of pulseprogram in directory.</p>
-</li>
-<li><p class="first">overwrite     True to overwrite files, False to warn.</p>
-</li>
-<li><dl class="first docutils">
-<dt>big           Endiness to write binary data with,</dt>
-<dd><p class="first last">bigendian=True, little=False, determined from dictionary
-if None.</p>
-</dd>
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">write</tt><big>(</big><em>dir</em>, <em>dic</em>, <em>data</em>, <em>bin_file=None</em>, <em>acqus_files=None</em>, <em>pprog_file=None</em>, <em>overwrite=False</em>, <em>big=None</em>, <em>write_prog=True</em>, <em>write_acqus=True</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/bruker.py#L339"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.bruker.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write Bruker files to disk.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dir</strong> : str</p>
+<blockquote>
+<div><p>Directory to write files to.</p>
+</div></blockquote>
+<p><strong>dir</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of Bruker parameters.</p>
+</div></blockquote>
+<p><strong>data</strong> : array_like</p>
+<blockquote>
+<div><p>Array of NMR data</p>
+</div></blockquote>
+<p><strong>bin_file</strong> : str, optional</p>
+<blockquote>
+<div><p>Filename of binary file in directory. None uses standard files.</p>
+</div></blockquote>
+<p><strong>acqus_files</strong> : list, optional</p>
+<blockquote>
+<div><p>List of filename(s) of acqus parameter files in directory. None uses
+standard files.</p>
+</div></blockquote>
+<p><strong>pprog_file</strong> : str, optional</p>
+<blockquote>
+<div><p>Filename of pulse program in directory. None uses standard files.</p>
+</div></blockquote>
+<p><strong>overwrite</strong> : bool, optional</p>
+<blockquote>
+<div><p>Set True to overwrite files, False will raise a Warning if files 
+exist.</p>
+</div></blockquote>
+<p><strong>big</strong> : bool or None, optional</p>
+<blockquote>
+<div><p>Endiness of binary file. True of big-endian, False for little-endian,
+None to determine endiness from Bruker dictionary.</p>
+</div></blockquote>
+<p><strong>write_pprog</strong> : bool, optional</p>
+<blockquote>
+<div><p>True to write the pulse program file, False prevents writing.</p>
+</div></blockquote>
+<p><strong>write_acqus</strong> : bool, optional</p>
+<blockquote class="last">
+<div><p>True to write the acqus files(s), False prevents writing.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.fileio.bruker.write_lowmem.html#nmrglue.fileio.bruker.write_lowmem" title="nmrglue.fileio.bruker.write_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">write_lowmem</span></tt></a></dt>
+<dd>Write Bruker files using minimal amounts of memory.</dd>
+<dt><a class="reference internal" href="nmrglue.fileio.bruker.read.html#nmrglue.fileio.bruker.read" title="nmrglue.fileio.bruker.read"><tt class="xref py py-obj docutils literal"><span class="pre">read</span></tt></a></dt>
+<dd>Read Bruker files.</dd>
 </dl>
-</li>
-<li><p class="first">write_prog    True will write pulseprogram file, False does not.</p>
-</li>
-<li><p class="first">write_acqus   True will write acqus file(s), False does not.</p>
-</li>
-</ul>
-<p>No return.</p>
-<p>If any of bin_file,acqus_files or pprog_file are None the associated 
-file(s) will be determined automatically</p>
+</div>
 </dd></dl>
 
 </div>

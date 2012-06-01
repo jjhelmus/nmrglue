@@ -73,7 +73,7 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.peakpick.pick.html#nmrglue.analysis.peakpick.pick" title="nmrglue.analysis.peakpick.pick"><tt class="xref py py-obj docutils literal"><span class="pre">pick</span></tt></a>(data,&nbsp;pthres[,&nbsp;nthres,&nbsp;msep,&nbsp;...])</td>
-<td>Pick (find) peaks in a spectral region.</td>
+<td>Pick (find) peaks in a region of a NMR spectrum.</td>
 </tr>
 </tbody>
 </table>
@@ -92,13 +92,13 @@ want fine control over peak picking will be interested in these functions.</p>
 <td>Add edge to list of locations, returning a list of edge-added locations</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.peakpick.clusters.html#nmrglue.analysis.peakpick.clusters" title="nmrglue.analysis.peakpick.clusters"><tt class="xref py py-obj docutils literal"><span class="pre">clusters</span></tt></a>(data,&nbsp;locations,&nbsp;pthres,&nbsp;nthres[,&nbsp;...])</td>
-<td>Perform cluster analysis of peak locations</td>
+<td>Perform cluster analysis of peak locations.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.peakpick.pack_table.html#nmrglue.analysis.peakpick.pack_table" title="nmrglue.analysis.peakpick.pack_table"><tt class="xref py py-obj docutils literal"><span class="pre">pack_table</span></tt></a>(locations[,&nbsp;cluster_ids,&nbsp;scales,&nbsp;...])</td>
 <td>Create a table from peak information.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.peakpick.guess_params_slice.html#nmrglue.analysis.peakpick.guess_params_slice" title="nmrglue.analysis.peakpick.guess_params_slice"><tt class="xref py py-obj docutils literal"><span class="pre">guess_params_slice</span></tt></a>(data,&nbsp;location,&nbsp;...)</td>
-<td>Guess the parameter of a peak in a segment given slices.</td>
+<td>Guess the parameter of a peak in a segment.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.peakpick.extract_1d.html#nmrglue.analysis.peakpick.extract_1d" title="nmrglue.analysis.peakpick.extract_1d"><tt class="xref py py-obj docutils literal"><span class="pre">extract_1d</span></tt></a>(data,&nbsp;location,&nbsp;axis)</td>
 <td>Extract a 1D slice from data along axis at location</td>
@@ -116,10 +116,10 @@ want fine control over peak picking will be interested in these functions.</p>
 <td>Fast version of find_all_nthres_fast.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.peakpick.find_pseg_slice.html#nmrglue.analysis.peakpick.find_pseg_slice" title="nmrglue.analysis.peakpick.find_pseg_slice"><tt class="xref py py-obj docutils literal"><span class="pre">find_pseg_slice</span></tt></a>(data,&nbsp;location,&nbsp;thres)</td>
-<td>Find slices which define a segment in data above thres starting a location</td>
+<td>Find slices which define a segment in data above thres.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.peakpick.find_nseg_slice.html#nmrglue.analysis.peakpick.find_nseg_slice" title="nmrglue.analysis.peakpick.find_nseg_slice"><tt class="xref py py-obj docutils literal"><span class="pre">find_nseg_slice</span></tt></a>(data,&nbsp;location,&nbsp;thres)</td>
-<td>Find slices which define a segment in data below thres starting a location</td>
+<td>Find slices which define a segment in data below thres.</td>
 </tr>
 </tbody>
 </table>

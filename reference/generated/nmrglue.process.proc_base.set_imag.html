@@ -65,13 +65,33 @@
 <h1>nmrglue.process.proc_base.set_imag<a class="headerlink" href="#nmrglue-process-proc-base-set-imag" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_base.set_imag">
-<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">set_imag</tt><big>(</big><em>data</em>, <em>v</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L915"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.set_imag" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">set_imag</tt><big>(</big><em>data</em>, <em>v</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L1408"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.set_imag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set imaginary portion of data to a constant.</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>data  Array of spectral data.</li>
-<li>v     Constant to set data to (real number).</li>
-</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>v</strong> : float</p>
+<blockquote>
+<div><p>Constant to set both imaginary component of <cite>data</cite> to.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Array of NMR data with imaginary components set to v.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>data is set in place, if original data is required make a copy before
+calling this function.</p>
 </dd></dl>
 
 </div>

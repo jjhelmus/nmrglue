@@ -65,10 +65,39 @@
 <h1>nmrglue.process.proc_base.ifft_positive<a class="headerlink" href="#nmrglue-process-proc-base-ifft-positive" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_base.ifft_positive">
-<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">ifft_positive</tt><big>(</big><em>data</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L427"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.ifft_positive" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">ifft_positive</tt><big>(</big><em>data</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L681"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.ifft_positive" title="Permalink to this definition">¶</a></dt>
 <dd><p>Inverse fourier transform with positive exponential, NMR ordered results.</p>
 <p>This is similar to the transform performed by NMRPipe&#8217;s FFT function with
 the -inv flag</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Inverse fourier transform of NMR data in &#8216;NMR order&#8217;.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><tt class="xref py py-obj docutils literal"><span class="pre">fft_postive</span></tt></dt>
+<dd>Fourier transform with a positive exponential.</dd>
+<dt><a class="reference internal" href="nmrglue.process.proc_base.ifft_norm.html#nmrglue.process.proc_base.ifft_norm" title="nmrglue.process.proc_base.ifft_norm"><tt class="xref py py-obj docutils literal"><span class="pre">ifft_norm</span></tt></a></dt>
+<dd>Norm (power) conserving inverse Fourier transform.</dd>
+<dt><a class="reference internal" href="nmrglue.process.proc_base.ifft.html#nmrglue.process.proc_base.ifft" title="nmrglue.process.proc_base.ifft"><tt class="xref py py-obj docutils literal"><span class="pre">ifft</span></tt></a></dt>
+<dd>Inverse Forier transform with a negative exponential.</dd>
+</dl>
+</div>
 </dd></dl>
 
 </div>

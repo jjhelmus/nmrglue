@@ -29,7 +29,7 @@
     <link rel="top" title="nmrglue 0.3-dev documentation" href="../../index.html" />
     <link rel="up" title="nmrglue.segmentation" href="../segmentation.html" />
     <link rel="next" title="nmrglue.analysis.segmentation.label_upward_seg" href="nmrglue.analysis.segmentation.label_upward_seg.html" />
-    <link rel="prev" title="nmrglue.analysis.segmentation.find_all_downward" href="nmrglue.analysis.segmentation.find_all_downward.html" /> 
+    <link rel="prev" title="nmrglue.analysis.segmentation.label_downward_seg" href="nmrglue.analysis.segmentation.label_downward_seg.html" /> 
   </head>
   <body>
     <div class="related">
@@ -48,7 +48,7 @@
           <a href="nmrglue.analysis.segmentation.label_upward_seg.html" title="nmrglue.analysis.segmentation.label_upward_seg"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="nmrglue.analysis.segmentation.find_all_downward.html" title="nmrglue.analysis.segmentation.find_all_downward"
+          <a href="nmrglue.analysis.segmentation.label_downward_seg.html" title="nmrglue.analysis.segmentation.label_downward_seg"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
           <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
@@ -65,16 +65,33 @@
 <h1>nmrglue.analysis.segmentation.mark_useg<a class="headerlink" href="#nmrglue-analysis-segmentation-mark-useg" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.analysis.segmentation.mark_useg">
-<tt class="descclassname">nmrglue.analysis.segmentation.</tt><tt class="descname">mark_useg</tt><big>(</big><em>mdata</em>, <em>map</em>, <em>pt</em>, <em>mark</em>, <em>structure</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/segmentation.py#L229"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.segmentation.mark_useg" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.analysis.segmentation.</tt><tt class="descname">mark_useg</tt><big>(</big><em>mdata</em>, <em>map</em>, <em>pt</em>, <em>mark</em>, <em>structure</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/segmentation.py#L247"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.segmentation.mark_useg" title="Permalink to this definition">¶</a></dt>
 <dd><p>Mark upward-connected region on segment map starting at node pt</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>mdata Masked data array</li>
-<li>map   Array mapping out segments</li>
-<li>pt    Index of starting node</li>
-<li>mark  Integer to mark map with.</li>
-</ul>
-<p>Returns nothing but modified mdata mask and map</p>
+<p>Modifies mdata mask and map.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>mdata</strong> : masked ndarray</p>
+<blockquote>
+<div><p>Masked data array.</p>
+</div></blockquote>
+<p><strong>map :</strong> :</p>
+<blockquote>
+<div><p>Array mapping out segments.</p>
+</div></blockquote>
+<p><strong>pt</strong> : tuple of ints</p>
+<blockquote>
+<div><p>Index of starting node</p>
+</div></blockquote>
+<p><strong>mark</strong> : int</p>
+<blockquote class="last">
+<div><p>Integer to mark map with.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -86,8 +103,8 @@
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="nmrglue.analysis.segmentation.find_all_downward.html"
-                        title="previous chapter">nmrglue.analysis.segmentation.find_all_downward</a></p>
+  <p class="topless"><a href="nmrglue.analysis.segmentation.label_downward_seg.html"
+                        title="previous chapter">nmrglue.analysis.segmentation.label_downward_seg</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="nmrglue.analysis.segmentation.label_upward_seg.html"
                         title="next chapter">nmrglue.analysis.segmentation.label_upward_seg</a></p>
@@ -129,7 +146,7 @@
           <a href="nmrglue.analysis.segmentation.label_upward_seg.html" title="nmrglue.analysis.segmentation.label_upward_seg"
              >next</a> |</li>
         <li class="right" >
-          <a href="nmrglue.analysis.segmentation.find_all_downward.html" title="nmrglue.analysis.segmentation.find_all_downward"
+          <a href="nmrglue.analysis.segmentation.label_downward_seg.html" title="nmrglue.analysis.segmentation.label_downward_seg"
              >previous</a> |</li>
         <li><a href="../../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
           <li><a href="../index.html" >Reference Guide</a> &raquo;</li>

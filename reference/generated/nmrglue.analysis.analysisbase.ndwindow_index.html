@@ -65,18 +65,29 @@
 <h1>nmrglue.analysis.analysisbase.ndwindow_index<a class="headerlink" href="#nmrglue-analysis-analysisbase-ndwindow-index" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="nmrglue.analysis.analysisbase.ndwindow_index">
-<em class="property">class </em><tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">ndwindow_index</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/analysisbase.py#L170"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow_index" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">ndwindow_index</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/analysisbase.py#L227"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow_index" title="Permalink to this definition">¶</a></dt>
 <dd><p>An N-dimensional interator object which returns the index of the window 
-center and a ndwindow slice array.</p>
-<p>Equivalent to:</p>
+center and a <a class="reference internal" href="nmrglue.analysis.analysisbase.ndwindow.html#nmrglue.analysis.analysisbase.ndwindow" title="nmrglue.analysis.analysisbase.ndwindow"><tt class="xref py py-class docutils literal"><span class="pre">ndwindow</span></tt></a> slice array.  See <a class="reference internal" href="nmrglue.analysis.analysisbase.ndwindow.html#nmrglue.analysis.analysisbase.ndwindow" title="nmrglue.analysis.analysisbase.ndwindow"><tt class="xref py py-class docutils literal"><span class="pre">ndwindow</span></tt></a> 
+for additional documentation.</p>
+<p>This class is equivalent to:</p>
 <dl class="docutils">
-<dt>for slices,index in zip(np.ndindex(shape),ndwindow(shape,wshape)):</dt>
-<dd>return (index,slice)</dd>
+<dt>for slices, index in zip(np.ndindex(shape), ndwindow(shape,wshape)):</dt>
+<dd>return (index, slice)</dd>
 </dl>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.analysis.analysisbase.ndwindow.html#nmrglue.analysis.analysisbase.ndwindow" title="nmrglue.analysis.analysisbase.ndwindow"><tt class="xref py py-obj docutils literal"><span class="pre">ndwindow</span></tt></a></dt>
+<dd>Iterator over only the window slices.</dd>
+<dt><a class="reference internal" href="nmrglue.analysis.analysisbase.ndwindow_inside.html#nmrglue.analysis.analysisbase.ndwindow_inside" title="nmrglue.analysis.analysisbase.ndwindow_inside"><tt class="xref py py-obj docutils literal"><span class="pre">ndwindow_inside</span></tt></a></dt>
+<dd>Iterator over equal sized windows in the array.</dd>
+</dl>
+</div>
 <dl class="method">
 <dt id="nmrglue.analysis.analysisbase.ndwindow_index.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/analysisbase.py#L181"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow_index.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<tt class="descname">__init__</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/analysisbase.py#L244"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow_index.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up the object</p>
+</dd></dl>
 
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
@@ -86,9 +97,9 @@ center and a ndwindow slice array.</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="#nmrglue.analysis.analysisbase.ndwindow_index.__init__" title="nmrglue.analysis.analysisbase.ndwindow_index.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">__init__</span></tt></a>(shape,&nbsp;wsize)</td>
-<td></td>
+<td>Set up the object</td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">next</span></tt>()</td>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">next</span></tt>(()&nbsp;-&gt;&nbsp;the&nbsp;next&nbsp;value,&nbsp;...)</td>
 <td></td>
 </tr>
 </tbody>

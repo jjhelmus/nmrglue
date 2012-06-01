@@ -66,9 +66,53 @@
 <dl class="function">
 <dt id="nmrglue.util.misc.pair_similar">
 <tt class="descclassname">nmrglue.util.misc.</tt><tt class="descname">pair_similar</tt><big>(</big><em>dic1</em>, <em>data1</em>, <em>dic2</em>, <em>data2</em>, <em>verb=False</em>, <em>atol=0.1001</em>, <em>rtol=0.1001</em>, <em>dtol=0.1001</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/util/misc.py#L12"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.util.misc.pair_similar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check a dic,data pair against a second dic,data pair for differences</p>
-<p>Returns tuple of Booleans indicating agreement between data and 
-dictionaries</p>
+<dd><p>Check a dic, data pair against a second dic, data pair for differences.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dic1</strong> : dict</p>
+<blockquote>
+<div><p>First dictionary of NMR parameters.</p>
+</div></blockquote>
+<p><strong>data1</strong> : ndarray</p>
+<blockquote>
+<div><p>First array of NMR data</p>
+</div></blockquote>
+<p><strong>dic2</strong> : dict</p>
+<blockquote>
+<div><p>Second dictionary of NMR parameters</p>
+</div></blockquote>
+<p><strong>data2</strong> : ndarray</p>
+<blockquote>
+<div><p>Second array of NMR data</p>
+</div></blockquote>
+<p><strong>verb</strong> : bool, optional</p>
+<blockquote>
+<div><p>Set True for verbose reporting.</p>
+</div></blockquote>
+<p><strong>atol</strong> : float, optional</p>
+<blockquote>
+<div><p>The absolute tolerent parameter to pass to numpy.allclose.</p>
+</div></blockquote>
+<p><strong>rtol</strong> : float, optional</p>
+<blockquote>
+<div><p>The relative tolenance parameter to pass to numpy.allclose.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>r1</strong> : bool</p>
+<blockquote>
+<div><p>True is data1 and data2 are similar, False if they differ.</p>
+</div></blockquote>
+<p><strong>r2</strong> : bool</p>
+<blockquote class="last">
+<div><p>True is dic1 and dic2 are similar, False if they differ.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

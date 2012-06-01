@@ -65,8 +65,35 @@
 <h1>nmrglue.fileio.rnmrtk.make_uc<a class="headerlink" href="#nmrglue-fileio-rnmrtk-make-uc" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.rnmrtk.make_uc">
-<tt class="descclassname">nmrglue.fileio.rnmrtk.</tt><tt class="descname">make_uc</tt><big>(</big><em>dic</em>, <em>data</em>, <em>dim=-1</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/rnmrtk.py#L12"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.rnmrtk.make_uc" title="Permalink to this definition">¶</a></dt>
-<dd><p>Make a unit conversion object</p>
+<tt class="descclassname">nmrglue.fileio.rnmrtk.</tt><tt class="descname">make_uc</tt><big>(</big><em>dic</em>, <em>data</em>, <em>dim=-1</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/rnmrtk.py#L19"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.rnmrtk.make_uc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creat a unit conversion object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of RNMRTK parameters.</p>
+</div></blockquote>
+<p><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>dim</strong> : int, optional</p>
+<blockquote>
+<div><p>Demension number to create unit conversion object for. Default is for
+the last dimension.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>uc</strong> : unit conversion object.</p>
+<blockquote class="last">
+<div><p>Unit conversion object for given dimension.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

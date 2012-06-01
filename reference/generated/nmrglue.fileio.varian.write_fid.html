@@ -65,18 +65,50 @@
 <h1>nmrglue.fileio.varian.write_fid<a class="headerlink" href="#nmrglue-fileio-varian-write-fid" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.varian.write_fid">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">write_fid</tt><big>(</big><em>filename</em>, <em>dic</em>, <em>data</em>, <em>torder='flat'</em>, <em>repack=False</em>, <em>overwrite=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/varian.py#L678"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.varian.write_fid" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write a Varian binary (fid) file</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>filename  Name of fid file to write to.</li>
-<li>dic       Python dictionary of file parameters.</li>
-<li>data      Array of spectral data to write.</li>
-<li>torder    Trace order (None for automatic). See read function.</li>
-<li>repack    True/False to repack file and block headers.</li>
-<li>overwrite True/False to overwrite existing file.</li>
-</ul>
-<p>No return value.</p>
+<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">write_fid</tt><big>(</big><em>filename</em>, <em>dic</em>, <em>data</em>, <em>torder='flat'</em>, <em>repack=False</em>, <em>overwrite=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/varian.py#L829"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.varian.write_fid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a Agilent/Varian binary (fid) file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>Filename of Agilent/Varian binary file to write to.</p>
+</div></blockquote>
+<p><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of Agilent/Varian file parameters.</p>
+</div></blockquote>
+<p><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>torder</strong> : {&#8216;f&#8217;, &#8216;r&#8217;, &#8216;o&#8217;}</p>
+<blockquote>
+<div><p>Trace ordering.  See <a class="reference internal" href="nmrglue.fileio.varian.read.html#nmrglue.fileio.varian.read" title="nmrglue.fileio.varian.read"><tt class="xref py py-func docutils literal"><span class="pre">read()</span></tt></a> for details.</p>
+</div></blockquote>
+<p><strong>repack</strong> : bool, optional</p>
+<blockquote>
+<div><p>True to repack file and block headers. False leave as is.</p>
+</div></blockquote>
+<p><strong>overwrite</strong> : bool, optional</p>
+<blockquote class="last">
+<div><p>Set True to overwrite an existing file, False will raise a Warning if
+the file exists.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.fileio.varian.write_fid_lowmem.html#nmrglue.fileio.varian.write_fid_lowmem" title="nmrglue.fileio.varian.write_fid_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">write_fid_lowmem</span></tt></a></dt>
+<dd>Write a Agilent/Varian binary file using mimimal amounts of memory</dd>
+<dt><a class="reference internal" href="nmrglue.fileio.varian.write.html#nmrglue.fileio.varian.write" title="nmrglue.fileio.varian.write"><tt class="xref py py-obj docutils literal"><span class="pre">write</span></tt></a></dt>
+<dd>Write Agilent/Varian files to a directory.</dd>
+</dl>
+</div>
 </dd></dl>
 
 </div>

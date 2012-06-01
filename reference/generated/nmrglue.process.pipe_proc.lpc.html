@@ -65,67 +65,89 @@
 <h1>nmrglue.process.pipe_proc.lpc<a class="headerlink" href="#nmrglue-process-pipe-proc-lpc" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.pipe_proc.lpc">
-<tt class="descclassname">nmrglue.process.pipe_proc.</tt><tt class="descname">lpc</tt><big>(</big><em>dic</em>, <em>data</em>, <em>pred='default'</em>, <em>x1='default'</em>, <em>xn='default'</em>, <em>ord=8</em>, <em>mode='f'</em>, <em>append='after'</em>, <em>bad_roots='auto'</em>, <em>mirror=None</em>, <em>fix_mode='on'</em>, <em>method='tls'</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/pipe_proc.py#L2250"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.pipe_proc.lpc" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.process.pipe_proc.</tt><tt class="descname">lpc</tt><big>(</big><em>dic</em>, <em>data</em>, <em>pred='default'</em>, <em>x1='default'</em>, <em>xn='default'</em>, <em>ord=8</em>, <em>mode='f'</em>, <em>append='after'</em>, <em>bad_roots='auto'</em>, <em>mirror=None</em>, <em>fix_mode='on'</em>, <em>method='tls'</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/pipe_proc.py#L2914"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.pipe_proc.lpc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Linear Prediction</p>
-<p>Parameters are slightly different than NMRPipe.</p>
-<p>Parameters:</p>
-<ul>
-<li><p class="first">dic       Dictionary of NMRPipe parameters.</p>
-</li>
-<li><p class="first">data      array of spectral data.</p>
-</li>
-<li><dl class="first docutils">
-<dt>pred      Number of points to predict, &#8220;default&#8221; chooses the vector size</dt>
-<dd><p class="first last">for forward prediction, 1 for backward prediction</p>
-</dd>
-</dl>
-</li>
-<li><p class="first">x1        First point in 1D vector to use to extract LP filter.</p>
-</li>
-<li><p class="first">xn        Last point in 1D vector to use to extract LP filter.</p>
-</li>
-<li><p class="first">ord       Prediction order (Number of LP coefficients)</p>
-</li>
-<li><dl class="first docutils">
-<dt>mode      Mode to generate LP filter (&#8216;f&#8217;-forward,&#8217;b&#8217;-backward,</dt>
-<dd><p class="first last">&#8216;fb&#8217;-forward-backward)</p>
-</dd>
-</dl>
-</li>
-<li><p class="first">append    Where to append predicted data (&#8216;before&#8217; or &#8216;after&#8217;)</p>
-</li>
-<li><dl class="first docutils">
-<dt>bad_roots Type of roots which are bad and should be stabilized,</dt>
-<dd><p class="first last">either those with &#8216;incr&#8217; or &#8216;decr&#8217; signals, set to None for
-no root stabilizing. Default of &#8216;auto&#8217; set root fixing
-based on LP mode.
-(mode==&#8217;f&#8217; or &#8216;fb&#8217; -&gt; &#8216;incr&#8217;, mode==&#8217;b&#8217; -&gt; &#8216;decr&#8217;)</p>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt>mirror    &#8216;90-180&#8217;,&#8216;0-0&#8217; or None for one-point shifted mirror image,</dt>
-<dd><p class="first last">extract mirror image, and No mirror image</p>
-</dd>
-</dl>
-</li>
-</ul>
-<p>Additional Parameters (Not included in NMRPipe):</p>
-<ul>
-<li><dl class="first docutils">
-<dt>fix_mode  Method used to stabilize bad roots, &#8220;on&#8221; to move the roots</dt>
-<dd><p class="first last">onto the unit circle, &#8220;reflect&#8221; to reflect bad roots across
-the unit circle.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt>method    Method to use to calculate the LP filter, choose from</dt>
-<dd><p class="first last">&#8216;svd&#8217;,&#8217;qr&#8217;,&#8217;choleskey&#8217; or &#8216;tls&#8217;.</p>
-</dd>
-</dl>
-</li>
-</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of NMRPipe parameters.</p>
+</div></blockquote>
+<p><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>pred</strong> : int</p>
+<blockquote>
+<div><p>Number of points to predict, &#8220;default&#8221; chooses the vector size for
+forward prediction, 1 for backward prediction</p>
+</div></blockquote>
+<p><strong>x1</strong> : int or &#8216;default&#8217;</p>
+<blockquote>
+<div><p>First point in 1D vector to use to extract LP filter. &#8216;default&#8217; will use
+the first or last point depending on the mode.</p>
+</div></blockquote>
+<p><strong>xn</strong> : int or &#8216;default&#8217;</p>
+<blockquote>
+<div><p>Last point in 1D vector to use to extract LP filter. &#8216;default&#8217; will use
+the first or last point depending on the mode.</p>
+</div></blockquote>
+<p><strong>ord</strong> : int</p>
+<blockquote>
+<div><p>Prediction order, number of LP coefficients used in prediction.</p>
+</div></blockquote>
+<p><strong>mode</strong> : {&#8216;f&#8217;, &#8216;b&#8217;, &#8216;fb&#8217;}</p>
+<blockquote>
+<div><p>Mode to generate LP filter, &#8216;f&#8217; for forward,&#8217;b&#8217; for backward, &#8216;fb&#8217; for
+forward-backward.</p>
+</div></blockquote>
+<p><strong>append</strong> : {&#8216;before&#8217; or &#8216;after&#8217;}</p>
+<blockquote>
+<div><p>Location to append predicted data, &#8216;before&#8217; or &#8216;after&#8217; the existing
+data.</p>
+</div></blockquote>
+<p><strong>bad_roots {&#8216;incr&#8217;, &#8216;decr&#8217;, None, &#8216;auto&#8217;} :</strong> :</p>
+<blockquote>
+<div><p>Type of roots which are will be marked as bad and stabilized. Choices
+are &#8216;incr&#8217; for increasing roots, &#8216;decr&#8217; for decreasing roots, or None
+for not root stabilization. The default &#8216;auto&#8217; will set this parameter
+based upon the LP <cite>mode</cite> parameter: &#8216;f&#8217; and &#8216;fb&#8217; will results in an
+&#8216;incr&#8217; parameter. &#8216;b&#8217; in &#8216;decr&#8217;.</p>
+</div></blockquote>
+<p><strong>mirror</strong> : {&#8216;90-180&#8217;, &#8216;0-0&#8217;, None}</p>
+<blockquote>
+<div><p>Mirror mode, option are &#8216;90-180&#8217; for a one point shifted mirror image,
+&#8216;0-0&#8217; for an exact mirror image, and None for no mirror imaging of the
+data.</p>
+</div></blockquote>
+<p><strong>fix_mode</strong> : {&#8216;on&#8217;, &#8216;reflect&#8217;}</p>
+<blockquote>
+<div><p>Method used to stabilize bad roots, &#8216;on&#8217; moves bad roots onto the unit 
+circle, &#8216;reflect&#8217; reflect bad roots across the unit circle.</p>
+</div></blockquote>
+<p><strong>method</strong> : {&#8216;svd&#8217;, &#8216;qr&#8217;, &#8216;choleskey&#8217;, &#8216;tls&#8217;}</p>
+<blockquote>
+<div><p>Method to use to calculate the LP filter.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of updated NMRPipe parameters.</p>
+</div></blockquote>
+<p><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Array of NMR data with linear prediction applied.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The results from this function do not match NMRPipe&#8217;s LP function.  Also
+some additional parameter and different parameter in this function.</p>
 </dd></dl>
 
 </div>

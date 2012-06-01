@@ -65,8 +65,42 @@
 <h1>nmrglue.util.misc.isdatasimilar<a class="headerlink" href="#nmrglue-util-misc-isdatasimilar" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.util.misc.isdatasimilar">
-<tt class="descclassname">nmrglue.util.misc.</tt><tt class="descname">isdatasimilar</tt><big>(</big><em>data1</em>, <em>data2</em>, <em>verb=False</em>, <em>atol=0.1001</em>, <em>rtol=0.1001</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/util/misc.py#L25"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.util.misc.isdatasimilar" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check that data is equal within tolerance</p>
+<tt class="descclassname">nmrglue.util.misc.</tt><tt class="descname">isdatasimilar</tt><big>(</big><em>data1</em>, <em>data2</em>, <em>verb=False</em>, <em>atol=0.1001</em>, <em>rtol=0.1001</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/util/misc.py#L46"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.util.misc.isdatasimilar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check that two sets of NMR data are equal within a tolerance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data1</strong> : ndarray</p>
+<blockquote>
+<div><p>First array of NMR data</p>
+</div></blockquote>
+<p><strong>data2</strong> : ndarray</p>
+<blockquote>
+<div><p>Second array of NMR data</p>
+</div></blockquote>
+<p><strong>verb</strong> : bool, optional</p>
+<blockquote>
+<div><p>Set True for verbose reporting.</p>
+</div></blockquote>
+<p><strong>atol</strong> : float, optional</p>
+<blockquote>
+<div><p>The absolute tolerent parameter to pass to numpy.allclose.</p>
+</div></blockquote>
+<p><strong>rtol</strong> : float, optional</p>
+<blockquote>
+<div><p>The relative tolenance parameter to pass to numpy.allclose.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>r1</strong> : bool</p>
+<blockquote class="last">
+<div><p>True is data1 and data2 are similar, False if they differ.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

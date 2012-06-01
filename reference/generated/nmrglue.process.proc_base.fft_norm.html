@@ -65,9 +65,41 @@
 <h1>nmrglue.process.proc_base.fft_norm<a class="headerlink" href="#nmrglue-process-proc-base-fft-norm" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_base.fft_norm">
-<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">fft_norm</tt><big>(</big><em>data</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L393"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.fft_norm" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">fft_norm</tt><big>(</big><em>data</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L565"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.fft_norm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fourier transform, total power preserved, NMR ordering of results</p>
-<p>This is similar to the transform performed by RNMRTK&#8217;s FFT function</p>
+<p>This function is  similar to the transform performed by The Rowland NMR
+Toolkit&#8217;s FFT function.</p>
+<p>See <a class="reference internal" href="nmrglue.process.proc_base.fft.html#nmrglue.process.proc_base.fft" title="nmrglue.process.proc_base.fft"><tt class="xref py py-func docutils literal"><span class="pre">fft()</span></tt></a> for documentation of the transformation applied by this
+function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Fourier transform of NMR data in &#8216;NMR order&#8217;.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.process.proc_base.ifft_norm.html#nmrglue.process.proc_base.ifft_norm" title="nmrglue.process.proc_base.ifft_norm"><tt class="xref py py-obj docutils literal"><span class="pre">ifft_norm</span></tt></a></dt>
+<dd>Inversion Fourier transform.</dd>
+<dt><a class="reference internal" href="nmrglue.process.proc_base.fft.html#nmrglue.process.proc_base.fft" title="nmrglue.process.proc_base.fft"><tt class="xref py py-obj docutils literal"><span class="pre">fft</span></tt></a></dt>
+<dd>None-norm (power) conserving Fourier transform.</dd>
+<dt><a class="reference internal" href="nmrglue.process.proc_base.fft_positive.html#nmrglue.process.proc_base.fft_positive" title="nmrglue.process.proc_base.fft_positive"><tt class="xref py py-obj docutils literal"><span class="pre">fft_positive</span></tt></a></dt>
+<dd>Forier transform with a positive exponential.</dd>
+</dl>
+</div>
 </dd></dl>
 
 </div>

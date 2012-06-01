@@ -65,7 +65,7 @@
 <h1>nmrglue.process.proc_lp.make_mirror<a class="headerlink" href="#nmrglue-process-proc-lp-make-mirror" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_lp.make_mirror">
-<tt class="descclassname">nmrglue.process.proc_lp.</tt><tt class="descname">make_mirror</tt><big>(</big><em>x</em>, <em>mode</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_lp.py#L645"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_lp.make_mirror" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.process.proc_lp.</tt><tt class="descname">make_mirror</tt><big>(</big><em>x</em>, <em>mode</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_lp.py#L722"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_lp.make_mirror" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make a mirror image trace.</p>
 <p>Reflects trace over zero as described in:
 G. Zhu and A. Bax, Journal of Magnetic Resonance, 1990, 90, 405</p>
@@ -75,9 +75,22 @@ G. Zhu and A. Bax, Journal of Magnetic Resonance, 1990, 90, 405</p>
 <dt>When mode is &#8220;180&#8221; (half point delay) form an array with length 2N:</dt>
 <dd>x_n-1 .. x_1 x_0 x_0 x_1 ... x_n-1</dd>
 </dl>
-<p>Parameters:</p>
-<p>x       1D array to use to form mirrored trace.
-mode    &#8220;0&#8221; or &#8220;180&#8221;, see above.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>x</strong> : ndarray</p>
+<blockquote>
+<div><p>1D array to form mirrored trace from.</p>
+</div></blockquote>
+<p><strong>mode</strong> : {&#8216;180&#8217;, &#8216;0&#8217;}</p>
+<blockquote class="last">
+<div><p>Mirror mode, see above.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

@@ -65,18 +65,40 @@
 <h1>nmrglue.fileio.fileiobase.unit_conversion<a class="headerlink" href="#nmrglue-fileio-fileiobase-unit-conversion" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="nmrglue.fileio.fileiobase.unit_conversion">
-<em class="property">class </em><tt class="descclassname">nmrglue.fileio.fileiobase.</tt><tt class="descname">unit_conversion</tt><big>(</big><em>size</em>, <em>cplx</em>, <em>sw</em>, <em>obs</em>, <em>car</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/fileiobase.py#L50"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.fileiobase.unit_conversion" title="Permalink to this definition">¶</a></dt>
-<dd><p>object provides methods to convert between common nmr units</p>
+<em class="property">class </em><tt class="descclassname">nmrglue.fileio.fileiobase.</tt><tt class="descname">unit_conversion</tt><big>(</big><em>size</em>, <em>cplx</em>, <em>sw</em>, <em>obs</em>, <em>car</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/fileiobase.py#L47"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.fileiobase.unit_conversion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides methods to convert between common NMR units</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>size</strong> : int</p>
+<blockquote>
+<div><p>Number of points in dimension (R|I).</p>
+</div></blockquote>
+<p><strong>cplex</strong> : bool</p>
+<blockquote>
+<div><p>True if dimension is complex, False is real.</p>
+</div></blockquote>
+<p><strong>sw</strong> : float</p>
+<blockquote>
+<div><p>Spectral width in Hz.</p>
+</div></blockquote>
+<p><strong>obs</strong> : float</p>
+<blockquote>
+<div><p>Observation frequency in MHz.</p>
+</div></blockquote>
+<p><strong>car</strong> : float</p>
+<blockquote class="last">
+<div><p>Carrier frequency in Hz.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="nmrglue.fileio.fileiobase.unit_conversion.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>size</em>, <em>cplx</em>, <em>sw</em>, <em>obs</em>, <em>car</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/fileiobase.py#L55"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.fileiobase.unit_conversion.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>size</em>, <em>cplx</em>, <em>sw</em>, <em>obs</em>, <em>car</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/fileiobase.py#L65"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.fileiobase.unit_conversion.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>create and set up a unit_conversion object</p>
-<p>Parameters:
-* size    Data size in points (R|I)
-* cplx    Complex flag (True or False)
-* sw      Spectral Width in Hz
-* obs     Observation Frequency in MHz
-* car     Carrier frequency in Hz</p>
 </dd></dl>
 
 <p class="rubric">Methods</p>
@@ -99,10 +121,10 @@
 <td>Return tuple of left and right edges in Hz</td>
 </tr>
 <tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">hz_scale</span></tt>()</td>
-<td>Return array of hz values</td>
+<td>Return array of Hz values</td>
 </tr>
 <tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">i</span></tt>(val[,&nbsp;unit])</td>
-<td>convert string or value/unit pair to integer</td>
+<td>Convert string or value/unit pair to integer</td>
 </tr>
 <tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">ms</span></tt>(val)</td>
 <td>Convert to milliseconds (ms)</td>
@@ -123,7 +145,7 @@
 <td>Return array of percent values</td>
 </tr>
 <tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">ppm</span></tt>(val)</td>
-<td>Convert to ppms</td>
+<td>Convert to ppm</td>
 </tr>
 <tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">ppm_limits</span></tt>()</td>
 <td>Return tuple of left and right edges in ppm</td>

@@ -65,8 +65,43 @@
 <h1>nmrglue.fileio.pipe.write<a class="headerlink" href="#nmrglue-fileio-pipe-write" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.write">
-<tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">write</tt><big>(</big><em>filename</em>, <em>dic</em>, <em>data</em>, <em>overwrite=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/pipe.py#L636"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.pipe.write" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write a NMRPipe file</p>
+<tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">write</tt><big>(</big><em>filename</em>, <em>dic</em>, <em>data</em>, <em>overwrite=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/pipe.py#L701"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.pipe.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a NMRPipe file to disk.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>Filename of NMRPipe to write to.  See Notes.</p>
+</div></blockquote>
+<p><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of NMRPipe parameters.</p>
+</div></blockquote>
+<p><strong>data</strong> : array_like</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>overwrite</strong> : bool, optional.</p>
+<blockquote class="last">
+<div><p>Set True to overwrite files, False will raise a Warning if file 
+exists.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.fileio.pipe.write_lowmem.html#nmrglue.fileio.pipe.write_lowmem" title="nmrglue.fileio.pipe.write_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">write_lowmem</span></tt></a></dt>
+<dd>Write NMRPipe files using minimal amounts of memory.</dd>
+<dt><a class="reference internal" href="nmrglue.fileio.pipe.read.html#nmrglue.fileio.pipe.read" title="nmrglue.fileio.pipe.read"><tt class="xref py py-obj docutils literal"><span class="pre">read</span></tt></a></dt>
+<dd>Read NMRPipe files.</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
 <p>For 3D data if filename has no &#8216;%&#8217; formatter then the data is written as a 
 3D NMRPipe data stream.  When the &#8216;%&#8217; formatter is provided the data is 
 written out as a standard NMRPipe 3D multi-file 3D.</p>

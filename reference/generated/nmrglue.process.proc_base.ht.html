@@ -65,14 +65,31 @@
 <h1>nmrglue.process.proc_base.ht<a class="headerlink" href="#nmrglue-process-proc-base-ht" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_base.ht">
-<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">ht</tt><big>(</big><em>data</em>, <em>N=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L530"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.ht" title="Permalink to this definition">¶</a></dt>
-<dd><p>Hilbert Transform</p>
-<p>Reconstruct Imaginary Data Via Hilbert Transform</p>
-<p>Parameter:</p>
-<ul class="simple">
-<li>data  Array of spectral data.</li>
-<li>N     Number of Fourier components.</li>
-</ul>
+<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">ht</tt><big>(</big><em>data</em>, <em>N=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L791"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.ht" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hilbert transform.</p>
+<p>Reconstruct imaginary data via hilbert transform.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarrat</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>N</strong> : int or None</p>
+<blockquote>
+<div><p>Number of Fourier components.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>NMR data which has been Hilvert transformed.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

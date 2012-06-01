@@ -62,17 +62,19 @@
             
   <div class="section" id="module-nmrglue.process.pipe_proc">
 <span id="nmrglue-pipe-proc"></span><span id="pipe-proc"></span><h1>nmrglue.pipe_proc<a class="headerlink" href="#module-nmrglue.process.pipe_proc" title="Permalink to this headline">¶</a></h1>
-<p>NMRPipe like processing functions for use with pipe dic,data pairs.</p>
-<p>These functions try to mimic NMRPipe processing functions but many differences
-exist between to two implementations.  In particular when using this module:</p>
+<p>NMRPipe like processing functions for use with the 
+<a class="reference internal" href="pipe.html#module-nmrglue.fileio.pipe" title="nmrglue.fileio.pipe"><tt class="xref py py-mod docutils literal"><span class="pre">nmrglue.fileio.pipe</span></tt></a> module.</p>
+<p>These functions attempt to mimic NMRPipe&#8217;s processing functions but small 
+differences exist between to two implementations.  In particular when using 
+this module:</p>
 <blockquote>
 <div><ul class="simple">
-<li>hdr=True over-rides all values in the calling function.</li>
-<li>A di flag is not used, rather the di function should be used to delete
-the imaginary portion of a spectra.</li>
-<li>x1,xn and other limits must be expressed in points.  spec2pnt or other unit 
-conversion functions should be used before calling the processing function 
-to calculate these values.</li>
+<li>hdr=True overrides all values in the calling function.</li>
+<li>A di flag is not used, rather the <a class="reference internal" href="generated/nmrglue.process.pipe_proc.di.html#nmrglue.process.pipe_proc.di" title="nmrglue.process.pipe_proc.di"><tt class="xref py py-func docutils literal"><span class="pre">di()</span></tt></a> function should be used 
+to delete the imaginary portion of a spectra.</li>
+<li>x1, xn and other limits must be expressed in points. A unit conversion
+object function should be used before calling the processing function to 
+calculate these values.</li>
 <li>No functions implement the dmx or nodmx flags.</li>
 </ul>
 </div></blockquote>
@@ -102,10 +104,10 @@ NotImplemented exception:</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.apod.html#nmrglue.process.pipe_proc.apod" title="nmrglue.process.pipe_proc.apod"><tt class="xref py py-obj docutils literal"><span class="pre">apod</span></tt></a>(dic,&nbsp;data[,&nbsp;qName,&nbsp;q1,&nbsp;q2,&nbsp;q3,&nbsp;c,&nbsp;...])</td>
-<td>Generic Apodization</td>
+<td>Generic apodization.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.em.html#nmrglue.process.pipe_proc.em" title="nmrglue.process.pipe_proc.em"><tt class="xref py py-obj docutils literal"><span class="pre">em</span></tt></a>(dic,&nbsp;data[,&nbsp;lb,&nbsp;c,&nbsp;start,&nbsp;size,&nbsp;inv,&nbsp;...])</td>
-<td>Exponential apodization</td>
+<td>Exponential apodization.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.gm.html#nmrglue.process.pipe_proc.gm" title="nmrglue.process.pipe_proc.gm"><tt class="xref py py-obj docutils literal"><span class="pre">gm</span></tt></a>(dic,&nbsp;data[,&nbsp;g1,&nbsp;g2,&nbsp;g3,&nbsp;c,&nbsp;start,&nbsp;size,&nbsp;...])</td>
 <td>Lorentz-to-Gauss apodization</td>
@@ -117,16 +119,16 @@ NotImplemented exception:</p>
 <td>Exponentially Damped J-Modulation Apodization</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.sp.html#nmrglue.process.pipe_proc.sp" title="nmrglue.process.pipe_proc.sp"><tt class="xref py py-obj docutils literal"><span class="pre">sp</span></tt></a>(dic,&nbsp;data[,&nbsp;off,&nbsp;end,&nbsp;pow,&nbsp;c,&nbsp;start,&nbsp;...])</td>
-<td>Sine Bell Apodization</td>
+<td>Sine bell apodization.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.sine.html#nmrglue.process.pipe_proc.sine" title="nmrglue.process.pipe_proc.sine"><tt class="xref py py-obj docutils literal"><span class="pre">sine</span></tt></a>(dic,&nbsp;data[,&nbsp;off,&nbsp;end,&nbsp;pow,&nbsp;c,&nbsp;start,&nbsp;...])</td>
-<td>Sine Bell Apodization</td>
+<td>Sine bell apodization.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.tm.html#nmrglue.process.pipe_proc.tm" title="nmrglue.process.pipe_proc.tm"><tt class="xref py py-obj docutils literal"><span class="pre">tm</span></tt></a>(dic,&nbsp;data[,&nbsp;t1,&nbsp;t2,&nbsp;c,&nbsp;start,&nbsp;size,&nbsp;inv,&nbsp;...])</td>
-<td>Trapezoid Apodization</td>
+<td>Trapezoid apodization.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.tri.html#nmrglue.process.pipe_proc.tri" title="nmrglue.process.pipe_proc.tri"><tt class="xref py py-obj docutils literal"><span class="pre">tri</span></tt></a>(dic,&nbsp;data[,&nbsp;loc,&nbsp;lHi,&nbsp;rHi,&nbsp;c,&nbsp;start,&nbsp;...])</td>
-<td>Triangular Apodization</td>
+<td>Triangular apodization</td>
 </tr>
 </tbody>
 </table>
@@ -140,16 +142,16 @@ NotImplemented exception:</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.rs.html#nmrglue.process.pipe_proc.rs" title="nmrglue.process.pipe_proc.rs"><tt class="xref py py-obj docutils literal"><span class="pre">rs</span></tt></a>(dic,&nbsp;data[,&nbsp;rs,&nbsp;sw])</td>
-<td>Right Shift and Zero Pad</td>
+<td>Right shift and zero pad.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.ls.html#nmrglue.process.pipe_proc.ls" title="nmrglue.process.pipe_proc.ls"><tt class="xref py py-obj docutils literal"><span class="pre">ls</span></tt></a>(dic,&nbsp;data[,&nbsp;ls,&nbsp;sw])</td>
 <td>Left Shift and Zero Pad</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.cs.html#nmrglue.process.pipe_proc.cs" title="nmrglue.process.pipe_proc.cs"><tt class="xref py py-obj docutils literal"><span class="pre">cs</span></tt></a>(dic,&nbsp;data,&nbsp;dir[,&nbsp;pts,&nbsp;neg,&nbsp;sw])</td>
-<td>Circular Shift</td>
+<td>Circular shift</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.fsh.html#nmrglue.process.pipe_proc.fsh" title="nmrglue.process.pipe_proc.fsh"><tt class="xref py py-obj docutils literal"><span class="pre">fsh</span></tt></a>(dic,&nbsp;data,&nbsp;dir,&nbsp;pts[,&nbsp;sw])</td>
-<td>Frequency Shift</td>
+<td>Frequency shift.</td>
 </tr>
 </tbody>
 </table>
@@ -163,16 +165,16 @@ NotImplemented exception:</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.ft.html#nmrglue.process.pipe_proc.ft" title="nmrglue.process.pipe_proc.ft"><tt class="xref py py-obj docutils literal"><span class="pre">ft</span></tt></a>(dic,&nbsp;data[,&nbsp;auto,&nbsp;real,&nbsp;inv,&nbsp;alt,&nbsp;neg,&nbsp;...])</td>
-<td>Complex Fourier Transform</td>
+<td>Complex Fourier transform.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.rft.html#nmrglue.process.pipe_proc.rft" title="nmrglue.process.pipe_proc.rft"><tt class="xref py py-obj docutils literal"><span class="pre">rft</span></tt></a>(dic,&nbsp;data[,&nbsp;inv])</td>
-<td>Real Fourier Transform</td>
+<td>Real Fourier transform.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.ha.html#nmrglue.process.pipe_proc.ha" title="nmrglue.process.pipe_proc.ha"><tt class="xref py py-obj docutils literal"><span class="pre">ha</span></tt></a>(dic,&nbsp;data[,&nbsp;inv])</td>
-<td>Hadamard Transform</td>
+<td>Hadamard transform.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.ht.html#nmrglue.process.pipe_proc.ht" title="nmrglue.process.pipe_proc.ht"><tt class="xref py py-obj docutils literal"><span class="pre">ht</span></tt></a>(dic,&nbsp;data[,&nbsp;mode,&nbsp;zf,&nbsp;td,&nbsp;auto])</td>
-<td>Hilbert Transform</td>
+<td>Hilbert transform.</td>
 </tr>
 </tbody>
 </table>
@@ -186,16 +188,16 @@ NotImplemented exception:</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.di.html#nmrglue.process.pipe_proc.di" title="nmrglue.process.pipe_proc.di"><tt class="xref py py-obj docutils literal"><span class="pre">di</span></tt></a>(dic,&nbsp;data)</td>
-<td>Delete Imaginaries</td>
+<td>Delete imaginaries</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.ps.html#nmrglue.process.pipe_proc.ps" title="nmrglue.process.pipe_proc.ps"><tt class="xref py py-obj docutils literal"><span class="pre">ps</span></tt></a>(dic,&nbsp;data[,&nbsp;p0,&nbsp;p1,&nbsp;inv,&nbsp;hdr,&nbsp;noup,&nbsp;ht,&nbsp;...])</td>
-<td>Phase Shift</td>
+<td>Phase shift</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.tp.html#nmrglue.process.pipe_proc.tp" title="nmrglue.process.pipe_proc.tp"><tt class="xref py py-obj docutils literal"><span class="pre">tp</span></tt></a>(dic,&nbsp;data[,&nbsp;hyper,&nbsp;nohyper,&nbsp;auto,&nbsp;nohdr])</td>
-<td>Transpose Data (2D)</td>
+<td>Transpose data (2D).</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.zf.html#nmrglue.process.pipe_proc.zf" title="nmrglue.process.pipe_proc.zf"><tt class="xref py py-obj docutils literal"><span class="pre">zf</span></tt></a>(dic,&nbsp;data[,&nbsp;zf,&nbsp;pad,&nbsp;size,&nbsp;mid,&nbsp;inter,&nbsp;...])</td>
-<td>Zero Fill</td>
+<td>Zero fill</td>
 </tr>
 </tbody>
 </table>
@@ -209,16 +211,16 @@ NotImplemented exception:</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.base.html#nmrglue.process.pipe_proc.base" title="nmrglue.process.pipe_proc.base"><tt class="xref py py-obj docutils literal"><span class="pre">base</span></tt></a>(dic,&nbsp;data[,&nbsp;nl,&nbsp;nw,&nbsp;first,&nbsp;last])</td>
-<td>Linear Baseline Correction</td>
+<td>Linear baseline correction.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.cbf.html#nmrglue.process.pipe_proc.cbf" title="nmrglue.process.pipe_proc.cbf"><tt class="xref py py-obj docutils literal"><span class="pre">cbf</span></tt></a>(dic,&nbsp;data[,&nbsp;last,&nbsp;reg,&nbsp;slice])</td>
-<td>Constant Baseline correction</td>
+<td>Constant baseline correction.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.med.html#nmrglue.process.pipe_proc.med" title="nmrglue.process.pipe_proc.med"><tt class="xref py py-obj docutils literal"><span class="pre">med</span></tt></a>(dic,&nbsp;data[,&nbsp;nw,&nbsp;sf,&nbsp;sigma])</td>
-<td>Median Baseline Correction</td>
+<td>Median baseline correction</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.sol.html#nmrglue.process.pipe_proc.sol" title="nmrglue.process.pipe_proc.sol"><tt class="xref py py-obj docutils literal"><span class="pre">sol</span></tt></a>(dic,&nbsp;data[,&nbsp;mode,&nbsp;fl,&nbsp;fs,&nbsp;head])</td>
-<td>Solvent Filter</td>
+<td>Solvent filter</td>
 </tr>
 </tbody>
 </table>
@@ -232,37 +234,37 @@ NotImplemented exception:</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.add.html#nmrglue.process.pipe_proc.add" title="nmrglue.process.pipe_proc.add"><tt class="xref py py-obj docutils literal"><span class="pre">add</span></tt></a>(dic,&nbsp;data[,&nbsp;r,&nbsp;i,&nbsp;c,&nbsp;ri,&nbsp;x1,&nbsp;xn])</td>
-<td>Add a Constant</td>
+<td>Add a constant</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.dx.html#nmrglue.process.pipe_proc.dx" title="nmrglue.process.pipe_proc.dx"><tt class="xref py py-obj docutils literal"><span class="pre">dx</span></tt></a>(dic,&nbsp;data)</td>
 <td>Derivative by central difference.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.ext.html#nmrglue.process.pipe_proc.ext" title="nmrglue.process.pipe_proc.ext"><tt class="xref py py-obj docutils literal"><span class="pre">ext</span></tt></a>(dic,&nbsp;data[,&nbsp;x1,&nbsp;xn,&nbsp;y1,&nbsp;yn,&nbsp;round,&nbsp;...])</td>
-<td>Extract Region</td>
+<td>Extract a region.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.integ.html#nmrglue.process.pipe_proc.integ" title="nmrglue.process.pipe_proc.integ"><tt class="xref py py-obj docutils literal"><span class="pre">integ</span></tt></a>(dic,&nbsp;data)</td>
-<td>Integral by Simple Sum</td>
+<td>Integral by simple sum</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.mc.html#nmrglue.process.pipe_proc.mc" title="nmrglue.process.pipe_proc.mc"><tt class="xref py py-obj docutils literal"><span class="pre">mc</span></tt></a>(dic,&nbsp;data[,&nbsp;mode])</td>
-<td>Modules/Magnitude Calculation</td>
+<td>Modules or magnitude calculation.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.mir.html#nmrglue.process.pipe_proc.mir" title="nmrglue.process.pipe_proc.mir"><tt class="xref py py-obj docutils literal"><span class="pre">mir</span></tt></a>(dic,&nbsp;data[,&nbsp;mode,&nbsp;invl,&nbsp;invr,&nbsp;sw])</td>
-<td>Append Mirror Image</td>
+<td>Append mirror image.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.mult.html#nmrglue.process.pipe_proc.mult" title="nmrglue.process.pipe_proc.mult"><tt class="xref py py-obj docutils literal"><span class="pre">mult</span></tt></a>(dic,&nbsp;data[,&nbsp;r,&nbsp;i,&nbsp;c,&nbsp;inv,&nbsp;hdr,&nbsp;x1,&nbsp;xn])</td>
-<td>Multiple by a Constant</td>
+<td>Multiple by a constant.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.rev.html#nmrglue.process.pipe_proc.rev" title="nmrglue.process.pipe_proc.rev"><tt class="xref py py-obj docutils literal"><span class="pre">rev</span></tt></a>(dic,&nbsp;data[,&nbsp;sw])</td>
-<td>Reverse Data</td>
+<td>Reverse data.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.set.html#nmrglue.process.pipe_proc.set" title="nmrglue.process.pipe_proc.set"><tt class="xref py py-obj docutils literal"><span class="pre">set</span></tt></a>(dic,&nbsp;data[,&nbsp;r,&nbsp;i,&nbsp;c,&nbsp;x1,&nbsp;xn])</td>
-<td>Set to a Constant</td>
+<td>Set data to a constant.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.shuf.html#nmrglue.process.pipe_proc.shuf" title="nmrglue.process.pipe_proc.shuf"><tt class="xref py py-obj docutils literal"><span class="pre">shuf</span></tt></a>(dic,&nbsp;data[,&nbsp;mode])</td>
 <td>Shuffle Utilities</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.sign.html#nmrglue.process.pipe_proc.sign" title="nmrglue.process.pipe_proc.sign"><tt class="xref py py-obj docutils literal"><span class="pre">sign</span></tt></a>(dic,&nbsp;data[,&nbsp;ri,&nbsp;r,&nbsp;i,&nbsp;left,&nbsp;right,&nbsp;...])</td>
-<td>Sign Manipulation Utilities</td>
+<td>Sign manipulation utilities</td>
 </tr>
 </tbody>
 </table>
@@ -276,34 +278,34 @@ NotImplemented exception:</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.coadd.html#nmrglue.process.pipe_proc.coadd" title="nmrglue.process.pipe_proc.coadd"><tt class="xref py py-obj docutils literal"><span class="pre">coadd</span></tt></a>(dic,&nbsp;data[,&nbsp;cList,&nbsp;axis,&nbsp;time])</td>
-<td>Co-Addition of Data</td>
+<td>Co-addition of data</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.coad.html#nmrglue.process.pipe_proc.coad" title="nmrglue.process.pipe_proc.coad"><tt class="xref py py-obj docutils literal"><span class="pre">coad</span></tt></a>(dic,&nbsp;data[,&nbsp;cList,&nbsp;axis,&nbsp;time])</td>
-<td>Co-Addition of Data</td>
+<td>Co-addition of data</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.dev.html#nmrglue.process.pipe_proc.dev" title="nmrglue.process.pipe_proc.dev"><tt class="xref py py-obj docutils literal"><span class="pre">dev</span></tt></a>(dic,&nbsp;data)</td>
-<td>Development Function (Null Function)</td>
+<td>Development function (does nothing)</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.img.html#nmrglue.process.pipe_proc.img" title="nmrglue.process.pipe_proc.img"><tt class="xref py py-obj docutils literal"><span class="pre">img</span></tt></a>(dic,&nbsp;data,&nbsp;filter[,&nbsp;dx,&nbsp;dy,&nbsp;kern,&nbsp;conv,&nbsp;...])</td>
-<td>Image Processing Utilities</td>
+<td>Image processing utilities</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.null.html#nmrglue.process.pipe_proc.null" title="nmrglue.process.pipe_proc.null"><tt class="xref py py-obj docutils literal"><span class="pre">null</span></tt></a>(dic,&nbsp;data)</td>
-<td>Null Function (no change)</td>
+<td>Null function</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.qart.html#nmrglue.process.pipe_proc.qart" title="nmrglue.process.pipe_proc.qart"><tt class="xref py py-obj docutils literal"><span class="pre">qart</span></tt></a>(dic,&nbsp;data[,&nbsp;a,&nbsp;f,&nbsp;auto])</td>
 <td>Scale Quad Artifacts</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.qmix.html#nmrglue.process.pipe_proc.qmix" title="nmrglue.process.pipe_proc.qmix"><tt class="xref py py-obj docutils literal"><span class="pre">qmix</span></tt></a>(dic,&nbsp;data[,&nbsp;ic,&nbsp;oc,&nbsp;cList,&nbsp;time])</td>
-<td>Complex Mixing of Input to Outputs</td>
+<td>Complex mixing of input to outputs</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.save.html#nmrglue.process.pipe_proc.save" title="nmrglue.process.pipe_proc.save"><tt class="xref py py-obj docutils literal"><span class="pre">save</span></tt></a>(dic,&nbsp;data,&nbsp;name[,&nbsp;overwrite])</td>
-<td>Save Current Vector</td>
+<td>Save the current vector.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.smo.html#nmrglue.process.pipe_proc.smo" title="nmrglue.process.pipe_proc.smo"><tt class="xref py py-obj docutils literal"><span class="pre">smo</span></tt></a>(dic,&nbsp;data[,&nbsp;n,&nbsp;center])</td>
-<td>Smooth Data</td>
+<td>Smooth data.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.process.pipe_proc.zd.html#nmrglue.process.pipe_proc.zd" title="nmrglue.process.pipe_proc.zd"><tt class="xref py py-obj docutils literal"><span class="pre">zd</span></tt></a>(dic,&nbsp;data[,&nbsp;wide,&nbsp;x0,&nbsp;slope,&nbsp;func,&nbsp;g])</td>
-<td>Zero Diagonal Band</td>
+<td>Zero diagonal band.</td>
 </tr>
 </tbody>
 </table>

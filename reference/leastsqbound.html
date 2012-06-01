@@ -28,7 +28,7 @@
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="nmrglue 0.3-dev documentation" href="../index.html" />
     <link rel="up" title="Reference Guide" href="index.html" />
-    <link rel="next" title="nmrglue.analysis.leastsqbound.leastsqbound" href="generated/nmrglue.analysis.leastsqbound.leastsqbound.html" />
+    <link rel="next" title="nmrglue.lineshapes1d" href="lineshapes1d.html" />
     <link rel="prev" title="nmrglue.analysis.helpers.scale_columns" href="generated/nmrglue.analysis.helpers.scale_columns.html" /> 
   </head>
   <body>
@@ -45,7 +45,7 @@
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="generated/nmrglue.analysis.leastsqbound.leastsqbound.html" title="nmrglue.analysis.leastsqbound.leastsqbound"
+          <a href="lineshapes1d.html" title="nmrglue.lineshapes1d"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="generated/nmrglue.analysis.helpers.scale_columns.html" title="nmrglue.analysis.helpers.scale_columns"
@@ -62,39 +62,181 @@
             
   <div class="section" id="module-nmrglue.analysis.leastsqbound">
 <span id="nmrglue-leastsqbound"></span><h1>nmrglue.leastsqbound<a class="headerlink" href="#module-nmrglue.analysis.leastsqbound" title="Permalink to this headline">¶</a></h1>
-<p>Constrained multivariate Levenberg-Marquardt optimization</p>
+<p>Constrained multivariate least-squares optimization</p>
 <p>This module is imported as nmrglue.leastsqbound and can be called as such.</p>
 <div class="section" id="developer-functions">
 <h2>Developer Functions<a class="headerlink" href="#developer-functions" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
+<dl class="function">
+<dt id="nmrglue.analysis.leastsqbound.leastsqbound">
+<tt class="descclassname">nmrglue.analysis.leastsqbound.</tt><tt class="descname">leastsqbound</tt><big>(</big><em>func</em>, <em>x0</em>, <em>args=()</em>, <em>bounds=None</em>, <em>Dfun=None</em>, <em>full_output=0</em>, <em>col_deriv=0</em>, <em>ftol=1.49012e-08</em>, <em>xtol=1.49012e-08</em>, <em>gtol=0.0</em>, <em>maxfev=0</em>, <em>epsfcn=0.0</em>, <em>factor=100</em>, <em>diag=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/leastsqbound.py#L88"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.leastsqbound.leastsqbound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bounded minimization of the sum of squares of a set of equations.</p>
+<div class="highlight-python"><pre>x = arg min(sum(func(y)**2,axis=0))
+         y</pre>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.leastsqbound.leastsqbound.html#nmrglue.analysis.leastsqbound.leastsqbound" title="nmrglue.analysis.leastsqbound.leastsqbound"><tt class="xref py py-obj docutils literal"><span class="pre">leastsqbound</span></tt></a>(func,&nbsp;x0,&nbsp;bounds[,&nbsp;args])</td>
-<td>Constrained multivariant Levenberg-Marquard optimization</td>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>func</strong> : callable</p>
+<blockquote>
+<div><p>should take at least one (possibly length N vector) argument and
+returns M floating point numbers.</p>
+</div></blockquote>
+<p><strong>x0</strong> : ndarray</p>
+<blockquote>
+<div><p>The starting estimate for the minimization.</p>
+</div></blockquote>
+<p><strong>args</strong> : tuple</p>
+<blockquote>
+<div><p>Any extra arguments to func are placed in this tuple.</p>
+</div></blockquote>
+<p><strong>bounds</strong> : list</p>
+<blockquote>
+<div><p><tt class="docutils literal"><span class="pre">(min,</span> <span class="pre">max)</span></tt> pairs for each element in <tt class="docutils literal"><span class="pre">x</span></tt>, defining
+the bounds on that parameter. Use None for one of <tt class="docutils literal"><span class="pre">min</span></tt> or
+<tt class="docutils literal"><span class="pre">max</span></tt> when there is no bound in that direction.</p>
+</div></blockquote>
+<p><strong>Dfun</strong> : callable</p>
+<blockquote>
+<div><p>A function or method to compute the Jacobian of func with derivatives
+across the rows. If this is None, the Jacobian will be estimated.</p>
+</div></blockquote>
+<p><strong>full_output</strong> : bool</p>
+<blockquote>
+<div><p>non-zero to return all optional outputs.</p>
+</div></blockquote>
+<p><strong>col_deriv</strong> : bool</p>
+<blockquote>
+<div><p>non-zero to specify that the Jacobian function computes derivatives
+down the columns (faster, because there is no transpose operation).</p>
+</div></blockquote>
+<p><strong>ftol</strong> : float</p>
+<blockquote>
+<div><p>Relative error desired in the sum of squares.</p>
+</div></blockquote>
+<p><strong>xtol</strong> : float</p>
+<blockquote>
+<div><p>Relative error desired in the approximate solution.</p>
+</div></blockquote>
+<p><strong>gtol</strong> : float</p>
+<blockquote>
+<div><p>Orthogonality desired between the function vector and the columns of
+the Jacobian.</p>
+</div></blockquote>
+<p><strong>maxfev</strong> : int</p>
+<blockquote>
+<div><p>The maximum number of calls to the function. If zero, then 100*(N+1) is
+the maximum where N is the number of elements in x0.</p>
+</div></blockquote>
+<p><strong>epsfcn</strong> : float</p>
+<blockquote>
+<div><p>A suitable step length for the forward-difference approximation of the
+Jacobian (for Dfun=None). If epsfcn is less than the machine precision,
+it is assumed that the relative errors in the functions are of the
+order of the machine precision.</p>
+</div></blockquote>
+<p><strong>factor</strong> : float</p>
+<blockquote>
+<div><p>A parameter determining the initial step bound
+(<tt class="docutils literal"><span class="pre">factor</span> <span class="pre">*</span> <span class="pre">||</span> <span class="pre">diag</span> <span class="pre">*</span> <span class="pre">x||</span></tt>). Should be in interval <tt class="docutils literal"><span class="pre">(0.1,</span> <span class="pre">100)</span></tt>.</p>
+</div></blockquote>
+<p><strong>diag</strong> : sequence</p>
+<blockquote>
+<div><p>N positive entries that serve as a scale factors for the variables.</p>
+</div></blockquote>
+</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.leastsqbound.internal2external.html#nmrglue.analysis.leastsqbound.internal2external" title="nmrglue.analysis.leastsqbound.internal2external"><tt class="xref py py-obj docutils literal"><span class="pre">internal2external</span></tt></a>(xi,&nbsp;bounds)</td>
-<td>Convert a series of internal variables to external variables</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.leastsqbound.external2internal.html#nmrglue.analysis.leastsqbound.external2internal" title="nmrglue.analysis.leastsqbound.external2internal"><tt class="xref py py-obj docutils literal"><span class="pre">external2internal</span></tt></a>(xe,&nbsp;bounds)</td>
-<td>Convert a series of external variables to internal variables</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.leastsqbound.internal2external_grad.html#nmrglue.analysis.leastsqbound.internal2external_grad" title="nmrglue.analysis.leastsqbound.internal2external_grad"><tt class="xref py py-obj docutils literal"><span class="pre">internal2external_grad</span></tt></a>(xi,&nbsp;bounds)</td>
-<td>Calculate the internal to external gradiant</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.leastsqbound.i2e_cov_x.html#nmrglue.analysis.leastsqbound.i2e_cov_x" title="nmrglue.analysis.leastsqbound.i2e_cov_x"><tt class="xref py py-obj docutils literal"><span class="pre">i2e_cov_x</span></tt></a>(xi,&nbsp;bounds,&nbsp;cov_x)</td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.leastsqbound.err.html#nmrglue.analysis.leastsqbound.err" title="nmrglue.analysis.leastsqbound.err"><tt class="xref py py-obj docutils literal"><span class="pre">err</span></tt></a>(p,&nbsp;bounds,&nbsp;efunc,&nbsp;args)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.leastsqbound.calc_cov_x.html#nmrglue.analysis.leastsqbound.calc_cov_x" title="nmrglue.analysis.leastsqbound.calc_cov_x"><tt class="xref py py-obj docutils literal"><span class="pre">calc_cov_x</span></tt></a>(infodic,&nbsp;p)</td>
-<td>Calculate cov_x from fjac, ipvt and p as is done in leastsq</td>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>x</strong> : ndarray</p>
+<blockquote>
+<div><p>The solution (or the result of the last iteration for an unsuccessful
+call).</p>
+</div></blockquote>
+<p><strong>cov_x</strong> : ndarray</p>
+<blockquote>
+<div><p>Uses the fjac and ipvt optional outputs to construct an
+estimate of the jacobian around the solution.  <tt class="docutils literal"><span class="pre">None</span></tt> if a
+singular matrix encountered (indicates very flat curvature in
+some direction).  This matrix must be multiplied by the
+residual standard deviation to get the covariance of the
+parameter estimates &#8211; see curve_fit.</p>
+</div></blockquote>
+<p><strong>infodict</strong> : dict</p>
+<blockquote>
+<div><p>a dictionary of optional outputs with the key s:</p>
+<div class="highlight-python"><pre>- 'nfev' : the number of function calls
+- 'fvec' : the function evaluated at the output
+- 'fjac' : A permutation of the R matrix of a QR
+         factorization of the final approximate
+         Jacobian matrix, stored column wise.
+         Together with ipvt, the covariance of the
+         estimate can be approximated.
+- 'ipvt' : an integer array of length N which defines
+         a permutation matrix, p, such that
+         fjac*p = q*r, where r is upper triangular
+         with diagonal elements of nonincreasing
+         magnitude. Column j of p is column ipvt(j)
+         of the identity matrix.
+- 'qtf'  : the vector (transpose(q) * fvec).</pre>
+</div>
+</div></blockquote>
+<p><strong>mesg</strong> : str</p>
+<blockquote>
+<div><p>A string message giving information about the cause of failure.</p>
+</div></blockquote>
+<p><strong>ier</strong> : int</p>
+<blockquote class="last">
+<div><p>An integer flag.  If it is equal to 1, 2, 3 or 4, the solution was
+found.  Otherwise, the solution was not found. In either case, the
+optional output variable &#8216;mesg&#8217; gives more information.</p>
+</div></blockquote>
+</td>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Notes</p>
+<p>&#8220;leastsq&#8221; is a wrapper around MINPACK&#8217;s lmdif and lmder algorithms.</p>
+<p>cov_x is a Jacobian approximation to the Hessian of the least squares
+objective function.
+This approximation assumes that the objective function is based on the
+difference between some observed target data (ydata) and a (non-linear)
+function of the parameters <cite>f(xdata, params)</cite></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">func</span><span class="p">(</span><span class="n">params</span><span class="p">)</span> <span class="o">=</span> <span class="n">ydata</span> <span class="o">-</span> <span class="n">f</span><span class="p">(</span><span class="n">xdata</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>so that the objective function is</p>
+<div class="highlight-python"><pre>  min   sum((ydata - f(xdata, params))**2, axis=0)
+params</pre>
+</div>
+<p>Contraints on the parameters are enforced using an internal parameter list 
+with appropiate transformations such that these internal parameters can be
+optimized without constraints. The transfomation between a given internal 
+parameter, p_i, and a external parameter, p_e, are as follows:</p>
+<p>With <tt class="docutils literal"><span class="pre">min</span></tt> and <tt class="docutils literal"><span class="pre">max</span></tt> bounds defined</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">p_i</span> <span class="o">=</span> <span class="n">arcsin</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">p_e</span> <span class="o">-</span> <span class="nb">min</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="nb">max</span> <span class="o">-</span> <span class="nb">min</span><span class="p">))</span> <span class="o">-</span> <span class="mf">1.</span><span class="p">)</span>
+<span class="n">p_e</span> <span class="o">=</span> <span class="nb">min</span> <span class="o">+</span> <span class="p">((</span><span class="nb">max</span> <span class="o">-</span> <span class="nb">min</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">p_i</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>With only <tt class="docutils literal"><span class="pre">max</span></tt> defined</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">p_i</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">((</span><span class="n">p_e</span> <span class="o">-</span> <span class="nb">max</span> <span class="o">+</span> <span class="mf">1.</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mf">1.</span><span class="p">)</span>
+<span class="n">p_e</span> <span class="o">=</span> <span class="nb">max</span> <span class="o">+</span> <span class="mf">1.</span> <span class="o">-</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">p_i</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">1.</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>With only <tt class="docutils literal"><span class="pre">min</span></tt> defined</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">p_i</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">((</span><span class="n">p_e</span> <span class="o">-</span> <span class="nb">min</span> <span class="o">+</span> <span class="mf">1.</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mf">1.</span><span class="p">)</span>
+<span class="n">p_e</span> <span class="o">=</span> <span class="nb">min</span> <span class="o">-</span> <span class="mf">1.</span> <span class="o">+</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">p_i</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">1.</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>These transfomations are used in the MINUIT package, and described in 
+detail in the section 1.3.1 of the MINUIT User&#8217;s Guide.</p>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><ol class="first upperalpha" start="6">
+<li>James and M. Winkler. MINUIT User&#8217;s Guide, July 16, 2004.</li>
+</ol>
+</li>
+</ul>
+</dd></dl>
+
 </div>
 </div>
 
@@ -107,9 +249,7 @@
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">nmrglue.leastsqbound</a><ul>
-<li><a class="reference internal" href="#developer-functions">Developer Functions</a><ul>
-</ul>
-</li>
+<li><a class="reference internal" href="#developer-functions">Developer Functions</a></li>
 </ul>
 </li>
 </ul>
@@ -118,8 +258,8 @@
   <p class="topless"><a href="generated/nmrglue.analysis.helpers.scale_columns.html"
                         title="previous chapter">nmrglue.analysis.helpers.scale_columns</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="generated/nmrglue.analysis.leastsqbound.leastsqbound.html"
-                        title="next chapter">nmrglue.analysis.leastsqbound.leastsqbound</a></p>
+  <p class="topless"><a href="lineshapes1d.html"
+                        title="next chapter">nmrglue.lineshapes1d</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/reference/leastsqbound.txt"
@@ -155,7 +295,7 @@
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="generated/nmrglue.analysis.leastsqbound.leastsqbound.html" title="nmrglue.analysis.leastsqbound.leastsqbound"
+          <a href="lineshapes1d.html" title="nmrglue.lineshapes1d"
              >next</a> |</li>
         <li class="right" >
           <a href="generated/nmrglue.analysis.helpers.scale_columns.html" title="nmrglue.analysis.helpers.scale_columns"

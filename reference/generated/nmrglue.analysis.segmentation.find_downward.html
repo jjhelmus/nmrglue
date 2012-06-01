@@ -29,7 +29,7 @@
     <link rel="top" title="nmrglue 0.3-dev documentation" href="../../index.html" />
     <link rel="up" title="nmrglue.segmentation" href="../segmentation.html" />
     <link rel="next" title="nmrglue.analysis.segmentation.find_connected" href="nmrglue.analysis.segmentation.find_connected.html" />
-    <link rel="prev" title="nmrglue.analysis.segmentation.find_all_upward" href="nmrglue.analysis.segmentation.find_all_upward.html" /> 
+    <link rel="prev" title="nmrglue.analysis.segmentation.label_upward" href="nmrglue.analysis.segmentation.label_upward.html" /> 
   </head>
   <body>
     <div class="related">
@@ -48,7 +48,7 @@
           <a href="nmrglue.analysis.segmentation.find_connected.html" title="nmrglue.analysis.segmentation.find_connected"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="nmrglue.analysis.segmentation.find_all_upward.html" title="nmrglue.analysis.segmentation.find_all_upward"
+          <a href="nmrglue.analysis.segmentation.label_upward.html" title="nmrglue.analysis.segmentation.label_upward"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
           <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
@@ -65,16 +65,38 @@
 <h1>nmrglue.analysis.segmentation.find_downward<a class="headerlink" href="#nmrglue-analysis-segmentation-find-downward" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.analysis.segmentation.find_downward">
-<tt class="descclassname">nmrglue.analysis.segmentation.</tt><tt class="descname">find_downward</tt><big>(</big><em>data</em>, <em>pt</em>, <em>thres</em>, <em>diag=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/segmentation.py#L343"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.segmentation.find_downward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find points downward-connected to pt in data.</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>data  2D array of data</li>
-<li>pt    Starting point, top of peak, tuple.</li>
-<li>thres Threshold, below this nodes are considered noise.</li>
-<li>diag  True or False to include diagonal neighbors in connection.</li>
-</ul>
-<p>Return: list of indicies of downward connected nodes.</p>
+<tt class="descclassname">nmrglue.analysis.segmentation.</tt><tt class="descname">find_downward</tt><big>(</big><em>data</em>, <em>pt</em>, <em>thres</em>, <em>diag=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/segmentation.py#L366"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.segmentation.find_downward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find points downward-connected to a point in data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of data.</p>
+</div></blockquote>
+<p><strong>pt</strong> : tuple of ints</p>
+<blockquote>
+<div><p>Starting point of peak.</p>
+</div></blockquote>
+<p><strong>thres</strong> : float</p>
+<blockquote>
+<div><p>Threshold, below this nodes are considered noise.</p>
+</div></blockquote>
+<p><strong>diag</strong> : bool, optional</p>
+<blockquote>
+<div><p>True to include diagonal neighbors in connection.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>nodes</strong> : list</p>
+<blockquote class="last">
+<div><p>Indicies of downward-connected nodes.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -86,8 +108,8 @@
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="nmrglue.analysis.segmentation.find_all_upward.html"
-                        title="previous chapter">nmrglue.analysis.segmentation.find_all_upward</a></p>
+  <p class="topless"><a href="nmrglue.analysis.segmentation.label_upward.html"
+                        title="previous chapter">nmrglue.analysis.segmentation.label_upward</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="nmrglue.analysis.segmentation.find_connected.html"
                         title="next chapter">nmrglue.analysis.segmentation.find_connected</a></p>
@@ -129,7 +151,7 @@
           <a href="nmrglue.analysis.segmentation.find_connected.html" title="nmrglue.analysis.segmentation.find_connected"
              >next</a> |</li>
         <li class="right" >
-          <a href="nmrglue.analysis.segmentation.find_all_upward.html" title="nmrglue.analysis.segmentation.find_all_upward"
+          <a href="nmrglue.analysis.segmentation.label_upward.html" title="nmrglue.analysis.segmentation.label_upward"
              >previous</a> |</li>
         <li><a href="../../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
           <li><a href="../index.html" >Reference Guide</a> &raquo;</li>

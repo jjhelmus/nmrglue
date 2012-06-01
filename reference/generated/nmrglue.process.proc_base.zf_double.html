@@ -65,14 +65,34 @@
 <h1>nmrglue.process.proc_base.zf_double<a class="headerlink" href="#nmrglue-process-proc-base-zf-double" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_base.zf_double">
-<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">zf_double</tt><big>(</big><em>data</em>, <em>n</em>, <em>mid=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L673"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.zf_double" title="Permalink to this definition">¶</a></dt>
-<dd><p>Zero fill to double size n times</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>data  Array of spectral data.</li>
-<li>n     Number of times to double data</li>
-<li>mid   Set to True to zero fill in middle of data.</li>
-</ul>
+<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">zf_double</tt><big>(</big><em>data</em>, <em>n</em>, <em>mid=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L1005"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.zf_double" title="Permalink to this definition">¶</a></dt>
+<dd><p>Zero fill by doubling original data size once or multiple times.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>n</strong> : int</p>
+<blockquote>
+<div><p>Number of times to double the size of the data.</p>
+</div></blockquote>
+<p><strong>mid</strong> : bool</p>
+<blockquote>
+<div><p>True to zero fill in the middle of data.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Zero filled array of NMR data.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

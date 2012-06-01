@@ -65,18 +65,41 @@
 <h1>nmrglue.fileio.pipe.read_table<a class="headerlink" href="#nmrglue-fileio-pipe-read-table" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.read_table">
-<tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">read_table</tt><big>(</big><em>filename</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/pipe.py#L28"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.pipe.read_table" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">read_table</tt><big>(</big><em>filename</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/pipe.py#L22"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.pipe.read_table" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a NMRPipe database table (.tab) file.</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>filename  Name of file to read</li>
-</ul>
-<p>Returns: pcomments,pformat,rec</p>
-<ul class="simple">
-<li>pcomments List of NMRPipe comment lines.</li>
-<li>pformats  List of NMRPipe table column formats strings.</li>
-<li>rec       Records array with named fields.</li>
-</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>Filename of NMRPipe table file to read.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>pcomments</strong> : list</p>
+<blockquote>
+<div><p>List of NMRPipe comment lines</p>
+</div></blockquote>
+<p><strong>pformat: list</strong> :</p>
+<blockquote>
+<div><p>List of NMRPipe table column format strings.</p>
+</div></blockquote>
+<p><strong>rec</strong> : recarray</p>
+<blockquote class="last">
+<div><p>Records array with named fields.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.fileio.pipe.write_table.html#nmrglue.fileio.pipe.write_table" title="nmrglue.fileio.pipe.write_table"><tt class="xref py py-obj docutils literal"><span class="pre">write_table</span></tt></a></dt>
+<dd>Write a NMRPipe table file.</dd>
+</dl>
+</div>
 </dd></dl>
 
 </div>

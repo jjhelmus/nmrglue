@@ -65,35 +65,49 @@
 <h1>nmrglue.process.proc_lp.cadzow<a class="headerlink" href="#nmrglue-process-proc-lp-cadzow" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_lp.cadzow">
-<tt class="descclassname">nmrglue.process.proc_lp.</tt><tt class="descname">cadzow</tt><big>(</big><em>data</em>, <em>M</em>, <em>K</em>, <em>niter</em>, <em>min_var=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_lp.py#L401"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_lp.cadzow" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.process.proc_lp.</tt><tt class="descname">cadzow</tt><big>(</big><em>data</em>, <em>M</em>, <em>K</em>, <em>niter</em>, <em>min_var=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_lp.py#L456"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_lp.cadzow" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform a (row wise) Cadzow-like signal enhancement on 1D or 2D data.</p>
-<p>Parameters:</p>
-<ul>
-<li><p class="first">data      1D or 2D data matrix.</p>
-</li>
-<li><dl class="first docutils">
-<dt>M         Large prediction order.  For best results should be between </dt>
-<dd><p class="first last">K+5 and 2*K.</p>
-</dd>
-</dl>
-</li>
-<li><p class="first">K         Reduced prediction order.</p>
-</li>
-<li><p class="first">niter     Number if iteration of the Cadzow procedure to perform.</p>
-</li>
-<li><dl class="first docutils">
-<dt>min_var   Set to True to adjust retained singular values using the </dt>
-<dd><p class="first last">minimum variance method, False does not correct the singular 
-values andis the Cadzow method.</p>
-</dd>
-</dl>
-</li>
-</ul>
-<p>Returns: array of enhanced data</p>
 <p>Performs a Cadzow-like signal enhancement with optional adjustment
 of singular values using the minimum variance method as desribed in:
-Chen, VanHuffel, Decanniere, VanHecke, JMR, 1994, 109A, 46-55.
-For 2D data performs independant enhancement on each row of data array.</p>
+Chen, VanHuffel, Decanniere, VanHecke, JMR, 1994, 109A, 46-55.</p>
+<p>For 2D data performs independant enhancement on each row of data array.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>1D or 2D NMR data to enhance.</p>
+</div></blockquote>
+<p><strong>M</strong> : int</p>
+<blockquote>
+<div><p>Large prediction order.  For best results should be between 
+K + 5 and 2 * K.</p>
+</div></blockquote>
+<p><strong>K</strong> : int</p>
+<blockquote>
+<div><p>Reduced prediction order.</p>
+</div></blockquote>
+<p><strong>niter</strong> : int</p>
+<blockquote>
+<div><p>Number if iteration of the Cadzow procedure to perform.</p>
+</div></blockquote>
+<p><strong>min_var</strong> : bool</p>
+<blockquote>
+<div><p>True to adjust retained singular values using the  minimum variance 
+method. False does not correct the singular values and is the 
+Cadzow method.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Array of enhanced data</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

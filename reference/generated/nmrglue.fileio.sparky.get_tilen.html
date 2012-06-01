@@ -65,9 +65,37 @@
 <h1>nmrglue.fileio.sparky.get_tilen<a class="headerlink" href="#nmrglue-fileio-sparky-get-tilen" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.sparky.get_tilen">
-<tt class="descclassname">nmrglue.fileio.sparky.</tt><tt class="descname">get_tilen</tt><big>(</big><em>f</em>, <em>n_tile</em>, <em>tw_tuple</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/sparky.py#L712"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.sparky.get_tilen" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read in tile n from file object with tile sizes given by tw_tuple</p>
-<p>Current file position is loss (store before calling if desired)</p>
+<tt class="descclassname">nmrglue.fileio.sparky.</tt><tt class="descname">get_tilen</tt><big>(</big><em>f</em>, <em>n_tile</em>, <em>tw_tuple</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/sparky.py#L802"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.sparky.get_tilen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a tile from a Sparky file object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>f</strong> : file object</p>
+<blockquote>
+<div><p>Open file object pointing to a Sparky file.</p>
+</div></blockquote>
+<p><strong>n_tile</strong> : int</p>
+<blockquote>
+<div><p>Tile number to read</p>
+</div></blockquote>
+<p><strong>tw_tuple</strong> : tuple of ints</p>
+<blockquote>
+<div><p>Tile size</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>tile</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Tile of NMR data. Data is returned as a 1D array.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Current file position is loss. In can be stored before calling if the
+position is later needed.</p>
 </dd></dl>
 
 </div>

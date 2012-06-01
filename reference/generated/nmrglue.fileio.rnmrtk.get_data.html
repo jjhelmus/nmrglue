@@ -65,17 +65,30 @@
 <h1>nmrglue.fileio.rnmrtk.get_data<a class="headerlink" href="#nmrglue-fileio-rnmrtk-get-data" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.rnmrtk.get_data">
-<tt class="descclassname">nmrglue.fileio.rnmrtk.</tt><tt class="descname">get_data</tt><big>(</big><em>file</em>, <em>dtype</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/rnmrtk.py#L221"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.rnmrtk.get_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get spectral data from a RNMRTK file</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>file  RNMRTK file name (.sec).</li>
-<li>dtype data type of data on disk.</li>
-</ul>
-<p>Return: data</p>
-<ul class="simple">
-<li>rdata raw spectral data, unshaped and always real</li>
-</ul>
+<tt class="descclassname">nmrglue.fileio.rnmrtk.</tt><tt class="descname">get_data</tt><big>(</big><em>filename</em>, <em>dtype</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/rnmrtk.py#L340"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.rnmrtk.get_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get spectral data from a RNMRTK file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>Filename of RNMRTK file (.sec) to get data from.</p>
+</div></blockquote>
+<p><strong>dtype</strong> : dtype</p>
+<blockquote>
+<div><p>Type of data in file, typically &#8216;float32&#8217;</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>rdata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Raw NMR data, unshaped and typically not complex.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

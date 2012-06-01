@@ -28,8 +28,8 @@
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="nmrglue 0.3-dev documentation" href="../index.html" />
     <link rel="up" title="Reference Guide" href="index.html" />
-    <link rel="next" title="nmrglue.analysis.lineshapes1d.sim_gauss_sigma" href="generated/nmrglue.analysis.lineshapes1d.sim_gauss_sigma.html" />
-    <link rel="prev" title="nmrglue.analysis.leastsqbound.calc_cov_x" href="generated/nmrglue.analysis.leastsqbound.calc_cov_x.html" /> 
+    <link rel="next" title="nmrglue.analysis.lineshapes1d.sim_gauss_fwhm" href="generated/nmrglue.analysis.lineshapes1d.sim_gauss_fwhm.html" />
+    <link rel="prev" title="nmrglue.leastsqbound" href="leastsqbound.html" /> 
   </head>
   <body>
     <div class="related">
@@ -45,10 +45,10 @@
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="generated/nmrglue.analysis.lineshapes1d.sim_gauss_sigma.html" title="nmrglue.analysis.lineshapes1d.sim_gauss_sigma"
+          <a href="generated/nmrglue.analysis.lineshapes1d.sim_gauss_fwhm.html" title="nmrglue.analysis.lineshapes1d.sim_gauss_fwhm"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="generated/nmrglue.analysis.leastsqbound.calc_cov_x.html" title="nmrglue.analysis.leastsqbound.calc_cov_x"
+          <a href="leastsqbound.html" title="nmrglue.leastsqbound"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Reference Guide</a> &raquo;</li> 
@@ -62,7 +62,7 @@
             
   <div class="section" id="module-nmrglue.analysis.lineshapes1d">
 <span id="nmrglue-lineshapes1d"></span><h1>nmrglue.lineshapes1d<a class="headerlink" href="#module-nmrglue.analysis.lineshapes1d" title="Permalink to this headline">¶</a></h1>
-<p>lineshapes1d.py One-dimensional lineshape functions and classes</p>
+<p>One-dimensional lineshape functions and classes</p>
 <p>This modules is imported as nmrglue.lineshapes1d and can be called as such.</p>
 <div class="section" id="developer-functions">
 <h2>Developer Functions<a class="headerlink" href="#developer-functions" title="Permalink to this headline">¶</a></h2>
@@ -74,14 +74,8 @@ want to segment spectra will be interested in these functions.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.lineshapes1d.sim_gauss_sigma.html#nmrglue.analysis.lineshapes1d.sim_gauss_sigma" title="nmrglue.analysis.lineshapes1d.sim_gauss_sigma"><tt class="xref py py-obj docutils literal"><span class="pre">sim_gauss_sigma</span></tt></a>(x,&nbsp;x0,&nbsp;sigma)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.lineshapes1d.sim_gauss_fwhm.html#nmrglue.analysis.lineshapes1d.sim_gauss_fwhm" title="nmrglue.analysis.lineshapes1d.sim_gauss_fwhm"><tt class="xref py py-obj docutils literal"><span class="pre">sim_gauss_fwhm</span></tt></a>(x,&nbsp;x0,&nbsp;fwhm)</td>
 <td>Simulate a Gaussian (normal) lineshape with unit height at the center.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.lineshapes1d.sim_gauss_fwhm.html#nmrglue.analysis.lineshapes1d.sim_gauss_fwhm" title="nmrglue.analysis.lineshapes1d.sim_gauss_fwhm"><tt class="xref py py-obj docutils literal"><span class="pre">sim_gauss_fwhm</span></tt></a>(x,&nbsp;x0,&nbsp;fwhm)</td>
-<td>Simulate a Gaussian (normal) lineshape with unit height at the center.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.lineshapes1d.sim_lorentz_gamma.html#nmrglue.analysis.lineshapes1d.sim_lorentz_gamma" title="nmrglue.analysis.lineshapes1d.sim_lorentz_gamma"><tt class="xref py py-obj docutils literal"><span class="pre">sim_lorentz_gamma</span></tt></a>(x,&nbsp;x0,&nbsp;gamma)</td>
-<td>Simulate a Lorentzian lineshape with unit height at the center.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.lineshapes1d.sim_lorentz_fwhm.html#nmrglue.analysis.lineshapes1d.sim_lorentz_fwhm" title="nmrglue.analysis.lineshapes1d.sim_lorentz_fwhm"><tt class="xref py py-obj docutils literal"><span class="pre">sim_lorentz_fwhm</span></tt></a>(x,&nbsp;x0,&nbsp;fwhm)</td>
 <td>Simulate a Lorentzian lineshape with unit height at the center.</td>
@@ -89,11 +83,17 @@ want to segment spectra will be interested in these functions.</p>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.lineshapes1d.sim_voigt_fwhm.html#nmrglue.analysis.lineshapes1d.sim_voigt_fwhm" title="nmrglue.analysis.lineshapes1d.sim_voigt_fwhm"><tt class="xref py py-obj docutils literal"><span class="pre">sim_voigt_fwhm</span></tt></a>(x,&nbsp;x0,&nbsp;fwhm_g,&nbsp;fwhm_l)</td>
 <td>Simulate a Voigt lineshape with unit height at the center.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.lineshapes1d.sim_voigt_sigmagamma.html#nmrglue.analysis.lineshapes1d.sim_voigt_sigmagamma" title="nmrglue.analysis.lineshapes1d.sim_voigt_sigmagamma"><tt class="xref py py-obj docutils literal"><span class="pre">sim_voigt_sigmagamma</span></tt></a>(x,&nbsp;x0,&nbsp;sigma,&nbsp;gamma)</td>
-<td>Simulate a Voigt lineshape with unit height at the center.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.lineshapes1d.sim_pvoigt_fwhm.html#nmrglue.analysis.lineshapes1d.sim_pvoigt_fwhm" title="nmrglue.analysis.lineshapes1d.sim_pvoigt_fwhm"><tt class="xref py py-obj docutils literal"><span class="pre">sim_pvoigt_fwhm</span></tt></a>(x,&nbsp;x0,&nbsp;fwhm,&nbsp;eta)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.lineshapes1d.sim_pvoigt_fwhm.html#nmrglue.analysis.lineshapes1d.sim_pvoigt_fwhm" title="nmrglue.analysis.lineshapes1d.sim_pvoigt_fwhm"><tt class="xref py py-obj docutils literal"><span class="pre">sim_pvoigt_fwhm</span></tt></a>(x,&nbsp;x0,&nbsp;fwhm,&nbsp;eta)</td>
 <td>Simulate a Pseudo Voigt lineshape with unit height at the center.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.lineshapes1d.sim_gauss_sigma.html#nmrglue.analysis.lineshapes1d.sim_gauss_sigma" title="nmrglue.analysis.lineshapes1d.sim_gauss_sigma"><tt class="xref py py-obj docutils literal"><span class="pre">sim_gauss_sigma</span></tt></a>(x,&nbsp;x0,&nbsp;sigma)</td>
+<td>Simulate a Gaussian (normal) lineshape with unit height at the center.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.lineshapes1d.sim_lorentz_gamma.html#nmrglue.analysis.lineshapes1d.sim_lorentz_gamma" title="nmrglue.analysis.lineshapes1d.sim_lorentz_gamma"><tt class="xref py py-obj docutils literal"><span class="pre">sim_lorentz_gamma</span></tt></a>(x,&nbsp;x0,&nbsp;gamma)</td>
+<td>Simulate a Lorentzian lineshape with unit height at the center.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.lineshapes1d.sim_voigt_sigmagamma.html#nmrglue.analysis.lineshapes1d.sim_voigt_sigmagamma" title="nmrglue.analysis.lineshapes1d.sim_voigt_sigmagamma"><tt class="xref py py-obj docutils literal"><span class="pre">sim_voigt_sigmagamma</span></tt></a>(x,&nbsp;x0,&nbsp;sigma,&nbsp;gamma)</td>
+<td>Simulate a Voigt lineshape with unit height at the center.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.lineshapes1d.ls_str2class.html#nmrglue.analysis.lineshapes1d.ls_str2class" title="nmrglue.analysis.lineshapes1d.ls_str2class"><tt class="xref py py-obj docutils literal"><span class="pre">ls_str2class</span></tt></a>(l)</td>
 <td>Convert lineshape string to lineshape class</td>
@@ -103,6 +103,47 @@ want to segment spectra will be interested in these functions.</p>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.lineshapes1d.center_fwhm_bymoments.html#nmrglue.analysis.lineshapes1d.center_fwhm_bymoments" title="nmrglue.analysis.lineshapes1d.center_fwhm_bymoments"><tt class="xref py py-obj docutils literal"><span class="pre">center_fwhm_bymoments</span></tt></a>(signal)</td>
 <td>Estimate the center and full-width half max of a signal using moments</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="developer-classes">
+<h2>Developer Classes<a class="headerlink" href="#developer-classes" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.lineshapes1d.location_scale.html#nmrglue.analysis.lineshapes1d.location_scale" title="nmrglue.analysis.lineshapes1d.location_scale"><tt class="xref py py-obj docutils literal"><span class="pre">location_scale</span></tt></a></td>
+<td>Base class for building a 2 parameter location scale lineshape class.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.lineshapes1d.gauss_sigma.html#nmrglue.analysis.lineshapes1d.gauss_sigma" title="nmrglue.analysis.lineshapes1d.gauss_sigma"><tt class="xref py py-obj docutils literal"><span class="pre">gauss_sigma</span></tt></a></td>
+<td>Gaussian (normal) lineshape class with unit height at the mean and sigma scale parameter.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.lineshapes1d.gauss_fwhm.html#nmrglue.analysis.lineshapes1d.gauss_fwhm" title="nmrglue.analysis.lineshapes1d.gauss_fwhm"><tt class="xref py py-obj docutils literal"><span class="pre">gauss_fwhm</span></tt></a></td>
+<td>Gaussian (normal) lineshape class with unit height at the mean and fwhm scale parameter.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.lineshapes1d.lorentz_gamma.html#nmrglue.analysis.lineshapes1d.lorentz_gamma" title="nmrglue.analysis.lineshapes1d.lorentz_gamma"><tt class="xref py py-obj docutils literal"><span class="pre">lorentz_gamma</span></tt></a></td>
+<td>Lorentzian lineshape class with unit height at the center and gamma scale parameter.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.lineshapes1d.lorentz_fwhm.html#nmrglue.analysis.lineshapes1d.lorentz_fwhm" title="nmrglue.analysis.lineshapes1d.lorentz_fwhm"><tt class="xref py py-obj docutils literal"><span class="pre">lorentz_fwhm</span></tt></a></td>
+<td>Lorentzian lineshape class with unit height at the center and gamma scale parameter.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.lineshapes1d.location_2params.html#nmrglue.analysis.lineshapes1d.location_2params" title="nmrglue.analysis.lineshapes1d.location_2params"><tt class="xref py py-obj docutils literal"><span class="pre">location_2params</span></tt></a></td>
+<td>Base Class for building a 3 parameter location, scale, other lineshape</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.lineshapes1d.voigt_fwhm.html#nmrglue.analysis.lineshapes1d.voigt_fwhm" title="nmrglue.analysis.lineshapes1d.voigt_fwhm"><tt class="xref py py-obj docutils literal"><span class="pre">voigt_fwhm</span></tt></a></td>
+<td>Voigt lineshape class with unit height at the center and full-width  half-maximum scale parameters.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.lineshapes1d.voigt_sigmagamma.html#nmrglue.analysis.lineshapes1d.voigt_sigmagamma" title="nmrglue.analysis.lineshapes1d.voigt_sigmagamma"><tt class="xref py py-obj docutils literal"><span class="pre">voigt_sigmagamma</span></tt></a></td>
+<td>Voigt lineshape class with unit height at the center and sigma, gamma scale parameters.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.lineshapes1d.pvoigt_fwhm.html#nmrglue.analysis.lineshapes1d.pvoigt_fwhm" title="nmrglue.analysis.lineshapes1d.pvoigt_fwhm"><tt class="xref py py-obj docutils literal"><span class="pre">pvoigt_fwhm</span></tt></a></td>
+<td>Pseudo-Voigt lineshape class with unit height at the center and full-width</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.lineshapes1d.scale.html#nmrglue.analysis.lineshapes1d.scale" title="nmrglue.analysis.lineshapes1d.scale"><tt class="xref py py-obj docutils literal"><span class="pre">scale</span></tt></a></td>
+<td>Scale lineshape class</td>
 </tr>
 </tbody>
 </table>
@@ -121,16 +162,19 @@ want to segment spectra will be interested in these functions.</p>
 <li><a class="reference internal" href="#developer-functions">Developer Functions</a><ul>
 </ul>
 </li>
+<li><a class="reference internal" href="#developer-classes">Developer Classes</a><ul>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="generated/nmrglue.analysis.leastsqbound.calc_cov_x.html"
-                        title="previous chapter">nmrglue.analysis.leastsqbound.calc_cov_x</a></p>
+  <p class="topless"><a href="leastsqbound.html"
+                        title="previous chapter">nmrglue.leastsqbound</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="generated/nmrglue.analysis.lineshapes1d.sim_gauss_sigma.html"
-                        title="next chapter">nmrglue.analysis.lineshapes1d.sim_gauss_sigma</a></p>
+  <p class="topless"><a href="generated/nmrglue.analysis.lineshapes1d.sim_gauss_fwhm.html"
+                        title="next chapter">nmrglue.analysis.lineshapes1d.sim_gauss_fwhm</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/reference/lineshapes1d.txt"
@@ -166,10 +210,10 @@ want to segment spectra will be interested in these functions.</p>
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="generated/nmrglue.analysis.lineshapes1d.sim_gauss_sigma.html" title="nmrglue.analysis.lineshapes1d.sim_gauss_sigma"
+          <a href="generated/nmrglue.analysis.lineshapes1d.sim_gauss_fwhm.html" title="nmrglue.analysis.lineshapes1d.sim_gauss_fwhm"
              >next</a> |</li>
         <li class="right" >
-          <a href="generated/nmrglue.analysis.leastsqbound.calc_cov_x.html" title="nmrglue.analysis.leastsqbound.calc_cov_x"
+          <a href="leastsqbound.html" title="nmrglue.leastsqbound"
              >previous</a> |</li>
         <li><a href="../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
           <li><a href="index.html" >Reference Guide</a> &raquo;</li> 

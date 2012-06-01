@@ -65,9 +65,9 @@
 <h1>nmrglue.fileio.pipe.pipestream_4d<a class="headerlink" href="#nmrglue-fileio-pipe-pipestream-4d" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="nmrglue.fileio.pipe.pipestream_4d">
-<em class="property">class </em><tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">pipestream_4d</tt><big>(</big><em>filename</em>, <em>order=(0</em>, <em>1</em>, <em>2</em>, <em>3)</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/pipe.py#L1866"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.pipe.pipestream_4d" title="Permalink to this definition">¶</a></dt>
-<dd><p>Emulate a numpy.ndarray objects without loading data into memory for low 
-memory reading of 4D NMRPipe data stream (one file 4D):</p>
+<em class="property">class </em><tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">pipestream_4d</tt><big>(</big><em>filename</em>, <em>order=(0</em>, <em>1</em>, <em>2</em>, <em>3)</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/pipe.py#L1980"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.pipe.pipestream_4d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Emulate a ndarray objects without loading data into memory for low memory
+reading of 4D NMRPipe data steams (one file 4D data sets).</p>
 <ul class="simple">
 <li>slicing operations return ndarray objects.</li>
 <li>can iterate over with expected results.</li>
@@ -75,9 +75,25 @@ memory reading of 4D NMRPipe data stream (one file 4D):</p>
 ordering.</li>
 <li>has ndim, shape, and dtype attributes.</li>
 </ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>Filename of 4D NMRPipe stream file.</p>
+</div></blockquote>
+<p><strong>order</strong> : tuple</p>
+<blockquote class="last">
+<div><p>Ordering of axes against file.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 <dl class="method">
 <dt id="nmrglue.fileio.pipe.pipestream_4d.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>filename</em>, <em>order=(0</em>, <em>1</em>, <em>2</em>, <em>3)</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/pipe.py#L1879"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.pipe.pipestream_4d.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>filename</em>, <em>order=(0</em>, <em>1</em>, <em>2</em>, <em>3)</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/pipe.py#L2000"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.pipe.pipestream_4d.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create and set up object</p>
 </dd></dl>
 
@@ -92,10 +108,10 @@ ordering.</li>
 <td>Create and set up object</td>
 </tr>
 <tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">swapaxes</span></tt>(axis1,&nbsp;axis2)</td>
-<td>Return data_nd object with axis1 and axis2 interchanged</td>
+<td>Return object with <cite>axis1</cite> and <cite>axis2</cite> interchanged.</td>
 </tr>
 <tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">transpose</span></tt>(*axes)</td>
-<td>Permute the dimensions of the array</td>
+<td>Return object with axes transposed.</td>
 </tr>
 </tbody>
 </table>

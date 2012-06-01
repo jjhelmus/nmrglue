@@ -65,15 +65,33 @@
 <h1>nmrglue.fileio.table.write<a class="headerlink" href="#nmrglue-fileio-table-write" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.table.write">
-<tt class="descclassname">nmrglue.fileio.table.</tt><tt class="descname">write</tt><big>(</big><em>filename</em>, <em>comments</em>, <em>rec</em>, <em>overwrite=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/table.py#L136"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.table.write" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write a nmrglue table to file (.tbl).</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>filename  Name of table file to write.</li>
-<li>comments  List of comments (strings terminated with newline).</li>
-<li>rec       Records array to write to file.</li>
-<li>overwrite Set True to overwrite file if it exists.</li>
-</ul>
+<tt class="descclassname">nmrglue.fileio.table.</tt><tt class="descname">write</tt><big>(</big><em>filename</em>, <em>comments</em>, <em>rec</em>, <em>overwrite=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/table.py#L145"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.table.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a nmrglue table to file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>Filename of file to write table to.</p>
+</div></blockquote>
+<p><strong>comments</strong> : list</p>
+<blockquote>
+<div><p>List of comments (strings terminated with newline).</p>
+</div></blockquote>
+<p><strong>rec</strong> : recarray</p>
+<blockquote>
+<div><p>Records array to write to file.</p>
+</div></blockquote>
+<p><strong>overwrite</strong> : bool, optional</p>
+<blockquote class="last">
+<div><p>True to overwrite file if it exists. False will raise an Warning if the
+file exists.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

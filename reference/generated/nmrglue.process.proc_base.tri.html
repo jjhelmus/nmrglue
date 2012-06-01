@@ -65,21 +65,63 @@
 <h1>nmrglue.process.proc_base.tri<a class="headerlink" href="#nmrglue-process-proc-base-tri" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_base.tri">
-<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">tri</tt><big>(</big><em>data</em>, <em>loc='auto'</em>, <em>lHi=0.0</em>, <em>rHi=0.0</em>, <em>inv=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L167"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.tri" title="Permalink to this definition">¶</a></dt>
-<dd><p>Triangle Apodization</p>
-<dl class="docutils">
-<dt>Functional form:</dt>
-<dd>0:loc   linear increase/decrease from lHi to 1.0   
-loc:    linear increase/decrease from 1.0 to rHi</dd>
-</dl>
-<p>Parameters:</p>
-<ul class="simple">
-<li>data  Array of spectral data.</li>
-<li>loc   Location of apex, &#8220;auto&#8221; sets to middle.</li>
-<li>lHi   Left side starting height.</li>
-<li>rHi   Right side starting height.</li>
-<li>inv   Set True for inverse apodization.</li>
-</ul>
+<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">tri</tt><big>(</big><em>data</em>, <em>loc='auto'</em>, <em>lHi=0.0</em>, <em>rHi=0.0</em>, <em>inv=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L238"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.tri" title="Permalink to this definition">¶</a></dt>
+<dd><p>Triangle apodization.</p>
+<p>Functional form of apodization window.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="23%" />
+<col width="77%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Range</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>0:loc</td>
+<td>Linear increase/decrease from lHi to 1.0</td>
+</tr>
+<tr class="row-odd"><td>loc:</td>
+<td>Linear increase/decrease from 1.0 to rHi</td>
+</tr>
+</tbody>
+</table>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>loc</strong> : int or &#8220;auto&#8221;</p>
+<blockquote>
+<div><p>Location of triangle apex. &#8216;auto&#8217; set the apex to the middle of the
+trace (default).</p>
+</div></blockquote>
+<p><strong>lHi</strong> : float</p>
+<blockquote>
+<div><p>Starting height of the left side of the triangle.</p>
+</div></blockquote>
+<p><strong>rHi</strong> : float</p>
+<blockquote>
+<div><p>Starting height of the right side of the triangle.</p>
+</div></blockquote>
+<p><strong>inv</strong> : bool, optional</p>
+<blockquote>
+<div><p>True for inverse apodization.  False (default) for standard.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Array of NMR data with apodization applied.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

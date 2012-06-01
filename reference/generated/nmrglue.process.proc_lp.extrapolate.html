@@ -65,23 +65,40 @@
 <h1>nmrglue.process.proc_lp.extrapolate<a class="headerlink" href="#nmrglue-process-proc-lp-extrapolate" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_lp.extrapolate">
-<tt class="descclassname">nmrglue.process.proc_lp.</tt><tt class="descname">extrapolate</tt><big>(</big><em>trace</em>, <em>a</em>, <em>pred</em>, <em>append</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_lp.py#L1038"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_lp.extrapolate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extrapolate points using LP prediction filter</p>
-<p>Parameters:</p>
-<ul>
-<li><p class="first">trace  1D vector to add points to</p>
-</li>
-<li><p class="first">a      LP coefficients (ordered according to direction of extrapolation)</p>
-</li>
-<li><p class="first">pred   Number of points to predict using LP prediction filter</p>
-</li>
-<li><dl class="first docutils">
-<dt>append &#8220;b&#8221; or &#8220;a&#8221; indicating if extrapolation should append before or </dt>
-<dd><p class="first last">after known points.</p>
-</dd>
-</dl>
-</li>
-</ul>
+<tt class="descclassname">nmrglue.process.proc_lp.</tt><tt class="descname">extrapolate</tt><big>(</big><em>trace</em>, <em>a</em>, <em>pred</em>, <em>append</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_lp.py#L1132"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_lp.extrapolate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extrapolate points using LP prediction filter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>trace</strong> : 1D ndarray</p>
+<blockquote>
+<div><p>1D array to extrapolate from and append to.</p>
+</div></blockquote>
+<p><strong>a</strong> : ndarray</p>
+<blockquote>
+<div><p>LP coefficients, must be ordered according to direction of
+extrapolation.</p>
+</div></blockquote>
+<p><strong>pred</strong> : int</p>
+<blockquote>
+<div><p>Number of points to predict using LP.</p>
+</div></blockquote>
+<p><strong>append</strong> : {&#8216;a&#8217;, &#8216;b&#8217;}</p>
+<blockquote>
+<div><p>Location to append new points, &#8216;a&#8217; for after the current data, &#8216;b&#8217; for
+before the current data.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ntrace</strong> : 1D ndarray</p>
+<blockquote class="last">
+<div><p>1D array with extrapolated points appended</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

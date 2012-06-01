@@ -65,8 +65,9 @@
 <h1>nmrglue.fileio.fileiobase.data_nd<a class="headerlink" href="#nmrglue-fileio-fileiobase-data-nd" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="nmrglue.fileio.fileiobase.data_nd">
-<em class="property">class </em><tt class="descclassname">nmrglue.fileio.fileiobase.</tt><tt class="descname">data_nd</tt><big>(</big><em>order</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/fileiobase.py#L508"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.fileiobase.data_nd" title="Permalink to this definition">¶</a></dt>
-<dd><p>data_nd emulates numpy.ndarray object without loading data into memory</p>
+<em class="property">class </em><tt class="descclassname">nmrglue.fileio.fileiobase.</tt><tt class="descname">data_nd</tt><big>(</big><em>order</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/fileiobase.py#L477"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.fileiobase.data_nd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for building objects which emulate ndarray objects without
+loading data into memory.  These object have the following properties:</p>
 <ul class="simple">
 <li>slicing operations return ndarray objects</li>
 <li>can iterate over with expected results</li>
@@ -74,9 +75,30 @@
 new axes ordering</li>
 <li>has ndim, shape, and dtype attributes.</li>
 </ul>
+<p class="rubric">Notes</p>
+<p>Classes which are use this class as a base should define the following
+methods:</p>
+<p>__init__ which must set up the object and defines at minimum:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>self.fshape <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd>Shape of the data on disk, the shape when order = (0, 1, 2, ..)</dd>
+<dt>self.order <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd>Ordering of the axes</dd>
+<dt>self.dtype <span class="classifier-delimiter">:</span> <span class="classifier">dtype</span></dt>
+<dd>Dtype of the emulated ndarray</dd>
+<dt>self.__setdimandshape__ should be called if self.dim and self.shape</dt>
+<dd>are not set up __init__.</dd>
+</dl>
+</div></blockquote>
+<dl class="docutils">
+<dt>__fgetitem__ which takes a well formatted tuple of slices and returns a</dt>
+<dd>ndarray object with the selected data</dd>
+</dl>
+<p>__fcopy__(self, order) which created a copy of the object with the new order</p>
 <dl class="method">
 <dt id="nmrglue.fileio.fileiobase.data_nd.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>order</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/fileiobase.py#L520"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.fileiobase.data_nd.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>order</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/fileiobase.py#L513"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.fileiobase.data_nd.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p class="rubric">Methods</p>
@@ -90,10 +112,10 @@ new axes ordering</li>
 <td></td>
 </tr>
 <tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">swapaxes</span></tt>(axis1,&nbsp;axis2)</td>
-<td>Return data_nd object with axis1 and axis2 interchanged</td>
+<td>Return object with <cite>axis1</cite> and <cite>axis2</cite> interchanged.</td>
 </tr>
 <tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">transpose</span></tt>(*axes)</td>
-<td>Permute the dimensions of the array</td>
+<td>Return object with axes transposed.</td>
 </tr>
 </tbody>
 </table>

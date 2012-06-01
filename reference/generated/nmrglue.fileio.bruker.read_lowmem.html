@@ -65,36 +65,34 @@
 <h1>nmrglue.fileio.bruker.read_lowmem<a class="headerlink" href="#nmrglue-fileio-bruker-read-lowmem" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.bruker.read_lowmem">
-<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">read_lowmem</tt><big>(</big><em>dir='.'</em>, <em>bin_file=None</em>, <em>acqus_files=None</em>, <em>pprog_file=None</em>, <em>shape=None</em>, <em>cplex=None</em>, <em>big=None</em>, <em>read_prog=True</em>, <em>read_acqus=True</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/bruker.py#L222"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.bruker.read_lowmem" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read Bruker files using minimal amounts of memory</p>
-<p>Parameters:</p>
-<ul>
-<li><p class="first">dir           Directory to read from.</p>
-</li>
-<li><p class="first">bin_file      Filename of binary file in directory.</p>
-</li>
-<li><p class="first">acqus_files   List of filename(s) of acqus parameter files in directory.</p>
-</li>
-<li><p class="first">pprog_file    Filename of pulseprogram in directory.</p>
-</li>
-<li><p class="first">shape         Shape of resulting data (tuple).</p>
-</li>
-<li><p class="first">cplex         Complexity of direct dimention (True/False).</p>
-</li>
-<li><dl class="first docutils">
-<dt>big           Endianness of binary file. Set to True for big-endian, </dt>
-<dd><p class="first last">False for little-endian and None to determind automatically</p>
-</dd>
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">read_lowmem</tt><big>(</big><em>dir='.'</em>, <em>bin_file=None</em>, <em>acqus_files=None</em>, <em>pprog_file=None</em>, <em>shape=None</em>, <em>cplex=None</em>, <em>big=None</em>, <em>read_prog=True</em>, <em>read_acqus=True</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/bruker.py#L255"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.bruker.read_lowmem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read Bruker files from a directory using minimal amounts of memory.</p>
+<p>See <a class="reference internal" href="nmrglue.fileio.bruker.read.html#nmrglue.fileio.bruker.read" title="nmrglue.fileio.bruker.read"><tt class="xref py py-func docutils literal"><span class="pre">read()</span></tt></a> for Parameters.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of Bruker parameters.</p>
+</div></blockquote>
+<p><strong>data</strong> : array_like</p>
+<blockquote class="last">
+<div><p>Low memory object which can access NMR data on demand.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.fileio.bruker.read.html#nmrglue.fileio.bruker.read" title="nmrglue.fileio.bruker.read"><tt class="xref py py-obj docutils literal"><span class="pre">read</span></tt></a></dt>
+<dd>Read Bruker files.</dd>
+<dt><a class="reference internal" href="nmrglue.fileio.bruker.write_lowmem.html#nmrglue.fileio.bruker.write_lowmem" title="nmrglue.fileio.bruker.write_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">write_lowmem</span></tt></a></dt>
+<dd>Write Bruker files using minimal amounts of memory.</dd>
 </dl>
-</li>
-<li><p class="first">read_pprog    True will read pulseprogram file, False prevents reading.</p>
-</li>
-<li><p class="first">read_acqus    True will read acqus file(s), False prevents reading.</p>
-</li>
-</ul>
-<p>Returns: dic,data</p>
-<p>Only the dir parameter must be defined, others will be determined 
-automatically if not specified.</p>
+</div>
 </dd></dl>
 
 </div>

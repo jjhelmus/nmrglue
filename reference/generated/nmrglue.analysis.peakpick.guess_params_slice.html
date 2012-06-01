@@ -65,20 +65,46 @@
 <h1>nmrglue.analysis.peakpick.guess_params_slice<a class="headerlink" href="#nmrglue-analysis-peakpick-guess-params-slice" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.analysis.peakpick.guess_params_slice">
-<tt class="descclassname">nmrglue.analysis.peakpick.</tt><tt class="descname">guess_params_slice</tt><big>(</big><em>data</em>, <em>location</em>, <em>seg_slice</em>, <em>ls_classes</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/peakpick.py#L322"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.peakpick.guess_params_slice" title="Permalink to this definition">¶</a></dt>
-<dd><p>Guess the parameter of a peak in a segment given slices.</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>data          Spectral data.</li>
-<li>seg_slice     List slices which slice data to given the desired segment.</li>
-<li>lineshapes    List of lineshape classes.</li>
-</ul>
-<p>Return: location,scale,amp</p>
-<ul class="simple">
-<li>location  Peak location.</li>
-<li>scale     Peak scale.</li>
-<li>amp       Peak amplitude.</li>
-</ul>
+<tt class="descclassname">nmrglue.analysis.peakpick.</tt><tt class="descname">guess_params_slice</tt><big>(</big><em>data</em>, <em>location</em>, <em>seg_slice</em>, <em>ls_classes</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/peakpick.py#L339"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.peakpick.guess_params_slice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Guess the parameter of a peak in a segment.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>NMR data.</p>
+</div></blockquote>
+<p><strong>location</strong> : tuple</p>
+<blockquote>
+<div><p>Peak locations.</p>
+</div></blockquote>
+<p><strong>seg_slice</strong> : list of slices</p>
+<blockquote>
+<div><p>List slices which slice data to give the desired segment.</p>
+</div></blockquote>
+<p><strong>lineshapes</strong> : list</p>
+<blockquote>
+<div><p>List of lineshape classes.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>location</strong> : list</p>
+<blockquote>
+<div><p>Peak locations.</p>
+</div></blockquote>
+<p><strong>scale</strong> : list</p>
+<blockquote>
+<div><p>Peak scales (linewidths).</p>
+</div></blockquote>
+<p><strong>amp</strong> : list</p>
+<blockquote class="last">
+<div><p>Peak amplitudes.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

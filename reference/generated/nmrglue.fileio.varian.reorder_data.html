@@ -65,17 +65,37 @@
 <h1>nmrglue.fileio.varian.reorder_data<a class="headerlink" href="#nmrglue-fileio-varian-reorder-data" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.varian.reorder_data">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">reorder_data</tt><big>(</big><em>data</em>, <em>shape</em>, <em>torder</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/varian.py#L433"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.varian.reorder_data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reorder data (raw from disk) packed with torder and shape</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>data  Data (2D) array, ordered as on disk.</li>
-<li>shape True shape of data</li>
-<li>toder Trace order. See read function.</li>
-</ul>
-<p>Returns: data (data with shape shape and ordered correctly)</p>
-<p>No error checking is done to see if data and shape contain the same
-number of values.</p>
+<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">reorder_data</tt><big>(</big><em>data</em>, <em>shape</em>, <em>torder</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/varian.py#L529"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.varian.reorder_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reorder raw data from file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : 2D ndarray</p>
+<blockquote>
+<div><p>Raw data as ordered in binary file.</p>
+</div></blockquote>
+<p><strong>shape</strong> : tuple of ints</p>
+<blockquote>
+<div><p>Shape of the NMR data.</p>
+</div></blockquote>
+<p><strong>torder</strong> : {&#8216;f&#8217;, &#8216;r&#8217;, &#8216;o&#8217; of Pytho function}</p>
+<blockquote>
+<div><p>Trace ordering . See <a class="reference internal" href="nmrglue.fileio.varian.read.html#nmrglue.fileio.varian.read" title="nmrglue.fileio.varian.read"><tt class="xref py py-func docutils literal"><span class="pre">read()</span></tt></a> for details.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>tdata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Minimal error checking is done to see if data and shape contain the same
+number of values.  This should be done before calling this function.</p>
 </dd></dl>
 
 </div>

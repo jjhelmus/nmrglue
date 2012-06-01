@@ -65,26 +65,82 @@
 <h1>nmrglue.process.pipe_proc.ext<a class="headerlink" href="#nmrglue-process-pipe-proc-ext" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.pipe_proc.ext">
-<tt class="descclassname">nmrglue.process.pipe_proc.</tt><tt class="descname">ext</tt><big>(</big><em>dic</em>, <em>data</em>, <em>x1='default'</em>, <em>xn='default'</em>, <em>y1='default'</em>, <em>yn='default'</em>, <em>round=1</em>, <em>left=False</em>, <em>right=False</em>, <em>mid=False</em>, <em>pow2=False</em>, <em>sw=True</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/pipe_proc.py#L1455"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.pipe_proc.ext" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extract Region</p>
-<p>The time parameter is not implemented.  Using multiple conflicting 
+<tt class="descclassname">nmrglue.process.pipe_proc.</tt><tt class="descname">ext</tt><big>(</big><em>dic</em>, <em>data</em>, <em>x1='default'</em>, <em>xn='default'</em>, <em>y1='default'</em>, <em>yn='default'</em>, <em>round=1</em>, <em>left=False</em>, <em>right=False</em>, <em>mid=False</em>, <em>pow2=False</em>, <em>sw=True</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/pipe_proc.py#L1849"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.pipe_proc.ext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract a region.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of NMRPipe parameters.</p>
+</div></blockquote>
+<p><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>x1</strong> : int or &#8216;default&#8217;</p>
+<blockquote>
+<div><p>Starting point of the X-axis extraction. &#8216;default&#8217; will start the 
+extraction at the first point.</p>
+</div></blockquote>
+<p><strong>xn</strong> : int or &#8216;default&#8217;</p>
+<blockquote>
+<div><p>Ending point of the X-axis extraction. &#8216;default&#8217; will stop the
+extraction at the last point.</p>
+</div></blockquote>
+<p><strong>y1</strong> : int or &#8216;default&#8217;</p>
+<blockquote>
+<div><p>Starting point of the Y-axis extraction. &#8216;default&#8217; will start the 
+extraction at the first point.</p>
+</div></blockquote>
+<p><strong>yn</strong> : int or &#8216;default&#8217;</p>
+<blockquote>
+<div><p>Ending point of the Y-axis extraction. &#8216;default&#8217; will stop the
+extraction at the last point.</p>
+</div></blockquote>
+<p><strong>round</strong> : int</p>
+<blockquote>
+<div><p>Multiple to round extraction size to.</p>
+</div></blockquote>
+<p><strong>left</strong> : bool</p>
+<blockquote>
+<div><p>True to extract the left half of the data.</p>
+</div></blockquote>
+<p><strong>right</strong> : bool</p>
+<blockquote>
+<div><p>True to extract the right half of the data.</p>
+</div></blockquote>
+<p><strong>mid</strong> : bool</p>
+<blockquote>
+<div><p>True to extract the central half of the data.</p>
+</div></blockquote>
+<p><strong>pow2</strong> : bool</p>
+<blockquote>
+<div><p>True will round the extracted size to the nearest power of 2.</p>
+</div></blockquote>
+<p><strong>sw</strong> : bool</p>
+<blockquote>
+<div><p>True to update the sweep width and ppm calibration parameters,
+recommended.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of updated NMRPipe parameters.</p>
+</div></blockquote>
+<p><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Extracted region of NMR data.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The <cite>time</cite> parameter is not implemented.  Using multiple conflicting 
 parameters may result in different results than NMRPipe.</p>
-<p>Parameters:
-* dic   Dictionary of NMRPipe parameters.
-* data  array of spectral data.
-* x1    X-axis extract region start
-* xn    X-axis extract region stop
-* y1    Y-axis extract region start
-* yn    Y-axis extract region stop
-* round Round extract size to nearest N points</p>
-<p>Set any of the following to True to select the desired extraction.
-* left  Extract Left Half.
-* right Extract Right Half.
-* mid   Extract Center Half.</p>
-<ul class="simple">
-<li>pow2  Set True to round extracted size to nearest power of 2.</li>
-<li>sw    Set True to update Sweep Width and ppm calibration</li>
-</ul>
 </dd></dl>
 
 </div>

@@ -65,15 +65,30 @@
 <h1>nmrglue.fileio.sparky.tile_data2d<a class="headerlink" href="#nmrglue-fileio-sparky-tile-data2d" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.sparky.tile_data2d">
-<tt class="descclassname">nmrglue.fileio.sparky.</tt><tt class="descname">tile_data2d</tt><big>(</big><em>data</em>, <em>(lentY</em>, <em>lentX)</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/sparky.py#L807"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.sparky.tile_data2d" title="Permalink to this definition">¶</a></dt>
-<dd><p>Tile sparky data into 1D numpy array</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>data    Two-dimensional data array</li>
-<li>lentY   Y (w1) dimention tile size</li>
-<li>lentX   X (w2) dimention tile size</li>
-</ul>
-<p>Returns 1D numpy array of floats</p>
+<tt class="descclassname">nmrglue.fileio.sparky.</tt><tt class="descname">tile_data2d</tt><big>(</big><em>data</em>, <em>(lentY</em>, <em>lentX)</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/sparky.py#L937"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.sparky.tile_data2d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tile 2D data into a 1D array.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : 2D ndarray</p>
+<blockquote>
+<div><p>NMR data, untiled/standard format.</p>
+</div></blockquote>
+<p><strong>(lentY, lentX)</strong> : tuple of ints</p>
+<blockquote>
+<div><p>Tile size.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>tdata</strong> : 1D ndarray</p>
+<blockquote class="last">
+<div><p>Tiled/Sparky formatted NMR data, returned as 1D array.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

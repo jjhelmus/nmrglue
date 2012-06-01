@@ -65,16 +65,39 @@
 <h1>nmrglue.fileio.table.append_column<a class="headerlink" href="#nmrglue-fileio-table-append-column" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.table.append_column">
-<tt class="descclassname">nmrglue.fileio.table.</tt><tt class="descname">append_column</tt><big>(</big><em>rec</em>, <em>col</em>, <em>name=None</em>, <em>format=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/table.py#L249"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.table.append_column" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.fileio.table.</tt><tt class="descname">append_column</tt><big>(</big><em>rec</em>, <em>col</em>, <em>name=None</em>, <em>format=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/table.py#L285"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.table.append_column" title="Permalink to this definition">¶</a></dt>
 <dd><p>Append a column to the end of a records array.</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>rec       Records array.</li>
-<li>col       Array which will be converted into the new column.</li>
-<li>name      Name of the column (if Name must be given in col.dtype.names)</li>
-<li>format    Data type to convert the new column into before appending.</li>
-</ul>
-<p>Returns: new_rec (new records array with column appended)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>rec</strong> : recarray</p>
+<blockquote>
+<div><p>Records array.</p>
+</div></blockquote>
+<p><strong>col</strong> : array_like</p>
+<blockquote>
+<div><p>Array or similar object which will be converted into the new column.</p>
+</div></blockquote>
+<p><strong>name</strong> : str, optional</p>
+<blockquote>
+<div><p>Name of the column. If None col.dtypes.name will be used.</p>
+</div></blockquote>
+<p><strong>format</strong> : dtype, optional</p>
+<blockquote>
+<div><p>Data type to convert the new column into before appending. Required if
+col is not an ndarray.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>new_rec</strong> : recarray</p>
+<blockquote class="last">
+<div><p>New records array with column appended.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

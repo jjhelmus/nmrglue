@@ -65,13 +65,39 @@
 <h1>nmrglue.fileio.bruker.read_jcamp<a class="headerlink" href="#nmrglue-fileio-bruker-read-jcamp" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.bruker.read_jcamp">
-<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">read_jcamp</tt><big>(</big><em>filename</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/bruker.py#L1088"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.bruker.read_jcamp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read a Bruker JCAMP-DX file into a dictionary</p>
-<p>Note: This is not a fully functional JCAMP-DX reader, it is only intended
-to read Bruker acqus (and similar) files</p>
-<p>Creates two special dictionary keys _coreheader and _comments</p>
-<p>Bruker parameter &#8220;$FOO&#8221; are extracted into strings, floats or lists
-and assigned to dic[&#8220;FOO&#8221;]</p>
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">read_jcamp</tt><big>(</big><em>filename</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/bruker.py#L1140"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.bruker.read_jcamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a Bruker JCAMP-DX file into a dictionary.</p>
+<p>Creates two special dictionary keys _coreheader and _comments Bruker 
+parameter &#8220;$FOO&#8221; are extracted into strings, floats or lists and assigned 
+to dic[&#8220;FOO&#8221;]</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>Filename of Bruker JCAMP-DX file.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
+<blockquote class="last">
+<div><p>Dictionary of parameters in file.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.fileio.bruker.write_jcamp.html#nmrglue.fileio.bruker.write_jcamp" title="nmrglue.fileio.bruker.write_jcamp"><tt class="xref py py-obj docutils literal"><span class="pre">write_jcamp</span></tt></a></dt>
+<dd>Write a Bruker JCAMP-DX file.</dd>
+</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>This is not a fully functional JCAMP-DX reader, it is only intended
+to read Bruker acqus (and similar) files.</p>
 </dd></dl>
 
 </div>

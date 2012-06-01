@@ -65,16 +65,42 @@
 <h1>nmrglue.process.proc_base.zd<a class="headerlink" href="#nmrglue-process-proc-base-zd" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_base.zd">
-<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">zd</tt><big>(</big><em>data</em>, <em>window</em>, <em>x0=0.0</em>, <em>slope=1.0</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L1608"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.zd" title="Permalink to this definition">¶</a></dt>
-<dd><p>Zero Diagonal band with generic window functions</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>data   Array of spectral data.</li>
-<li>window Window function to apply to diagonal band</li>
-<li>wide   Diagonal band half width in points.</li>
-<li>x0     Diagonal starting location in points.</li>
-<li>slope  Diagonal slope.</li>
-</ul>
+<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">zd</tt><big>(</big><em>data</em>, <em>window</em>, <em>x0=0.0</em>, <em>slope=1.0</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L2315"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.zd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Zero Diagonal band with generic window function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>window</strong> : ndarray</p>
+<blockquote>
+<div><p>Window to apply to diagonal band.</p>
+</div></blockquote>
+<p><strong>wide</strong> : int</p>
+<blockquote>
+<div><p>Diagonal band half width in points.</p>
+</div></blockquote>
+<p><strong>x0</strong> : int</p>
+<blockquote>
+<div><p>Starting location of diagonal band in points.</p>
+</div></blockquote>
+<p><strong>slope</strong> : float</p>
+<blockquote>
+<div><p>Slope of diagonal band.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Array of NMR data with diagonal band set to zero.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

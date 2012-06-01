@@ -65,35 +65,66 @@
 <h1>nmrglue.process.pipe_proc.mult<a class="headerlink" href="#nmrglue-process-pipe-proc-mult" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.pipe_proc.mult">
-<tt class="descclassname">nmrglue.process.pipe_proc.</tt><tt class="descname">mult</tt><big>(</big><em>dic</em>, <em>data</em>, <em>r=1.0</em>, <em>i=1.0</em>, <em>c=1.0</em>, <em>inv=False</em>, <em>hdr=False</em>, <em>x1=1.0</em>, <em>xn='default'</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/pipe_proc.py#L1739"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.pipe_proc.mult" title="Permalink to this definition">¶</a></dt>
-<dd><p>Multiple by a Constant</p>
-<p>Parameter c is used even when r and i are defined.  NMRPipe ignores c when
-r or i are defined.</p>
-<p>Parameters:</p>
-<ul>
-<li><p class="first">dic   Dictionary of NMRPipe parameters.</p>
-</li>
-<li><p class="first">data  array of spectral data.</p>
-</li>
-<li><p class="first">r     Constant to multply real data by.</p>
-</li>
-<li><p class="first">i     Constant to multiply imaginary data by.</p>
-</li>
-<li><p class="first">c     Constant to multiply both real and imaginary data by.</p>
-</li>
-<li><p class="first">inv   Multiply by inverse of Constant (both real and imaginary)</p>
-</li>
-<li><p class="first">hdr   Use constant value from header.</p>
-</li>
-<li><p class="first">x1    First point of region to multiply constant by.</p>
-</li>
-<li><dl class="first docutils">
-<dt>xn    Last point of region to multiply constant by. &#8216;default&#8217; specifies </dt>
-<dd><p class="first last">the end of the vector.</p>
-</dd>
-</dl>
-</li>
-</ul>
+<tt class="descclassname">nmrglue.process.pipe_proc.</tt><tt class="descname">mult</tt><big>(</big><em>dic</em>, <em>data</em>, <em>r=1.0</em>, <em>i=1.0</em>, <em>c=1.0</em>, <em>inv=False</em>, <em>hdr=False</em>, <em>x1=1.0</em>, <em>xn='default'</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/pipe_proc.py#L2185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.pipe_proc.mult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multiple by a constant.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of NMRPipe parameters.</p>
+</div></blockquote>
+<p><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>r</strong> : float</p>
+<blockquote>
+<div><p>Constant to multiply real data by.</p>
+</div></blockquote>
+<p><strong>i</strong> : float</p>
+<blockquote>
+<div><p>Constant to multiply imaginary data by.</p>
+</div></blockquote>
+<p><strong>c</strong> : float</p>
+<blockquote>
+<div><p>Constant to multiply both real and imaginary data by.</p>
+</div></blockquote>
+<p><strong>inv</strong> : bool</p>
+<blockquote>
+<div><p>True to multiply by the inverse of the constant.</p>
+</div></blockquote>
+<p><strong>hdr</strong> : bool</p>
+<blockquote>
+<div><p>True to use constant defined in dic.</p>
+</div></blockquote>
+<p><strong>x1</strong> : int</p>
+<blockquote>
+<div><p>First point of region to multiply constant by.</p>
+</div></blockquote>
+<p><strong>xn</strong> : int or &#8216;default&#8217;</p>
+<blockquote>
+<div><p>Last point of region to multiple constant by.  &#8216;default&#8217; specifies the 
+last point.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of updated NMRPipe parameters.</p>
+</div></blockquote>
+<p><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Array of NMR data which has been multiplied by a constant.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Parameter <cite>c</cite> is used even when <cite>r</cite> and <cite>i</cite> are defined.  NMRPipe&#8217;s MULT
+function ignores c when r or i are defined.</p>
 </dd></dl>
 
 </div>

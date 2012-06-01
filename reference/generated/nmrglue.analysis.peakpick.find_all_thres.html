@@ -65,25 +65,49 @@
 <h1>nmrglue.analysis.peakpick.find_all_thres<a class="headerlink" href="#nmrglue-analysis-peakpick-find-all-thres" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.analysis.peakpick.find_all_thres">
-<tt class="descclassname">nmrglue.analysis.peakpick.</tt><tt class="descname">find_all_thres</tt><big>(</big><em>data</em>, <em>thres</em>, <em>msep</em>, <em>find_segs=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/peakpick.py#L373"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.peakpick.find_all_thres" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.analysis.peakpick.</tt><tt class="descname">find_all_thres</tt><big>(</big><em>data</em>, <em>thres</em>, <em>msep</em>, <em>find_segs=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/peakpick.py#L396"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.peakpick.find_all_thres" title="Permalink to this definition">¶</a></dt>
 <dd><p>Peak pick a spectrum using a threshhold-minimum distance algorithm.</p>
 <p>Find peaks (local maxima) in a arbitrary dimensional NMR spectra above a 
 set threshold with a minimal distance between peaks.  When the spectrum is 
 small and multiple copies can fit into RAM use the _fast version of this 
 function. Segments are found by finding the first point in each direction
 along each dimension which is below the threshold.</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>data      N-dimensional array.</li>
-<li>thres     Threshold value for minimum peak height</li>
-<li>msep      N-tuple of minimum peak seperations along each axis</li>
-<li>find_segs True or False to return a list of slices for the segments.</li>
-</ul>
-<p>Returns: locations,seg_slices</p>
-<ul class="simple">
-<li>locations     List of indicies of peak locations</li>
-<li>seg_slices    List of slices which extract a region around each peak.</li>
-</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>NMR data.</p>
+</div></blockquote>
+<p><strong>thres</strong> : float</p>
+<blockquote>
+<div><p>Threshold value for minimum peak height</p>
+</div></blockquote>
+<p><strong>msep</strong> : tuple</p>
+<blockquote>
+<div><p>Tuple of minimum peak seperations along each axis.</p>
+</div></blockquote>
+<p><strong>find_segs</strong> : bool, optional</p>
+<blockquote>
+<div><p>True  to find segments and return a list of slices which select that
+segment.  False performs no segmentation discovery.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>locations</strong> : list</p>
+<blockquote>
+<div><p>List of peak locations</p>
+</div></blockquote>
+<p><strong>seg_slices</strong> : list, optional</p>
+<blockquote class="last">
+<div><p>List of slices which extract a region around each peak. Only returned
+when find_segs is True.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

@@ -65,14 +65,18 @@
 <h1>nmrglue.analysis.analysisbase.ndwindow_inside_index<a class="headerlink" href="#nmrglue-analysis-analysisbase-ndwindow-inside-index" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="nmrglue.analysis.analysisbase.ndwindow_inside_index">
-<em class="property">class </em><tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">ndwindow_inside_index</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/analysisbase.py#L247"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow_inside_index" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">ndwindow_inside_index</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/analysisbase.py#L326"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow_inside_index" title="Permalink to this definition">¶</a></dt>
 <dd><p>An N-dimensional interator object which returns the index of the window 
-top-left and a ndwindow_inside slice array.</p>
-<p>Similar to ndwindow_index but reports top left index of window.</p>
+top-left and a <a class="reference internal" href="nmrglue.analysis.analysisbase.ndwindow_inside.html#nmrglue.analysis.analysisbase.ndwindow_inside" title="nmrglue.analysis.analysisbase.ndwindow_inside"><tt class="xref py py-class docutils literal"><span class="pre">ndwindow_inside</span></tt></a> slice array.</p>
+<p>Similar to <a class="reference internal" href="nmrglue.analysis.analysisbase.ndwindow_index.html#nmrglue.analysis.analysisbase.ndwindow_index" title="nmrglue.analysis.analysisbase.ndwindow_index"><tt class="xref py py-class docutils literal"><span class="pre">ndwindow_index</span></tt></a> but reports top left index of 
+window.</p>
+<p>See <a class="reference internal" href="nmrglue.analysis.analysisbase.ndwindow_inside.html#nmrglue.analysis.analysisbase.ndwindow_inside" title="nmrglue.analysis.analysisbase.ndwindow_inside"><tt class="xref py py-class docutils literal"><span class="pre">ndwindow_inside</span></tt></a> and :py:class`ndwindow_index` for addition
+documentation.</p>
 <dl class="method">
 <dt id="nmrglue.analysis.analysisbase.ndwindow_inside_index.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/analysisbase.py#L255"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow_inside_index.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<tt class="descname">__init__</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/analysisbase.py#L338"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow_inside_index.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up the object</p>
+</dd></dl>
 
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
@@ -82,9 +86,9 @@ top-left and a ndwindow_inside slice array.</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="#nmrglue.analysis.analysisbase.ndwindow_inside_index.__init__" title="nmrglue.analysis.analysisbase.ndwindow_inside_index.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">__init__</span></tt></a>(shape,&nbsp;wsize)</td>
-<td></td>
+<td>Set up the object</td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">next</span></tt>()</td>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">next</span></tt>(()&nbsp;-&gt;&nbsp;the&nbsp;next&nbsp;value,&nbsp;or&nbsp;raiseStopIteration)</td>
 <td></td>
 </tr>
 </tbody>

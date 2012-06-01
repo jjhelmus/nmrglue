@@ -65,14 +65,37 @@
 <h1>nmrglue.fileio.table.delete_column<a class="headerlink" href="#nmrglue-fileio-table-delete-column" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.table.delete_column">
-<tt class="descclassname">nmrglue.fileio.table.</tt><tt class="descname">delete_column</tt><big>(</big><em>rec</em>, <em>N</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/table.py#L309"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.table.delete_column" title="Permalink to this definition">¶</a></dt>
-<dd><p>Delete a column from a records array</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>rec   Records array.</li>
-<li>N     Number of the column to delete.</li>
-</ul>
-<p>Returns: new_rec (new records array with column inserted)</p>
+<tt class="descclassname">nmrglue.fileio.table.</tt><tt class="descname">delete_column</tt><big>(</big><em>rec</em>, <em>N</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/table.py#L360"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.table.delete_column" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a column from a records array.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>rec</strong> : recarray</p>
+<blockquote>
+<div><p>Records array.</p>
+</div></blockquote>
+<p><strong>N</strong> : int</p>
+<blockquote>
+<div><p>Column number to delete.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>new_rec</strong> : recarray</p>
+<blockquote class="last">
+<div><p>New records array with column deleted.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.fileio.table.reorder_columns.html#nmrglue.fileio.table.reorder_columns" title="nmrglue.fileio.table.reorder_columns"><tt class="xref py py-obj docutils literal"><span class="pre">reorder_columns</span></tt></a></dt>
+<dd>Delete multiple columns from a records array.</dd>
+</dl>
+</div>
 </dd></dl>
 
 </div>

@@ -65,15 +65,38 @@
 <h1>nmrglue.process.proc_base.ps<a class="headerlink" href="#nmrglue-process-proc-base-ps" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_base.ps">
-<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">ps</tt><big>(</big><em>data</em>, <em>p0=0.0</em>, <em>p1=0.0</em>, <em>inv=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L570"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.ps" title="Permalink to this definition">¶</a></dt>
-<dd><p>Linear Phase Correction</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>data  Array of spectral data.</li>
-<li>p0    Zero order phase in degrees.</li>
-<li>p1    First order phase in degrees.</li>
-<li>inv   Set True for inverse phase correction</li>
-</ul>
+<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">ps</tt><big>(</big><em>data</em>, <em>p0=0.0</em>, <em>p1=0.0</em>, <em>inv=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L847"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.ps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Linear phase correction</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>p0</strong> : float</p>
+<blockquote>
+<div><p>Zero order phase in degrees.</p>
+</div></blockquote>
+<p><strong>p1</strong> : float</p>
+<blockquote>
+<div><p>First order phase in degrees.</p>
+</div></blockquote>
+<p><strong>inv</strong> : bool, optional</p>
+<blockquote>
+<div><p>True for inverse phase correction</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Phased NMR data.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

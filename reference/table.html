@@ -62,14 +62,13 @@
             
   <div class="section" id="module-nmrglue.fileio.table">
 <span id="nmrglue-table"></span><h1>nmrglue.table<a class="headerlink" href="#module-nmrglue.fileio.table" title="Permalink to this headline">¶</a></h1>
-<p>nmrglue table functions</p>
+<p>nmrglue table functions.</p>
 <p>nmrglue uses numpy records array as stores of various data (peak tables, 
-trajectories,etc).  This module provides functions to read and write records
+trajectories, etc).  This module provides functions to read and write records
 arrays from disk.  Formatting of the numeric values is left to Python&#8217;s str
 function and only the data type need be specified.  In addition this module
-contains functions to convert nmrglue&#8217;s comments to and from NMRPipe&#8217;s 
-pcomments,pformats lists.</p>
-<p>This modules is imported as nmrglue.pipe and can be called as such.</p>
+contains functions to convert nmrglue&#8217;s table format NMRPipe&#8217;s table format.</p>
+<p>This modules is imported as nmrglue.table and can be called as such.</p>
 <div class="section" id="user-information">
 <h2>User Information<a class="headerlink" href="#user-information" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="user-functions">
@@ -81,43 +80,43 @@ pcomments,pformats lists.</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.table.read.html#nmrglue.fileio.table.read" title="nmrglue.fileio.table.read"><tt class="xref py py-obj docutils literal"><span class="pre">read</span></tt></a>(filename)</td>
-<td>Read a table (.tbl) file.</td>
+<td>Read a nmrglue table file.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.table.write.html#nmrglue.fileio.table.write" title="nmrglue.fileio.table.write"><tt class="xref py py-obj docutils literal"><span class="pre">write</span></tt></a>(filename,&nbsp;comments,&nbsp;rec[,&nbsp;overwrite])</td>
-<td>Write a nmrglue table to file (.tbl).</td>
+<td>Write a nmrglue table to file.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.table.insert_row.html#nmrglue.fileio.table.insert_row" title="nmrglue.fileio.table.insert_row"><tt class="xref py py-obj docutils literal"><span class="pre">insert_row</span></tt></a>(rec,&nbsp;N,&nbsp;row)</td>
 <td>Insert a row into a records array before row number N.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.table.append_row.html#nmrglue.fileio.table.append_row" title="nmrglue.fileio.table.append_row"><tt class="xref py py-obj docutils literal"><span class="pre">append_row</span></tt></a>(rec,&nbsp;row)</td>
-<td>Append a row to the end of a records array</td>
+<td>Append a row to the end of a records array.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.table.delete_row.html#nmrglue.fileio.table.delete_row" title="nmrglue.fileio.table.delete_row"><tt class="xref py py-obj docutils literal"><span class="pre">delete_row</span></tt></a>(rec,&nbsp;N)</td>
-<td>Delete row N from records array.</td>
+<td>Delete a row from a records array.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.table.reorder_rows.html#nmrglue.fileio.table.reorder_rows" title="nmrglue.fileio.table.reorder_rows"><tt class="xref py py-obj docutils literal"><span class="pre">reorder_rows</span></tt></a>(rec,&nbsp;new_order)</td>
-<td>Reorder rows in a records array.</td>
+<td>Reorder or delete rows in a records array.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.table.insert_column.html#nmrglue.fileio.table.insert_column" title="nmrglue.fileio.table.insert_column"><tt class="xref py py-obj docutils literal"><span class="pre">insert_column</span></tt></a>(rec,&nbsp;N,&nbsp;col[,&nbsp;name,&nbsp;format])</td>
-<td>Insert a column into a records array before column number N.</td>
+<td>Insert a column into a records array.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.table.append_column.html#nmrglue.fileio.table.append_column" title="nmrglue.fileio.table.append_column"><tt class="xref py py-obj docutils literal"><span class="pre">append_column</span></tt></a>(rec,&nbsp;col[,&nbsp;name,&nbsp;format])</td>
 <td>Append a column to the end of a records array.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.table.delete_column.html#nmrglue.fileio.table.delete_column" title="nmrglue.fileio.table.delete_column"><tt class="xref py py-obj docutils literal"><span class="pre">delete_column</span></tt></a>(rec,&nbsp;N)</td>
-<td>Delete a column from a records array</td>
+<td>Delete a column from a records array.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.table.reorder_columns.html#nmrglue.fileio.table.reorder_columns" title="nmrglue.fileio.table.reorder_columns"><tt class="xref py py-obj docutils literal"><span class="pre">reorder_columns</span></tt></a>(rec,&nbsp;new_order)</td>
-<td>Reorder columns in a records array</td>
+<td>Reorder or delete columns in a records array.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.table.pipe2glue.html#nmrglue.fileio.table.pipe2glue" title="nmrglue.fileio.table.pipe2glue"><tt class="xref py py-obj docutils literal"><span class="pre">pipe2glue</span></tt></a>(pcomments,&nbsp;pformat,&nbsp;rec)</td>
-<td>Convert a NMRPipe table to nmrglue table</td>
+<td>Convert a NMRPipe table to a nmrglue table</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.table.glue2pipe.html#nmrglue.fileio.table.glue2pipe" title="nmrglue.fileio.table.glue2pipe"><tt class="xref py py-obj docutils literal"><span class="pre">glue2pipe</span></tt></a>(comments,&nbsp;rec)</td>
-<td>Convert a nmrglue table to a NMRPipe table</td>
+<td>Convert a nmrglue table to a NMRPipe table.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.table.guess_pformat.html#nmrglue.fileio.table.guess_pformat" title="nmrglue.fileio.table.guess_pformat"><tt class="xref py py-obj docutils literal"><span class="pre">guess_pformat</span></tt></a>(col)</td>
-<td>Guess a NMRPipe table column format string given a column</td>
+<td>Guess a NMRPipe table column format string given a column.</td>
 </tr>
 </tbody>
 </table>

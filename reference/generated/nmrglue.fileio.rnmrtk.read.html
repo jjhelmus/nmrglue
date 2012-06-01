@@ -65,31 +65,48 @@
 <h1>nmrglue.fileio.rnmrtk.read<a class="headerlink" href="#nmrglue-fileio-rnmrtk-read" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.rnmrtk.read">
-<tt class="descclassname">nmrglue.fileio.rnmrtk.</tt><tt class="descname">read</tt><big>(</big><em>file</em>, <em>par_file=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/rnmrtk.py#L72"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.rnmrtk.read" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read a RNMRTK file, returning a dic,data pair</p>
-<p>Parameters:</p>
-<ul>
-<li><p class="first">file      RNMRTK file name (.sec).</p>
-</li>
-<li><dl class="first docutils">
-<dt>par_file  RNMRTK parameter file, if set to None the last four characters </dt>
-<dd><p class="first last">of the file are changed to .par and this is used as the 
-parameter filename.</p>
-</dd>
+<tt class="descclassname">nmrglue.fileio.rnmrtk.</tt><tt class="descname">read</tt><big>(</big><em>filename</em>, <em>par_file=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/rnmrtk.py#L113"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.rnmrtk.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read RNMRTK files.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>Filename of RNMRTK file to read (.sec).</p>
+</div></blockquote>
+<p><strong>par_file</strong> : str or None, optional</p>
+<blockquote>
+<div><p>Filename of RNMRTK parameter file. If None (default) a the last four
+characters of <cite>file</cite> are changed to .par.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>dic</strong> : dic</p>
+<blockquote>
+<div><p>Dictionary of RNMRTK parameters.</p>
+</div></blockquote>
+<p><strong>data</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.fileio.rnmrtk.read_lowmem.html#nmrglue.fileio.rnmrtk.read_lowmem" title="nmrglue.fileio.rnmrtk.read_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">read_lowmem</span></tt></a></dt>
+<dd>Read RNMRTK files with minimal memory usage.</dd>
+<dt><a class="reference internal" href="nmrglue.fileio.rnmrtk.write.html#nmrglue.fileio.rnmrtk.write" title="nmrglue.fileio.rnmrtk.write"><tt class="xref py py-obj docutils literal"><span class="pre">write</span></tt></a></dt>
+<dd>Write RNMRTK files.</dd>
 </dl>
-</li>
-</ul>
-<p>Return: dic,data</p>
-<ul class="simple">
-<li>dic   Python dictionary containing RNMRTK parameters</li>
-<li>data  Spectral data (numpy array)</li>
-</ul>
-<dl class="docutils">
-<dt>Note:   </dt>
-<dd>The dictionary parameters are ordered opposite the data layout, that
-is to say the the FIRST parameter in each list corresponds to the
-LAST axis in the data array.</dd>
-</dl>
+</div>
+<p class="rubric">Notes</p>
+<p>The dictionary parameters are ordered opposite the data layout, that is to
+say the the FIRST parameter in each list corresponds to the LAST axis in 
+the data array.</p>
 </dd></dl>
 
 </div>

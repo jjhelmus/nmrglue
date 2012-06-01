@@ -65,17 +65,37 @@
 <h1>nmrglue.analysis.analysisbase.find_limits<a class="headerlink" href="#nmrglue-analysis-analysisbase-find-limits" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.analysis.analysisbase.find_limits">
-<tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">find_limits</tt><big>(</big><em>pts</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/analysisbase.py#L50"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.analysisbase.find_limits" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">find_limits</tt><big>(</big><em>pts</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/analysisbase.py#L60"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.analysisbase.find_limits" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find the limits which outline the provided list of points</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>pts   List of points [(z0,y0,x0),(z1,y1,x1),...]</li>
-</ul>
-<p>Returns (min,max):</p>
-<ul class="simple">
-<li>min   array of minimum indices array([zmin,ymin,xmin]</li>
-<li>max   array of maximum indices array([zmin,ymin,xmin]</li>
-</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>pts</strong> : list of int tuples</p>
+<blockquote>
+<div><p>List of points [(z0, y0, x0), (z1, y1, x1), ...]</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>min</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of minimum indices: array([zmin, ymin, xmin]</p>
+</div></blockquote>
+<p><strong>max</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Array of maximum indices: array([zmin, ymin, xmin]</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.analysis.analysisbase.limits2slice.html#nmrglue.analysis.analysisbase.limits2slice" title="nmrglue.analysis.analysisbase.limits2slice"><tt class="xref py py-obj docutils literal"><span class="pre">limits2slice</span></tt></a></dt>
+<dd>Create a list of slices from min, max limits</dd>
+</dl>
+</div>
 </dd></dl>
 
 </div>

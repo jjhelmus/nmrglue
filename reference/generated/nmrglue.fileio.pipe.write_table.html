@@ -65,16 +65,44 @@
 <h1>nmrglue.fileio.pipe.write_table<a class="headerlink" href="#nmrglue-fileio-pipe-write-table" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.write_table">
-<tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">write_table</tt><big>(</big><em>filename</em>, <em>pcomments</em>, <em>pformats</em>, <em>rec</em>, <em>overwrite=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/pipe.py#L81"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.pipe.write_table" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">write_table</tt><big>(</big><em>filename</em>, <em>pcomments</em>, <em>pformats</em>, <em>rec</em>, <em>overwrite=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/pipe.py#L80"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.pipe.write_table" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write a NMRPipe database table (.tab) file.</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>filename  Name of file to write to.</li>
-<li>pcomments List of NMRPipe comment lines.</li>
-<li>pformats  List of NMRPipe table column formats strings.</li>
-<li>rec       Records array of table.</li>
-<li>overwrite Set True to overwrite file if it exists.</li>
-</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>Filename of file to write to.</p>
+</div></blockquote>
+<p><strong>pcomments: list</strong> :</p>
+<blockquote>
+<div><p>List of NMRPipe comment lines.</p>
+</div></blockquote>
+<p><strong>pformats :</strong> :</p>
+<blockquote>
+<div><p>List of NMRPipe table column formats strings.</p>
+</div></blockquote>
+<p><strong>rec</strong> : recarray</p>
+<blockquote>
+<div><p>Records array of table.</p>
+</div></blockquote>
+<p><strong>overwrite: bool, optional</strong> :</p>
+<blockquote class="last">
+<div><p>True to overwrite file if it exists, False will raise a Warning if the
+file exists.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.fileio.pipe.read_table.html#nmrglue.fileio.pipe.read_table" title="nmrglue.fileio.pipe.read_table"><tt class="xref py py-obj docutils literal"><span class="pre">read_table</span></tt></a></dt>
+<dd>Read a NMRPipe table file.</dd>
+</dl>
+</div>
 </dd></dl>
 
 </div>

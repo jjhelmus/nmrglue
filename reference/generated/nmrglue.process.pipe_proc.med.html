@@ -65,18 +65,50 @@
 <h1>nmrglue.process.pipe_proc.med<a class="headerlink" href="#nmrglue-process-pipe-proc-med" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.pipe_proc.med">
-<tt class="descclassname">nmrglue.process.pipe_proc.</tt><tt class="descname">med</tt><big>(</big><em>dic</em>, <em>data</em>, <em>nw=24</em>, <em>sf=16</em>, <em>sigma=5.0</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/pipe_proc.py#L1343"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.pipe_proc.med" title="Permalink to this definition">¶</a></dt>
-<dd><p>Median Baseline Correction</p>
+<tt class="descclassname">nmrglue.process.pipe_proc.</tt><tt class="descname">med</tt><big>(</big><em>dic</em>, <em>data</em>, <em>nw=24</em>, <em>sf=16</em>, <em>sigma=5.0</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/pipe_proc.py#L1692"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.pipe_proc.med" title="Permalink to this definition">¶</a></dt>
+<dd><p>Median baseline correction</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of NMRPipe parameters.</p>
+</div></blockquote>
+<p><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>nw</strong> : int</p>
+<blockquote>
+<div><p>Median window size in points.</p>
+</div></blockquote>
+<p><strong>sf</strong> : int</p>
+<blockquote>
+<div><p>Smoothing filter size in points.</p>
+</div></blockquote>
+<p><strong>sigma</strong> : float</p>
+<blockquote>
+<div><p>Gaussian convolution width.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of updated NMRPipe parameters.</p>
+</div></blockquote>
+<p><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Array of NMR data with an median baseline correction applied.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
 <p>This function applies Friendrich&#8217;s model-free baseline flatting algorithm
-(Friendrichs JBNMR 1995 5 147-153).  NMRPipe applies a different algorithm.</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>dic   Dictionary of NMRPipe parameters.</li>
-<li>data  array of spectral data.</li>
-<li>nw    Median window in points.</li>
-<li>sf    Smoothing filter in points.</li>
-<li>sigma Gaussian convolution width.</li>
-</ul>
+(Friendrichs JBNMR 1995 5 147-153).  NMRPipe applies a different and 
+unknown algorithm.</p>
 </dd></dl>
 
 </div>

@@ -65,13 +65,33 @@
 <h1>nmrglue.analysis.analysisbase.slice2limits<a class="headerlink" href="#nmrglue-analysis-analysisbase-slice2limits" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.analysis.analysisbase.slice2limits">
-<tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">slice2limits</tt><big>(</big><em>slices</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/analysisbase.py#L82"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.analysisbase.slice2limits" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a tuple of min,max limits from a set of slices</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>slices: list of slices</li>
-</ul>
-<p>Returns: Tuple of minimum and maximum indices</p>
+<tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">slice2limits</tt><big>(</big><em>slices</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/analysisbase.py#L107"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.analysisbase.slice2limits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a tuple of minimum, maximum limits from a set of slices.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>slices</strong> : list</p>
+<blockquote>
+<div><p>List of slice objects which return points between limits</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>limits: tuple, (ndarray, ndarray)</strong> :</p>
+<blockquote class="last">
+<div><p>Two tuple consisting of array of the minimum and maximum indices.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.analysis.analysisbase.limits2slice.html#nmrglue.analysis.analysisbase.limits2slice" title="nmrglue.analysis.analysisbase.limits2slice"><tt class="xref py py-obj docutils literal"><span class="pre">limits2slice</span></tt></a></dt>
+<dd>Find a list of slices given minumum and maximum limits.</dd>
+</dl>
+</div>
 </dd></dl>
 
 </div>

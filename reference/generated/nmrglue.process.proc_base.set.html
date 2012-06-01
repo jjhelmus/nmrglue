@@ -65,13 +65,33 @@
 <h1>nmrglue.process.proc_base.set<a class="headerlink" href="#nmrglue-process-proc-base-set" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_base.set">
-<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">set</tt><big>(</big><em>data</em>, <em>c</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L874"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.set" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set Data to a Constant</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>data  Array of spectral data.</li>
-<li>c     Constant to set data to (may be complex)</li>
-</ul>
+<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">set</tt><big>(</big><em>data</em>, <em>c</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L1331"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set to a constant.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>c</strong> : float or complex</p>
+<blockquote>
+<div><p>Constant to set data to.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Array of constants.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>data is set in place, if original data is required make a copy before
+calling this function.</p>
 </dd></dl>
 
 </div>

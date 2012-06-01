@@ -28,8 +28,8 @@
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="nmrglue 0.3-dev documentation" href="../../index.html" />
     <link rel="up" title="nmrglue.lineshapes1d" href="../lineshapes1d.html" />
-    <link rel="next" title="nmrglue.analysis.lineshapes1d.sim_gauss_fwhm" href="nmrglue.analysis.lineshapes1d.sim_gauss_fwhm.html" />
-    <link rel="prev" title="nmrglue.analysis.lineshapes1d.center_fwhm_bymoments" href="nmrglue.analysis.lineshapes1d.center_fwhm_bymoments.html" /> 
+    <link rel="next" title="nmrglue.analysis.lineshapes1d.sim_lorentz_gamma" href="nmrglue.analysis.lineshapes1d.sim_lorentz_gamma.html" />
+    <link rel="prev" title="nmrglue.analysis.lineshapes1d.sim_pvoigt_fwhm" href="nmrglue.analysis.lineshapes1d.sim_pvoigt_fwhm.html" /> 
   </head>
   <body>
     <div class="related">
@@ -45,10 +45,10 @@
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="nmrglue.analysis.lineshapes1d.sim_gauss_fwhm.html" title="nmrglue.analysis.lineshapes1d.sim_gauss_fwhm"
+          <a href="nmrglue.analysis.lineshapes1d.sim_lorentz_gamma.html" title="nmrglue.analysis.lineshapes1d.sim_lorentz_gamma"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="nmrglue.analysis.lineshapes1d.center_fwhm_bymoments.html" title="nmrglue.analysis.lineshapes1d.center_fwhm_bymoments"
+          <a href="nmrglue.analysis.lineshapes1d.sim_pvoigt_fwhm.html" title="nmrglue.analysis.lineshapes1d.sim_pvoigt_fwhm"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
           <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
@@ -65,20 +65,40 @@
 <h1>nmrglue.analysis.lineshapes1d.sim_gauss_sigma<a class="headerlink" href="#nmrglue-analysis-lineshapes1d-sim-gauss-sigma" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.analysis.lineshapes1d.sim_gauss_sigma">
-<tt class="descclassname">nmrglue.analysis.lineshapes1d.</tt><tt class="descname">sim_gauss_sigma</tt><big>(</big><em>x</em>, <em>x0</em>, <em>sigma</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/lineshapes1d.py#L14"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.lineshapes1d.sim_gauss_sigma" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.analysis.lineshapes1d.</tt><tt class="descname">sim_gauss_sigma</tt><big>(</big><em>x</em>, <em>x0</em>, <em>sigma</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/lineshapes1d.py#L15"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.lineshapes1d.sim_gauss_sigma" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simulate a Gaussian (normal) lineshape with unit height at the center.</p>
 <p>Simulate discrete points of a continuous Gaussian (normal) distribution
 with unit height at the center.  Sigma (the standard deviation of the
 distribution) is used as the distribution scale parameter.</p>
 <p>Functional form:</p>
 <blockquote>
-<div>f(x; x0, sigma) = exp(-(x-x0)^2  / (2 * sigma^2))</div></blockquote>
-<p>Parameters:</p>
-<ul class="simple">
-<li>x     Array of values at which to evaluate distribution.</li>
-<li>x0    Center (mean) of Gaussian distribution.</li>
-<li>sigma Scale (variance) of the Gaussian distribution.</li>
-</ul>
+<div>f(x; x0, sigma) = exp( -(x - x0) ^ 2  / (2 * sigma ^ 2))</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>x</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of values at which to evaluate the distribution.</p>
+</div></blockquote>
+<p><strong>x0</strong> : float</p>
+<blockquote>
+<div><p>Center (mean) of Gaussian distribution.</p>
+</div></blockquote>
+<p><strong>sigma</strong> : float</p>
+<blockquote>
+<div><p>Scale (variance) of the Gaussian distribution.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>f</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Distribution evaluated at points in x.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -90,11 +110,11 @@ distribution) is used as the distribution scale parameter.</p>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="nmrglue.analysis.lineshapes1d.center_fwhm_bymoments.html"
-                        title="previous chapter">nmrglue.analysis.lineshapes1d.center_fwhm_bymoments</a></p>
+  <p class="topless"><a href="nmrglue.analysis.lineshapes1d.sim_pvoigt_fwhm.html"
+                        title="previous chapter">nmrglue.analysis.lineshapes1d.sim_pvoigt_fwhm</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="nmrglue.analysis.lineshapes1d.sim_gauss_fwhm.html"
-                        title="next chapter">nmrglue.analysis.lineshapes1d.sim_gauss_fwhm</a></p>
+  <p class="topless"><a href="nmrglue.analysis.lineshapes1d.sim_lorentz_gamma.html"
+                        title="next chapter">nmrglue.analysis.lineshapes1d.sim_lorentz_gamma</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/reference/generated/nmrglue.analysis.lineshapes1d.sim_gauss_sigma.txt"
@@ -130,10 +150,10 @@ distribution) is used as the distribution scale parameter.</p>
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="nmrglue.analysis.lineshapes1d.sim_gauss_fwhm.html" title="nmrglue.analysis.lineshapes1d.sim_gauss_fwhm"
+          <a href="nmrglue.analysis.lineshapes1d.sim_lorentz_gamma.html" title="nmrglue.analysis.lineshapes1d.sim_lorentz_gamma"
              >next</a> |</li>
         <li class="right" >
-          <a href="nmrglue.analysis.lineshapes1d.center_fwhm_bymoments.html" title="nmrglue.analysis.lineshapes1d.center_fwhm_bymoments"
+          <a href="nmrglue.analysis.lineshapes1d.sim_pvoigt_fwhm.html" title="nmrglue.analysis.lineshapes1d.sim_pvoigt_fwhm"
              >previous</a> |</li>
         <li><a href="../../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
           <li><a href="../index.html" >Reference Guide</a> &raquo;</li>

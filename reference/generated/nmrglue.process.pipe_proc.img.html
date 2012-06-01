@@ -65,32 +65,101 @@
 <h1>nmrglue.process.pipe_proc.img<a class="headerlink" href="#nmrglue-process-pipe-proc-img" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.pipe_proc.img">
-<tt class="descclassname">nmrglue.process.pipe_proc.</tt><tt class="descname">img</tt><big>(</big><em>dic, data, filter, dx=1.0, dy=1.0, kern=[1], conv=False, thres=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/pipe_proc.py#L2027"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.pipe_proc.img" title="Permalink to this definition">¶</a></dt>
-<dd><p>Image Processing Utilities</p>
+<tt class="descclassname">nmrglue.process.pipe_proc.</tt><tt class="descname">img</tt><big>(</big><em>dic, data, filter, dx=1.0, dy=1.0, kern=[1], conv=False, thres=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/pipe_proc.py#L2576"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.pipe_proc.img" title="Permalink to this definition">¶</a></dt>
+<dd><p>Image processing utilities</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of NMRPipe parameters.</p>
+</div></blockquote>
+<p><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>filter</strong> : {&#8216;median&#8217;, &#8216;min&#8217;, &#8216;max&#8217;, &#8216;amin&#8217;, &#8216;amax&#8217;, &#8216;range&#8217;, &#8216;avg&#8217;, &#8216;dev&#8217;}</p>
+<blockquote>
+<div><p>Image processing filter to apply. See table below for descriptions.</p>
+</div></blockquote>
+<p><strong>dx</strong> : float</p>
+<blockquote>
+<div><p>Filter width along X-axis in points.</p>
+</div></blockquote>
+<p><strong>dy</strong> : float</p>
+<blockquote>
+<div><p>Filter width along Y-axis in points.</p>
+</div></blockquote>
+<p><strong>kern</strong> : list</p>
+<blockquote>
+<div><p>List of convolution filter kernel values, only used when conv is True.</p>
+</div></blockquote>
+<p><strong>conv</strong> : bool</p>
+<blockquote>
+<div><p>True to apply convolution filter with kernel of kern.</p>
+</div></blockquote>
+<p><strong>thres</strong> : float or None or True</p>
+<blockquote>
+<div><p>Threshold value.  Only points above this value will have the filter
+applied. None turns thresholding off and the filter will be applied 
+to all points. True will set a threshold value of 0.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of updated NMRPipe parameters.</p>
+</div></blockquote>
+<p><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Imaged processed array of NMR data.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
 <p>This function wraps when regions extend past the edges (NMRPipe doesn&#8217;t).
 The filter is applied to both the real and imaginary channels</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>dic    Dictionary of NMRPipe parameters.</li>
-<li>data   array of spectral data.</li>
-<li>filter Filter to apply</li>
-<li>dx     Filter X-axis width in points.</li>
-<li>dy     Filter Y-axis width in points.</li>
-<li>kern   List of kernal values</li>
-<li>conv   Set True to apply convolution filter</li>
-<li>thres  Threshold value for use in computing filter, None turns off.</li>
-</ul>
 <p>Supported filters are:</p>
-<ul class="simple">
-<li>median    Median</li>
-<li>min       Minimum</li>
-<li>max       Maximim</li>
-<li>amin      Absolute Minimum</li>
-<li>amax      Absolute Maximum</li>
-<li>range     Range</li>
-<li>avg       Average</li>
-<li>dev       Standard Deviation</li>
-</ul>
+<table border="1" class="docutils">
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>median</td>
+<td>Median</td>
+</tr>
+<tr class="row-odd"><td>min</td>
+<td>Minimum</td>
+</tr>
+<tr class="row-even"><td>max</td>
+<td>Maximim</td>
+</tr>
+<tr class="row-odd"><td>amin</td>
+<td>Absolute Minimum</td>
+</tr>
+<tr class="row-even"><td>amax</td>
+<td>Absolute Maximum</td>
+</tr>
+<tr class="row-odd"><td>range</td>
+<td>Range</td>
+</tr>
+<tr class="row-even"><td>avg</td>
+<td>Average</td>
+</tr>
+<tr class="row-odd"><td>dev</td>
+<td>Standard Deviation</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

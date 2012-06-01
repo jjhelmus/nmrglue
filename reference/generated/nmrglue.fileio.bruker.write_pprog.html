@@ -65,11 +65,39 @@
 <h1>nmrglue.fileio.bruker.write_pprog<a class="headerlink" href="#nmrglue-fileio-bruker-write-pprog" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.bruker.write_pprog">
-<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">write_pprog</tt><big>(</big><em>filename</em>, <em>dic</em>, <em>overwrite=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/bruker.py#L1434"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.bruker.write_pprog" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write a minimal Bruker pulse program</p>
-<p>DO NOT TRY TO RUN THE RESULTING PULSE PROGRAM</p>
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">write_pprog</tt><big>(</big><em>filename</em>, <em>dic</em>, <em>overwrite=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/bruker.py#L1525"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.bruker.write_pprog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a minimal Bruker pulse program to file.</p>
+<p><strong>DO NOT TRY TO RUN THE RESULTING PULSE PROGRAM</strong></p>
 <p>This pulse program should return the same dictionary when read using 
 read_pprog, nothing else.  The pulse program will be nonsense.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>Filename of file to write pulse program to.</p>
+</div></blockquote>
+<p><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of pulse program parameters.</p>
+</div></blockquote>
+<p><strong>overwrite</strong> : bool, optional</p>
+<blockquote class="last">
+<div><p>True to overwrite an existing file, False will raise a Warning if the
+file already exists.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.fileio.bruker.read_pprog.html#nmrglue.fileio.bruker.read_pprog" title="nmrglue.fileio.bruker.read_pprog"><tt class="xref py py-obj docutils literal"><span class="pre">read_pprog</span></tt></a></dt>
+<dd>Read a Bruker pulse program.</dd>
+</dl>
+</div>
 </dd></dl>
 
 </div>

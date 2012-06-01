@@ -28,7 +28,7 @@
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="nmrglue 0.3-dev documentation" href="../index.html" />
     <link rel="up" title="Reference Guide" href="index.html" />
-    <link rel="next" title="nmrglue.analysis.segmentation.label_connected" href="generated/nmrglue.analysis.segmentation.label_connected.html" />
+    <link rel="next" title="nmrglue.analysis.segmentation.find_all_connected" href="generated/nmrglue.analysis.segmentation.find_all_connected.html" />
     <link rel="prev" title="nmrglue.analysis.peakpick.find_nseg_slice" href="generated/nmrglue.analysis.peakpick.find_nseg_slice.html" /> 
   </head>
   <body>
@@ -45,7 +45,7 @@
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="generated/nmrglue.analysis.segmentation.label_connected.html" title="nmrglue.analysis.segmentation.label_connected"
+          <a href="generated/nmrglue.analysis.segmentation.find_all_connected.html" title="nmrglue.analysis.segmentation.find_all_connected"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="generated/nmrglue.analysis.peakpick.find_nseg_slice.html" title="nmrglue.analysis.peakpick.find_nseg_slice"
@@ -62,7 +62,7 @@
             
   <div class="section" id="module-nmrglue.analysis.segmentation">
 <span id="nmrglue-segmentation"></span><h1>nmrglue.segmentation<a class="headerlink" href="#module-nmrglue.analysis.segmentation" title="Permalink to this headline">¶</a></h1>
-<p>segmentation - functions to perform segmentation of NMR spectrum.</p>
+<p>Functions to perform segmentation of NMR spectrum.</p>
 <p>This modules is imported as nmrglue.segmentation and can be called as such.</p>
 <div class="section" id="developer-functions">
 <h2>Developer Functions<a class="headerlink" href="#developer-functions" title="Permalink to this headline">¶</a></h2>
@@ -74,53 +74,53 @@ want to segment spectra will be interested in these functions.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.segmentation.label_connected.html#nmrglue.analysis.segmentation.label_connected" title="nmrglue.analysis.segmentation.label_connected"><tt class="xref py py-obj docutils literal"><span class="pre">label_connected</span></tt></a>(data,&nbsp;thres,&nbsp;structure)</td>
-<td>Label connected features in data.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.segmentation.find_all_connected.html#nmrglue.analysis.segmentation.find_all_connected" title="nmrglue.analysis.segmentation.find_all_connected"><tt class="xref py py-obj docutils literal"><span class="pre">find_all_connected</span></tt></a>(data,&nbsp;thres[,&nbsp;find_segs,&nbsp;...])</td>
-<td>Find all connected segments in data</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.segmentation.label_nconnected.html#nmrglue.analysis.segmentation.label_nconnected" title="nmrglue.analysis.segmentation.label_nconnected"><tt class="xref py py-obj docutils literal"><span class="pre">label_nconnected</span></tt></a>(data,&nbsp;thres,&nbsp;structure)</td>
-<td>Label nconnected features in data.</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.segmentation.find_all_connected.html#nmrglue.analysis.segmentation.find_all_connected" title="nmrglue.analysis.segmentation.find_all_connected"><tt class="xref py py-obj docutils literal"><span class="pre">find_all_connected</span></tt></a>(data,&nbsp;thres[,&nbsp;find_segs,&nbsp;...])</td>
+<td>Find all connected segments.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.segmentation.find_all_nconnected.html#nmrglue.analysis.segmentation.find_all_nconnected" title="nmrglue.analysis.segmentation.find_all_nconnected"><tt class="xref py py-obj docutils literal"><span class="pre">find_all_nconnected</span></tt></a>(data,&nbsp;thres[,&nbsp;...])</td>
-<td>Find all negatively connected segments in data</td>
+<td>Find all negatively connected segments in data.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.segmentation.mark_dseg.html#nmrglue.analysis.segmentation.mark_dseg" title="nmrglue.analysis.segmentation.mark_dseg"><tt class="xref py py-obj docutils literal"><span class="pre">mark_dseg</span></tt></a>(mdata,&nbsp;map,&nbsp;pt,&nbsp;mark,&nbsp;structure)</td>
-<td>Mark downward-connected region on segment map starting at node pt</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.segmentation.label_downward_seg.html#nmrglue.analysis.segmentation.label_downward_seg" title="nmrglue.analysis.segmentation.label_downward_seg"><tt class="xref py py-obj docutils literal"><span class="pre">label_downward_seg</span></tt></a>(data,&nbsp;labels,&nbsp;seg_slice,&nbsp;...)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.segmentation.label_downward.html#nmrglue.analysis.segmentation.label_downward" title="nmrglue.analysis.segmentation.label_downward"><tt class="xref py py-obj docutils literal"><span class="pre">label_downward</span></tt></a>(data,&nbsp;thres,&nbsp;structure)</td>
-<td>Label connected features in data.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.segmentation.find_all_downward.html#nmrglue.analysis.segmentation.find_all_downward" title="nmrglue.analysis.segmentation.find_all_downward"><tt class="xref py py-obj docutils literal"><span class="pre">find_all_downward</span></tt></a>(data,&nbsp;thres[,&nbsp;find_segs,&nbsp;diag])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.segmentation.find_all_downward.html#nmrglue.analysis.segmentation.find_all_downward" title="nmrglue.analysis.segmentation.find_all_downward"><tt class="xref py py-obj docutils literal"><span class="pre">find_all_downward</span></tt></a>(data,&nbsp;thres[,&nbsp;find_segs,&nbsp;diag])</td>
 <td>Find all downward connected segments in data</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.segmentation.mark_useg.html#nmrglue.analysis.segmentation.mark_useg" title="nmrglue.analysis.segmentation.mark_useg"><tt class="xref py py-obj docutils literal"><span class="pre">mark_useg</span></tt></a>(mdata,&nbsp;map,&nbsp;pt,&nbsp;mark,&nbsp;structure)</td>
-<td>Mark upward-connected region on segment map starting at node pt</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.segmentation.label_upward_seg.html#nmrglue.analysis.segmentation.label_upward_seg" title="nmrglue.analysis.segmentation.label_upward_seg"><tt class="xref py py-obj docutils literal"><span class="pre">label_upward_seg</span></tt></a>(data,&nbsp;labels,&nbsp;seg_slice,&nbsp;...)</td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.segmentation.label_upward.html#nmrglue.analysis.segmentation.label_upward" title="nmrglue.analysis.segmentation.label_upward"><tt class="xref py py-obj docutils literal"><span class="pre">label_upward</span></tt></a>(data,&nbsp;thres,&nbsp;structure)</td>
-<td>Label upward connected features in data.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.segmentation.find_all_upward.html#nmrglue.analysis.segmentation.find_all_upward" title="nmrglue.analysis.segmentation.find_all_upward"><tt class="xref py py-obj docutils literal"><span class="pre">find_all_upward</span></tt></a>(data,&nbsp;thres[,&nbsp;find_segs,&nbsp;diag])</td>
 <td>Find all upward connected segments in data</td>
 </tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.segmentation.label_connected.html#nmrglue.analysis.segmentation.label_connected" title="nmrglue.analysis.segmentation.label_connected"><tt class="xref py py-obj docutils literal"><span class="pre">label_connected</span></tt></a>(data,&nbsp;thres,&nbsp;structure)</td>
+<td>Label connected features in data.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.segmentation.label_nconnected.html#nmrglue.analysis.segmentation.label_nconnected" title="nmrglue.analysis.segmentation.label_nconnected"><tt class="xref py py-obj docutils literal"><span class="pre">label_nconnected</span></tt></a>(data,&nbsp;thres,&nbsp;structure)</td>
+<td>Label nconnected features in data.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.segmentation.label_downward.html#nmrglue.analysis.segmentation.label_downward" title="nmrglue.analysis.segmentation.label_downward"><tt class="xref py py-obj docutils literal"><span class="pre">label_downward</span></tt></a>(data,&nbsp;thres,&nbsp;structure)</td>
+<td>Label connected features in data.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.segmentation.label_upward.html#nmrglue.analysis.segmentation.label_upward" title="nmrglue.analysis.segmentation.label_upward"><tt class="xref py py-obj docutils literal"><span class="pre">label_upward</span></tt></a>(data,&nbsp;thres,&nbsp;structure)</td>
+<td>Label upward connected features in data.</td>
+</tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.segmentation.find_downward.html#nmrglue.analysis.segmentation.find_downward" title="nmrglue.analysis.segmentation.find_downward"><tt class="xref py py-obj docutils literal"><span class="pre">find_downward</span></tt></a>(data,&nbsp;pt,&nbsp;thres[,&nbsp;diag])</td>
-<td>Find points downward-connected to pt in data.</td>
+<td>Find points downward-connected to a point in data.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.segmentation.find_connected.html#nmrglue.analysis.segmentation.find_connected" title="nmrglue.analysis.segmentation.find_connected"><tt class="xref py py-obj docutils literal"><span class="pre">find_connected</span></tt></a>(data,&nbsp;pt,&nbsp;thres[,&nbsp;diag])</td>
-<td>Find points connected to pt in data.</td>
+<td>Find points connected to a point in data.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.segmentation.find_nconnected.html#nmrglue.analysis.segmentation.find_nconnected" title="nmrglue.analysis.segmentation.find_nconnected"><tt class="xref py py-obj docutils literal"><span class="pre">find_nconnected</span></tt></a>(data,&nbsp;pt,&nbsp;thres[,&nbsp;diag])</td>
 <td>Find points connected to pt in data below threshold.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.segmentation.find_upward.html#nmrglue.analysis.segmentation.find_upward" title="nmrglue.analysis.segmentation.find_upward"><tt class="xref py py-obj docutils literal"><span class="pre">find_upward</span></tt></a>(data,&nbsp;pt,&nbsp;thres[,&nbsp;diag])</td>
 <td>Find points upward-connected to pt in data.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.segmentation.mark_dseg.html#nmrglue.analysis.segmentation.mark_dseg" title="nmrglue.analysis.segmentation.mark_dseg"><tt class="xref py py-obj docutils literal"><span class="pre">mark_dseg</span></tt></a>(mdata,&nbsp;map,&nbsp;pt,&nbsp;mark,&nbsp;structure)</td>
+<td>Mark downward-connected region on segment map starting at node pt.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.segmentation.label_downward_seg.html#nmrglue.analysis.segmentation.label_downward_seg" title="nmrglue.analysis.segmentation.label_downward_seg"><tt class="xref py py-obj docutils literal"><span class="pre">label_downward_seg</span></tt></a>(data,&nbsp;labels,&nbsp;seg_slice,&nbsp;...)</td>
+<td>Label a segment which is downward connected</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.segmentation.mark_useg.html#nmrglue.analysis.segmentation.mark_useg" title="nmrglue.analysis.segmentation.mark_useg"><tt class="xref py py-obj docutils literal"><span class="pre">mark_useg</span></tt></a>(mdata,&nbsp;map,&nbsp;pt,&nbsp;mark,&nbsp;structure)</td>
+<td>Mark upward-connected region on segment map starting at node pt</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.segmentation.label_upward_seg.html#nmrglue.analysis.segmentation.label_upward_seg" title="nmrglue.analysis.segmentation.label_upward_seg"><tt class="xref py py-obj docutils literal"><span class="pre">label_upward_seg</span></tt></a>(data,&nbsp;labels,&nbsp;seg_slice,&nbsp;...)</td>
+<td>Label a segment which is upward connected</td>
 </tr>
 </tbody>
 </table>
@@ -147,8 +147,8 @@ want to segment spectra will be interested in these functions.</p>
   <p class="topless"><a href="generated/nmrglue.analysis.peakpick.find_nseg_slice.html"
                         title="previous chapter">nmrglue.analysis.peakpick.find_nseg_slice</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="generated/nmrglue.analysis.segmentation.label_connected.html"
-                        title="next chapter">nmrglue.analysis.segmentation.label_connected</a></p>
+  <p class="topless"><a href="generated/nmrglue.analysis.segmentation.find_all_connected.html"
+                        title="next chapter">nmrglue.analysis.segmentation.find_all_connected</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/reference/segmentation.txt"
@@ -184,7 +184,7 @@ want to segment spectra will be interested in these functions.</p>
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="generated/nmrglue.analysis.segmentation.label_connected.html" title="nmrglue.analysis.segmentation.label_connected"
+          <a href="generated/nmrglue.analysis.segmentation.find_all_connected.html" title="nmrglue.analysis.segmentation.find_all_connected"
              >next</a> |</li>
         <li class="right" >
           <a href="generated/nmrglue.analysis.peakpick.find_nseg_slice.html" title="nmrglue.analysis.peakpick.find_nseg_slice"

@@ -3,7 +3,7 @@ nmrglue.table
 
 .. automodule:: nmrglue.fileio.table
 
-This modules is imported as nmrglue.pipe and can be called as such.
+This modules is imported as nmrglue.table and can be called as such.
 
 User Information
 ----------------

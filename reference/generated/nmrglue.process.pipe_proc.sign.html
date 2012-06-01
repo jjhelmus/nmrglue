@@ -65,23 +65,69 @@
 <h1>nmrglue.process.pipe_proc.sign<a class="headerlink" href="#nmrglue-process-pipe-proc-sign" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.pipe_proc.sign">
-<tt class="descclassname">nmrglue.process.pipe_proc.</tt><tt class="descname">sign</tt><big>(</big><em>dic</em>, <em>data</em>, <em>ri=False</em>, <em>r=False</em>, <em>i=False</em>, <em>left=False</em>, <em>right=False</em>, <em>alt=False</em>, <em>abs=False</em>, <em>sign=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/pipe_proc.py#L1949"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.pipe_proc.sign" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sign Manipulation Utilities</p>
-<p>All sign manupulation modes set True are applied.</p>
-<p>Parameters:</p>
-<ul class="simple">
-<li>dic   Dictionary of NMRPipe parameters.</li>
-<li>data  array of spectral data.</li>
-</ul>
-<p>Select one or more of the desired modes by setting to True:
-* ri    Negate all data.
-* r     Negate real data.
-* i     Negate imaginary data.
-* left  Negate left half.
-* right Negate right half.
-* alt   Negate Alterate points.
-* abs   Replace data with absolute value of data.
-* sign  Replace data with sign (-1 or 1) of data.</p>
+<tt class="descclassname">nmrglue.process.pipe_proc.</tt><tt class="descname">sign</tt><big>(</big><em>dic</em>, <em>data</em>, <em>ri=False</em>, <em>r=False</em>, <em>i=False</em>, <em>left=False</em>, <em>right=False</em>, <em>alt=False</em>, <em>abs=False</em>, <em>sign=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/pipe_proc.py#L2445"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.pipe_proc.sign" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sign manipulation utilities</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of NMRPipe parameters.</p>
+</div></blockquote>
+<p><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>ri</strong> : bool</p>
+<blockquote>
+<div><p>True to negate all data points.</p>
+</div></blockquote>
+<p><strong>r</strong> : bool</p>
+<blockquote>
+<div><p>True to negate real data points.</p>
+</div></blockquote>
+<p><strong>i</strong> : bool</p>
+<blockquote>
+<div><p>True to negate imaginary data points.</p>
+</div></blockquote>
+<p><strong>left</strong> : bool</p>
+<blockquote>
+<div><p>True to negate the left half of the data.</p>
+</div></blockquote>
+<p><strong>right</strong> : bool</p>
+<blockquote>
+<div><p>True to negate the right half of the data.</p>
+</div></blockquote>
+<p><strong>alt</strong> : bool</p>
+<blockquote>
+<div><p>True to negate alternating data points.</p>
+</div></blockquote>
+<p><strong>abs</strong> : bool</p>
+<blockquote>
+<div><p>True to replace both real and imaginary data with it&#8217;s absolute value.</p>
+</div></blockquote>
+<p><strong>sign</strong> : bool</p>
+<blockquote>
+<div><p>True to replace data with the sign (-1 or 1) of the data.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of updated NMRPipe parameters.</p>
+</div></blockquote>
+<p><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Array of NMR data after sign manipulation.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>All sign manupulation modes set True are applied in the order they appear in
+the function parameter list.</p>
 </dd></dl>
 
 </div>

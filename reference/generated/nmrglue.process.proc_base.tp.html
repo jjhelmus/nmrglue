@@ -65,12 +65,30 @@
 <h1>nmrglue.process.proc_base.tp<a class="headerlink" href="#nmrglue-process-proc-base-tp" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_base.tp">
-<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">tp</tt><big>(</big><em>data</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L610"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.tp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transpose Data</p>
-<ul class="simple">
-<li>data  Array of spectral data.</li>
-<li>hyper Set True if hypercomplex data.</li>
-</ul>
+<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">tp</tt><big>(</big><em>data</em>, <em>hyper=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L906"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.tp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transpose data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>hyper</strong> : bool</p>
+<blockquote>
+<div><p>True if hypercomplex data.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Array of NMR data with axes transposed.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

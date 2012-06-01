@@ -65,20 +65,46 @@
 <h1>nmrglue.process.proc_base.jmod<a class="headerlink" href="#nmrglue-process-proc-base-jmod" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_base.jmod">
-<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">jmod</tt><big>(</big><em>data</em>, <em>e=0.0</em>, <em>off=0.0</em>, <em>end=0.0</em>, <em>inv=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L90"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.jmod" title="Permalink to this definition">¶</a></dt>
-<dd><p>Exponentially Damped J-Modulation Apodization</p>
-<dl class="docutils">
-<dt>Functional form:</dt>
-<dd>jmod(x_i) = exp(-e)*sin( pi*off + pi*(end-off)*i/(size-1))</dd>
-</dl>
-<p>Parameters:</p>
-<ul class="simple">
-<li>data  Array of spectral data.</li>
-<li>e     Exponential term.</li>
-<li>off   Start of  modulation in fraction of pi radians.</li>
-<li>end   End of modulation in fraction of pi radians.</li>
-<li>inv   Set True for inverse apodization</li>
-</ul>
+<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">jmod</tt><big>(</big><em>data</em>, <em>e=0.0</em>, <em>off=0.0</em>, <em>end=0.0</em>, <em>inv=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L125"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.jmod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exponentially damped J-modulation apodization</p>
+<p>Functional form of apodization window:</p>
+<div class="math">
+\[jmod(x_i) = \exp(-e) * \sin(\frac{pi * off + pi * (end - off) * i}
+                                    {size - 1})\]</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>e</strong> : float</p>
+<blockquote>
+<div><p>Exponential apodization term.</p>
+</div></blockquote>
+<p><strong>off</strong> : float</p>
+<blockquote>
+<div><p>Start of J-modulation in fractions of pi radians (180 degrees).</p>
+</div></blockquote>
+<p><strong>end</strong> : float</p>
+<blockquote>
+<div><p>End of J-modulation in fractions of pi radians (180 degrees).</p>
+</div></blockquote>
+<p><strong>inv</strong> : bool, optional</p>
+<blockquote>
+<div><p>True for inverse apodization.  False (default) for standard.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Array of NMR data with apodization applied.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

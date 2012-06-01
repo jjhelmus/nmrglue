@@ -63,7 +63,7 @@
   <div class="section" id="module-nmrglue.fileio.fileiobase">
 <span id="nmrglue-fileiobase"></span><h1>nmrglue.fileiobase<a class="headerlink" href="#module-nmrglue.fileio.fileiobase" title="Permalink to this headline">¶</a></h1>
 <p>fileiobase provides general purpose NMR file IO functions and classes
-used by multiple nmrglue.fileio modules</p>
+used by multiple nmrglue.fileio modules.</p>
 <p>This modules is imported as nmrglue.fileiobase and can be called as such.</p>
 <div class="section" id="developer-information">
 <h2>Developer Information<a class="headerlink" href="#developer-information" title="Permalink to this headline">¶</a></h2>
@@ -78,7 +78,7 @@ high level functions.</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.fileiobase.create_blank_udic.html#nmrglue.fileio.fileiobase.create_blank_udic" title="nmrglue.fileio.fileiobase.create_blank_udic"><tt class="xref py py-obj docutils literal"><span class="pre">create_blank_udic</span></tt></a>(ndim)</td>
-<td>Create a blank universal dictionary for a ndim-D spectrum</td>
+<td>Create a blank universal dictionary for a spectrum of dimension ndim.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.fileiobase.open_towrite.html#nmrglue.fileio.fileiobase.open_towrite" title="nmrglue.fileio.fileiobase.open_towrite"><tt class="xref py py-obj docutils literal"><span class="pre">open_towrite</span></tt></a>(filename[,&nbsp;overwrite])</td>
 <td>Open filename for writing and return file object</td>
@@ -127,10 +127,10 @@ interested in these classes.</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.fileiobase.unit_conversion.html#nmrglue.fileio.fileiobase.unit_conversion" title="nmrglue.fileio.fileiobase.unit_conversion"><tt class="xref py py-obj docutils literal"><span class="pre">unit_conversion</span></tt></a>(size,&nbsp;cplx,&nbsp;sw,&nbsp;obs,&nbsp;car)</td>
-<td>object provides methods to convert between common nmr units</td>
+<td>Provides methods to convert between common NMR units</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.fileiobase.data_nd.html#nmrglue.fileio.fileiobase.data_nd" title="nmrglue.fileio.fileiobase.data_nd"><tt class="xref py py-obj docutils literal"><span class="pre">data_nd</span></tt></a>(order)</td>
-<td>data_nd emulates numpy.ndarray object without loading data into memory</td>
+<td>Base class for building objects which emulate ndarray objects without loading data into memory.</td>
 </tr>
 </tbody>
 </table>

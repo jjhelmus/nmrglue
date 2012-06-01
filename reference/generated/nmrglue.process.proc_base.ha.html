@@ -65,11 +65,29 @@
 <h1>nmrglue.process.proc_base.ha<a class="headerlink" href="#nmrglue-process-proc-base-ha" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_base.ha">
-<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">ha</tt><big>(</big><em>data</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L490"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.ha" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">ha</tt><big>(</big><em>data</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L741"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.ha" title="Permalink to this definition">¶</a></dt>
 <dd><p>Hadamard Transform</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Hadamard transform of NMR data.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
 <p>This function is very slow.  Implement a Fast Walsh-Hadamard Transform
-with sequency/Walsh ordering (FWHT_w) for faster tranforms.</p>
-<p>See:</p>
+with sequency/Walsh ordering (FWHT_w) will result in much faster tranforms.</p>
 <p><a class="reference external" href="http://en.wikipedia.org/wiki/Walsh_matrix">http://en.wikipedia.org/wiki/Walsh_matrix</a>
 <a class="reference external" href="http://en.wikipedia.org/wiki/Fast_Hadamard_transform">http://en.wikipedia.org/wiki/Fast_Hadamard_transform</a></p>
 </dd></dl>

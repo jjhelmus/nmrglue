@@ -29,7 +29,7 @@
     <link rel="top" title="nmrglue 0.3-dev documentation" href="../index.html" />
     <link rel="up" title="Reference Guide" href="index.html" />
     <link rel="next" title="nmrglue.analysis.linesh.fit_spectrum" href="generated/nmrglue.analysis.linesh.fit_spectrum.html" />
-    <link rel="prev" title="nmrglue.analysis.lineshapes1d.center_fwhm_bymoments" href="generated/nmrglue.analysis.lineshapes1d.center_fwhm_bymoments.html" /> 
+    <link rel="prev" title="nmrglue.analysis.lineshapes1d.scale" href="generated/nmrglue.analysis.lineshapes1d.scale.html" /> 
   </head>
   <body>
     <div class="related">
@@ -48,7 +48,7 @@
           <a href="generated/nmrglue.analysis.linesh.fit_spectrum.html" title="nmrglue.analysis.linesh.fit_spectrum"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="generated/nmrglue.analysis.lineshapes1d.center_fwhm_bymoments.html" title="nmrglue.analysis.lineshapes1d.center_fwhm_bymoments"
+          <a href="generated/nmrglue.analysis.lineshapes1d.scale.html" title="nmrglue.analysis.lineshapes1d.scale"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Reference Guide</a> &raquo;</li> 
@@ -75,25 +75,25 @@ found in NMR experiments</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.linesh.fit_spectrum.html#nmrglue.analysis.linesh.fit_spectrum" title="nmrglue.analysis.linesh.fit_spectrum"><tt class="xref py py-obj docutils literal"><span class="pre">fit_spectrum</span></tt></a>(spectrum,&nbsp;lineshapes,&nbsp;params,&nbsp;...)</td>
-<td>Fit a spectrum by region which contain one or more peaks.</td>
+<td>Fit a NMR spectrum by regions which contain one or more peaks.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.linesh.fit_NDregion.html#nmrglue.analysis.linesh.fit_NDregion" title="nmrglue.analysis.linesh.fit_NDregion"><tt class="xref py py-obj docutils literal"><span class="pre">fit_NDregion</span></tt></a>(region,&nbsp;lineshapes,&nbsp;params,&nbsp;amps)</td>
 <td>Fit a N-dimensional region.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.linesh.sim_NDregion.html#nmrglue.analysis.linesh.sim_NDregion" title="nmrglue.analysis.linesh.sim_NDregion"><tt class="xref py py-obj docutils literal"><span class="pre">sim_NDregion</span></tt></a>(shape,&nbsp;lineshapes,&nbsp;params,&nbsp;amps)</td>
-<td>Simulate a arbitrary dimensional region with one or more peaks.</td>
+<td>Simulate an N-dimensional region with one or more peaks.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.linesh.add_to_table.html#nmrglue.analysis.linesh.add_to_table" title="nmrglue.analysis.linesh.add_to_table"><tt class="xref py py-obj docutils literal"><span class="pre">add_to_table</span></tt></a>(rec,&nbsp;columns,&nbsp;column_names)</td>
-<td>Add (append) multiple columns to a record array</td>
+<td>Add (append) multiple columns to a records array.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.linesh.pack_table.html#nmrglue.analysis.linesh.pack_table" title="nmrglue.analysis.linesh.pack_table"><tt class="xref py py-obj docutils literal"><span class="pre">pack_table</span></tt></a>(pbest,&nbsp;abest,&nbsp;iers,&nbsp;rec,&nbsp;...[,&nbsp;...])</td>
 <td>Pack fitting parameters into table</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.linesh.unpack_table.html#nmrglue.analysis.linesh.unpack_table" title="nmrglue.analysis.linesh.unpack_table"><tt class="xref py py-obj docutils literal"><span class="pre">unpack_table</span></tt></a>(rec,&nbsp;param_columns,&nbsp;amp_column)</td>
-<td>Unpack initial fitting parameters from a table</td>
+<td>Unpack initial fitting parameters from a table.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.linesh.estimate_scales.html#nmrglue.analysis.linesh.estimate_scales" title="nmrglue.analysis.linesh.estimate_scales"><tt class="xref py py-obj docutils literal"><span class="pre">estimate_scales</span></tt></a>(spectrum,&nbsp;centers,&nbsp;box_width)</td>
-<td>Estimate scale parameter for peaks in a spectrum</td>
+<td>Estimate scale parameter for peaks in a spectrum.</td>
 </tr>
 </tbody>
 </table>
@@ -116,19 +116,19 @@ functions.</p>
 <td>Split list l into N sublists of equal size</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.linesh.calc_errors.html#nmrglue.analysis.linesh.calc_errors" title="nmrglue.analysis.linesh.calc_errors"><tt class="xref py py-obj docutils literal"><span class="pre">calc_errors</span></tt></a>(region,&nbsp;ls_classes,&nbsp;p,&nbsp;cov,&nbsp;...)</td>
-<td>Calcuate the parameter errors from the Standard Errors of the Estimate.</td>
+<td>Calcuate the parameter errors from the standard errors of the estimate.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.linesh.s_NDregion.html#nmrglue.analysis.linesh.s_NDregion" title="nmrglue.analysis.linesh.s_NDregion"><tt class="xref py py-obj docutils literal"><span class="pre">s_NDregion</span></tt></a>(p,&nbsp;shape,&nbsp;ls_classes,&nbsp;n_peaks)</td>
-<td>Simulate a arbitrary dimensional region with one or more peaks.</td>
+<td>Simulate an N-dimensional region with one or more peaks.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.linesh.s_single_NDregion.html#nmrglue.analysis.linesh.s_single_NDregion" title="nmrglue.analysis.linesh.s_single_NDregion"><tt class="xref py py-obj docutils literal"><span class="pre">s_single_NDregion</span></tt></a>(p,&nbsp;shape,&nbsp;ls_classes)</td>
-<td>Simulate a arbitrary dimensional region with a single peak.</td>
+<td>Simulate an N-dimensional region with a single peak.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.linesh.err_NDregion.html#nmrglue.analysis.linesh.err_NDregion" title="nmrglue.analysis.linesh.err_NDregion"><tt class="xref py py-obj docutils literal"><span class="pre">err_NDregion</span></tt></a>(p,&nbsp;region,&nbsp;shape,&nbsp;ls_classes,&nbsp;...)</td>
-<td>Error functions for a NDregion, called by f_NDregion function</td>
+<td>Error function for an N-dimensional region, called by <a class="reference internal" href="generated/nmrglue.analysis.linesh.f_NDregion.html#nmrglue.analysis.linesh.f_NDregion" title="nmrglue.analysis.linesh.f_NDregion"><tt class="xref py py-func docutils literal"><span class="pre">f_NDregion()</span></tt></a></td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.linesh.f_NDregion.html#nmrglue.analysis.linesh.f_NDregion" title="nmrglue.analysis.linesh.f_NDregion"><tt class="xref py py-obj docutils literal"><span class="pre">f_NDregion</span></tt></a>(region,&nbsp;ls_classes,&nbsp;p0,&nbsp;p_bounds,&nbsp;...)</td>
-<td>Fit an arbitrary dimensional regions  containing one or more peaks</td>
+<td>Fit an N-dimensional regions containing one or more peaks.</td>
 </tr>
 </tbody>
 </table>
@@ -155,8 +155,8 @@ functions.</p>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="generated/nmrglue.analysis.lineshapes1d.center_fwhm_bymoments.html"
-                        title="previous chapter">nmrglue.analysis.lineshapes1d.center_fwhm_bymoments</a></p>
+  <p class="topless"><a href="generated/nmrglue.analysis.lineshapes1d.scale.html"
+                        title="previous chapter">nmrglue.analysis.lineshapes1d.scale</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="generated/nmrglue.analysis.linesh.fit_spectrum.html"
                         title="next chapter">nmrglue.analysis.linesh.fit_spectrum</a></p>
@@ -198,7 +198,7 @@ functions.</p>
           <a href="generated/nmrglue.analysis.linesh.fit_spectrum.html" title="nmrglue.analysis.linesh.fit_spectrum"
              >next</a> |</li>
         <li class="right" >
-          <a href="generated/nmrglue.analysis.lineshapes1d.center_fwhm_bymoments.html" title="nmrglue.analysis.lineshapes1d.center_fwhm_bymoments"
+          <a href="generated/nmrglue.analysis.lineshapes1d.scale.html" title="nmrglue.analysis.lineshapes1d.scale"
              >previous</a> |</li>
         <li><a href="../index.html">nmrglue 0.3-dev documentation</a> &raquo;</li>
           <li><a href="index.html" >Reference Guide</a> &raquo;</li> 

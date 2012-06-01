@@ -65,21 +65,42 @@
 <h1>nmrglue.analysis.analysisbase.ndwindow<a class="headerlink" href="#nmrglue-analysis-analysisbase-ndwindow" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="nmrglue.analysis.analysisbase.ndwindow">
-<em class="property">class </em><tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">ndwindow</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/analysisbase.py#L113"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow" title="Permalink to this definition">¶</a></dt>
-<dd><p>An N-dimentional iterator to slice arrays into windows.</p>
+<em class="property">class </em><tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">ndwindow</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/analysisbase.py#L159"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>An N-dimensional iterator to slice arrays into windows.</p>
 <p>Given the shape of an array and a window size, an &#8216;ndwindow&#8217; instance
 iterators over tuples of slices which slice an the array into wsize 
 sub-arrays.  At each iteration, the index of the center of the sub-array 
-is incremented by one along the last dimension.  Array border are ignored
+is incremented by one along the last dimension.  Array borders are ignored
 so the resulting sub-array can be smaller than wsize.  If wsize contains
 even values the window is off center containing an additional point with 
 lower index.</p>
-<p>Parameters</p>
-<ul class="simple">
-<li>size  Size of array to generate tuples of slices from.</li>
-<li>wsize Size of the area to select from array (sub-array maximum size).</li>
-</ul>
-<p>Example:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>size</strong> : tuple of ints</p>
+<blockquote>
+<div><p>Size of array to generate tuples of slices from.</p>
+</div></blockquote>
+<p><strong>wsize</strong> : tuple of ints</p>
+<blockquote class="last">
+<div><p>Window/sub-array size. Size of the area to select from array.  This is
+the maximum size of the window.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.analysis.analysisbase.ndwindow_index.html#nmrglue.analysis.analysisbase.ndwindow_index" title="nmrglue.analysis.analysisbase.ndwindow_index"><tt class="xref py py-obj docutils literal"><span class="pre">ndwindow_index</span></tt></a></dt>
+<dd>Iterator of a ndwindow and index of the window center</dd>
+<dt><a class="reference internal" href="nmrglue.analysis.analysisbase.ndwindow_inside.html#nmrglue.analysis.analysisbase.ndwindow_inside" title="nmrglue.analysis.analysisbase.ndwindow_inside"><tt class="xref py py-obj docutils literal"><span class="pre">ndwindow_inside</span></tt></a></dt>
+<dd>Iterator over equal sized windows in the array.</dd>
+</dl>
+</div>
+<p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">ndwindow</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">,(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
 <span class="gp">... </span>    <span class="k">print</span> <span class="n">a</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>
@@ -102,8 +123,9 @@ lower index.</p>
 </div>
 <dl class="method">
 <dt id="nmrglue.analysis.analysisbase.ndwindow.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/analysisbase.py#L153"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow.__init__" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<tt class="descname">__init__</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/analysisbase.py#L207"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up the ndwindow object</p>
+</dd></dl>
 
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
@@ -113,9 +135,9 @@ lower index.</p>
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="#nmrglue.analysis.analysisbase.ndwindow.__init__" title="nmrglue.analysis.analysisbase.ndwindow.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">__init__</span></tt></a>(shape,&nbsp;wsize)</td>
-<td></td>
+<td>Set up the ndwindow object</td>
 </tr>
-<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">next</span></tt>()</td>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">next</span></tt>(()&nbsp;-&gt;&nbsp;the&nbsp;next&nbsp;value,&nbsp;...)</td>
 <td></td>
 </tr>
 </tbody>

@@ -65,38 +65,18 @@
 <h1>nmrglue.fileio.bruker.write_lowmem<a class="headerlink" href="#nmrglue-fileio-bruker-write-lowmem" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.bruker.write_lowmem">
-<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">write_lowmem</tt><big>(</big><em>dir</em>, <em>dic</em>, <em>data</em>, <em>bin_file=None</em>, <em>acqus_files=None</em>, <em>pprog_file=None</em>, <em>overwrite=False</em>, <em>big=None</em>, <em>write_prog=True</em>, <em>write_acqus=True</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/bruker.py#L378"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.bruker.write_lowmem" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write Bruker files trace by trace (low memory)</p>
-<p>Parameters:</p>
-<ul>
-<li><p class="first">dir           Directory to write to.</p>
-</li>
-<li><p class="first">dic           dictionary holding acqus_files and pprog_file parameters.</p>
-</li>
-<li><p class="first">data          array of data</p>
-</li>
-<li><p class="first">bin_file      Filename of binary file to write to in directory</p>
-</li>
-<li><p class="first">acqus_files   Filename(s) of acqus files in directory to write to.</p>
-</li>
-<li><p class="first">pprog_file    Filename of pulseprogram in directory.</p>
-</li>
-<li><p class="first">overwrite     True to overwrite files, False to warn.</p>
-</li>
-<li><dl class="first docutils">
-<dt>big           Endiness to write binary data with,</dt>
-<dd><p class="first last">bigendian=True, little=False</p>
-</dd>
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">write_lowmem</tt><big>(</big><em>dir</em>, <em>dic</em>, <em>data</em>, <em>bin_file=None</em>, <em>acqus_files=None</em>, <em>pprog_file=None</em>, <em>overwrite=False</em>, <em>big=None</em>, <em>write_prog=True</em>, <em>write_acqus=True</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/bruker.py#L415"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.bruker.write_lowmem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write Bruker files using minimal amounts of memory (trace by trace).</p>
+<p>See <a class="reference internal" href="nmrglue.fileio.bruker.write.html#nmrglue.fileio.bruker.write" title="nmrglue.fileio.bruker.write"><tt class="xref py py-func docutils literal"><span class="pre">write()</span></tt></a> for Parameters.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.fileio.bruker.write.html#nmrglue.fileio.bruker.write" title="nmrglue.fileio.bruker.write"><tt class="xref py py-obj docutils literal"><span class="pre">write</span></tt></a></dt>
+<dd>Write Bruker files.</dd>
+<dt><a class="reference internal" href="nmrglue.fileio.bruker.read_lowmem.html#nmrglue.fileio.bruker.read_lowmem" title="nmrglue.fileio.bruker.read_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">read_lowmem</span></tt></a></dt>
+<dd>Read Bruker files using minimal amounts of memory.</dd>
 </dl>
-</li>
-<li><p class="first">write_prog    True will write pulseprogram file, False does not.</p>
-</li>
-<li><p class="first">write_acqus   True will write acqus file(s), False does not.</p>
-</li>
-</ul>
-<p>No return.</p>
-<p>If any of bin_file,acqus_files or pprog_file are None the associated 
-file(s) will be determined automatically</p>
+</div>
 </dd></dl>
 
 </div>
