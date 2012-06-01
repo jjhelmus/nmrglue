@@ -1,0 +1,24 @@
+nmrglue.analysis.lineshapes1d.location_scale
+============================================
+
+.. currentmodule:: nmrglue.analysis.lineshapes1d
+
+.. autoclass:: location_scale
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~location_scale.add_edge
+      ~location_scale.nparam
+      ~location_scale.remove_edge
+   
+   
+
+   
+   
+   
