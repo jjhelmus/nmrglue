@@ -351,8 +351,8 @@ def guess_params_slice(data, location, seg_slice, ls_classes):
     lineshapes : list
         List of lineshape classes.
 
-    Return
-    ------
+    Returns
+    -------
     location : list
         Peak locations.
     scale : list

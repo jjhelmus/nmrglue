@@ -787,7 +787,7 @@ def f_NDregion(region, ls_classes, p0, p_bounds, n_peaks, wmask, **kw):
     **kw : optional
         Additional keywords passed to the scipy.optimize.leastsq function.
     
-    Also See
+    See Also
     --------
     fit_NDregion : Fit N-dimensional region with user friendly parameter. 
 

@@ -378,8 +378,8 @@ def find_downward(data, pt, thres, diag=False):
     diag : bool, optional
         True to include diagonal neighbors in connection.
 
-    Return
-    ------
+    Returns
+    -------
     nodes : list
         Indicies of downward-connected nodes.
 
@@ -426,8 +426,8 @@ def find_connected(data, pt, thres, diag=False):
     diag : bool, optional
         True to include diagonal neighbors in connection.
 
-    Return
-    ------
+    Returns
+    -------
     nodes : list
         Indicies of connected nodes.
 
@@ -472,8 +472,8 @@ def find_nconnected(data, pt, thres, diag=False):
     diag : bool, optional
         True to include diagonal neighbors in connection.
 
-    Return
-    ------
+    Returns
+    -------
     nodes : list
         Indicies of connected nodes.
     
@@ -518,8 +518,8 @@ def find_upward(data, pt, thres, diag=False):
     diag : bool, optional
         True to include diagonal neighbors in connection.
 
-    Return
-    ------
+    Returns
+    -------
     nodes : list
         Indicies of upward-connected nodes.
  
