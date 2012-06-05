@@ -494,20 +494,24 @@ pvoigt = pvoigt_fwhm
 
 # lineshape class router
 
+ls_table = {
+    "gauss"  : gauss,
+    "g"      : gauss,
+    "lorentz": lorentz,
+    "l"      : lorentz,
+    "scale"  : scale,
+    "s"      : scale,
+    "voigt"  : voigt,
+    "v"      : voigt,
+    "pvoigt" : pvoigt,
+    "pv"     : pvoigt
+}
+
 def ls_str2class(l):
-    """ Convert lineshape string to lineshape class """
-    if l == "gauss" or l == "g":
-        return gauss()
-    elif l == "lorentz" or l == "l":
-        return lorentz()
-    elif l == "scale" or l == "s":
-        return scale()
-    elif l == "voigt" or l == "v":
-        return voigt()
-    elif l == "pvoigt" or l == "pv":
-        return pvoigt()
+    if ls_table.has_key(l):
+        return ls_table[l]()
     else:
-        raise ValueError("Unknown lineshape %s", (l))
+        raise ValueError("Unknown lineshape %s",(l))
 
 # basic lineshape analysis
 
