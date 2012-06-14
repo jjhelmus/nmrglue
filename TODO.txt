@@ -2,57 +2,40 @@ Items to do before article is published
 =======================================
 
 1. Update inline documentation on all user functions and classes to match scipy
-documentation standards.
-
-Module          Docs(21/21) Notes
-------          ----------- -----
-bruker          Done
-convert         Done                    
-fileiobase      Done                    
-glue            Skipped     Not imported
-pipe            Done
-rnmrtk          Done        Finish module
-sparky          Done
-table           Done
-varian          Done
+documentation standards.  DONE
 
 pipe_proc       Done        References to low level function/ better
                             description
 proc_base       Done        Additional doc, which functions good for any dim?
 proc_bl         Done        Flesh out sol_* functions?
-proc_lp         Done
 
-analysisbase    Done
 helpers         Done        Better docs?
-leastsqbound    Done
 lineshapes1d    Done        Warnings b/c __init__,  .. math:: for lineshapes?
-linesh          Done
 peakpick        Done        Links to picking algorithms
 segmentation    Done        See Alsos?
 
-misc            Done
 
 2. Unit tests for all modules which use nose.  Make data needed for these unit
 test available for download.
 
-Module      Unit Test (0 /21)  
-------      -----------------
-bruker          
-convert         
-fileiobase        
-glue            
-pipe            
+Module      Unit Test (5 /21)       Notes 
+------      -----------------       -----
+bruker      Done                    Example data is bruker_data.tar (91 MB) 
+convert     Done                    TOO BIG, generate from conversion scripts.  
+fileiobase  None Needed             No tests needed      
+glue        Skipped                 Not imported          
+pipe        Done                    TOO BIG, generate from conversion scripts.
 rnmrtk          
-sparky          
-table           
-varian          
+sparky      Done                    TOO BIG, generate from conversion scripts.
+table       
+varian      Done                    Example data is agilent_data.tar (135 MB)
 
 pipe_proc       
 proc_base       
 proc_bl         
 proc_lp         
 
-analysisbase    
+analysisbase    None Needed         No tests needed    
 helpers         
 leastsqbound    
 lineshapes1d    
@@ -69,11 +52,9 @@ fitting and segmentation examples.
 
 4. Rewrite tutorial, include mention of analysis module.
 
-5. Write unit tests for all major submodules and make data needed for unit tests
-available for download.  All tests should use nose.
-
-6. Release version 0.3, check installer on Linux, Windows, and OS-X.  Update
-install script, grep for XXX in all files and update pyPI record.
+5. Release version 0.3, check installer on Linux, Windows, and OS-X.  Update
+install script, grep for XXX in all files and update pyPI record. Record
+example data.
 
 
 To Do and other updates post journal article.
@@ -90,6 +71,8 @@ nmrglue
 
     filio
     -----
+    - replicate varian namespace as agilent namespace.
+    - finish writing, documenting and testing rnmrtk module.
     - lowmemory (in-place) writing of regions of data.
         Use data_nd functionality with put_slice.
     - ability to write slices to file in all modules (ala pipe.write_slice3d)
@@ -99,8 +82,8 @@ nmrglue
     - spinev module?
     - simpson module?
 
-    gui
-    ---
+    gui? 
+    ----
     - gui module with common gui functions?
 
     process
