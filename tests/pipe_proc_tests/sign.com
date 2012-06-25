@@ -2,32 +2,32 @@
 
 nmrPipe -in ./time_complex.fid  \
 | nmrPipe  -fn SIGN -ri\
--ov -out s1.dat
+-ov -out sign1.dat
 
 nmrPipe -in ./time_complex.fid  \
 | nmrPipe  -fn SIGN -r\
--ov -out s2.dat
+-ov -out sign2.dat
 
 nmrPipe -in ./time_complex.fid  \
 | nmrPipe  -fn SIGN -i\
--ov -out s3.dat
+-ov -out sign3.dat
 
 nmrPipe -in ./time_complex.fid  \
 | nmrPipe  -fn SIGN -left\
--ov -out s4.dat
+-ov -out sign4.dat
 
 nmrPipe -in ./time_complex.fid  \
 | nmrPipe  -fn SIGN -right\
--ov -out s5.dat
+-ov -out sign5.dat
 
 nmrPipe -in ./time_complex.fid  \
 | nmrPipe  -fn SIGN -alt\
--ov -out s6.dat
+-ov -out sign6.dat
 
 nmrPipe -in ./time_complex.fid  \
 | nmrPipe  -fn SIGN -abs\
--ov -out s7.dat
+-ov -out sign7.dat
 
 nmrPipe -in ./time_complex.fid  \
 | nmrPipe  -fn SIGN -sign\
--ov -out s8.dat
+-ov -out sign8.dat

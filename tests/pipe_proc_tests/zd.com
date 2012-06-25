@@ -2,7 +2,7 @@
 
 nmrPipe -in ./time_complex.fid                \
 | nmrPipe  -fn ZD -wide 1 -x0 20 -slope 2 -func 0 \
--ov -out zd.dat
+-ov -out zd1.dat
 
 nmrPipe -in ./time_complex.fid                \
 | nmrPipe  -fn ZD -wide 5 -x0 10 -slope 5 -func 1 \

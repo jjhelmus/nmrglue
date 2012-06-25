@@ -6,6 +6,7 @@ import shutil
 
 from numpy.testing import assert_array_equal
 import nmrglue as ng
+from nose.plugins.attrib import attr
 
 from setup import DATA_DIR
 
@@ -50,7 +51,9 @@ def lowmem_fid_write_readback(dic, data, shape, torder):
     assert dic == rdic
     os.remove(tf)
 
-# test
+# tests
+
+@attr(speed='fast')
 def test_1d():
     """ reading/writing of 1D Varian file """    
     dic, data = ng.varian.read(DATA_DIR + "agilent_1d")
@@ -61,6 +64,7 @@ def test_1d():
     assert round(data[1].imag, 2) == -49503.41
     write_readback(dic, data)
 
+@attr(speed='fast')
 def test_2d():
     """ reading/writing of 2D Varian file """    
     dic, data = ng.varian.read(DATA_DIR + "agilent_2d")
@@ -71,6 +75,7 @@ def test_2d():
     assert round(data[10, 18].imag, 2) == -67.20
     write_readback(dic, data)
 
+@attr(speed='fast')
 def test_2d_lowmem():
     """ low memory reading/writing of 2D Varian file """    
     dic, data = ng.varian.read_lowmem(DATA_DIR + "agilent_2d")
@@ -81,6 +86,7 @@ def test_2d_lowmem():
     assert round(data[10, 18].imag, 2) == -67.20
     lowmem_write_readback(dic, data)
 
+@attr(speed='fast')
 def test_2d_tppi():
     """ reading/writing of 2D Varian file with TPPI encoding """    
     dic, data = ng.varian.read(DATA_DIR + "agilent_2d_tppi")
@@ -91,6 +97,7 @@ def test_2d_tppi():
     assert round(data[10, 18].imag, 2) == -594.73
     write_readback(dic, data)
 
+@attr(speed='fast')
 def test_2d_tppi_lowmem():
     """ low memory reading/writing of 2D Varian file with TPPI encoding """    
     dic, data = ng.varian.read_lowmem(DATA_DIR + "agilent_2d_tppi")
@@ -101,6 +108,7 @@ def test_2d_tppi_lowmem():
     assert round(data[10, 18].imag, 2) == -594.73
     lowmem_write_readback(dic, data)
 
+@attr(speed='slow')
 def test_3d():
     """ reading/writing of 3D Varian file """    
     dic, data = ng.varian.read(DATA_DIR + "agilent_3d")
@@ -111,6 +119,7 @@ def test_3d():
     assert round(data[10, 11, 18].imag, 2) == -7.75
     write_readback(dic, data)
 
+@attr(speed='slow')
 def test_3d_lowmem():
     """ low memory reading/writing of 3D Varian file """    
     dic, data = ng.varian.read_lowmem(DATA_DIR + "agilent_3d") 
@@ -121,6 +130,7 @@ def test_3d_lowmem():
     assert round(data[10, 11, 18].imag, 2) == -7.75
     lowmem_write_readback(dic, data)
 
+@attr(speed='slow')
 def test_4d():
     """ reading/writing of 4D Varian fid file """    
     # since this is a fake 4D with no procpar we need to explicitly
@@ -134,6 +144,7 @@ def test_4d():
     assert round(data[3, 10, 11, 18].imag, 2) == 16.01
     write_fid_readback(dic, data, (8, 12, 16, 1400),'r')
 
+@attr(speed='slow')
 def test_4d_lowmem():
     """ low memory reading/writing of 4D Varian fid file """    
     # since this is a fake 4D with no procpar we need to explicitly

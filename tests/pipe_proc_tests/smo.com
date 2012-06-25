@@ -2,7 +2,7 @@
 
 nmrPipe -in ./time_complex.fid                \
 | nmrPipe  -fn SMO  \
--ov -out smo.dat
+-ov -out smo1.dat
 
 nmrPipe -in ./time_complex.fid                \
 | nmrPipe  -fn SMO -n 5\

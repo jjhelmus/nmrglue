@@ -2,7 +2,7 @@
 
 nmrPipe -in ./time_complex.fid                \
 | nmrPipe  -fn YTP  -auto\
--ov -out ytp.dat
+-ov -out ytp1.dat
 
 nmrPipe -in ./time_complex.fid                \
 | nmrPipe  -fn YTP -hyper \

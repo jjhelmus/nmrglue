@@ -2,7 +2,7 @@
 
 nmrPipe -in ./time_complex.fid                \
 | nmrPipe  -fn ZF -zf 2  \
--ov -out zf.dat
+-ov -out zf1.dat
 
 nmrPipe -in ./time_complex.fid                \
 | nmrPipe  -fn ZF -pad 200  \

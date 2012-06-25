@@ -2,7 +2,7 @@
 
 nmrPipe -in ./time_complex.fid                \
 | nmrPipe  -fn MC -pow \
--ov -out mc.dat
+-ov -out mc1.dat
 
 nmrPipe -in ./time_complex.fid                \
 | nmrPipe  -fn MC -mod \

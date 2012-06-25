@@ -1,3 +1,3 @@
 #! /usr/bin/env python
-
-# do nothing as NMRPipe goes into inf loop.
+""" Create files for dev unit test """
+# do nothing as NMRPipe goes into infinite loop.

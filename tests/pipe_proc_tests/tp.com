@@ -2,7 +2,7 @@
 
 nmrPipe -in ./time_complex.fid                \
 | nmrPipe  -fn TP  -auto\
--ov -out tp.dat
+-ov -out tp1.dat
 
 nmrPipe -in ./time_complex.fid                \
 | nmrPipe  -fn TP -hyper \

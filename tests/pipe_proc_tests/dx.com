@@ -2,4 +2,4 @@
 
 nmrPipe -in ./time_complex.fid                \
 | nmrPipe  -fn DX  \
--ov -out dx.dat
+-ov -out dx1.dat

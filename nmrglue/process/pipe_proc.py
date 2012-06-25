@@ -298,6 +298,8 @@ def em(dic, data, lb=0.0, c=1.0, start=1, size='default', inv=False, one=False,
     # set the apod flags
     dic[fn + "APODCODE"] = 2.0
     dic[fn + "APODQ1"] = lb
+    dic[fn + "APODQ2"] = 0.0
+    dic[fn + "APODQ3"] = 0.0
 
     sw = dic[fn + "SW"] 
     flb = lb / sw
@@ -469,6 +471,7 @@ def gmb(dic, data, lb=0.0, gb=0.0, c=1.0, start=1, size='default', inv=False,
     dic[fn + "APODCODE"] = 7.0
     dic[fn + "APODQ1"] = lb
     dic[fn + "APODQ2"] = gb
+    dic[fn + "APODQ3"] = 0.0
 
     # calculate native parameters
     sw = dic[fn + "SW"]
@@ -731,6 +734,7 @@ def tm(dic, data, t1=0.0, t2=0.0, c=1.0, start=1, size='default', inv=False,
     dic[fn + "APODCODE"] = 4.0
     dic[fn + "APODQ1"] = t1
     dic[fn + "APODQ2"] = t2
+    dic[fn + "APODQ3"] = 0.0
 
     # apply apodization to data
     if start == 0 and size == 'default':
@@ -1200,8 +1204,8 @@ def rft(dic, data, inv=False):
 
     Notes
     -----
-    This function gives results which differ from NMRPipe's RFT function in
-    cetrain cases.
+    This function gives results which slightly differ from NMRPipe's RFT 
+    function in some cases.
 
     """
     fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
@@ -1314,8 +1318,8 @@ def ht(dic, data, mode="ps0-0", zf=False, td=False, auto=False):
     if mode not in ["ps0-0","ps90-180"]:
         raise ValueError("mode must be ps0-0 or ps90-180")
     if mode == "ps90-180":
-        # XXX this gets close but not quite right
-        data = -data[::-1]
+        # XXX determine how this works....
+        pass
     if zf:
         N = 2 ** (np.ceil(np.log2(data.shape[-1]))) #not same as NMRPipe
     else:
@@ -2810,10 +2814,7 @@ def save(dic, data, name, overwrite=True):
     """
     dic["FDPIPECOUNT"] = 1.0
 
-    if dic["FDDIMCOUNT"] == 1:
-        pipe.write_1D(name, dic, data, overwrite)
-    else:
-        pipe.write_2D(name, dic, data, overwrite)
+    pipe.write_single(name, dic, data, overwrite)
 
     dic["FDPIPECOUNT"] = 0.0
     dic = update_minmax(dic, data)

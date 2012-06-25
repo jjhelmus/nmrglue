@@ -2,7 +2,7 @@
 
 nmrPipe -in ./time_complex.fid                \
 | nmrPipe  -fn NULL  \
--ov -out null.dat
+-ov -out null1.dat
 
 nmrPipe -in ./time_complex.fid                \
 | nmrPipe  -fn NULL -di \
