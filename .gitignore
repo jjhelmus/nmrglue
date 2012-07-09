@@ -7,4 +7,7 @@
 # Documentation intermediates
 doc/source/reference/generated
 doc/build
-old_doc
+
+# data and sandbox
+data
+sandbox

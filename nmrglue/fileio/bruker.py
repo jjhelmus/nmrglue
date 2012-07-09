@@ -1127,7 +1127,7 @@ def rm_dig_filter(data, decim, dspfvs, grpdly=0):
     #print "phase: %f, skip: %i add: %i"%(phase,skip,add)
 
     # frequency shift
-    pdata = proc_base.fsh2(data, -phase)
+    pdata = proc_base.fsh2(data, phase)
     
     # add points at the end of the specta to beginning
     pdata[..., :add] = pdata[..., :add]+pdata[..., :-(add+1):-1]
