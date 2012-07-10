@@ -642,7 +642,7 @@ def read_binary(filename, shape=(1), cplex=True, big=True):
 
     """
     # open the file and get the data
-    f = open(filename)
+    f = open(filename, 'rb')
     data = get_data(f, big=big)
 
     # complexify if needed
@@ -837,7 +837,7 @@ class bruker_nd(fileiobase.data_nd):
         # create an empty array to store the selected slices
         out = np.empty(tuple(osize), dtype=self.dtype)
 
-        f = open(self.filename, 'r')
+        f = open(self.filename, 'rb')
 
         # read in the data trace by trace
         for out_index, in_index in nd_iter:
@@ -1166,7 +1166,7 @@ def read_jcamp(filename):
 
     """
     dic = {"_coreheader":[], "_comments":[]}    # create empty dictionary
-    f = open(filename, 'r')
+    f = open(filename, 'rb')
 
     # loop until EOF
     while len(f.read(1)):
@@ -1407,7 +1407,7 @@ def read_pprog(filename):
     """
     
     # open the file
-    f = open(filename, 'r')
+    f = open(filename, 'rb')
 
     # initilize lists and dictionaries
     var = dict()
