@@ -340,7 +340,7 @@ def open_towrite(filename, overwrite=False):
     if p != '' and os.path.exists(p) == False:
         os.makedirs(p)
 
-    return open(filename, 'w')
+    return open(filename, 'wb')
 
 ################################################
 # numpy ndarray emulation and helper functions #

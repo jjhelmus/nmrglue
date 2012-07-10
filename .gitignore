@@ -3,6 +3,7 @@
 
 # vim swap files
 *.swp
+*.*~
 
 # Documentation intermediates
 doc/source/reference/generated
