@@ -646,7 +646,7 @@ def read_fid(filename, shape=None, torder='flat', read_blockhead=False):
 
     """
     # open the file
-    f = open(filename)
+    f = open(filename, 'rb')
 
     # read the fileheader
     dic = fileheader2dic(get_fileheader(f))
@@ -733,7 +733,7 @@ def read_fid_lowmem(filename, shape=None, torder='flat',
 
     """
     # open the file
-    f = open(filename)
+    f = open(filename, 'rb')
 
     # read the fileheader
     dic = fileheader2dic(get_fileheader(f))
@@ -780,7 +780,7 @@ def read_fid_ntraces(filename, shape=None, torder='flat',
 
     """
     # open the file
-    f = open(filename)
+    f = open(filename, 'rb')
 
     # read the fileheader
     dic = fileheader2dic(get_fileheader(f))
@@ -1782,7 +1782,7 @@ def read_procpar(filename):
     """ 
     Read a procpar file returning a dictionary of procpar parameters.
     """
-    f = open(filename)
+    f = open(filename, 'rb')
     dic = dict()
     length = os.stat(filename).st_size
 
@@ -1923,7 +1923,7 @@ class fid_nd(fileiobase.data_nd):
         Create and set up object.
         """
         # read the file dictionary
-        f = open(filename, 'r')
+        f = open(filename, 'rb')
         dic = fileheader2dic(get_fileheader(f))
         f.close()
 
@@ -1985,7 +1985,7 @@ class fid_nd(fileiobase.data_nd):
         # create an empty array to store the selected slices
         out = np.empty(tuple(osize), dtype=self.dtype)
 
-        f = open(self.filename, 'r')
+        f = open(self.filename, 'rb')
 
         # read in the data trace by trace
         for out_index, in_index in nd_iter:

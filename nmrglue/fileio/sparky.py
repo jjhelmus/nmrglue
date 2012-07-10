@@ -252,7 +252,7 @@ def read(filename):
 
     """
     # open the file
-    f = open(filename)
+    f = open(filename, 'rb')
 
     # determind the dimentionality
     n = fileheader2dic(get_fileheader(f))["naxis"]
@@ -288,7 +288,7 @@ def read_lowmem(filename):
    
     """    
     # open the file
-    f = open(filename)
+    f = open(filename, 'rb')
 
     # determind the dimentionality
     n = fileheader2dic(get_fileheader(f))["naxis"]
@@ -365,7 +365,7 @@ def read_2D(filename):
     Read a 2D sparky file. See :py:func:`read` for documentation.
     """
     seek_pos = os.stat(filename).st_size
-    f = open(filename)
+    f = open(filename, 'rb')
 
     # read the file header
     dic = fileheader2dic(get_fileheader(f))
@@ -422,7 +422,7 @@ def read_3D(filename):
     Read a 3D Sparky file. See :py:func:`read` for documentation.
     """
     seek_pos = os.stat(filename).st_size
-    f = open(filename)
+    f = open(filename, 'rb')
 
     # read the file header
     dic = fileheader2dic(get_fileheader(f))
@@ -541,7 +541,7 @@ class sparky_2d(fileiobase.data_nd):
         """
         # open the file
         self.filename = filename
-        f = open(filename)
+        f = open(filename, 'rb')
 
         # read the fileheader
         self.dic = fileheader2dic(get_fileheader(f))
@@ -585,7 +585,7 @@ class sparky_2d(fileiobase.data_nd):
 
         (sY, sX) is a well formatted tuple of slices
         """
-        f = open(self.filename)
+        f = open(self.filename, 'rb')
 
         #print sY,sX
         gY = range(self.lenY)[sY]   # list of values to take in Y
@@ -669,7 +669,7 @@ class sparky_3d(fileiobase.data_nd):
         """
         # open the file
         self.filename = filename
-        f = open(filename)
+        f = open(filename, 'rb')
 
         # read the fileheader
         self.dic = fileheader2dic(get_fileheader(f))
@@ -716,7 +716,7 @@ class sparky_3d(fileiobase.data_nd):
 
         (sZ, sY, sX) is a well formateed tuple of slices
         """
-        f = open(self.filename)
+        f = open(self.filename, 'rb')
 
         gZ = range(self.lenZ)[sZ]   # list of values to take in Z
         gY = range(self.lenY)[sY]   # list of values to take in Y

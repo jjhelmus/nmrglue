@@ -498,7 +498,7 @@ class rnmrtk_nd(fileiobase.data_nd):
         out = np.empty(tuple(osize), dtype=self.dtype)
 
         # opent the file for reading
-        f = open(self.filename, 'r')
+        f = open(self.filename, 'rb')
 
         # read in the data trace by trace
         for out_index, in_index in nd_iter:
@@ -552,7 +552,7 @@ def read_par(filename):
 
     """
     dic = make_empty_dic()
-    f = open(filename)
+    f = open(filename, 'rb')
     for line in f:
         if len(line.split()) >= 2:
             parse_par_line(line, dic)

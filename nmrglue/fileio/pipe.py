@@ -44,7 +44,7 @@ def read_table(filename):
     """
     # divide up into comment lines and data lines
     specials = ["VARS", "FORMAT", "NULLSTRING", "NULLVALUE", "REMARK", "DATA"]
-    f = open(filename, 'r')
+    f = open(filename, 'rb')
     cl = []
     dl = []
     for line in f:
@@ -1639,7 +1639,7 @@ class pipe_2d(fileiobase.data_nd):
 
         (sY, sX) is a well formated tuple of slices
         """
-        f = open(self.filename, 'r') # open the file for reading
+        f = open(self.filename, 'rb') # open the file for reading
         
         # determine which objects should be selected
         lenY, lenX = self.fshape
@@ -1756,7 +1756,7 @@ class pipe_3d(fileiobase.data_nd):
         # read in the data file by file and trace by trace
         for zi, z in enumerate(zch):
             # open the Z axis file
-            f = open(self.filemask % (z + 1), 'r')
+            f = open(self.filemask % (z + 1), 'rb')
             for yi, y in enumerate(ych):
                 ntrace = y
                 trace = get_trace(f, ntrace, lenX, self.bswap, self.cplex)
@@ -1826,7 +1826,7 @@ class pipestream_3d(fileiobase.data_nd):
 
         (sZ, sY, sX) is a well formated tuple of slices
         """
-        f = open(self.filename, 'r') # open the file for reading
+        f = open(self.filename, 'rb') # open the file for reading
         
         # determine which objects should be selected
         lenZ, lenY, lenX = self.fshape
@@ -1967,9 +1967,9 @@ class pipe_4d(fileiobase.data_nd):
         for ai, a in enumerate(ach):
             for zi, z in enumerate(zch):                
                 if self.singleindex:   # single index
-                    f = open(self.filemask % (a * lenZ + z + 1), 'r')
+                    f = open(self.filemask % (a * lenZ + z + 1), 'rb')
                 else:   # two index
-                    f = open(self.filemask % (a + 1, z + 1), 'r')
+                    f = open(self.filemask % (a + 1, z + 1), 'rb')
                 for yi, y in enumerate(ych):
                     ntrace = y
                     trace = get_trace(f, ntrace, lenX, self.bswap, self.cplex)
@@ -2043,7 +2043,7 @@ class pipestream_4d(fileiobase.data_nd):
         (sA, sZ, sY, sX) is a well formated tuple of slices
 
         """
-        f = open(self.filename, 'r') # open the file for reading
+        f = open(self.filename, 'rb') # open the file for reading
         
         # determine which objects should be selected
         lenA, lenZ, lenY, lenX = self.fshape

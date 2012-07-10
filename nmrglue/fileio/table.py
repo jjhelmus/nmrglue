@@ -123,7 +123,7 @@ def read(filename):
 
     """
     # pull out the comment lines from the file (start with #)
-    f = open(filename, 'r')
+    f = open(filename, 'rb')
     comments = [l for l in f if l[0] == '#']
     f.close()
     
