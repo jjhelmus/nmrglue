@@ -9,6 +9,10 @@
 doc/source/reference/generated
 doc/build
 
+# build directories
+build
+dist
+
 # data and sandbox
 data
 sandbox
