@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.create_data
+=================================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: create_data

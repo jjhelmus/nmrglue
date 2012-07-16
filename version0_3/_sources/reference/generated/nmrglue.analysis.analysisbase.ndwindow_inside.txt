@@ -1,0 +1,23 @@
+nmrglue.analysis.analysisbase.ndwindow_inside
+=============================================
+
+.. currentmodule:: nmrglue.analysis.analysisbase
+
+.. autoclass:: ndwindow_inside
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ndwindow_inside.__init__
+      ~ndwindow_inside.next
+   
+   
+
+   
+   
+   

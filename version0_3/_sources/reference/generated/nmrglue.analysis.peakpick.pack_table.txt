@@ -1,0 +1,6 @@
+nmrglue.analysis.peakpick.pack_table
+====================================
+
+.. currentmodule:: nmrglue.analysis.peakpick
+
+.. autofunction:: pack_table

@@ -1,0 +1,6 @@
+nmrglue.fileio.fileiobase.trace2index_flat
+==========================================
+
+.. currentmodule:: nmrglue.fileio.fileiobase
+
+.. autofunction:: trace2index_flat

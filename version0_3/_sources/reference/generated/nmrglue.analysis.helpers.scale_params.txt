@@ -1,0 +1,6 @@
+nmrglue.analysis.helpers.scale_params
+=====================================
+
+.. currentmodule:: nmrglue.analysis.helpers
+
+.. autofunction:: scale_params

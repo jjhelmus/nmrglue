@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.find_dtype
+================================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: find_dtype

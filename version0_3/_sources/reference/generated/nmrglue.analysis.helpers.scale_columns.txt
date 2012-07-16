@@ -1,0 +1,6 @@
+nmrglue.analysis.helpers.scale_columns
+======================================
+
+.. currentmodule:: nmrglue.analysis.helpers
+
+.. autofunction:: scale_columns

@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.repack_blockheader
+========================================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: repack_blockheader

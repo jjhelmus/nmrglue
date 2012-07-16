@@ -1,0 +1,6 @@
+nmrglue.process.proc_base.exchange_lr
+=====================================
+
+.. currentmodule:: nmrglue.process.proc_base
+
+.. autofunction:: exchange_lr

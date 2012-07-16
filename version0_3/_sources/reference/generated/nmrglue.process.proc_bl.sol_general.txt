@@ -1,0 +1,6 @@
+nmrglue.process.proc_bl.sol_general
+===================================
+
+.. currentmodule:: nmrglue.process.proc_bl
+
+.. autofunction:: sol_general

@@ -1,0 +1,6 @@
+nmrglue.fileio.sparky.guess_udic
+================================
+
+.. currentmodule:: nmrglue.fileio.sparky
+
+.. autofunction:: guess_udic

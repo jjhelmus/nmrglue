@@ -1,0 +1,6 @@
+nmrglue.analysis.linesh.add_to_table
+====================================
+
+.. currentmodule:: nmrglue.analysis.linesh
+
+.. autofunction:: add_to_table

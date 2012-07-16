@@ -1,0 +1,6 @@
+nmrglue.process.proc_base.filter_max
+====================================
+
+.. currentmodule:: nmrglue.process.proc_base
+
+.. autofunction:: filter_max

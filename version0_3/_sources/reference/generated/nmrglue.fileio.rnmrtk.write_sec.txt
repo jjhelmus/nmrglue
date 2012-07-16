@@ -1,0 +1,6 @@
+nmrglue.fileio.rnmrtk.write_sec
+===============================
+
+.. currentmodule:: nmrglue.fileio.rnmrtk
+
+.. autofunction:: write_sec

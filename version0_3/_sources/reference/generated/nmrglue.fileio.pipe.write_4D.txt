@@ -1,0 +1,6 @@
+nmrglue.fileio.pipe.write_4D
+============================
+
+.. currentmodule:: nmrglue.fileio.pipe
+
+.. autofunction:: write_4D

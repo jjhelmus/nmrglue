@@ -1,0 +1,44 @@
+nmrglue.fileio.fileiobase.unit_conversion
+=========================================
+
+.. currentmodule:: nmrglue.fileio.fileiobase
+
+.. autoclass:: unit_conversion
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~unit_conversion.__init__
+      ~unit_conversion.f
+      ~unit_conversion.hz
+      ~unit_conversion.hz_limits
+      ~unit_conversion.hz_scale
+      ~unit_conversion.i
+      ~unit_conversion.ms
+      ~unit_conversion.ms_limits
+      ~unit_conversion.ms_scale
+      ~unit_conversion.percent
+      ~unit_conversion.percent_limits
+      ~unit_conversion.percent_scale
+      ~unit_conversion.ppm
+      ~unit_conversion.ppm_limits
+      ~unit_conversion.ppm_scale
+      ~unit_conversion.sec
+      ~unit_conversion.sec_limits
+      ~unit_conversion.sec_scale
+      ~unit_conversion.seconds
+      ~unit_conversion.unit
+      ~unit_conversion.us
+      ~unit_conversion.us_limits
+      ~unit_conversion.us_scale
+   
+   
+
+   
+   
+   

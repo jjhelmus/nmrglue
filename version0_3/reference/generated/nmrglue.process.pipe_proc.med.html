@@ -1,0 +1,178 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nmrglue.process.pipe_proc.med &mdash; nmrglue 0.3 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.3 documentation" href="../../index.html" />
+    <link rel="up" title="nmrglue.pipe_proc" href="../pipe_proc.html" />
+    <link rel="next" title="nmrglue.process.pipe_proc.sol" href="nmrglue.process.pipe_proc.sol.html" />
+    <link rel="prev" title="nmrglue.process.pipe_proc.cbf" href="nmrglue.process.pipe_proc.cbf.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.pipe_proc.sol.html" title="nmrglue.process.pipe_proc.sol"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.pipe_proc.cbf.html" title="nmrglue.process.pipe_proc.cbf"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">nmrglue 0.3 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../pipe_proc.html" accesskey="U">nmrglue.pipe_proc</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="nmrglue-process-pipe-proc-med">
+<h1>nmrglue.process.pipe_proc.med<a class="headerlink" href="#nmrglue-process-pipe-proc-med" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="nmrglue.process.pipe_proc.med">
+<tt class="descclassname">nmrglue.process.pipe_proc.</tt><tt class="descname">med</tt><big>(</big><em>dic</em>, <em>data</em>, <em>nw=24</em>, <em>sf=16</em>, <em>sigma=5.0</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/pipe_proc.py#L1696"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.pipe_proc.med" title="Permalink to this definition">¶</a></dt>
+<dd><p>Median baseline correction</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of NMRPipe parameters.</p>
+</div></blockquote>
+<p><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>nw</strong> : int</p>
+<blockquote>
+<div><p>Median window size in points.</p>
+</div></blockquote>
+<p><strong>sf</strong> : int</p>
+<blockquote>
+<div><p>Smoothing filter size in points.</p>
+</div></blockquote>
+<p><strong>sigma</strong> : float</p>
+<blockquote>
+<div><p>Gaussian convolution width.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of updated NMRPipe parameters.</p>
+</div></blockquote>
+<p><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Array of NMR data with an median baseline correction applied.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This function applies Friendrich&#8217;s model-free baseline flatting algorithm
+(Friendrichs JBNMR 1995 5 147-153).  NMRPipe applies a different and 
+unknown algorithm.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="nmrglue.process.pipe_proc.cbf.html"
+                        title="previous chapter">nmrglue.process.pipe_proc.cbf</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="nmrglue.process.pipe_proc.sol.html"
+                        title="next chapter">nmrglue.process.pipe_proc.sol</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/reference/generated/nmrglue.process.pipe_proc.med.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.pipe_proc.sol.html" title="nmrglue.process.pipe_proc.sol"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.pipe_proc.cbf.html" title="nmrglue.process.pipe_proc.cbf"
+             >previous</a> |</li>
+        <li><a href="../../index.html">nmrglue 0.3 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../pipe_proc.html" >nmrglue.pipe_proc</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2012, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

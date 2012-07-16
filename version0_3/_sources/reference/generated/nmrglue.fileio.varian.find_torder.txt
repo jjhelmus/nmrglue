@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.find_torder
+=================================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: find_torder

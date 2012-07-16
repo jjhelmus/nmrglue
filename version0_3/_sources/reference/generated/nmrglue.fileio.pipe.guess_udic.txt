@@ -1,0 +1,6 @@
+nmrglue.fileio.pipe.guess_udic
+==============================
+
+.. currentmodule:: nmrglue.fileio.pipe
+
+.. autofunction:: guess_udic

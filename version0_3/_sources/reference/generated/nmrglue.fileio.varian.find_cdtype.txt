@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.find_cdtype
+=================================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: find_cdtype

@@ -1,6 +1,0 @@
-nmrglue.analysis.leastsqbound.internal2external
-===============================================
-
-.. currentmodule:: nmrglue.analysis.leastsqbound
-
-.. autofunction:: internal2external

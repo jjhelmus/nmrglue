@@ -1,0 +1,6 @@
+nmrglue.fileio.pipe.put_data
+============================
+
+.. currentmodule:: nmrglue.fileio.pipe
+
+.. autofunction:: put_data

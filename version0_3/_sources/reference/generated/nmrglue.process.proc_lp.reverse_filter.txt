@@ -1,0 +1,6 @@
+nmrglue.process.proc_lp.reverse_filter
+======================================
+
+.. currentmodule:: nmrglue.process.proc_lp
+
+.. autofunction:: reverse_filter

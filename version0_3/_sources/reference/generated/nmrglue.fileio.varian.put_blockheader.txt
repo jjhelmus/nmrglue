@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.put_blockheader
+=====================================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: put_blockheader

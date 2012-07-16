@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.read_lowmem
+=================================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: read_lowmem

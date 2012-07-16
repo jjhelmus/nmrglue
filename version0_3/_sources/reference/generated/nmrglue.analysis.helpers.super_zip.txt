@@ -1,0 +1,6 @@
+nmrglue.analysis.helpers.super_zip
+==================================
+
+.. currentmodule:: nmrglue.analysis.helpers
+
+.. autofunction:: super_zip

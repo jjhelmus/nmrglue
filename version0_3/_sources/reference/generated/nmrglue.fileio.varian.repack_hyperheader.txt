@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.repack_hyperheader
+========================================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: repack_hyperheader

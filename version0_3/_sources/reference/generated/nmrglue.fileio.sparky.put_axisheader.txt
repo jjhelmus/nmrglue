@@ -1,0 +1,6 @@
+nmrglue.fileio.sparky.put_axisheader
+====================================
+
+.. currentmodule:: nmrglue.fileio.sparky
+
+.. autofunction:: put_axisheader

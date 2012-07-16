@@ -1,0 +1,6 @@
+nmrglue.process.proc_base.c2ri
+==============================
+
+.. currentmodule:: nmrglue.process.proc_base
+
+.. autofunction:: c2ri

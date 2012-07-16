@@ -1,0 +1,228 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nmrglue.analysis.linesh.fit_spectrum &mdash; nmrglue 0.3 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.3 documentation" href="../../index.html" />
+    <link rel="up" title="nmrglue.linesh" href="../linesh.html" />
+    <link rel="next" title="nmrglue.analysis.linesh.fit_NDregion" href="nmrglue.analysis.linesh.fit_NDregion.html" />
+    <link rel="prev" title="nmrglue.analysis.linesh.f_NDregion" href="nmrglue.analysis.linesh.f_NDregion.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.analysis.linesh.fit_NDregion.html" title="nmrglue.analysis.linesh.fit_NDregion"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.analysis.linesh.f_NDregion.html" title="nmrglue.analysis.linesh.f_NDregion"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">nmrglue 0.3 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../linesh.html" accesskey="U">nmrglue.linesh</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="nmrglue-analysis-linesh-fit-spectrum">
+<h1>nmrglue.analysis.linesh.fit_spectrum<a class="headerlink" href="#nmrglue-analysis-linesh-fit-spectrum" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="nmrglue.analysis.linesh.fit_spectrum">
+<tt class="descclassname">nmrglue.analysis.linesh.</tt><tt class="descname">fit_spectrum</tt><big>(</big><em>spectrum</em>, <em>lineshapes</em>, <em>params</em>, <em>amps</em>, <em>bounds</em>, <em>ampbounds</em>, <em>centers</em>, <em>rIDs</em>, <em>box_width</em>, <em>error_flag</em>, <em>verb=True</em>, <em>**kw</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/linesh.py#L145"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.linesh.fit_spectrum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit a NMR spectrum by regions which contain one or more peaks.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>spectrum</strong> : array_like</p>
+<blockquote>
+<div><p>NMR data. ndarray or emulated type, must be slicable.</p>
+</div></blockquote>
+<p><strong>lineshape :list</strong> :</p>
+<blockquote>
+<div><p>List of lineshapes by label (str) or a lineshape class. See
+<a class="reference internal" href="nmrglue.analysis.linesh.fit_NDregion.html#nmrglue.analysis.linesh.fit_NDregion" title="nmrglue.analysis.linesh.fit_NDregion"><tt class="xref py py-func docutils literal"><span class="pre">fit_NDregion()</span></tt></a> for details.</p>
+</div></blockquote>
+<p><strong>params</strong> : list</p>
+<blockquote>
+<div><p>P-length list (P is the number of peaks in region) of N-length lists 
+of tuples where each each tuple is the optimiztion starting parameters
+for a given peak and dimension lineshape.</p>
+</div></blockquote>
+<p><strong>amps</strong> : list</p>
+<blockquote>
+<div><p>P-length list of amplitudes.</p>
+</div></blockquote>
+<p><strong>bounds</strong> : list</p>
+<blockquote>
+<div><p>List of bounds for parameter of same shape as params.  If none of the 
+parameters in a given dimension have limits None can be used, 
+otherwise each dimension should have a list or tuple of (min,max) or 
+None for each parameter. min or max may be None when there is no 
+bounds in a given direction.</p>
+</div></blockquote>
+<p><strong>ampbounds</strong> : list</p>
+<blockquote>
+<div><p>P-length list of bounds for the amplitude with format similar to 
+bounds.</p>
+</div></blockquote>
+<p><strong>centers</strong> : list</p>
+<blockquote>
+<div><p>List of N-tuples indicating peak centers.</p>
+</div></blockquote>
+<p><strong>rIDs</strong> : list</p>
+<blockquote>
+<div><p>P-length list of region numbers.  Peak with the same region number 
+are fit together.</p>
+</div></blockquote>
+<p><strong>box_width</strong> : tuple</p>
+<blockquote>
+<div><p>Tuple of length N indicating box width to add and subtract from peak 
+centers to form regions around peak to fit.</p>
+</div></blockquote>
+<p><strong>error_flag</strong> : bool</p>
+<blockquote>
+<div><p>True to estimate errors for each lineshape parameter and amplitude.</p>
+</div></blockquote>
+<p><strong>verb</strong> : bool, optional</p>
+<blockquote>
+<div><p>True to print a summary of each region fit, False (the default) 
+supresses all printing.</p>
+</div></blockquote>
+<p><strong>**kw</strong> : optional</p>
+<blockquote>
+<div><p>Additional keywords passed to the scipy.optimize.leastsq function.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>params_best</strong> : list</p>
+<blockquote>
+<div><p>Optimal values for lineshape parameters with same format as params 
+input parameter.</p>
+</div></blockquote>
+<p><strong>amp_best</strong> : list</p>
+<blockquote>
+<div><p>List of optimal peak amplitudes.</p>
+</div></blockquote>
+<p><strong>param_err</strong> : list, only returned when error_flag is True</p>
+<blockquote>
+<div><p>Estimated lineshape parameter errors with same format as params.</p>
+</div></blockquote>
+<p><strong>amp_err</strong> : list, only returned when error_flag is True</p>
+<blockquote>
+<div><p>Estimated peak amplitude errors.</p>
+</div></blockquote>
+<p><strong>iers</strong> : list</p>
+<blockquote class="last">
+<div><p>List of interger flag from scipy.optimize.leastsq indicating if the 
+solution was found for a given peak.  1,2,3,4 indicates that a 
+solution was found. Other indicate an error.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="nmrglue.analysis.linesh.f_NDregion.html"
+                        title="previous chapter">nmrglue.analysis.linesh.f_NDregion</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="nmrglue.analysis.linesh.fit_NDregion.html"
+                        title="next chapter">nmrglue.analysis.linesh.fit_NDregion</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/reference/generated/nmrglue.analysis.linesh.fit_spectrum.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.analysis.linesh.fit_NDregion.html" title="nmrglue.analysis.linesh.fit_NDregion"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.analysis.linesh.f_NDregion.html" title="nmrglue.analysis.linesh.f_NDregion"
+             >previous</a> |</li>
+        <li><a href="../../index.html">nmrglue 0.3 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../linesh.html" >nmrglue.linesh</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2012, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

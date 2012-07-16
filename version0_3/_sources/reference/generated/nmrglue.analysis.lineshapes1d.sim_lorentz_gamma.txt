@@ -1,0 +1,6 @@
+nmrglue.analysis.lineshapes1d.sim_lorentz_gamma
+===============================================
+
+.. currentmodule:: nmrglue.analysis.lineshapes1d
+
+.. autofunction:: sim_lorentz_gamma

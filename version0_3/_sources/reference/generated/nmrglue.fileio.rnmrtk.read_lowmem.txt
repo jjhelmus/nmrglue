@@ -1,0 +1,6 @@
+nmrglue.fileio.rnmrtk.read_lowmem
+=================================
+
+.. currentmodule:: nmrglue.fileio.rnmrtk
+
+.. autofunction:: read_lowmem

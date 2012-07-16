@@ -1,0 +1,6 @@
+nmrglue.analysis.linesh.make_slist
+==================================
+
+.. currentmodule:: nmrglue.analysis.linesh
+
+.. autofunction:: make_slist

@@ -1,0 +1,6 @@
+nmrglue.process.pipe_proc.coad
+==============================
+
+.. currentmodule:: nmrglue.process.pipe_proc
+
+.. autofunction:: coad

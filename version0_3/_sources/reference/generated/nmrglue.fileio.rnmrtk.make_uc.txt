@@ -1,0 +1,6 @@
+nmrglue.fileio.rnmrtk.make_uc
+=============================
+
+.. currentmodule:: nmrglue.fileio.rnmrtk
+
+.. autofunction:: make_uc

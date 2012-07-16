@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.repack_fileheader
+=======================================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: repack_fileheader

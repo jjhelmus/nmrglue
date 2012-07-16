@@ -1,0 +1,6 @@
+nmrglue.analysis.peakpick.add_edge
+==================================
+
+.. currentmodule:: nmrglue.analysis.peakpick
+
+.. autofunction:: add_edge

@@ -1,0 +1,6 @@
+nmrglue.process.proc_lp.fix_roots
+=================================
+
+.. currentmodule:: nmrglue.process.proc_lp
+
+.. autofunction:: fix_roots

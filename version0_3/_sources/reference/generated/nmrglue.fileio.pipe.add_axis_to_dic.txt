@@ -1,0 +1,6 @@
+nmrglue.fileio.pipe.add_axis_to_dic
+===================================
+
+.. currentmodule:: nmrglue.fileio.pipe
+
+.. autofunction:: add_axis_to_dic

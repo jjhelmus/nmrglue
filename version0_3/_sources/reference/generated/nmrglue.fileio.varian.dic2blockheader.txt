@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.dic2blockheader
+=====================================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: dic2blockheader

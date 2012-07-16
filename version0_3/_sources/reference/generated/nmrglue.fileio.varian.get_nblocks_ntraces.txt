@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.get_nblocks_ntraces
+=========================================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: get_nblocks_ntraces

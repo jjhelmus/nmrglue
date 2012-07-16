@@ -1,0 +1,33 @@
+nmrglue.analysis.lineshapes1d.voigt_fwhm
+========================================
+
+.. currentmodule:: nmrglue.analysis.lineshapes1d
+
+.. autoclass:: voigt_fwhm
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~voigt_fwhm.add_edge
+      ~voigt_fwhm.guessp
+      ~voigt_fwhm.nparam
+      ~voigt_fwhm.pnames
+      ~voigt_fwhm.remove_edge
+      ~voigt_fwhm.sim
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~voigt_fwhm.name
+   
+   

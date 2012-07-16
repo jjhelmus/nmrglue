@@ -1,0 +1,6 @@
+nmrglue.fileio.pipe.read_4D
+===========================
+
+.. currentmodule:: nmrglue.fileio.pipe
+
+.. autofunction:: read_4D

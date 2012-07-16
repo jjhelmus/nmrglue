@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.reorder_data
+==================================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: reorder_data

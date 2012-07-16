@@ -1,0 +1,188 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nmrglue.process.proc_base.fft &mdash; nmrglue 0.3 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.3 documentation" href="../../index.html" />
+    <link rel="up" title="nmrglue.proc_base" href="../proc_base.html" />
+    <link rel="next" title="nmrglue.process.proc_base.fft_norm" href="nmrglue.process.proc_base.fft_norm.html" />
+    <link rel="prev" title="nmrglue.process.proc_base.irft" href="nmrglue.process.proc_base.irft.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.proc_base.fft_norm.html" title="nmrglue.process.proc_base.fft_norm"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.proc_base.irft.html" title="nmrglue.process.proc_base.irft"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">nmrglue 0.3 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../proc_base.html" accesskey="U">nmrglue.proc_base</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="nmrglue-process-proc-base-fft">
+<h1>nmrglue.process.proc_base.fft<a class="headerlink" href="#nmrglue-process-proc-base-fft" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="nmrglue.process.proc_base.fft">
+<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">fft</tt><big>(</big><em>data</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L509"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.fft" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fourier transform, NMR ordering of results.</p>
+<p>There are a number of definitions of the discrete Fourier transform
+the version used in this function is as follows.</p>
+<div class="math">
+\[A_k = \sum_{m=0}^{n-1} a_m \exp\left\{-2\pi i{mk \over n}
+\right\}\qquad k = 0,\ldots,n-1. \]</div>
+<p>With the inverse DFT in the <a class="reference internal" href="nmrglue.process.proc_base.ifft.html#nmrglue.process.proc_base.ifft" title="nmrglue.process.proc_base.ifft"><tt class="xref py py-func docutils literal"><span class="pre">ifft()</span></tt></a> function defined as follows.</p>
+<div class="math">
+\[a_m = \frac{1}{n} \sum_{k=0}^{n-1} A_k \exp \left\{2\pi
+i{mk\over n} \right\}\qquad n = 0,\ldots,n-1.\]</div>
+<p>Two alternative definitions are also supported by nmrglue. One in
+which both the sum in the fft and ifft are multiplied by
+<span class="math">\(\frac{1}{\sqrt{n}}\)</span> which results in a pair of transforms in 
+which the total power contained in the the signals before and after the
+transforms are equal.  This is the type transforms used in the 
+Rowland NMR Toolkit. This type of transform is performed by the 
+<a class="reference internal" href="nmrglue.process.proc_base.fft_norm.html#nmrglue.process.proc_base.fft_norm" title="nmrglue.process.proc_base.fft_norm"><tt class="xref py py-func docutils literal"><span class="pre">fft_norm()</span></tt></a> and <a class="reference internal" href="nmrglue.process.proc_base.ifft_norm.html#nmrglue.process.proc_base.ifft_norm" title="nmrglue.process.proc_base.ifft_norm"><tt class="xref py py-func docutils literal"><span class="pre">ifft_norm()</span></tt></a> functions.</p>
+<p>The second definition changes the sign of the exponent to be positive while
+keeping the normalization factors the same.  This type of transform is
+performed by the NMRPipe processing package and the functions 
+<a class="reference internal" href="nmrglue.process.proc_base.fft_positive.html#nmrglue.process.proc_base.fft_positive" title="nmrglue.process.proc_base.fft_positive"><tt class="xref py py-func docutils literal"><span class="pre">fft_positive()</span></tt></a> and <a class="reference internal" href="nmrglue.process.proc_base.ifft_positive.html#nmrglue.process.proc_base.ifft_positive" title="nmrglue.process.proc_base.ifft_positive"><tt class="xref py py-func docutils literal"><span class="pre">ifft_positive()</span></tt></a>.</p>
+<p>All of the Fourier transforms perfromed by nmrglue return results in &#8216;NMR
+order&#8217;, in which the two half of the spectrum have been swapped and
+reversed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Fourier transform of NMR data in &#8216;NMR order&#8217;.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.process.proc_base.ifft.html#nmrglue.process.proc_base.ifft" title="nmrglue.process.proc_base.ifft"><tt class="xref py py-obj docutils literal"><span class="pre">ifft</span></tt></a></dt>
+<dd>Inversion Fourier transform.</dd>
+<dt><a class="reference internal" href="nmrglue.process.proc_base.fft_norm.html#nmrglue.process.proc_base.fft_norm" title="nmrglue.process.proc_base.fft_norm"><tt class="xref py py-obj docutils literal"><span class="pre">fft_norm</span></tt></a></dt>
+<dd>Norm (power) conserving Fourier transform.</dd>
+<dt><a class="reference internal" href="nmrglue.process.proc_base.fft_positive.html#nmrglue.process.proc_base.fft_positive" title="nmrglue.process.proc_base.fft_positive"><tt class="xref py py-obj docutils literal"><span class="pre">fft_positive</span></tt></a></dt>
+<dd>Forier transform with a positive exponential.</dd>
+</dl>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="nmrglue.process.proc_base.irft.html"
+                        title="previous chapter">nmrglue.process.proc_base.irft</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="nmrglue.process.proc_base.fft_norm.html"
+                        title="next chapter">nmrglue.process.proc_base.fft_norm</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/reference/generated/nmrglue.process.proc_base.fft.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.proc_base.fft_norm.html" title="nmrglue.process.proc_base.fft_norm"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.proc_base.irft.html" title="nmrglue.process.proc_base.irft"
+             >previous</a> |</li>
+        <li><a href="../../index.html">nmrglue 0.3 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../proc_base.html" >nmrglue.proc_base</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2012, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

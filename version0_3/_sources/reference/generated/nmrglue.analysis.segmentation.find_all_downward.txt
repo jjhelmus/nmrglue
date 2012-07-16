@@ -1,0 +1,6 @@
+nmrglue.analysis.segmentation.find_all_downward
+===============================================
+
+.. currentmodule:: nmrglue.analysis.segmentation
+
+.. autofunction:: find_all_downward

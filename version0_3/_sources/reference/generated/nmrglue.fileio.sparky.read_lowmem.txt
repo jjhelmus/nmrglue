@@ -1,0 +1,6 @@
+nmrglue.fileio.sparky.read_lowmem
+=================================
+
+.. currentmodule:: nmrglue.fileio.sparky
+
+.. autofunction:: read_lowmem

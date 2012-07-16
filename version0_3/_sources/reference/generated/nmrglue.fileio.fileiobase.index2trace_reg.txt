@@ -1,0 +1,6 @@
+nmrglue.fileio.fileiobase.index2trace_reg
+=========================================
+
+.. currentmodule:: nmrglue.fileio.fileiobase
+
+.. autofunction:: index2trace_reg

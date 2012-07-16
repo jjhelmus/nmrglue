@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.write_fid_lowmem
+======================================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: write_fid_lowmem

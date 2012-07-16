@@ -1,0 +1,6 @@
+nmrglue.process.proc_base.range_flt
+===================================
+
+.. currentmodule:: nmrglue.process.proc_base
+
+.. autofunction:: range_flt

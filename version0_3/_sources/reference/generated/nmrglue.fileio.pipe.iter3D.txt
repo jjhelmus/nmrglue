@@ -1,0 +1,25 @@
+nmrglue.fileio.pipe.iter3D
+==========================
+
+.. currentmodule:: nmrglue.fileio.pipe
+
+.. autoclass:: iter3D
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~iter3D.__init__
+      ~iter3D.next
+      ~iter3D.reinitialize
+      ~iter3D.write
+   
+   
+
+   
+   
+   

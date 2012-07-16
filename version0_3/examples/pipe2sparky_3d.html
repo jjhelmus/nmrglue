@@ -1,0 +1,156 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>convert example: pipe2sparky_3d &mdash; nmrglue 0.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.3 documentation" href="../index.html" />
+    <link rel="up" title="Examples" href="index.html" />
+    <link rel="next" title="convert example: varian2pipe_1d" href="varian2pipe_1d.html" />
+    <link rel="prev" title="convert example: pipe2sparky_2d" href="pipe2sparky_2d.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="varian2pipe_1d.html" title="convert example: varian2pipe_1d"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pipe2sparky_2d.html" title="convert example: pipe2sparky_2d"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">nmrglue 0.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="convert-example-pipe2sparky-3d">
+<span id="pipe2sparky-3d"></span><h1>convert example: pipe2sparky_3d<a class="headerlink" href="#convert-example-pipe2sparky-3d" title="Permalink to this headline">¶</a></h1>
+<p>This example shows how to use nmrglue to convert between the NMRPipe and Sparky
+file formats for a 3D data set.  The last block of code lists the differences
+between this conversion and one performed with pipe2ucsf.</p>
+<p>[<a class="reference download internal" href="../_downloads/pipe2sparky_3d.py"><tt class="xref download docutils literal"><span class="pre">source</span> <span class="pre">code</span></tt></a>]</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#! /usr/bin/env python</span>
+
+<span class="kn">import</span> <span class="nn">nmrglue</span> <span class="kn">as</span> <span class="nn">ng</span>
+
+<span class="c"># read in the varian data</span>
+<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read_lowmem</span><span class="p">(</span><span class="s">&quot;../common_data/3d_pipe/ft/test</span><span class="si">%03d</span><span class="s">.ft3&quot;</span><span class="p">)</span>
+
+<span class="c"># Set the parameters </span>
+<span class="n">u</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">guess_udic</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
+
+<span class="c"># create the converter object and initilize with varian data</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">convert</span><span class="o">.</span><span class="n">converter</span><span class="p">()</span>
+<span class="n">C</span><span class="o">.</span><span class="n">from_pipe</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">u</span><span class="p">)</span>
+
+<span class="c"># create pipe data and then write it out</span>
+<span class="n">ng</span><span class="o">.</span><span class="n">sparky</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;3d_sparky.ucsf&quot;</span><span class="p">,</span><span class="o">*</span><span class="n">C</span><span class="o">.</span><span class="n">to_sparky</span><span class="p">(),</span><span class="n">overwrite</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c"># check the conversion against NMRPipe</span>
+<span class="k">print</span> <span class="s">&quot;Conversion complete, listing differences between files:&quot;</span>
+<span class="n">sdic</span><span class="p">,</span><span class="n">sdata</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">sparky</span><span class="o">.</span><span class="n">read_lowmem</span><span class="p">(</span><span class="s">&quot;3d_sparky.ucsf&quot;</span><span class="p">)</span>
+<span class="n">sdic2</span><span class="p">,</span><span class="n">sdata2</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">sparky</span><span class="o">.</span><span class="n">read_lowmem</span><span class="p">(</span><span class="s">&quot;../common_data/3d_sparky/data.ucsf&quot;</span><span class="p">)</span>
+<span class="k">print</span> <span class="n">ng</span><span class="o">.</span><span class="n">misc</span><span class="o">.</span><span class="n">pair_similar</span><span class="p">(</span><span class="n">sdic</span><span class="p">,</span><span class="n">sdata</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span><span class="n">sdic2</span><span class="p">,</span><span class="n">sdata2</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span><span class="n">verb</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pipe2sparky_2d.html"
+                        title="previous chapter">convert example: pipe2sparky_2d</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="varian2pipe_1d.html"
+                        title="next chapter">convert example: varian2pipe_1d</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/pipe2sparky_3d.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="varian2pipe_1d.html" title="convert example: varian2pipe_1d"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pipe2sparky_2d.html" title="convert example: pipe2sparky_2d"
+             >previous</a> |</li>
+        <li><a href="../index.html">nmrglue 0.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2012, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

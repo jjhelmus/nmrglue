@@ -1,0 +1,6 @@
+nmrglue.fileio.table.read
+=========================
+
+.. currentmodule:: nmrglue.fileio.table
+
+.. autofunction:: read

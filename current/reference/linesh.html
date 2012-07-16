@@ -1,0 +1,212 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nmrglue.linesh &mdash; nmrglue 0.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.3 documentation" href="../index.html" />
+    <link rel="up" title="Reference Guide" href="index.html" />
+    <link rel="next" title="nmrglue.analysis.linesh.fit_spectrum" href="generated/nmrglue.analysis.linesh.fit_spectrum.html" />
+    <link rel="prev" title="nmrglue.analysis.lineshapes1d.scale" href="generated/nmrglue.analysis.lineshapes1d.scale.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.analysis.linesh.fit_spectrum.html" title="nmrglue.analysis.linesh.fit_spectrum"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.analysis.lineshapes1d.scale.html" title="nmrglue.analysis.lineshapes1d.scale"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">nmrglue 0.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Reference Guide</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-nmrglue.analysis.linesh">
+<span id="nmrglue-linesh"></span><h1>nmrglue.linesh<a class="headerlink" href="#module-nmrglue.analysis.linesh" title="Permalink to this headline">¶</a></h1>
+<p>Functions for fitting and simulating arbitrary dimensional lineshapes commonly
+found in NMR experiments</p>
+<p>This module is imported as nmrglue.linesh and can be called as such</p>
+<div class="section" id="user-functions">
+<h2>User Functions<a class="headerlink" href="#user-functions" title="Permalink to this headline">¶</a></h2>
+<p>These are the functions the majority of users will use from the linesh module.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.linesh.fit_spectrum.html#nmrglue.analysis.linesh.fit_spectrum" title="nmrglue.analysis.linesh.fit_spectrum"><tt class="xref py py-obj docutils literal"><span class="pre">fit_spectrum</span></tt></a>(spectrum,&nbsp;lineshapes,&nbsp;params,&nbsp;...)</td>
+<td>Fit a NMR spectrum by regions which contain one or more peaks.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.linesh.fit_NDregion.html#nmrglue.analysis.linesh.fit_NDregion" title="nmrglue.analysis.linesh.fit_NDregion"><tt class="xref py py-obj docutils literal"><span class="pre">fit_NDregion</span></tt></a>(region,&nbsp;lineshapes,&nbsp;params,&nbsp;amps)</td>
+<td>Fit a N-dimensional region.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.linesh.sim_NDregion.html#nmrglue.analysis.linesh.sim_NDregion" title="nmrglue.analysis.linesh.sim_NDregion"><tt class="xref py py-obj docutils literal"><span class="pre">sim_NDregion</span></tt></a>(shape,&nbsp;lineshapes,&nbsp;params,&nbsp;amps)</td>
+<td>Simulate an N-dimensional region with one or more peaks.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.linesh.add_to_table.html#nmrglue.analysis.linesh.add_to_table" title="nmrglue.analysis.linesh.add_to_table"><tt class="xref py py-obj docutils literal"><span class="pre">add_to_table</span></tt></a>(rec,&nbsp;columns,&nbsp;column_names)</td>
+<td>Add (append) multiple columns to a records array.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.linesh.pack_table.html#nmrglue.analysis.linesh.pack_table" title="nmrglue.analysis.linesh.pack_table"><tt class="xref py py-obj docutils literal"><span class="pre">pack_table</span></tt></a>(pbest,&nbsp;abest,&nbsp;iers,&nbsp;rec,&nbsp;...[,&nbsp;...])</td>
+<td>Pack fitting parameters into table</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.linesh.unpack_table.html#nmrglue.analysis.linesh.unpack_table" title="nmrglue.analysis.linesh.unpack_table"><tt class="xref py py-obj docutils literal"><span class="pre">unpack_table</span></tt></a>(rec,&nbsp;param_columns,&nbsp;amp_column)</td>
+<td>Unpack initial fitting parameters from a table.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.linesh.estimate_scales.html#nmrglue.analysis.linesh.estimate_scales" title="nmrglue.analysis.linesh.estimate_scales"><tt class="xref py py-obj docutils literal"><span class="pre">estimate_scales</span></tt></a>(spectrum,&nbsp;centers,&nbsp;box_width)</td>
+<td>Estimate scale parameter for peaks in a spectrum.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="developer-functions">
+<h2>Developer Functions<a class="headerlink" href="#developer-functions" title="Permalink to this headline">¶</a></h2>
+<p>These functions are typically not used directly by users.  Developers who
+want fine control over lineshape fitting may be interested in these
+functions.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.linesh.make_slist.html#nmrglue.analysis.linesh.make_slist" title="nmrglue.analysis.linesh.make_slist"><tt class="xref py py-obj docutils literal"><span class="pre">make_slist</span></tt></a>(l,&nbsp;t_sizes)</td>
+<td>Create a list of tuples of given sizes from a list</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.linesh.split_list.html#nmrglue.analysis.linesh.split_list" title="nmrglue.analysis.linesh.split_list"><tt class="xref py py-obj docutils literal"><span class="pre">split_list</span></tt></a>(l,&nbsp;N)</td>
+<td>Split list l into N sublists of equal size</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.linesh.calc_errors.html#nmrglue.analysis.linesh.calc_errors" title="nmrglue.analysis.linesh.calc_errors"><tt class="xref py py-obj docutils literal"><span class="pre">calc_errors</span></tt></a>(region,&nbsp;ls_classes,&nbsp;p,&nbsp;cov,&nbsp;...)</td>
+<td>Calcuate the parameter errors from the standard errors of the estimate.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.linesh.s_NDregion.html#nmrglue.analysis.linesh.s_NDregion" title="nmrglue.analysis.linesh.s_NDregion"><tt class="xref py py-obj docutils literal"><span class="pre">s_NDregion</span></tt></a>(p,&nbsp;shape,&nbsp;ls_classes,&nbsp;n_peaks)</td>
+<td>Simulate an N-dimensional region with one or more peaks.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.linesh.s_single_NDregion.html#nmrglue.analysis.linesh.s_single_NDregion" title="nmrglue.analysis.linesh.s_single_NDregion"><tt class="xref py py-obj docutils literal"><span class="pre">s_single_NDregion</span></tt></a>(p,&nbsp;shape,&nbsp;ls_classes)</td>
+<td>Simulate an N-dimensional region with a single peak.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.linesh.err_NDregion.html#nmrglue.analysis.linesh.err_NDregion" title="nmrglue.analysis.linesh.err_NDregion"><tt class="xref py py-obj docutils literal"><span class="pre">err_NDregion</span></tt></a>(p,&nbsp;region,&nbsp;shape,&nbsp;ls_classes,&nbsp;...)</td>
+<td>Error function for an N-dimensional region, called by <a class="reference internal" href="generated/nmrglue.analysis.linesh.f_NDregion.html#nmrglue.analysis.linesh.f_NDregion" title="nmrglue.analysis.linesh.f_NDregion"><tt class="xref py py-func docutils literal"><span class="pre">f_NDregion()</span></tt></a></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.linesh.f_NDregion.html#nmrglue.analysis.linesh.f_NDregion" title="nmrglue.analysis.linesh.f_NDregion"><tt class="xref py py-obj docutils literal"><span class="pre">f_NDregion</span></tt></a>(region,&nbsp;ls_classes,&nbsp;p0,&nbsp;p_bounds,&nbsp;...)</td>
+<td>Fit an N-dimensional regions containing one or more peaks.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">nmrglue.linesh</a><ul>
+<li><a class="reference internal" href="#user-functions">User Functions</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#developer-functions">Developer Functions</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="generated/nmrglue.analysis.lineshapes1d.scale.html"
+                        title="previous chapter">nmrglue.analysis.lineshapes1d.scale</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="generated/nmrglue.analysis.linesh.fit_spectrum.html"
+                        title="next chapter">nmrglue.analysis.linesh.fit_spectrum</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/reference/linesh.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.analysis.linesh.fit_spectrum.html" title="nmrglue.analysis.linesh.fit_spectrum"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.analysis.lineshapes1d.scale.html" title="nmrglue.analysis.lineshapes1d.scale"
+             >previous</a> |</li>
+        <li><a href="../index.html">nmrglue 0.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Reference Guide</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2012, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

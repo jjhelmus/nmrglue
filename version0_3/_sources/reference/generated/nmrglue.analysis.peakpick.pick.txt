@@ -1,0 +1,6 @@
+nmrglue.analysis.peakpick.pick
+==============================
+
+.. currentmodule:: nmrglue.analysis.peakpick
+
+.. autofunction:: pick

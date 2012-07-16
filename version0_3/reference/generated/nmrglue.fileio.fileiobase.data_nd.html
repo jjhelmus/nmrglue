@@ -1,0 +1,188 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nmrglue.fileio.fileiobase.data_nd &mdash; nmrglue 0.3 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.3 documentation" href="../../index.html" />
+    <link rel="up" title="nmrglue.fileiobase" href="../fileiobase.html" />
+    <link rel="next" title="nmrglue.pipe" href="../pipe.html" />
+    <link rel="prev" title="nmrglue.fileio.fileiobase.unit_conversion" href="nmrglue.fileio.fileiobase.unit_conversion.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../pipe.html" title="nmrglue.pipe"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.fileio.fileiobase.unit_conversion.html" title="nmrglue.fileio.fileiobase.unit_conversion"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">nmrglue 0.3 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../fileiobase.html" accesskey="U">nmrglue.fileiobase</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="nmrglue-fileio-fileiobase-data-nd">
+<h1>nmrglue.fileio.fileiobase.data_nd<a class="headerlink" href="#nmrglue-fileio-fileiobase-data-nd" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="nmrglue.fileio.fileiobase.data_nd">
+<em class="property">class </em><tt class="descclassname">nmrglue.fileio.fileiobase.</tt><tt class="descname">data_nd</tt><big>(</big><em>order</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/fileiobase.py#L477"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.fileiobase.data_nd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for building objects which emulate ndarray objects without
+loading data into memory.  These object have the following properties:</p>
+<ul class="simple">
+<li>slicing operations return ndarray objects</li>
+<li>can iterate over with expected results</li>
+<li>transpose and swapaxes functions create a new data_nd object with the
+new axes ordering</li>
+<li>has ndim, shape, and dtype attributes.</li>
+</ul>
+<p class="rubric">Notes</p>
+<p>Classes which are use this class as a base should define the following
+methods:</p>
+<p>__init__ which must set up the object and defines at minimum:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>self.fshape <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd>Shape of the data on disk, the shape when order = (0, 1, 2, ..)</dd>
+<dt>self.order <span class="classifier-delimiter">:</span> <span class="classifier">tuple</span></dt>
+<dd>Ordering of the axes</dd>
+<dt>self.dtype <span class="classifier-delimiter">:</span> <span class="classifier">dtype</span></dt>
+<dd>Dtype of the emulated ndarray</dd>
+<dt>self.__setdimandshape__ should be called if self.dim and self.shape</dt>
+<dd>are not set up __init__.</dd>
+</dl>
+</div></blockquote>
+<dl class="docutils">
+<dt>__fgetitem__ which takes a well formatted tuple of slices and returns a</dt>
+<dd>ndarray object with the selected data</dd>
+</dl>
+<p>__fcopy__(self, order) which created a copy of the object with the new order</p>
+<dl class="method">
+<dt id="nmrglue.fileio.fileiobase.data_nd.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>order</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/fileiobase.py#L513"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.fileiobase.data_nd.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#nmrglue.fileio.fileiobase.data_nd.__init__" title="nmrglue.fileio.fileiobase.data_nd.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">__init__</span></tt></a>(order)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">swapaxes</span></tt>(axis1,&nbsp;axis2)</td>
+<td>Return object with <cite>axis1</cite> and <cite>axis2</cite> interchanged.</td>
+</tr>
+<tr class="row-odd"><td><tt class="xref py py-obj docutils literal"><span class="pre">transpose</span></tt>(*axes)</td>
+<td>Return object with axes transposed.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="nmrglue.fileio.fileiobase.unit_conversion.html"
+                        title="previous chapter">nmrglue.fileio.fileiobase.unit_conversion</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../pipe.html"
+                        title="next chapter">nmrglue.pipe</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/reference/generated/nmrglue.fileio.fileiobase.data_nd.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../pipe.html" title="nmrglue.pipe"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.fileio.fileiobase.unit_conversion.html" title="nmrglue.fileio.fileiobase.unit_conversion"
+             >previous</a> |</li>
+        <li><a href="../../index.html">nmrglue 0.3 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../fileiobase.html" >nmrglue.fileiobase</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2012, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

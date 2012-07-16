@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.write
+===========================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: write

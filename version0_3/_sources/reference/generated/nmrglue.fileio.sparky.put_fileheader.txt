@@ -1,0 +1,6 @@
+nmrglue.fileio.sparky.put_fileheader
+====================================
+
+.. currentmodule:: nmrglue.fileio.sparky
+
+.. autofunction:: put_fileheader

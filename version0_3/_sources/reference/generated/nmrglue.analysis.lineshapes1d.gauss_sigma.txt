@@ -1,0 +1,33 @@
+nmrglue.analysis.lineshapes1d.gauss_sigma
+=========================================
+
+.. currentmodule:: nmrglue.analysis.lineshapes1d
+
+.. autoclass:: gauss_sigma
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~gauss_sigma.add_edge
+      ~gauss_sigma.guessp
+      ~gauss_sigma.nparam
+      ~gauss_sigma.pnames
+      ~gauss_sigma.remove_edge
+      ~gauss_sigma.sim
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~gauss_sigma.name
+   
+   

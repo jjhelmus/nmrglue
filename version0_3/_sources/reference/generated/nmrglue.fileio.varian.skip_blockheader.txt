@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.skip_blockheader
+======================================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: skip_blockheader

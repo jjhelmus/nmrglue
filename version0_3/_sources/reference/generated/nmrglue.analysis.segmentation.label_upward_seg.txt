@@ -1,0 +1,6 @@
+nmrglue.analysis.segmentation.label_upward_seg
+==============================================
+
+.. currentmodule:: nmrglue.analysis.segmentation
+
+.. autofunction:: label_upward_seg

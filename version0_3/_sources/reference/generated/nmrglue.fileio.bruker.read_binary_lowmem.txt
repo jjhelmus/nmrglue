@@ -1,0 +1,6 @@
+nmrglue.fileio.bruker.read_binary_lowmem
+========================================
+
+.. currentmodule:: nmrglue.fileio.bruker
+
+.. autofunction:: read_binary_lowmem

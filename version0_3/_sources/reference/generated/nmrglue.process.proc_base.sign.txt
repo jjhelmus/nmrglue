@@ -1,0 +1,6 @@
+nmrglue.process.proc_base.sign
+==============================
+
+.. currentmodule:: nmrglue.process.proc_base
+
+.. autofunction:: sign

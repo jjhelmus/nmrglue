@@ -1,0 +1,6 @@
+nmrglue.fileio.fileiobase.size_and_ndtofrom_iter
+================================================
+
+.. currentmodule:: nmrglue.fileio.fileiobase
+
+.. autofunction:: size_and_ndtofrom_iter

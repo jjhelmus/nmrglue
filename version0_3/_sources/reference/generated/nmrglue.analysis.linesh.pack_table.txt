@@ -1,0 +1,6 @@
+nmrglue.analysis.linesh.pack_table
+==================================
+
+.. currentmodule:: nmrglue.analysis.linesh
+
+.. autofunction:: pack_table

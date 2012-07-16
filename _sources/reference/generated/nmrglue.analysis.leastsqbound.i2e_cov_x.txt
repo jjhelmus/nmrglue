@@ -1,6 +1,0 @@
-nmrglue.analysis.leastsqbound.i2e_cov_x
-=======================================
-
-.. currentmodule:: nmrglue.analysis.leastsqbound
-
-.. autofunction:: i2e_cov_x

@@ -1,6 +1,0 @@
-nmrglue.process.proc_base.hadamard
-==================================
-
-.. currentmodule:: nmrglue.process.proc_base
-
-.. autofunction:: hadamard

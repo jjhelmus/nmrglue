@@ -1,0 +1,178 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nmrglue.analysis.peakpick.pack_table &mdash; nmrglue 0.3 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.3 documentation" href="../../index.html" />
+    <link rel="up" title="nmrglue.peakpick" href="../peakpick.html" />
+    <link rel="next" title="nmrglue.analysis.peakpick.guess_params_slice" href="nmrglue.analysis.peakpick.guess_params_slice.html" />
+    <link rel="prev" title="nmrglue.analysis.peakpick.clusters" href="nmrglue.analysis.peakpick.clusters.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.analysis.peakpick.guess_params_slice.html" title="nmrglue.analysis.peakpick.guess_params_slice"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.analysis.peakpick.clusters.html" title="nmrglue.analysis.peakpick.clusters"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">nmrglue 0.3 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../peakpick.html" accesskey="U">nmrglue.peakpick</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="nmrglue-analysis-peakpick-pack-table">
+<h1>nmrglue.analysis.peakpick.pack_table<a class="headerlink" href="#nmrglue-analysis-peakpick-pack-table" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="nmrglue.analysis.peakpick.pack_table">
+<tt class="descclassname">nmrglue.analysis.peakpick.</tt><tt class="descname">pack_table</tt><big>(</big><em>locations, cluster_ids=None, scales=None, amps=None, axis_names=['A', 'Z', 'Y', 'X']</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/peakpick.py#L290"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.peakpick.pack_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a table from peak information.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>locations</strong> : list</p>
+<blockquote>
+<div><p>List of peak locations.</p>
+</div></blockquote>
+<p><strong>cluster_ids</strong> : list, optional</p>
+<blockquote>
+<div><p>List of cluster numbers. None will not include cluster number in the
+table.</p>
+</div></blockquote>
+<p><strong>scales</strong> : list, optional</p>
+<blockquote>
+<div><p>List of peak scales (linewidths). None will not include peak scales in
+the table.</p>
+</div></blockquote>
+<p><strong>amps</strong> : list, optional</p>
+<blockquote>
+<div><p>List of peak amplitudes. None will not include peak amplitudes in the
+table.</p>
+</div></blockquote>
+<p><strong>axis_names</strong> : list, optional</p>
+<blockquote>
+<div><p>List of axis names, the last n will be used for column name prefixes 
+where n is the number of dimensions.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>table</strong> : recarray</p>
+<blockquote class="last">
+<div><p>nmrglue table with column representing peak parameters. Peak locations 
+are given column names like &#8216;X_AXIS&#8217;, &#8216;Y_AXIS&#8217;, etc. Cluster_ids are 
+given a column name of &#8216;cID&#8217;. Peak scales (linewidths) are given 
+column names like &#8216;X_LW&#8217;,&#8217;Y_LW&#8217;.  Peak amplitudes are given a column 
+name of &#8216;VOL&#8217;.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="nmrglue.analysis.peakpick.clusters.html"
+                        title="previous chapter">nmrglue.analysis.peakpick.clusters</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="nmrglue.analysis.peakpick.guess_params_slice.html"
+                        title="next chapter">nmrglue.analysis.peakpick.guess_params_slice</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/reference/generated/nmrglue.analysis.peakpick.pack_table.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.analysis.peakpick.guess_params_slice.html" title="nmrglue.analysis.peakpick.guess_params_slice"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.analysis.peakpick.clusters.html" title="nmrglue.analysis.peakpick.clusters"
+             >previous</a> |</li>
+        <li><a href="../../index.html">nmrglue 0.3 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../peakpick.html" >nmrglue.peakpick</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2012, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

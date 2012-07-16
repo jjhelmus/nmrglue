@@ -1,0 +1,290 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nmrglue.bruker &mdash; nmrglue 0.3 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.3 documentation" href="../index.html" />
+    <link rel="up" title="Reference Guide" href="index.html" />
+    <link rel="next" title="nmrglue.fileio.bruker.read" href="generated/nmrglue.fileio.bruker.read.html" />
+    <link rel="prev" title="Reference Guide" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.fileio.bruker.read.html" title="nmrglue.fileio.bruker.read"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Reference Guide"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">nmrglue 0.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Reference Guide</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-nmrglue.fileio.bruker">
+<span id="nmrglue-bruker"></span><h1>nmrglue.bruker<a class="headerlink" href="#module-nmrglue.fileio.bruker" title="Permalink to this headline">¶</a></h1>
+<p>Functions for reading and writing Bruker binary (ser/fid) files, Bruker 
+JCAMP-DX parameter (acqus) files, and Bruker pulse program (pulseprogram) 
+files.</p>
+<p>This modules is imported as nmrglue.bruker and can be called as such.</p>
+<div class="section" id="user-information">
+<h2>User Information<a class="headerlink" href="#user-information" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="user-functions">
+<h3>User Functions<a class="headerlink" href="#user-functions" title="Permalink to this headline">¶</a></h3>
+<p>These are functions which are targetted for users of nmrglue.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.read.html#nmrglue.fileio.bruker.read" title="nmrglue.fileio.bruker.read"><tt class="xref py py-obj docutils literal"><span class="pre">read</span></tt></a>([dir,&nbsp;bin_file,&nbsp;acqus_files,&nbsp;...])</td>
+<td>Read Bruker files from a directory.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.write.html#nmrglue.fileio.bruker.write" title="nmrglue.fileio.bruker.write"><tt class="xref py py-obj docutils literal"><span class="pre">write</span></tt></a>(dir,&nbsp;dic,&nbsp;data[,&nbsp;bin_file,&nbsp;...])</td>
+<td>Write Bruker files to disk.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.remove_digital_filter.html#nmrglue.fileio.bruker.remove_digital_filter" title="nmrglue.fileio.bruker.remove_digital_filter"><tt class="xref py py-obj docutils literal"><span class="pre">remove_digital_filter</span></tt></a>(dic,&nbsp;data)</td>
+<td>Remove the digial filter from Bruker data.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.read_lowmem.html#nmrglue.fileio.bruker.read_lowmem" title="nmrglue.fileio.bruker.read_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">read_lowmem</span></tt></a>([dir,&nbsp;bin_file,&nbsp;acqus_files,&nbsp;...])</td>
+<td>Read Bruker files from a directory using minimal amounts of memory.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.write_lowmem.html#nmrglue.fileio.bruker.write_lowmem" title="nmrglue.fileio.bruker.write_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">write_lowmem</span></tt></a>(dir,&nbsp;dic,&nbsp;data[,&nbsp;bin_file,&nbsp;...])</td>
+<td>Write Bruker files using minimal amounts of memory (trace by trace).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.read_binary.html#nmrglue.fileio.bruker.read_binary" title="nmrglue.fileio.bruker.read_binary"><tt class="xref py py-obj docutils literal"><span class="pre">read_binary</span></tt></a>(filename[,&nbsp;shape,&nbsp;cplex,&nbsp;big])</td>
+<td>Read Bruker binary data from file and return dic,data pair</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.write_binary.html#nmrglue.fileio.bruker.write_binary" title="nmrglue.fileio.bruker.write_binary"><tt class="xref py py-obj docutils literal"><span class="pre">write_binary</span></tt></a>(filename,&nbsp;dic,&nbsp;data[,&nbsp;...])</td>
+<td>Write Bruker binary data to file.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.read_binary_lowmem.html#nmrglue.fileio.bruker.read_binary_lowmem" title="nmrglue.fileio.bruker.read_binary_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">read_binary_lowmem</span></tt></a>(filename[,&nbsp;shape,&nbsp;cplex,&nbsp;big])</td>
+<td>Read Bruker binary data from file using minimal memory.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.write_binary_lowmem.html#nmrglue.fileio.bruker.write_binary_lowmem" title="nmrglue.fileio.bruker.write_binary_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">write_binary_lowmem</span></tt></a>(filename,&nbsp;dic,&nbsp;data[,&nbsp;...])</td>
+<td>Write Bruker binary data to file using minimal memory (trace by trace).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.read_jcamp.html#nmrglue.fileio.bruker.read_jcamp" title="nmrglue.fileio.bruker.read_jcamp"><tt class="xref py py-obj docutils literal"><span class="pre">read_jcamp</span></tt></a>(filename)</td>
+<td>Read a Bruker JCAMP-DX file into a dictionary.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.write_jcamp.html#nmrglue.fileio.bruker.write_jcamp" title="nmrglue.fileio.bruker.write_jcamp"><tt class="xref py py-obj docutils literal"><span class="pre">write_jcamp</span></tt></a>(dic,&nbsp;filename[,&nbsp;overwrite])</td>
+<td>Write a Bruker JCAMP-DX file from a dictionary</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.read_pprog.html#nmrglue.fileio.bruker.read_pprog" title="nmrglue.fileio.bruker.read_pprog"><tt class="xref py py-obj docutils literal"><span class="pre">read_pprog</span></tt></a>(filename)</td>
+<td>Read a Bruker pulse program (pulseprogram) file.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.write_pprog.html#nmrglue.fileio.bruker.write_pprog" title="nmrglue.fileio.bruker.write_pprog"><tt class="xref py py-obj docutils literal"><span class="pre">write_pprog</span></tt></a>(filename,&nbsp;dic[,&nbsp;overwrite])</td>
+<td>Write a minimal Bruker pulse program to file.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.guess_udic.html#nmrglue.fileio.bruker.guess_udic" title="nmrglue.fileio.bruker.guess_udic"><tt class="xref py py-obj docutils literal"><span class="pre">guess_udic</span></tt></a>(dic,&nbsp;data)</td>
+<td>Guess parameters of universal dictionary from dic, data pair.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.create_dic.html#nmrglue.fileio.bruker.create_dic" title="nmrglue.fileio.bruker.create_dic"><tt class="xref py py-obj docutils literal"><span class="pre">create_dic</span></tt></a>(udic)</td>
+<td>Create a Bruker parameter dictionary from a universal dictionary.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="developer-infomation">
+<h2>Developer Infomation<a class="headerlink" href="#developer-infomation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="bruker-file-format-information">
+<h3>Bruker file format information<a class="headerlink" href="#bruker-file-format-information" title="Permalink to this headline">¶</a></h3>
+<p>Bruker binary files (ser/fid) store data as an array of int32s whose endiness
+is determinded by the parameter BYTORDA (1 = big endian, 0 = little endian).
+Typically the direct dimension is digitally filtered. The exact method of
+removing this filter is unknown but an approximation is avaliable.</p>
+<p>Bruker JCAMP-DX files (acqus, etc) are text file which are described by the
+<a class="reference external" href="http://www.jcamp-dx.org/">JCAMP-DX standard</a>.  Bruker parameters are
+prefixed with a &#8216;$&#8217;.</p>
+<p>Bruker pulseprogram files are text files described in various Bruker manuals.
+Of special important are lines which describe external variable assignments
+(surrounded by &#8220;&#8216;s), loops (begin with lo), phases (contain ip of dp) or
+increments (contain id, dd, ipu or dpu).  These lines are parsed when reading
+the file with nmrglue.</p>
+</div>
+<div class="section" id="developer-functions">
+<h3>Developer Functions<a class="headerlink" href="#developer-functions" title="Permalink to this headline">¶</a></h3>
+<p>These functions are typically not used directly by users.  Developers who want
+fine control over Bruker files may be interested in these functions.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.create_data.html#nmrglue.fileio.bruker.create_data" title="nmrglue.fileio.bruker.create_data"><tt class="xref py py-obj docutils literal"><span class="pre">create_data</span></tt></a>(data)</td>
+<td>Create a bruker data array (recast into a complex128 or int32)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.create_acqus_dic.html#nmrglue.fileio.bruker.create_acqus_dic" title="nmrglue.fileio.bruker.create_acqus_dic"><tt class="xref py py-obj docutils literal"><span class="pre">create_acqus_dic</span></tt></a>(adic[,&nbsp;direct])</td>
+<td>Create a Bruker acqus dictionary from an Universal axis dictionary.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.guess_shape.html#nmrglue.fileio.bruker.guess_shape" title="nmrglue.fileio.bruker.guess_shape"><tt class="xref py py-obj docutils literal"><span class="pre">guess_shape</span></tt></a>(dic)</td>
+<td>Determine data shape and complexity from Bruker dictionary.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.get_data.html#nmrglue.fileio.bruker.get_data" title="nmrglue.fileio.bruker.get_data"><tt class="xref py py-obj docutils literal"><span class="pre">get_data</span></tt></a>(f,&nbsp;big)</td>
+<td>Get binary data from file object with given endiness</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.put_data.html#nmrglue.fileio.bruker.put_data" title="nmrglue.fileio.bruker.put_data"><tt class="xref py py-obj docutils literal"><span class="pre">put_data</span></tt></a>(f,&nbsp;data[,&nbsp;big])</td>
+<td>Put data to file object with given endiness</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.complexify_data.html#nmrglue.fileio.bruker.complexify_data" title="nmrglue.fileio.bruker.complexify_data"><tt class="xref py py-obj docutils literal"><span class="pre">complexify_data</span></tt></a>(data)</td>
+<td>Complexify data packed real, imag.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.uncomplexify_data.html#nmrglue.fileio.bruker.uncomplexify_data" title="nmrglue.fileio.bruker.uncomplexify_data"><tt class="xref py py-obj docutils literal"><span class="pre">uncomplexify_data</span></tt></a>(data_in)</td>
+<td>Uncomplexify data (pack real,imag) into a int32 array</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.rm_dig_filter.html#nmrglue.fileio.bruker.rm_dig_filter" title="nmrglue.fileio.bruker.rm_dig_filter"><tt class="xref py py-obj docutils literal"><span class="pre">rm_dig_filter</span></tt></a>(data,&nbsp;decim,&nbsp;dspfvs[,&nbsp;grpdly])</td>
+<td>Remove the digital filter from Bruker data.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.parse_jcamp_line.html#nmrglue.fileio.bruker.parse_jcamp_line" title="nmrglue.fileio.bruker.parse_jcamp_line"><tt class="xref py py-obj docutils literal"><span class="pre">parse_jcamp_line</span></tt></a>(line,&nbsp;f)</td>
+<td>Parse a single JCAMP-DX line</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.write_jcamp_pair.html#nmrglue.fileio.bruker.write_jcamp_pair" title="nmrglue.fileio.bruker.write_jcamp_pair"><tt class="xref py py-obj docutils literal"><span class="pre">write_jcamp_pair</span></tt></a>(f,&nbsp;key,&nbsp;value)</td>
+<td>Write out a line of a JCAMP file.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="developer-classes">
+<h3>Developer Classes<a class="headerlink" href="#developer-classes" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.bruker_nd.html#nmrglue.fileio.bruker.bruker_nd" title="nmrglue.fileio.bruker.bruker_nd"><tt class="xref py py-obj docutils literal"><span class="pre">bruker_nd</span></tt></a>(filename,&nbsp;fshape,&nbsp;cplex,&nbsp;big[,&nbsp;order])</td>
+<td>Emulate a ndarray objects without loading data into memory for low memory</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">nmrglue.bruker</a><ul>
+<li><a class="reference internal" href="#user-information">User Information</a><ul>
+<li><a class="reference internal" href="#user-functions">User Functions</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#developer-infomation">Developer Infomation</a><ul>
+<li><a class="reference internal" href="#bruker-file-format-information">Bruker file format information</a></li>
+<li><a class="reference internal" href="#developer-functions">Developer Functions</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#developer-classes">Developer Classes</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Reference Guide</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="generated/nmrglue.fileio.bruker.read.html"
+                        title="next chapter">nmrglue.fileio.bruker.read</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/reference/bruker.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.fileio.bruker.read.html" title="nmrglue.fileio.bruker.read"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Reference Guide"
+             >previous</a> |</li>
+        <li><a href="../index.html">nmrglue 0.3 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Reference Guide</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2012, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

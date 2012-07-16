@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.read
+==========================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: read

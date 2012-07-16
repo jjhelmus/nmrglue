@@ -1,0 +1,6 @@
+nmrglue.fileio.pipe.create_data
+===============================
+
+.. currentmodule:: nmrglue.fileio.pipe
+
+.. autofunction:: create_data
