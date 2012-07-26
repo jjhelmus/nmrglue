@@ -3,6 +3,7 @@ Functions to convert between NMR file formats
 """
 
 import datetime
+from warnings import warn
 
 import numpy as np
 
@@ -62,7 +63,7 @@ class converter(object):
 
         # Warnings
         if self._data.dtype.kind != np.dtype(self._odtype).kind:
-            print "Warning: Incompatiable dtypes, conversion not recommended"
+            warn("Incompatible dtypes, conversion not recommended")
 
         # Return data
         if isinstance(self._data, np.ndarray):   # in memory data

@@ -20,6 +20,7 @@ These are available (as of 04/2011) online from
 import os
 import struct
 import inspect
+from warnings import warn
 
 import numpy as np
 
@@ -433,8 +434,8 @@ def find_torder(dic, shape):
     """
     Find the torder from the procpar dictionary.
 
-    If propar dictionary is incomplete a Warning is written and 'f' is 
-    returned.
+    If propar dictionary is incomplete a UserWarning is issued and 'r' is
+    returned. 
 
     Parameters
     ----------
@@ -456,7 +457,7 @@ def find_torder(dic, shape):
         return 'f'  # flat
     
     if "array" not in dic:
-        print "Warning: no array in dictionary, torder set to regular"
+        warn("no array in dictionary, torder set to 'r'")
         return 'r'
 
     # extract the array list
@@ -475,7 +476,7 @@ def find_torder(dic, shape):
             else:
                 return 'o'  # opposite
         else:
-            print "Warning: missing phase order, torder set to regular"
+            warn("missing phase order, torder set to 'r'")
             return 'r'
     
     if ndim == 4:
@@ -485,14 +486,14 @@ def find_torder(dic, shape):
             if al.index("phase") < al.index("phase2") < al.index("phase3"):
                 return 'o'  # opposite
             else:
-                print "Warning: bad phase order, torder set to regular"
+                warn("bad phase order, torder set to 'r'")
                 return 'r'
         else:
-            print "Warning: missing phase order, torder set to regular"
+            warn("missing phase order, torder set to 'r'")
             return 'r'
 
-    print "Warning: No trace ordering for", ndim, "dimensional data"
-    print "torder set to regular"
+    warn("No trace ordering for" + str(ndim) + 
+            "dimensional data, torder set to 'r'")
     return 'r'
 
 def torder2i2t(torder):
@@ -555,7 +556,7 @@ def reorder_data(data, shape, torder):
         try:
             data = data.reshape(shape)
         except ValueError:
-            print "Warning", data.shape, "cannot be shaped into", shape
+            warn(str(data.shape) +  "cannot be shaped into" + str(shape))
         return data
 
     # all other cases
@@ -675,7 +676,7 @@ def read_fid(filename, shape=None, torder='flat', read_blockhead=False):
    
     # return raw data if no shape provided.
     if shape == None:
-        print "Warning: unknown shape, returning unshaped data"
+        warn("unknown shape, returning unshaped data")
         return dic, data
    
     # check for 1D
@@ -688,14 +689,14 @@ def read_fid(filename, shape=None, torder='flat', read_blockhead=False):
         try:
             return dic, reorder_data(data, shape, torder)
         except:
-            print "Warning: data cannot be re-ordered, returning raw 2D data"
-            print "Provided shape: " + str(shape) + " torder: "+str(torder)
+            warn("data cannot be re-ordered, returning raw 2D data\n" + 
+                    "Provided shape: " + str(shape) + " torder: "+str(torder))
             return dic, data
 
     try:
         data = data.reshape(shape)
     except ValueError:
-        print "Warning:", data.shape, "cannot be shaped into", shape
+        warn(str(data.shape) + "cannot be shaped into" + str(shape))
         return dic, data
 
     return dic, data
@@ -811,7 +812,7 @@ def read_fid_ntraces(filename, shape=None, torder='flat',
     
     # try to reshape
     if shape == None:
-        print "Warning: unknown shape, returning unshaped data"
+        warn("unknown shape, returning unshaped data")
         return dic, data
 
     # reorder 3D/4D data
@@ -821,7 +822,7 @@ def read_fid_ntraces(filename, shape=None, torder='flat',
     try:
         data = data.reshape(shape)
     except ValueError:
-        print "Warning:", data.shape, "cannot be shaped into", shape
+        warn(str(data.shape) + "cannot be shaped into" + str(shape))
         return dic, data
 
     return dic, data
@@ -866,9 +867,9 @@ def write_fid(filename, dic, data, torder='flat', repack=False,
     
     # error checking
     if data.shape[1] != (dic["np"] / 2):
-        print "Warning: data and np size mismatch"
+        warn("data and np size mismatch")   # XXX raise Error?
     if data.shape[0] != dic["nblocks"]:
-        print "Warning: data and block size mismatch"
+        warn("data and block size mismatch")    # XXX raise Error?
 
     # open file for writing
     f = fileiobase.open_towrite(filename, overwrite=overwrite)
@@ -940,9 +941,9 @@ def write_fid_lowmem(filename, dic, data, torder='f', repack=False,
 
     # error checking
     if data.shape[-1] != (dic["np"] / 2):
-        print "Warning: data and np size mismatch"
+        warn("data and np size mismatch")   # XXX raise Error?
     if reduce(lambda x, y: x * y, data.shape[:-1]) != dic["nblocks"]:
-        print "Warning: data and block size mismatch"
+        warn("data and block size mismatch")    # XXX raise Error?
 
     # open file for writing
     f = fileiobase.open_towrite(filename, overwrite=overwrite)
@@ -1655,7 +1656,7 @@ def find_shape(pdic):
         shape = [int(pdic["np"]["values"][0]) // 2]
     except:
         # when shape finding fails issue warning and return None
-        print "Warning: shape not found, may be incorrect"
+        warn("shape cannot be determined.")
         return None
 
     # check for an array, we will deal only with the inner most array.

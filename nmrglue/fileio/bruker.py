@@ -25,6 +25,7 @@ the file with nmrglue.
 """
 
 import os
+from warnings import warn
 
 import numpy as np
 
@@ -493,7 +494,7 @@ def guess_shape(dic):
     try:
         fsize = dic["FILE_SIZE"]
     except KeyError:
-        print "Warning: cannot determine shape do to missing FILE_SIZE key"
+        warn("cannot determine shape do to missing FILE_SIZE key")
         return (1,), True
     
     # extract td0,td1,td2,td3 from dictionaries
@@ -657,7 +658,7 @@ def read_binary(filename, shape=(1), cplex=True, big=True):
         return dic, data.reshape(shape)
 
     except ValueError:
-        print "Warning:", data.shape, "cannot be shaped into", shape
+        warn(str(data.shape) + "cannot be shaped into" + str(shape))
         return dic, data
 
 def read_binary_lowmem(filename, shape=(1), cplex=True, big=True):
@@ -1185,7 +1186,7 @@ def read_jcamp(filename):
             key, value = parse_jcamp_line(line, f)
             dic[key] = value
         else:
-            print "Warning: Extraneous line:", line
+            warn("Extraneous line:" + line)
 
     return dic
 

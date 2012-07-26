@@ -9,6 +9,7 @@ import struct
 import datetime
 import os
 from StringIO import StringIO
+from warnings import warn
 
 import numpy as np
 
@@ -998,7 +999,7 @@ def put_data(filename, fdata, data, overwrite=False):
     Put fdata and data to 2D NMRPipe.
     """
     if data.dtype != 'float32':
-        print data.dtype
+        #print data.dtype
         raise TypeError, 'data.dtype is not float32'
     if fdata.dtype != 'float32':
         raise TypeError, 'fdata.dtype is not float32'
@@ -1411,7 +1412,7 @@ def reshape_data(data, shape):
     try:
         return data.reshape(shape)
     except ValueError:
-        print "Warning:", data.shape, "cannot be shaped into", shape
+        warn(str(data.shape) + "cannot be shaped into" + str(shape))
         return data
 
 def unshape_data(data):
