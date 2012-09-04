@@ -188,7 +188,7 @@ def create_pdic_param(name, values):
 ########################
 
 def read(dir=".", fid_file="fid", procpar_file="procpar", read_blockhead=False,
-        shape=None, torder=None):
+        shape=None, torder=None, as_2d=False):
     """
     Read Agilent/Varian files in a directory.
 
@@ -212,6 +212,9 @@ def read(dir=".", fid_file="fid", procpar_file="procpar", read_blockhead=False,
         matrix. None (the default) will attempt to find this automatically 
         which is typically fine for most NMR experiments. See below for
         additional details.
+    as_2d : bool, optional
+        True to return data as a 2D array ignorning the shape and torder
+        parameters.
 
     Returns
     -------
@@ -255,14 +258,16 @@ def read(dir=".", fid_file="fid", procpar_file="procpar", read_blockhead=False,
     # read in the procpar file
     pdic = read_procpar(os.path.join(dir, procpar_file))
 
-    if shape == None:
-        shape = find_shape(pdic)
-    if torder == None and shape != None and len(shape) >= 3:
-        torder = find_torder(pdic, shape)
+    # determine shape and torder is needed
+    if as_2d == False:
+        if shape == None:
+            shape = find_shape(pdic)
+        if torder == None and shape != None and len(shape) >= 3:
+            torder = find_torder(pdic, shape)
 
     # read in the fid file
     fname = os.path.join(dir, fid_file)
-    dic, data = read_fid(fname, shape, torder, read_blockhead)
+    dic, data = read_fid(fname, shape, torder, as_2d, read_blockhead)
 
     # add the procpar dictionary to the main dictionary
     dic["procpar"] = pdic
@@ -615,7 +620,8 @@ def order_data(data, torder):
 # fid reading/writing #
 #######################
  
-def read_fid(filename, shape=None, torder='flat', read_blockhead=False):
+def read_fid(filename, shape=None, torder='flat', as_2d=False,
+        read_blockhead=False):
     """ 
     Read a Agilent/Varian binary (fid) file.
 
@@ -628,6 +634,9 @@ def read_fid(filename, shape=None, torder='flat', read_blockhead=False):
         array. Required if more than one trace per block (non-standard).
     torder : {'f', 'n', 'o'}
         Trace order. See :py:func:`read` for details.
+    as_2d : bool, optional
+        True to return the data as a 2D array, ignoring the shape and torder
+        parameters.
     read_blockhead : bool, optional
         True to read the Agilent/Varian blockheaders(s) into the returned 
         dictionary. False ignores them.
@@ -654,7 +663,7 @@ def read_fid(filename, shape=None, torder='flat', read_blockhead=False):
 
     # if ntraces is not 1 use _ntraces version 
     if dic["ntraces"] != 1:
-        return read_fid_ntraces(filename, shape, torder, read_blockhead)
+        return read_fid_ntraces(filename, shape, torder, as_2d, read_blockhead)
 
     # data parameters
     dt = find_dtype(dic)
@@ -674,6 +683,10 @@ def read_fid(filename, shape=None, torder='flat', read_blockhead=False):
     # uninterleave the real and imaginary data
     data = uninterleave_data(data)
    
+    # return as 2D is requested
+    if as_2d:
+        return dic, data
+
     # return raw data if no shape provided.
     if shape == None:
         warn("unknown shape, returning unshaped data")
@@ -702,7 +715,7 @@ def read_fid(filename, shape=None, torder='flat', read_blockhead=False):
     return dic, data
 
       
-def read_fid_lowmem(filename, shape=None, torder='flat', 
+def read_fid_lowmem(filename, shape=None, torder='flat', as_2d=False, 
         read_blockhead=False):
     """ 
     Read a Agilent/Varian binary (fid) file using mimimal amounts of memory.
@@ -747,7 +760,7 @@ def read_fid_lowmem(filename, shape=None, torder='flat',
     data = fid_nd(filename, i2tfunc, shape)
     return dic, data
 
-def read_fid_ntraces(filename, shape=None, torder='flat', 
+def read_fid_ntraces(filename, shape=None, torder='flat', as_2d=False,
         read_blockhead=False):
     """
     Read a Agilent/Varian binary (fid) file possibility having multiple 
@@ -762,6 +775,9 @@ def read_fid_ntraces(filename, shape=None, torder='flat',
         array. Required if more than one trace per block (non-standard).
     torder : {'f', 'n', 'o'}
         Trace order. See :py:func:`read` for details.
+    as_2d : bool, optional
+        True to return the data as a 2D array, ignoring the shape and torder
+        parameters.
     read_blockhead : bool, optional
         True to read the Agilent/Varian blockheaders(s) into the returned 
         dictionary. False ignores them.
@@ -805,6 +821,10 @@ def read_fid_ntraces(filename, shape=None, torder='flat',
 
     # uninterleave the real and imaginary data
     data = uninterleave_data(data)
+
+    # if 2D array requested, return unshaped
+    if as_2d:
+        return dic, data
 
     # check for 1D
     if data.shape[0] == 1:
