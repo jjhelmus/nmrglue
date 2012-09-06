@@ -1,0 +1,2 @@
+rm -r agilent_3d/data
+rm -r data

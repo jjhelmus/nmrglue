@@ -1,0 +1,15 @@
+coadd_2d.py example
+===================
+
+Introduction
+------------
+
+This example contains a Python script (coadd_pseudo3d.py) which coaddes 
+two pseudo-3D NMRPipe data sets contained in run01.dir and run02.dir 
+directories.
+
+Instructions
+------------
+
+1. Run coadd_pseudo3d.py to perform the coadding.  The directory
+coadded_data.dir will be created.

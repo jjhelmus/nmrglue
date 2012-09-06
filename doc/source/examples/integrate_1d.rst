@@ -8,6 +8,8 @@ script reads in ppm peak limits from ``limits.in`` and takes a simple
 summation integral of each peak using the spectra contained in ``1d_data.ft``.  The integration values are writting to ``area.out`` and a plot is make showing
 the integration limits and values overlayed on the spectra to ``plot.png``.
 
+The data used in this example is available for 
+`download. <http://nmrglue.googlecode.com/files/example_integrate_1d.zip>`_
 
 [:download:`source code <../../../examples/integration/integrate_1d/integrate_1d.py>`]
 

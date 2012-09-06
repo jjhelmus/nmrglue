@@ -1,0 +1,31 @@
+plot_2d_* examples
+==================
+
+Introduction
+------------
+
+This example contains four Python scripts (plot_spectrum.py, 
+plot_spectrum_pts.py, plot_boxes.py and plot_assignments.py) which create 
+figures of 2D NMR spectrum stored in a NMRPipe file. Sample 2D NMRPipe data 
+is also included.
+
+Instructions
+------------
+
+1. Run plot_spectrum.py to create the file `spectrum.png` 
+
+2. Run plot_spectrum_pts.py to create the file `spectrum_pts.png` 
+
+3. Run plot_assignments.py to create the file `assignments.png` with boxes
+around peaks listed in limits.in
+
+4. Run plot_boxes.py to create a file for each peak in limits.in.
+
+
+Notes
+-----
+The data in the nmrpipe_2d directory is identical to the nmrpipe_2d directory 
+which can be created using the agilent_test_data archive.  If this example is 
+run from within a git repository a symbolic link can be made to this directory 
+to save disk space.  Step 2 can also be skipped if the conversion script is run
+from within the test data directory.

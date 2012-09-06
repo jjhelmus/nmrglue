@@ -50,6 +50,8 @@ data.  Add examples of spectral analysis (peak picking, lineshape fitting).
 Add T1 measurements and TEDOR fitting?  Linear prediction, peak picking,
 fitting and segmentation examples.
 
+Find way to include t1_fitting data...
+
 4. Rewrite tutorial, include mention of analysis module.
 
 5. Release version 0.3, check installer on Linux, Windows, and OS-X.  Update

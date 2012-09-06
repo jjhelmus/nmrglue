@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 """
 An example of using wxPython to build a GUI application using nmrglue
-This application displays the NMRPipe apodization windows
+This application displays NMRPipe apodization windows.
 """
 
+import wx
 import numpy as np
 import nmrglue as ng
-
 import matplotlib
 
 # uncomment the following to use wx rather than wxagg
@@ -19,91 +19,90 @@ from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
 
 from matplotlib.backends.backend_wx import NavigationToolbar2Wx
 from matplotlib.figure import Figure
-import wx
 
-apod_list = ["SP","EM","GM","GMB","TM","TRI","JMOD"]
-
+apod_list = ["SP", "EM", "GM", "GMB", "TM", "TRI", "JMOD"]
 
 class ParameterPanel(wx.Panel):
-    
-    def __init__(self,parent):
-        wx.Panel.__init__(self,parent,-1)
+    """ WX panel where apodization parameters can be set by the user """
+
+    def __init__(self, parent):
+        """ Initialize the frame """
+        wx.Panel.__init__(self, parent, -1)
 
         self.parent = parent
 
-        self.qName1 = wx.StaticText(self,-1,"Type:")
-        self.qName2 = wx.Choice(self,-1,choices=apod_list)
-        self.Bind(wx.EVT_CHOICE,self.ApodChoose,self.qName2)
+        # create the various elements in the panel
+        self.qName1 = wx.StaticText(self, -1, "Type:")
+        self.qName2 = wx.Choice(self, -1, choices=apod_list)
+        self.Bind(wx.EVT_CHOICE, self.ApodChoose, self.qName2)
         
-        self.q1_1 = wx.StaticText(self,-1,"q1:")
-        self.q1_2 = wx.TextCtrl(self,-1,"0.0")
+        self.q1_1 = wx.StaticText(self, -1, "q1:")
+        self.q1_2 = wx.TextCtrl(self, -1, "0.0")
 
-        self.q2_1 = wx.StaticText(self,-1,"q2:")
-        self.q2_2 = wx.TextCtrl(self,-1,"1.0")
+        self.q2_1 = wx.StaticText(self, -1, "q2:")
+        self.q2_2 = wx.TextCtrl(self, -1, "1.0")
         
-        self.q3_1 = wx.StaticText(self,-1,"q3:")
-        self.q3_2 = wx.TextCtrl(self,-1,"1.0")
+        self.q3_1 = wx.StaticText(self, -1, "q3:")
+        self.q3_2 = wx.TextCtrl(self, -1, "1.0")
 
-        self.c1 = wx.StaticText(self,-1,"c")
-        self.c2 = wx.TextCtrl(self,-1,"1.0")
+        self.c1 = wx.StaticText(self, -1, "c")
+        self.c2 = wx.TextCtrl(self, -1, "1.0")
 
-        self.start_1 = wx.StaticText(self,-1,"Start")
-        self.start_2 = wx.TextCtrl(self,-1,"1.0")
+        self.start_1 = wx.StaticText(self, -1, "Start")
+        self.start_2 = wx.TextCtrl(self, -1, "1.0")
 
-        self.size_1 = wx.StaticText(self,-1,"Size")
+        self.size_1 = wx.StaticText(self, -1, "Size")
         self.size_1.Enable(False)
-        self.size_2 = wx.TextCtrl(self,-1,"1.0")
+        self.size_2 = wx.TextCtrl(self, -1, "1.0")
         self.size_2.Enable(False)
 
-        self.inv = wx.CheckBox(self,-1,"Invert")
+        self.inv = wx.CheckBox(self, -1, "Invert")
 
-        self.use_size = wx.CheckBox(self,-1,"Custom Size")
-        self.Bind(wx.EVT_CHECKBOX,self.OnLimitCheck,self.use_size)
+        self.use_size = wx.CheckBox(self, -1, "Custom Size")
+        self.Bind(wx.EVT_CHECKBOX, self.OnLimitCheck, self.use_size)
 
-        self.points_1 = wx.StaticText(self,-1,"Number of Points:")
-        self.points_2 = wx.TextCtrl(self,-1,"1000")
+        self.points_1 = wx.StaticText(self, -1, "Number of Points:")
+        self.points_2 = wx.TextCtrl(self, -1, "1000")
 
-        self.sw_1 = wx.StaticText(self,-1,"Spectral Width:")
-        self.sw_2 = wx.TextCtrl(self,-1,"50000.")
+        self.sw_1 = wx.StaticText(self, -1, "Spectral Width:")
+        self.sw_2 = wx.TextCtrl(self, -1, "50000.")
 
-
-        self.b1 = wx.Button(self,10,"Draw")
-        self.Bind(wx.EVT_BUTTON,self.OnDraw,self.b1)
+        self.b1 = wx.Button(self, 10, "Draw")
+        self.Bind(wx.EVT_BUTTON, self.OnDraw, self.b1)
         self.b1.SetDefault()
 
-        self.b2 = wx.Button(self,20,"Clear")
-        self.Bind(wx.EVT_BUTTON,self.OnClear,self.b2)
+        self.b2 = wx.Button(self, 20, "Clear")
+        self.Bind(wx.EVT_BUTTON, self.OnClear, self.b2)
         self.b2.SetDefault()
 
         self.InitApod("SP")
 
-        # layout
-        apod_grid = wx.GridSizer(8,2)
+        # layout of the panel
+        apod_grid = wx.GridSizer(8, 2)
 
         apod_grid.AddMany([self.qName1, self.qName2,
                    self.q1_1, self.q1_2,
                    self.q2_1, self.q2_2,
                    self.q3_1, self.q3_2, 
-                   self.c1,self.c2,
-                   self.start_1,self.start_2,
-                   self.size_1,self.size_2,
-                   self.inv,self.use_size])
+                   self.c1, self.c2,
+                   self.start_1, self.start_2,
+                   self.size_1, self.size_2,
+                   self.inv, self.use_size])
         
-        data_grid = wx.GridSizer(2,2)
-        data_grid.AddMany([self.points_1,self.points_2,
-                self.sw_1,self.sw_2])
+        data_grid = wx.GridSizer(2, 2)
+        data_grid.AddMany([self.points_1, self.points_2,
+                self.sw_1, self.sw_2])
 
-
-        apod_box = wx.StaticBoxSizer(wx.StaticBox(self,-1,
-            "Apodization Parameters"))
+        apod_box = wx.StaticBoxSizer(wx.StaticBox(self, -1, 
+                                        "Apodization Parameters"))
         apod_box.Add(apod_grid)
 
-        data_box = wx.StaticBoxSizer(wx.StaticBox(self,-1,
-            "Data Parameters"))
+        data_box = wx.StaticBoxSizer(wx.StaticBox(self, -1,
+                                        "Data Parameters"))
         data_box.Add(data_grid)
 
-        button_box = wx.GridSizer(1,2)
-        button_box.AddMany([self.b1,self.b2])
+        button_box = wx.GridSizer(1, 2)
+        button_box.AddMany([self.b1, self.b2])
 
         mainbox = wx.BoxSizer(wx.VERTICAL)
         mainbox.Add(apod_box)
@@ -111,17 +110,20 @@ class ParameterPanel(wx.Panel):
         mainbox.Add(button_box)
         self.SetSizer(mainbox)
 
-    def OnLimitCheck(self,event):
-        k= event.IsChecked()
+    def OnLimitCheck(self, event):
+        """ Set the custom size when the check box is checked.  """
+        k = event.IsChecked()
         self.size_1.Enable(k)
         self.size_2.Enable(k)
         points = float(self.points_2.GetValue())
         self.size_2.SetValue(str(points))
 
-    def ApodChoose(self,event):
+    def ApodChoose(self, event):
+        """ Set the choosen apodization type """
         self.InitApod(apod_list[self.qName2.GetCurrentSelection()])
 
-    def InitApod(self,qName):
+    def InitApod(self, qName):
+        """ Set the default parameter for a choosen apodization window """
         
         if qName == "SP":
             self.q1_1.Enable(True)
@@ -200,7 +202,7 @@ class ParameterPanel(wx.Panel):
             self.q1_1.SetLabel("loc")
             self.q1_2.Enable(True)
             points = points = float(self.points_2.GetValue())
-            self.q1_2.SetValue(str(points/2.))
+            self.q1_2.SetValue(str(points / 2.))
 
             self.q2_1.Enable(True)
             self.q2_1.SetLabel("lHi")
@@ -228,7 +230,8 @@ class ParameterPanel(wx.Panel):
             self.q3_2.Enable(True)
             self.q3_2.SetValue("0.0")
 
-    def OnDraw(self,event):
+    def OnDraw(self, event):
+        """ Draw the apodization window """
         qName = apod_list[self.qName2.GetCurrentSelection()]
         q1 = float(self.q1_2.GetValue())
         q2 = float(self.q2_2.GetValue())
@@ -243,16 +246,21 @@ class ParameterPanel(wx.Panel):
         points = float(self.points_2.GetValue())
         sw = float(self.sw_2.GetValue())
 
-        self.parent.ApplyApod(qName,q1,q2,q3,c,start,size,inv,use_size,
-        points,sw)
+        self.parent.ApplyApod(qName, q1, q2, q3, c, start, size, inv, 
+                                use_size, points, sw)
         
-    def OnClear(self,event):
+    def OnClear(self, event):
+        """ Clear all apodization windows previously drawn """
         self.parent.ClearFigure()
 
 class CanvasFrame(wx.Frame):
-
+    """ 
+    WX frame containing a matplotlib canvas where the apodization windows are
+    drawn and the parameter panel where apodization parameter can be set.
+    """
     def __init__(self):
-        wx.Frame.__init__(self,None,-1,'Apodization Viewer')
+        """ Initializate the frame """
+        wx.Frame.__init__(self, None, -1, 'Apodization Viewer')
 
         self.SetBackgroundColour(wx.NamedColor("WHITE"))
 
@@ -265,61 +273,48 @@ class CanvasFrame(wx.Frame):
         
         # layout
         fsizer = wx.BoxSizer(wx.VERTICAL)
-        fsizer.Add(self.canvas,0,wx.EXPAND)
-        fsizer.Add(self.toolbar,0,wx.EXPAND)
+        fsizer.Add(self.canvas, 0, wx.EXPAND)
+        fsizer.Add(self.toolbar, 0, wx.EXPAND)
 
         self.sizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.sizer.Add(self.params,0,wx.EXPAND) 
-        self.sizer.Add(fsizer,0,wx.EXPAND)
+        self.sizer.Add(self.params, 0, wx.EXPAND) 
+        self.sizer.Add(fsizer, 0, wx.EXPAND)
 
         self.SetSizer(self.sizer)
         self.Fit()
 
     def OnPaint(self, event):
+        """ Draw the apodization window """
         self.canvas.draw()
 
     def ClearFigure(self):
+        """ Clear all previously drawn apodization windows """
         self.axes.cla()
         self.OnPaint(-1)
 
-    def ApplyApod(self,qName,q1,q2,q3,c,start,size,inv,use_size,points,sw):
-       
-        """
-        print "DEBUGGING INFOMATION"
-        print "ApplyApod Recieved:"
-        print "qName:",qName
-        print "q1:",q1
-        print "q2:",q2
-        print "q3:",q3
-        print "c:",c
-        print "start:",start
-        print "size:",size
-        print "inv:",inv
-        print "use_size:",use_size
-        print "points:",points
-        print "sw:",sw
-        """
-
+    def ApplyApod(self, qName, q1, q2, q3, c, start, size, inv, use_size, 
+                    points, sw):
+        """ Apply the selected apodization, draw the windows on the canvas """
+        
         # create the dictionary
         dic = ng.fileiobase.create_blank_udic(1)
         dic[0]["sw"] = sw
         dic[0]["size"] = points
 
         # create the data
-        data = np.ones(points,dtype="complex")
+        data = np.ones(points, dtype="complex")
 
         # convert to NMRPipe format
         C = ng.convert.converter()
-        C.from_universal(dic,data)
-        pdic,pdata = C.to_pipe()
-
+        C.from_universal(dic, data)
+        pdic, pdata = C.to_pipe()
 
         if use_size == True:
             tsize = size
         else:
             tsize = 'default'
-        null,apod_data = ng.pipe_proc.apod(pdic,pdata,qName=qName,
-        q1=q1,q2=q2,q3=q3,c=c,inv=inv,size=tsize,start=start)
+        null, apod_data = ng.pipe_proc.apod(pdic, pdata, qName=qName,
+                q1=q1, q2=q2, q3=q3, c=c, inv=inv, size=tsize, start=start)
 
         # draw the window
         #self.axes.cla()
@@ -327,12 +322,11 @@ class CanvasFrame(wx.Frame):
         self.OnPaint(-1)
 
 class App(wx.App):
-
+    """ Wx application """
     def OnInit(self):
-        'Create the main window and insert the custom frame'
+        """ Create the main window and insert the custom frame """
         frame = CanvasFrame()
         frame.Show(True)
-
         return True
 
 app = App(0)

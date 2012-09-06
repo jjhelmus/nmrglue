@@ -10,16 +10,19 @@ for examining data or publication.  In this example the box limits used in
 plotted with the box limits indicated by the dark dashed line.  To check peak
 assignments see :ref:`plot_2d_assignments`.
 
-[:download:`source code <../../../examples/plotting/2d_boxes/plot_boxes.py>`]
+The data used in this example is available for 
+`download. <http://nmrglue.googlecode.com/files/example_plot_2d.zip>`_
 
-.. literalinclude:: ../../../examples/plotting/2d_boxes/plot_boxes.py
+[:download:`source code <../../../examples/plotting/plot_2d/plot_boxes.py>`]
 
-[:download:`input file <../../../examples/plotting/2d_boxes/limits.in>`]
+.. literalinclude:: ../../../examples/plotting/plot_2d/plot_boxes.py
 
-.. literalinclude:: ../../../examples/plotting/2d_boxes/limits.in
+[:download:`input file <../../../examples/plotting/plot_2d/limits.in>`]
+
+.. literalinclude:: ../../../examples/plotting/plot_2d/limits.in
 
 Sample Figure
 
-[:download:`T11.png <../../../examples/plotting/2d_boxes/T11.png>`]
+[:download:`T11.png <../../../examples/plotting/plot_2d/T11.png>`]
 
-.. image:: ../../../examples/plotting/2d_boxes/T11.png
+.. image:: ../../../examples/plotting/plot_2d/T11.png

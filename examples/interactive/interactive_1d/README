@@ -1,0 +1,20 @@
+interactive_1d example
+======================
+
+Introduction
+------------
+
+This example contains a Python script 1d_interactive.py which creates an
+interactive session for examining a 1D NMR spectrum.  
+
+Instructions
+------------
+
+1. Run 1d_interactive.py.
+
+Notes
+-----
+The data in the nmrpipe_1d directory is identical to the nmrpipe_1d directory 
+which appears can be created from the agilent_test_data archive.  If this 
+example is run from within a git repository a symbolic link can be made to 
+this directory to save disk space.

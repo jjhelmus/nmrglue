@@ -1,0 +1,34 @@
+agilent2pipe_2d_tppi example
+============================
+
+Introduction
+------------
+
+This example contains a Python script (agilent2pipe_2d_tppi.py) which converts 
+a 2D Agilent/Varian data set into a NMRPipe formatted file, a NMRPipe script 
+(agilent2pipe_2d_tppi.com) which performs the same conversion, a Python script 
+(compare.py) to compare the results of the conversions, and an example 2D 
+Agilent/Varian data set.
+
+Instructions
+------------
+
+1. Run agilent2pipe_2d_tppi.py to perform the conversion using nmrglue.  This 
+creates the NMRPipe file `2d_pipe_tppi.fid`.
+
+2. If NMRPipe is installed, run the agilent2pipe_2d_tppi.com script to perform 
+the same conversion with NMRPipe, this step is only necessary if one wishes to
+compare the results from the two conversions.  This script creates the file
+test.fid in the agilent_2d_tppi directory.
+
+3. Run compare.py to compare the NMRPipe files created by the two above 
+scripts. A few differences in the date and time meta-data are expected and will
+be reported.
+
+Notes
+-----
+The data in the agilent_2d_tppi directory is identical to the agilent_2d_tppi 
+directory which appears in the agilent_test_data archive.  If this example is 
+run from within a git repository a symbolic link can be made to this directory 
+to save disk space.  Step 2 can also be skipped if the conversion script is run
+from within the test data directory.

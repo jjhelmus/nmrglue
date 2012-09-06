@@ -1,0 +1,2 @@
+rm -r bruker_3d/fid/
+rm -r data/

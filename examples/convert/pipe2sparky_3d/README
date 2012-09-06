@@ -1,0 +1,36 @@
+pipe2sparky_3d example
+======================
+
+Introduction
+------------
+
+This example contains a NMRPipe script (pipe2pipe_3d.com) which processes time
+domain NMRPipe data, a Python script (pipe2sparky_3d.py) which converts a 3D 
+NMRPipe file in a Sparky formatted file, a script (pipe2sparky_3d.com) which 
+performs the same conversion using pipe2ucsf, a Python script (compare.py) to 
+compare the results of the conversions, and an example 3D NMRPipe data set.
+
+Instructions
+------------
+
+1. Run pipe2pipe_3d.com to process the 3D time domain NMRPipe data.
+
+2. Run pipe2sparky_3d.py to perform the conversion using nmrglue.  This 
+creates the NMRPipe file `sparky_3d.ucsf`.
+
+3. If Sparky is installed, run the pipe2sparky_3d.com script to perform the
+same conversion with pipe2ucsf, this step is only necessary if one wishes to
+compare the results from the two conversions.  This script creates the file
+sparky_3d.ucsf in the nmrpipe_3d directory.
+
+4. Run compare.py to compare the Sparky files created by the two above 
+scripts. A few differences in the date and time meta-data are expected and 
+will be reported.
+
+Notes
+-----
+The data in the nmrpipe_3d directory is identical to the nmrpipe_3d directory 
+which appears can be created from the agilent_test_data archive.  If this 
+example is run from within a git repository a symbolic link can be made to 
+this directory to save disk space.  Step 2 can also be skipped if the
+conversion script is run from within the test data directory.

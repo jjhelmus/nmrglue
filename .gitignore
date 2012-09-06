@@ -16,3 +16,32 @@ dist
 # data and sandbox
 data
 sandbox
+
+# example data
+examples/zip_files
+examples/coadd/coadd_2d_pipe/*.fid
+examples/coadd/coadd_pseudo3d_pipe/run*.dir
+examples/separate/separate_2d_bruker/arrayed_data.dir
+examples/separate/separate_2d_varian/arrayed_data.dir
+examples/separate/separate_1d_varian/arrayed_data.dir
+
+# example data which are links to common data directories
+examples/convert/agilent2pipe_1d/agilent_1d
+examples/convert/agilent2pipe_2d/agilent_2d
+examples/convert/agilent2pipe_2d_tppi/agilent_2d_tppi
+examples/convert/agilent2pipe_3d/agilent_3d
+examples/convert/bruker2pipe_1d/bruker_1d
+examples/convert/bruker2pipe_2d/bruker_2d
+examples/convert/bruker2pipe_3d/bruker_3d
+examples/convert/pipe2sparky_2d/nmrpipe_2d
+examples/convert/pipe2sparky_3d/nmrpipe_3d
+examples/integration/integrate_1d/nmrpipe_1d
+examples/integration/integrate_2d/nmrpipe_2d
+examples/interactive/interactive_1d/nmrpipe_1d
+examples/interactive/interactive_2d/nmrpipe_2d
+examples/plotting/plot_1d/nmrpipe_1d
+examples/plotting/plot_2d/nmrpipe_2d
+examples/processing/nmrpipe_1d
+examples/processing/nmrpipe_2d
+examples/processing/nmrpipe_2d_tppi
+examples/processing/nmrpipe_3d

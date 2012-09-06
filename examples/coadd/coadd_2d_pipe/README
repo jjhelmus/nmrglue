@@ -1,0 +1,14 @@
+coadd_2d.py example
+===================
+
+Introduction
+------------
+
+This example contains a Python script (coadd_2d.py) which coaddes three 2D
+NMRPipe file (test-run01.fid, test-run02.fid, and test-run03.fid).
+
+Instructions
+------------
+
+1. Run coadd_2d.py to perform the coadding.  The file coadded.fid will be
+created.

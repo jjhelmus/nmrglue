@@ -1,0 +1,23 @@
+ftiing_t1_data example
+======================
+
+Introduction
+------------
+
+In this example T1 relaxation data is fit using a series of Python script which
+use nmrglue to extract and fit the relaxation trajectories.
+
+Instructions
+------------
+
+1. Run extract_trajs.py, which read box limits from boxes.in, a list of
+spectra from spectra.in and intergrates each peak in each spectrum.  The
+normalized trajecories are stored in the `traj.npy` file.
+
+2. Run fit_exp_leastsq.py to fit the trajectories in the `traj.npy` file.  The
+best fit parameter are stored to the `fits.pickle` file and the human readable
+`fits.txt` file.  
+
+3. Run the pt.py script which creates plots (XYY_plot.png) of the various
+trajectories.  
+

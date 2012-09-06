@@ -1,0 +1,15 @@
+coadd_1d.py example
+===================
+
+Introduction
+------------
+
+This example contains a Python script (coadd_1d.py) which coaddes four 1D
+NMRPipe file (test-run01.fid, test-run02.fid, test-run03.fid and 
+test-run04.fid).
+
+Instructions
+------------
+
+1. Run coadd_1d.py to perform the coadding.  The file coadded.fid will be
+created.

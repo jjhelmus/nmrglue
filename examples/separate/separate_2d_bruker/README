@@ -1,0 +1,13 @@
+separate_2d_bruker example
+==========================
+
+Introduction
+------------
+
+This example contains a Python script separate.py which separates 2D spectra
+from an array of 2D data in a Bruker data set.
+
+Instructions
+------------
+
+Run separate.py,  23 directories (1, 2, 3, ... 23) are created.

@@ -1,0 +1,9 @@
+rm 1d_pipe.ft
+rm 2d_pipe.ft2
+rm 2d_pipe_tppi.ft2
+rm -r ft
+
+rm nmrpipe_1d/test.ft
+rm nmrpipe_2d/test.ft2
+rm nmrpipe_2d_tppi/test.ft2
+rm -r nmrpipe_3d/ft

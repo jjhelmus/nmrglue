@@ -1,0 +1,28 @@
+process_pipe_* example
+======================
+
+Introduction
+------------
+
+This example contains a Python script (process_pipe_*.py) for processing a 
+NMRPipe file, a NMRPipe script (pipe2pipe_*.py) to perform the same processing 
+using NMRPipe, a Python script (compare_*.py) to compare the results, and 
+sample time domain NMRPipe data.
+
+Instructions
+------------
+
+1. Run process_pipe_Nd.py to process the time domain NMRPipe data using nmrglue,
+replace N with the correct dimension.
+
+2. If NMRPipe is install run pipe2pipe_Nd.com to process the data using NMRPipe.
+
+3. Compare the results of the two processing methods by running compare_Nd.py
+
+Notes
+-----
+The data in the nmrpipe_* directory is identical to the nmrpipe_( directory 
+which can be created using the agilent_test_data archive.  If this example is 
+run from within a git repository a symbolic link can be made to this directory 
+to save disk space.  Step 2 can also be skipped if the conversion script is run
+from within the test data directory.

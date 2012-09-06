@@ -8,7 +8,9 @@ This example shows how to use nmrglue and
 simple interactive environment for examining a 2D spectrum from a NMRPipe 
 file.  
 
+The data used in this example is available for 
+`download. <http://nmrglue.googlecode.com/files/example_interactive_2d.zip>`_
 
-[:download:`source code <../../../examples/interactive/2d_interactive/2d_interactive.py>`]
+[:download:`source code <../../../examples/interactive/interactive_2d/2d_interactive.py>`]
 
-.. literalinclude:: ../../../examples/interactive/2d_interactive/2d_interactive.py
+.. literalinclude:: ../../../examples/interactive/interactive_2d/2d_interactive.py

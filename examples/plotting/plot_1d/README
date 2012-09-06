@@ -1,0 +1,24 @@
+plot_1d_time and plot_1d_freq examples
+======================================
+
+Introduction
+------------
+
+This example contains Python scripts (plot_1d_pipe_freq.py and
+plot_1d_pipe_time.py) which create figures of 1D NMRPipe data in the time and
+frequency domain.  Sample 1D NMRPipe data is also included.
+
+Instructions
+------------
+
+1. Run plot_1d_pipe_time.py to create the file `fid.png` 
+
+2. Run plot_1d_pipe_freq.py to create the file `spectrum.png` 
+
+Notes
+-----
+The data in the nmrpipe_1d directory is identical to the nmrpipe_1d directory 
+which can be created using the agilent_test_data archive.  If this example is 
+run from within a git repository a symbolic link can be made to this directory 
+to save disk space.  Step 2 can also be skipped if the conversion script is run
+from within the test data directory.

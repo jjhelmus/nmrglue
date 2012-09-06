@@ -1,0 +1,13 @@
+separate_1d_varian example
+==========================
+
+Introduction
+------------
+
+This example contains a Python script separate.py which separates 1D spectra
+from an array of 1D data in a Agilent/Varian data set.
+
+Instructions
+------------
+
+Run separate.py,  26 directories (tHX_XXXX.fid) are created.

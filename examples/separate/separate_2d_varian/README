@@ -1,0 +1,13 @@
+separate_2d_varian example
+==========================
+
+Introduction
+------------
+
+This example contains a Python script separate.py which separates 2D spectra
+from an array of 2D data in a Agilent/Varian data set.
+
+Instructions
+------------
+
+Run separate.py,  6 directories (tXmix_XXXX.fid) are created.
