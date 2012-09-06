@@ -10,6 +10,9 @@ subdirectories named ``*.fid`` containing a ``test.fid`` file.  The directory
 ``coadded_data.dir`` is created with the same subdirectory structure containing 
 ``test.fid`` files containing data created by coadding each pseudo-3D.
 
+The data used in this example is available for 
+`download. <http://nmrglue.googlecode.com/files/example_coadd_pseudo3d_pipe.zip>`_
+
 [:download:`source code <../../../examples/coadd/coadd_pseudo3d_pipe/coadd_pseudo3d.py>`]
 
 .. literalinclude:: ../../../examples/coadd/coadd_pseudo3d_pipe/coadd_pseudo3d.py

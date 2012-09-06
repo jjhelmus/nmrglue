@@ -29,7 +29,7 @@
     <link rel="top" title="nmrglue 0.4-dev documentation" href="../index.html" />
     <link rel="up" title="Examples" href="index.html" />
     <link rel="next" title="plotting example: plot_2d_assignments" href="plot_2d_assignments.html" />
-    <link rel="prev" title="plotting example: plot_1d_freq" href="plot_1d_freq.html" /> 
+    <link rel="prev" title="plotting example: plot_2d_spectrum_pts" href="plot_2d_spectrum_pts.html" /> 
   </head>
   <body>
     <div class="related">
@@ -48,7 +48,7 @@
           <a href="plot_2d_assignments.html" title="plotting example: plot_2d_assignments"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="plot_1d_freq.html" title="plotting example: plot_1d_freq"
+          <a href="plot_2d_spectrum_pts.html" title="plotting example: plot_2d_spectrum_pts"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">nmrglue 0.4-dev documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Examples</a> &raquo;</li> 
@@ -68,9 +68,11 @@ for examining data or publication.  In this example the box limits used in
 <a class="reference internal" href="integrate_2d.html#integrate-2d"><em>integration example: integrate_2d</em></a> are graphically examined.  A contour plot of each peak is
 plotted with the box limits indicated by the dark dashed line.  To check peak
 assignments see <a class="reference internal" href="plot_2d_assignments.html#plot-2d-assignments"><em>plotting example: plot_2d_assignments</em></a>.</p>
+<p>The data used in this example is available for
+<a class="reference external" href="http://nmrglue.googlecode.com/files/example_plot_2d.zip">download.</a></p>
 <p>[<a class="reference download internal" href="../_downloads/plot_boxes.py"><tt class="xref download docutils literal"><span class="pre">source</span> <span class="pre">code</span></tt></a>]</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#! /usr/bin/env python</span>
-<span class="c"># Create contour plots of each peak defined in limits.in file</span>
+<span class="c"># Create a contour plots of each peak defined in limits.in file</span>
 
 <span class="kn">import</span> <span class="nn">nmrglue</span> <span class="kn">as</span> <span class="nn">ng</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -78,60 +80,60 @@ assignments see <a class="reference internal" href="plot_2d_assignments.html#plo
 <span class="kn">import</span> <span class="nn">matplotlib.cm</span>
 
 <span class="c"># plot parameters</span>
-<span class="n">xpad</span> <span class="o">=</span> <span class="mi">5</span>    <span class="c"># padding around peak box on x-axis</span>
-<span class="n">ypad</span> <span class="o">=</span> <span class="mi">5</span>    <span class="c"># padding around peak box on y-axis</span>
+<span class="n">xpad</span> <span class="o">=</span> <span class="mi">5</span>                        <span class="c"># padding around peak box on x-axis</span>
+<span class="n">ypad</span> <span class="o">=</span> <span class="mi">5</span>                        <span class="c"># padding around peak box on y-axis</span>
 <span class="n">cmap</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Blues_r</span>    <span class="c"># contour map (colors to use for contours)</span>
-<span class="n">contour_start</span>   <span class="o">=</span> <span class="mi">30000</span>     <span class="c"># contour level start value</span>
-<span class="n">contour_num</span>     <span class="o">=</span> <span class="mi">20</span>        <span class="c"># number of contour levels</span>
-<span class="n">contour_factor</span>  <span class="o">=</span> <span class="mf">1.20</span>      <span class="c"># scaling factor between contour levels</span>
+<span class="n">contour_start</span> <span class="o">=</span> <span class="mi">30000</span>           <span class="c"># contour level start value</span>
+<span class="n">contour_num</span> <span class="o">=</span> <span class="mi">20</span>                <span class="c"># number of contour levels</span>
+<span class="n">contour_factor</span> <span class="o">=</span> <span class="mf">1.20</span>           <span class="c"># scaling factor between contour levels</span>
 
 <span class="c"># calculate contour levels</span>
-<span class="n">cl</span> <span class="o">=</span> <span class="p">[</span><span class="n">contour_start</span><span class="o">*</span><span class="n">contour_factor</span><span class="o">**</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">contour_num</span><span class="p">)]</span>
+<span class="n">cl</span> <span class="o">=</span> <span class="n">contour_start</span> <span class="o">*</span> <span class="n">contour_factor</span> <span class="o">**</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">contour_num</span><span class="p">)</span>
 
 <span class="c"># read in the data from a NMRPipe file</span>
-<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;../../common_data/2d_pipe/test.ft2&quot;</span><span class="p">)</span>
+<span class="n">dic</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;nmrpipe_2d/test.ft2&quot;</span><span class="p">)</span>
 
 <span class="c"># read in the integration limits</span>
 <span class="n">peak_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">recfromtxt</span><span class="p">(</span><span class="s">&quot;limits.in&quot;</span><span class="p">)</span>
 
 <span class="c"># loop over the peaks</span>
-<span class="k">for</span> <span class="n">name</span><span class="p">,</span><span class="n">x0</span><span class="p">,</span><span class="n">y0</span><span class="p">,</span><span class="n">x1</span><span class="p">,</span><span class="n">y1</span> <span class="ow">in</span> <span class="n">peak_list</span><span class="p">:</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="ow">in</span> <span class="n">peak_list</span><span class="p">:</span>
 
-    <span class="k">if</span> <span class="n">x0</span><span class="o">&gt;</span><span class="n">x1</span><span class="p">:</span>
-        <span class="n">x0</span><span class="p">,</span><span class="n">x1</span> <span class="o">=</span> <span class="n">x1</span><span class="p">,</span><span class="n">x0</span>
-    <span class="k">if</span> <span class="n">y0</span><span class="o">&gt;</span><span class="n">y1</span><span class="p">:</span>
-        <span class="n">y0</span><span class="p">,</span><span class="n">y1</span> <span class="o">=</span> <span class="n">y1</span><span class="p">,</span><span class="n">y0</span>
+    <span class="k">if</span> <span class="n">x0</span> <span class="o">&gt;</span> <span class="n">x1</span><span class="p">:</span>
+        <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span> <span class="o">=</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x0</span>
+    <span class="k">if</span> <span class="n">y0</span> <span class="o">&gt;</span> <span class="n">y1</span><span class="p">:</span>
+        <span class="n">y0</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y0</span>
 
     <span class="c"># slice the data around the peak</span>
-    <span class="nb">slice</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">y0</span><span class="o">-</span><span class="n">ypad</span><span class="p">:</span><span class="n">y1</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">ypad</span><span class="p">,</span><span class="n">x0</span><span class="o">-</span><span class="n">xpad</span><span class="p">:</span><span class="n">x1</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">xpad</span><span class="p">]</span>
+    <span class="nb">slice</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">y0</span> <span class="o">-</span> <span class="n">ypad</span><span class="p">:</span><span class="n">y1</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">ypad</span><span class="p">,</span> <span class="n">x0</span> <span class="o">-</span> <span class="n">xpad</span><span class="p">:</span><span class="n">x1</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">xpad</span><span class="p">]</span>
 
     <span class="c"># create the figure</span>
     <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
     <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
 
     <span class="c"># plot the contours</span>
-    <span class="k">print</span> <span class="s">&quot;Plotting:&quot;</span><span class="p">,</span><span class="n">name</span>
-    <span class="n">etup</span> <span class="o">=</span> <span class="p">(</span><span class="n">x0</span><span class="o">-</span><span class="n">xpad</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">x1</span><span class="o">+</span><span class="n">xpad</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">y0</span><span class="o">-</span><span class="n">ypad</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">y1</span><span class="o">+</span><span class="n">ypad</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="nb">slice</span><span class="p">,</span><span class="n">cl</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="n">etup</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;Plotting:&quot;</span><span class="p">,</span> <span class="n">name</span>
+    <span class="n">etup</span> <span class="o">=</span> <span class="p">(</span><span class="n">x0</span> <span class="o">-</span> <span class="n">xpad</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x1</span> <span class="o">+</span> <span class="n">xpad</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y0</span> <span class="o">-</span> <span class="n">ypad</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">+</span> <span class="n">ypad</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="nb">slice</span><span class="p">,</span> <span class="n">cl</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">etup</span><span class="p">)</span>
 
     <span class="c"># draw a box around the peak</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x0</span><span class="p">,</span><span class="n">x1</span><span class="p">,</span><span class="n">x1</span><span class="p">,</span><span class="n">x0</span><span class="p">,</span><span class="n">x0</span><span class="p">],[</span><span class="n">y0</span><span class="p">,</span><span class="n">y0</span><span class="p">,</span><span class="n">y1</span><span class="p">,</span><span class="n">y1</span><span class="p">,</span><span class="n">y0</span><span class="p">],</span><span class="s">&#39;k--&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">x0</span><span class="p">],</span> <span class="p">[</span><span class="n">y0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y0</span><span class="p">],</span> <span class="s">&#39;k--&#39;</span><span class="p">)</span>
 
     <span class="c"># draw light boxes at +/- one point</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x0</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">x1</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">x1</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">x0</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">x0</span><span class="o">-</span><span class="mi">1</span><span class="p">],[</span><span class="n">y0</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">y0</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">y1</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">y1</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">y0</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-            <span class="s">&#39;k--&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.35</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x0</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">x1</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">x1</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">x0</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">x0</span><span class="o">+</span><span class="mi">1</span><span class="p">],[</span><span class="n">y0</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">y0</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">y1</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">y1</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">y0</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span>
-            <span class="s">&#39;k--&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.35</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="p">[</span><span class="n">y0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="s">&#39;k--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.35</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x1</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x1</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="p">[</span><span class="n">y0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="s">&#39;k--&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.35</span><span class="p">)</span>
 
     <span class="c"># set the title</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
     <span class="c"># save the figure</span>
-    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">name</span><span class="o">+</span><span class="s">&quot;.png&quot;</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="s">&quot;.png&quot;</span><span class="p">)</span>
     <span class="k">del</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>[<a class="reference download internal" href="../_downloads/limits3.in"><tt class="xref download docutils literal"><span class="pre">input</span> <span class="pre">file</span></tt></a>]</p>
+<p>[<a class="reference download internal" href="../_downloads/limits2.in"><tt class="xref download docutils literal"><span class="pre">input</span> <span class="pre">file</span></tt></a>]</p>
 <div class="highlight-python"><pre>#Peak   X0      Y0      X1      Y1
 # Peak defines 15N resonance in 2D NCO spectra.
 # Limits are in term of points from 0 to length-1.
@@ -158,8 +160,8 @@ W43     2008    952     2019    933
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="plot_1d_freq.html"
-                        title="previous chapter">plotting example: plot_1d_freq</a></p>
+  <p class="topless"><a href="plot_2d_spectrum_pts.html"
+                        title="previous chapter">plotting example: plot_2d_spectrum_pts</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="plot_2d_assignments.html"
                         title="next chapter">plotting example: plot_2d_assignments</a></p>
@@ -201,7 +203,7 @@ W43     2008    952     2019    933
           <a href="plot_2d_assignments.html" title="plotting example: plot_2d_assignments"
              >next</a> |</li>
         <li class="right" >
-          <a href="plot_1d_freq.html" title="plotting example: plot_1d_freq"
+          <a href="plot_2d_spectrum_pts.html" title="plotting example: plot_2d_spectrum_pts"
              >previous</a> |</li>
         <li><a href="../index.html">nmrglue 0.4-dev documentation</a> &raquo;</li>
           <li><a href="index.html" >Examples</a> &raquo;</li> 
@@ -209,7 +211,7 @@ W43     2008    952     2019    933
     </div>
     <div class="footer">
         &copy; Copyright 2010-2012, Jonathan J. Helmus.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
     </div>
   </body>
 </html>

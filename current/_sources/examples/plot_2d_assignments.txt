@@ -10,16 +10,19 @@ for examining data or publication.  In this example the assignments used in
 with the boxes and assignments is created.  To examine the box limit more
 closely see :ref:`plot_2d_boxes`.
 
-[:download:`source code <../../../examples/plotting/2d_boxes/plot_assignments.py>`]
+The data used in this example is available for 
+`download. <http://nmrglue.googlecode.com/files/example_plot_2d.zip>`_
 
-.. literalinclude:: ../../../examples/plotting/2d_boxes/plot_assignments.py
+[:download:`source code <../../../examples/plotting/plot_2d/plot_assignments.py>`]
 
-[:download:`input file <../../../examples/plotting/2d_boxes/limits.in>`]
+.. literalinclude:: ../../../examples/plotting/plot_2d/plot_assignments.py
 
-.. literalinclude:: ../../../examples/plotting/2d_boxes/limits.in
+[:download:`input file <../../../examples/plotting/plot_2d/limits.in>`]
+
+.. literalinclude:: ../../../examples/plotting/plot_2d/limits.in
 
 Result:
 
-[:download:`assignments.png <../../../examples/plotting/2d_boxes/assignments.png>`]
+[:download:`assignments.png <../../../examples/plotting/plot_2d/assignments.png>`]
 
-.. image:: ../../../examples/plotting/2d_boxes/assignments.png
+.. image:: ../../../examples/plotting/plot_2d/assignments.png

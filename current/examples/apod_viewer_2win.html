@@ -66,15 +66,20 @@
 additional python modules like
 <a class="reference external" href="http://matplotlib.sourceforge.net/index.html">matplotlib</a> and
 <a class="reference external" href="http://www.wxpython.org/">wxPython</a> to create full fledged NMR applications.</p>
-<p>This application allows users to examine various NMRPipe apodization windows
-with different parameters.</p>
+<p>In this application users can examine graphically the apodization windows
+produced by the various window functions supported by NMRPipe.  In this example
+the canvas in which the apodization windows are drawn and the location to input
+the apodization parameter are contained in two seperate same window.  The
+<a class="reference internal" href="apod_viewer_1win.html#apod-viewer-1win"><em>application example: apod_viewer_1win</em></a> example has the canvas and input area in a single
+window.</p>
 <p>[<a class="reference download internal" href="../_downloads/apod_viewer_2win.py"><tt class="xref download docutils literal"><span class="pre">source</span> <span class="pre">code</span></tt></a>]</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#!/usr/bin/env python</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">An example of using wxPython to build a GUI application using nmrglue</span>
-<span class="sd">This application displays the NMRPipe apodization windows</span>
+<span class="sd">This application displays NMRPipe apodization windows.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="kn">import</span> <span class="nn">wx</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">nmrglue</span> <span class="kn">as</span> <span class="nn">ng</span>
 <span class="kn">import</span> <span class="nn">matplotlib</span>
@@ -89,91 +94,91 @@ with different parameters.</p>
 
 <span class="kn">from</span> <span class="nn">matplotlib.backends.backend_wx</span> <span class="kn">import</span> <span class="n">NavigationToolbar2Wx</span>
 <span class="kn">from</span> <span class="nn">matplotlib.figure</span> <span class="kn">import</span> <span class="n">Figure</span>
-<span class="kn">import</span> <span class="nn">wx</span>
 
-<span class="n">apod_list</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;SP&quot;</span><span class="p">,</span><span class="s">&quot;EM&quot;</span><span class="p">,</span><span class="s">&quot;GM&quot;</span><span class="p">,</span><span class="s">&quot;GMB&quot;</span><span class="p">,</span><span class="s">&quot;TM&quot;</span><span class="p">,</span><span class="s">&quot;TRI&quot;</span><span class="p">,</span><span class="s">&quot;JMOD&quot;</span><span class="p">]</span>
+<span class="n">apod_list</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;SP&quot;</span><span class="p">,</span> <span class="s">&quot;EM&quot;</span><span class="p">,</span> <span class="s">&quot;GM&quot;</span><span class="p">,</span> <span class="s">&quot;GMB&quot;</span><span class="p">,</span> <span class="s">&quot;TM&quot;</span><span class="p">,</span> <span class="s">&quot;TRI&quot;</span><span class="p">,</span> <span class="s">&quot;JMOD&quot;</span><span class="p">]</span>
 
 <span class="k">class</span> <span class="nc">ParameterFrame</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Frame</span><span class="p">):</span>
-    
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">parent</span><span class="p">,</span><span class="nb">id</span><span class="p">):</span>
-        <span class="n">wx</span><span class="o">.</span><span class="n">Frame</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">parent</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;Parameters&quot;</span><span class="p">,</span>
-            <span class="n">style</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">DEFAULT_DIALOG_STYLE</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">RESIZE_BORDER</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot; WX frame where apodization parameters can be set by the user &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Initialize the frame &quot;&quot;&quot;</span>
+        <span class="n">wx</span><span class="o">.</span><span class="n">Frame</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;Parameters&quot;</span><span class="p">,</span>
+                <span class="n">style</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">DEFAULT_DIALOG_STYLE</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">RESIZE_BORDER</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">parent</span> <span class="o">=</span> <span class="n">parent</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">qName1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;Type:&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">qName2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Choice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">choices</span><span class="o">=</span><span class="n">apod_list</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_CHOICE</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ApodChoose</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">qName2</span><span class="p">)</span>
+        <span class="c"># create the various elements in the panel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qName1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;Type:&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qName2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Choice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">apod_list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_CHOICE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ApodChoose</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qName2</span><span class="p">)</span>
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">q1_1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;q1:&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">q1_2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;0.0&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q1_1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;q1:&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q1_2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;0.0&quot;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">q2_1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;q2:&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">q2_2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;1.0&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q2_1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;q2:&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q2_2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;1.0&quot;</span><span class="p">)</span>
         
-        <span class="bp">self</span><span class="o">.</span><span class="n">q3_1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;q3:&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">q3_2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;1.0&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q3_1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;q3:&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q3_2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;1.0&quot;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">c1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;c&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">c2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;1.0&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;c&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">c2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;1.0&quot;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">start_1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;Start&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">start_2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;1.0&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;Start&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;1.0&quot;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">size_1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;Size&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size_1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;Size&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">size_1</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">size_2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;1.0&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size_2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;1.0&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">size_2</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">inv</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">CheckBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;Invert&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inv</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">CheckBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;Invert&quot;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">use_size</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">CheckBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;Custom Size&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_CHECKBOX</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">OnLimitCheck</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">use_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_size</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">CheckBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;Custom Size&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_CHECKBOX</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">OnLimitCheck</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_size</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">points_1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;Number of Points:&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">points_2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;1000&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">points_1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;Number of Points:&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">points_2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;1000&quot;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">sw_1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;Spectral Width:&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sw_2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&quot;50000.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sw_1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;Spectral Width:&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sw_2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s">&quot;50000.&quot;</span><span class="p">)</span>
 
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">b1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="s">&quot;Draw&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_BUTTON</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">OnDraw</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">b1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b1</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="s">&quot;Draw&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_BUTTON</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">OnDraw</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b1</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">b1</span><span class="o">.</span><span class="n">SetDefault</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">b2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="s">&quot;Clear&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_BUTTON</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">OnClear</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">b2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b2</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="s">&quot;Clear&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Bind</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">EVT_BUTTON</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">OnClear</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b2</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">b2</span><span class="o">.</span><span class="n">SetDefault</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">InitApod</span><span class="p">(</span><span class="s">&quot;SP&quot;</span><span class="p">)</span>
 
-        <span class="c"># layout</span>
-        <span class="n">apod_grid</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">GridSizer</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+        <span class="c"># layout of the panel</span>
+        <span class="n">apod_grid</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">GridSizer</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 
         <span class="n">apod_grid</span><span class="o">.</span><span class="n">AddMany</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">qName1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qName2</span><span class="p">,</span>
                    <span class="bp">self</span><span class="o">.</span><span class="n">q1_1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q1_2</span><span class="p">,</span>
                    <span class="bp">self</span><span class="o">.</span><span class="n">q2_1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q2_2</span><span class="p">,</span>
                    <span class="bp">self</span><span class="o">.</span><span class="n">q3_1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q3_2</span><span class="p">,</span> 
-                   <span class="bp">self</span><span class="o">.</span><span class="n">c1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">c2</span><span class="p">,</span>
-                   <span class="bp">self</span><span class="o">.</span><span class="n">start_1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">start_2</span><span class="p">,</span>
-                   <span class="bp">self</span><span class="o">.</span><span class="n">size_1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">size_2</span><span class="p">,</span>
-                   <span class="bp">self</span><span class="o">.</span><span class="n">inv</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">use_size</span><span class="p">])</span>
+                   <span class="bp">self</span><span class="o">.</span><span class="n">c1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">c2</span><span class="p">,</span>
+                   <span class="bp">self</span><span class="o">.</span><span class="n">start_1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_2</span><span class="p">,</span>
+                   <span class="bp">self</span><span class="o">.</span><span class="n">size_1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size_2</span><span class="p">,</span>
+                   <span class="bp">self</span><span class="o">.</span><span class="n">inv</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_size</span><span class="p">])</span>
         
-        <span class="n">data_grid</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">GridSizer</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">data_grid</span><span class="o">.</span><span class="n">AddMany</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">points_1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">points_2</span><span class="p">,</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">sw_1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_2</span><span class="p">])</span>
+        <span class="n">data_grid</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">GridSizer</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">data_grid</span><span class="o">.</span><span class="n">AddMany</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">points_1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">points_2</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sw_1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sw_2</span><span class="p">])</span>
 
-
-        <span class="n">apod_box</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticBoxSizer</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">StaticBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>
-            <span class="s">&quot;Apodization Parameters&quot;</span><span class="p">))</span>
+        <span class="n">apod_box</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticBoxSizer</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">StaticBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> 
+                                        <span class="s">&quot;Apodization Parameters&quot;</span><span class="p">))</span>
         <span class="n">apod_box</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">apod_grid</span><span class="p">)</span>
 
-        <span class="n">data_box</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticBoxSizer</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">StaticBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>
-            <span class="s">&quot;Data Parameters&quot;</span><span class="p">))</span>
+        <span class="n">data_box</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticBoxSizer</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">StaticBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+                                        <span class="s">&quot;Data Parameters&quot;</span><span class="p">))</span>
         <span class="n">data_box</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">data_grid</span><span class="p">)</span>
 
-        <span class="n">button_box</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">GridSizer</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
-        <span class="n">button_box</span><span class="o">.</span><span class="n">AddMany</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">b1</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">b2</span><span class="p">])</span>
+        <span class="n">button_box</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">GridSizer</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">button_box</span><span class="o">.</span><span class="n">AddMany</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">b1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">b2</span><span class="p">])</span>
 
         <span class="n">mainbox</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">BoxSizer</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">VERTICAL</span><span class="p">)</span>
         <span class="n">mainbox</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">apod_box</span><span class="p">)</span>
@@ -184,17 +189,20 @@ with different parameters.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">Fit</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">SetMinSize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">GetSize</span><span class="p">())</span>
 
-    <span class="k">def</span> <span class="nf">OnLimitCheck</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">event</span><span class="p">):</span>
-        <span class="n">k</span><span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">IsChecked</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">OnLimitCheck</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Set the custom size when the check box is checked.  &quot;&quot;&quot;</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">IsChecked</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">size_1</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">size_2</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
         <span class="n">points</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points_2</span><span class="o">.</span><span class="n">GetValue</span><span class="p">())</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">size_2</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">points</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="nf">ApodChoose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">event</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">ApodChoose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Set the choosen apodization type &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">InitApod</span><span class="p">(</span><span class="n">apod_list</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">qName2</span><span class="o">.</span><span class="n">GetCurrentSelection</span><span class="p">()])</span>
 
-    <span class="k">def</span> <span class="nf">InitApod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">qName</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">InitApod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qName</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Set the default parameter for a choosen apodization window &quot;&quot;&quot;</span>
         
         <span class="k">if</span> <span class="n">qName</span> <span class="o">==</span> <span class="s">&quot;SP&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">q1_1</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
@@ -273,7 +281,7 @@ with different parameters.</p>
             <span class="bp">self</span><span class="o">.</span><span class="n">q1_1</span><span class="o">.</span><span class="n">SetLabel</span><span class="p">(</span><span class="s">&quot;loc&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">q1_2</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
             <span class="n">points</span> <span class="o">=</span> <span class="n">points</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points_2</span><span class="o">.</span><span class="n">GetValue</span><span class="p">())</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">q1_2</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">points</span><span class="o">/</span><span class="mf">2.</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">q1_2</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">points</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">))</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">q2_1</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">q2_1</span><span class="o">.</span><span class="n">SetLabel</span><span class="p">(</span><span class="s">&quot;lHi&quot;</span><span class="p">)</span>
@@ -301,7 +309,8 @@ with different parameters.</p>
             <span class="bp">self</span><span class="o">.</span><span class="n">q3_2</span><span class="o">.</span><span class="n">Enable</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">q3_2</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="s">&quot;0.0&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">OnDraw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">event</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">OnDraw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Draw the apodization window &quot;&quot;&quot;</span>
         <span class="n">qName</span> <span class="o">=</span> <span class="n">apod_list</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">qName2</span><span class="o">.</span><span class="n">GetCurrentSelection</span><span class="p">()]</span>
         <span class="n">q1</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q1_2</span><span class="o">.</span><span class="n">GetValue</span><span class="p">())</span>
         <span class="n">q2</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">q2_2</span><span class="o">.</span><span class="n">GetValue</span><span class="p">())</span>
@@ -316,16 +325,21 @@ with different parameters.</p>
         <span class="n">points</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">points_2</span><span class="o">.</span><span class="n">GetValue</span><span class="p">())</span>
         <span class="n">sw</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sw_2</span><span class="o">.</span><span class="n">GetValue</span><span class="p">())</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">ApplyApod</span><span class="p">(</span><span class="n">qName</span><span class="p">,</span><span class="n">q1</span><span class="p">,</span><span class="n">q2</span><span class="p">,</span><span class="n">q3</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">start</span><span class="p">,</span><span class="n">size</span><span class="p">,</span><span class="n">inv</span><span class="p">,</span><span class="n">use_size</span><span class="p">,</span>
-        <span class="n">points</span><span class="p">,</span><span class="n">sw</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">ApplyApod</span><span class="p">(</span><span class="n">qName</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q3</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">inv</span><span class="p">,</span> 
+                                <span class="n">use_size</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">sw</span><span class="p">)</span>
         
-    <span class="k">def</span> <span class="nf">OnClear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">event</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">OnClear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Clear all apodization windows previously drawn &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">ClearFigure</span><span class="p">()</span>
 
 <span class="k">class</span> <span class="nc">CanvasFrame</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Frame</span><span class="p">):</span>
-
+    <span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">    WX frame containing a matplotlib canvas where the apodization windows are</span>
+<span class="sd">    drawn. Launches the parameter frame where apodization parameter can be set.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">wx</span><span class="o">.</span><span class="n">Frame</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="bp">None</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s">&#39;Apodization Viewer&#39;</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot; Initializate the frame &quot;&quot;&quot;</span>
+        <span class="n">wx</span><span class="o">.</span><span class="n">Frame</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#39;Apodization Viewer&#39;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">SetBackgroundColour</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">NamedColor</span><span class="p">(</span><span class="s">&quot;WHITE&quot;</span><span class="p">))</span>
 
@@ -334,63 +348,50 @@ with different parameters.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span> <span class="o">=</span> <span class="n">FigureCanvas</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolbar</span> <span class="o">=</span> <span class="n">NavigationToolbar2Wx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">toolbar</span><span class="o">.</span><span class="n">Realize</span><span class="p">()</span>
-        
-        <span class="c"># open Parameter Dialog</span>
-        <span class="n">win</span> <span class="o">=</span> <span class="n">ParameterFrame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+       
+        <span class="c"># open parameter window</span>
+        <span class="n">win</span> <span class="o">=</span> <span class="n">ParameterFrame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">win</span><span class="o">.</span><span class="n">Show</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
 
         <span class="c"># layout</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sizer</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">BoxSizer</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">VERTICAL</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">LEFT</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">TOP</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">GROW</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">toolbar</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">LEFT</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">EXPAND</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">LEFT</span><span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">TOP</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">GROW</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">toolbar</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">LEFT</span><span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">EXPAND</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">SetSizer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sizer</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Fit</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">OnPaint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Draw the apodization window &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">ClearFigure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Clear all previously drawn apodization windows &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">cla</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">OnPaint</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">ApplyApod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">qName</span><span class="p">,</span><span class="n">q1</span><span class="p">,</span><span class="n">q2</span><span class="p">,</span><span class="n">q3</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">start</span><span class="p">,</span><span class="n">size</span><span class="p">,</span><span class="n">inv</span><span class="p">,</span><span class="n">use_size</span><span class="p">,</span><span class="n">points</span><span class="p">,</span><span class="n">sw</span><span class="p">):</span>
-       
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        print &quot;DEBUGGING INFOMATION&quot;</span>
-<span class="sd">        print &quot;ApplyApod Recieved:&quot;</span>
-<span class="sd">        print &quot;qName:&quot;,qName</span>
-<span class="sd">        print &quot;q1:&quot;,q1</span>
-<span class="sd">        print &quot;q2:&quot;,q2</span>
-<span class="sd">        print &quot;q3:&quot;,q3</span>
-<span class="sd">        print &quot;c:&quot;,c</span>
-<span class="sd">        print &quot;start:&quot;,start</span>
-<span class="sd">        print &quot;size:&quot;,size</span>
-<span class="sd">        print &quot;inv:&quot;,inv</span>
-<span class="sd">        print &quot;use_size:&quot;,use_size</span>
-<span class="sd">        print &quot;points:&quot;,points</span>
-<span class="sd">        print &quot;sw:&quot;,sw</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
+    <span class="k">def</span> <span class="nf">ApplyApod</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qName</span><span class="p">,</span> <span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="p">,</span> <span class="n">q3</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">inv</span><span class="p">,</span> <span class="n">use_size</span><span class="p">,</span> 
+                    <span class="n">points</span><span class="p">,</span> <span class="n">sw</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Apply the selected apodization, draw the windows on the canvas &quot;&quot;&quot;</span>
+        
         <span class="c"># create the dictionary</span>
         <span class="n">dic</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">fileiobase</span><span class="o">.</span><span class="n">create_blank_udic</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">dic</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&quot;sw&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sw</span>
         <span class="n">dic</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&quot;size&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">points</span>
 
         <span class="c"># create the data</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">points</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="s">&quot;complex&quot;</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&quot;complex&quot;</span><span class="p">)</span>
 
         <span class="c"># convert to NMRPipe format</span>
         <span class="n">C</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">convert</span><span class="o">.</span><span class="n">converter</span><span class="p">()</span>
-        <span class="n">C</span><span class="o">.</span><span class="n">from_universal</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
-        <span class="n">pdic</span><span class="p">,</span><span class="n">pdata</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">to_pipe</span><span class="p">()</span>
-
+        <span class="n">C</span><span class="o">.</span><span class="n">from_universal</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+        <span class="n">pdic</span><span class="p">,</span> <span class="n">pdata</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">to_pipe</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">use_size</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
             <span class="n">tsize</span> <span class="o">=</span> <span class="n">size</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">tsize</span> <span class="o">=</span> <span class="s">&#39;default&#39;</span>
-        <span class="n">null</span><span class="p">,</span><span class="n">apod_data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">apod</span><span class="p">(</span><span class="n">pdic</span><span class="p">,</span><span class="n">pdata</span><span class="p">,</span><span class="n">qName</span><span class="o">=</span><span class="n">qName</span><span class="p">,</span>
-        <span class="n">q1</span><span class="o">=</span><span class="n">q1</span><span class="p">,</span><span class="n">q2</span><span class="o">=</span><span class="n">q2</span><span class="p">,</span><span class="n">q3</span><span class="o">=</span><span class="n">q3</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span><span class="n">inv</span><span class="o">=</span><span class="n">inv</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="n">tsize</span><span class="p">,</span><span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">)</span>
+        <span class="n">null</span><span class="p">,</span> <span class="n">apod_data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">apod</span><span class="p">(</span><span class="n">pdic</span><span class="p">,</span> <span class="n">pdata</span><span class="p">,</span> <span class="n">qName</span><span class="o">=</span><span class="n">qName</span><span class="p">,</span>
+                <span class="n">q1</span><span class="o">=</span><span class="n">q1</span><span class="p">,</span> <span class="n">q2</span><span class="o">=</span><span class="n">q2</span><span class="p">,</span> <span class="n">q3</span><span class="o">=</span><span class="n">q3</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">c</span><span class="p">,</span> <span class="n">inv</span><span class="o">=</span><span class="n">inv</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">tsize</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">)</span>
 
         <span class="c"># draw the window</span>
         <span class="c">#self.axes.cla()</span>
@@ -398,7 +399,9 @@ with different parameters.</p>
         <span class="bp">self</span><span class="o">.</span><span class="n">OnPaint</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="k">class</span> <span class="nc">App</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">App</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Wx application &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">OnInit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Create the main window and insert the custom frame &quot;&quot;&quot;</span>
         <span class="n">frame</span> <span class="o">=</span> <span class="n">CanvasFrame</span><span class="p">()</span>
         <span class="n">frame</span><span class="o">.</span><span class="n">Show</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">True</span>
@@ -467,7 +470,7 @@ with different parameters.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2010-2012, Jonathan J. Helmus.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
     </div>
   </body>
 </html>

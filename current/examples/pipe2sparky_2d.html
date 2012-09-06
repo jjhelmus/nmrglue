@@ -62,32 +62,27 @@
             
   <div class="section" id="convert-example-pipe2sparky-2d">
 <span id="pipe2sparky-2d"></span><h1>convert example: pipe2sparky_2d<a class="headerlink" href="#convert-example-pipe2sparky-2d" title="Permalink to this headline">¶</a></h1>
-<p>This example shows how to use nmrglue to convert between the NMRPipe and Sparky
-file formats for a 2D data set.  The last block of code lists the differences
-between this conversion and one performed with pipe2ucsf.</p>
+<p>This example shows how to use nmrglue to convert a 2D NMRPipe file into a
+Sparky formatted file.</p>
+<p>The data used in this example is available for
+<a class="reference external" href="http://nmrglue.googlecode.com/files/example_pipe2sparky_2d.zip">download.</a></p>
 <p>[<a class="reference download internal" href="../_downloads/pipe2sparky_2d.py"><tt class="xref download docutils literal"><span class="pre">source</span> <span class="pre">code</span></tt></a>]</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#! /usr/bin/env python</span>
 
 <span class="kn">import</span> <span class="nn">nmrglue</span> <span class="kn">as</span> <span class="nn">ng</span>
 
-<span class="c"># read in the varian data</span>
-<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;../common_data/2d_pipe/test.ft2&quot;</span><span class="p">)</span>
+<span class="c"># read in the NMRPipe data</span>
+<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;nmrpipe_2d/test.ft2&quot;</span><span class="p">)</span>
 
-<span class="c"># Set the parameters </span>
-<span class="n">u</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">guess_udic</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
+<span class="c"># Set the spectral parameters </span>
+<span class="n">udic</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">guess_udic</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 
-<span class="c"># create the converter object and initilize with varian data</span>
+<span class="c"># create the converter object and initilize with NMRPipe data</span>
 <span class="n">C</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">convert</span><span class="o">.</span><span class="n">converter</span><span class="p">()</span>
-<span class="n">C</span><span class="o">.</span><span class="n">from_pipe</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="n">u</span><span class="p">)</span>
+<span class="n">C</span><span class="o">.</span><span class="n">from_pipe</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">udic</span><span class="p">)</span>
 
-<span class="c"># create pipe data and then write it out</span>
-<span class="n">ng</span><span class="o">.</span><span class="n">sparky</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;2d_sparky.ucsf&quot;</span><span class="p">,</span><span class="o">*</span><span class="n">C</span><span class="o">.</span><span class="n">to_sparky</span><span class="p">(),</span><span class="n">overwrite</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-
-<span class="c"># check the conversion against NMRPipe</span>
-<span class="k">print</span> <span class="s">&quot;Conversion complete, listing differences between files:&quot;</span>
-<span class="n">sdic</span><span class="p">,</span><span class="n">sdata</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">sparky</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;2d_sparky.ucsf&quot;</span><span class="p">)</span>
-<span class="n">sdic2</span><span class="p">,</span><span class="n">sdata2</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">sparky</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;../common_data/2d_sparky/data.ucsf&quot;</span><span class="p">)</span>
-<span class="k">print</span> <span class="n">ng</span><span class="o">.</span><span class="n">misc</span><span class="o">.</span><span class="n">pair_similar</span><span class="p">(</span><span class="n">sdic</span><span class="p">,</span><span class="n">sdata</span><span class="p">,</span><span class="n">sdic2</span><span class="p">,</span><span class="n">sdata2</span><span class="p">,</span><span class="n">verb</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="c"># create Sparky data and then write it out</span>
+<span class="n">ng</span><span class="o">.</span><span class="n">sparky</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;sparky_2d.ucsf&quot;</span><span class="p">,</span> <span class="o">*</span><span class="n">C</span><span class="o">.</span><span class="n">to_sparky</span><span class="p">(),</span> <span class="n">overwrite</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -150,7 +145,7 @@ between this conversion and one performed with pipe2ucsf.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2010-2012, Jonathan J. Helmus.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
     </div>
   </body>
 </html>

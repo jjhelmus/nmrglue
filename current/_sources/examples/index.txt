@@ -35,15 +35,15 @@ Convert Examples
 
 .. toctree::
 
+    agilent2pipe_1d.rst
+    agilent2pipe_2d.rst
+    agilent2pipe_2d_tppi.rst
+    agilent2pipe_3d.rst
     bruker2pipe_1d.rst
     bruker2pipe_2d.rst
     bruker2pipe_3d.rst
     pipe2sparky_2d.rst
     pipe2sparky_3d.rst
-    varian2pipe_1d.rst
-    varian2pipe_2d.rst
-    varian2pipe_2d_tppi.rst
-    varian2pipe_3d.rst
 
 .. _fitting_examples:
 
@@ -83,11 +83,11 @@ Plotting Examples
 
     plot_1d_time.rst
     plot_1d_freq.rst
-    plot_2d_boxes.rst
-    plot_2d_assignments.rst
     plot_2d_spectrum.rst
     plot_2d_spectrum_pts.rst
-    
+    plot_2d_boxes.rst
+    plot_2d_assignments.rst
+
 .. _processing_examples:
 
 Processing Examples
@@ -100,13 +100,13 @@ Processing Examples
     process_pipe_2d_tppi.rst
     process_pipe_3d.rst
 
-.. _unarray_examples:
+.. _seperate_examples:
 
-Unarray Examples
-----------------
+Separate Examples
+-----------------
 
 .. toctree::
 
-    unarray_1d_varian.rst
-    unarray_2d_varian.rst
-    unarray_2d_bruker.rst
+    separate_1d_varian.rst
+    separate_2d_varian.rst
+    separate_2d_bruker.rst

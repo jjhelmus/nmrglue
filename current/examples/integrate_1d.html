@@ -66,6 +66,8 @@
 script reads in ppm peak limits from <tt class="docutils literal"><span class="pre">limits.in</span></tt> and takes a simple
 summation integral of each peak using the spectra contained in <tt class="docutils literal"><span class="pre">1d_data.ft</span></tt>.  The integration values are writting to <tt class="docutils literal"><span class="pre">area.out</span></tt> and a plot is make showing
 the integration limits and values overlayed on the spectra to <tt class="docutils literal"><span class="pre">plot.png</span></tt>.</p>
+<p>The data used in this example is available for
+<a class="reference external" href="http://nmrglue.googlecode.com/files/example_integrate_1d.zip">download.</a></p>
 <p>[<a class="reference download internal" href="../_downloads/integrate_1d.py"><tt class="xref download docutils literal"><span class="pre">source</span> <span class="pre">code</span></tt></a>]</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#! /usr/bin/env python</span>
 <span class="c"># Example scipt to show integration of a 1D spectrum</span>
@@ -75,49 +77,50 @@ the integration limits and values overlayed on the spectra to <tt class="docutil
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 
 <span class="c"># read in the data from a NMRPipe file</span>
-<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;1d_data.ft&quot;</span><span class="p">)</span>
+<span class="n">dic</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;1d_data.ft&quot;</span><span class="p">)</span>
 <span class="n">length</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
 <span class="c"># read in the integration limits</span>
 <span class="n">peak_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">recfromtxt</span><span class="p">(</span><span class="s">&quot;limits.in&quot;</span><span class="p">)</span>
 
 <span class="c"># determind the ppm scale</span>
-<span class="n">uc</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">make_uc</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span><span class="n">data</span><span class="p">)</span>
-<span class="n">ppm_scale</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">uc</span><span class="o">.</span><span class="n">ppm</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="n">uc</span><span class="o">.</span><span class="n">ppm</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">size</span><span class="o">-</span><span class="mi">1</span><span class="p">),</span><span class="n">data</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+<span class="n">uc</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">make_uc</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+<span class="n">ppm_scale</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">ppm_scale</span><span class="p">()</span>
 
 <span class="c"># plot the spectrum</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ppm_scale</span><span class="p">,</span><span class="n">data</span><span class="p">,</span><span class="s">&#39;k-&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ppm_scale</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="s">&#39;k-&#39;</span><span class="p">)</span>
 
 <span class="c"># prepare the output file</span>
-<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;area.out&quot;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+<span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&quot;area.out&quot;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
 <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;#Name</span><span class="se">\t</span><span class="s">Start</span><span class="se">\t</span><span class="s">Stop</span><span class="se">\t</span><span class="s">Area</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
 
 <span class="c"># loop over the integration limits</span>
-<span class="k">for</span> <span class="n">name</span><span class="p">,</span><span class="n">start</span><span class="p">,</span><span class="n">end</span> <span class="ow">in</span> <span class="n">peak_list</span><span class="p">:</span>
-    <span class="nb">min</span> <span class="o">=</span> <span class="n">uc</span><span class="p">(</span><span class="n">start</span><span class="p">,</span><span class="s">&quot;ppm&quot;</span><span class="p">)</span>
-    <span class="nb">max</span> <span class="o">=</span> <span class="n">uc</span><span class="p">(</span><span class="n">end</span><span class="p">,</span><span class="s">&quot;ppm&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">min</span><span class="o">&gt;</span><span class="nb">max</span><span class="p">:</span>
-        <span class="nb">min</span><span class="p">,</span><span class="nb">max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">,</span><span class="nb">min</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="ow">in</span> <span class="n">peak_list</span><span class="p">:</span>
+    <span class="nb">min</span> <span class="o">=</span> <span class="n">uc</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="s">&quot;ppm&quot;</span><span class="p">)</span>
+    <span class="nb">max</span> <span class="o">=</span> <span class="n">uc</span><span class="p">(</span><span class="n">end</span><span class="p">,</span> <span class="s">&quot;ppm&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">min</span> <span class="o">&gt;</span> <span class="nb">max</span><span class="p">:</span>
+        <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">,</span> <span class="nb">min</span>
 
     <span class="c"># extract the peak</span>
-    <span class="n">peak</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="nb">min</span><span class="p">:</span><span class="nb">max</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
-    <span class="n">peak_scale</span> <span class="o">=</span> <span class="n">ppm_scale</span><span class="p">[</span><span class="nb">min</span><span class="p">:</span><span class="nb">max</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">peak</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="nb">min</span><span class="p">:</span><span class="nb">max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">peak_scale</span> <span class="o">=</span> <span class="n">ppm_scale</span><span class="p">[</span><span class="nb">min</span><span class="p">:</span><span class="nb">max</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
 
     <span class="c"># plot the integration lines, limits and name of peaks</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">peak_scale</span><span class="p">,</span><span class="n">peak</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span><span class="o">/</span><span class="mf">100.</span><span class="o">+</span><span class="n">peak</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span><span class="s">&#39;g-&#39;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">peak_scale</span><span class="p">,[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">peak_scale</span><span class="p">),</span><span class="s">&#39;r-&#39;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">peak_scale</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="mf">0.5</span><span class="o">*</span><span class="n">peak</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">/</span><span class="mf">100.</span><span class="o">+</span><span class="n">peak</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span><span class="n">name</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">peak_scale</span><span class="p">,</span> <span class="n">peak</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span> <span class="o">/</span> <span class="mf">100.</span> <span class="o">+</span> <span class="n">peak</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="s">&#39;g-&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">peak_scale</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">peak_scale</span><span class="p">),</span> <span class="s">&#39;r-&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">peak_scale</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">peak</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">/</span> <span class="mf">100.</span> <span class="o">+</span> <span class="n">peak</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">name</span><span class="p">,</span>
+                <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
 
     <span class="c"># write out the integration info</span>
-    <span class="n">tup</span> <span class="o">=</span> <span class="p">(</span> <span class="n">name</span><span class="p">,</span><span class="n">peak_scale</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">peak_scale</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">peak</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="p">)</span>
-    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%.3f</span><span class="se">\t</span><span class="si">%.3f</span><span class="se">\t</span><span class="si">%E</span><span class="se">\n</span><span class="s">&quot;</span><span class="o">%</span><span class="n">tup</span><span class="p">)</span>
+    <span class="n">tup</span> <span class="o">=</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">peak_scale</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">peak_scale</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">peak</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%.3f</span><span class="se">\t</span><span class="si">%.3f</span><span class="se">\t</span><span class="si">%E</span><span class="se">\n</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">tup</span><span class="p">)</span>
 
 <span class="c"># close the output file and save the plot</span>
 <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">ppm_scale</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">ppm_scale</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&quot;plot.png&quot;</span><span class="p">)</span> <span class="c"># change this to plot.pdf, plot.ps, etc</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">ppm_scale</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ppm_scale</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&quot;plot.png&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>[<a class="reference download internal" href="../_downloads/limits.in"><tt class="xref download docutils literal"><span class="pre">input</span> <span class="pre">file</span></tt></a>]</p>
@@ -212,7 +215,7 @@ Ce	26.972	12.111	2.024605E+08
     </div>
     <div class="footer">
         &copy; Copyright 2010-2012, Jonathan J. Helmus.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
     </div>
   </body>
 </html>

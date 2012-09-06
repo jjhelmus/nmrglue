@@ -10,6 +10,8 @@ volumes are writting to ``volumes.out``.  For a method to graphically examine
 these limits see :ref:`plot_2d_boxes`.  Similarly to check the peak 
 assignments see :ref:`plot_2d_assignments`.
 
+The data used in this example is available for 
+`download. <http://nmrglue.googlecode.com/files/example_integrate_2d.zip>`_
 
 [:download:`source code <../../../examples/integration/integrate_2d/integrate_2d.py>`]
 

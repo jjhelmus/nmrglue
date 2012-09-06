@@ -28,7 +28,7 @@
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="nmrglue 0.4-dev documentation" href="../index.html" />
     <link rel="up" title="Examples" href="index.html" />
-    <link rel="next" title="plotting example: plot_2d_spectrum" href="plot_2d_spectrum.html" />
+    <link rel="next" title="process example: process_pipe_1d" href="process_pipe_1d.html" />
     <link rel="prev" title="plotting example: plot_2d_boxes" href="plot_2d_boxes.html" /> 
   </head>
   <body>
@@ -45,7 +45,7 @@
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="plot_2d_spectrum.html" title="plotting example: plot_2d_spectrum"
+          <a href="process_pipe_1d.html" title="process example: process_pipe_1d"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="plot_2d_boxes.html" title="plotting example: plot_2d_boxes"
@@ -68,9 +68,11 @@ for examining data or publication.  In this example the assignments used in
 <a class="reference internal" href="integrate_2d.html#integrate-2d"><em>integration example: integrate_2d</em></a> are graphically examined.  A contour plot of the spectrum
 with the boxes and assignments is created.  To examine the box limit more
 closely see <a class="reference internal" href="plot_2d_boxes.html#plot-2d-boxes"><em>plotting example: plot_2d_boxes</em></a>.</p>
+<p>The data used in this example is available for
+<a class="reference external" href="http://nmrglue.googlecode.com/files/example_plot_2d.zip">download.</a></p>
 <p>[<a class="reference download internal" href="../_downloads/plot_assignments.py"><tt class="xref download docutils literal"><span class="pre">source</span> <span class="pre">code</span></tt></a>]</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#! /usr/bin/env python</span>
-<span class="c"># Create contour plots of a spectrum with each peak in limits.in labeled</span>
+<span class="c"># Create a contour plots of a spectrum with each peak in limits.in labeled</span>
 
 <span class="kn">import</span> <span class="nn">nmrglue</span> <span class="kn">as</span> <span class="nn">ng</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
@@ -79,16 +81,16 @@ closely see <a class="reference internal" href="plot_2d_boxes.html#plot-2d-boxes
 
 <span class="c"># plot parameters</span>
 <span class="n">cmap</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Blues_r</span>    <span class="c"># contour map (colors to use for contours)</span>
-<span class="n">contour_start</span>   <span class="o">=</span> <span class="mi">30000</span>     <span class="c"># contour level start value</span>
-<span class="n">contour_num</span>     <span class="o">=</span> <span class="mi">20</span>        <span class="c"># number of contour levels</span>
-<span class="n">contour_factor</span>  <span class="o">=</span> <span class="mf">1.20</span>      <span class="c"># scaling factor between contour levels</span>
-<span class="n">textsize</span> <span class="o">=</span> <span class="mi">6</span>       <span class="c"># text size of labels</span>
+<span class="n">contour_start</span> <span class="o">=</span> <span class="mi">30000</span>           <span class="c"># contour level start value</span>
+<span class="n">contour_num</span> <span class="o">=</span> <span class="mi">20</span>                <span class="c"># number of contour levels</span>
+<span class="n">contour_factor</span> <span class="o">=</span> <span class="mf">1.20</span>           <span class="c"># scaling factor between contour levels</span>
+<span class="n">textsize</span> <span class="o">=</span> <span class="mi">6</span>                    <span class="c"># text size of labels</span>
 
 <span class="c"># calculate contour levels</span>
-<span class="n">cl</span> <span class="o">=</span> <span class="p">[</span><span class="n">contour_start</span><span class="o">*</span><span class="n">contour_factor</span><span class="o">**</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">contour_num</span><span class="p">)]</span>
+<span class="n">cl</span> <span class="o">=</span> <span class="n">contour_start</span> <span class="o">*</span> <span class="n">contour_factor</span> <span class="o">**</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">contour_num</span><span class="p">)</span>
 
 <span class="c"># read in the data from a NMRPipe file</span>
-<span class="n">dic</span><span class="p">,</span><span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;../../common_data/2d_pipe/test.ft2&quot;</span><span class="p">)</span>
+<span class="n">dic</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;nmrpipe_2d/test.ft2&quot;</span><span class="p">)</span>
 
 <span class="c"># read in the integration limits</span>
 <span class="n">peak_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">recfromtxt</span><span class="p">(</span><span class="s">&quot;limits.in&quot;</span><span class="p">)</span>
@@ -98,29 +100,30 @@ closely see <a class="reference internal" href="plot_2d_boxes.html#plot-2d-boxes
 <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
 
 <span class="c"># plot the contours</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">cl</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span><span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">cl</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> 
+            <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
 
 <span class="c"># loop over the peaks</span>
-<span class="k">for</span> <span class="n">name</span><span class="p">,</span><span class="n">x0</span><span class="p">,</span><span class="n">y0</span><span class="p">,</span><span class="n">x1</span><span class="p">,</span><span class="n">y1</span> <span class="ow">in</span> <span class="n">peak_list</span><span class="p">:</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="ow">in</span> <span class="n">peak_list</span><span class="p">:</span>
 
-    <span class="k">if</span> <span class="n">x0</span><span class="o">&gt;</span><span class="n">x1</span><span class="p">:</span>
-        <span class="n">x0</span><span class="p">,</span><span class="n">x1</span> <span class="o">=</span> <span class="n">x1</span><span class="p">,</span><span class="n">x0</span>
-    <span class="k">if</span> <span class="n">y0</span><span class="o">&gt;</span><span class="n">y1</span><span class="p">:</span>
-        <span class="n">y0</span><span class="p">,</span><span class="n">y1</span> <span class="o">=</span> <span class="n">y1</span><span class="p">,</span><span class="n">y0</span>
+    <span class="k">if</span> <span class="n">x0</span> <span class="o">&gt;</span> <span class="n">x1</span><span class="p">:</span>
+        <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span> <span class="o">=</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x0</span>
+    <span class="k">if</span> <span class="n">y0</span> <span class="o">&gt;</span> <span class="n">y1</span><span class="p">:</span>
+        <span class="n">y0</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y0</span>
 
     <span class="c"># plot a box around each peak and label</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x0</span><span class="p">,</span><span class="n">x1</span><span class="p">,</span><span class="n">x1</span><span class="p">,</span><span class="n">x0</span><span class="p">,</span><span class="n">x0</span><span class="p">],[</span><span class="n">y0</span><span class="p">,</span><span class="n">y0</span><span class="p">,</span><span class="n">y1</span><span class="p">,</span><span class="n">y1</span><span class="p">,</span><span class="n">y0</span><span class="p">],</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x1</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">y0</span><span class="p">,</span><span class="n">name</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="n">textsize</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">x0</span><span class="p">],</span> <span class="p">[</span><span class="n">y0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y0</span><span class="p">],</span> <span class="s">&#39;k&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">textsize</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
     
 <span class="c"># set limits</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">1900</span><span class="p">,</span><span class="mi">2200</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">750</span><span class="p">,</span><span class="mi">1400</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">1900</span><span class="p">,</span> <span class="mi">2200</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">750</span><span class="p">,</span> <span class="mi">1400</span><span class="p">)</span>
 
 <span class="c"># save the figure</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&quot;assignments.png&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>[<a class="reference download internal" href="../_downloads/limits3.in"><tt class="xref download docutils literal"><span class="pre">input</span> <span class="pre">file</span></tt></a>]</p>
+<p>[<a class="reference download internal" href="../_downloads/limits2.in"><tt class="xref download docutils literal"><span class="pre">input</span> <span class="pre">file</span></tt></a>]</p>
 <div class="highlight-python"><pre>#Peak   X0      Y0      X1      Y1
 # Peak defines 15N resonance in 2D NCO spectra.
 # Limits are in term of points from 0 to length-1.
@@ -150,8 +153,8 @@ W43     2008    952     2019    933
   <p class="topless"><a href="plot_2d_boxes.html"
                         title="previous chapter">plotting example: plot_2d_boxes</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="plot_2d_spectrum.html"
-                        title="next chapter">plotting example: plot_2d_spectrum</a></p>
+  <p class="topless"><a href="process_pipe_1d.html"
+                        title="next chapter">process example: process_pipe_1d</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/examples/plot_2d_assignments.txt"
@@ -187,7 +190,7 @@ W43     2008    952     2019    933
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="plot_2d_spectrum.html" title="plotting example: plot_2d_spectrum"
+          <a href="process_pipe_1d.html" title="process example: process_pipe_1d"
              >next</a> |</li>
         <li class="right" >
           <a href="plot_2d_boxes.html" title="plotting example: plot_2d_boxes"
@@ -198,7 +201,7 @@ W43     2008    952     2019    933
     </div>
     <div class="footer">
         &copy; Copyright 2010-2012, Jonathan J. Helmus.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
     </div>
   </body>
 </html>
