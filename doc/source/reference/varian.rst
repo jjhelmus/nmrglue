@@ -5,7 +5,8 @@ nmrglue.varian
 
 .. automodule:: nmrglue.fileio.varian
 
-This modules is imported as nmrglue.varian and can be called as such.
+This modules is imported as nmrglue.varian and can be called as such.  These
+functions and classes can also be access from nmrglue.agilent.
 
 User Information
 ----------------

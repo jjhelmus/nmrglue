@@ -10,6 +10,7 @@ fileio modules
 .. toctree::
     :maxdepth: 2
     
+    agilent
     bruker
     convert
     fileiobase
