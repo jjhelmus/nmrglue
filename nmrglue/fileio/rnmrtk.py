@@ -192,8 +192,10 @@ def read_lowmem(filename, par_file=None):
     dic = read_par(par_file)
 
     # determine shape, complexity and endiness from dictionary
-    fshape = dic["layout"][0]
+    fshape = list(dic["layout"][0])
     cplex = {1:False, 2:True}[dic['nptype'][0]]
+    if cplex:
+        fshape[-1] /= 2
     big = {'<':False, '>':True}[dic['format'][0]]
     data = rnmrtk_nd(filename, fshape, cplex, big)
     return dic, data
