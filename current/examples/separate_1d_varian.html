@@ -1,0 +1,156 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>separate example: separate_1d_varian &mdash; nmrglue 0.4-dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.4-dev documentation" href="../index.html" />
+    <link rel="up" title="Examples" href="index.html" />
+    <link rel="next" title="separate example: separate_2d_varian" href="separate_2d_varian.html" />
+    <link rel="prev" title="process example: process_pipe_3d" href="process_pipe_3d.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="separate_2d_varian.html" title="separate example: separate_2d_varian"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="process_pipe_3d.html" title="process example: process_pipe_3d"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">nmrglue 0.4-dev documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="separate-example-separate-1d-varian">
+<span id="separate-1d-varian"></span><h1>separate example: separate_1d_varian<a class="headerlink" href="#separate-example-separate-1d-varian" title="Permalink to this headline">¶</a></h1>
+<p>This example shows how to use nmrglue to separate Agilent/Varian data
+collected with an innermost parameter interleaved.  The full experimental
+data in the <tt class="docutils literal"><span class="pre">arrayed_data.dir</span></tt> directory is unpacked into a series of
+directories with names <tt class="docutils literal"><span class="pre">tHX_*.fid</span></tt> which can be converted with nmrglue or
+NMRPipe. The name and values of the interleaved parameter is determined from
+the <tt class="docutils literal"><span class="pre">procpar</span></tt> file in the <tt class="docutils literal"><span class="pre">arrayed_data.dir</span></tt> directory.</p>
+<p>The data used in this example is available for
+<a class="reference external" href="http://nmrglue.googlecode.com/files/example_separate_1d_varian.zip">download.</a></p>
+<p>[<a class="reference download internal" href="../_downloads/separate.py"><tt class="xref download docutils literal"><span class="pre">source</span> <span class="pre">code</span></tt></a>]</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#! /usr/bin/env python</span>
+<span class="c"># Separate 1D Agilent/Varian data creating directories based on the </span>
+<span class="c"># array parameter found in the procpar file.</span>
+
+<span class="kn">import</span> <span class="nn">nmrglue</span> <span class="kn">as</span> <span class="nn">ng</span>
+
+<span class="n">dic</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">varian</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&#39;arrayed_data.dir&#39;</span><span class="p">)</span>
+
+<span class="n">dic</span><span class="p">[</span><span class="s">&#39;nblocks&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="n">arrayed_param</span> <span class="o">=</span> <span class="n">dic</span><span class="p">[</span><span class="s">&#39;procpar&#39;</span><span class="p">][</span><span class="s">&#39;array&#39;</span><span class="p">][</span><span class="s">&#39;values&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c"># loop over the echo times, separating and saving each 1D</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">array_val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dic</span><span class="p">[</span><span class="s">&#39;procpar&#39;</span><span class="p">][</span><span class="n">arrayed_param</span><span class="p">][</span><span class="s">&#39;values&#39;</span><span class="p">]):</span>
+    <span class="n">dir_name</span> <span class="o">=</span> <span class="n">arrayed_param</span> <span class="o">+</span> <span class="s">&#39;_&#39;</span> <span class="o">+</span> <span class="n">array_val</span> <span class="o">+</span> <span class="s">&#39;.fid&#39;</span>
+    <span class="k">print</span> <span class="s">&quot;Creating directory:&quot;</span><span class="p">,</span> <span class="n">dir_name</span>
+    <span class="n">ng</span><span class="o">.</span><span class="n">varian</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">dir_name</span><span class="p">,</span> <span class="n">dic</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">overwrite</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="process_pipe_3d.html"
+                        title="previous chapter">process example: process_pipe_3d</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="separate_2d_varian.html"
+                        title="next chapter">separate example: separate_2d_varian</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/separate_1d_varian.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="separate_2d_varian.html" title="separate example: separate_2d_varian"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="process_pipe_3d.html" title="process example: process_pipe_3d"
+             >previous</a> |</li>
+        <li><a href="../index.html">nmrglue 0.4-dev documentation</a> &raquo;</li>
+          <li><a href="index.html" >Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2012, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>
