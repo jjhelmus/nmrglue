@@ -9,6 +9,7 @@ Information of the Rowland NMR Toolkit file format
 """
 
 import numpy as np
+from warnings import warn
 
 from . import fileiobase
 
@@ -36,14 +37,17 @@ def make_uc(dic, data, dim=-1):
         Unit conversion object for given dimension.
 
     """
-    if dim < 0:   # negative dimensions
+    if dim < 0:     # negative dimensions
         dim = data.ndim + dim
     size = data.shape[dim]  # R|I
-    cplx = {1:False, 2:True}[dic['nptype'][dim]]
-    sw = dic['sw'][dim]   # Hz
-    obs = dic['sf'][dim]   # MHz
-    car = dic['zero_freq_ppm'][dim] * dic[obs]   # Hz
+
+    ddim = find_dic_dim(dic, dim)
+    cplx = {'R':False, 'C':True}[dic['nptype'][ddim]]
+    sw = dic['sw'][ddim]   # Hz
+    obs = dic['sf'][ddim]   # MHz
+    car = dic['ppm'][ddim] * dic[obs]   # Hz
     return fileiobase.unit_conversion(size, cplx, sw, obs, car)
+
 
 #################
 # data creation #
@@ -78,15 +82,45 @@ def guess_udic(dic, data):
     udic : dict
         Universal dictionary of spectral parameters.
 
-    """
+    """ 
     # create an empty universal dictionary
-    udic = fileiobase.create_black_udic(data.ndim)
+    ndim = dic['ndim']
+    udic = fileiobase.create_blank_udic(ndim)
+   
+    # fill in parameters from RNMRTK dictionary for each dimension
+    for iudim in xrange(ndim):
 
-    # update the default values
-    # TODO: write this 
+        # find the corresponding dimension in the RNMRTK parameter dictionary 
+        idim = find_dic_dim(dic, iudim)
+
+        udic[iudim]['encoding'] = dic['quad'][idim].lower()  
+        udic[iudim]['car'] = dic['ppm'][idim] * dic['sf'][idim]
+        udic[iudim]['obs'] = dic['sf'][idim] 
+        udic[iudim]['sw'] = dic['sw'][idim]
+        udic[iudim]['size'] = dic['npts'][idim]
+        
+        # set quadrature and correct size 
+        if dic['nptype'][idim] == 'C':
+            if iudim != ndim - 1:
+                udic[iudim]['size'] *= 2    # don't double size of last dim
+            udic[iudim]['complex'] = True
+        else:
+            udic[iudim]['complex'] = False
+
+        # set label to T1 or F1, etc
+        udic[iudim]['label'] = dic['dom'][idim] + str(idim+1)
+        
+        # set time or frequency domain
+        if dic['dom'][idim].upper() == 'T':
+            udic[iudim]['freq'] = False
+            udic[iudim]['time'] = True
+        else:
+            udic[iudim]['freq'] = True
+            udic[iudim]['time'] = False
+    
     return udic
 
-def create_dic(udic):
+def create_dic(udic, dim_order=None):
     """
     Create a RNMRTK dictionary from a universal dictionary.
 
@@ -94,6 +128,10 @@ def create_dic(udic):
     ----------
     udic : dict
         Universal dictionary of spectral parameters.
+    dim_order : list, optional
+        List mapping axis numbers in the universal dictionary to the order
+        in which they will appear in the RNMRTK dictionary.  If None, the
+        default [0, 1, 2, ...] is used.
 
     Returns
     --------
@@ -101,11 +139,71 @@ def create_dic(udic):
         Dictionary of RNMRTK parameters.
 
     """
-    dic = make_empty_dic()
+    
+    # create the RNMRTK dictionary and fill with some default values
+    dic = {}
+    dic['comment'] = ''
+    dic['ndim'] = ndim = int(udic['ndim']) 
+    dic['format'] = np.dtype('float32').str 
+    
+    if dim_order is None:   
+        dim_order = range(ndim) # default to 0, 1, 2, ...
+    
+    # set various parameters from the universal dictionary
+    dic['dom'] = [['F', 'T'][udic[i]['time']] for i in dim_order]
+    dic['nptype'] = [['R', 'C'][udic[i]['complex']] for i in dim_order]
+    dic['ppm'] = [udic[i]['car'] / udic[i]['obs'] for i in dim_order]
+    dic['sf'] = [udic[i]['obs'] for i in dim_order]
+    dic['sw'] = [udic[i]['sw'] for i in dim_order]
+    dic['npts'] = [udic[i]['size'] for i in dim_order] 
+    dic['quad'] = [udic[i]['encoding'].lower() for i in dim_order]
 
-    # TODO
+    # xfirst and xstep are freq domains values, correct later for time domain
+    dic['xfirst'] = [-0.5 * i for i in  dic['sw']]
+    dic['xstep'] = [udic[i]['sw'] / udic[i]['size'] for i in dim_order]
+    
+    # these we guess on, they may be incorrect
+    dic['cphase'] = [0.0] * ndim
+    dic['lphase'] = [0.0] * ndim
+    dic['nacq'] = [udic[i]['size'] for i in dim_order]
+
+    # make small corrections as needed
+    rnmrtk_quads = ['states', 'states-tppi', 'tppi', 'tppi-redfield']
+    for i in range(ndim):
+        
+        # fix quadrature if not a valid RNMRTK quadrature
+        if dic['quad'][i] not in rnmrtk_quads:
+            dic['quad'][i] = 'states'
+        
+        # fix parameters if time domain data 
+        if dic['dom'][i] == 'T':    # time domain data
+            dic['xfirst'][i] = 0.0
+            if dic['quad'][i] in ['states']:
+                # states time domain data
+                dic['xstep'][i] = 1. / dic['sw'][i]
+            else:
+                # tppi time domain data
+                dic['xstep'][i] = 0.5 / dic['sw'][i]
+        
+        # half the number of points if dimension is complex 
+        if dic['nptype'][i] == 'C':
+            dic['npts'][i] /= 2
+        
+    # determine and set layout 
+    size = [udic[i]['size'] for i in range(ndim)]
+    domains = [dic['dom'][i] + str(i+1) for i in range(ndim)]
+    
+    # correct size of last dimension if complex
+    if dic['nptype'][dim_order[-1]] == 'C':
+        dic['npts'][dim_order[-1]] *= 2
+        size[-1] *= 2 
+        if dic['dom'][dim_order[-1]] == 'F':
+            dic['xstep'][dim_order[-1]] /= 2.
+    
+    dic['layout'] = (size, domains) 
+
     return dic
-
+    
 #######################
 # Reading and Writing #
 #######################
@@ -149,7 +247,7 @@ def read(filename, par_file=None):
     # determine sec file parameters from parameter dictionary
     dtype = dic["format"]
     shape = dic["layout"][0]
-    cplex = {1:False, 2:True}[dic['nptype'][0]]
+    cplex = {'R':False, 'C':True}[dic['nptype'][0]]
 
     # read in the data
     data = read_sec(filename, dtype, shape, cplex)
@@ -193,7 +291,7 @@ def read_lowmem(filename, par_file=None):
 
     # determine shape, complexity and endiness from dictionary
     fshape = list(dic["layout"][0])
-    cplex = {1:False, 2:True}[dic['nptype'][0]]
+    cplex = {'R':False, 'C':True}[dic['nptype'][0]]
     if cplex:
         fshape[-1] /= 2
     big = {'<':False, '>':True}[dic['format'][0]]
@@ -526,17 +624,53 @@ class rnmrtk_nd(fileiobase.data_nd):
         f.close()
         return out
 
+##################################
+# Parameter dictionary utilities #
+##################################
+
+def find_dic_dim(dic, dim):
+    """
+    Find dimension in dictionary which corresponds to array dimension.
+    
+    Parameters
+    ----------
+    dic : dict
+        Dictionary of RNMRTK parameters.
+    dim : int, non-negative
+        Dimension of data array.
+
+    Returns
+    -------
+    ddim : int
+        Dimension in dic which corresponds to array dimension, dim.
+    
+    """
+    dic_dims = [int(i[1]) - 1 for i in dic['layout'][1]]
+    return dic_dims.index(dim)
+
+def find_array_dim(dic, ddim):
+    """
+    Find array dimension which corresponds to dictionary dimension.
+    
+    Parameters
+    ----------
+    dic : dict
+        Dictionary of RNMRTK parameters.
+    ddim : int, non-negative
+        Dimension in dictionary.
+
+    Returns
+    -------
+    dim : int
+        Dimension in array which corresponds to dictionary dimension, ddim.
+    
+    """
+    dic_dims = [int(i[1]) for i in dic['layout'][1]]
+    return dic_dims[ddim]
 
 ############################
 # parameter file functions #
 ############################
-
-def find_shape(dic):
-    """ 
-    Determine the data shape (R+I for all dims) from a RNMRTK dictionary.
-    """
-    s = [dic['npts'][i] * dic['nptype'][i] for i in range(dic['ndim'])]
-    return tuple(s[::-1])
 
 def read_par(filename):
     """
@@ -553,26 +687,19 @@ def read_par(filename):
         Dictionary of RNMRTK parameters.
 
     """
-    dic = make_empty_dic()
+    dic = {}
     f = open(filename, 'rb')
     for line in f:
         if len(line.split()) >= 2:
             parse_par_line(line, dic)
-    # reorder dictionary lists per layout
-    ndim = dic['ndim']
-    plist = [int(s[1]) - 1 for s in dic['layout'][1][::-1]] + range(ndim, 4)
-    permute_dic(dic, plist)
-    return dic
+    
+    # check that order and layout match, if they do remove from dictionary
+    if dic['order'] != [int(i[1]) for i in dic['layout'][1]]:
+        warn('Dom order and layout order do not match')
+    else:
+        dic.pop('order')
 
-def permute_dic(dic, plist):
-    """
-    Permute all parameters in dictionary according to plist (4 element list)
-    """
-    lists_keys = ['dom', 'ldim', 'nacq', 'npts', 'nptype', 'p0', 'p1', 'quad',
-                    'sf', 'sw', 'xfirst', 'xstep', 'zero_freq_ppm']
-    for key in lists_keys:
-        dic[key] = [dic[key][i] for i in plist]
-    return 
+    return dic
 
 def write_par(par_file, dic, overwrite):
     """
@@ -589,13 +716,6 @@ def write_par(par_file, dic, overwrite):
         file exists.
 
     """
-    # permute the dictionary so that the ordering is 1,2,...0,0
-    plist = [0, 1, 2, 3]
-    for i, v in enumerate(dic['ldim']):
-        if v != 0:
-            plist[i] = v - 1
-    permute_dic(dic, plist)
-
     # open file for writing
     f = fileiobase.open_towrite(par_file, overwrite)
     
@@ -603,16 +723,12 @@ def write_par(par_file, dic, overwrite):
     f.write('Comment \'' + dic['comment'] + '\'\n')
     
     # Dom line, set from layout
-    ndim = dic['ndim'] 
-    #l = "Dom "+" ".join([dic['dom'][i]+str(i+1) for i in range(ndim)])
     l = "Dom " + " ".join(dic['layout'][1])
     f.write(l + "\n")
     
     # N line
-    npts = dic['npts']
-    str_nptype = [['', 'R', 'C'][i] for i in dic['nptype']]
-    t = [ "%14i %c" % (npts[i], str_nptype[i]) for i in range(ndim)]
-    l = "N".ljust(8) + "".join(t)
+    s = ["%14i %c" % (t) for t in zip(dic['npts'], dic['nptype'])]
+    l = "N".ljust(8) + "".join(s)
     f.write(l + "\n")
 
     # write out additional lines Command    Value lines
@@ -621,17 +737,15 @@ def write_par(par_file, dic, overwrite):
              'Cphase':'%16.3f', 'Lphase':'%16.3f', 'Sf':'%16.2f', 
              'Ppm':'%16.3f', 'Nacq':'%16i'}
      
-    c2d = {'Sw':'sw', 'Xfirst':'xfirst', 'Xstep':'xstep', 'Cphase':'p0',
-           'Lphase':'p1', 'Sf':'sf', 'Ppm':'zero_freq_ppm', 'Nacq':'nacq'}
-
     for lc in order:
-        t = [codes[lc] % (dic[c2d[lc]][i]) for i in range(ndim)]
+        t = [codes[lc] % i for i in dic[lc.lower()]]
         l = lc.ljust(8) + "".join(t)
         f.write(l + "\n")
     
     # Quad line
-    str_quad = [{0:'States', 1:'States-TPPI'}[i] for i in dic['quad']]
-    t = ["%16s" % (str_quad[i]) for i in range(ndim)]
+    quad_dic = {'states':'States', 'states-tppi':'States-TPPI', 'tppi':'TPPI',
+                    'tppi-redfield':'TPPI-Redfield'}
+    t = ["%16s" % (quad_dic[i]) for i in dic['quad']]
     l = "Quad".ljust(8) + "".join(t)
     f.write(l + "\n")
 
@@ -645,8 +759,6 @@ def write_par(par_file, dic, overwrite):
     f.write(l + "\n")
     f.close()
 
-    # permute the dictionary back
-    permute_dic(dic, plist)
     return
 
 def parse_par_line(line, dic):
@@ -659,31 +771,23 @@ def parse_par_line(line, dic):
     if c == 'COMMENT':
         dic['comment'] = pl[0].strip('\'')
     
-    if c == 'DOM':
-        for i, p in enumerate(pl):
-            dic['dom'][int(p[1]) - 1] = p[0]
-        # also update ndim and ldim keys
+    elif c == 'DOM':
+        dom = [s[0] for s in pl]        # dom as it appears in the file
         dic['ndim'] = ndim = len(pl)
-        dic['ldim'][:ndim] = range(1, ndim + 1) # since we have not permuted
+        dic['order'] = order = [int(s[1]) for s in pl]  # dimension order
+        # dom in accending order (to match other parameter)
+        dic['dom'] = [dom[order.index(i)] for i in range(1, ndim + 1)]
 
-    if c == 'N':
-        for i, p in enumerate(pl[::2]):
-            dic['npts'][i] = int(p)
-        for i, p in enumerate(pl[1::2]):
-            dic['nptype'][i] = {'C':2, 'R':1}[p]
+    elif c == 'N':
+        dic['npts'] = [int(i) for i in pl[::2]]
+        dic['nptype'] = list(pl[1::2])
 
-    float_p = { 'SW':'sw', 'XFIRST':'xfirst', 'XSTEP':'xstep', 'CPHASE':'p0',
-                'LPHASE':'p1', 'SF':'sf', 'PPM':'zero_freq_ppm'}
-
-    if c in float_p.keys():
-        for i, p in enumerate(pl):
-            dic[float_p[c]][i] = float(p)
+    elif c in ['SW', 'XFIRST', 'XSTEP', 'CPHASE', 'LPHASE', 'SF', 'PPM']:
+        dic[c.lower()] = [float(i) for i in pl]
     elif c == "NACQ":
-        for i, p in enumerate(pl):
-            dic['nacq'][i] = int(p)
+        dic['nacq'] = [int(i) for i in pl]
     elif c == "QUAD":
-        for i, p in enumerate(pl):
-            dic['quad'][i] = {'States':0, 'States-TPPI':1}[p]
+        dic['quad'] = [str(s).lower() for s in pl]
 
     # format assumes IEEE-Float type, only checks endiness
     elif c == 'FORMAT':
@@ -696,31 +800,3 @@ def parse_par_line(line, dic):
         domains = [p.split(":")[0] for p in pl]
         dic['layout'] = size, domains
     return
-
-def make_empty_dic():
-    """
-    Make an empty RNMRTK parameter dictionary.
-    """
-    dic = { 'pbufptr':0,
-            'cbufptr':0,
-            'npages':0,
-            'pbuf':0,
-            'ndim':0,
-            'ldim':[0, 0, 0, 0],
-            'npts':[1, 1, 1, 1],
-            'nptype':[1, 1, 1, 1],
-            'nacq':[0, 0, 0, 0],
-            'sw':[4000.0, 4000.0, 4000.0, 4000.0],
-            'xfirst':[0.0, 0.0, 0.0, 0.0],
-            'xstep':[1.0/4000.0, 1/4000.0, 1/4000.0, 1/4000.0],
-            'p0':[0.0, 0.0, 0.0, 0.0],
-            'p1':[0.0, 0.0, 0.0, 0.0],
-            'zero_freq_ppm':[4.77, 4.77, 4.77, 4.77],
-            'sf':[399.65, 399.65, 399.65, 399.65], 
-            'quad':[0, 0, 0, 0],
-            'dom':['T', 'T', 'T', 'T'],
-            'comment':'',
-            'format':'<f4',
-            'layout':([], [])
-            }
-    return dic

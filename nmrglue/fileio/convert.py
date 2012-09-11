@@ -11,6 +11,7 @@ from . import pipe
 from . import varian
 from . import bruker
 from . import sparky
+from . import rnmrtk
 from . import fileiobase
 
 class converter(object):
@@ -95,8 +96,8 @@ class converter(object):
 
         if "realfactor" in self._iproc:
             data.real = data.real * self._iproc['realfactor']
-            
-        if "imagfactor" in self._iproc:
+           
+        if "imagfactor" in self._iproc and np.iscomplexobj(data):
             data.imag = data.imag * self._iproc['imagfactor']
 
         # processing for output 
@@ -111,7 +112,7 @@ class converter(object):
         if "realfactor" in self._oproc:
             data.real = data.real * self._oproc['realfactor']
             
-        if "imagfactor" in self._oproc:
+        if "imagfactor" in self._oproc and np.iscomplexobj(data):
             data.imag = data.imag * self._oproc['imagfactor']
 
         return data.astype(self._odtype)
@@ -162,6 +163,37 @@ class converter(object):
             self._udic = udic
         else:
             self._udic = varian.guess_udic(dic, data) 
+
+    def from_rnmrtk(self, dic, data, udic=None, agilent_compatible=False):
+        """ 
+        Load converter with RNMRTK data.
+
+        Parameters
+        ----------
+        dic : dict
+            Dictionary of RNMRTK parameters.
+        data : array_like
+            NMR data.
+        udic : dict, optional
+            Universal dictionary, if not provided will be guesses from dic.
+        agilent_compatible : bool, optional
+            True when RNMRTK data is being compared to Agilent/Varian data.
+
+        """
+        # set data
+        self._data = data
+
+        # set input processing filters.
+        if agilent_compatible:
+            self._iproc = {"alt_id_sign":True, "imagfactor":-1.0}
+        else:
+            self._iproc = {}
+
+        # set the universal dictionary
+        if udic != None:
+            self._udic = udic
+        else:
+            self._udic = rnmrtk.guess_udic(dic, data) 
 
     def from_pipe(self, dic, data, udic=None):
         """ 
@@ -280,6 +312,44 @@ class converter(object):
 
         # add processing flags for output
         self._oproc = {}
+        if self._udic[self._udic["ndim"] - 1]["complex"]:
+            self._odtype = "complex64"
+        else:
+            self._odtype = "float32"
+
+        return dic, self.__returndata()
+
+    def to_rnmrtk(self, agilent_compatible=False, dim_order=None):
+        """
+        Return RNMRTK format data.
+
+        Parameters
+        ----------
+        agilent_compatible : bool, optional
+            True when RNMRTK data is being compared to Agilent/Varian data.
+        dim_order : list, optional
+            List mapping axis numbers in the universal dictionary to the to the
+            order in which they will appear in the RNMRTK dictionary.  If None,
+            the default, [0, 1, 2, ...] will be used.
+        
+
+        Returns
+        -------
+        dic : dict
+            Dictionary of RNMRTK parameters.
+        data : array_like
+            NMR data in RNMRTK format.
+
+        """
+        # create dictionary
+        dic = rnmrtk.create_dic(self._udic)
+
+        # add processing flags for output
+        if agilent_compatible:
+            self._oproc = {"alt_id_sign":True, "imagfactor":-1.0}
+        else:
+            self._oproc = {}
+
         if self._udic[self._udic["ndim"] - 1]["complex"]:
             self._odtype = "complex64"
         else:

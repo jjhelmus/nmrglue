@@ -1,62 +1,32 @@
 Items to do before article is published
 =======================================
 
-1. Update inline documentation on all user functions and classes to match scipy
-documentation standards.  DONE
-
-pipe_proc       Done        References to low level function/ better
-                            description
-proc_base       Done        Additional doc, which functions good for any dim?
-proc_bl         Done        Flesh out sol_* functions?
-
-helpers         Done        Better docs?
-lineshapes1d    Done        Warnings b/c __init__,  .. math:: for lineshapes?
-peakpick        Done        Links to picking algorithms
-segmentation    Done        See Alsos?
-
-
-2. Unit tests for all modules which use nose.  Make data needed for these unit
-test available for download.
-
-Module      Unit Test (5 /21)       Notes 
-------      -----------------       -----
-bruker      Done                    Example data is bruker_data.tar (91 MB) 
-convert     Done                    TOO BIG, generate from conversion scripts.  
-fileiobase  None Needed             No tests needed      
-glue        Skipped                 Not imported          
-pipe        Done                    TOO BIG, generate from conversion scripts.
-rnmrtk          
-sparky      Done                    TOO BIG, generate from conversion scripts.
-table       
-varian      Done                    Example data is agilent_data.tar (135 MB)
-
-pipe_proc       
-proc_base       
-proc_bl         
-proc_lp         
-
-analysisbase    None Needed         No tests needed    
-helpers         
-leastsqbound    
-lineshapes1d    
-linesh          
-peakpick        
-segmentation    
-
-misc
-
-3. Check over examples, prune, update and add as needed.  Add links to raw 
+1. Check over examples, prune, update and add as needed.  Add links to raw 
 data.  Add examples of spectral analysis (peak picking, lineshape fitting).
 Add T1 measurements and TEDOR fitting?  Linear prediction, peak picking,
 fitting and segmentation examples.
 
 Find way to include t1_fitting data...
 
-4. Rewrite tutorial, include mention of analysis module.
+2. Rewrite tutorial, include mention of analysis module.
 
-5. Release version 0.3, check installer on Linux, Windows, and OS-X.  Update
-install script, grep for XXX in all files and update pyPI record. Record
-example data.
+3. Finish rnmrtk modules and related tests.
+
+    Code guess_udic - DONE
+    Code create dic - DONE
+    Add to convert (to_rnmrtk and from_rnmrtk) - DONE 
+    Add the following tests to test_convert - partial
+        varian <-> rnmrtk   - DONE 
+        rnmrtk <-> rnmrtk   - DONE (in both)
+        rnmrtk <-> nmrpipe  - DONE
+    Readthrough
+    Check docs
+
+
+4. Release version 0.4 and write release instructions, check installer on 
+Linux, Windows, and OS-X.  Update install script, grep for XXX in all files
+and update pyPI record.
+
 
 
 To Do and other updates post journal article.
@@ -73,7 +43,6 @@ nmrglue
 
     filio
     -----
-    - replicate varian namespace as agilent namespace.
     - finish writing, documenting and testing rnmrtk module.
     - lowmemory (in-place) writing of regions of data.
         Use data_nd functionality with put_slice.
@@ -82,7 +51,7 @@ nmrglue
     - update glue module?
     - sparky_nd object? or dimension agnostic functions?
     - spinev module?
-    - simpson module?
+    - simpson module
 
     gui? 
     ----
@@ -100,7 +69,48 @@ nmrglue
     - profile processing and optimize
     - poly_td and poly_fd in proc_bl.py
 
+test
+----
+
+-   The following modules do not have tests, decide how to test them and where
+    such tests belong:
+
+Module          Notes
+------          ------
+fileiobase      Tested       
+glue            Not currently imported      
+rnmrtk          
+table       
+proc_base       Partially tested with pipe_proc test     
+proc_bl         Partially tested with pipe_proc test
+proc_lp         Partially tested with pipe_proc test
+analysisbase    No tests needed    
+helpers         
+leastsqbound    
+lineshapes1d    
+linesh          
+peakpick        
+segmentation    
+misc
+
+- Check coverage on current tests, get to 80%+
+- Create unit tests?
+
+
+doc
+---
+
+-   pipe_proc: Add References to low level function / better description
+-   proc_base : Additional documentation, indication which functions work on 
+    arbitrary dimensional data.
+-   proc_bl : Flesh out the sol_* functions?
+-   helpers : Better documentation, examples?
+-   lineshapes1d : fix warning during build caused by missing __init__ methods, 
+    add .. math:: in lineshape documentation?
+-   peakpick : Add links to the picking algorithms.
+-   segmentation : Add See Also sections?
 
 Other thoughts
 --------------
-- Unix like commands (coadd_pipe, unarray_varian, ...)
+- Unix like commands (coadd_pipe, seperate_varian, ...)
+- GUI to create conversions scripts

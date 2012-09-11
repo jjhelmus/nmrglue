@@ -89,12 +89,67 @@ def check_pdic(dic1, dic2, exclude=None, v=False):
         else:
             assert abs(dic1[k] - dic2[k]) <= 0.002
 
+def check_rdic(dic1, dic2, ndim, exclude=None, v=True):
+    """ Compare two RNMRTK parameter dictionaries up to dimension ndim"""
+    if exclude is None:
+        exclude = []
+
+    non_list_keys = ['comment', 'format', 'ndim', 'layout']
+    list_keys = ['dom', 'nacq', 'npts', 'nptype', 'cphase', 'lphase', 'quad',
+                    'sf', 'sw', 'xfirst', 'xstep', 'ppm']
+    
+    # check keys which are not lists
+    for k in non_list_keys:
+        if k in exclude:
+            continue
+        if v:
+            if dic1[k] != dic2[k]:
+                print k, dic1[k], dic2[k]
+        assert dic1[k] == dic2[k]
+
+    # check keys which are lists for first ndim parameters
+    for k in list_keys:
+        if k in exclude:
+            continue
+        for i in xrange(ndim):
+            if k in ['dom', 'nptype', 'quad']:  # these are strings
+                if v:
+                    if dic1[k][i] != dic2[k][i]:
+                        print k, i, dic1[k][i], dic2[k][i]
+                assert dic1[k][i] == dic2[k][i]
+                continue
+            
+            if v:
+                if abs(dic1[k][i] - dic2[k][i]) > abs(dic1[k][i] / 1000.):
+                    print k, i, dic1[k][i], dic2[k][i]
+                if abs(dic1[k][i] - dic2[k][i]) > abs(dic2[k][i] / 1000.):
+                    print k, i, dic1[k][i], dic2[k][i]
+            assert abs(dic1[k][i] - dic2[k][i]) <= abs(dic1[k][i] / 1000.)
+            assert abs(dic1[k][i] - dic2[k][i]) <= abs(dic2[k][i] / 1000.)
+    return
 
 
 bad_varian_keys = ["procpar"]
 bad_pipe_keys = ["FDYEAR", "FDMONTH", "FDDAY", "FDHOURS", "FDMINS", "FDSECS"]
 bad_bruker_keys = ["pprog", "acqus", "acqu2s"]
 bad_sparky_keys = ['bsize', 'extended', 'date', 'owner']
+#bad_rnmrtk_keys = ['layout', 'comment', 'p0', 'p1']
+bad_rnmrtk_keys = ['nacq', 'cphase', 'lphase']
+
+# keys which are bad because rnmrtk sets them incorrect when outputting NMRPipe
+# formatted data
+bad_rnmrtk2pipe_keys = ["FDF1LABEL", "FDF2LABEL", "FDF3LABEL", "FDF4LABEL",
+    "FDF1QUADFLAG", "FDF2QUADFLAG", "FDF3QUADFLAG", "FDF4QUADFLAG",
+    "FDDIMORDER1", "FDDIMORDER2", "FDDIMORDER3", "FDDIMORDER4",
+    "FDF1P0", "FDF2P0", "FDF3P0", "FDF4P0",
+    "FDF1P1", "FDF2P1", "FDF3P1", "FDF4P1",
+    "FDF1SIZE", "FDF2SIZE", "FDF3SIZE", "FDF4SIZE",
+    "FDF1TDSIZE", "FDF2TDSIZE", "FDF3TDSIZE", "FDF4TDSIZE",
+    "FDF1APOD", "FDF2APOD", "FDF3APOD", "FDF4APOD",
+    "FDF1CENTER", "FDF2CENTER", "FDF3CENTER", "FDF4CENTER",
+    "FDF1UNITS", "FDF2UNITS", "FDF3UNITS", "FDF4UNITS", 
+    "FDDIMORDER", "FDREALSIZE", "FDFLTFORMAT", "FD2DVIRGIN", "FDPIPEFLAG",
+    "FDCOMMENT", "FD2DPHASE", "FDFILECOUNT"]
 
 # tests
 
@@ -161,6 +216,59 @@ def test_agilent_1d():
     check_dic(vdic, cdic, bad_varian_keys)
     shutil.rmtree(td)
 
+def test_agilent_1d_rnmrtk():
+    """ 1D time agilent, rnmrtk <-> rnmrtk """
+    # prepare agilent converter
+    vdic, vdata = ng.varian.read(DATA_DIR + "agilent_1d")
+    uvdic = ng.varian.guess_udic(vdic, vdata)
+    vC = ng.convert.converter()
+    vC.from_varian(vdic, vdata, uvdic)
+
+    # prepare rnmrtk converter
+    rdic, rdata = ng.rnmrtk.read(DATA_DIR + "rnmrtk_1d/time_1d.sec")
+    urdic = ng.rnmrtk.guess_udic(rdic, rdata)
+    rC = ng.convert.converter()
+    rC.from_rnmrtk(rdic, rdata, urdic, agilent_compatible=True)
+
+    # agilent -> rnmrtk
+    cdic, cdata = vC.to_rnmrtk(agilent_compatible=True)
+    assert_array_equal(rdata, cdata)
+    #check_rdic(rdic, cdic, 1, bad_rnmrtk_keys)     # XXX do not check
+    # write and readback
+    tf = tempfile.mktemp(suffix='.sec', dir='.')
+    ng.rnmrtk.write(tf, cdic, cdata)
+    rrdic, rrdata = ng.rnmrtk.read(tf)
+    assert_array_equal(cdata, rrdata)
+    check_rdic(cdic, rrdic, 1)
+    os.remove(tf)
+    os.remove(tf.replace('.sec', '.par'))
+
+    # rnmrtk -> rnmrtk
+    cdic, cdata = rC.to_rnmrtk(agilent_compatible=True)
+    assert_array_equal(rdata, cdata)
+    check_rdic(rdic, cdic, 1, bad_rnmrtk_keys)
+    # write and readback
+    tf = tempfile.mktemp(suffix='.sec', dir='.')
+    ng.rnmrtk.write(tf, cdic, cdata)
+    rrdic, rrdata = ng.rnmrtk.read(tf)
+    assert_array_equal(rdata, rrdata)
+    check_rdic(rdic, rrdic, 1, bad_rnmrtk_keys)
+    os.remove(tf)
+    os.remove(tf.replace('.sec', '.par'))
+
+    # rnmrtk -> agilent
+    cdic, cdata = rC.to_varian()
+    assert_array_equal(vdata, cdata)
+    check_dic(vdic, cdic, bad_varian_keys)
+    # write and readback
+    td = tempfile.mkdtemp(dir=".")
+    ng.varian.write(td, cdic, cdata)
+    rrdic, rrdata = ng.varian.read(td)
+    assert_array_equal(vdata, rrdata)
+    check_dic(vdic, cdic, bad_varian_keys)
+    shutil.rmtree(td)
+
+
 def test_agilent_2d():
     """ 2D time agilent, pipe <-> agilent, pipe """
     # prepare Varian converter
@@ -220,6 +328,58 @@ def test_agilent_2d():
     ng.varian.write(td, cdic, cdata)
     rdic, rdata = ng.varian.read(td)
     assert_array_equal(vdata, rdata)
+    check_dic(vdic, cdic, bad_varian_keys)
+    shutil.rmtree(td)
+
+def test_agilent_2d_rnmrtk():
+    """ 2D time agilent, rnmrtk <-> rnmrtk """
+    # prepare agilent converter
+    vdic, vdata = ng.varian.read(DATA_DIR + "agilent_2d")
+    uvdic = ng.varian.guess_udic(vdic, vdata)
+    vC = ng.convert.converter()
+    vC.from_varian(vdic, vdata, uvdic)
+
+    # prepare rnmrtk converter
+    rdic, rdata = ng.rnmrtk.read(DATA_DIR + "rnmrtk_2d/time_2d.sec")
+    urdic = ng.rnmrtk.guess_udic(rdic, rdata)
+    rC = ng.convert.converter()
+    rC.from_rnmrtk(rdic, rdata, urdic, agilent_compatible=True)
+
+    # agilent -> rnmrtk
+    cdic, cdata = vC.to_rnmrtk(agilent_compatible=True)
+    assert_array_equal(rdata, cdata)
+    #check_rdic(rdic, cdic, 2, bad_rnmrtk_keys)     # XXX do not check
+    # write and readback
+    tf = tempfile.mktemp(suffix='.sec', dir='.')
+    ng.rnmrtk.write(tf, cdic, cdata)
+    rrdic, rrdata = ng.rnmrtk.read(tf)
+    assert_array_equal(cdata, rrdata)
+    check_rdic(cdic, rrdic, 2)
+    os.remove(tf)
+    os.remove(tf.replace('.sec', '.par'))
+
+    # rnmrtk -> rnmrtk
+    cdic, cdata = rC.to_rnmrtk(agilent_compatible=True)
+    assert_array_equal(rdata, cdata)
+    check_rdic(rdic, cdic, 2, bad_rnmrtk_keys)
+    # write and readback
+    tf = tempfile.mktemp(suffix='.sec', dir='.')
+    ng.rnmrtk.write(tf, cdic, cdata)
+    rrdic, rrdata = ng.rnmrtk.read(tf)
+    assert_array_equal(rdata, rrdata)
+    check_rdic(rdic, rrdic, 2, bad_rnmrtk_keys)
+    os.remove(tf)
+    os.remove(tf.replace('.sec', '.par'))
+
+    # rnmrtk -> agilent
+    cdic, cdata = rC.to_varian()
+    assert_array_equal(vdata, cdata)
+    check_dic(vdic, cdic, bad_varian_keys)
+    # write and readback
+    td = tempfile.mkdtemp(dir=".")
+    ng.varian.write(td, cdic, cdata)
+    rrdic, rrdata = ng.varian.read(td)
+    assert_array_equal(vdata, rrdata)
     check_dic(vdic, cdic, bad_varian_keys)
     shutil.rmtree(td)
 
@@ -293,6 +453,58 @@ def test_agilent_3d():
     check_dic(vdic, cdic, bad_varian_keys)
     shutil.rmtree(td)
 
+def test_agilent_3d_rnmrtk():
+    """ 3D time agilent, rnmrtk <-> rnmrtk """
+    # prepare agilent converter
+    vdic, vdata = ng.varian.read(DATA_DIR + "agilent_3d")
+    uvdic = ng.varian.guess_udic(vdic, vdata)
+    vC = ng.convert.converter()
+    vC.from_varian(vdic, vdata, uvdic)
+
+    # prepare rnmrtk converter
+    rdic, rdata = ng.rnmrtk.read(DATA_DIR + "rnmrtk_3d/time_3d.sec")
+    urdic = ng.rnmrtk.guess_udic(rdic, rdata)
+    rC = ng.convert.converter()
+    rC.from_rnmrtk(rdic, rdata, urdic, agilent_compatible=True)
+
+    # agilent -> rnmrtk
+    cdic, cdata = vC.to_rnmrtk(agilent_compatible=True)
+    assert_array_equal(rdata, cdata)
+    #check_rdic(rdic, cdic, 3, bad_rnmrtk_keys)     # XXX do not check
+    # write and readback
+    tf = tempfile.mktemp(suffix='.sec', dir='.')
+    ng.rnmrtk.write(tf, cdic, cdata)
+    rrdic, rrdata = ng.rnmrtk.read(tf)
+    assert_array_equal(cdata, rrdata)
+    check_rdic(cdic, rrdic, 3)
+    os.remove(tf)
+    os.remove(tf.replace('.sec', '.par'))
+
+    # rnmrtk -> rnmrtk
+    cdic, cdata = rC.to_rnmrtk(agilent_compatible=True)
+    assert_array_equal(rdata, cdata)
+    check_rdic(rdic, cdic, 3, bad_rnmrtk_keys)
+    # write and readback
+    tf = tempfile.mktemp(suffix='.sec', dir='.')
+    ng.rnmrtk.write(tf, cdic, cdata)
+    rrdic, rrdata = ng.rnmrtk.read(tf)
+    assert_array_equal(rdata, rrdata)
+    check_rdic(rdic, rrdic, 3, bad_rnmrtk_keys)
+    os.remove(tf)
+    os.remove(tf.replace('.sec', '.par'))
+
+    # rnmrtk -> agilent
+    cdic, cdata = rC.to_varian()
+    assert_array_equal(vdata, cdata)
+    check_dic(vdic, cdic, bad_varian_keys)
+    # write and readback
+    td = tempfile.mkdtemp(dir=".")
+    ng.varian.write(td, cdic, cdata)
+    rrdic, rrdata = ng.varian.read(td)
+    assert_array_equal(vdata, rrdata)
+    check_dic(vdic, cdic, bad_varian_keys)
+    shutil.rmtree(td)
+
 def test_bruker_1d():
     """ 1D time bruker, pipe <-> bruker, pipe """
     # prepare Bruker converter
@@ -357,6 +569,59 @@ def test_bruker_1d():
     assert_array_equal(bdata, rdata)
     check_dic(bdic, cdic, bad_bruker_keys)
     shutil.rmtree(td)
+
+def test_bruker_1d_rnmrtk():
+    """ 1D time bruker, rnmrtk <-> rnmrtk """
+    # prepare Bruker converter
+    bdic, bdata = ng.bruker.read(DATA_DIR + "bruker_1d")
+    ubdic = ng.bruker.guess_udic(bdic, bdata)
+    bC = ng.convert.converter()
+    bC.from_bruker(bdic, bdata, ubdic)
+
+    # prepare Pipe converter
+    rdic, rdata = ng.rnmrtk.read(DATA_DIR + "bruker_1d/time_1d.sec")
+    urdic = ng.rnmrtk.guess_udic(rdic, rdata)
+    rC = ng.convert.converter()
+    rC.from_rnmrtk(rdic, rdata, urdic)
+
+    # bruker -> rnmrtk
+    cdic, cdata = bC.to_rnmrtk()
+    assert_array_equal(rdata, cdata)
+    #check_rdic(rdic, cdic, 1)   # XXX don't check dictionary
+    # write and readback
+    tf = tempfile.mktemp(suffix='.sec', dir='.')
+    ng.rnmrtk.write(tf, cdic, cdata)
+    rrdic, rrdata = ng.rnmrtk.read(tf)
+    assert_array_equal(rdata, rrdata)
+    #check_pdic(rdic, rrdic , 1)   # XXX don't check dictionary
+    os.remove(tf)
+    os.remove(tf.replace('.sec', '.par'))
+
+    # rnmrtk -> rnmrtk
+    cdic, cdata = rC.to_rnmrtk()
+    assert_array_equal(rdata, cdata)
+    check_rdic(rdic, cdic, 1, bad_rnmrtk_keys)
+    # write and readback
+    tf = tempfile.mktemp(suffix='.sec', dir='.')
+    ng.rnmrtk.write(tf, cdic, cdata)
+    rrdic, rrdata = ng.rnmrtk.read(tf)
+    assert_array_equal(rdata, rrdata)
+    check_rdic(rdic, rrdic, 1, bad_rnmrtk_keys)
+    os.remove(tf)
+    os.remove(tf.replace('.sec', '.par'))
+
+    # rnmrtk -> bruker
+    cdic, cdata = rC.to_bruker()
+    assert_array_equal(bdata, cdata)
+    check_dic(bdic, cdic, bad_bruker_keys)
+    # write and readback
+    td = tempfile.mkdtemp(dir=".")
+    ng.bruker.write(td, cdic, cdata)
+    rdic, rdata = ng.bruker.read(td)
+    assert_array_equal(bdata, rdata)
+    check_dic(bdic, cdic, bad_bruker_keys)
+    shutil.rmtree(td)
+
 
 def test_bruker_2d():
     """ 2D time bruker, pipe <-> bruker, pipe """
@@ -423,6 +688,59 @@ def test_bruker_2d():
     assert_array_equal(bdata, rdata)
     check_dic(bdic, cdic, bad_bruker_keys)
     shutil.rmtree(td)
+
+def test_bruker_2d_rnmrtk():
+    """ 2D time bruker, rnmrtk <-> rnmrtk """
+    # prepare Bruker converter
+    bdic, bdata = ng.bruker.read(DATA_DIR + "bruker_2d")
+    ubdic = ng.bruker.guess_udic(bdic, bdata)
+    bC = ng.convert.converter()
+    bC.from_bruker(bdic, bdata, ubdic)
+
+    # prepare Pipe converter
+    rdic, rdata = ng.rnmrtk.read(DATA_DIR + "bruker_2d/time_2d.sec")
+    urdic = ng.rnmrtk.guess_udic(rdic, rdata)
+    rC = ng.convert.converter()
+    rC.from_rnmrtk(rdic, rdata, urdic)
+
+    # bruker -> rnmrtk
+    cdic, cdata = bC.to_rnmrtk()
+    assert_array_equal(rdata, cdata)
+    #check_rdic(rdic, cdic, 1)   # XXX don't check dictionary
+    # write and readback
+    tf = tempfile.mktemp(suffix='.sec', dir='.')
+    ng.rnmrtk.write(tf, cdic, cdata)
+    rrdic, rrdata = ng.rnmrtk.read(tf)
+    assert_array_equal(rdata, rrdata)
+    #check_pdic(rdic, rrdic , 1)   # XXX don't check dictionary
+    os.remove(tf)
+    os.remove(tf.replace('.sec', '.par'))
+
+    # rnmrtk -> rnmrtk
+    cdic, cdata = rC.to_rnmrtk()
+    assert_array_equal(rdata, cdata)
+    check_rdic(rdic, cdic, 2, bad_rnmrtk_keys)
+    # write and readback
+    tf = tempfile.mktemp(suffix='.sec', dir='.')
+    ng.rnmrtk.write(tf, cdic, cdata)
+    rrdic, rrdata = ng.rnmrtk.read(tf)
+    assert_array_equal(rdata, rrdata)
+    check_rdic(rdic, rrdic, 2, bad_rnmrtk_keys)
+    os.remove(tf)
+    os.remove(tf.replace('.sec', '.par'))
+
+    # rnmrtk -> bruker
+    cdic, cdata = rC.to_bruker()
+    assert_array_equal(bdata, cdata)
+    check_dic(bdic, cdic, bad_bruker_keys)
+    # write and readback
+    td = tempfile.mkdtemp(dir=".")
+    ng.bruker.write(td, cdic, cdata)
+    rdic, rdata = ng.bruker.read(td)
+    assert_array_equal(bdata, rdata)
+    check_dic(bdic, cdic, bad_bruker_keys)
+    shutil.rmtree(td)
+
 
 def test_bruker_3d():
     """ 3D time bruker, pipe <-> bruker, pipe """
@@ -496,6 +814,60 @@ def test_bruker_3d():
     assert_array_equal(bdata, rdata)
     check_dic(bdic, cdic, bad_bruker_keys)
     shutil.rmtree(td)
+
+def test_bruker_3d_rnmrtk():
+    """ 3D time bruker, rnmrtk <-> rnmrtk """
+    # prepare Bruker converter
+    bdic, bdata = ng.bruker.read(DATA_DIR + "bruker_3d")
+    ubdic = ng.bruker.guess_udic(bdic, bdata)
+    bC = ng.convert.converter()
+    bC.from_bruker(bdic, bdata, ubdic)
+
+    # prepare Pipe converter
+    rdic, rdata = ng.rnmrtk.read(DATA_DIR + "bruker_3d/time_3d.sec")
+    urdic = ng.rnmrtk.guess_udic(rdic, rdata)
+    rC = ng.convert.converter()
+    rC.from_rnmrtk(rdic, rdata, urdic)
+
+    # bruker -> rnmrtk
+    cdic, cdata = bC.to_rnmrtk()
+    assert_array_equal(rdata, cdata)
+    #check_rdic(rdic, cdic, 3)   # XXX don't check dictionary
+    # write and readback
+    tf = tempfile.mktemp(suffix='.sec', dir='.')
+    ng.rnmrtk.write(tf, cdic, cdata)
+    rrdic, rrdata = ng.rnmrtk.read(tf)
+    assert_array_equal(rdata, rrdata)
+    #check_pdic(rdic, rrdic , 3)   # XXX don't check dictionary
+    os.remove(tf)
+    os.remove(tf.replace('.sec', '.par'))
+
+    # rnmrtk -> rnmrtk
+    cdic, cdata = rC.to_rnmrtk()
+    assert_array_equal(rdata, cdata)
+    check_rdic(rdic, cdic, 3, bad_rnmrtk_keys)
+    # write and readback
+    tf = tempfile.mktemp(suffix='.sec', dir='.')
+    ng.rnmrtk.write(tf, cdic, cdata)
+    rrdic, rrdata = ng.rnmrtk.read(tf)
+    assert_array_equal(rdata, rrdata)
+    check_rdic(rdic, rrdic, 3, bad_rnmrtk_keys)
+    os.remove(tf)
+    os.remove(tf.replace('.sec', '.par'))
+
+    # rnmrtk -> bruker
+    cdic, cdata = rC.to_bruker()
+    assert_array_equal(bdata, cdata)
+    check_dic(bdic, cdic, bad_bruker_keys)
+    # write and readback
+    td = tempfile.mkdtemp(dir=".")
+    ng.bruker.write(td, cdic, cdata)
+    rdic, rdata = ng.bruker.read(td)
+    assert_array_equal(bdata, rdata)
+    check_dic(bdic, cdic, bad_bruker_keys)
+    shutil.rmtree(td)
+
+
 
 def test_sparky_2d():
     """ 2D freq sparky, pipe <-> sparky, pipe """
@@ -1135,6 +1507,211 @@ def test_agilent_3d_lowmem():
     assert_array_equal(vdata[0:3, 0:4, 0:20], rdata[0:3, 0:4, 0:20])
     check_dic(vdic, cdic, bad_varian_keys)
     shutil.rmtree(td)
+
+
+def test_rnmrtk_1d():
+    """ 1D freq rnmrtk, pipe <-> rnmrtk, pipe """
+    
+    # prepare rnmrtk converter
+    rdic, rdata = ng.rnmrtk.read(DATA_DIR + "rnmrtk_1d/freq_1d.sec")
+    urdic = ng.rnmrtk.guess_udic(rdic, rdata)
+    rC = ng.convert.converter()
+    rC.from_rnmrtk(rdic, rdata, urdic)
+
+    # prepare Pipe converter
+    pdic, pdata = ng.pipe.read(DATA_DIR + "rnmrtk_1d/test.ft")
+    updic = ng.pipe.guess_udic(pdic, pdata)
+    pC = ng.convert.converter()
+    pC.from_pipe(pdic, pdata, updic)
+
+    # rnmrtk -> rnmrtk
+    cdic, cdata = rC.to_rnmrtk()
+    assert_array_equal(rdata, cdata)
+    check_rdic(rdic, cdic, 1, exclude=bad_rnmrtk_keys)
+    # write and readback
+    tf = tempfile.mktemp(suffix='.sec', dir='.')
+    ng.rnmrtk.write(tf, cdic, cdata)
+    rrdic, rrdata = ng.rnmrtk.read(tf)
+    assert_array_equal(cdata, rrdata)
+    check_rdic(rdic, rrdic, 1, exclude=bad_rnmrtk_keys) 
+    os.remove(tf)
+    os.remove(tf.replace('.sec', '.par'))
+
+    # rnmrtk -> pipe
+    cdic, cdata = rC.to_pipe()
+    assert_array_equal(pdata, cdata)
+    check_pdic(pdic, cdic, bad_pipe_keys + bad_rnmrtk2pipe_keys, v=True)
+    # write and readback
+    tf = tempfile.mktemp(dir=".")
+    ng.pipe.write(tf, cdic, cdata)
+    rrdic, rrdata = ng.pipe.read(tf)
+    assert_array_equal(pdata, rrdata)
+    check_pdic(pdic, cdic, bad_pipe_keys + bad_rnmrtk2pipe_keys, v=True)
+    os.remove(tf)
+
+    # pipe -> pipe
+    cdic, cdata = pC.to_pipe()
+    assert_array_equal(pdata, cdata[:]) 
+    check_pdic(pdic, cdic, bad_pipe_keys + bad_rnmrtk2pipe_keys, v=True)
+    # write and readback
+    tf = tempfile.mktemp(dir=".")
+    ng.pipe.write(tf, cdic, cdata)
+    rrdic, rrdata = ng.pipe.read(tf)
+    assert_array_equal(pdata, rrdata[:])
+    check_pdic(pdic, cdic, bad_pipe_keys + bad_rnmrtk2pipe_keys, v=True)
+    os.remove(tf)
+
+    # pipe -> rnmrtk
+    cdic, cdata = pC.to_rnmrtk()
+    assert_array_equal(rdata, cdata)
+    check_rdic(rdic, cdic, 1, exclude=bad_rnmrtk_keys)
+    # write and readback
+    tf = tempfile.mktemp(suffix='.sec', dir='.')
+    ng.rnmrtk.write(tf, cdic, cdata)
+    rrdic, rrdata = ng.rnmrtk.read(tf)
+    assert_array_equal(rrdata, rdata)
+    check_rdic(rdic, rrdic, 1, exclude=bad_rnmrtk_keys)
+    os.remove(tf)
+    os.remove(tf.replace('.sec', '.par'))
+
+def test_rnmrtk_2d():
+    """ 2D freq rnmrtk, pipe <-> rnmrtk, pipe """
+    
+    # prepare rnmrtk converter
+    rdic, rdata = ng.rnmrtk.read(DATA_DIR + "rnmrtk_2d/freq_2d.sec")
+    urdic = ng.rnmrtk.guess_udic(rdic, rdata)
+    rC = ng.convert.converter()
+    rC.from_rnmrtk(rdic, rdata, urdic)
+
+    # prepare pipe converter
+    pdic, pdata = ng.pipe.read(DATA_DIR + "rnmrtk_2d/test.ft2")
+    updic = ng.pipe.guess_udic(pdic, pdata)
+    pC = ng.convert.converter()
+    pC.from_pipe(pdic, pdata, updic)
+
+    # rnmrtk -> rnmrtk
+    cdic, cdata = rC.to_rnmrtk()
+    assert_array_equal(rdata, cdata)
+    check_rdic(rdic, cdic, 2, exclude=bad_rnmrtk_keys)
+    # write and readback
+    tf = tempfile.mktemp(suffix='.sec', dir='.')
+    ng.rnmrtk.write(tf, cdic, cdata)
+    rrdic, rrdata = ng.rnmrtk.read(tf)
+    assert_array_equal(cdata, rrdata)
+    check_rdic(rdic, rrdic, 2, exclude=bad_rnmrtk_keys)
+    os.remove(tf)
+    os.remove(tf.replace('.sec', '.par'))
+
+    # rnmrtk -> pipe
+    cdic, cdata = rC.to_pipe()
+    assert_array_equal(pdata, cdata)
+    check_pdic(pdic, cdic, bad_pipe_keys + bad_rnmrtk2pipe_keys, v=True)
+    # write and readback
+    tf = tempfile.mktemp(dir=".")
+    ng.pipe.write(tf, cdic, cdata)
+    rrdic, rrdata = ng.pipe.read(tf)
+    assert_array_equal(pdata, rrdata)
+    check_pdic(pdic, cdic, bad_pipe_keys + bad_rnmrtk2pipe_keys, v=True)
+    os.remove(tf)
+
+    # pipe -> pipe
+    cdic, cdata = pC.to_pipe()
+    assert_array_equal(pdata, cdata[:])
+    check_pdic(pdic, cdic, bad_pipe_keys + bad_rnmrtk2pipe_keys, v=True) 
+    # write and readback
+    tf = tempfile.mktemp(dir=".")
+    ng.pipe.write(tf, cdic, cdata)
+    rrdic, rrdata = ng.pipe.read(tf)
+    assert_array_equal(pdata, rrdata[:])
+    check_pdic(pdic, cdic, bad_pipe_keys + bad_rnmrtk2pipe_keys, v=True) 
+    os.remove(tf)
+
+    # pipe -> rnmrtk
+    cdic, cdata = pC.to_rnmrtk()
+    assert_array_equal(rdata, cdata)
+    check_rdic(rdic, cdic, 2, exclude=bad_rnmrtk_keys)
+    # write and readback
+    tf = tempfile.mktemp(suffix='.sec', dir='.')
+    ng.rnmrtk.write(tf, cdic, cdata)
+    rrdic, rrdata = ng.rnmrtk.read(tf)
+    assert_array_equal(rrdata, rdata)
+    check_rdic(rdic, rrdic, 2, exclude=bad_rnmrtk_keys)
+    os.remove(tf)
+    os.remove(tf.replace('.sec', '.par'))
+
+def test_rnmrtk_3d():
+    """ 3D freq rnmrtk, pipe <-> rnmrtk, pipe """
+    
+    # prepare rnmrtk converter
+    rdic, rdata = ng.rnmrtk.read(DATA_DIR + "rnmrtk_3d/freq_3d.sec")
+    urdic = ng.rnmrtk.guess_udic(rdic, rdata)
+    rC = ng.convert.converter()
+    rC.from_rnmrtk(rdic, rdata, urdic)
+
+    # prepare pipe converter
+    pdic, pdata = ng.pipe.read(DATA_DIR + "rnmrtk_3d/test.ft3")
+    updic = ng.pipe.guess_udic(pdic, pdata)
+    pC = ng.convert.converter()
+    pC.from_pipe(pdic, pdata, updic)
+
+    # rnmrtk -> rnmrtk
+    cdic, cdata = rC.to_rnmrtk()
+    assert_array_equal(rdata, cdata)
+    check_rdic(rdic, cdic, 3, exclude=bad_rnmrtk_keys)
+    # write and readback
+    tf = tempfile.mktemp(suffix='.sec', dir='.')
+    ng.rnmrtk.write(tf, cdic, cdata)
+    rrdic, rrdata = ng.rnmrtk.read(tf)
+    assert_array_equal(cdata, rrdata)
+    check_rdic(rdic, rrdic, 3, exclude=bad_rnmrtk_keys)
+    os.remove(tf)
+    os.remove(tf.replace('.sec', '.par'))
+
+    # rnmrtk -> pipe
+    cdic, cdata = rC.to_pipe()
+    assert_array_equal(pdata, cdata)
+    check_pdic(pdic, cdic, bad_pipe_keys + bad_rnmrtk2pipe_keys, v=True)
+    # write and readback
+    tf = tempfile.mktemp(dir=".") + "%03d"
+    #tf = tempfile.mktemp(dir=".")      # Uncomment these lines to write 
+    #cdic['FDPIPEFLAG'] = 1.0           # a single NMRPipe stream file
+    ng.pipe.write(tf, cdic, cdata)
+    rrdic, rrdata = ng.pipe.read(tf)
+    assert_array_equal(pdata, rrdata)
+    check_pdic(pdic, cdic, bad_pipe_keys + bad_rnmrtk2pipe_keys, v=True)
+    #os.remove(tf)                      # this line too
+    for f in glob.glob(tf[:-4] + "*"):
+        os.remove(f)
+    
+    # pipe -> pipe
+    cdic, cdata = pC.to_pipe()
+    assert_array_equal(pdata, cdata[:])
+    check_pdic(pdic, cdic, bad_pipe_keys + bad_rnmrtk2pipe_keys, v=True) 
+    # write and readback
+    tf = tempfile.mktemp(dir=".") + "%03d"
+    #tf = tempfile.mktemp(dir=".")  # Uncomment these lines to write
+    #cdic['FDPIPEFLAG'] = 1.0       # a single NMRPipe stream file
+    ng.pipe.write(tf, cdic, cdata)
+    rrdic, rrdata = ng.pipe.read(tf)
+    assert_array_equal(pdata, rrdata[:])
+    check_pdic(pdic, cdic, bad_pipe_keys + bad_rnmrtk2pipe_keys, v=True) 
+    #os.remove(tf)                  # This line too
+    for f in glob.glob(tf[:-4] + "*"):
+        os.remove(f)
+
+    # pipe -> rnmrtk
+    cdic, cdata = pC.to_rnmrtk()
+    assert_array_equal(rdata, cdata)
+    check_rdic(rdic, cdic, 3, exclude=bad_rnmrtk_keys)
+    # write and readback
+    tf = tempfile.mktemp(suffix='.sec', dir='.')
+    ng.rnmrtk.write(tf, cdic, cdata)
+    rrdic, rrdata = ng.rnmrtk.read(tf)
+    assert_array_equal(rrdata, rdata)
+    check_rdic(rdic, rrdic, 3, exclude=bad_rnmrtk_keys)
+    os.remove(tf)
+    os.remove(tf.replace('.sec', '.par'))
+
 
 # To skip a particular test, uncomment the test stub below
 

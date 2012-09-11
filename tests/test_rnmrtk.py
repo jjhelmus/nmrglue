@@ -46,7 +46,7 @@ def test_1d_time():
     assert round(data[1].imag, 2) == -49503.41
     assert dic['sw'][0] == 50000.0
     assert dic['sf'][0] == 125.68
-    assert dic['zero_freq_ppm'][0] == 99.0
+    assert dic['ppm'][0] == 99.0
     write_readback(dic, data)
 
 @attr(speed='fast')
@@ -58,7 +58,7 @@ def test_1d_freq():
     assert round(data[1], 2) == -1702.76
     assert dic['sw'][0] == 50000.0
     assert dic['sf'][0] == 125.68
-    assert dic['zero_freq_ppm'][0] == 99.0
+    assert dic['ppm'][0] == 99.0
     write_readback(dic, data)
 
 @attr(speed='fast')
@@ -70,12 +70,12 @@ def test_2d_time():
     assert round(data[0, 1].imag, 2) == -223.20
     assert round(data[10, 18].real, 2) == 17.93
     assert round(data[10, 18].imag, 2) == -67.20
-    assert dic['sw'][0] == 50000.0
-    assert dic['sf'][0] == 125.69
-    assert dic['zero_freq_ppm'][0] == 55.0
-    assert dic['sw'][1] == 5555.556
-    assert dic['sf'][1] == 50.65
-    assert dic['zero_freq_ppm'][1] == 120.0
+    assert dic['sw'][1] == 50000.0
+    assert dic['sf'][1] == 125.69
+    assert dic['ppm'][1] == 55.0
+    assert dic['sw'][0] == 5555.556
+    assert dic['sf'][0] == 50.65
+    assert dic['ppm'][0] == 120.0
     write_readback(dic, data)
 
 @attr(speed='fast')
@@ -85,12 +85,12 @@ def test_2d_freq():
     assert data.shape == (2048, 4096) 
     assert round(data[0, 1], 2) == -.19 
     assert round(data[10, 18], 2) == 0.88
-    assert dic['sw'][0] == 50000.0
-    assert dic['sf'][0] == 125.69
-    assert dic['zero_freq_ppm'][0] == 55.0
-    assert dic['sw'][1] == 5555.556
-    assert dic['sf'][1] == 50.65
-    assert dic['zero_freq_ppm'][1] == 120.0
+    assert dic['sw'][1] == 50000.0
+    assert dic['sf'][1] == 125.69
+    assert dic['ppm'][1] == 55.0
+    assert dic['sw'][0] == 5555.556
+    assert dic['sf'][0] == 50.65
+    assert dic['ppm'][0] == 120.0
     write_readback(dic, data)
 
 @attr(speed='fast')
@@ -102,12 +102,12 @@ def test_2d_time_lowmem():
     assert round(data[0, 1].imag, 2) == -223.20
     assert round(data[10, 18].real, 2) == 17.93
     assert round(data[10, 18].imag, 2) == -67.20
-    assert dic['sw'][0] == 50000.0
-    assert dic['sf'][0] == 125.69
-    assert dic['zero_freq_ppm'][0] == 55.0
-    assert dic['sw'][1] == 5555.556
-    assert dic['sf'][1] == 50.65
-    assert dic['zero_freq_ppm'][1] == 120.0
+    assert dic['sw'][1] == 50000.0
+    assert dic['sf'][1] == 125.69
+    assert dic['ppm'][1] == 55.0
+    assert dic['sw'][0] == 5555.556
+    assert dic['sf'][0] == 50.65
+    assert dic['ppm'][0] == 120.0
     lowmem_write_readback(dic, data)
 
 @attr(speed='fast')
@@ -117,12 +117,12 @@ def test_2d_freq_lowmem():
     assert data.shape == (2048, 4096) 
     assert round(data[0, 1], 2) == -.19 
     assert round(data[10, 18], 2) == 0.88
-    assert dic['sw'][0] == 50000.0
-    assert dic['sf'][0] == 125.69
-    assert dic['zero_freq_ppm'][0] == 55.0
-    assert dic['sw'][1] == 5555.556
-    assert dic['sf'][1] == 50.65
-    assert dic['zero_freq_ppm'][1] == 120.0
+    assert dic['sw'][1] == 50000.0
+    assert dic['sf'][1] == 125.69
+    assert dic['ppm'][1] == 55.0
+    assert dic['sw'][0] == 5555.556
+    assert dic['sf'][0] == 50.65
+    assert dic['ppm'][0] == 120.0
     lowmem_write_readback(dic, data)
 
 @attr(speed='slow')
@@ -134,15 +134,15 @@ def test_3d_time():
     assert round(data[0, 1, 2].imag, 2) == 33.82
     assert round(data[10, 11, 18].real, 2) == -9.36
     assert round(data[10, 11, 18].imag, 2) == -7.75
-    assert dic['sw'][0] == 50000.0
-    assert dic['sf'][0] == 125.68
-    assert dic['zero_freq_ppm'][0] == 56.0
+    assert dic['sw'][2] == 50000.0
+    assert dic['sf'][2] == 125.68
+    assert dic['ppm'][2] == 56.0
     assert dic['sw'][1] == 2777.778
     assert dic['sf'][1] == 50.65
-    assert dic['zero_freq_ppm'][1] == 120.0
-    assert dic['sw'][2] == 5555.556
-    assert dic['sf'][2] == 125.68
-    assert dic['zero_freq_ppm'][2] == 56.0 
+    assert dic['ppm'][1] == 120.0
+    assert dic['sw'][0] == 5555.556
+    assert dic['sf'][0] == 125.68
+    assert dic['ppm'][0] == 56.0 
     write_readback(dic, data)
 
 @attr(speed='slow')
@@ -152,15 +152,15 @@ def test_3d_freq():
     assert data.shape == (128, 128, 4096)
     assert round(data[0, 1, 2], 2) == 3.23
     assert round(data[10, 11, 18], 2) == 1.16
-    assert dic['sw'][0] == 50000.0
-    assert dic['sf'][0] == 125.68
-    assert dic['zero_freq_ppm'][0] == 56.0
+    assert dic['sw'][2] == 50000.0
+    assert dic['sf'][2] == 125.68
+    assert dic['ppm'][2] == 56.0
     assert dic['sw'][1] == 2777.778
     assert dic['sf'][1] == 50.65
-    assert dic['zero_freq_ppm'][1] == 120.0
-    assert dic['sw'][2] == 5555.556
-    assert dic['sf'][2] == 125.68
-    assert dic['zero_freq_ppm'][2] == 56.0 
+    assert dic['ppm'][1] == 120.0
+    assert dic['sw'][0] == 5555.556
+    assert dic['sf'][0] == 125.68
+    assert dic['ppm'][0] == 56.0 
     write_readback(dic, data)
 
 @attr(speed='slow')
@@ -172,15 +172,15 @@ def test_3d_time_lowmem():
     assert round(data[0, 1, 2].imag, 2) == 33.82
     assert round(data[10, 11, 18].real, 2) == -9.36
     assert round(data[10, 11, 18].imag, 2) == -7.75
-    assert dic['sw'][0] == 50000.0
-    assert dic['sf'][0] == 125.68
-    assert dic['zero_freq_ppm'][0] == 56.0
+    assert dic['sw'][2] == 50000.0
+    assert dic['sf'][2] == 125.68
+    assert dic['ppm'][2] == 56.0
     assert dic['sw'][1] == 2777.778
     assert dic['sf'][1] == 50.65
-    assert dic['zero_freq_ppm'][1] == 120.0
-    assert dic['sw'][2] == 5555.556
-    assert dic['sf'][2] == 125.68
-    assert dic['zero_freq_ppm'][2] == 56.0 
+    assert dic['ppm'][1] == 120.0
+    assert dic['sw'][0] == 5555.556
+    assert dic['sf'][0] == 125.68
+    assert dic['ppm'][0] == 56.0 
     lowmem_write_readback(dic, data)
 
 @attr(speed='slow')
@@ -190,13 +190,106 @@ def test_3d_freq_lowmem():
     assert data.shape == (128, 128, 4096)
     assert round(data[0, 1, 2], 2) == 3.23
     assert round(data[10, 11, 18], 2) == 1.16
-    assert dic['sw'][0] == 50000.0
-    assert dic['sf'][0] == 125.68
-    assert dic['zero_freq_ppm'][0] == 56.0
+    assert dic['sw'][2] == 50000.0
+    assert dic['sf'][2] == 125.68
+    assert dic['ppm'][2] == 56.0
     assert dic['sw'][1] == 2777.778
     assert dic['sf'][1] == 50.65
-    assert dic['zero_freq_ppm'][1] == 120.0
-    assert dic['sw'][2] == 5555.556
-    assert dic['sf'][2] == 125.68
-    assert dic['zero_freq_ppm'][2] == 56.0 
+    assert dic['ppm'][1] == 120.0
+    assert dic['sw'][0] == 5555.556
+    assert dic['sf'][0] == 125.68
+    assert dic['ppm'][0] == 56.0 
     lowmem_write_readback(dic, data)
+
+@attr(speed='fast')
+def test_3d_transpose():
+    """ reading/writing of transposed 3D RNMRTK time domain file """    
+    
+    # T1 T2 T3 ordering
+    dic, data = ng.rnmrtk.read(DATA_DIR + "rnmrtk_3d/time_3d_t1_t2_t3.sec")
+    assert data.shape == (128, 88, 36)
+    assert round(data[2, 6, 4].real, 2) == -1.82
+    assert dic['npts'] == [64, 44, 36]
+    write_readback(dic, data)
+ 
+    # T1 T3 T2 ordering
+    dic, data = ng.rnmrtk.read(DATA_DIR + "rnmrtk_3d/time_3d_t1_t3_t2.sec")
+    assert data.shape == (128, 72, 44)
+    assert round(data[2, 8, 3].real, 2) == -1.82
+    assert dic['npts'] == [64, 44, 36]
+    write_readback(dic, data)
+ 
+    # T2 T1 T3 ordering
+    dic, data = ng.rnmrtk.read(DATA_DIR + "rnmrtk_3d/time_3d_t2_t1_t3.sec")
+    assert data.shape == (88, 128, 36)
+    assert round(data[6, 2, 4].real, 2) == -1.82
+    assert dic['npts'] == [64, 44, 36]
+    write_readback(dic, data)
+ 
+    # T2 T3 T1 ordering
+    dic, data = ng.rnmrtk.read(DATA_DIR + "rnmrtk_3d/time_3d_t2_t3_t1.sec")
+    assert data.shape == (88, 72, 64)
+    assert round(data[6, 8, 1].real, 2) == -1.82
+    assert dic['npts'] == [64, 44, 36]
+    write_readback(dic, data)
+ 
+    # T3 T1 T2 ordering
+    dic, data = ng.rnmrtk.read(DATA_DIR + "rnmrtk_3d/time_3d_t3_t1_t2.sec")
+    assert data.shape == (72, 128, 44)
+    assert round(data[8, 2, 3].real, 2) == -1.82
+    assert dic['npts'] == [64, 44, 36]
+    write_readback(dic, data)
+ 
+    # T3 T2 T1 ordering
+    dic, data = ng.rnmrtk.read(DATA_DIR + "rnmrtk_3d/time_3d_t3_t2_t1.sec")
+    assert data.shape == (72, 88, 64)
+    assert round(data[8, 6, 1].real, 2) == -1.82
+    assert dic['npts'] == [64, 44, 36]
+    write_readback(dic, data)
+ 
+@attr(speed='slow')
+def test_3d_transpose_lowmem():
+    """ low mem. reading/writing of transposed 3D RNMRTK time domain file """
+    
+    # T1 T2 T3 ordering
+    dic, data = ng.rnmrtk.read_lowmem(DATA_DIR+"rnmrtk_3d/time_3d_t1_t2_t3.sec")
+    assert data.shape == (128, 88, 36)
+    assert round(data[2, 6, 4].real, 2) == -1.82
+    assert dic['npts'] == [64, 44, 36]
+    lowmem_write_readback(dic, data)
+ 
+    # T1 T3 T2 ordering
+    dic, data = ng.rnmrtk.read_lowmem(DATA_DIR+"rnmrtk_3d/time_3d_t1_t3_t2.sec")
+    assert data.shape == (128, 72, 44)
+    assert round(data[2, 8, 3].real, 2) == -1.82
+    assert dic['npts'] == [64, 44, 36]
+    lowmem_write_readback(dic, data)
+ 
+    # T2 T1 T3 ordering
+    dic, data = ng.rnmrtk.read_lowmem(DATA_DIR+"rnmrtk_3d/time_3d_t2_t1_t3.sec")
+    assert data.shape == (88, 128, 36)
+    assert round(data[6, 2, 4].real, 2) == -1.82
+    assert dic['npts'] == [64, 44, 36]
+    lowmem_write_readback(dic, data)
+ 
+    # T2 T3 T1 ordering
+    dic, data = ng.rnmrtk.read_lowmem(DATA_DIR+"rnmrtk_3d/time_3d_t2_t3_t1.sec")
+    assert data.shape == (88, 72, 64)
+    assert round(data[6, 8, 1].real, 2) == -1.82
+    assert dic['npts'] == [64, 44, 36]
+    lowmem_write_readback(dic, data)
+ 
+    # T3 T1 T2 ordering
+    dic, data = ng.rnmrtk.read_lowmem(DATA_DIR+"rnmrtk_3d/time_3d_t3_t1_t2.sec")
+    assert data.shape == (72, 128, 44)
+    assert round(data[8, 2, 3].real, 2) == -1.82
+    assert dic['npts'] == [64, 44, 36]
+    lowmem_write_readback(dic, data)
+ 
+    # T3 T2 T1 ordering
+    dic, data = ng.rnmrtk.read_lowmem(DATA_DIR+"rnmrtk_3d/time_3d_t3_t2_t1.sec")
+    assert data.shape == (72, 88, 64)
+    assert round(data[8, 6, 1].real, 2) == -1.82
+    assert dic['npts'] == [64, 44, 36]
+    lowmem_write_readback(dic, data)
+ 
