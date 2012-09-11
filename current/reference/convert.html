@@ -71,7 +71,7 @@
 <p>This class is targetted for users of nmrglue.</p>
 <dl class="class">
 <dt id="nmrglue.fileio.convert.converter">
-<em class="property">class </em><tt class="descclassname">nmrglue.fileio.convert.</tt><tt class="descname">converter</tt><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/convert.py#L16"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.convert.converter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">nmrglue.fileio.convert.</tt><tt class="descname">converter</tt><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/convert.py#L17"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.convert.converter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Object which allows conversion between NMR file formats, including low
 memory data objects.</p>
 <p>Conversion between NMR file formats with this class involves three steps.
@@ -92,7 +92,7 @@ dictionary to any of the <tt class="docutils literal"><span class="pre">from_</s
 parameters are guessed from the file format&#8217;s dictionary of parameters.</p>
 <dl class="method">
 <dt id="nmrglue.fileio.convert.converter.from_bruker">
-<tt class="descname">from_bruker</tt><big>(</big><em>dic</em>, <em>data</em>, <em>udic=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/convert.py#L214"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.convert.converter.from_bruker" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">from_bruker</tt><big>(</big><em>dic</em>, <em>data</em>, <em>udic=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/convert.py#L246"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.convert.converter.from_bruker" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load converter with Bruker data.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -118,7 +118,7 @@ parameters are guessed from the file format&#8217;s dictionary of parameters.</p
 
 <dl class="method">
 <dt id="nmrglue.fileio.convert.converter.from_pipe">
-<tt class="descname">from_pipe</tt><big>(</big><em>dic</em>, <em>data</em>, <em>udic=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/convert.py#L166"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.convert.converter.from_pipe" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">from_pipe</tt><big>(</big><em>dic</em>, <em>data</em>, <em>udic=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/convert.py#L198"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.convert.converter.from_pipe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load converter with NMRPipe data.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -143,8 +143,38 @@ parameters are guessed from the file format&#8217;s dictionary of parameters.</p
 </dd></dl>
 
 <dl class="method">
+<dt id="nmrglue.fileio.convert.converter.from_rnmrtk">
+<tt class="descname">from_rnmrtk</tt><big>(</big><em>dic</em>, <em>data</em>, <em>udic=None</em>, <em>agilent_compatible=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/convert.py#L167"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.convert.converter.from_rnmrtk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load converter with RNMRTK data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of RNMRTK parameters.</p>
+</div></blockquote>
+<p><strong>data</strong> : array_like</p>
+<blockquote>
+<div><p>NMR data.</p>
+</div></blockquote>
+<p><strong>udic</strong> : dict, optional</p>
+<blockquote>
+<div><p>Universal dictionary, if not provided will be guesses from dic.</p>
+</div></blockquote>
+<p><strong>agilent_compatible</strong> : bool, optional</p>
+<blockquote class="last">
+<div><p>True when RNMRTK data is being compared to Agilent/Varian data.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="nmrglue.fileio.convert.converter.from_sparky">
-<tt class="descname">from_sparky</tt><big>(</big><em>dic</em>, <em>data</em>, <em>udic=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/convert.py#L190"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.convert.converter.from_sparky" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">from_sparky</tt><big>(</big><em>dic</em>, <em>data</em>, <em>udic=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/convert.py#L222"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.convert.converter.from_sparky" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load converter with Sparky data.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -170,7 +200,7 @@ parameters are guessed from the file format&#8217;s dictionary of parameters.</p
 
 <dl class="method">
 <dt id="nmrglue.fileio.convert.converter.from_universal">
-<tt class="descname">from_universal</tt><big>(</big><em>dic</em>, <em>data</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/convert.py#L120"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.convert.converter.from_universal" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">from_universal</tt><big>(</big><em>dic</em>, <em>data</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/convert.py#L121"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.convert.converter.from_universal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load converter with Universal data.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -192,7 +222,7 @@ parameters are guessed from the file format&#8217;s dictionary of parameters.</p
 
 <dl class="method">
 <dt id="nmrglue.fileio.convert.converter.from_varian">
-<tt class="descname">from_varian</tt><big>(</big><em>dic</em>, <em>data</em>, <em>udic=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/convert.py#L139"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.convert.converter.from_varian" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">from_varian</tt><big>(</big><em>dic</em>, <em>data</em>, <em>udic=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/convert.py#L140"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.convert.converter.from_varian" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load converter with Agilent/Varian data.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -218,7 +248,7 @@ parameters are guessed from the file format&#8217;s dictionary of parameters.</p
 
 <dl class="method">
 <dt id="nmrglue.fileio.convert.converter.to_bruker">
-<tt class="descname">to_bruker</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/convert.py#L341"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.convert.converter.to_bruker" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">to_bruker</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/convert.py#L411"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.convert.converter.to_bruker" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return Bruker format data.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -240,7 +270,7 @@ parameters are guessed from the file format&#8217;s dictionary of parameters.</p
 
 <dl class="method">
 <dt id="nmrglue.fileio.convert.converter.to_pipe">
-<tt class="descname">to_pipe</tt><big>(</big><em>datetimeobj=datetime.datetime(2012</em>, <em>9</em>, <em>6</em>, <em>17</em>, <em>44</em>, <em>46</em>, <em>425980)</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/convert.py#L260"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.convert.converter.to_pipe" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">to_pipe</tt><big>(</big><em>datetimeobj=datetime.datetime(2012</em>, <em>9</em>, <em>11</em>, <em>15</em>, <em>47</em>, <em>9</em>, <em>16583)</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/convert.py#L292"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.convert.converter.to_pipe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return NMRPipe format data.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -268,8 +298,42 @@ date and time is used by default.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="nmrglue.fileio.convert.converter.to_rnmrtk">
+<tt class="descname">to_rnmrtk</tt><big>(</big><em>agilent_compatible=False</em>, <em>dim_order=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/convert.py#L322"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.convert.converter.to_rnmrtk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return RNMRTK format data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>agilent_compatible</strong> : bool, optional</p>
+<blockquote>
+<div><p>True when RNMRTK data is being compared to Agilent/Varian data.</p>
+</div></blockquote>
+<p><strong>dim_order</strong> : list, optional</p>
+<blockquote>
+<div><p>List mapping axis numbers in the universal dictionary to the to the
+order in which they will appear in the RNMRTK dictionary.  If None,
+the default, [0, 1, 2, ...] will be used.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of RNMRTK parameters.</p>
+</div></blockquote>
+<p><strong>data</strong> : array_like</p>
+<blockquote class="last">
+<div><p>NMR data in RNMRTK format.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="nmrglue.fileio.convert.converter.to_sparky">
-<tt class="descname">to_sparky</tt><big>(</big><em>datetimeobj=datetime.datetime(2012</em>, <em>9</em>, <em>6</em>, <em>17</em>, <em>44</em>, <em>46</em>, <em>425992)</em>, <em>user='user'</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/convert.py#L311"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.convert.converter.to_sparky" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">to_sparky</tt><big>(</big><em>datetimeobj=datetime.datetime(2012</em>, <em>9</em>, <em>11</em>, <em>15</em>, <em>47</em>, <em>9</em>, <em>16599)</em>, <em>user='user'</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/convert.py#L381"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.convert.converter.to_sparky" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return Sparky format data.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -303,7 +367,7 @@ default.</p>
 
 <dl class="method">
 <dt id="nmrglue.fileio.convert.converter.to_universal">
-<tt class="descname">to_universal</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/convert.py#L239"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.convert.converter.to_universal" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">to_universal</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/convert.py#L271"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.convert.converter.to_universal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return Universal format data.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -325,7 +389,7 @@ default.</p>
 
 <dl class="method">
 <dt id="nmrglue.fileio.convert.converter.to_varian">
-<tt class="descname">to_varian</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/convert.py#L290"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.convert.converter.to_varian" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">to_varian</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/convert.py#L360"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.convert.converter.to_varian" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return Agilent/Varian format data.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -357,7 +421,7 @@ default.</p>
 fine control over file conversion will be interested in these classes</p>
 <dl class="class">
 <dt id="nmrglue.fileio.convert.udata_nd">
-<em class="property">class </em><tt class="descclassname">nmrglue.fileio.convert.</tt><tt class="descname">udata_nd</tt><big>(</big><em>edata</em>, <em>iproc</em>, <em>oproc</em>, <em>odtype</em>, <em>order=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/convert.py#L363"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.convert.udata_nd" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">nmrglue.fileio.convert.</tt><tt class="descname">udata_nd</tt><big>(</big><em>edata</em>, <em>iproc</em>, <em>oproc</em>, <em>odtype</em>, <em>order=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/convert.py#L433"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.convert.udata_nd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrap other fileiobase.data_nd derived objects with input/output conversion
 when slices are requested.</p>
 <ul class="simple">

@@ -1,6 +1,0 @@
-nmrglue.fileio.rnmrtk.permute_dic
-=================================
-
-.. currentmodule:: nmrglue.fileio.rnmrtk
-
-.. autofunction:: permute_dic

@@ -65,7 +65,7 @@
 <h1>nmrglue.fileio.rnmrtk.create_dic<a class="headerlink" href="#nmrglue-fileio-rnmrtk-create-dic" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.rnmrtk.create_dic">
-<tt class="descclassname">nmrglue.fileio.rnmrtk.</tt><tt class="descname">create_dic</tt><big>(</big><em>udic</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/rnmrtk.py#L89"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.rnmrtk.create_dic" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.fileio.rnmrtk.</tt><tt class="descname">create_dic</tt><big>(</big><em>udic</em>, <em>dim_order=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/rnmrtk.py#L123"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.rnmrtk.create_dic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a RNMRTK dictionary from a universal dictionary.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -74,6 +74,12 @@
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>udic</strong> : dict</p>
 <blockquote>
 <div><p>Universal dictionary of spectral parameters.</p>
+</div></blockquote>
+<p><strong>dim_order</strong> : list, optional</p>
+<blockquote>
+<div><p>List mapping axis numbers in the universal dictionary to the order
+in which they will appear in the RNMRTK dictionary.  If None, the
+default [0, 1, 2, ...] is used.</p>
 </div></blockquote>
 </td>
 </tr>

@@ -104,7 +104,7 @@
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.guess_udic.html#nmrglue.fileio.rnmrtk.guess_udic" title="nmrglue.fileio.rnmrtk.guess_udic"><tt class="xref py py-obj docutils literal"><span class="pre">guess_udic</span></tt></a>(dic,&nbsp;data)</td>
 <td>Guess parameters of a universal dictionary from a dic, data pair.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.create_dic.html#nmrglue.fileio.rnmrtk.create_dic" title="nmrglue.fileio.rnmrtk.create_dic"><tt class="xref py py-obj docutils literal"><span class="pre">create_dic</span></tt></a>(udic)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.create_dic.html#nmrglue.fileio.rnmrtk.create_dic" title="nmrglue.fileio.rnmrtk.create_dic"><tt class="xref py py-obj docutils literal"><span class="pre">create_dic</span></tt></a>(udic[,&nbsp;dim_order])</td>
 <td>Create a RNMRTK dictionary from a universal dictionary.</td>
 </tr>
 </tbody>
@@ -142,17 +142,14 @@ functions.</p>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.interleave_data.html#nmrglue.fileio.rnmrtk.interleave_data" title="nmrglue.fileio.rnmrtk.interleave_data"><tt class="xref py py-obj docutils literal"><span class="pre">interleave_data</span></tt></a>(data)</td>
 <td>Interleave real, imag data in data</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.find_shape.html#nmrglue.fileio.rnmrtk.find_shape" title="nmrglue.fileio.rnmrtk.find_shape"><tt class="xref py py-obj docutils literal"><span class="pre">find_shape</span></tt></a>(dic)</td>
-<td>Determine the data shape (R+I for all dims) from a RNMRTK dictionary.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.permute_dic.html#nmrglue.fileio.rnmrtk.permute_dic" title="nmrglue.fileio.rnmrtk.permute_dic"><tt class="xref py py-obj docutils literal"><span class="pre">permute_dic</span></tt></a>(dic,&nbsp;plist)</td>
-<td>Permute all parameters in dictionary according to plist (4 element list)</td>
-</tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.parse_par_line.html#nmrglue.fileio.rnmrtk.parse_par_line" title="nmrglue.fileio.rnmrtk.parse_par_line"><tt class="xref py py-obj docutils literal"><span class="pre">parse_par_line</span></tt></a>(line,&nbsp;dic)</td>
 <td>Parse a line from a RNMRTK parameter file (.par).</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.make_empty_dic.html#nmrglue.fileio.rnmrtk.make_empty_dic" title="nmrglue.fileio.rnmrtk.make_empty_dic"><tt class="xref py py-obj docutils literal"><span class="pre">make_empty_dic</span></tt></a>()</td>
-<td>Make an empty RNMRTK parameter dictionary.</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.find_dic_dim.html#nmrglue.fileio.rnmrtk.find_dic_dim" title="nmrglue.fileio.rnmrtk.find_dic_dim"><tt class="xref py py-obj docutils literal"><span class="pre">find_dic_dim</span></tt></a>(dic,&nbsp;dim)</td>
+<td>Find dimension in dictionary which corresponds to array dimension.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.rnmrtk.find_array_dim.html#nmrglue.fileio.rnmrtk.find_array_dim" title="nmrglue.fileio.rnmrtk.find_array_dim"><tt class="xref py py-obj docutils literal"><span class="pre">find_array_dim</span></tt></a>(dic,&nbsp;ddim)</td>
+<td>Find array dimension which corresponds to dictionary dimension.</td>
 </tr>
 </tbody>
 </table>

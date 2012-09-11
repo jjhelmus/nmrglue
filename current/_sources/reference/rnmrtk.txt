@@ -46,10 +46,10 @@ functions.
     put_trace
     uninterleave_data
     interleave_data
-    find_shape
-    permute_dic
     parse_par_line
-    make_empty_dic
+    find_dic_dim
+    find_array_dim
+
 
 Developer Classes
 ^^^^^^^^^^^^^^^^^
