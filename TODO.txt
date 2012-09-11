@@ -10,20 +10,7 @@ Find way to include t1_fitting data...
 
 2. Rewrite tutorial, include mention of analysis module.
 
-3. Finish rnmrtk modules and related tests.
-
-    Code guess_udic - DONE
-    Code create dic - DONE
-    Add to convert (to_rnmrtk and from_rnmrtk) - DONE 
-    Add the following tests to test_convert - partial
-        varian <-> rnmrtk   - DONE 
-        rnmrtk <-> rnmrtk   - DONE (in both)
-        rnmrtk <-> nmrpipe  - DONE
-    Readthrough
-    Check docs
-
-
-4. Release version 0.4 and write release instructions, check installer on 
+3. Release version 0.4 and write release instructions, check installer on 
 Linux, Windows, and OS-X.  Update install script, grep for XXX in all files
 and update pyPI record.
 
