@@ -81,6 +81,45 @@ def isdatasimilar(data1, data2, verb=False, atol=atol, rtol=rtol):
             print "Data does not match"
     return r
 
+def isitemsimilar(v1, v2, verb=False, dtol=dtol):
+    """
+    Compare two values for differences
+
+    See docstrings from 'isdicsimilar' and 'islistsimilar' for more information
+    """
+
+    r = True
+
+    # type checking
+    if type(v1) != type(v2):
+        r = False
+        if verb:
+            print "Key has different type", k, type(dic1[k]), \
+                    type(dic2[k])
+            
+    # iterable checking
+    elif isinstance(v1, dict):
+        r = r and isdicsimilar(v1, v2, verb=verb, dtol=dtol)
+        
+    elif isinstance(v1, list):
+        r = r and islistsimilar(v1, v2, verb=verb, dtol=dtol)
+
+    # numeric type
+    elif isinstance(v1, (int, float)):
+        if abs(v1 - v2) > dtol:
+            r = False
+            if verb:
+                print "Key mismatch:", k, v1, v2
+
+    # all other types: just check if equal
+    else:
+        if v1 != v2:
+            r = False
+            if verb:
+                print "Key mismatch:", k, v1, v2
+
+    return r
+
 def isdicsimilar(dic1, dic2, verb=False, dtol=dtol):
     """
     Compare two dictionaries for differences
@@ -129,37 +168,8 @@ def isdicsimilar(dic1, dic2, verb=False, dtol=dtol):
     for k in iset:
         v1, v2 = dic1[k], dic2[k]
 
-        # type checking
-        if type(v1) != type(v2):
+        if not isitemsimilar(v1, v2, verb=verb, dtol=dtol):
             r = False
-            if verb:
-                print "Key has different type", k, type(dic1[k]), \
-                        type(dic2[k])
-            
-        # iterable checking
-        if isinstance(v1, dict):
-            #if verb:
-            #    print "Checking sub-dictionary:",k
-            r = r and isdicsimilar(v1, v2, verb=verb, dtol=dtol)
-        
-        elif isinstance(v1, list):
-            #if verb:
-            #    print "Checking sub-list:",k
-            r = r and islistsimilar(v1, v2, verb=verb, dtol=dtol)
-
-        # numeric type
-        elif isinstance(v1, int) or isinstance(v1, float):
-            if abs(v1 - v2) > dtol:
-                r = False
-                if verb:
-                    print "Key mismatch:", k, v1, v2
-
-        # all other type just check if equal
-        else:
-            if v1 != v2:
-                r = False
-                if verb:
-                    print "Key mismatch:", k, v1, v2
 
     return r
 
@@ -181,34 +191,7 @@ def islistsimilar(l1, l2, verb=False, dtol=dtol):
 
     # loop over keys in both sets
     for v1, v2 in zip(l1, l2):
-        # type checking
-        if type(v1) != type(v2):
+        if not isitemsimilar(v1, v2, verb=verb, dtol=dtol):
             r = False
-            if verb:
-                print "Item has different type", v1, v2
-            
-        # iterable checking
-        if isinstance(v1, dict):
-            #if verb:
-            #    print "Checking sub-dictionary"
-            r = r and isdicsimilar(v1, v2, verb=verb, dtol=dtol)
-        
-        if isinstance(v1, list):
-            #if verb:
-            #    print "Checking sub-list"
-            r = r and islistsimilar(v1, v2, verb=verb, dtol=dtol)
 
-        # numeric type
-        elif isinstance(v1, int) or isinstance(v1, float):
-            if abs(v1 - v2) > dtol:
-                r = False
-                if verb:
-                    print "Item mismatch:", v1, v2
-
-        # all other type just check if equal
-        else:
-            if v1 != v2:
-                r = False
-                if verb:
-                    print "Item mismatch:", v1, v2
     return r
