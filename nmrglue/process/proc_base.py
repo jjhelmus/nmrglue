@@ -1046,18 +1046,20 @@ def zf_size(data, size, mid=False):
 
 def largest_power_of_2(value):
     """
-    Find the largest and nearest power of two of a value
+    Find the nearest power of two equal to or larger than a value.
     
     Parameters
     ----------
-    value: int
-    
+    value : int
+        Value to find nearest power of two equal to or larger than.
+
     Returns
     -------
-    pw: int
+    pw : int
         Power of 2. 
+
     """
-    return int(pow(2, np.ceil(np.log(value)/np.log(2))))
+    return int(pow(2, np.ceil(np.log(value) / np.log(2))))
          
 def zf_auto(data, mid=False):
     """ 
