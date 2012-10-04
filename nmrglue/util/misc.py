@@ -85,7 +85,8 @@ def isitemsimilar(v1, v2, verb=False, dtol=dtol):
     """
     Compare two values for differences
 
-    See docstrings from 'isdicsimilar' and 'islistsimilar' for more information
+    See :py:func:`isdicsimilar` for Parameters.
+    
     """
 
     r = True
