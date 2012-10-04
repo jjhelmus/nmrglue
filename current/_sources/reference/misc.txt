@@ -15,4 +15,5 @@ Functions
     isdatasimilar
     isdicsimilar
     islistsimilar
+    isitemsimilar
 

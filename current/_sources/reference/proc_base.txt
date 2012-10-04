@@ -185,4 +185,5 @@ are included here for completeness.
     avg_flt
     std_flt
     sum_flt
+    largest_power_of_2
 
