@@ -45,3 +45,8 @@ examples/processing/nmrpipe_1d
 examples/processing/nmrpipe_2d
 examples/processing/nmrpipe_2d_tppi
 examples/processing/nmrpipe_3d
+
+#Eclipse PyDev
+.project
+.pydevproject
+*.prefs
