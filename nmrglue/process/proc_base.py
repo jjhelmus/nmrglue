@@ -1044,6 +1044,21 @@ def zf_size(data, size, mid=False):
     """
     return zf_pad(data, int(size - data.shape[-1]), mid)
 
+def largest_power_of_2(value):
+    """
+    Find the largest and nearest power of two of a value
+    
+    Parameters
+    ----------
+    value: int
+    
+    Returns
+    -------
+    pw: int
+        Power of 2. 
+    """
+    return int(pow(2, np.ceil(np.log(value)/np.log(2))))
+         
 def zf_auto(data, mid=False):
     """ 
     Zero fill to next largest power of two.
@@ -1061,7 +1076,7 @@ def zf_auto(data, mid=False):
         Zero filled array of NMR data.
 
     """
-    zf_size(data, np.ceil(np.log(data.shape[-1]) / np.log(2)), mid)
+    return zf_size(data, largest_power_of_2(data.shape[-1]), mid)
 
 ####################
 # Basic Untilities #
