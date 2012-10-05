@@ -19,11 +19,12 @@ import numpy as np
 
 from . import fileiobase
 
+
 # unit conversion function
 def make_uc(dic, data, dim=-1):
-    """ 
+    """
     Create a unit conversion object.
- 
+
     Parameters
     ----------
     dic : dict
@@ -41,28 +42,29 @@ def make_uc(dic, data, dim=-1):
 
     """
     if dim == -1:
-        dim = data.ndim - 1 # last dimention 
-   
+        dim = data.ndim - 1  # last dimention
+
     wdic = dic["w" + str(int(1 + dim))]
 
     size = float(wdic["npoints"])
     cplx = False
-    sw   = wdic["spectral_width"]
-    obs  = wdic["spectrometer_freq"]
-    car  = wdic["xmtr_freq"] * obs        
+    sw = wdic["spectral_width"]
+    obs = wdic["spectrometer_freq"]
+    car = wdic["xmtr_freq"] * obs
 
     return fileiobase.unit_conversion(size, cplx, sw, obs, car)
 
-# dictionary/data creation
 
+# dictionary/data creation
 def create_data(data):
-    """ 
+    """
     Create a Sparky data array (recast into float32 array)
     """
-    return np.array(data, dtype = "float32")
+    return np.array(data, dtype="float32")
+
 
 def guess_udic(dic, data):
-    """ 
+    """
     Guess parameter of universal dictionary from dic,data pair.
 
     Parameters
@@ -95,8 +97,9 @@ def guess_udic(dic, data):
 
     return udic
 
+
 def create_dic(udic, datetimeobj=datetime.datetime.now(), user='user'):
-    """ 
+    """
     Create a Sparky parameter dictionary from universal dictionary.
 
     Parameters
@@ -115,7 +118,7 @@ def create_dic(udic, datetimeobj=datetime.datetime.now(), user='user'):
 
     """
     dic = dict()
-   
+
     # determind shape of array
     shape = [udic[k]["size"] for k in xrange(udic["ndim"])]
 
@@ -137,7 +140,7 @@ def create_dic(udic, datetimeobj=datetime.datetime.now(), user='user'):
     ntiles = 1
     for tlen, slen in zip(tshape, shape):
         ntiles *= np.ceil(float(slen) / tlen)
-   
+
     # points in tile
     tpoints = np.array(tshape).prod()
 
@@ -152,8 +155,9 @@ def create_dic(udic, datetimeobj=datetime.datetime.now(), user='user'):
         dic["w" + str(i + 1)] = create_axisdic(udic[i], tlen, dlen)
     return dic
 
+
 def create_axisdic(adic, tlen, dlen):
-    """ 
+    """
     Make an Sparky axis dictionary from a universal axis dictionary.
 
     Parameters
@@ -162,7 +166,7 @@ def create_axisdic(adic, tlen, dlen):
         Axis dictionary from a universal dictionary.
     tlen : int
         Tile length of axis.
-    dlen : int    
+    dlen : int
         Data length of axis.
 
     Returns
@@ -179,34 +183,37 @@ def create_axisdic(adic, tlen, dlen):
     dic["bsize"] = int(tlen)
     dic["spectrometer_freq"] = float(adic["obs"])
     dic["spectral_width"] = float(adic["sw"])
-    dic["xmtr_freq"] = float(adic["car"])/dic["spectrometer_freq"]
+    dic["xmtr_freq"] = float(adic["car"]) / dic["spectrometer_freq"]
     dic["zero_order"] = 0.0
     dic["first_order"] = 0.0
     dic["first_pt_scale"] = 0.0
-    dic["extended"] = '\x80'        # transform bit set
+    dic["extended"] = '\x80'  # transform bit set
     return dic
 
+
 def datetime2dic(datetimeobj, dic):
-    """ 
+    """
     Add datetime object to dictionary
     """
     dic["date"] = datetimeobj.ctime()
     return dic
 
+
 def dic2datetime(dic):
-    """ 
+    """
     Create a datetime object from a Sparky dictionary
     """
     return datetime.datetime.strptime(dic["date"], "%a %b %d %H:%M:%S %Y")
 
+
 def calc_tshape(shape, kbyte_max=128):
-    """ 
+    """
     Calculate a tile shape from data shape.
 
-    
+
     Parameters
     ----------
-    shape : tuple    
+    shape : tuple
         Shape of NMR data (data.shape).
     kbyte_max : float or int
         Maximum tile size in Kilobytes.
@@ -215,7 +222,7 @@ def calc_tshape(shape, kbyte_max=128):
     -------
     tshape : tuple
         Shape of tile.
-    
+
     """
     # Algorithm divides each dimention by 2 until under kbyte_max tile size.
     s = np.array(shape, dtype="int")
@@ -223,14 +230,14 @@ def calc_tshape(shape, kbyte_max=128):
     while (s.prod() * 4. / 1024. > kbyte_max):
         s[i] = np.floor(s[i] / 2.)
         i = i + 1
-        if i == len(s): 
+        if i == len(s):
             i = 0
     return tuple(s)
 
-# global read/write functions
 
+# global read/write functions
 def read(filename):
-    """ 
+    """
     Read a Sparky file.
 
     Parameters
@@ -261,14 +268,15 @@ def read(filename):
     if n == 2:
         return read_2D(filename)
     if n == 3:
-        return read_3D(filename) 
+        return read_3D(filename)
 
-    raise ValueError,"unknown dimentionality: %s" % n
+    raise ValueError("unknown dimentionality: %s" % n)
+
 
 def read_lowmem(filename):
-    """ 
+    """
     Read a Sparky file using minimal memory.
-     
+
     Parameters
     ----------
     filename : str
@@ -285,8 +293,8 @@ def read_lowmem(filename):
     --------
     read : Read a Sparky file.
     write_lowmem : Write a Sparky file using mimimal memory.
-   
-    """    
+
+    """
     # open the file
     f = open(filename, 'rb')
 
@@ -298,17 +306,17 @@ def read_lowmem(filename):
         return read_lowmem_2D(filename)
     if n == 3:
         return read_lowmem_3D(filename)
-    
-    raise ValueError,"unknown dimentionality: %s" % n
+
+    raise ValueError("unknown dimentionality: %s" % n)
 
 
 def write(filename, dic, data, overwrite=False):
-    """ 
+    """
     Write a Sparky file.
 
     Parameters
     ----------
-    filename : str    
+    filename : str
         Filename of Sparky file to write to.
     dic : dict
         Dictionary of Sparky parameters.
@@ -330,13 +338,14 @@ def write(filename, dic, data, overwrite=False):
         return write_2D(filename, dic, data, overwrite=overwrite)
     if n == 3:
         return write_3D(filename, dic, data, overwrite=overwrite)
-    
-    raise ValueError,"unknown dimentionality: %s" % n
+
+    raise ValueError("unknown dimentionality: %s" % n)
+
 
 def write_lowmem(filename, dic, data, overwrite=False):
     """
     Write a Sparky using minimum amounts of memory (tile by tile)
- 
+
     Parameters
     ----------
     filename : str
@@ -353,15 +362,15 @@ def write_lowmem(filename, dic, data, overwrite=False):
     --------
     write : Write a Sparky file.
     read_lowmem : Read a Sparky file using mimimal amounts of memory.
-    
-    """    
+
+    """
     # write also writes tile by tile...
     return write(filename, dic, data, overwrite)
 
-# dimension specific reading/writing functions
 
+# dimension specific reading/writing functions
 def read_2D(filename):
-    """ 
+    """
     Read a 2D sparky file. See :py:func:`read` for documentation.
     """
     seek_pos = os.stat(filename).st_size
@@ -372,14 +381,14 @@ def read_2D(filename):
 
     # check for file size mismatch
     if seek_pos != dic["seek_pos"]:
-        raise IOError, "Bad file size %s vs %s", (seek_pos, dic["seek_pos"])
+        raise IOError("Bad file size %s vs %s", (seek_pos, dic["seek_pos"]))
 
     # read the axis headers...
     for i in xrange(dic['naxis']):
         dic["w" + str(i + 1)] = axisheader2dic(get_axisheader(f))
 
     # read the data and untile
-    lenY = dic["w1"]["npoints"]  
+    lenY = dic["w1"]["npoints"]
     lenX = dic["w2"]["npoints"]
     lentY = dic["w1"]["bsize"]
     lentX = dic["w2"]["bsize"]
@@ -388,8 +397,9 @@ def read_2D(filename):
 
     return dic, data
 
+
 def write_2D(filename, dic, data, overwrite=False):
-    """ 
+    """
     Write a 2D Sparky file. See :py:func:`write` for documentation.
     """
     # open the file for writing
@@ -406,8 +416,8 @@ def write_2D(filename, dic, data, overwrite=False):
     lentY = dic["w1"]["bsize"]
     t_tup = (lentY, lentX)
 
-    ttX = np.ceil(data.shape[1] / float(lentX)) # total tiles in X dim
-    ttY = np.ceil(data.shape[0] / float(lentY)) # total tiles in Y dim
+    ttX = np.ceil(data.shape[1] / float(lentX))  # total tiles in X dim
+    ttY = np.ceil(data.shape[0] / float(lentY))  # total tiles in Y dim
     tt = ttX * ttY
 
     for i in xrange(int(tt)):
@@ -418,7 +428,7 @@ def write_2D(filename, dic, data, overwrite=False):
 
 
 def read_3D(filename):
-    """ 
+    """
     Read a 3D Sparky file. See :py:func:`read` for documentation.
     """
     seek_pos = os.stat(filename).st_size
@@ -429,14 +439,14 @@ def read_3D(filename):
 
     # check for file size mismatch
     if seek_pos != dic["seek_pos"]:
-        raise IOError, "Bad file size %s vs %s", (seek_pos, dic["seek_pos"])
+        raise IOError("Bad file size %s vs %s", (seek_pos, dic["seek_pos"]))
 
     # read the axis headers...
     for i in xrange(dic['naxis']):
         dic["w" + str(i + 1)] = axisheader2dic(get_axisheader(f))
 
     # read the data and untile
-    lenZ = dic["w1"]["npoints"]  
+    lenZ = dic["w1"]["npoints"]
     lenY = dic["w2"]["npoints"]
     lenX = dic["w3"]["npoints"]
     lentZ = dic["w1"]["bsize"]
@@ -449,7 +459,7 @@ def read_3D(filename):
 
 
 def write_3D(filename, dic, data, overwrite=False):
-    """ 
+    """
     Write a 3D Sparky file. See :py:func:`write` for documentation.
     """
     # open the file for writing
@@ -469,10 +479,10 @@ def write_3D(filename, dic, data, overwrite=False):
 
     t_tup = (lentZ, lentY, lentX)
 
-    ttX = np.ceil(data.shape[2] / float(lentX)) # total tiles in X dim
-    ttY = np.ceil(data.shape[1] / float(lentY)) # total tiles in Y dim
-    ttZ = np.ceil(data.shape[0] / float(lentZ)) # total tiles in Z dim
-    
+    ttX = np.ceil(data.shape[2] / float(lentX))  # total tiles in X dim
+    ttY = np.ceil(data.shape[1] / float(lentY))  # total tiles in Y dim
+    ttZ = np.ceil(data.shape[0] / float(lentZ))  # total tiles in Z dim
+
     tt = ttX * ttY * ttZ
 
     for i in xrange(int(tt)):
@@ -480,44 +490,45 @@ def write_3D(filename, dic, data, overwrite=False):
     f.close()
     return
 
-# read_lowmem functions
 
+# read_lowmem functions
 def read_lowmem_2D(filename):
-    """ 
+    """
     Read a 2D Sparky file using minimal memory. See :py:func:`read_lowmem`.
     """
     seek_pos = os.stat(filename).st_size
 
     # create the sparky_2d file
     data = sparky_2d(filename)
-    dic  = dict(data.dic)
+    dic = dict(data.dic)
 
     # check for file size mismatch
     if seek_pos != dic["seek_pos"]:
-        raise IOError, "Bad file size %s vs %s", (seek_pos, dic["seek_pos"])
+        raise IOError("Bad file size %s vs %s", (seek_pos, dic["seek_pos"]))
     return dic, data
 
+
 def read_lowmem_3D(filename):
-    """ 
+    """
     Read a 3D sparky file using minimal memory. See :py:func:`read_lowmem`.
     """
     seek_pos = os.stat(filename).st_size
 
     # create the sparky_3d file
     data = sparky_3d(filename)
-    dic  = dict(data.dic)
+    dic = dict(data.dic)
 
     # check for file size mismatch
     if seek_pos != dic["seek_pos"]:
-        raise IOError, "Bad file size %s vs %s", (seek_pos, dic["seek_pos"])
+        raise IOError("Bad file size %s vs %s", (seek_pos, dic["seek_pos"]))
 
     return dic, data
 
-# sparky_ low memory objects
 
+# sparky_ low memory objects
 class sparky_2d(fileiobase.data_nd):
     """
-    Emulates a ndarray object without loading data into memory for low memory 
+    Emulates a ndarray object without loading data into memory for low memory
     reading of 2D Sparky files.
 
     * slicing operations return ndarray objects.
@@ -547,7 +558,7 @@ class sparky_2d(fileiobase.data_nd):
         self.dic = fileheader2dic(get_fileheader(f))
 
         if self.dic["naxis"] != 2:
-            raise StandardError, "file is not a 2D Sparky file"
+            raise StandardError("file is not a 2D Sparky file")
 
         # read in the axisheaders
         self.dic["w1"] = axisheader2dic(get_axisheader(f))
@@ -565,7 +576,7 @@ class sparky_2d(fileiobase.data_nd):
         # check order
         if order == None:
             order = (0, 1)
-        
+
         # finalize
         self.dtype = np.dtype("float32")
         self.order = order
@@ -573,7 +584,7 @@ class sparky_2d(fileiobase.data_nd):
         self.__setdimandshape__()
 
     def __fcopy__(self, order):
-        """ 
+        """
         Create a copy
         """
         n = sparky_2d(self.filename, order)
@@ -588,19 +599,19 @@ class sparky_2d(fileiobase.data_nd):
         f = open(self.filename, 'rb')
 
         #print sY,sX
-        gY = range(self.lenY)[sY]   # list of values to take in Y
-        gX = range(self.lenX)[sX]   # list of values to take in X
+        gY = range(self.lenY)[sY]  # list of values to take in Y
+        gX = range(self.lenX)[sX]  # list of values to take in X
 
         # tiles to get in each dim to read
-        gtY = set([np.floor(i / self.lentY) for i in gY]) # Y tile to read
-        gtX = set([np.floor(i / self.lentX) for i in gX]) # X tile to read
+        gtY = set([np.floor(i / self.lentY) for i in gY])  # Y tile to read
+        gtX = set([np.floor(i / self.lentX) for i in gX])  # X tile to read
 
         # create a empty output directory
         out = np.empty((len(gY), len(gX)), dtype=self.dtype)
-        
+
         for iY in gtY:      # loop over Y tiles to get
             for iX in gtX:  # loop over X tiles to get
-                
+
                 # get the tile and reshape it
                 ntile = iY * np.ceil(self.lenX / self.lentX) + iX
                 tile = get_tilen(f, ntile, (self.lentX, self.lentY))
@@ -614,13 +625,13 @@ class sparky_2d(fileiobase.data_nd):
                 maxY = (iY + 1) * self.lentY
 
                 # determind what elements are needed from this tile
-                XinX = [i for i in gX if maxX > i >= minX ] # values in gX
-                XinT = [i - minX for i in XinX] # tile index values
-                XinO = [gX.index(i) for i in XinX] # output indexes
+                XinX = [i for i in gX if maxX > i >= minX]  # values in gX
+                XinT = [i - minX for i in XinX]  # tile index values
+                XinO = [gX.index(i) for i in XinX]  # output indexes
 
-                YinY = [i for i in gY if maxY > i >= minY ] # values in gX
-                YinT = [i - minY for i in YinY] # tile index values
-                YinO = [gY.index(i) for i in YinY] # output indexes
+                YinY = [i for i in gY if maxY > i >= minY]  # values in gX
+                YinT = [i - minY for i in YinY]  # tile index values
+                YinO = [gY.index(i) for i in YinY]  # output indexes
 
                 # take elements from the tile
                 ctile = tile.take(XinT, axis=1).take(YinT, axis=0)
@@ -644,6 +655,7 @@ class sparky_2d(fileiobase.data_nd):
         f.close()
         return out
 
+
 class sparky_3d(fileiobase.data_nd):
     """
     Emulates a ndarray object without loading data into memory for low memory
@@ -664,7 +676,7 @@ class sparky_3d(fileiobase.data_nd):
 
     """
     def __init__(self, filename, order=None):
-        """ 
+        """
         Create and set up object
         """
         # open the file
@@ -673,9 +685,9 @@ class sparky_3d(fileiobase.data_nd):
 
         # read the fileheader
         self.dic = fileheader2dic(get_fileheader(f))
-        
+
         if self.dic["naxis"] != 3:
-            raise StandardError,"file not 3D Sparky file"
+            raise StandardError("file not 3D Sparky file")
 
         # read in the axisheaders
         self.dic["w1"] = axisheader2dic(get_axisheader(f))
@@ -696,7 +708,7 @@ class sparky_3d(fileiobase.data_nd):
         # check order
         if order == None:
             order = (0, 1, 2)
-        
+
         # finalize
         self.dtype = np.dtype("float32")
         self.order = order
@@ -711,38 +723,38 @@ class sparky_3d(fileiobase.data_nd):
         return n
 
     def __fgetitem__(self, (sZ, sY, sX)):
-        """ 
+        """
         Returns ndarray of selected values.
 
         (sZ, sY, sX) is a well formateed tuple of slices
         """
         f = open(self.filename, 'rb')
 
-        gZ = range(self.lenZ)[sZ]   # list of values to take in Z
-        gY = range(self.lenY)[sY]   # list of values to take in Y
-        gX = range(self.lenX)[sX]   # list of values to take in X
+        gZ = range(self.lenZ)[sZ]  # list of values to take in Z
+        gY = range(self.lenY)[sY]  # list of values to take in Y
+        gX = range(self.lenX)[sX]  # list of values to take in X
 
         # tiles to get in each dim to read
-        gtZ = set([np.floor(float(i) / self.lentZ) for i in gZ]) # Z tiles
-        gtY = set([np.floor(float(i) / self.lentY) for i in gY]) # Y tiles
-        gtX = set([np.floor(float(i) / self.lentX) for i in gX]) # X tiles
+        gtZ = set([np.floor(float(i) / self.lentZ) for i in gZ])  # Z tiles
+        gtY = set([np.floor(float(i) / self.lentY) for i in gY])  # Y tiles
+        gtX = set([np.floor(float(i) / self.lentX) for i in gX])  # X tiles
 
         # total tiles in each dim
-        ttX = np.ceil(self.lenX / float(self.lentX)) # total tiles in X
-        ttY = np.ceil(self.lenY / float(self.lentY)) # total tiles in Y
-        ttZ = np.ceil(self.lenZ / float(self.lentZ)) # total tiles in Z
+        ttX = np.ceil(self.lenX / float(self.lentX))  # total tiles in X
+        ttY = np.ceil(self.lenY / float(self.lentY))  # total tiles in Y
+        ttZ = np.ceil(self.lenZ / float(self.lentZ))  # total tiles in Z
 
         tile_tup = (self.lentZ, self.lentY, self.lentX)
 
         # create a empty output array
         out = np.empty((len(gZ), len(gY), len(gX)), dtype=self.dtype)
-        
+
         for iZ in gtZ:          # loop over Z tiles to get
             for iY in gtY:      # loop over Y tiles to get
                 for iX in gtX:  # loop over X tiles to get
-                
+
                     # get the tile and reshape it
-                    ntile = iZ*ttX*ttY + iY*ttX + iX
+                    ntile = iZ * ttX * ttY + iY * ttX + iX
                     tile = get_tilen(f, ntile, tile_tup)
                     tile = tile.reshape(tile_tup)
 
@@ -757,17 +769,17 @@ class sparky_3d(fileiobase.data_nd):
                     maxZ = (iZ + 1) * self.lentZ
 
                     # determind what elements are needed from this tile
-                    XinX = [i for i in gX if maxX > i >= minX] # values in gX
-                    XinT = [i - minX for i in XinX] # tile index values
-                    XinO = [gX.index(i) for i in XinX] # output indexes
+                    XinX = [i for i in gX if maxX > i >= minX]  # values in gX
+                    XinT = [i - minX for i in XinX]  # tile index values
+                    XinO = [gX.index(i) for i in XinX]  # output indexes
 
-                    YinY = [i for i in gY if maxY > i >= minY] # values in gX
-                    YinT = [i - minY for i in YinY] # tile index values
-                    YinO = [gY.index(i) for i in YinY] # output indexes
+                    YinY = [i for i in gY if maxY > i >= minY]  # values in gX
+                    YinT = [i - minY for i in YinY]  # tile index values
+                    YinO = [gY.index(i) for i in YinY]  # output indexes
 
-                    ZinZ = [i for i in gZ if maxZ > i >= minZ] # values in gX
-                    ZinT = [i - minZ for i in ZinZ] # tile index values
-                    ZinO = [gZ.index(i) for i in ZinZ] # output indexes
+                    ZinZ = [i for i in gZ if maxZ > i >= minZ]  # values in gX
+                    ZinT = [i - minZ for i in ZinZ]  # tile index values
+                    ZinO = [gZ.index(i) for i in ZinZ]  # output indexes
 
                     # take elements from the tile
                     ctile = tile.take(XinT, axis=2).take(YinT, axis=1)
@@ -791,16 +803,15 @@ class sparky_3d(fileiobase.data_nd):
                     #print "ZinT",ZinT
                     #print "ZinO",ZinO
 
-                    # put the cut tile to the out array 
+                    # put the cut tile to the out array
                     out[np.ix_(ZinO, YinO, XinO)] = ctile
         f.close()
         return out
 
 
 # tile and data get/put functions
-
 def get_tilen(f, n_tile, tw_tuple):
-    """ 
+    """
     Read a tile from a Sparky file object.
 
     Parameters
@@ -829,11 +840,12 @@ def get_tilen(f, n_tile, tw_tuple):
         tsize = tsize * i
 
     # seek to the beginning of the tile
-    f.seek(int(180 + 128 * len(tw_tuple) + n_tile * tsize))    
+    f.seek(int(180 + 128 * len(tw_tuple) + n_tile * tsize))
     return np.frombuffer(f.read(tsize), dtype='>f4')
 
+
 def get_tile(f, num_points):
-    """ 
+    """
     Read the next tile from a Sparky file object.
 
     Parameters
@@ -852,8 +864,9 @@ def get_tile(f, num_points):
     bsize = num_points * 4        # size in bytes
     return np.frombuffer(f.read(bsize), dtype='>f4')
 
+
 def put_tile(f, tile):
-    """ 
+    """
     Put a tile to a Sparky file object.
 
     Parameters
@@ -867,29 +880,31 @@ def put_tile(f, tile):
     f.write(tile.astype('>f4').tostring())
     return
 
+
 def get_data(f):
-    """ 
+    """
     Read all data from sparky file object.
     """
     return np.frombuffer(f.read(), dtype='>f4')
 
+
 def put_data(f, data):
-    """ 
+    """
     Put data to a Sparky file object.
 
-    This function does not untile data. This should be done before calling 
+    This function does not untile data. This should be done before calling
     this function
-    
+
     """
     f.write(data.astype('>f4').tostring())
     return
 
-# tiling/untiling functions
 
+# tiling/untiling functions
 def find_tilen_2d(data, ntile, (lentY, lentX)):
-    """ 
+    """
     Return a tile from a 2D NMR data set.
-    
+
     Parameters
     ----------
     data : 2D ndarray
@@ -909,8 +924,8 @@ def find_tilen_2d(data, ntile, (lentY, lentX)):
     Edge tiles are zero filled to the indicated tile size.
 
     """
-    ttX = np.ceil(data.shape[1] / float(lentX))    # total tiles in X dim
-    ttY = np.ceil(data.shape[0] / float(lentY))    # total tiles in Y dim
+    ttX = np.ceil(data.shape[1] / float(lentX))  # total tiles in X dim
+    ttY = np.ceil(data.shape[0] / float(lentY))  # total tiles in Y dim
 
     # tile number in each dim
     Xt = ntile % ttX
@@ -929,13 +944,14 @@ def find_tilen_2d(data, ntile, (lentY, lentX)):
     # see if this is the case
     if tile.shape == (lentY, lentX):    # well sized tile
         return tile.flatten()
-    else:  
+    else:
         new_tile = np.zeros((lentY, lentX), dtype="float32")
         new_tile[:tile.shape[0], :tile.shape[1]] = tile
         return new_tile.flatten()
 
+
 def tile_data2d(data, (lentY, lentX)):
-    """ 
+    """
     Tile 2D data into a 1D array.
 
     Parameters
@@ -952,24 +968,25 @@ def tile_data2d(data, (lentY, lentX)):
 
     """
     # determind the number of tiles in data
-    ttX = np.ceil(data.shape[1] / float(lentX)) # total tiles in X dim
-    ttY = np.ceil(data.shape[0] / float(lentY)) # total tiles in Y dim
+    ttX = np.ceil(data.shape[1] / float(lentX))  # total tiles in X dim
+    ttY = np.ceil(data.shape[0] / float(lentY))  # total tiles in Y dim
     tt = ttX * ttY  # total number of tiles
-    
+
     # calc some basic parameter
     tsize = lentX * lentY   # number of points in one tile
     t_tup = (lentY, lentX)  # tile size tuple
 
     # create an empty array to store file data
     out = np.empty((tt * tsize), dtype="float32")
-    
+
     for i in xrange(int(tt)):
         out[i * tsize:(i + 1) * tsize] = find_tilen_2d(data, i, t_tup)
 
     return out
 
+
 def untile_data2D(data, (lentY, lentX), (lenY, lenX)):
-    """ 
+    """
     Rearrange 2D Tiled/Sparky formatted data into standard format.
 
     Parameters
@@ -988,13 +1005,13 @@ def untile_data2D(data, (lentY, lentX), (lenY, lenX)):
 
     """
     # determind the number of tiles in data
-    ttX = np.ceil(lenX / float(lentX))    # total tiles in X dim
-    ttY = np.ceil(lenY / float(lentY))    # total tiles in Y dim
+    ttX = np.ceil(lenX / float(lentX))  # total tiles in X dim
+    ttY = np.ceil(lenY / float(lentY))  # total tiles in Y dim
     tt = ttX * ttY
 
     # calc some basic parameter
-    tsize = lentX * lentY     # number of points in one tile
-    t_tup = (lentY, lentX)   # tile size tuple
+    tsize = lentX * lentY  # number of points in one tile
+    t_tup = (lentY, lentX)  # tile size tuple
 
     # create an empty array to store file data
     out = np.empty((ttY * lentY, ttX * lentX), dtype="float32")
@@ -1010,7 +1027,7 @@ def untile_data2D(data, (lentY, lentX), (lenY, lenX)):
             ntile = iY * ttX + iX
             minT = ntile * tsize
             maxT = (ntile + 1) * tsize
-            
+
             # DEBUG
             #print "ntile",ntile
             #print "minX",minX,"maxX",maxX
@@ -1024,10 +1041,11 @@ def untile_data2D(data, (lentY, lentX), (lenY, lenX)):
 
     return out[:lenY, :lenX]
 
+
 def find_tilen_3d(data, ntile, (lentZ, lentY, lentX)):
-    """ 
-    Return a single tile from a 3D NMR data set. 
-    
+    """
+    Return a single tile from a 3D NMR data set.
+
     Parameters
     ----------
     data : 3D ndarray
@@ -1041,20 +1059,20 @@ def find_tilen_3d(data, ntile, (lentZ, lentY, lentX)):
     -------
     tile : 1D ndarray
         Tile of NMR data, returned as 1D array.
-    
+
     Notes
     -----
     Edge tiles are zero filled to the indicated tile size.
 
     """
-    ttX = np.ceil(data.shape[2] / float(lentX))    # total tiles in X dim
-    ttY = np.ceil(data.shape[1] / float(lentY))    # total tiles in Y dim
-    ttZ = np.ceil(data.shape[0] / float(lentZ))    # total tiles in Z dim
+    ttX = np.ceil(data.shape[2] / float(lentX))  # total tiles in X dim
+    ttY = np.ceil(data.shape[1] / float(lentY))  # total tiles in Y dim
+    ttZ = np.ceil(data.shape[0] / float(lentZ))  # total tiles in Z dim
 
     # tile number in each dim
     Xt = ntile % ttX
     Yt = int(np.floor(ntile / ttX)) % ttY
-    Zt = int( np.floor( ntile / (ttX * ttY) ) )
+    Zt = int(np.floor(ntile / (ttX * ttY)))
 
     # dimention limits
     Xmin = int(Xt * lentX)
@@ -1065,20 +1083,21 @@ def find_tilen_3d(data, ntile, (lentZ, lentY, lentX)):
 
     Zmin = int(Zt * lentZ)
     Zmax = int((Zt + 1) * lentZ)
-    
+
     tile = data[Zmin:Zmax, Ymin:Ymax, Xmin:Xmax]
 
     # some edge tiles might need zero filling
     # see if this is the case
-    if tile.shape == (lentZ, lentY, lentX):    # well sized tile
+    if tile.shape == (lentZ, lentY, lentX):  # well sized tile
         return tile.flatten()
-    else:  
+    else:
         new_tile = np.zeros((lentZ, lentY, lentX), dtype="float32")
         new_tile[:tile.shape[0], :tile.shape[1], :tile.shape[2]] = tile
         return new_tile.flatten()
 
+
 def tile_data3d(data, (lentZ, lentY, lentX)):
-    """ 
+    """
     Tile 3D data into a 1D numpy array
 
     Parameters
@@ -1092,28 +1111,29 @@ def tile_data3d(data, (lentZ, lentY, lentX)):
     -------
     tile : 1D ndarray
         Tiled/Sparky formatted NMR data, returned as 1D array.
-     
+
     """
     # determind the number of tiles in data
-    ttX = np.ceil(data.shape[2] / float(lentX))    # total tiles in X dim
-    ttY = np.ceil(data.shape[1] / float(lentY))    # total tiles in Y dim
-    ttZ = np.ceil(data.shape[0] / float(lentZ))    # total tiles in Z dim
+    ttX = np.ceil(data.shape[2] / float(lentX))  # total tiles in X dim
+    ttY = np.ceil(data.shape[1] / float(lentY))  # total tiles in Y dim
+    ttZ = np.ceil(data.shape[0] / float(lentZ))  # total tiles in Z dim
 
     tt = ttX * ttY * ttZ    # total number of tiles
-    
+
     # calc some basic parameter
-    tsize = lentX * lentY * lentZ       # number of points in one tile
-    t_tup = (lentZ, lentY, lentX)     # tile size tuple
+    tsize = lentX * lentY * lentZ  # number of points in one tile
+    t_tup = (lentZ, lentY, lentX)  # tile size tuple
 
     # create an empty array to store file data
     out = np.empty((tt * tsize), dtype="float32")
-    
+
     for i in xrange(int(tt)):
         out[i * tsize:(i + 1) * tsize] = find_tilen_3d(data, i, t_tup)
     return out
 
+
 def untile_data3D(data, (lentZ, lentY, lentX), (lenZ, lenY, lenX)):
-    """ 
+    """
     Rearrange 3D tiled/Sparky formatted data into standard format.
 
     Parameters
@@ -1130,16 +1150,16 @@ def untile_data3D(data, (lentZ, lentY, lentX), (lenZ, lenY, lenX)):
     sdata : 3D ndarray
         NMR data, untiled/standard format.
 
-    """    
+    """
     # determind the number of tiles in data
-    ttX = np.ceil(lenX / float(lentX))    # total tiles in X dim
-    ttY = np.ceil(lenY / float(lentY))    # total tiles in Y dim
-    ttZ = np.ceil(lenZ / float(lentZ))    # total tiles in Z dim
+    ttX = np.ceil(lenX / float(lentX))  # total tiles in X dim
+    ttY = np.ceil(lenY / float(lentY))  # total tiles in Y dim
+    ttZ = np.ceil(lenZ / float(lentZ))  # total tiles in Z dim
     tt = ttX * ttY * ttZ
 
     # calc some basic parameter
-    tsize = lentX * lentY * lentZ   # number of points in one tile
-    t_tup = (lentZ, lentY, lentX)   # tile size tuple
+    tsize = lentX * lentY * lentZ  # number of points in one tile
+    t_tup = (lentZ, lentY, lentX)  # tile size tuple
 
     # create an empty array to store file data
     out = np.empty((ttZ * lentZ, ttY * lentY, ttX * lentX), dtype="float32")
@@ -1147,7 +1167,7 @@ def untile_data3D(data, (lentZ, lentY, lentX), (lenZ, lenY, lenX)):
     for iZ in xrange(int(ttZ)):
         for iY in xrange(int(ttY)):
             for iX in xrange(int(ttX)):
-            
+
                 minX = iX * lentX
                 maxX = (iX + 1) * lentX
 
@@ -1165,36 +1185,38 @@ def untile_data3D(data, (lentZ, lentY, lentX), (lenZ, lenY, lenX)):
                 data[minT:maxT].reshape(t_tup)
 
     return out[:lenZ, :lenY, :lenX]
- 
-# fileheader functions
 
+
+# fileheader functions
 def get_fileheader(f):
-    """ 
+    """
     Get fileheader from file and return a list.
 
     Reads the 180 byte file header of a Sparky file
 
     """
     # file header as descriped in ucsffile.cc of sparky source
-    # header is packed as follows: 
+    # header is packed as follows:
     # ident(10s),naxis(c),ncomponents(c),encoding(c),version(c)
     # owner(9s),date(26s),comment(80s),pad(3x),seek_pos(l),scratch(40s),
     # pad(4x)
 
     # note that between comment and seek_pos is a 3 byte pad
     # so that the long is @ a multiple of 4
-    # also sparky always packs big-endian, hence > 
-    return struct.unpack('>10s 4c 9s 26s 80s 3x l 40s 4x', f.read(180) )  
+    # also sparky always packs big-endian, hence >
+    return struct.unpack('>10s 4c 9s 26s 80s 3x l 40s 4x', f.read(180))
+
 
 def put_fileheader(f, fl):
-    """ 
+    """
     Write fileheader list to file (180-bytes).
     """
-    f.write( struct.pack('>10s 4c 9s 26s 80s 3x l 40s 4x', *fl))
+    f.write(struct.pack('>10s 4c 9s 26s 80s 3x l 40s 4x', *fl))
     return
 
+
 def fileheader2dic(header):
-    """ 
+    """
     Convert a fileheader list into a Sparky parameter dictionary.
     """
     dic = dict()
@@ -1208,14 +1230,15 @@ def fileheader2dic(header):
     dic["comment"] = str(header[7]).strip('\x00')
     dic["seek_pos"] = header[8]     # eof seek position
     dic["scratch"] = str(header[9]).strip('\x00')
-    return dic  
+    return dic
+
 
 def dic2fileheader(dic):
-    """ 
+    """
     Convert a Sparky parameter dictionary into a fileheader list.
     """
     fl = [0] * 10
-    fl[0] = dic["ident"]  
+    fl[0] = dic["ident"]
     fl[1] = chr(dic["naxis"])
     fl[2] = chr(dic["ncomponents"])
     fl[3] = chr(dic["encoding"])
@@ -1227,13 +1250,14 @@ def dic2fileheader(dic):
     fl[9] = dic["scratch"]
     return fl
 
+
 # axisheader functions
 def get_axisheader(f):
-    """ 
+    """
     Get an axisheader from file and return a list.
 
     Only the first 44 bytes are examined, the NMR_PROCESSED and other header
-    parameters are ignored since the current version of Sparky does not use 
+    parameters are ignored since the current version of Sparky does not use
     them.
 
     """
@@ -1244,19 +1268,21 @@ def get_axisheader(f):
     # first_order(f),first_pt_scale(f),ZEROS
     return struct.unpack('>6s h 3I 6f 84s', f.read(128))
 
+
 def put_axisheader(f, al):
-    """ 
+    """
     Write an axisheader list to file (128-bytes written).
     """
-    f.write(struct.pack('>6s h 3I 6f 84s', *al) )
+    f.write(struct.pack('>6s h 3I 6f 84s', *al))
     return
 
+
 def axisheader2dic(header):
-    """ 
+    """
     Convert an axisheader list into Sparky parameter axis dictionary.
     """
     dic = dict()
-    dic["nucleus"] = str(header[0]).strip('\x00') 
+    dic["nucleus"] = str(header[0]).strip('\x00')
     dic["spectral_shift"] = header[1]
     dic["npoints"] = header[2]
     dic["size"] = header[3]
@@ -1270,12 +1296,13 @@ def axisheader2dic(header):
     dic["extended"] = header[11]
     return dic
 
+
 def dic2axisheader(dic):
-    """ 
+    """
     Convert a Sparky parameter axis diction into a axisherder list.
     """
     al = [0] * 12
-    al[0] = dic["nucleus"] 
+    al[0] = dic["nucleus"]
     al[1] = dic["spectral_shift"]
     al[2] = dic["npoints"]
     al[3] = dic["size"]
@@ -1287,5 +1314,4 @@ def dic2axisheader(dic):
     al[9] = dic["first_order"]
     al[10] = dic["first_pt_scale"]
     al[11] = dic["extended"]
-
     return al

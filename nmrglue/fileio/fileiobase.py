@@ -9,8 +9,9 @@ import itertools
 
 import numpy as np
 
+
 def create_blank_udic(ndim):
-    """ 
+    """
     Create a blank universal dictionary for a spectrum of dimension ndim.
     """
     udic = dict()
@@ -19,19 +20,19 @@ def create_blank_udic(ndim):
     for i in xrange(ndim):
         d = dict()
         d["sw"] = 999.99        # spectral width in Hz
-        d["complex"] = True     # Quadrature, True when dimension is complex  
+        d["complex"] = True     # Quadrature, True when dimension is complex
         d["obs"] = 999.99       # Observation frequency in MHz
         d["car"] = 999.99       # Carrier frequency in Hz
         d["size"] = 1           # Number of points in dimension based on the
-                                # shape of the data array. As such the direct 
-                                # dimension (-1) size is R|I, all indirect 
+                                # shape of the data array. As such the direct
+                                # dimension (-1) size is R|I, all indirect
                                 # dimensions are R+I
 
         d["label"] = ["X", "Y", "Z", "A"][i]    # name of dimension
 
         # encoding of dimension, ie states, tppi, etc.  The direct dimension
         # should be listed as direct.
-        if i == ndim-1:
+        if i == ndim - 1:
             d["encoding"] = "direct"
         else:
             d["encoding"] = "states"
@@ -44,14 +45,15 @@ def create_blank_udic(ndim):
 
     return udic
 
+
 class unit_conversion():
-    """ 
+    """
     Provides methods to convert between common NMR units
 
     Parameters
     ----------
     size : int
-        Number of points in dimension (R|I). 
+        Number of points in dimension (R|I).
     cplex : bool
         True if dimension is complex, False is real.
     sw : float
@@ -63,15 +65,15 @@ class unit_conversion():
 
     """
     def __init__(self, size, cplx, sw, obs, car):
-        """ 
+        """
         create and set up a unit_conversion object
         """
         # fundamental units
         self._size = size
         self._cplx = cplx
-        self._sw   = sw
-        self._obs  = obs
-        self._car  = car
+        self._sw = sw
+        self._obs = obs
+        self._car = car
 
         # derived units (these are in ppm)
         self._delta = -self._sw / (self._size * self._obs)
@@ -91,8 +93,8 @@ class unit_conversion():
         return (pts * self._delta + self._first) * self._obs
 
     def __ppm2pts(self, ppm):
-        return (ppm - self._first) / self._delta   
-    
+        return (ppm - self._first) / self._delta
+
     def __pts2ppm(self, pts):
         return (pts * self._delta) + self._first
 
@@ -101,7 +103,7 @@ class unit_conversion():
         return sec * self._sw
 
     def __pts2sec(self, pts):
-        return pts * 1. /self._sw
+        return pts * 1. / self._sw
 
     def __ms2pts(self, ms):
         return ms * self._sw / 1.e3
@@ -117,7 +119,7 @@ class unit_conversion():
 
     # routers
     def __unit2pnt(self, val, units):
-        """ 
+        """
         Convert units to points
         """
         units = units.upper()
@@ -141,7 +143,7 @@ class unit_conversion():
         return pts
 
     def __pnt2unit(self, val, units):
-        """ 
+        """
         Convert points to units
         """
         units = units.upper()
@@ -164,7 +166,7 @@ class unit_conversion():
         return k
 
     def __str2pnt(self, s):
-        """ 
+        """
         Convert string with units to points
         """
         units = s.strip(string.digits + string.whitespace + "." + "-").upper()
@@ -214,25 +216,25 @@ class unit_conversion():
         return self.__pnt2unit(val, "PERCENT")
 
     def seconds(self, val):
-        """ 
+        """
         Convert to seconds
         """
         return self.__pnt2unit(val, "SEC")
 
     def sec(self, val):
-        """ 
+        """
         Convert to seconds
         """
         return self.__pnt2unit(val, "SEC")
 
     def ms(self, val):
-        """ 
+        """
         Convert to milliseconds (ms)
         """
         return self.__pnt2unit(val, "MS")
 
     def us(self, val):
-        """ 
+        """
         Convert to microseconds (us)
         """
         return self.__pnt2unit(val, "US")
@@ -245,11 +247,11 @@ class unit_conversion():
 
     # limits and scales
     def percent_limits(self):
-        """ 
+        """
         Return tuple of left and right edges in percent
         """
         return 0.0, 100.0
-    
+
     def percent_scale(self):
         """
         Return array of percent values
@@ -260,7 +262,7 @@ class unit_conversion():
         """
         Return tuple of left and right edges in ppm
         """
-        return self.ppm(0), self.ppm(self._size-1)
+        return self.ppm(0), self.ppm(self._size - 1)
 
     def ppm_scale(self):
         """
@@ -270,7 +272,7 @@ class unit_conversion():
         return np.linspace(x0, x1, self._size)
 
     def hz_limits(self):
-        """ 
+        """
         Return tuple of left and right edges in Hz
         """
         return self.hz(0), self.hz(self._size - 1)
@@ -283,7 +285,7 @@ class unit_conversion():
         return np.linspace(x0, x1, self._size)
 
     def sec_limits(self):
-        """ 
+        """
         Return tuple of left and right edges in seconds
         """
         return self.sec(0), self.sec(self._size - 1)
@@ -296,7 +298,7 @@ class unit_conversion():
         return np.linspace(x0, x1, self._size)
 
     def ms_limits(self):
-        """ 
+        """
         Return tuple of left and right edges in milliseconds
         """
         return self.ms(0), self.ms(self._size - 1)
@@ -309,7 +311,7 @@ class unit_conversion():
         return np.linspace(x0, x1, self._size)
 
     def us_limits(self):
-        """ 
+        """
         Return tuple of left and right edges in milliseconds
         """
         return self.us(0), self.us(self._size - 1)
@@ -325,15 +327,15 @@ class unit_conversion():
 
 
 def open_towrite(filename, overwrite=False):
-    """ 
+    """
     Open filename for writing and return file object
 
     Function checks if file exists (and raises IOError if overwrite=False) and
     creates necessary directiories as needed.
     """
     # check if file exists and overwrite if False
-    if os.path.exists(filename) and (overwrite==False):
-        raise IOError,"File exists, recall with overwrite=True"
+    if os.path.exists(filename) and (overwrite == False):
+        raise IOError("File exists, recall with overwrite=True")
 
     p, fn = os.path.split(filename)  # split into filename and path
     # create directories if needed
@@ -347,18 +349,23 @@ def open_towrite(filename, overwrite=False):
 ################################################
 
 # iterators for ND array
+
+
 def ndfrom_iter(shape, slices):
     ch = [range(lenx)[sX] for lenx, sX in zip(shape, slices)]
     return itertools.product(*ch)
+
 
 def ndto_iter(shape, slices):
     ich = [range(len(range(lenx)[sX])) for lenx, sX in zip(shape, slices)]
     return itertools.product(*ich)
 
+
 def ndtofrom_iter(shape, slices):
     ch = [range(lenx)[sX] for lenx, sX in zip(shape, slices)]
     ich = [range(len(i)) for i in ch]
     return zip(itertools.product(*ich), itertools.product(*ch))
+
 
 def size_and_ndtofrom_iter(shape, slices):
     ch = [range(lenx)[sX] for lenx, sX in zip(shape, slices)]
@@ -368,21 +375,24 @@ def size_and_ndtofrom_iter(shape, slices):
 
 
 # index2trace and trace2index functions
+
+
 def index2trace_flat(shape, index):
     """
     Calculate trace number from shape and index of all indirect dimensions
     assuming a flat structure
     """
-    # We need to perform: 
-    # index[0]*shape[1]*...shape[-1] + index[1]*shape[2]*...shape[-1] + ... 
+    # We need to perform:
+    # index[0]*shape[1]*...shape[-1] + index[1]*shape[2]*...shape[-1] + ...
     # + index[-1]*shape[-1] + index[-1]
     # To do this we calculate the product of shape[X] elements and multiple
     # by the corresponding index element, index[-1] as added at the beginning
     a = index[-1]
     for i, v in enumerate(index[:-1]):
-        mult = reduce(lambda x, y: x*y, shape[i + 1:])
+        mult = reduce(lambda x, y: x * y, shape[i + 1:])
         a = a + mult * v
     return a
+
 
 def trace2index_flat(shape, ntrace):
     """
@@ -397,6 +407,7 @@ def trace2index_flat(shape, ntrace):
     index.insert(0, q)
     return tuple(index)
 
+
 def index2trace_opp(shape, index):
     """
     Calculate trace number from shape and index of all indirect dimensions
@@ -406,15 +417,16 @@ def index2trace_opp(shape, index):
     # deal with the phase component
     phases = [v % 2 for v in index]
     nphase = index2trace_flat([2] * n, phases[::-1])
-    # deal with the remainer 
+    # deal with the remainer
     pindex = [v // 2 for v in index]
     pshape = [i / 2 for i in shape]
     nbase = index2trace_flat(pshape, pindex)
     return nbase * 2 ** n + nphase
 
-def trace2index_opp(shape, ntrace):   
+
+def trace2index_opp(shape, ntrace):
     """
-    Calculate the index of a trace assuming opposite phase/time increment 
+    Calculate the index of a trace assuming opposite phase/time increment
     ordering
     """
     n = len(shape)
@@ -425,6 +437,7 @@ def trace2index_opp(shape, ntrace):
     total = [b * 2 + a for b, a in zip(base, to_add)]
     return tuple(total)
 
+
 def index2trace_reg(shape, index):
     """
     Calculate trace number from shape and index of all indirect dimensions
@@ -434,20 +447,21 @@ def index2trace_reg(shape, index):
     # deal with the phase component
     phases = [v % 2 for v in index]
     nphase = index2trace_flat([2] * n, phases)
-    # deal with the remainer 
+    # deal with the remainer
     pindex = [v // 2 for v in index]
     pshape = [i / 2 for i in shape]
     nbase = index2trace_flat(pshape, pindex)
-    return nbase*2**n+nphase
+    return nbase * 2 ** n + nphase
 
-def trace2index_reg(shape, ntrace):   
+
+def trace2index_reg(shape, ntrace):
     """
-    Calculate the index of a trace assuming the same phase/time increment 
+    Calculate the index of a trace assuming the same phase/time increment
     ordering
     """
     n = len(shape)
-    q, r = divmod(ntrace, 2**n)
-    to_add = list(trace2index_flat([2]*n, r))
+    q, r = divmod(ntrace, 2 ** n)
+    to_add = list(trace2index_flat([2] * n, r))
     pshape = [i / 2 for i in shape]
     base = list(trace2index_flat(pshape, q))
     total = [b * 2 + a for b, a in zip(base, to_add)]
@@ -459,11 +473,11 @@ def trace2index_reg(shape, ntrace):
 # inherited classes should define:
 #
 #    __init__ which sets up the object and defines at minimum
-#       
+#
 #       self.fshape shape of data on disk (shape when order = (0,1,2...)
-#       self.order order of axes, default is (0,1,2,...)       
+#       self.order order of axes, default is (0,1,2,...)
 #       self.dtype
-#       
+#
 #   self.__setdimandshape__ can be called to set self.dim and self.shape
 #    if they are not set by __init__
 #
@@ -492,11 +506,11 @@ class data_nd(object):
     methods:
 
     __init__ which must set up the object and defines at minimum:
-        
+
         self.fshape : tuple
             Shape of the data on disk, the shape when order = (0, 1, 2, ..)
         self.order : tuple
-            Ordering of the axes 
+            Ordering of the axes
         self.dtype : dtype
             Dtype of the emulated ndarray
 
@@ -506,7 +520,8 @@ class data_nd(object):
     __fgetitem__ which takes a well formatted tuple of slices and returns a
         ndarray object with the selected data
 
-    __fcopy__(self, order) which created a copy of the object with the new order
+    __fcopy__(self, order) which created a copy of the object with the new
+        order
 
     """
 
@@ -520,7 +535,7 @@ class data_nd(object):
         self.shape = tuple([self.fshape[i] for i in self.order])
 
     def __copy__(self):
-        """ 
+        """
         create a copy
         """
         return __fcopy(self, self.order)
@@ -539,31 +554,31 @@ class data_nd(object):
         while Ellipsis in rlist:
             i = rlist.index(Ellipsis)
             rlist.pop(i)
-            for j in range(self.ndim-len(rlist)):
+            for j in range(self.ndim - len(rlist)):
                 rlist.insert(i, slice(None))
 
         if len(rlist) > self.ndim:
-            raise IndexError,"invalid index"
+            raise IndexError("invalid index")
 
         # replace none-slices with slice objects
         for i, v in enumerate(rlist):
             if type(v) != slice:
-                
+
                 # check for out of range indexes
                 if v >= self.shape[i]:
-                    raise IndexError, "index(%s) out of range(0<=index<%s) \
-                    in dimension %s" % (v, self.shape[i]-1, i)
+                    raise IndexError("index(%s) out of range(0 <= index < %s) \
+                    in dimension %s" % (v, self.shape[i] - 1, i))
 
-                if v <= (-1*self.shape[i]-1):
-                    raise IndexError, "index(%s) out of range(0<=index<%s) \
-                    in dimension %s" % (v, self.shape[i]-1, i)
+                if v <= (-1 * self.shape[i] - 1):
+                    raise IndexError("index(%s) out of range(0 <= index < %s) \
+                    in dimension %s" % (v, self.shape[i] - 1, i))
 
                 if v < 0:
-                    w  = self.shape[i] + v
+                    w = self.shape[i] + v
                     rlist[i] = slice(w, w + 1, 1)
                 else:
                     rlist[i] = slice(v, v + 1, 1)
-            
+
         # pad the list with additional dimentions
         for i in range(len(rlist), self.ndim):
             rlist.append(slice(None))
@@ -601,9 +616,9 @@ class data_nd(object):
         if axis2 < 0:
             axis2 = self.ndim - axis2
         if axis1 >= self.ndim:
-            raise ValueError, "bad axis1 argument to swapaxes"
+            raise ValueError("bad axis1 argument to swapaxes")
         if axis2 >= self.ndim:
-            raise ValueError, "bad axis2 argument to swapaxes"
+            raise ValueError("bad axis2 argument to swapaxes")
 
         order = list(self.order)
         order[axis1], order[axis2] = order[axis2], order[axis1]
@@ -628,7 +643,7 @@ class data_nd(object):
         -------
         out : data_nd object
             Object whose axes are permuted.
-            
+
         """
         if axes == ():    # default is to switch order of axes
             axes = range(self.ndim)[::-1]
@@ -640,15 +655,15 @@ class data_nd(object):
             axes = [int(i) for i in axes]
         except:
             raise TypeError("an integer is required")
-        
+
         if len(axes) != self.ndim:   # check for to few/many axes
             raise ValueError("axes don't match array")
 
         # replace negatives axes values with positives
         for i, v in enumerate(axes):
             if v < 0:
-                axes[i] = self.ndim+v
-        
+                axes[i] = self.ndim + v
+
         # check for invalid axes
         for v in axes:
             if v >= self.ndim:

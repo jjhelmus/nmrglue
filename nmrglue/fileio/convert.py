@@ -14,6 +14,7 @@ from . import sparky
 from . import rnmrtk
 from . import fileiobase
 
+
 class converter(object):
     """
     Object which allows conversion between NMR file formats, including low
@@ -21,7 +22,7 @@ class converter(object):
 
     Conversion between NMR file formats with this class involves three steps.
     First a new converter object must be created.  Then the converter must be
-    loaded with data using a ``from_`` method.  Finally, the dictionary and 
+    loaded with data using a ``from_`` method.  Finally, the dictionary and
     data representation of a NMR data in the desired format is extracted using
     a ``to_`` method.  This can then be written to disk.
 
@@ -35,18 +36,18 @@ class converter(object):
 
     Spectral parameters can be provided directly by passing a Universal
     dictionary to any of the ``from_`` methods.  If not provided the spectral
-    parameters are guessed from the file format's dictionary of parameters.   
+    parameters are guessed from the file format's dictionary of parameters.
 
     """
     def __init__(self):
-        """ 
+        """
         Create a converter object
         """
         pass
 
     # utility functions
     def __returndata(self):
-        """ 
+        """
         Return data or emulated data after error checking
         """
 
@@ -78,7 +79,7 @@ class converter(object):
             return udata_nd(self._data, iproc, oproc, odtype, order)
 
     def __procdata(self):
-        """ 
+        """
         Process data as indicated by flags
         """
         # copy the data
@@ -89,29 +90,29 @@ class converter(object):
         if data.ndim >= 2 and "alt_id_sign" in self._iproc:
             #data[1::2] = -data[1::2]
             s = [slice(None, None, None)] * data.ndim
-            for i in range(data.ndim-1):
+            for i in range(data.ndim - 1):
                 s[i] = slice(1, None, 2)
                 data[s] = -data[s]
                 s[i] = slice(None, None, None)
 
         if "realfactor" in self._iproc:
             data.real = data.real * self._iproc['realfactor']
-           
+
         if "imagfactor" in self._iproc and np.iscomplexobj(data):
             data.imag = data.imag * self._iproc['imagfactor']
 
-        # processing for output 
+        # processing for output
         # sign alt. indirect dimension
         if data.ndim >= 2 and "alt_id_sign" in self._oproc:
             s = [slice(None, None, None)] * data.ndim
-            for i in range(data.ndim-1):
+            for i in range(data.ndim - 1):
                 s[i] = slice(1, None, 2)
                 data[s] = -data[s]
                 s[i] = slice(None, None, None)
 
         if "realfactor" in self._oproc:
             data.real = data.real * self._oproc['realfactor']
-            
+
         if "imagfactor" in self._oproc and np.iscomplexobj(data):
             data.imag = data.imag * self._oproc['imagfactor']
 
@@ -119,7 +120,7 @@ class converter(object):
 
     # IMPORTERS (from_*)
     def from_universal(self, dic, data):
-        """ 
+        """
         Load converter with Universal data.
 
         Parameters
@@ -138,7 +139,7 @@ class converter(object):
         self._udic = dic
 
     def from_varian(self, dic, data, udic=None):
-        """ 
+        """
         Load converter with Agilent/Varian data.
 
         Parameters
@@ -149,23 +150,23 @@ class converter(object):
             NMR data.
         udic : dict, optional
             Universal dictionary, if not provided will be guesses from dic.
-        
+
         """
         # set data
         self._data = data
         if udic != None and udic[0]['encoding'].lower() == "tppi":
-            self._iproc = {"imagfactor":-1.0}
+            self._iproc = {"imagfactor": -1.0}
         else:   # states, etc needs sign alt. of indirect dim.
-            self._iproc = {"alt_id_sign":True, "imagfactor":-1.0}
+            self._iproc = {"alt_id_sign": True, "imagfactor": -1.0}
 
         # set the universal dictionary
         if udic != None:
             self._udic = udic
         else:
-            self._udic = varian.guess_udic(dic, data) 
+            self._udic = varian.guess_udic(dic, data)
 
     def from_rnmrtk(self, dic, data, udic=None, agilent_compatible=False):
-        """ 
+        """
         Load converter with RNMRTK data.
 
         Parameters
@@ -185,7 +186,7 @@ class converter(object):
 
         # set input processing filters.
         if agilent_compatible:
-            self._iproc = {"alt_id_sign":True, "imagfactor":-1.0}
+            self._iproc = {"alt_id_sign": True, "imagfactor": -1.0}
         else:
             self._iproc = {}
 
@@ -193,10 +194,10 @@ class converter(object):
         if udic != None:
             self._udic = udic
         else:
-            self._udic = rnmrtk.guess_udic(dic, data) 
+            self._udic = rnmrtk.guess_udic(dic, data)
 
     def from_pipe(self, dic, data, udic=None):
-        """ 
+        """
         Load converter with NMRPipe data.
 
         Parameters
@@ -207,12 +208,12 @@ class converter(object):
             NMR data.
         udic : dict, optional
             Universal dictionary, if not provided will be guesses from dic.
-        
+
         """
         # set data
         self._data = data
         self._iproc = {}
-       
+
         # set the universal dictionary
         if udic != None:
             self._udic = udic
@@ -220,7 +221,7 @@ class converter(object):
             self._udic = pipe.guess_udic(dic, data)
 
     def from_sparky(self, dic, data, udic=None):
-        """ 
+        """
         Load converter with Sparky data.
 
         Parameters
@@ -231,7 +232,7 @@ class converter(object):
             NMR data.
         udic : dict, optional
             Universal dictionary, if not provided will be guesses from dic.
-        
+
         """
         # set data
         self._data = data
@@ -244,7 +245,7 @@ class converter(object):
             self._udic = sparky.guess_udic(dic, data)
 
     def from_bruker(self, dic, data, udic=None):
-        """ 
+        """
         Load converter with Bruker data.
 
         Parameters
@@ -255,7 +256,7 @@ class converter(object):
             NMR data.
         udic : dict, optional
             Universal dictionary, if not provided will be guesses from dic.
-        
+
         """
         # set data
         self._data = data
@@ -269,7 +270,7 @@ class converter(object):
 
     # EXPORTERS (to_*)
     def to_universal(self):
-        """ 
+        """
         Return Universal format data.
 
         Returns
@@ -290,7 +291,7 @@ class converter(object):
         return dic, self.__returndata()
 
     def to_pipe(self, datetimeobj=datetime.datetime.now()):
-        """ 
+        """
         Return NMRPipe format data.
 
         Parameters
@@ -331,7 +332,7 @@ class converter(object):
             List mapping axis numbers in the universal dictionary to the to the
             order in which they will appear in the RNMRTK dictionary.  If None,
             the default, [0, 1, 2, ...] will be used.
-        
+
 
         Returns
         -------
@@ -346,7 +347,7 @@ class converter(object):
 
         # add processing flags for output
         if agilent_compatible:
-            self._oproc = {"alt_id_sign":True, "imagfactor":-1.0}
+            self._oproc = {"alt_id_sign": True, "imagfactor": -1.0}
         else:
             self._oproc = {}
 
@@ -358,7 +359,7 @@ class converter(object):
         return dic, self.__returndata()
 
     def to_varian(self):
-        """ 
+        """
         Return Agilent/Varian format data.
 
         Returns
@@ -373,7 +374,7 @@ class converter(object):
         dic = varian.create_dic(self._udic)
 
         # add processing flags for output
-        self._oproc = {"alt_id_sign":True, "imagfactor":-1.0}
+        self._oproc = {"alt_id_sign": True, "imagfactor": -1.0}
         self._odtype = "complex64"
 
         return dic, self.__returndata()
@@ -388,7 +389,7 @@ class converter(object):
             Datetime object to include in the Sparky parameters.  The current
             date and time is used by default.
         user : str, optional
-            Username to include in the Sparky parameters. 'user' is the 
+            Username to include in the Sparky parameters. 'user' is the
             default.
 
         Returns
@@ -397,7 +398,7 @@ class converter(object):
             Dictionary of Sparky parameters.
         data : array_like
             NMR data in Sparky format.
-        
+
         """
         # create dictionary
         dic = sparky.create_dic(self._udic, datetimeobj, user)
@@ -409,7 +410,7 @@ class converter(object):
         return dic, self.__returndata()
 
     def to_bruker(self):
-        """ 
+        """
         Return Bruker format data.
 
         Returns
@@ -433,7 +434,7 @@ class converter(object):
 class udata_nd(fileiobase.data_nd):
     """
     Wrap other fileiobase.data_nd derived objects with input/output conversion
-    when slices are requested.  
+    when slices are requested.
 
     * slicing operations return ndarray objects.
     * can iterate over with expected results.
@@ -453,7 +454,7 @@ class udata_nd(fileiobase.data_nd):
         Output dtype.
     order : tuple
         Axis ordering relative to input data.
-    
+
     Notes
     -----
     The iproc and oproc dictionary can contains the following keys and values.
@@ -467,7 +468,7 @@ class udata_nd(fileiobase.data_nd):
     ===========     ==========  ==========================================
 
     """
-    
+
     def __init__(self, edata, iproc, oproc, odtype, order=None):
         """
         create and set up
@@ -477,9 +478,9 @@ class udata_nd(fileiobase.data_nd):
         self._oproc = oproc         # output processing dictionary
         self._odtype = odtype       # output dtype
         self.edata = edata          # file
-        
+
         # required data_nd attributes
-        self.order = order  
+        self.order = order
         self.fshape = edata.fshape
         self.dtype = odtype
         self.__setdimandshape__()   # set ndim and shape attributes
@@ -498,19 +499,18 @@ class udata_nd(fileiobase.data_nd):
         slices is a well formateed n-tuple of slices
         """
         data = self.edata.__fgetitem__(slices)
-        
-        # input processing 
+
+        # input processing
         if "alt_id_sign" in self._iproc:    # sign alt. indirect dimension
             if "alt_id_sign" not in self._oproc:    # skip if in both
                 fslice = slices[:-1]
                 ffshape = self.fshape[:-1]
                 nd_iter = fileiobase.ndtofrom_iter(ffshape, fslice)
                 for out_index, in_index in nd_iter:
-                    # negate the trace if there is an odd number of 
+                    # negate the trace if there is an odd number of
                     # odd number indices in the slice
-                    if np.mod(in_index, 2).sum() % 2 == 1: 
+                    if np.mod(in_index, 2).sum() % 2 == 1:
                         data[out_index] = -data[out_index]
-
 
         if "realfactor" in self._iproc:
             data.real = data.real * self._iproc['realfactor']
@@ -524,14 +524,14 @@ class udata_nd(fileiobase.data_nd):
                 ffshape = self.fshape[:-1]
                 nd_iter = fileiobase.ndtofrom_iter(ffshape, fslice)
                 for out_index, in_index in nd_iter:
-                    # negate the trace if there is an odd number of 
+                    # negate the trace if there is an odd number of
                     # odd number indices in the slice
-                    if np.mod(in_index, 2).sum() % 2 == 1: 
+                    if np.mod(in_index, 2).sum() % 2 == 1:
                         data[out_index] = -data[out_index]
 
         if "realfactor" in self._oproc:
             data.real = data.real * self._oproc['realfactor']
         if "imagfactor" in self._oproc:
             data.imag = data.imag * self._oproc['imagfactor']
-        
+
         return data.astype(self._odtype)

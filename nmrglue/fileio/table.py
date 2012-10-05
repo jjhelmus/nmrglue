@@ -1,7 +1,7 @@
-""" 
+"""
 nmrglue table functions.
 
-nmrglue uses numpy records array as stores of various data (peak tables, 
+nmrglue uses numpy records array as stores of various data (peak tables,
 trajectories, etc).  This module provides functions to read and write records
 arrays from disk.  Formatting of the numeric values is left to Python's str
 function and only the data type need be specified.  In addition this module
@@ -11,19 +11,20 @@ contains functions to convert nmrglue's table format NMRPipe's table format.
 import numpy as np
 from . import fileiobase
 
+
 def pipe2glue(pcomments, pformat, rec):
     """
     Convert a NMRPipe table to a nmrglue table
-    
+
     Parameters
     ----------
     pcomments : list
         List of NMRPipe comment lines.
-    pformats : list  
+    pformats : list
         List of NMRPipe table column formats strings.
     rec : recarray
         Records array with named fields.
-    
+
     Returns
     -------
     comments : list
@@ -35,7 +36,8 @@ def pipe2glue(pcomments, pformat, rec):
     # add a "#" to the list of comments and we are done
     comments = ["# " + c for c in pcomments]
     return comments, rec
-    
+
+
 def glue2pipe(comments, rec):
     """
     Convert a nmrglue table to a NMRPipe table.
@@ -52,9 +54,9 @@ def glue2pipe(comments, rec):
     pcomments : list
         List of NMRPipe comment lines.
     pformats : list
-        List of NMRPipe table column formats strings.  This list is guessed from
-        the data types and precision in the reconrds array.  This may not be the
-        exact format desired, edit this to your liking.
+        List of NMRPipe table column formats strings.  This list is guessed
+        from the data types and precision in the reconrds array.  This may not
+        be the exact format desired, edit this to your liking.
     rec : recarray
         Records array with named fields.
 
@@ -67,6 +69,7 @@ def glue2pipe(comments, rec):
 
     return pcomments, pformat, rec
 
+
 def guess_pformat(col):
     """
     Guess a NMRPipe table column format string given a column.
@@ -75,7 +78,7 @@ def guess_pformat(col):
     ----------
     col : ndarray
         Array from a records array.
-    
+
     Returns
     -------
     s : str
@@ -83,27 +86,28 @@ def guess_pformat(col):
 
     """
     kind = col.dtype.kind
-    
+
     if kind == 'S' or kind == 'a':  # string
         return '%s'
-    
+
     if kind == 'i' or kind == 'u':  # integer (signed or unsigned)
         # N is the number of digits in largest value, or 1
         N = max(np.ceil(np.log(np.abs(col).max()) / np.log(10)), 1)
         # +1 for sign
-        return '%{0}d'.format(int(N + 1)) 
+        return '%{0}d'.format(int(N + 1))
 
     if kind == 'f':
         # will be either %+e or %N.3f, see if 'e' is in %g to determine
         if True in ['e' in '%g' % (v) for v in col]:
             return '%+e'
         else:
-            N = max(np.ceil(np.log(np.abs(col).max()) / np.log(10)) , 1)
-            # +1 for sign, +1 for decimal points, +3 for precision  
+            N = max(np.ceil(np.log(np.abs(col).max()) / np.log(10)), 1)
+            # +1 for sign, +1 for decimal points, +3 for precision
             return '%{0}.3f'.format(int(N + 5))
 
     # remaining kinds: 'c' - complex, 'b' - boolean, 'U' - unicode, 'V' - void
     raise ValueError("unknown kind %s in column" % (kind))
+
 
 def read(filename):
     """
@@ -126,21 +130,22 @@ def read(filename):
     f = open(filename, 'rb')
     comments = [l for l in f if l[0] == '#']
     f.close()
-    
+
     # find the line beginning with # NAMES and parse out the column names
-    nl = [i for i, l in enumerate(comments) if l[:7]=="# NAMES"]
+    nl = [i for i, l in enumerate(comments) if l[:7] == "# NAMES"]
     if len(nl) != 1:
         raise IOError("%s does not have a # NAMES line" % (filename))
-    dtd = {'names':comments.pop(nl[0])[7:].split()}
-    
+    dtd = {'names': comments.pop(nl[0])[7:].split()}
+
     # find the line beginning with # DTYPE and parse out the column names
-    dl = [i for i, l in enumerate(comments) if l[:9]=="# FORMATS"]
+    dl = [i for i, l in enumerate(comments) if l[:9] == "# FORMATS"]
     if len(dl) != 1:
         raise IOError("%s does not have a # FORMATS line" % (filename))
     dtd['formats'] = comments.pop(dl[0])[9:].split()
-    
+
     # return the data as a records array
     return comments, np.atleast_1d(np.recfromtxt(filename, dtype=dtd))
+
 
 def write(filename, comments, rec, overwrite=False):
     """
@@ -161,19 +166,19 @@ def write(filename, comments, rec, overwrite=False):
     """
     # open the file for writing
     f = fileiobase.open_towrite(filename, overwrite)
-    
+
     # write out the comment lines at the top of the file
     for c in comments:
         f.write(c)
-    
+
     # Determind the list of column names
     names = rec.dtype.names
-    
+
     # Determind the list of column formats
     sizes = [rec.dtype[n].itemsize for n in names]
     kinds = [rec.dtype[n].kind for n in names]
     formats = [k + str(s) for s, k in zip(sizes, kinds)]
-    
+
     # write out the NAMES and FORMATS lines
     f.write("# NAMES " + " ".join(names) + "\n")
     f.write("# FORMATS " + " ".join(formats) + "\n")
@@ -187,12 +192,12 @@ def write(filename, comments, rec, overwrite=False):
         f.write(s + "\n")
     f.close()
 
-# Row functions
 
+# Row functions
 def insert_row(rec, N, row):
-    """ 
+    """
     Insert a row into a records array before row number N.
-    
+
     Parameters
     ----------
     rec : recarray
@@ -201,7 +206,7 @@ def insert_row(rec, N, row):
         Row number to insert new row before.
     row : array_like
         Array or similar object which will be converted into a new row.
-    
+
     Returns
     -------
     new_rec : recarray
@@ -210,17 +215,18 @@ def insert_row(rec, N, row):
     """
     return np.insert(rec, N, row)
 
+
 def append_row(rec, row):
-    """ 
+    """
     Append a row to the end of a records array.
-    
+
     Parameters
     ----------
     rec : recarray
         Records array.
     row : array_like
          Array or similar object which will be converted into a new row.
-    
+
     Returns
     -------
     new_rec : recarray
@@ -230,22 +236,23 @@ def append_row(rec, row):
     N = len(rec)
     return insert_row(rec, N, row)
 
+
 def delete_row(rec, N):
-    """ 
+    """
     Delete a row from a records array.
-    
+
     Parameters
     ----------
     rec : recarray
         Records array.
     N : int
         Row number to delete.
-    
+
     Returns
     -------
     new_rec : recarray
         New records array with row deleted.
-    
+
     See Also
     --------
     reorder_rows : delete multiple rows in a single call.
@@ -253,11 +260,12 @@ def delete_row(rec, N):
     """
     return np.delete(rec, N)
 
+
 def reorder_rows(rec, new_order):
     """
     Reorder or delete rows in a records array.
 
-    This function can also be used to delete multiple rows from a records 
+    This function can also be used to delete multiple rows from a records
     array, only the rows in the new_order list are retained in the new records
     array.
 
@@ -268,24 +276,23 @@ def reorder_rows(rec, new_order):
     new_order : list
         List of row indices and order in new records array.  Only the rows in
         this list are retained in the new records array.  Therefore this
-        function can also be used to delete multiple rows from a records 
+        function can also be used to delete multiple rows from a records
         array.
 
     Returns
     -------
     new_rec : recarray
         New records array with rows reordered.
- 
+
     """
     return np.take(rec, new_order)
 
 
 # Column functions
-
 def append_column(rec, col, name=None, format=None):
-    """ 
+    """
     Append a column to the end of a records array.
-    
+
     Parameters
     ----------
     rec : recarray
@@ -307,8 +314,9 @@ def append_column(rec, col, name=None, format=None):
     N = len(rec.dtype.descr)
     return insert_column(rec, N, col, name, format)
 
+
 def insert_column(rec, N, col, name=None, format=None):
-    """ 
+    """
     Insert a column into a records array.
 
     Parameters
@@ -332,7 +340,7 @@ def insert_column(rec, N, col, name=None, format=None):
 
     """
     col = np.array(col)
-    
+
     # get name and format parameter from column if not provided
     if name == None:
         if col.dtype.names != None:
@@ -341,26 +349,27 @@ def insert_column(rec, N, col, name=None, format=None):
             raise ValueError("Must provide a name for the column")
     if format == None:
         format = col.dtype.str
-    
+
     # insert the new column (name, format) to the table dtypes
     dtd = rec.dtype.descr
     dtd.insert(N, (name, format))
 
     # create the new table with an additional column
     new_rec = np.empty(rec.shape, dtd)
-   
+
     # fill in the old columns
-    for n in rec.dtype.names: 
+    for n in rec.dtype.names:
         new_rec[n] = rec[n]
     # and the new column
     new_rec[name] = col.astype(format)
-    
+
     return np.atleast_1d(np.rec.array(new_rec))
 
+
 def delete_column(rec, N):
-    """ 
+    """
     Delete a column from a records array.
-    
+
     Parameters
     ----------
     rec : recarray
@@ -372,7 +381,7 @@ def delete_column(rec, N):
     -------
     new_rec : recarray
         New records array with column deleted.
-    
+
     See Also
     --------
     reorder_columns : Delete multiple columns from a records array.
@@ -390,17 +399,17 @@ def delete_column(rec, N):
 
 
 def reorder_columns(rec, new_order):
-    """ 
+    """
     Reorder or delete columns in a records array.
-    
+
     Parameters
     ----------
     rec : recarray
         Records array.
     new_order : list
-        List of column indices and order in new records array.  Only the 
-        columns in this list are retained in the new records array.  
-        Therefore this function can also be used to delete multiple columns 
+        List of column indices and order in new records array.  Only the
+        columns in this list are retained in the new records array.
+        Therefore this function can also be used to delete multiple columns
         from a records array.
 
     Returns
@@ -418,4 +427,3 @@ def reorder_columns(rec, new_order):
     for n in new_rec.dtype.names:
         new_rec[n] = rec[n]
     return np.atleast_1d(np.rec.array(new_rec))
-
