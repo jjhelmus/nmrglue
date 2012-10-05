@@ -1,7 +1,7 @@
 """
-A collection of NMR spectral processing functions which operate on the last 
+A collection of NMR spectral processing functions which operate on the last
 dimension (1) of 2D arrays.  These functions are wrapped by other processing
-modules but can also be used directly.  All parameter are assumed to be in 
+modules but can also be used directly.  All parameter are assumed to be in
 units of points unless otherwise noted.
 """
 
@@ -18,12 +18,13 @@ pi = np.pi
 # Apodization functions #
 #########################
 
+
 def em(data, lb=0.0, inv=False):
     """
     Exponential apodization
 
     Functional form of apodization window:
-    
+
     .. math::
         em(x_i) = \\exp(-pi * i * lb)
 
@@ -38,7 +39,7 @@ def em(data, lb=0.0, inv=False):
 
     Returns
     -------
-    ndata : ndarray 
+    ndata : ndarray
         Array of NMR data with apodization applied.
 
     """
@@ -47,17 +48,18 @@ def em(data, lb=0.0, inv=False):
         apod = 1 / apod   # invert apodization
     return apod * data
 
+
 def gm(data, g1=0.0, g2=0.0, g3=0.0, inv=False):
-    """ 
+    """
     Lorentz-to-Gauss apodization
-    
+
     Functional form of apodization window:
-    
+
     .. math::
         gm(x_i) = \\exp(e - g^2)
-    
+
     Where:
-    
+
     .. math::
         e = pi * i * g1 \\\\
         g = 0.6 * pi * g2 * (g3 * (size - 1) - i)
@@ -71,30 +73,31 @@ def gm(data, g1=0.0, g2=0.0, g3=0.0, inv=False):
     g2 : float
         Gaussian broadening width.
     g3 : float
-        Location of Gaussian maximum. 
+        Location of Gaussian maximum.
     inv : bool, optional
         True for inverse apodization.  False (default) for standard.
 
     Returns
     -------
-    ndata : ndarray 
+    ndata : ndarray
         Array of NMR data with apodization applied.
 
     """
     size = data.shape[-1]
     e = pi * np.arange(size) * g1
     g = 0.6 * pi * g2 * (g3 * (size - 1) - np.arange(size))
-    apod = np.exp(e-g*g).astype(data.dtype)
+    apod = np.exp(e - g * g).astype(data.dtype)
     if inv:
         apod = 1 / apod
     return apod * data
 
+
 def gmb(data, a=0.0, b=0.0, inv=False):
-    """ 
-    Modified gaussian apodization 
+    """
+    Modified gaussian apodization
 
     Functional form of apodization window:
-    
+
     .. math::
         gmb(x_i) = \\exp(-a * i - b * i^2)
 
@@ -111,23 +114,24 @@ def gmb(data, a=0.0, b=0.0, inv=False):
 
     Returns
     -------
-    ndata : ndarray 
+    ndata : ndarray
         Array of NMR data with apodization applied.
-    
-    """ 
+
+    """
     size = data.shape[-1]
     apod = np.exp(-a * np.arange(size) - b *
                   np.arange(size) ** 2).astype(data.dtype)
     if inv:
         apod = 1 / apod
-    return apod*data
+    return apod * data
+
 
 def jmod(data, e=0.0, off=0.0, end=0.0, inv=False):
-    """ 
+    """
     Exponentially damped J-modulation apodization
 
     Functional form of apodization window:
-    
+
     .. math::
         jmod(x_i) = \\exp(-e) * \\sin(\\frac{pi * off + pi * (end - off) * i}
                                             {size - 1})
@@ -147,24 +151,25 @@ def jmod(data, e=0.0, off=0.0, end=0.0, inv=False):
 
     Returns
     -------
-    ndata : ndarray 
+    ndata : ndarray
         Array of NMR data with apodization applied.
- 
+
     """
     size = data.shape[-1]
-    apod = (np.exp(-e * np.arange(size)).astype(data.dtype) * 
+    apod = (np.exp(-e * np.arange(size)).astype(data.dtype) *
             np.sin(pi * off + pi * (end - off) * np.arange(size) /
                 (size - 1)).astype(data.dtype))
     if inv:
         apod = 1 / apod
     return apod * data
 
+
 def sp(data, off=0, end=1.0, pow=1.0, inv=False):
-    """ 
+    """
     Shifted sine-bell apodization
 
     Functional form of apodization window:
-    
+
     .. math::
         sp(x_i) = \\sin(\\frac{pi * off + pi * (end - off) * i}
                               {size - 1})^{pow}
@@ -184,9 +189,9 @@ def sp(data, off=0, end=1.0, pow=1.0, inv=False):
 
     Returns
     -------
-    ndata : ndarray 
+    ndata : ndarray
         Array of NMR data with apodization applied.
- 
+
     """
     size = data.shape[-1]
     apod = np.power(np.sin(pi * off + pi * (end - off) * np.arange(size) /
@@ -195,14 +200,16 @@ def sp(data, off=0, end=1.0, pow=1.0, inv=False):
         apod = 1 / apod
     return apod * data
 
+
 sine = sp
+
 
 def tm(data, t1=0.0, t2=0.0, inv=False):
     """
     Trapezoid Apodization
 
     Functional form of apodization:
-        
+
     ============ ================================
     Range        Description
     ============ ================================
@@ -224,9 +231,9 @@ def tm(data, t1=0.0, t2=0.0, inv=False):
 
     Returns
     -------
-    ndata : ndarray 
+    ndata : ndarray
         Array of NMR data with apodization applied.
- 
+
     """
     size = data.shape[-1]
     apod = np.concatenate((np.linspace(0, 1, t1), np.ones(size - t1 - t2),
@@ -234,6 +241,7 @@ def tm(data, t1=0.0, t2=0.0, inv=False):
     if inv:
         apod = 1 / apod
     return apod * data
+
 
 def tri(data, loc="auto", lHi=0.0, rHi=0.0, inv=False):
     """
@@ -264,29 +272,31 @@ def tri(data, loc="auto", lHi=0.0, rHi=0.0, inv=False):
 
     Returns
     -------
-    ndata : ndarray 
+    ndata : ndarray
         Array of NMR data with apodization applied.
- 
+
     """
     size = data.shape[-1]
     if loc == "auto":
         loc = int(size / 2.)
-    apod = np.concatenate((np.linspace(lHi, 1., loc), np.linspace(1., rHi, 
-                            size - loc +1)[1:])).astype(data.dtype)
+    apod = np.concatenate((np.linspace(lHi, 1., loc), np.linspace(1., rHi,
+                            size - loc + 1)[1:])).astype(data.dtype)
     if inv:
         apod = 1 / apod
     return apod * data
+
 
 ###################
 # Shift functions #
 ###################
 
+
 def rs(data, pts=0.0):
     """
     Right shift and zero fill.
-    
+
     Parameters
-    ---------- 
+    ----------
     data :
         Array of NMR data.
     pts : int
@@ -306,12 +316,13 @@ def rs(data, pts=0.0):
     data[..., :int(pts)] = 0
     return data
 
+
 def ls(data, pts=0.0):
     """
     Left shift and fill with zero
- 
+
     Parameters
-    ---------- 
+    ----------
     data :
         Array of NMR data.
     pts : int
@@ -331,9 +342,10 @@ def ls(data, pts=0.0):
     data[..., -int(pts):] = 0
     return data
 
+
 def cs(data, pts=0.0, neg=False):
     """
-    Circular shift 
+    Circular shift
 
     Parameters
     ----------
@@ -353,9 +365,10 @@ def cs(data, pts=0.0, neg=False):
     """
     return roll(data, pts, neg)
 
+
 def roll(data, pts=0.0, neg=False):
     """
-    Roll axis 
+    Roll axis
 
     Parameters
     ----------
@@ -371,7 +384,7 @@ def roll(data, pts=0.0, neg=False):
     -------
     ndata : ndarray
         Array of NMR data with last axis rolled.
-    
+
     """
     data = np.roll(data, int(pts), axis=-1)
     if neg:
@@ -381,8 +394,9 @@ def roll(data, pts=0.0, neg=False):
             data[..., pts:] = -data[..., pts:]
     return data
 
+
 def fsh(data, pts):
-    """ 
+    """
     Frequency shift by Fourier transform. Negative signed phase correction.
 
     Parameters
@@ -390,7 +404,7 @@ def fsh(data, pts):
     data : ndarray
         Array of NMR data.
     pts : float
-        Number of points to frequency shift the data.  Positive value will 
+        Number of points to frequency shift the data.  Positive value will
         shift the spectrum to the right, negative values to the left.
 
     Returns
@@ -403,23 +417,24 @@ def fsh(data, pts):
 
     # inverse fft -> first order phase correction -> fft
     # idata = icomplexft(data)
-    # pdata = np.exp(-2.j*pi*pts*np.arange(s)/s,sig=data.dtype)*icomplexft(data)
+    # pdata =np.exp(-2.j*pi*pts*np.arange(s)/s,sig=data.dtype)*icomplexft(data)
     # data = complexft(pdata)
 
     # inplace processing
-    return fft(np.exp(-2.j * pi * pts * np.arange(s) / 
+    return fft(np.exp(-2.j * pi * pts * np.arange(s) /
                         s).astype(data.dtype) * ifft(data))
+
 
 def fsh2(data, pts):
     """
     Frequency Shift by Fourier transform. Postive signed phase correction.
- 
+
     Parameters
     ----------
     data : ndarray
         Array of NMR data.
     pts : float
-        Number of points to frequency shift the data.  Positive value will 
+        Number of points to frequency shift the data.  Positive value will
         shift the spectrum to the right, negative values to the left.
 
     Returns
@@ -430,30 +445,34 @@ def fsh2(data, pts):
     """
     s = float(data.shape[-1])
     return fft_positive(np.exp(2.j * pi * pts * np.arange(s) /
-                        s).astype(data.dtype) * ifft_positive(data)) 
+                        s).astype(data.dtype) * ifft_positive(data))
+
 
 ##############
 # Transforms #
 ##############
 
+
 def nmr_reorder(data):
-    """ 
+    """
     Reorder spectrum after FT transform to NMR order (swap halves and reverse).
     """
     s = data.shape[-1]
-    return np.append(data[..., int(s / 2)::-1], data[..., s:int(s / 2):-1], 
+    return np.append(data[..., int(s / 2)::-1], data[..., s:int(s / 2):-1],
                      axis=-1)
 
+
 def swap_halves(data):
-    """ 
+    """
     Swap the halves of a spectrum,
     """
     s = data.shape[-1]
     return np.append(data[..., int(s / 2):], data[..., :int(s / 2)], axis=-1)
 
+
 # Fourier based Transforms
 def rft(x):
-    """ 
+    """
     Real Fourier transform.
 
     Parameters
@@ -476,9 +495,10 @@ def rft(x):
     return np.array(nmr_reorder(np.fft.fft(2 * xp, axis=-1).real),
                     dtype="float32")
 
+
 def irft(xp):
     """
-    Inverse real fourier transform 
+    Inverse real fourier transform
 
     Parameters
     ----------
@@ -494,7 +514,7 @@ def irft(xp):
     # XXX figure out what exactly this is doing
     s = xp.shape[-1]
     xp = np.fft.ifft(nmr_reorder(xp))   # re-order, inverse FT
-    
+
     # output results
     x = np.zeros(xp.shape, dtype="float32")
 
@@ -505,42 +525,43 @@ def irft(xp):
     x[..., -1] = xp[..., s / 2].real
     return x
 
+
 # Fourier transforms
 def fft(data):
-    """ 
+    """
     Fourier transform, NMR ordering of results.
-    
+
     There are a number of definitions of the discrete Fourier transform
-    the version used in this function is as follows. 
+    the version used in this function is as follows.
 
     .. math::
 
         A_k = \\sum_{m=0}^{n-1} a_m \\exp\\left\\{-2\\pi i{mk \\over n}
-        \\right\\}\\qquad k = 0,\\ldots,n-1. 
-        
+        \\right\\}\\qquad k = 0,\\ldots,n-1.
+
     With the inverse DFT in the :py:func:`ifft` function defined as follows.
 
     .. math::
 
         a_m = \\frac{1}{n} \\sum_{k=0}^{n-1} A_k \\exp \\left\\{2\\pi
         i{mk\\over n} \\right\\}\\qquad n = 0,\\ldots,n-1.
-        
+
     Two alternative definitions are also supported by nmrglue. One in
     which both the sum in the fft and ifft are multiplied by
-    :math:`\\frac{1}{\\sqrt{n}}` which results in a pair of transforms in 
+    :math:`\\frac{1}{\\sqrt{n}}` which results in a pair of transforms in
     which the total power contained in the the signals before and after the
-    transforms are equal.  This is the type transforms used in the 
-    Rowland NMR Toolkit. This type of transform is performed by the 
-    :py:func:`fft_norm` and :py:func:`ifft_norm` functions. 
-    
+    transforms are equal.  This is the type transforms used in the
+    Rowland NMR Toolkit. This type of transform is performed by the
+    :py:func:`fft_norm` and :py:func:`ifft_norm` functions.
+
     The second definition changes the sign of the exponent to be positive while
     keeping the normalization factors the same.  This type of transform is
-    performed by the NMRPipe processing package and the functions 
+    performed by the NMRPipe processing package and the functions
     :py:func:`fft_positive` and :py:func:`ifft_positive`.
 
     All of the Fourier transforms perfromed by nmrglue return results in 'NMR
     order', in which the two half of the spectrum have been swapped and
-    reversed.  
+    reversed.
 
     Parameters
     ----------
@@ -557,10 +578,11 @@ def fft(data):
     ifft : Inversion Fourier transform.
     fft_norm : Norm (power) conserving Fourier transform.
     fft_positive : Forier transform with a positive exponential.
-    
+
 
     """
-    return np.fft.fftshift(np.fft.fft(data, axis = -1).astype(data.dtype), -1)
+    return np.fft.fftshift(np.fft.fft(data, axis=-1).astype(data.dtype), -1)
+
 
 def fft_norm(data):
     """
@@ -568,9 +590,9 @@ def fft_norm(data):
 
     This function is  similar to the transform performed by The Rowland NMR
     Toolkit's FFT function.
-    
+
     See :py:func:`fft` for documentation of the transformation applied by this
-    function. 
+    function.
 
     Parameters
     ----------
@@ -587,19 +609,20 @@ def fft_norm(data):
     ifft_norm : Inversion Fourier transform.
     fft : None-norm (power) conserving Fourier transform.
     fft_positive : Forier transform with a positive exponential.
- 
+
     """
     return fft(data) / np.sqrt(float(data.shape[-1]))
 
+
 def fft_positive(data):
-    """ 
+    """
     Fourier transform with positive exponential, NMR ordering of results
 
     This is similar to the transform performed by NMRPipe's FFT function.
- 
+
     See :py:func:`fft` for documentation of the transformation applied by this
-    function. 
-    
+    function.
+
     Parameters
     ----------
     data : ndarray
@@ -615,20 +638,21 @@ def fft_positive(data):
     ifft_positive : Inversion Fourier transform.
     fft_norm : Norm (power) conserving Fourier transform.
     fft_positive : Forier transform with a positive exponential.
-    
+
     """
     # a positive exponential is the same as a IFFT, but we need to undo
     # the 1/N scaling
     s = float(data.shape[-1])
-    return (np.fft.fftshift(np.fft.ifft(data, axis=-1).astype(data.dtype), -1) 
+    return (np.fft.fftshift(np.fft.ifft(data, axis=-1).astype(data.dtype), -1)
                     * s)
 
+
 def ifft(data):
-    """ 
+    """
     Inverse fourier transform, NMR ordering of results.
-   
+
     See :py:func:`fft` for documentation of the transformation applied by this
-    function. 
+    function.
 
     Parameters
     ----------
@@ -645,19 +669,20 @@ def ifft(data):
     fft : Fourier transform.
     ifft_norm : Norm (power) conserving inverse Fourier transform.
     ifft_positive : inverse Forier transform with a positive exponential.
-    
+
     """
     return np.fft.ifft(np.fft.ifftshift(data, -1), axis=-1).astype(data.dtype)
 
+
 def ifft_norm(data):
-    """ 
+    """
     Inverse fourier transform, total power preserved, NMR ordering of results
 
-    This is similar to the transform performed by the Rowland NMR Toolkit's IFFT
-    function.
- 
+    This is similar to the transform performed by the Rowland NMR Toolkit's
+    IFFT function.
+
     See :py:func:`fft` for documentation of the transformation applied by this
-    function. 
+    function.
 
     Parameters
     ----------
@@ -674,9 +699,10 @@ def ifft_norm(data):
     fft_norm : Norm (power) conserving Fourier transform.
     ifft : Non-norm (power) conserving inverse Fourier transform.
     ifft_positive : inverse Forier transform with a positive exponential.
-    
+
     """
     return ifft(data) * np.sqrt(float(data.shape[-1]))
+
 
 def ifft_positive(data):
     """
@@ -700,24 +726,25 @@ def ifft_positive(data):
     fft_postive : Fourier transform with a positive exponential.
     ifft_norm : Norm (power) conserving inverse Fourier transform.
     ifft : Inverse Forier transform with a negative exponential.
- 
+
     """
     # a inverse fft with positive exponential in the FFT definition is the
     # same as a FFT with negative exponentials, but with a 1/N scaling factor
     s = 1.0 / float(data.shape[-1])
-    return (np.fft.fft(np.fft.ifftshift(data, -1), axis=-1).astype(data.dtype) 
-             * s) 
+    return (np.fft.fft(np.fft.ifftshift(data, -1), axis=-1).astype(data.dtype)
+             * s)
+
 
 # Hadamard Transform functions
-
 def int2bin(n, digits=8):
-    """ 
-    Integer to binary string 
+    """
+    Integer to binary string
     """
     return "".join([str((n >> y) & 1) for y in range(digits - 1, -1, -1)])
 
+
 def bin2int(s):
-    """ 
+    """
     binary string to integer
     """
     o = 0
@@ -725,6 +752,7 @@ def bin2int(s):
     for i, v in enumerate(s):
         o = o + int(v) * 2 ** (k - i)
     return o
+
 
 def gray(n):
     """
@@ -738,8 +766,9 @@ def gray(n):
         g = [mg[j] + first[j] for j in range(2 ** (i + 1))]
     return g
 
+
 def ha(data):
-    """ 
+    """
     Hadamard Transform
 
     Parameters
@@ -756,7 +785,7 @@ def ha(data):
     -----
     This function is very slow.  Implement a Fast Walsh-Hadamard Transform
     with sequency/Walsh ordering (FWHT_w) will result in much faster tranforms.
-    
+
     http://en.wikipedia.org/wiki/Walsh_matrix
     http://en.wikipedia.org/wiki/Fast_Hadamard_transform
 
@@ -764,7 +793,7 @@ def ha(data):
     # implementation is a proof of concept and EXTEMEMLY SLOW
 
     # determind the order and final size of input vectors
-    ord = int(np.ceil(np.log2(data.shape[-1])))  # Walsh/Hadamard order 
+    ord = int(np.ceil(np.log2(data.shape[-1])))  # Walsh/Hadamard order
     max = 2 ** ord
 
     # zero fill to power of 2
@@ -777,7 +806,7 @@ def ha(data):
     nat = np.dot(zdata, H)
     nat = np.array(nat, dtype=data.dtype)
 
-    # Bit-Reversal Permutation 
+    # Bit-Reversal Permutation
     s = [int2bin(x, digits=ord)[::-1] for x in range(max)]
     brp = [bin2int(x) for x in s]
     brp_data = np.take(nat, brp, axis=-1)
@@ -787,6 +816,7 @@ def ha(data):
     gp_data = np.take(brp_data, gp, axis=-1)
 
     return gp_data
+
 
 def ht(data, N=None):
     """
@@ -809,9 +839,9 @@ def ht(data, N=None):
     """
     # XXX come back and fix this when a sane version of scipy.signal.hilbert
     # is included with scipy 0.8
-    
+
     # create an empty output array
-    fac = N/data.shape[-1]
+    fac = N / data.shape[-1]
     z = np.empty(data.shape, dtype=(data.flat[0] + data.flat[1] * 1.j).dtype)
     if data.ndim == 1:
         z[:] = scipy.signal.hilbert(data.real, N)[:data.shape[-1]] * fac
@@ -823,9 +853,11 @@ def ht(data, N=None):
     z.real = data.real
     return z
 
+
 ##########################
 # Standard NMR Functions #
 ##########################
+
 
 def di(data):
     """
@@ -844,8 +876,9 @@ def di(data):
     """
     return data.real
 
+
 def ps(data, p0=0.0, p1=0.0, inv=False):
-    """ 
+    """
     Linear phase correction
 
     Parameters
@@ -865,14 +898,15 @@ def ps(data, p0=0.0, p1=0.0, inv=False):
         Phased NMR data.
 
     """
-    p0 = p0 * pi / 180. # convert to radians
-    p1 = p1 * pi / 180. 
+    p0 = p0 * pi / 180.  # convert to radians
+    p1 = p1 * pi / 180.
     size = data.shape[-1]
     apod = np.exp(1.0j * (p0 + (p1 * np.arange(size) / size))
                   ).astype(data.dtype)
     if inv:
         apod = 1 / apod
     return apod * data
+
 
 def ps_exp(data, p0=0.0, tc=0.0, inv=False):
     """
@@ -895,7 +929,7 @@ def ps_exp(data, p0=0.0, tc=0.0, inv=False):
         Phased NMR data.
 
     """
-    p0 = p0 * pi / 180. # convert to radians
+    p0 = p0 * pi / 180.  # convert to radians
     size = data.shape[-1]
     apod = np.exp(1.0j * (p0 * np.exp(-tc * np.arange(size) / size))
                   ).astype(data.dtype)
@@ -903,8 +937,9 @@ def ps_exp(data, p0=0.0, tc=0.0, inv=False):
         apod = 1 / apod
     return apod * data
 
+
 def tp(data, hyper=False):
-    """ 
+    """
     Transpose data.
 
     Parameters
@@ -925,15 +960,19 @@ def tp(data, hyper=False):
     else:
         return data.transpose()
 
+
 ytp = tp
+
+
 xy2yx = tp
 
+
 def tp_hyper(data):
-    """ 
+    """
     Hypercomplex tranpose.
 
     Use when both dimension are complex.
-    
+
     Parameters
     ----------
     data : ndarray
@@ -945,6 +984,7 @@ def tp_hyper(data):
         Array of hypercomplex NMR data with axes transposed.
     """
     return c2ri(ri2c(data).transpose())
+
 
 def zf_inter(data, pts=1):
     """
@@ -961,14 +1001,15 @@ def zf_inter(data, pts=1):
     -------
     ndata : ndarray
         Array of NMR data to which `pts` zero have been added between all
-        points. 
+        points.
 
     """
     size = list(data.shape)
     size[-1] = (pts + 1) * size[-1]
     z = np.zeros(size, dtype=data.dtype)
-    z[..., ::pts + 1] = data[..., :] 
+    z[..., ::pts + 1] = data[..., :]
     return z
+
 
 def zf_pad(data, pad=0, mid=False):
     """
@@ -989,7 +1030,7 @@ def zf_pad(data, pad=0, mid=False):
         Array of NMR data to which `pad` zeros have been appended to the end or
         middle of the data.
 
-    """ 
+    """
     size = list(data.shape)
     size[-1] = pad
     z = np.zeros(size, dtype=data.dtype)
@@ -1000,7 +1041,9 @@ def zf_pad(data, pad=0, mid=False):
     else:
         return np.concatenate((data, z), axis=-1)
 
+
 zf = zf_pad
+
 
 def zf_double(data, n, mid=False):
     """
@@ -1014,7 +1057,7 @@ def zf_double(data, n, mid=False):
         Number of times to double the size of the data.
     mid : bool
         True to zero fill in the middle of data.
-    
+
     Returns
     -------
     ndata : ndarray
@@ -1022,7 +1065,8 @@ def zf_double(data, n, mid=False):
 
     """
     return zf_pad(data, int((data.shape[-1] * 2 ** n) - data.shape[-1]), mid)
-    
+
+
 def zf_size(data, size, mid=False):
     """
     Zero fill to given size.
@@ -1035,7 +1079,7 @@ def zf_size(data, size, mid=False):
         Size of data after zero filling.
     mid : bool
         True to zero fill in the middle of data.
-    
+
     Returns
     -------
     ndata : ndarray
@@ -1044,10 +1088,11 @@ def zf_size(data, size, mid=False):
     """
     return zf_pad(data, int(size - data.shape[-1]), mid)
 
+
 def largest_power_of_2(value):
     """
     Find the nearest power of two equal to or larger than a value.
-    
+
     Parameters
     ----------
     value : int
@@ -1056,13 +1101,14 @@ def largest_power_of_2(value):
     Returns
     -------
     pw : int
-        Power of 2. 
+        Power of 2.
 
     """
     return int(pow(2, np.ceil(np.log(value) / np.log(2))))
-         
+
+
 def zf_auto(data, mid=False):
-    """ 
+    """
     Zero fill to next largest power of two.
 
     Parameters
@@ -1071,7 +1117,7 @@ def zf_auto(data, mid=False):
         Array of NMR data.
     mid : bool
         True to zero fill in the middle of data.
-    
+
     Returns
     -------
     ndata : ndarray
@@ -1080,19 +1126,20 @@ def zf_auto(data, mid=False):
     """
     return zf_size(data, largest_power_of_2(data.shape[-1]), mid)
 
+
 ####################
 # Basic Untilities #
 ####################
 
-# Add Constant
 
+# Add Constant
 def add(data, r=0.0, i=0.0, c=0.0):
     """
     Add constant.
 
     Parameters
     ----------
-    data : ndarray 
+    data : ndarray
         Array of NMR data.
     r : float
         Constant to add to real data.
@@ -1102,7 +1149,7 @@ def add(data, r=0.0, i=0.0, c=0.0):
     c : float
         Constant to add to both real and imaginary data.  This constant is only
         added to the real data if no imaginary data is present.
-    
+
     Returns
     -------
     ndata : ndarray
@@ -1114,15 +1161,16 @@ def add(data, r=0.0, i=0.0, c=0.0):
         data.imag = data.imag + i + c
     return data
 
+
 def add_ri(data):
-    """ 
+    """
     Add real and imaginary components.
-    
+
     Parameters
     ----------
-    data : ndarray 
+    data : ndarray
         Array of complex NMR data.
- 
+
     Returns
     -------
     ndata : ndarray
@@ -1131,8 +1179,8 @@ def add_ri(data):
     """
     return data.real + data.imag
 
-# Derivative
 
+# Derivative
 def dx(data):
     """
     Derivative by central difference
@@ -1141,9 +1189,9 @@ def dx(data):
 
     Parameters
     ----------
-    data : ndarray 
+    data : ndarray
         Array of NMR data.
- 
+
     Returns
     -------
     ndata : ndarray
@@ -1153,11 +1201,11 @@ def dx(data):
     z = np.empty_like(data)
     z[..., 0] = data[..., 1] - data[..., 0]    # first point
     z[..., -1] = data[..., -1] - data[..., -2]  # last point
-    z[..., 1:-1]  = data[..., 2:] - data[..., :-2] # interior 
+    z[..., 1:-1] = data[..., 2:] - data[..., :-2]  # interior
     return z
 
-# Extract Region
 
+# Extract Region
 def ext(data, x0=None, xn=None, y0=None, yn=None):
     """
     Extract region.
@@ -1176,7 +1224,7 @@ def ext(data, x0=None, xn=None, y0=None, yn=None):
         Y-axis extract region start.
     yn : int
         Y-axis extract region end.
-   
+
     Returns
     -------
     ndata : ndarray
@@ -1185,15 +1233,16 @@ def ext(data, x0=None, xn=None, y0=None, yn=None):
     """
     return data[y0:yn, x0:xn]
 
+
 def ext_left(data):
     """
     Extract the left half of spectrum.
- 
+
     Parameters
     ----------
     data : ndarray
         Array of NMR data.
-    
+
     Returns
     -------
     ndata : ndarray
@@ -1202,15 +1251,16 @@ def ext_left(data):
     """
     return data[..., 0:int(data.shape[-1] / 2.)]
 
+
 def ext_right(data):
     """
     Extract the right half of the spectrum.
-  
+
     Parameters
     ----------
     data : ndarray
         Array of NMR data.
-    
+
     Returns
     -------
     ndata : ndarray
@@ -1219,34 +1269,36 @@ def ext_right(data):
     """
     return data[..., int(data.shape[-1] / 2.):]
 
+
 def ext_mid(data):
     """
     Extract the middle of the spectrum.
-  
+
     Parameters
     ----------
     data : ndarray
         Array of NMR data.
-    
+
     Returns
     -------
     ndata : ndarray
         Middle half of spectrum.
 
     """
-    return data[..., int(data.shape[-1] * 1./4.):int(data.shape[-1] * 3. / 4.)]
+    return data[..., int(data.shape[-1] * 1. / 4.):
+                                int(data.shape[-1] * 3. / 4.)]
+
 
 # Integrate
-
 def integ(data):
-    """ 
+    """
     Integrate by cumulative sum.
- 
+
     Parameters
     ----------
     data : ndarray
         Array of NMR data.
-    
+
     Returns
     -------
     ndata : ndarray
@@ -1255,15 +1307,16 @@ def integ(data):
     """
     return np.cumsum(data, axis=-1)
 
-# Modulus Calculation
 
+# Modulus Calculation
 def mc(data):
-    """ 
+    """
     Modulus calculation.
 
     Calculates sqrt(real^2 + imag^2)
     """
     return np.sqrt(data.real ** 2 + data.imag ** 2)
+
 
 def mc_pow(data):
     """
@@ -1271,15 +1324,16 @@ def mc_pow(data):
 
     Calculated real^2+imag^2
     """
-    return data.real ** 2+data.imag ** 2
+    return data.real ** 2 + data.imag ** 2
+
 
 # Mirror
-
 def mir_left(data):
     """
-    Append a mirror image of the data on the left. 
+    Append a mirror image of the data on the left.
     """
     return np.append(data, data[..., ::-1], axis=-1)
+
 
 def mir_right(data):
     """
@@ -1287,17 +1341,19 @@ def mir_right(data):
     """
     return np.append(data[..., ::-1], data, axis=-1)
 
+
 def mir_center(data):
     """
     Append a mirror image of the data in the center.
     """
-    s = data.shape[-1] 
-    return np.concatenate((data[..., s / 2:], data, data[..., :s / 2]), 
+    s = data.shape[-1]
+    return np.concatenate((data[..., s / 2:], data, data[..., :s / 2]),
                           axis=-1)
+
 
 def mir_center_onepoint(data):
     """
-    Append a mirror image of the data in the center with a one point shift 
+    Append a mirror image of the data in the center with a one point shift
     amd negate appended imaginary data.
     """
     s = int(data.shape[-1])
@@ -1306,8 +1362,8 @@ def mir_center_onepoint(data):
         data.imag[..., :s - 1] = -data.imag[..., :s - 1]
     return data
 
-# Multiply by a constant
 
+# Multiply by a constant
 def mult(data, r=1.0, i=1.0, c=1.0):
     """
     Multiply by a constant.
@@ -1335,16 +1391,16 @@ def mult(data, r=1.0, i=1.0, c=1.0):
         data.imag = data.imag * i * c
     return data
 
-# Reverse
 
+# Reverse
 def rev(data):
     """
     Reverse data.
     """
     return data[..., ::-1]
 
-# Set to a Constant
 
+# Set to a Constant
 def set(data, c):
     """
     Set to a constant.
@@ -1365,10 +1421,11 @@ def set(data, c):
     -----
     data is set in place, if original data is required make a copy before
     calling this function.
-    
+
     """
     data[..., :] = c
     return data
+
 
 def set_complex(data, v):
     """
@@ -1390,12 +1447,13 @@ def set_complex(data, v):
     -----
     data is set in place, if original data is required make a copy before
     calling this function.
-    
+
     """
     data.real = v
     if np.iscomplexobj(data):
         data.imag = v
     return data
+
 
 def set_real(data, v):
     """
@@ -1417,10 +1475,11 @@ def set_real(data, v):
     -----
     data is set in place, if original data is required make a copy before
     calling this function.
- 
+
     """
     data.real = v
     return data
+
 
 def set_imag(data, v):
     """
@@ -1442,14 +1501,14 @@ def set_imag(data, v):
     -----
     data is set in place, if original data is required make a copy before
     calling this function.
- 
+
     """
     if np.iscomplexobj(data):
         data.imag = v
     return data
 
-# Shuffle Utilities
 
+# Shuffle Utilities
 def ri2c(data):
     """
     Interleave real and imaginary data into a real array.
@@ -1461,17 +1520,20 @@ def ri2c(data):
     n[..., 1::2] = data.imag
     return n
 
+
 def interleave_complex(data):
-    """ 
+    """
     Unpack complex data into an interleaved real, imaginary array.
     """
     return ri2c(data)
+
 
 def unpack_complex(data):
     """
     Unpacks complex array into real array (interleaves values).
     """
-    return ri2c(data)    
+    return ri2c(data)
+
 
 def c2ri(data):
     """
@@ -1490,11 +1552,13 @@ def c2ri(data):
     n.imag = data.real[..., 1::2]
     return n
 
+
 def seperate_interleaved(data):
     """
     Seperate interleaved real, imaginary data into complex array.
     """
     return c2ri(data)
+
 
 def pack_complex(data):
     """
@@ -1502,11 +1566,13 @@ def pack_complex(data):
     """
     return c2ri(data)
 
+
 def decode_States(data):
     """
     Decode data collected using States (seperates interleaved data).
     """
     return c2ri(data)
+
 
 def ri2rr(data):
     """
@@ -1520,7 +1586,9 @@ def ri2rr(data):
     n[..., half:] = data.imag
     return n
 
+
 append_imag = ri2rr
+
 
 def rr2ri(data):
     """
@@ -1537,7 +1605,9 @@ def rr2ri(data):
     n.imag = data[..., half:]
     return n
 
+
 unappend_imag = rr2ri
+
 
 def exlr(data):
     """
@@ -1549,7 +1619,9 @@ def exlr(data):
     n[..., half:] = data[..., :half]
     return n
 
+
 exchange_lr = exlr
+
 
 def rolr(data):
     """
@@ -1561,10 +1633,12 @@ def rolr(data):
     n[..., half:] = data[..., :(half - 1):-1]
     return n
 
+
 rotate_lr = rolr
 
+
 def swap(data):
-    """ 
+    """
     Swap real and imaginary data.
     """
     n = np.empty_like(data)
@@ -1572,7 +1646,9 @@ def swap(data):
     n.imag = data.real
     return n
 
+
 swap_ri = swap
+
 
 def bswap(data):
     """
@@ -1580,10 +1656,11 @@ def bswap(data):
     """
     return data.byteswap()
 
+
 byte_swap = bswap
 
-# Sign Manipulation Utilities
 
+# Sign Manipulation Utilities
 def neg_left(data):
     """
     Negate left half.
@@ -1592,13 +1669,15 @@ def neg_left(data):
             -data[..., 0:int(data.shape[-1] / 2.)]
     return data
 
+
 def neg_right(data):
-    """ 
+    """
     Negate right half.
     """
-    data[..., int(data.shape[-1]/2.):] = \
+    data[..., int(data.shape[-1] / 2.):] = \
             -data[..., int(data.shape[-1] / 2.):]
     return data
+
 
 def neg_middle(data):
     """
@@ -1608,21 +1687,24 @@ def neg_middle(data):
         -data[..., int(data.shape[-1] * 1. / 4.):int(data.shape[-1] * 3. / 4.)]
     return data
 
+
 def neg_edges(data):
     """
     Negate edge half (non-middle) of spectra.
     """
-    data[..., :int(data.shape[-1] * 1./4)] = \
+    data[..., :int(data.shape[-1] * 1. / 4)] = \
             -data[..., :int(data.shape[-1] * 1. / 4)]
-    data[..., int(data.shape[-1] * 3./4):] = \
+    data[..., int(data.shape[-1] * 3. / 4):] = \
             -data[..., int(data.shape[-1] * 3. / 4):]
     return data
+
 
 def neg_all(data):
     """
     Negate data
     """
     return -data
+
 
 def neg_real(data):
     """
@@ -1631,12 +1713,14 @@ def neg_real(data):
     data.real = -data.real
     return data
 
+
 def neg_imag(data):
     """
     Negate imaginary data
     """
     data.imag = -data.imag
     return data
+
 
 def neg_even(data):
     """
@@ -1645,6 +1729,7 @@ def neg_even(data):
     data[..., ::2] = -data[..., ::2]
     return data
 
+
 def neg_odd(data):
     """
     Negate odd points
@@ -1652,11 +1737,13 @@ def neg_odd(data):
     data[..., 1::2] = -data[..., 1::2]
     return data
 
+
 def neg_alt(data):
     """
     Negate alternate (odd) points.
     """
     return neg_odd(data)
+
 
 def abs(data):
     """
@@ -1666,6 +1753,7 @@ def abs(data):
     data.imag = np.abs(data.imag)
     return data
 
+
 def sign(data):
     """
     Replace data with sign (-1 or 1) of data (seperately on each channel)
@@ -1674,18 +1762,19 @@ def sign(data):
     data.imag = np.sign(data.imag)
     return data
 
+
 ##################
 # Misc Functions #
 ##################
 
-# Coadd data
 
+# Coadd data
 def coadd(data, clist, axis=-1):
     """
     Coadd data.
 
-    Reduce data along axis by blocks data and multiplying by 
-    coefficients in clist.  Incomplete blocks are discarded.   
+    Reduce data along axis by blocks data and multiplying by
+    coefficients in clist.  Incomplete blocks are discarded.
 
     Parameters
     ----------
@@ -1695,7 +1784,7 @@ def coadd(data, clist, axis=-1):
         List of Coefficients
     axis : {0, 1, -1}
         Axis to reduce. 0 for Y, 1 or -1 for X.
-    
+
     """
     # there is probably a efficient way to do this with tile and inner
     # or scipy.ndimage.generic_filter
@@ -1719,11 +1808,12 @@ def coadd(data, clist, axis=-1):
         for i in range(k):
             n = n + clist[i] * data[i:m:k]
     return n
-        
+
+
 coad = coadd
 
-# Image Processing
 
+# Image Processing
 def thres(data, thres=0.0):
     """
     Mark values less than thres as invalid (for use with filters)
@@ -1738,10 +1828,11 @@ def thres(data, thres=0.0):
     Returns
     -------
     ndata : masked ndarray
-        Masked array of NMR data with values less than thres masked. 
+        Masked array of NMR data with values less than thres masked.
 
     """
     return np.ma.masked_less(data, thres)
+
 
 def conv(data, kern=[1.], m="wrap", c=0.0):
     """
@@ -1771,14 +1862,16 @@ def conv(data, kern=[1.], m="wrap", c=0.0):
     data.imag = scipy.ndimage.convolve(data.imag, weights=kern, mode=m, cval=c)
     return data
 
+
 convolute = conv
+
 
 def corr(data, kern=[1.], m="wrap", c=0.0):
     """
     Correlate data with a kernel (weights).
 
     Real and imaginary components of data are correlated seperately.
- 
+
     Parameters
     ----------
     data : ndarray
@@ -1797,18 +1890,20 @@ def corr(data, kern=[1.], m="wrap", c=0.0):
 
     """
     kern = np.array(kern)
-    data.real = scipy.ndimage.correlate(data.real, weights=kern, mode=m, 
+    data.real = scipy.ndimage.correlate(data.real, weights=kern, mode=m,
                                         cval=c)
-    data.imag = scipy.ndimage.correlate(data.imag, weights=kern, mode=m, 
+    data.imag = scipy.ndimage.correlate(data.imag, weights=kern, mode=m,
                                         cval=c)
     return data
 
+
 correlate = corr
+
 
 def filter_median(data, s=(1, 1), m="wrap", c=0.0):
     """
     Apply a median filter.
-    
+
     Real and imaginary components are filtered seperately.
 
     Parameters
@@ -1828,9 +1923,10 @@ def filter_median(data, s=(1, 1), m="wrap", c=0.0):
         Filtered NMR data.
 
     """
-    data.real = scipy.ndimage.median_filter(data.real, size=s, mode=m, cval=c) 
+    data.real = scipy.ndimage.median_filter(data.real, size=s, mode=m, cval=c)
     data.imag = scipy.ndimage.median_filter(data.imag, size=s, mode=m, cval=c)
     return data
+
 
 def filter_min(data, s=(1, 1), m="wrap", c=0.0):
     """
@@ -1855,9 +1951,10 @@ def filter_min(data, s=(1, 1), m="wrap", c=0.0):
         Filtered NMR data.
 
     """
-    data.real = scipy.ndimage.minimum_filter(data.real, size=s, mode=m, cval=c) 
+    data.real = scipy.ndimage.minimum_filter(data.real, size=s, mode=m, cval=c)
     data.imag = scipy.ndimage.minimum_filter(data.imag, size=s, mode=m, cval=c)
     return data
+
 
 def filter_max(data, s=(1, 1), m="wrap", c=0.0):
     """
@@ -1880,13 +1977,14 @@ def filter_max(data, s=(1, 1), m="wrap", c=0.0):
     -------
     ndata : ndarray
         Filtered NMR data.
-    
+
     """
-    data.real = scipy.ndimage.maximum_filter(data.real, size=s, mode=m, cval=c) 
+    data.real = scipy.ndimage.maximum_filter(data.real, size=s, mode=m, cval=c)
     data.imag = scipy.ndimage.maximum_filter(data.imag, size=s, mode=m, cval=c)
     return data
 
-def filter_percentile(data, s=(1, 1), m="wrap", c=0.0):
+
+def filter_percentile(data, percentile, s=(1, 1), m="wrap", c=0.0):
     """
     Apply a percentile filter.
 
@@ -1896,6 +1994,8 @@ def filter_percentile(data, s=(1, 1), m="wrap", c=0.0):
     ----------
     data : ndarray
         Array of NMR data.
+    percentile : float
+        Filter percentile parameter.
     s : tuple
         Shape or size taken for each step of the filter.
     m : {'reflect', 'constant', 'nearest', 'wrap'}
@@ -1909,13 +2009,14 @@ def filter_percentile(data, s=(1, 1), m="wrap", c=0.0):
         Filtered NMR data.
 
     """
-    data.real = scipy.ndimage.percentile_filter(data.real, size=s, mode=m,
-                                                cval=c) 
-    data.imag = scipy.ndimage.percentile_filter(data.imag, size=s, mode=m, 
-                                                cval=c)
+    data.real = scipy.ndimage.percentile_filter(data.real, percentile, size=s,
+                                                mode=m, cval=c)
+    data.imag = scipy.ndimage.percentile_filter(data.imag, percentile, size=s,
+                                                mode=m, cval=c)
     return data
 
-def filter_rank(data, s=(1, 1), m="wrap", c=0.0):
+
+def filter_rank(data, rank, s=(1, 1), m="wrap", c=0.0):
     """
     Apply a rank filter.
 
@@ -1925,6 +2026,8 @@ def filter_rank(data, s=(1, 1), m="wrap", c=0.0):
     ----------
     data : ndarray
         Array of NMR data.
+    rank : int
+        Filter rank parameter.
     s : tuple
         Shape or size taken for each step of the filter.
     m : {'reflect', 'constant', 'nearest', 'wrap'}
@@ -1938,11 +2041,15 @@ def filter_rank(data, s=(1, 1), m="wrap", c=0.0):
         Filtered NMR data.
 
     """
-    data.real = scipy.ndimage.rank_filter(data.real, size=s, mode=m, cval=c) 
-    data.imag = scipy.ndimage.rank_filter(data.imag, size=s, mode=m, cval=c)
+    data.real = scipy.ndimage.rank_filter(data.real, rank, size=s, mode=m,
+                                                cval=c)
+    data.imag = scipy.ndimage.rank_filter(data.imag, rank, size=s, mode=m,
+                                                cval=c)
     return data
 
+
 # These filter are much slower as they use the generic filter functions...
+
 
 def filter_amin(data, s=(1, 1), m="wrap", c=0.0):
     """
@@ -1965,14 +2072,15 @@ def filter_amin(data, s=(1, 1), m="wrap", c=0.0):
     -------
     ndata : ndarray
         Filtered NMR data.
-    
+
     """
     flt = amin_flt
-    data.real = scipy.ndimage.generic_filter(data.real, flt, size=s, mode=m, 
-                                             cval=c) 
-    data.imag = scipy.ndimage.generic_filter(data.imag, flt, size=s, mode=m, 
+    data.real = scipy.ndimage.generic_filter(data.real, flt, size=s, mode=m,
+                                             cval=c)
+    data.imag = scipy.ndimage.generic_filter(data.imag, flt, size=s, mode=m,
                                              cval=c)
     return data
+
 
 def filter_amax(data, s=(1, 1), m="wrap", c=0.0):
     """
@@ -1999,10 +2107,11 @@ def filter_amax(data, s=(1, 1), m="wrap", c=0.0):
     """
     flt = amax_flt
     data.real = scipy.ndimage.generic_filter(data.real, flt, size=s, mode=m,
-                                             cval=c) 
-    data.imag = scipy.ndimage.generic_filter(data.imag, flt, size=s, mode=m, 
+                                             cval=c)
+    data.imag = scipy.ndimage.generic_filter(data.imag, flt, size=s, mode=m,
                                              cval=c)
     return data
+
 
 def filter_range(data, s=(1, 1), m="wrap", c=0.0):
     """
@@ -2028,11 +2137,12 @@ def filter_range(data, s=(1, 1), m="wrap", c=0.0):
 
     """
     flt = range_flt
-    data.real = scipy.ndimage.generic_filter(data.real, flt, size=s, mode=m, 
-                                             cval=c) 
-    data.imag = scipy.ndimage.generic_filter(data.imag, flt, size=s, mode=m, 
+    data.real = scipy.ndimage.generic_filter(data.real, flt, size=s, mode=m,
+                                             cval=c)
+    data.imag = scipy.ndimage.generic_filter(data.imag, flt, size=s, mode=m,
                                              cval=c)
     return data
+
 
 def filter_avg(data, s=(1, 1), m="wrap", c=0.0):
     """
@@ -2058,11 +2168,12 @@ def filter_avg(data, s=(1, 1), m="wrap", c=0.0):
 
     """
     flt = avg_flt
-    data.real = scipy.ndimage.generic_filter(data.real, flt, size=s, mode=m, 
-                                             cval=c) 
-    data.imag = scipy.ndimage.generic_filter(data.imag, flt, size=s, mode=m, 
+    data.real = scipy.ndimage.generic_filter(data.real, flt, size=s, mode=m,
+                                             cval=c)
+    data.imag = scipy.ndimage.generic_filter(data.imag, flt, size=s, mode=m,
                                              cval=c)
     return data
+
 
 def filter_dev(data, s=(1, 1), m="wrap", c=0.0):
     """
@@ -2085,14 +2196,15 @@ def filter_dev(data, s=(1, 1), m="wrap", c=0.0):
     -------
     ndata : ndarray
         Filtered NMR data.
-    
+
     """
     flt = std_flt
-    data.real = scipy.ndimage.generic_filter(data.real, flt, size=s, mode=m, 
-                                             cval=c) 
-    data.imag = scipy.ndimage.generic_filter(data.imag, flt, size=s, mode=m, 
+    data.real = scipy.ndimage.generic_filter(data.real, flt, size=s, mode=m,
+                                             cval=c)
+    data.imag = scipy.ndimage.generic_filter(data.imag, flt, size=s, mode=m,
                                              cval=c)
     return data
+
 
 def filter_sum(data, s=(1, 1), m="wrap", c=0.0):
     """
@@ -2115,14 +2227,15 @@ def filter_sum(data, s=(1, 1), m="wrap", c=0.0):
     -------
     ndata : ndarray
         Filtered NMR data.
-    
+
     """
     flt = sum_flt
     data.real = scipy.ndimage.generic_filter(data.real, flt, size=s, mode=m,
-                                             cval=c) 
-    data.imag = scipy.ndimage.generic_filter(data.imag, flt, size=s, mode=m, 
+                                             cval=c)
+    data.imag = scipy.ndimage.generic_filter(data.imag, flt, size=s, mode=m,
                                              cval=c)
     return data
+
 
 def filter_generic(data, filter, s=(1, 1), m="wrap", c=0.0):
     """
@@ -2150,34 +2263,40 @@ def filter_generic(data, filter, s=(1, 1), m="wrap", c=0.0):
 
     """
     flt = filter
-    data.real = scipy.ndimage.generic_filter(data.real, flt, size=s, mode=m, 
-                                             cval=c) 
-    data.imag = scipy.ndimage.generic_filter(data.imag, flt, size=s, mode=m, 
+    data.real = scipy.ndimage.generic_filter(data.real, flt, size=s, mode=m,
+                                             cval=c)
+    data.imag = scipy.ndimage.generic_filter(data.imag, flt, size=s, mode=m,
                                              cval=c)
     return data
 
+
 # filter functions
 
-def amin_flt(arr): 
+def amin_flt(arr):
     return  arr[np.abs(arr).argmin()]
 
-def amax_flt(arr): 
+
+def amax_flt(arr):
     return arr[np.abs(arr).argmax()]
 
-def range_flt(arr): 
+
+def range_flt(arr):
     return arr.max() - arr.min()
 
-def avg_flt(arr): 
+
+def avg_flt(arr):
     return arr.avg()
 
-def std_flt(arr): 
+
+def std_flt(arr):
     return arr.std()
 
-def sum_flt(arr): 
+
+def sum_flt(arr):
     return arr.sum()
 
-# Scale Quad Artifacts
 
+# Scale Quad Artifacts
 def qart(data, a=0.0, f=0.0):
     """
     Scale Quad Artifacts.
@@ -2188,7 +2307,7 @@ def qart(data, a=0.0, f=0.0):
     ----------
     data : ndarray
         Array of NMR data.
-    a : float    
+    a : float
         Amplitude adjustment.
     f : float
         Phase adjustment.
@@ -2202,12 +2321,14 @@ def qart(data, a=0.0, f=0.0):
     data.imag = (1 + a) * data.imag + f * data.real
     return data
 
+
 def qart_auto(data):
     """
     Scale quad artifacts by values from Gram-Schmidt orthogonalization.
     """
     a, f = gram_schmidt(data)
     return qart(data, a, f)
+
 
 def gram_schmidt(data):
     """
@@ -2229,12 +2350,12 @@ def gram_schmidt(data):
     # imag(data'') = R/S*imag(data')
     # imag(data')  = imag(data)-C/R * real(data)
     # therefore:
-    # imag(data'') = R/S*imag(data) - R*C/(S*R) * real(data) 
+    # imag(data'') = R/S*imag(data) - R*C/(S*R) * real(data)
     # so A = R/S, B=-C/(S)
     return(R / S, -C / S)
 
-# Complex Mixing
 
+# Complex Mixing
 def qmix(data, carr):
     """
     Mix input and output channels provided coefficient array.
@@ -2246,7 +2367,7 @@ def qmix(data, carr):
     carr : array_liek
         Array of coefficients for mixing.  The size of carr must evenly divide
         qmix.
-    
+
     Returns
     -------
     ndata : ndarray
@@ -2272,8 +2393,8 @@ def qmix(data, carr):
 
     return n
 
-# Smooth and Center
 
+# Smooth and Center
 def smo(data, n):
     """
     Smooth data.
@@ -2292,14 +2413,14 @@ def smo(data, n):
 
     """
     # XXX this can probably be accomplished by a median_filter
-    n  = int(n)
+    n = int(n)
 
     # a is the accumulator
     a = np.copy(data)
-    
+
     for i in range(1, n + 1):
         a = a + rs(data, i) + ls(data, i)
-   
+
     # divide the interior by 2*n+1 to get mean
     a[..., n:-n] = a[..., n:-n] / (2 * n + 1)
     # divide the left edges by 2n+1-i where i is the distance from the interior
@@ -2308,10 +2429,11 @@ def smo(data, n):
     # divide the right edge similarly
     for i in range(-n, 0):
         a[..., i] = a[..., i] / (n - i)
-    return a 
+    return a
+
 
 def center(data, n):
-    """ 
+    """
     Center data.
 
     Parameters
@@ -2329,6 +2451,7 @@ def center(data, n):
     """
     return data - smo(data, n)
 
+
 def zd(data, window, x0=0.0, slope=1.0):
     """
     Zero Diagonal band with generic window function.
@@ -2345,16 +2468,16 @@ def zd(data, window, x0=0.0, slope=1.0):
         Starting location of diagonal band in points.
     slope : float
         Slope of diagonal band.
- 
+
     Returns
     -------
     ndata : ndarray
         Array of NMR data with diagonal band set to zero.
 
-   
+
     """
     width = len(window)         # full width
-    wide = (width - 1.) / 2     # half width        
+    wide = (width - 1.) / 2     # half width
     rows = data.shape[0]        # rows in data
     cols = data.shape[-1]       # columns in data
     c_start = x0 + slope        # start of center diagonal band
@@ -2363,7 +2486,7 @@ def zd(data, window, x0=0.0, slope=1.0):
     max_r = int(min(rows, np.floor((cols - c_start + wide) / slope) + 1))
 
     # apply window to band row by row
-    for r in xrange(max_r): # r from 0 to max_r-1
+    for r in xrange(max_r):  # r from 0 to max_r-1
         w_min = 0           # window min
         w_max = width       # window max
 
@@ -2382,6 +2505,7 @@ def zd(data, window, x0=0.0, slope=1.0):
 
     return data
 
+
 def zd_boxcar(data, wide=1.0, x0=0.0, slope=1.0):
     """
     Zero diagonal band with a boxcar function.
@@ -2396,7 +2520,7 @@ def zd_boxcar(data, wide=1.0, x0=0.0, slope=1.0):
         Starting location of diagonal band in points.
     slope : float
         Slope of diagonal band.
- 
+
     Returns
     -------
     ndata : ndarray
@@ -2405,6 +2529,7 @@ def zd_boxcar(data, wide=1.0, x0=0.0, slope=1.0):
     """
     window = np.zeros(2 * wide + 1)
     return zd(data, window, x0=x0, slope=slope)
+
 
 def zd_triangle(data, wide=1.0, x0=0.0, slope=1.0):
     """
@@ -2420,16 +2545,17 @@ def zd_triangle(data, wide=1.0, x0=0.0, slope=1.0):
         Starting location of diagonal band in points.
     slope : float
         Slope of diagonal band.
- 
+
     Returns
     -------
     ndata : ndarray
         Array of NMR data with diagonal band set to zero.
 
     """
-    window = np.append(np.linspace(1, 0, wide + 1), 
+    window = np.append(np.linspace(1, 0, wide + 1),
                     np.linspace(0, 1, wide + 1)[1:])
     return zd(data, window, x0=x0, slope=slope)
+
 
 def zd_sinebell(data, wide=1.0, x0=0.0, slope=1.0):
     """
@@ -2445,7 +2571,7 @@ def zd_sinebell(data, wide=1.0, x0=0.0, slope=1.0):
         Starting location of diagonal band in points.
     slope : float
         Slope of diagonal band.
- 
+
     Returns
     -------
     ndata : ndarray
@@ -2454,6 +2580,7 @@ def zd_sinebell(data, wide=1.0, x0=0.0, slope=1.0):
     """
     window = 1 - np.sin(np.linspace(0, pi, 2 * wide + 1))
     return zd(data, window, x0=x0, slope=slope)
+
 
 def zd_gaussian(data, wide=1.0, x0=0.0, slope=1.0, g=1):
     """
@@ -2471,7 +2598,7 @@ def zd_gaussian(data, wide=1.0, x0=0.0, slope=1.0, g=1):
         Slope of diagonal band.
     g : float
         Width of Gaussian function.
-    
+
     Returns
     -------
     ndata : ndarray

@@ -5,10 +5,10 @@ Linear Prediction (LP) functions for extrapolating and modeling NMR signals.
 __developer_info__ = """
 Notes
 ^^^^^
-This module contains functions for performing linear prediction on NMR  data. 
-The algorithms used were selected for simplicity to show how linear prediction 
-works not for computational speed nor stability.  Locations where significant 
-improvements can be made to improve speed or stability are indicated with 
+This module contains functions for performing linear prediction on NMR  data.
+The algorithms used were selected for simplicity to show how linear prediction
+works not for computational speed nor stability.  Locations where significant
+improvements can be made to improve speed or stability are indicated with
 SPEED and STABILITY within the source code with discussion following.
 
 The notation for the Linear Prediction equation, coefficients, roots, etc.
@@ -23,9 +23,11 @@ be easy to add if desired.  See :py:func:`find_lproots_hsvd` for an example.
 import numpy as np
 import scipy.linalg
 
+
 #############################################
 # linear prediction extrapolation functions #
 #############################################
+
 
 def lp(data, pred=1, slice=slice(None), order=8, mode="f", append="after",
     bad_roots="auto", fix_mode="on", mirror=None, method="svd"):
@@ -36,15 +38,15 @@ def lp(data, pred=1, slice=slice(None), order=8, mode="f", append="after",
     ----------
     data : ndarray
         1D or 2D NMR data with the last (-1) axis in the time domain.
-    pred : int      
+    pred : int
         Number of points to predict along the last axis.
     slice : slice object, optional
-        Slice object which selects the region along the last axis to use in LP 
+        Slice object which selects the region along the last axis to use in LP
         equation.  The default (slice(None)) will use all points.
     order : int
         Prediction order, number of LP coefficients calculated.
     mode : {'f', 'b', 'fb' or 'bf'}
-        Mode to generate LP filter. 'f' for forward,'b' for backward, fb for 
+        Mode to generate LP filter. 'f' for forward,'b' for backward, fb for
         'forward-backward and 'bf' for backward-forward.
     extend : {'before', 'after'}
         Location to extend the data, either 'before' the current data, or
@@ -53,21 +55,21 @@ def lp(data, pred=1, slice=slice(None), order=8, mode="f", append="after",
         Type of roots which to consider bad and to stabilize.  Option are those
         with increasing signals 'incr' or decreasing signals 'decr'.  None will
         perform no root stabiliting.  The default ('auto') will set the
-        parameter based on the `mode` parameter.  'f' or 'fb' `mode` will 
+        parameter based on the `mode` parameter.  'f' or 'fb' `mode` will
         results in a 'incr' `bad_roots` parameter, 'b' or 'bf` in 'decr'
     fix_mode : {'on', 'reflect'}
-        Method used to stabilize bad roots, 'on' to move the roots onto the 
-        unit circle, 'reflect' to reflect bad roots across the unit circle. 
+        Method used to stabilize bad roots, 'on' to move the roots onto the
+        unit circle, 'reflect' to reflect bad roots across the unit circle.
         This parameter is ignored when `bad_roots` is None.
     mirror : {None, '0', '180'}
-        Mode to form mirror image of data before processing.  None will 
-        process the data trace as provided (no mirror image). '0' or '180' 
-        forms a mirror image of the sliced trace to calculate the LP filter.  
+        Mode to form mirror image of data before processing.  None will
+        process the data trace as provided (no mirror image). '0' or '180'
+        forms a mirror image of the sliced trace to calculate the LP filter.
         '0' should be used with data with no delay, '180' with data
         with an initial half-point delay.
     method : {'svd', 'qr', 'choleskey', 'tls'}
         Method to use to calculate the LP filter. Choices are a SVD ('svd'), QR
-        ('qr'), or Choleskey ('choleskey') decomposition, or Total Least 
+        ('qr'), or Choleskey ('choleskey') decomposition, or Total Least
         Squares ('tls').
 
     Returns
@@ -79,11 +81,11 @@ def lp(data, pred=1, slice=slice(None), order=8, mode="f", append="after",
     Notes
     -----
     When given 2D data a series of 1D linear predictions are made to
-    each row in the array, extending each by pred points. To perform a 2D 
+    each row in the array, extending each by pred points. To perform a 2D
     linear prediction using a 2D prediction matrix use :py:func:`lp2d`.
 
-    In forward-backward or backward-forward mode root stabilizing is done 
-    on both sets of signal roots as calculated in the first mode direction.  
+    In forward-backward or backward-forward mode root stabilizing is done
+    on both sets of signal roots as calculated in the first mode direction.
     After averaging the coefficient the roots are again stabilized.
 
     When the append parameter does not match the LP mode, for example
@@ -93,7 +95,7 @@ def lp(data, pred=1, slice=slice(None), order=8, mode="f", append="after",
 
     """
     if data.ndim == 1:
-        return lp_1d(data, pred, slice, order, mode, append, bad_roots, 
+        return lp_1d(data, pred, slice, order, mode, append, bad_roots,
                      fix_mode, mirror, method)
     elif data.ndim == 2:
         # create empty array to hold output
@@ -108,54 +110,57 @@ def lp(data, pred=1, slice=slice(None), order=8, mode="f", append="after",
     else:
         raise ValueError("data must be a one or two dimensional array")
 
-# method specific extrapolation
 
+# method specific extrapolation
 def lp_svd(data, pred=1, slice=slice(None), order=8, mode="f", append="after",
            bad_roots="auto", fix_mode="on", mirror=None):
     """
     Linear Prediction extrapolation of 1D or 2D data using SVD decomposition.
-    
+
     See :py:func:`lp` for documentation.
 
     """
-    return lp(data, pred, slice, order, mode, append, bad_roots, fix_mode, 
+    return lp(data, pred, slice, order, mode, append, bad_roots, fix_mode,
               mirror, method="svd")
+
 
 def lp_qr(data, pred=1, slice=slice(None), order=8, mode="f", append="after",
            bad_roots="auto", fix_mode="on", mirror=None):
     """
     Linear Prediction extrapolation of 1D or 2D data using QR decomposition.
-    
+
     See :py:func:`lp` for documentation
 
     """
-    return lp(data, pred, slice, order, mode, append, bad_roots, fix_mode, 
+    return lp(data, pred, slice, order, mode, append, bad_roots, fix_mode,
               mirror, method="qr")
+
 
 def lp_cho(data, pred=1, slice=slice(None), order=8, mode="f", append="after",
            bad_roots="auto", fix_mode="on", mirror=None):
     """
     Linear Prediction extrapolation of 1D or 2D data using Cholesky
     decomposition.
-    
+
     See :py:func:`lp` for documentation
     """
-    return lp(data, pred, slice, order, mode, append, bad_roots, fix_mode, 
+    return lp(data, pred, slice, order, mode, append, bad_roots, fix_mode,
             mirror, method="cholesky")
+
 
 def lp_tls(data, pred=1, slice=slice(None), order=8, mode="f", append="after",
            bad_roots="auto", fix_mode="on", mirror=None):
     """
     Linear Prediction extrapolation of 1D or 2D data using Total Least Squares.
-    
+
     See :py:func:`lp` for documentation.
-    
+
     """
-    return lp(data, pred, slice, order, mode, append, bad_roots, fix_mode, 
+    return lp(data, pred, slice, order, mode, append, bad_roots, fix_mode,
             mirror, method="tls")
 
-# underlying 1D extrapolation
 
+# underlying 1D extrapolation
 def lp_1d(trace, pred=1, slice=slice(None), order=8, mode="f", append="after",
     bad_roots="auto", fix_mode="on", mirror=None, method="svd"):
     """
@@ -165,15 +170,15 @@ def lp_1d(trace, pred=1, slice=slice(None), order=8, mode="f", append="after",
     ----------
     trace : ndarray
         1D NMR data in the time domain.
-    pred : int      
+    pred : int
         Number of points to predict along the last axis.
     slice : slice object, optional
-        Slice object which selects the region along the last axis to use in LP 
+        Slice object which selects the region along the last axis to use in LP
         equation.  The default (slice(None)) will use all points.
     order : int
         Prediction order, number of LP coefficients calculated.
     mode : {'f', 'b', 'fb' or 'bf'}
-        Mode to generate LP filter. 'f' for forward,'b' for backward, fb for 
+        Mode to generate LP filter. 'f' for forward,'b' for backward, fb for
         'forward-backward and 'bf' for backward-forward.
     extend : {'before', 'after'}
         Location to extend the data, either 'before' the current data, or
@@ -182,21 +187,21 @@ def lp_1d(trace, pred=1, slice=slice(None), order=8, mode="f", append="after",
         Type of roots which to consider bad and to stabilize.  Option are those
         with increasing signals 'incr' or decreasing signals 'decr'.  None will
         perform no root stabiliting.  The default ('auto') will set the
-        parameter based on the `mode` parameter.  'f' or 'fb' `mode` will 
+        parameter based on the `mode` parameter.  'f' or 'fb' `mode` will
         results in a 'incr' `bad_roots` parameter, 'b' or 'bf` in 'decr'
     fix_mode : {'on', 'reflect'}
-        Method used to stabilize bad roots, 'on' to move the roots onto the 
-        unit circle, 'reflect' to reflect bad roots across the unit circle. 
+        Method used to stabilize bad roots, 'on' to move the roots onto the
+        unit circle, 'reflect' to reflect bad roots across the unit circle.
         This parameter is ignored when `bad_roots` is None.
     mirror : {None, '0', '180'}
-        Mode to form mirror image of data before processing.  None will 
-        process the data trace as provided (no mirror image). '0' or '180' 
-        forms a mirror image of the sliced trace to calculate the LP filter.  
+        Mode to form mirror image of data before processing.  None will
+        process the data trace as provided (no mirror image). '0' or '180'
+        forms a mirror image of the sliced trace to calculate the LP filter.
         '0' should be used with data with no delay, '180' with data
         with an initial half-point delay.
     method : {'svd', 'qr', 'choleskey', 'tls'}
         Method to use to calculate the LP filter. Choices are a SVD ('svd'), QR
-        ('qr'), or Choleskey ('choleskey') decomposition, or Total Least 
+        ('qr'), or Choleskey ('choleskey') decomposition, or Total Least
         Squares ('tls').
 
     Returns
@@ -207,8 +212,8 @@ def lp_1d(trace, pred=1, slice=slice(None), order=8, mode="f", append="after",
 
     Notes
     -----
-    In forward-backward or backward-forward mode root stabilizing is done 
-    on both sets of signal roots as calculated in the first mode direction.  
+    In forward-backward or backward-forward mode root stabilizing is done
+    on both sets of signal roots as calculated in the first mode direction.
     After averaging the coefficient the roots are again stabilized.
 
     When the append parameter does not match the LP mode, for example
@@ -220,7 +225,7 @@ def lp_1d(trace, pred=1, slice=slice(None), order=8, mode="f", append="after",
     See Also
     --------
     lp : 1D or 2D linear prediction extrapolation.
- 
+
     """
     # check for bad arguments
     if mode not in ["f", "b", "fb", "bf"]:
@@ -243,7 +248,7 @@ def lp_1d(trace, pred=1, slice=slice(None), order=8, mode="f", append="after",
         if mode == "f" or mode == "fb":
             bad_roots = "incr"
         else:
-            bad_roots = "decr" 
+            bad_roots = "decr"
 
     x = trace[slice]    # extract region to use for finding LP coefficients
 
@@ -257,27 +262,29 @@ def lp_1d(trace, pred=1, slice=slice(None), order=8, mode="f", append="after",
         a = find_lpc_bf(x, order, bad_roots, fix_mode, method)
         mode = "b"
     else:
-        D, d = make_Dd(x, order, mode) # form the LP equation matrix and vector
+        # form the LP equation matrix and vector
+        D, d = make_Dd(x, order, mode)
         a = find_lpc(D, d, method)  # determind the LP prediction filter
 
     # stablize roots if needed
     if bad_roots != None:           # stablize roots if needed
-        poles = find_roots(a, mode) # find roots (poles)
-        poles = fix_roots(poles, bad_roots, fix_mode) # fix roots
+        poles = find_roots(a, mode)  # find roots (poles)
+        poles = fix_roots(poles, bad_roots, fix_mode)  # fix roots
         # reverse filter when calculated filter is in wrong direction
-        if (mode == "b" and append == "after") or (mode == "f" and 
+        if (mode == "b" and append == "after") or (mode == "f" and
                                                    append == "before"):
             poles = [1. / pole for pole in poles]
-            mode = {'f':'b', 'b':'f'}[mode]
+            mode = {'f': 'b', 'b': 'f'}[mode]
         a = find_coeff(poles, mode)  # find LP filter from roots
     else:
         # reverse filter when calculated filter is in wrong direction
-        if (mode == "b" and append == "after") or (mode == "f" and 
+        if (mode == "b" and append == "after") or (mode == "f" and
                                                    append == "before"):
             a = reverse_filter(a, mode)
     # extrapolate the trace using the prediction filter
     ntrace = extrapolate(trace, a, pred, append)
     return ntrace
+
 
 ##################
 # LP2D functions #
@@ -287,7 +294,7 @@ def lp_1d(trace, pred=1, slice=slice(None), order=8, mode="f", append="after",
 def lp2d(data, pred, P, M, mirror='0', fix_points=True, method='svd'):
     """
     Perform a forward 2D linear prediction extrapolation on data.
-    
+
     Use the 2D linear prediction algorithm presented in:
     G. Zhu and A. Bax, Journal of Magnetic Resonance, 1992, 98, 192-199.
     to extend the last (1) axis by `pred` points. A PxM prediction matrix, C,
@@ -295,14 +302,14 @@ def lp2d(data, pred, P, M, mirror='0', fix_points=True, method='svd'):
 
     data[n,m] = /sigma_{l=0}^{P-1} /sigma_{k=1}^M C_{l,k}*data[n-l,m-k]
 
-    For all valid points in data. This prediction matrix together with the 
-    data matrix with a mirror image appended is used to extend the last (1) 
+    For all valid points in data. This prediction matrix together with the
+    data matrix with a mirror image appended is used to extend the last (1)
     axis by pred points resulting in a new array of size [N_0, N_1+pred] where
-    N_0 and N_1 are the sizes of the original data.  To linear predict 
+    N_0 and N_1 are the sizes of the original data.  To linear predict
     both dimensions this function should be used twice with a transpose
     between the uses.
 
-    Backward linear prediction using this method is not possible as the 
+    Backward linear prediction using this method is not possible as the
     method depends on being able to mirror the data before the first collected
     point. In backwards mode this would correspond to being able to correctly
     determind points after the last point which cannot be determinded using the
@@ -327,7 +334,7 @@ def lp2d(data, pred, P, M, mirror='0', fix_points=True, method='svd'):
         Method to use for forming the mirror image of the non-predicted axis.
         '0' indicated no initial delay, '180' for a half-point delay.
     fix_points : bool
-        True to reduce predicted points with magnitude larger than the largest 
+        True to reduce predicted points with magnitude larger than the largest
         data point. False leaved predicted points  unaltered.
     method : {'svd', 'qr', 'cholesky', 'tls'}
         Method used to calculate the LP prediction matrix.  See :py:func:`lp`
@@ -361,8 +368,9 @@ def lp2d(data, pred, P, M, mirror='0', fix_points=True, method='svd'):
     # extrapolate the 2D data using the prediction matrix
     return extrapolate_2d(data, C, pred, fix_points, mirror)
 
+
 def extrapolate_2d(x, C, pred, fix_points, mirror):
-    """ 
+    """
     Extrapolate points along the 1st axis using the lp2d algorithm.
     """
     # find the prediction matrix shape and flatten it
@@ -392,19 +400,20 @@ def extrapolate_2d(x, C, pred, fix_points, mirror):
     # after filling a column, replace the whole column with the mirrored column
 
     for j in xrange(N_1 - M, N_1 - M + pred):  # column index loop
-        for i in xrange(plane - P + 1, last - P + 1): # row index loop
+        for i in xrange(plane - P + 1, last - P + 1):  # row index loop
             new[i + P - 1, j + M] = np.sum(new[i:i + P, j:j + M].flat * c)
-            
+
             if fix_points:  # reduce predicted point is needed
                 if new[i + P - 1, j + M] > x_max:
-                    new[i + P - 1, j + M] = ((x_max * x_max) / 
+                    new[i + P - 1, j + M] = ((x_max * x_max) /
                                              (new[i + P - 1, j + M]))
-        
-        # fill the column with the mirrored column so it can be read in the 
+
+        # fill the column with the mirrored column so it can be read in the
         # next interation of the loop
         new[:, j + M] = make_mirror(new[plane:, j + M], mirror)
 
     return new[plane:]
+
 
 def make_lp2d_Dd(x, P, M, mode='f'):
     """
@@ -421,32 +430,33 @@ def make_lp2d_Dd(x, P, M, mode='f'):
                                 # top left corner
                                 # this can be done with the same code
                                 # after reversing x,
-                                # x = x[::-1,::-1] 
+                                # x = x[::-1,::-1]
 
-    # Build D and d' row by row by flattening a PxM region of the x matrix 
-    # starting at 0, 0 and moving down to the bottom of the matrix, then moving 
-    # back to the top and over one row, and continue till all data has been 
+    # Build D and d' row by row by flattening a PxM region of the x matrix
+    # starting at 0, 0 and moving down to the bottom of the matrix, then moving
+    # back to the top and over one row, and continue till all data has been
     # read. d' is filled with the element next to the right corner of this
     # PxM region.
 
     N_0, N_1 = x.shape  # length of the matrix
 
-    count_P = N_0 - P+1 # number of valid starting position vertically
-    count_M = N_1 - M   # number of valid starting position horizontally
-                        # taking into account the element next to the 
-                        # bottom right corner is the predicted value.
-    
+    count_P = N_0 - P + 1   # number of valid starting position vertically
+    count_M = N_1 - M       # number of valid starting position horizontally
+                            # taking into account the element next to the
+                            # bottom right corner is the predicted value.
+
     # create an empty D matrix
     D = np.empty((count_P * count_M, P * M), dtype=x.dtype)
     d = np.empty((count_P * count_M, 1), dtype=x.dtype)
 
-    # fill D and d' row by row (i,j) give coordinates of top-left corner of 
+    # fill D and d' row by row (i,j) give coordinates of top-left corner of
     # PxM reading matrix
     for j in xrange(count_M):
         for i in xrange(count_P):
             D[j * count_P + i] = x[i:i + P, j:j + M].flat
-            d[j * count_P + i] = x[i + P - 1, j + M] 
+            d[j * count_P + i] = x[i + P - 1, j + M]
     return D, d
+
 
 #############################################
 # Cadzow/Minumum variance signal enhacement #
@@ -460,7 +470,7 @@ def cadzow(data, M, K, niter, min_var=False):
     Performs a Cadzow-like signal enhancement with optional adjustment
     of singular values using the minimum variance method as desribed in:
     Chen, VanHuffel, Decanniere, VanHecke, JMR, 1994, 109A, 46-55.
-    
+
     For 2D data performs independant enhancement on each row of data array.
 
     Parameters
@@ -468,15 +478,15 @@ def cadzow(data, M, K, niter, min_var=False):
     data : ndarray
         1D or 2D NMR data to enhance.
     M : int
-        Large prediction order.  For best results should be between 
+        Large prediction order.  For best results should be between
         K + 5 and 2 * K.
     K : int
         Reduced prediction order.
     niter : int
-        Number if iteration of the Cadzow procedure to perform.   
+        Number if iteration of the Cadzow procedure to perform.
     min_var : bool
-        True to adjust retained singular values using the  minimum variance 
-        method. False does not correct the singular values and is the 
+        True to adjust retained singular values using the  minimum variance
+        method. False does not correct the singular values and is the
         Cadzow method.
 
     Returns
@@ -484,7 +494,7 @@ def cadzow(data, M, K, niter, min_var=False):
     ndata : ndarray
         Array of enhanced data
 
-    """    
+    """
     if data.ndim == 1:
         for i in xrange(niter):
             data = cadzow_single(data, M, K, min_var)
@@ -504,11 +514,11 @@ def cadzow_single(x, M, K, min_var=False):
 
     See :py:func:`cadzow` for documentation.
 
-    """ 
+    """
     # variable names based upon Chen et al, JMR 1994 109A 46
     # form the Hankel data matrix X
-    N = len(x) 
-    L = N - M + 1    
+    N = len(x)
+    L = N - M + 1
     X = scipy.linalg.hankel(x[:L], x[L - 1:])
 
     # Compute the SVD of X
@@ -519,13 +529,13 @@ def cadzow_single(x, M, K, min_var=False):
     Vlh = np.mat(Vh[:K, :])     # first K columns of V are first K rows of Vh
     sl = s[:K]
 
-    if min_var: # adjust singular values using minimum variance method
+    if min_var:  # adjust singular values using minimum variance method
         # estimate variance of noise singular values
         s2 = (1. / (M - K)) * np.power(s[K:], 2).sum()
         sl = np.array([l - s2 / l for l in sl])
 
     Sl = np.mat(np.diag(sl))
-        
+
     # compute enhanced data vector for rank-reduced data matrix
     Xp = Ul * Sl * Vlh
 
@@ -535,11 +545,13 @@ def cadzow_single(x, M, K, min_var=False):
         xp[i] = np.diag(Xp[:, ::-1], v).mean()
     return xp
 
+
 ###################################################
 # Linear Prediction parametric modeling functions #
 ###################################################
 
-def lp_model(trace, slice=slice(None), order=8, mode="f", mirror=None, 
+
+def lp_model(trace, slice=slice(None), order=8, mode="f", mirror=None,
         method="svd", full=False):
     """
     Use Linear Prediction to model 1D NMR time domain data.
@@ -549,16 +561,16 @@ def lp_model(trace, slice=slice(None), order=8, mode="f", mirror=None,
     trace : 1D ndarray
         One dimensional time domain NMR data to model.
     slice : slice object, optional
-        Slice object which selects the region along the last axis to use in LP 
+        Slice object which selects the region along the last axis to use in LP
         equation.  The default, slice(None), will use all points.
     order : int
         Prediction order, number of LP coefficients calculated.
     mode : {'f', 'b'}
         Mode to generate LP filter. 'f' for forward,'b' for backward.
     mirror : {None, '0', '180'}
-        Mode to form mirror image of data before processing.  None will 
-        process the data trace as provided (no mirror image). '0' or '180' 
-        forms a mirror image of the sliced trace to calculate the LP filter.  
+        Mode to form mirror image of data before processing.  None will
+        process the data trace as provided (no mirror image). '0' or '180'
+        forms a mirror image of the sliced trace to calculate the LP filter.
         '0' should be used with data with no delay, '180' with data
         with an initial half-point delay.
     method : {'svd', 'qr', 'choleskey', 'tls'}
@@ -568,7 +580,7 @@ def lp_model(trace, slice=slice(None), order=8, mode="f", mirror=None,
     full : bool
         True to return amplitudes and phases calculated by performing a least
         squares fitting to the data after LP modeling.  False will return only
-        the damping (relaxation) factors and signal frequencies. 
+        the damping (relaxation) factors and signal frequencies.
 
     Returns
     -------
@@ -582,7 +594,7 @@ def lp_model(trace, slice=slice(None), order=8, mode="f", mirror=None,
     phase : list, optional.
         List of signal phases found by least squares fitting of data after LP
         modeling, only returned when `full` parameter is True.
-    
+
 
     Notes
     -----
@@ -604,7 +616,7 @@ def lp_model(trace, slice=slice(None), order=8, mode="f", mirror=None,
         x = make_mirror(x, mirror)
 
     # calculate LP coefficient and factor to find poles
-    if method in ['svd', 'qr', 'cholseky', 'tls']: 
+    if method in ['svd', 'qr', 'cholseky', 'tls']:
         D, d = make_Dd(x, order, mode)   # form the LP equation elements
         a = find_lpc(D, d, method)      # find LP coefficients
         poles = find_roots(a, mode)     # find roots
@@ -614,14 +626,14 @@ def lp_model(trace, slice=slice(None), order=8, mode="f", mirror=None,
     else:
         raise ValueError("Invalid method")
 
-    # reverse poles if we have backward poles 
+    # reverse poles if we have backward poles
     if mode == "b":
         poles = [1. / pole for pole in poles]
 
     # determind the damping factor and frequencies from the roots
     damp = [root2damp(pole) for pole in poles]
     freq = [root2freq(pole) for pole in poles]
-    
+
     if full == False:
         return damp, freq
 
@@ -632,7 +644,7 @@ def lp_model(trace, slice=slice(None), order=8, mode="f", mirror=None,
     # z_0*b_0^1+z_1*b_1^1+.... = x_1
     # ...
     # Where b is the LP roots (poles), x is the signal, and a_0 are unknown
-    # 
+    #
     # To solve this recast into Bz = x and solve for a using scipy.lstsq
 
     # SPEED
@@ -646,51 +658,57 @@ def lp_model(trace, slice=slice(None), order=8, mode="f", mirror=None,
 
     # Now the z_n = amp_n*exp(phase_n*i), use this to determind the amplitudes
     # and phases
-    amp   = [cof2amp(cof) for cof in z]
-    phase = [cof2phase(cof) for cof in z] 
+    amp = [cof2amp(cof) for cof in z]
+    phase = [cof2phase(cof) for cof in z]
 
     return damp, freq, amp, phase
 
 
 ###############################################################
-# functions to determine signal parameters from LP parameters # 
+# functions to determine signal parameters from LP parameters #
 ###############################################################
 
+
 def root2damp(pole):
-    """ 
-    Calculate the damping factor from a LP root 
+    """
+    Calculate the damping factor from a LP root
     """
     # damping factor is the radius in the complex plane -1/pi*ln(|pole|)
     return -1. / (np.pi) * np.log(np.abs(pole))
 
+
 def root2freq(pole):
-    """ 
-    Calculate the frequency from a LP root 
+    """
+    Calculate the frequency from a LP root
     """
     # frequency is the angle from the x-axis to the point in the complex plane
     # arg(pole) / (2*pi) = atan2(imag,real) / (2*pi)
     return np.arctan2(pole.imag, pole.real) / (2. * np.pi)
 
+
 def cof2amp(z):
-    """ 
-    Calculate a signal amplitude from a model coefficient 
+    """
+    Calculate a signal amplitude from a model coefficient
     """
     # z = amp*exp(phase*i) so amp is abs(z)
     return np.abs(z)
 
+
 def cof2phase(z):
-    """ 
-    Calculate a signal phase from a model coefficient 
+    """
+    Calculate a signal phase from a model coefficient
     """
     # z = amp*exp(phase(i) so phase is the arg(z)
     return np.arctan2(z.imag, z.real)
+
 
 ##############################
 # data preperation functions #
 ##############################
 
+
 def make_D(x, order, mode):
-    """ 
+    """
     Make the LP equation D matrix (Da = d')
     """
     L = len(x) - order
@@ -701,6 +719,7 @@ def make_D(x, order, mode):
     else:
         raise ValueError("mode must be 'f' or 'b'")
 
+
 def make_little_d(x, order, mode):
     """
     Make the LP equation d' vector (Da = d')
@@ -708,16 +727,18 @@ def make_little_d(x, order, mode):
     if mode == "f":
         return x[order:].reshape(len(x) - order, 1)
     elif mode == "b":
-        L = len(x ) -order
+        L = len(x) - order
         return x[:L].reshape(L, 1)
     else:
         raise ValueError("mode must be 'f' or 'b'")
+
 
 def make_Dd(x, order, mode):
     """
     make the LP equation D matrix and d' vector (Da=d')
     """
     return make_D(x, order, mode), make_little_d(x, order, mode)
+
 
 def make_mirror(x, mode):
     """
@@ -727,7 +748,7 @@ def make_mirror(x, mode):
     G. Zhu and A. Bax, Journal of Magnetic Resonance, 1990, 90, 405
 
     When mode is "0" (no initial delay) form the an array with length 2N-1:
-        x_n-1 ... x_1 x_0 x_1 ... x_n-1  
+        x_n-1 ... x_1 x_0 x_1 ... x_n-1
 
     When mode is "180" (half point delay) form an array with length 2N:
         x_n-1 .. x_1 x_0 x_0 x_1 ... x_n-1
@@ -755,6 +776,7 @@ def make_mirror(x, mode):
 # prediction.  Forward LP returns coefficients ordered m, m-1, ...1
 # Backward LP returns 1, 2, ..., m where m is the order of the prediction.
 
+
 def find_lpc(D, d, method):
     """
     Find linear prediction filter using a provided method.
@@ -769,6 +791,7 @@ def find_lpc(D, d, method):
         return find_lpc_tls(D, d)
     else:
         raise ValueError("invalid method")
+
 
 def find_lpc_svd(D, d):
     """
@@ -787,12 +810,13 @@ eps = np.finfo('float').eps
 feps = np.finfo('single').eps
 _array_precision = {'f': 0, 'd': 1, 'F': 0, 'D': 1}
 
+
 def pinv_diagsvd(s, m, L):
     """
     Construct the pseudo-inverse of the sigma matrix from singular values
     """
     t = s.dtype.char
-    cond = {0:feps*1e3, 1:eps*1e6}[_array_precision[t]]
+    cond = {0: feps * 1e3, 1: eps * 1e6}[_array_precision[t]]
     cutoff = s[0] * cond
     Si = np.zeros((m, L), t)
     for i in range(len(s)):
@@ -800,23 +824,25 @@ def pinv_diagsvd(s, m, L):
             Si[i, i] = 1.0 / np.conj(s[i])
     return Si
 
+
 def find_lpc_qr(D, d):
     """
     Find linear prediction filter using QR decomposition.
     """
     L = D.shape[0]
     m = D.shape[1]
-    q, r  = scipy.linalg.qr(D)
+    q, r = scipy.linalg.qr(D)
     q, r = np.mat(q), np.mat(r)
 
     # SPEED
-    # the next line is slow and the use of pinv2 should be avoided as 
-    # pseudo inversion of r involves a computationally expensive SVD 
-    # decomposition which is not needed.  Rather r*x = q.H*d should be 
+    # the next line is slow and the use of pinv2 should be avoided as
+    # pseudo inversion of r involves a computationally expensive SVD
+    # decomposition which is not needed.  Rather r*x = q.H*d should be
     # solved for x using LAPACK's ZTRTRS function (or similar function with
-    # different prefix).  This is not currently available in scipy/numpy and 
+    # different prefix).  This is not currently available in scipy/numpy and
     # therefore is not used here.
     return scipy.linalg.pinv2(r) * q.H * d
+
 
 def find_lpc_cholesky(D, d):
     """
@@ -832,6 +858,7 @@ def find_lpc_cholesky(D, d):
     c, lower = scipy.linalg.cho_factor(DhD)     # Compute Cholesky decomp.
     return scipy.linalg.cho_solve((c, lower), Dhd)  # solve normal equation
 
+
 def find_lpc_tls(D, d):
     """
     Find linear prediction filter using the Total Least Squares method
@@ -840,10 +867,11 @@ def find_lpc_tls(D, d):
     E = np.append(D, d, axis=1)     # form the augmented data matrix
     U, s, Vh = scipy.linalg.svd(E)  # SVD decompositon of augmented matrix
     V = np.conj(Vh.T)               # Hermetian transpose
-    return (-1. / V[m, m] * V[:m, m]).reshape((m, 1)) 
+    return (-1. / V[m, m] * V[:m, m]).reshape((m, 1))
+
 
 def find_lpc_fb(x, order, bad_roots, fix_mode, method):
-    """ 
+    """
     Determind LP coefficient using forward-backward linear prediction.
 
     Averages LP coefficients generated from solving the forward and backward
@@ -882,8 +910,9 @@ def find_lpc_fb(x, order, bad_roots, fix_mode, method):
     # average the forward and backward coefficients
     return (forward_a + backward_a) / 2.
 
+
 def find_lpc_bf(x, order, bad_roots, fix_mode, method):
-    """ 
+    """
     Determind LP coefficient using backward-forward linear prediction.
 
     Averages LP coefficients generated from solving the forward and backward
@@ -922,23 +951,25 @@ def find_lpc_bf(x, order, bad_roots, fix_mode, method):
     # average the forward and backward coefficients
     return (forward_a + backward_a) / 2.
 
+
 #####################################
 # root finding and fixing functions #
 #####################################
+
 
 def find_lproots_hsvd(x, M, K, mode, zmethod='sm'):
     """
     Find LP roots (poles) using the HSVD method
 
-    Perform a HSVD linear prediction to determind signal roots (poles) as 
+    Perform a HSVD linear prediction to determind signal roots (poles) as
     described in:
-    Barkhuijsen, DeBeer, and Van Ormondt, JMR, 1987, 73, 553 
-    
+    Barkhuijsen, DeBeer, and Van Ormondt, JMR, 1987, 73, 553
+
     Parameters x, M and K are the same as those described in the above article.
-    zmethod refer to the method used to calculate Z', either a least-squares 
+    zmethod refer to the method used to calculate Z', either a least-squares
     method (lstsq) can be used to solve U_b*Z'=U_t or the Sherman-Morrison
     formula (sm) can be used to avoid the full matrix inversion with equation
-    [12] being used to find Z'. The Sherman-Morrison method should be faster 
+    [12] being used to find Z'. The Sherman-Morrison method should be faster
     with similar precision.
 
     Parameters
@@ -953,14 +984,14 @@ def find_lproots_hsvd(x, M, K, mode, zmethod='sm'):
     mode : {'f', 'b'}
         Mode to perform LP. 'f' for forward,'b' for backward.
     zmethod : {'lstsq', 'sm'}
-        Method used to find Z' 'lstsq' for least squares, 'sm' for 
+        Method used to find Z' 'lstsq' for least squares, 'sm' for
         Sherman-Morrison.
 
     Returns
     -------
     y : ndarray
         Array of signal roots (poles)
-    
+
     """
     # check parameters
     if mode not in ['f', 'b']:
@@ -969,11 +1000,11 @@ def find_lproots_hsvd(x, M, K, mode, zmethod='sm'):
         raise ValueError("zmethod must be 'lstsq' or 'sm'")
     if K > min(M + 1, len(x) - M):
         raise ValueError("K must be less than min(M + 1, len(x) - M)")
-    
+
     # form the data matrix X
-    N = len(x) 
+    N = len(x)
     L = N - M - 1
-    
+
     if mode == "f":
         X = scipy.linalg.hankel(x[:L + 1], x[L:])
     else:
@@ -996,12 +1027,13 @@ def find_lproots_hsvd(x, M, K, mode, zmethod='sm'):
     else:
         # solve using equation [12]:
         # Z' = (Ek + (u*uh / (1-uh*u)) ) * Ub.H*Ut
-        uh = Uk[-1] # bottom row of Uk
+        uh = Uk[-1]  # bottom row of Uk
         u = uh.H
-        Zp = (np.eye(K, dtype=u.dtype) + (u * uh/(1. - uh * u))) * Ub.H * Ut
+        Zp = (np.eye(K, dtype=u.dtype) + (u * uh / (1. - uh * u))) * Ub.H * Ut
 
     # diagonalization (find eigenvalues) of Z' to yield roots
     return scipy.linalg.eigvals(Zp)
+
 
 def find_roots(a, mode="f"):
     """
@@ -1014,7 +1046,7 @@ def find_roots(a, mode="f"):
     mode : {'f', 'b'}
         Mode of LP coefficients.  'f' for coefficients ordered m, m - 1,..., 1.
         'b' for coefficients ordered 1, 2, ...., m
-    
+
     Returns
     -------
     roots : array
@@ -1036,20 +1068,21 @@ def find_roots(a, mode="f"):
     # To calculate the roots, create a leading 1.0+0.0j and reverse if needed.
     p = np.empty(len(a) + 1, dtype=a.dtype)
     p[0] = (1.0 + 0.0j)
-    
+
     if mode == "f":      # reverse for forward LP
         p[1:] = -a.flat[::-1]
     else:   # backward LP
         p[1:] = -a.flat[:]
     return np.roots(p)
 
+
 def find_coeff(poles, mode="f"):
     """
     Find LP coefficients from a set of LP roots (poles).
-    
+
     Parameters
     ----------
-    poles : ndarray   
+    poles : ndarray
         Array of LP roots (poles)
     mode : {'f', 'b'}
         Mode in which LP coefficients should be returned.  'f' for coefficients
@@ -1068,18 +1101,20 @@ def find_coeff(poles, mode="f"):
     if mode not in ['f', 'b']:
         raise ValueError("mode must be 'f'or 'b'")
 
-    if mode == 'f': # reverse resulting coefficients
+    if mode == 'f':  # reverse resulting coefficients
         return np.squeeze(-np.poly(poles)[:0:-1])
     else:   # keep coefficients as is
         return np.squeeze(-np.poly(poles)[1:])
+
 
 def reverse_filter(a, mode):
     """
     Reverse a filter (change forward LP to backwards LP).
     """
-    nmode = {'f':'b', 'b':'f'}[mode]
+    nmode = {'f': 'b', 'b': 'f'}[mode]
     # find roots, replace each root with 1/root, then recalculate filter
     return find_coeff([1. / pole for pole in find_roots(a, mode)], nmode)
+
 
 def fix_roots(poles, fix_roots="incr", fix_mode="reflect"):
     """
@@ -1091,11 +1126,11 @@ def fix_roots(poles, fix_roots="incr", fix_mode="reflect"):
         Array of LP roots (poles).
     fix_roots : {'incr', 'decr'}
         Type of roots which to consider bad and to stabilize.  Either those
-        with increasing signals 'incr' or decreasing signals 'decr'.  
+        with increasing signals 'incr' or decreasing signals 'decr'.
     fix_mode : {'on', 'reflect'}
-        Method used to stabilize bad roots, 'on' to move the roots onto the 
-        unit circle, 'reflect' to reflect bad roots across the unit circle. 
-    
+        Method used to stabilize bad roots, 'on' to move the roots onto the
+        unit circle, 'reflect' to reflect bad roots across the unit circle.
+
     Returns
     -------
     npoles : ndarray
@@ -1125,9 +1160,11 @@ def fix_roots(poles, fix_roots="incr", fix_mode="reflect"):
                     poles[i] = 1 / np.conj(pole)
     return poles
 
+
 ###########################
 # Extrapolation functions #
 ###########################
+
 
 def extrapolate(trace, a, pred, append):
     """
@@ -1135,7 +1172,7 @@ def extrapolate(trace, a, pred, append):
 
     Parameters
     ----------
-    trace : 1D ndarray  
+    trace : 1D ndarray
         1D array to extrapolate from and append to.
     a : ndarray
         LP coefficients, must be ordered according to direction of
@@ -1153,7 +1190,7 @@ def extrapolate(trace, a, pred, append):
 
     """
     m = len(a)      # LP order
-    M = len(trace)  # number of points in original trace
+    M = len(trace)   # number of points in original trace
     ntrace = np.empty((M + pred), dtype=trace.dtype)
 
     if append not in ["after", "before"]:
@@ -1162,7 +1199,8 @@ def extrapolate(trace, a, pred, append):
     if append == "after":   # append after trace
         ntrace[:M] = trace
         for i in xrange(pred):
-            ntrace[M + i] = np.sum(np.multiply(ntrace[M - m + i:M + i], a.flat))
+            ntrace[M + i] = np.sum(np.multiply(ntrace[M - m + i:M + i],
+                                                                    a.flat))
         return ntrace
 
     if append == "before":   # append before trace

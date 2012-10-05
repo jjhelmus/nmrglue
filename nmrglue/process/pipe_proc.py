@@ -1,23 +1,23 @@
 """
-NMRPipe like processing functions for use with the 
+NMRPipe like processing functions for use with the
 :py:mod:`nmrglue.fileio.pipe` module.
 
-These functions attempt to mimic NMRPipe's processing functions but small 
-differences exist between to two implementations.  In particular when using 
+These functions attempt to mimic NMRPipe's processing functions but small
+differences exist between to two implementations.  In particular when using
 this module:
 
-    * hdr=True overrides all values in the calling function. 
-    * A di flag is not used, rather the :py:func:`di` function should be used 
+    * hdr=True overrides all values in the calling function.
+    * A di flag is not used, rather the :py:func:`di` function should be used
       to delete the imaginary portion of a spectra.
     * x1, xn and other limits must be expressed in points. A unit conversion
-      object function should be used before calling the processing function to 
+      object function should be used before calling the processing function to
       calculate these values.
     * No functions implement the dmx or nodmx flags.
-     
-Additional differences from NMRPipe's functions are documented in the 
+
+Additional differences from NMRPipe's functions are documented in the
 individual processing functions.
 
-The following functions have not been implemented and will raise a 
+The following functions have not been implemented and will raise a
 NotImplemented exception:
 
     * ann      Fourier Analysis by Neural Net
@@ -41,12 +41,14 @@ from . import proc_lp
 
 pi = np.pi
 
+
 ###################
 # Unit conversion #
 ###################
 
+
 class unit_conversion(fileiobase.unit_conversion):
-    """ 
+    """
     Unit converter class that returns NMRPipe like index values.  Useful
     when calling pipe_proc functions
     """
@@ -58,8 +60,9 @@ class unit_conversion(fileiobase.unit_conversion):
     def __pnt2unit(self, val, units):
         return fileiobase.unit_conversion.__pnt2unit(self, val - 1, units)
 
+
 def make_uc(dic, data, dim=-1):
-    """ 
+    """
     Create a unit conversion object which accepts/returns NMRPipe indices.
 
     Parameters
@@ -75,12 +78,12 @@ def make_uc(dic, data, dim=-1):
     Returns
     -------
     uc : unit conversion object
-        Unit conversion object for the given dimension which accepts and returns
-        NMRPipe indices (starting from 1).
+        Unit conversion object for the given dimension which accepts and
+        returns NMRPipe indices (starting from 1).
 
     """
     if dim == -1:
-        dim = data.ndim - 1 # last dimention
+        dim = data.ndim - 1  # last dimention
 
     fn = "FDF" + str(int(dic["FDDIMORDER"][data.ndim - 1 - dim]))
     size = float(data.shape[dim])
@@ -104,13 +107,14 @@ def make_uc(dic, data, dim=-1):
 # Dictionary functions #
 ########################
 
+
 def recalc_orig(dic, data, fn, axis=-1):
     """
     Recalculate the origin for given axis
     """
     # ORIG calculation
     s = float(data.shape[axis])
-    
+
     # This really should check that the axis is not the last...
     if dic[fn + "QUADFLAG"] == 0 and axis != -1:
         s = int(s / 2.)
@@ -119,11 +123,11 @@ def recalc_orig(dic, data, fn, axis=-1):
     if dic["FD2DPHASE"] == 1 and fn != "FDF2" and dic[fn + "FTFLAG"] != 1:
         s = int(s / 2.)
 
-    sw  = dic[fn + "SW"]
+    sw = dic[fn + "SW"]
     car = dic[fn + "CAR"]
     obs = dic[fn + "OBS"]
-    s2  = float(dic[fn + "CENTER"])
-    
+    s2 = float(dic[fn + "CENTER"])
+
     # DEBUG
     #print "Recalc of origin"
     #print "s:",s
@@ -135,6 +139,7 @@ def recalc_orig(dic, data, fn, axis=-1):
 
     dic[fn + "ORIG"] = car * obs - sw * ((s - s2) / s)
     return dic
+
 
 def update_minmax(dic, data):
     """
@@ -148,6 +153,7 @@ def update_minmax(dic, data):
     dic["FDSCALEFLAG"] = 1.0    # FDMIN/MAX are valid
     return dic
 
+
 def clean_minmax(dic):
     """
     Clean (set to zero) the MAX/MIN dictionary keys.
@@ -160,18 +166,20 @@ def clean_minmax(dic):
     dic["FDSCALEFLAG"] = 0.0    # FDMIN/MAX not valid
     return dic
 
+
 #########################
 # Apodization functions #
 #########################
 
-def apod(dic, data, qName=None, q1=1.0, q2=1.0, q3=1.0, c=1.0, start=1, 
+
+def apod(dic, data, qName=None, q1=1.0, q2=1.0, q3=1.0, c=1.0, start=1,
         size='default', inv=False, one=False, hdr=False):
-    """ 
+    """
     Generic apodization.
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -182,8 +190,8 @@ def apod(dic, data, qName=None, q1=1.0, q2=1.0, q3=1.0, c=1.0, start=1,
         First apodization function parameter. See specific apodization function
         for details.
     q2 : float
-        Second apodization function parameter. See specific apodization function
-        for details.
+        Second apodization function parameter. See specific apodization
+        function for details.
     q3 : float
         Third apodization function parameter. See specific apodization function
         for details.
@@ -197,7 +205,7 @@ def apod(dic, data, qName=None, q1=1.0, q2=1.0, q3=1.0, c=1.0, start=1,
     inv : bool, optional
         True for inverse apodization, False for normal apodization.
     one : bool, optional
-        True to set points outside of window to 1. False leaves points outside 
+        True to set points outside of window to 1. False leaves points outside
         the apodization window as is.
     hdr : bool, optional
         True to read apodization parameters from the the parameters in dic.
@@ -221,24 +229,24 @@ def apod(dic, data, qName=None, q1=1.0, q2=1.0, q3=1.0, c=1.0, start=1,
 
     """
     if hdr:
-        fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+        fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
         qnum = dic[fn + "APODCODE"]
         qName = ["", "SP", "EM", "GM", "TM", "", "TRI", "GMB", "JMOD"][qnum]
 
     # Set apod codes here so that all three parameter are set
-    fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+    fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
     dic[fn + "APODQ1"] = q1
     dic[fn + "APODQ2"] = q2
     dic[fn + "APODQ3"] = q3
 
     if qName == "EM":
-        return em(dic, data, q1, c, start, size, inv, one, hdr) 
+        return em(dic, data, q1, c, start, size, inv, one, hdr)
     elif qName == "GM":
-        return gm(dic, data, q1, q2, q3, c, start, size, inv, one, hdr) 
+        return gm(dic, data, q1, q2, q3, c, start, size, inv, one, hdr)
     elif qName == "GMB":
         return gmb(dic, data, q1, q2, c, start, size, inv, one, hdr)
     elif qName == "JMOD":
-        return jmod(dic, data, q1, q2, q3, False, False, c, start, size, inv, 
+        return jmod(dic, data, q1, q2, q3, False, False, c, start, size, inv,
                     one, hdr)
     elif qName == "SP":
         return sp(dic, data, q1, q2, q3, c, start, size, inv, one, hdr)
@@ -249,18 +257,19 @@ def apod(dic, data, qName=None, q1=1.0, q2=1.0, q3=1.0, c=1.0, start=1,
     else:
         raise ValueError("qName must be SP, EM, GM, GMB, TM, TRI or JMOD")
 
-def em(dic, data, lb=0.0, c=1.0, start=1, size='default', inv=False, one=False, 
+
+def em(dic, data, lb=0.0, c=1.0, start=1, size='default', inv=False, one=False,
         hdr=False):
-    """ 
+    """
     Exponential apodization.
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
-    lb : float 
+    lb : float
         Exponential line broadening in Hz.
     c : float
         First point scale value.
@@ -272,7 +281,7 @@ def em(dic, data, lb=0.0, c=1.0, start=1, size='default', inv=False, one=False,
     inv : bool, optional
         True for inverse apodization, False for normal apodization.
     one : bool, optional
-        True to set points outside of window to 1. False leaves points outside 
+        True to set points outside of window to 1. False leaves points outside
         the apodization window as is.
     hdr : bool, optional
         True to read apodization parameters from the the parameters in dic.
@@ -288,9 +297,9 @@ def em(dic, data, lb=0.0, c=1.0, start=1, size='default', inv=False, one=False,
     start = start - 1   # arrays should start at 0
 
     # update dictionary
-    fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+    fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
 
-    if hdr: # read apod values from data headers
+    if hdr:  # read apod values from data headers
         c = dic[fn + "C1"] + 1
         lb = dic[fn + "APODQ1"]
     dic[fn + "C1"] = c - 1.0
@@ -301,7 +310,7 @@ def em(dic, data, lb=0.0, c=1.0, start=1, size='default', inv=False, one=False,
     dic[fn + "APODQ2"] = 0.0
     dic[fn + "APODQ3"] = 0.0
 
-    sw = dic[fn + "SW"] 
+    sw = dic[fn + "SW"]
     flb = lb / sw
 
     # apply apodization to data
@@ -311,7 +320,7 @@ def em(dic, data, lb=0.0, c=1.0, start=1, size='default', inv=False, one=False,
         if size == 'default':
             stop = data.shape[-1]
         else:
-            stop = start+size
+            stop = start + size
         data[..., start:stop] = p.em(data[..., start:stop], lb=flb, inv=inv)
         if one == False:
             data[..., :start] = 0.0
@@ -326,14 +335,15 @@ def em(dic, data, lb=0.0, c=1.0, start=1, size='default', inv=False, one=False,
     dic = update_minmax(dic, data)
     return dic, data
 
-def gm(dic, data, g1=0.0, g2=0.0, g3=0.0, c=1.0, start=1, size='default', 
+
+def gm(dic, data, g1=0.0, g2=0.0, g3=0.0, c=1.0, start=1, size='default',
         inv=False, one=False, hdr=False):
-    """ 
+    """
     Lorentz-to-Gauss apodization
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -353,7 +363,7 @@ def gm(dic, data, g1=0.0, g2=0.0, g3=0.0, c=1.0, start=1, size='default',
     inv : bool, optional
         True for inverse apodization, False for normal apodization.
     one : bool, optional
-        True to set points outside of window to 1. False leaves points outside 
+        True to set points outside of window to 1. False leaves points outside
         the apodization window as is.
     hdr : bool, optional
         True to read apodization parameters from the the parameters in dic.
@@ -364,20 +374,20 @@ def gm(dic, data, g1=0.0, g2=0.0, g3=0.0, c=1.0, start=1, size='default',
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Array of NMR data with lorentz-to-gauss apodization applied.
-    
-    """
-    start = start - 1 # arrays should start at 0
-    fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
 
-    if hdr: # read apod values from data header
+    """
+    start = start - 1  # arrays should start at 0
+    fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
+
+    if hdr:  # read apod values from data header
         g1 = dic[fn + "APODQ1"]
-        g2 = dic[fn + "APODQ2"] 
-        g3 = dic[fn + "APODQ3"] 
+        g2 = dic[fn + "APODQ2"]
+        g3 = dic[fn + "APODQ3"]
         c = dic[fn + "C1"] + 1
 
     # update the dictionary
     dic[fn + "C1"] = c - 1.0
-    
+
     # set the apod flags
     dic[fn + "APODCODE"] = 3.0
     dic[fn + "APODQ1"] = g1
@@ -398,12 +408,12 @@ def gm(dic, data, g1=0.0, g2=0.0, g3=0.0, c=1.0, start=1, size='default',
             stop = data.shape[-1]
         else:
             stop = start + size
-        
+
         # pipe sets the maximum to the actual data maximum not
         # the maximum of the windowed region, so adj. g3p as necessary
         g3p = g3p * data.shape[-1] / (stop - start)
         #print start,stop,g1p,g2p,g3p
-        data[..., start:stop] = p.gm(data[..., start:stop], g1p, g2p, g3p, 
+        data[..., start:stop] = p.gm(data[..., start:stop], g1p, g2p, g3p,
                                      inv=inv)
         if one == False:
             data[..., :start] = 0.0
@@ -418,14 +428,15 @@ def gm(dic, data, g1=0.0, g2=0.0, g3=0.0, c=1.0, start=1, size='default',
     dic = update_minmax(dic, data)
     return dic, data
 
-def gmb(dic, data, lb=0.0, gb=0.0, c=1.0, start=1, size='default', inv=False, 
+
+def gmb(dic, data, lb=0.0, gb=0.0, c=1.0, start=1, size='default', inv=False,
         one=False, hdr=False):
-    """ 
+    """
     Modified Gaussian Apodization
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -443,7 +454,7 @@ def gmb(dic, data, lb=0.0, gb=0.0, c=1.0, start=1, size='default', inv=False,
     inv : bool, optional
         True for inverse apodization, False for normal apodization.
     one : bool, optional
-        True to set points outside of window to 1. False leaves points outside 
+        True to set points outside of window to 1. False leaves points outside
         the apodization window as is.
     hdr : bool, optional
         True to read apodization parameters from the the parameters in dic.
@@ -454,19 +465,19 @@ def gmb(dic, data, lb=0.0, gb=0.0, c=1.0, start=1, size='default', inv=False,
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Array of NMR data with a modified gaussian apodization applied.
- 
-    """
-    start = start - 1 # arrays should start at 0
-    fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
 
-    if hdr: # read apod values from data header
+    """
+    start = start - 1  # arrays should start at 0
+    fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
+
+    if hdr:  # read apod values from data header
         lb = dic[fn + "APODQ1"]
-        gb = dic[fn + "APODQ2"] 
+        gb = dic[fn + "APODQ2"]
         c = dic[fn + "C1"] + 1
 
     # update the dictionary
     dic[fn + "C1"] = c - 1.0
-    
+
     # set the apod flags
     dic[fn + "APODCODE"] = 7.0
     dic[fn + "APODQ1"] = lb
@@ -500,14 +511,15 @@ def gmb(dic, data, lb=0.0, gb=0.0, c=1.0, start=1, size='default', inv=False,
     dic = update_minmax(dic, data)
     return dic, data
 
-def jmod(dic, data, off=0.0, j=0.0, lb=0.0, sin=False, cos=False, c=1.0, 
+
+def jmod(dic, data, off=0.0, j=0.0, lb=0.0, sin=False, cos=False, c=1.0,
         start=1, size='default', inv=False, one=False, hdr=False):
     """
     Exponentially Damped J-Modulation Apodization
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -532,7 +544,7 @@ def jmod(dic, data, off=0.0, j=0.0, lb=0.0, sin=False, cos=False, c=1.0,
     inv : bool, optional
         True for inverse apodization, False for normal apodization.
     one : bool, optional
-        True to set points outside of window to 1. False leaves points outside 
+        True to set points outside of window to 1. False leaves points outside
         the apodization window as is.
     hdr : bool, optional
         True to read apodization parameters from the the parameters in dic.
@@ -544,25 +556,25 @@ def jmod(dic, data, off=0.0, j=0.0, lb=0.0, sin=False, cos=False, c=1.0,
     ndata : ndarray
         Array of NMR data with a exponentially damped J-modulation apodization
         applied.
- 
+
     """
-    start = start - 1 # arrays should start at 0
-    fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+    start = start - 1  # arrays should start at 0
+    fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
 
     if sin:
         off = 0.0
     if cos:
         off = 0.5
 
-    if hdr: # read apod values from data header
+    if hdr:  # read apod values from data header
         off = dic[fn + "APODQ1"]
-        j   = dic[fn + "APODQ2"]
-        lb   = dic[fn + "APODQ3"]
-        c  = dic[fn + "C1"] + 1
+        j = dic[fn + "APODQ2"]
+        lb = dic[fn + "APODQ3"]
+        c = dic[fn + "C1"] + 1
 
     # update the dictionary
     dic[fn + "C1"] = c - 1.0
-    
+
     # set the apod flags
     dic[fn + "APODCODE"] = 8.0
     dic[fn + "APODQ1"] = off
@@ -571,7 +583,7 @@ def jmod(dic, data, off=0.0, j=0.0, lb=0.0, sin=False, cos=False, c=1.0,
 
     # calculate native parameters
     sw = dic[fn + "SW"]
-    e = pi * lb / sw 
+    e = pi * lb / sw
     end = off + j * (data.shape[-1] - 1) / sw
 
     # apply apodization to data
@@ -584,7 +596,7 @@ def jmod(dic, data, off=0.0, j=0.0, lb=0.0, sin=False, cos=False, c=1.0,
             stop = start + size
         #print start,stop,e,off,end
         end = off + j * (stop - start - 1) / sw
-        data[..., start:stop] = p.jmod(data[..., start:stop], e, off, end, 
+        data[..., start:stop] = p.jmod(data[..., start:stop], e, off, end,
                                        inv=inv)
         if one == False:
             data[..., :start] = 0.0
@@ -598,14 +610,15 @@ def jmod(dic, data, off=0.0, j=0.0, lb=0.0, sin=False, cos=False, c=1.0,
     dic = update_minmax(dic, data)
     return dic, data
 
-def sp(dic, data, off=0.0, end=1.0, pow=1.0, c=1.0, start=1, size='default', 
+
+def sp(dic, data, off=0.0, end=1.0, pow=1.0, c=1.0, start=1, size='default',
         inv=False, one=False, hdr=False):
-    """ 
+    """
     Sine bell apodization.
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -625,7 +638,7 @@ def sp(dic, data, off=0.0, end=1.0, pow=1.0, c=1.0, start=1, size='default',
     inv : bool, optional
         True for inverse apodization, False for normal apodization.
     one : bool, optional
-        True to set points outside of window to 1. False leaves points outside 
+        True to set points outside of window to 1. False leaves points outside
         the apodization window as is.
     hdr : bool, optional
         True to read apodization parameters from the the parameters in dic.
@@ -636,20 +649,20 @@ def sp(dic, data, off=0.0, end=1.0, pow=1.0, c=1.0, start=1, size='default',
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Array of NMR data with a sine-bell apodization applied.
- 
-    """
-    start = start - 1 # arrays should start at 0
-    fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
 
-    if hdr: # read apod values from data header
+    """
+    start = start - 1  # arrays should start at 0
+    fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
+
+    if hdr:  # read apod values from data header
         off = dic[fn + "APODQ1"]
         end = dic[fn + "APODQ2"]
         pow = dic[fn + "APODQ3"]
-        c   = dic[fn + "C1"] + 1
+        c = dic[fn + "C1"] + 1
 
     # update the dictionary
-    dic[fn+"C1"] = c - 1.0
-    
+    dic[fn + "C1"] = c - 1.0
+
     # set the apod flags
     dic[fn + "APODCODE"] = 1.0
     dic[fn + "APODQ1"] = off
@@ -673,22 +686,24 @@ def sp(dic, data, off=0.0, end=1.0, pow=1.0, c=1.0, start=1, size='default',
     # first point scaling
     if inv:
         data[..., 0] = data[..., 0] / c
-    else: 
+    else:
         data[..., 0] = data[..., 0] * c
 
     dic = update_minmax(dic, data)
     return dic, data
 
-sine = sp   # wrapper for sine functions 
 
-def tm(dic, data, t1=0.0, t2=0.0, c=1.0, start=1, size='default', inv=False, 
+sine = sp   # wrapper for sine functions
+
+
+def tm(dic, data, t1=0.0, t2=0.0, c=1.0, start=1, size='default', inv=False,
         one=False, hdr=False):
     """
     Trapezoid apodization.
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -706,7 +721,7 @@ def tm(dic, data, t1=0.0, t2=0.0, c=1.0, start=1, size='default', inv=False,
     inv : bool, optional
         True for inverse apodization, False for normal apodization.
     one : bool, optional
-        True to set points outside of window to 1. False leaves points outside 
+        True to set points outside of window to 1. False leaves points outside
         the apodization window as is.
     hdr : bool, optional
         True to read apodization parameters from the the parameters in dic.
@@ -717,19 +732,19 @@ def tm(dic, data, t1=0.0, t2=0.0, c=1.0, start=1, size='default', inv=False,
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Array of NMR data with a trapezoid apodization applied.
- 
-    """
-    start = start - 1 # arrays should start at 0
-    fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
 
-    if hdr: # read apod values from data header
+    """
+    start = start - 1  # arrays should start at 0
+    fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
+
+    if hdr:  # read apod values from data header
         t1 = dic[fn + "APODQ1"]
         t2 = dic[fn + "APODQ2"]
         c = dic[fn + "C1"] + 1
 
     # update the dictionary
     dic[fn + "C1"] = c - 1.0
-    
+
     # set the apod flags
     dic[fn + "APODCODE"] = 4.0
     dic[fn + "APODQ1"] = t1
@@ -744,7 +759,7 @@ def tm(dic, data, t1=0.0, t2=0.0, c=1.0, start=1, size='default', inv=False,
             stop = data.shape[-1]
         else:
             stop = start + size
-        data[..., start:stop] = p.tm(data[..., start:stop], t1=t1, t2=t2, 
+        data[..., start:stop] = p.tm(data[..., start:stop], t1=t1, t2=t2,
                                      inv=inv)
         if one == False:
             data[..., :start] = 0.0
@@ -757,20 +772,21 @@ def tm(dic, data, t1=0.0, t2=0.0, c=1.0, start=1, size='default', inv=False,
         data[..., 0] = data[..., 0] * c
 
     # check for NaN in array (when div by 0)
-    if np.isnan(data).any():    
+    if np.isnan(data).any():
         data = np.array(np.nan_to_num(data), dtype=data.dtype)
 
     dic = update_minmax(dic, data)
     return dic, data
 
-def tri(dic, data, loc="auto", lHi=0.0, rHi=0.0, c=1.0, start=1, 
+
+def tri(dic, data, loc="auto", lHi=0.0, rHi=0.0, c=1.0, start=1,
         size='default', inv=False, one=False, hdr=False):
     """
     Triangular apodization
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -791,7 +807,7 @@ def tri(dic, data, loc="auto", lHi=0.0, rHi=0.0, c=1.0, start=1,
     inv : bool, optional
         True for inverse apodization, False for normal apodization.
     one : bool, optional
-        True to set points outside of window to 1. False leaves points outside 
+        True to set points outside of window to 1. False leaves points outside
         the apodization window as is.
     hdr : bool, optional
         True to read apodization parameters from the the parameters in dic.
@@ -802,21 +818,21 @@ def tri(dic, data, loc="auto", lHi=0.0, rHi=0.0, c=1.0, start=1,
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Array of NMR data with a triangular apodization applied.
- 
+
     Notes
     -----
     The right side of the apodization is differs slightly from NMRPipe's tri
     function.
 
     """
-    start = start - 1 # arrays should start at 0
+    start = start - 1  # arrays should start at 0
 
     if loc == "auto":
         loc = data.shape[-1] / 2
 
-    fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+    fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
 
-    if hdr: # read apod values from data header
+    if hdr:  # read apod values from data header
         loc = dic[fn + "APODQ1"]
         lHi = dic[fn + "APODQ2"]
         rHi = dic[fn + "APODQ3"]
@@ -824,7 +840,7 @@ def tri(dic, data, loc="auto", lHi=0.0, rHi=0.0, c=1.0, start=1,
 
     # update the dictionary
     dic[fn + "C1"] = c - 1.0
-    
+
     # set the apod flags
     dic[fn + "APODCODE"] = 6.0
     dic[fn + "APODQ1"] = loc
@@ -839,7 +855,7 @@ def tri(dic, data, loc="auto", lHi=0.0, rHi=0.0, c=1.0, start=1,
             stop = data.shape[-1]
         else:
             stop = start + size
-        data[..., start:stop] = p.tri(data[..., start:stop], loc, lHi, rHi, 
+        data[..., start:stop] = p.tri(data[..., start:stop], loc, lHi, rHi,
                                       inv=inv)
         if one == False:
             data[..., :start] = 0.0
@@ -854,9 +870,11 @@ def tri(dic, data, loc="auto", lHi=0.0, rHi=0.0, c=1.0, start=1,
     dic = update_minmax(dic, data)
     return dic, data
 
+
 ###################
 # Shift functions #
 ###################
+
 
 def rs(dic, data, rs=0.0, sw=False):
     """
@@ -864,7 +882,7 @@ def rs(dic, data, rs=0.0, sw=False):
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -879,7 +897,7 @@ def rs(dic, data, rs=0.0, sw=False):
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Array of NMR data which has been right shifted.
-    
+
     """
     if rs < 0:  # negative right shifts are left shifts
         return ls(dic, data, ls=-rs, sw=sw)
@@ -887,13 +905,14 @@ def rs(dic, data, rs=0.0, sw=False):
     data = p.rs(data, pts=rs)
     dic = update_minmax(dic, data)
 
-    fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+    fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
 
-    if sw and dic[fn + "FTFLAG"] == 1:    
+    if sw and dic[fn + "FTFLAG"] == 1:
         # we are in freq domain and must update NDORIG and NDCENTER
         dic[fn + "CENTER"] = dic[fn + "CENTER"] + rs
         dic = recalc_orig(dic, data, fn)
     return dic, data
+
 
 def ls(dic, data, ls=0.0, sw=False):
     """
@@ -901,7 +920,7 @@ def ls(dic, data, ls=0.0, sw=False):
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -925,16 +944,17 @@ def ls(dic, data, ls=0.0, sw=False):
     dic = update_minmax(dic, data)
 
     if sw:
-        fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+        fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
         if dic[fn + "FTFLAG"] == 1:   # freq domain
             # update NDORIG and NDCENTER
             dic[fn + "CENTER"] = dic[fn + "CENTER"] - ls
             dic = recalc_orig(dic, data, fn)
         else:   # time domain
             dic[fn + "APOD"] = data.shape[-1] - ls
-            dic[fn + "TDSIZE"] = data.shape[-1] - ls 
+            dic[fn + "TDSIZE"] = data.shape[-1] - ls
 
     return dic, data
+
 
 def cs(dic, data, dir, pts=0.0, neg=False, sw=False):
     """
@@ -944,7 +964,7 @@ def cs(dic, data, dir, pts=0.0, neg=False, sw=False):
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -974,7 +994,7 @@ def cs(dic, data, dir, pts=0.0, neg=False, sw=False):
     data = p.cs(data, pts, neg=neg)
     dic = update_minmax(dic, data)
 
-    fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+    fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
 
     if sw and dic[fn + "FTFLAG"] == 1:
         # freq domain update NDORIG and NDCENTER
@@ -982,13 +1002,14 @@ def cs(dic, data, dir, pts=0.0, neg=False, sw=False):
         dic = recalc_orig(dic, data, fn)
     return dic, data
 
+
 def fsh(dic, data, dir, pts, sw=True):
     """
     Frequency shift.
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -1009,9 +1030,9 @@ def fsh(dic, data, dir, pts, sw=True):
 
     Notes
     -----
-    This function does not perfrom a Hilbert transfrom when data is complex, 
-    NMRPipe's FSH function appear to.  As such the results of the 
-    imaginary channel differs from NMRPipe. In addition MAX/MIN value are 
+    This function does not perfrom a Hilbert transfrom when data is complex,
+    NMRPipe's FSH function appear to.  As such the results of the
+    imaginary channel differs from NMRPipe. In addition MAX/MIN value are
     slightly different than those in NMRPipe.
 
     """
@@ -1036,8 +1057,8 @@ def fsh(dic, data, dir, pts, sw=True):
 
     dic = update_minmax(dic, data)
 
-    fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
-    if dic[fn + "FTFLAG"] == 1 and sw: # freq domain
+    fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
+    if dic[fn + "FTFLAG"] == 1 and sw:  # freq domain
         dic[fn + "CENTER"] = dic[fn + "CENTER"] + pts
         dic = recalc_orig(dic, data, fn)
     if del_imag == False:
@@ -1045,9 +1066,11 @@ def fsh(dic, data, dir, pts, sw=True):
     else:
         return dic, data.real
 
+
 ##############
 # Transforms #
 ##############
+
 
 def ft(dic, data, auto=False, real=False, inv=False, alt=False, neg=False,
     null=False, bruk=False):
@@ -1056,7 +1079,7 @@ def ft(dic, data, auto=False, real=False, inv=False, alt=False, neg=False,
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -1095,27 +1118,27 @@ def ft(dic, data, auto=False, real=False, inv=False, alt=False, neg=False,
     if auto:
         # turn off all flags
         real = False
-        inv  = False
-        alt  = False
-        neg  = False
+        inv = False
+        alt = False
+        neg = False
         null = False
         bruk = False
 
-        fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
-        if dic[fn+"FTFLAG"] == 1.0:   # freq domain
+        fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
+        if dic[fn + "FTFLAG"] == 1.0:   # freq domain
             inv = True
-        else: # freq domain
+        else:  # freq domain
             # Real, TPPI and Sequential data is real transform
             if dic["FDDIMCOUNT"] >= 2.:
-                if (dic["FD2DPHASE"] == 0 or dic["FD2DPHASE"] == 1 and 
+                if (dic["FD2DPHASE"] == 0 or dic["FD2DPHASE"] == 1 and
                     fn != "FDF2"):
                     real = True
 
             # sign and negation in AQSIGN
             if dic[fn + "AQSIGN"] == 1 or dic[fn + "AQSIGN"] == 2:
                 alt = True
-            
-            if (dic[fn + "AQSIGN"] == 16 or dic[fn + "AQSIGN"] == 17 or 
+
+            if (dic[fn + "AQSIGN"] == 16 or dic[fn + "AQSIGN"] == 17 or
                 dic[fn + "AQSIGN"] == 18):
                 alt = True
                 neg = True
@@ -1135,17 +1158,17 @@ def ft(dic, data, auto=False, real=False, inv=False, alt=False, neg=False,
     if real:    # keep real data
         if np.iscomplexobj(data):
             data.imag = 0.0
-    
-    if alt: # sign alternate
+
+    if alt:  # sign alternate
         if inv == False:    # inv with alt, alternates the inverse
             data[..., 1::2] = data[..., 1::2] * -1.
 
-    if neg: # negate the imaginary 
+    if neg:  # negate the imaginary
         if np.iscomplexobj(data):
             data.imag = data.imag * -1.
 
     # update the dictionary
-    fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+    fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
     dic[fn + "FTFLAG"] = (dic[fn + "FTFLAG"] + 1) % 2   # troggle FT flag
     if dic[fn + "FTFLAG"] == 1:
         dic[fn + "FTSIZE"] = data.shape[-1]
@@ -1159,7 +1182,7 @@ def ft(dic, data, auto=False, real=False, inv=False, alt=False, neg=False,
     if data.dtype != "complex64":
         data = data.astype("complex64")
 
-    if inv: # inverse transform
+    if inv:  # inverse transform
         data = p.ifft_positive(data)
         if alt:
             data[..., 1::2] = data[..., 1::2] * -1
@@ -1170,17 +1193,18 @@ def ft(dic, data, auto=False, real=False, inv=False, alt=False, neg=False,
         # return a complex array with double size
         data = np.array(data[..., size / 2:], dtype="complex64")
 
-        # adjust quadrature 
+        # adjust quadrature
         dic[fn + "QUADFLAG"] = 0.0
         dic["FDQUADFLAG"] = 0.0
 
         # adjust size
         dic[fn + "APOD"] = dic[fn + "APOD"] / 2.0
-        dic[fn + "TDSIZE"] = dic[fn+"TDSIZE"] / 2.0
+        dic[fn + "TDSIZE"] = dic[fn + "TDSIZE"] / 2.0
         dic["FDSIZE"] = dic["FDSIZE"] / 2.0
 
     dic = update_minmax(dic, data)
     return dic, data
+
 
 def rft(dic, data, inv=False):
     """
@@ -1188,13 +1212,13 @@ def rft(dic, data, inv=False):
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
     inv : bool
         True to perform an inverse transform.
-    
+
     Returns
     -------
     ndic : dict
@@ -1204,15 +1228,15 @@ def rft(dic, data, inv=False):
 
     Notes
     -----
-    This function gives results which slightly differ from NMRPipe's RFT 
+    This function gives results which slightly differ from NMRPipe's RFT
     function in some cases.
 
     """
-    fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
-    fn2 = "FDF" + str(int(dic["FDDIMORDER"][1])) # F1, F2, etc
+    fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
+    fn2 = "FDF" + str(int(dic["FDDIMORDER"][1]))  # F1, F2, etc
 
     # if dim is 2, direct dim is real and indirect is complex
-    if (data.ndim == 2 and dic[fn + "QUADFLAG"] == 1 and 
+    if (data.ndim == 2 and dic[fn + "QUADFLAG"] == 1 and
             dic[fn2 + "QUADFLAG"] == 0):
         data = data[::2]
 
@@ -1222,11 +1246,12 @@ def rft(dic, data, inv=False):
         data = p.rft(data.real)
 
     # update the dictionary
-    dic[fn + "FTFLAG"]   = (dic[fn + "FTFLAG"] + 1) % 2   # troggle FT flag
+    dic[fn + "FTFLAG"] = (dic[fn + "FTFLAG"] + 1) % 2   # troggle FT flag
     dic[fn + "QUADFLAG"] = 1.0  # real data
-    dic["FDQUADFLAG"]  = 1.0    # real data
+    dic["FDQUADFLAG"] = 1.0    # real data
     dic = update_minmax(dic, data)
     return dic, data
+
 
 def ha(dic, data, inv=False):
     """
@@ -1234,13 +1259,13 @@ def ha(dic, data, inv=False):
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
     inv : bool
         True to perform an inverse transform.
-    
+
     Returns
     -------
     ndic : dict
@@ -1250,17 +1275,17 @@ def ha(dic, data, inv=False):
 
     Notes
     -----
-    This function is slow.  Implemented a FWHT in proc_base would 
+    This function is slow.  Implemented a FWHT in proc_base would
     significantly improve the speed of this functions.
 
     """
     data = p.ha(data)
 
     if inv:
-        data = data/data.shape[-1]
+        data = data / data.shape[-1]
 
     dic = update_minmax(dic, data)
-    fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+    fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
     dic[fn + "FTFLAG"] = (dic[fn + "FTFLAG"] + 1) % 2   # troggle FT flag
 
     # calculation for dictionary updates
@@ -1269,7 +1294,7 @@ def ha(dic, data, inv=False):
     dic[fn + "CENTER"] = s2
     dic = recalc_orig(dic, data, fn)
     dic["FDSIZE"] = s
-    
+
     return dic, data
 
 
@@ -1279,14 +1304,14 @@ def ht(dic, data, mode="ps0-0", zf=False, td=False, auto=False):
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
     mode : {'ps0-0', 'ps90-180'}
         Mirror image mode.
     zf : bool
-        True to zero fill before transform for speed. 
+        True to zero fill before transform for speed.
     td : bool
         True to set the time-domain parameter to half size.
     auto : bool
@@ -1298,30 +1323,30 @@ def ht(dic, data, mode="ps0-0", zf=False, td=False, auto=False):
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Array of NMR data which has been Hilbert transformed.
-    
+
     Notes
     -----
     "ps90-180" mirror image mode gives different results than NMRPipe's HT
     function.
 
     """
-    fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+    fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
     if auto:
         # when no cutting and 180 P1 correction
-        if (dic[fn + "P1"] == 180.0 and dic[fn + "X1"] == 0.0 and 
+        if (dic[fn + "P1"] == 180.0 and dic[fn + "X1"] == 0.0 and
                 dic[fn + "XN"] == 0.0):
             zf = False
             mode = "ps90-180"
         else:
             zf = True
             mode = "ps0-0"
-    if mode not in ["ps0-0","ps90-180"]:
+    if mode not in ["ps0-0", "ps90-180"]:
         raise ValueError("mode must be ps0-0 or ps90-180")
     if mode == "ps90-180":
         # XXX determine how this works....
         pass
     if zf:
-        N = 2 ** (np.ceil(np.log2(data.shape[-1]))) #not same as NMRPipe
+        N = 2 ** (np.ceil(np.log2(data.shape[-1])))  # not same as NMRPipe
     else:
         N = data.shape[-1]
 
@@ -1336,11 +1361,14 @@ def ht(dic, data, mode="ps0-0", zf=False, td=False, auto=False):
         dic[fn + "APOD"] = data.shape[-1] / 2.
     return dic, z
 
+
 _ht = ht    # private function so ps can call the ht function
+
 
 ##########################
 # Standard NMR Functions #
 ##########################
+
 
 def di(dic, data):
     """
@@ -1348,24 +1376,24 @@ def di(dic, data):
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
- 
+
     Returns
     -------
     ndic : dict
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Array of NMR data from which imaginaries have been removed.
-    
+
     """
     data = p.di(data)
-    fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+    fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
 
-    if dic[fn+"QUADFLAG"] == 0.0:
-        dic[fn+"QUADFLAG"] = 1
+    if dic[fn + "QUADFLAG"] == 0.0:
+        dic[fn + "QUADFLAG"] = 1
 
         if fn == "FDF2":
             # half number of point in indirect dim for States/
@@ -1378,6 +1406,7 @@ def di(dic, data):
 
     return dic, data
 
+
 def ps(dic, data, p0=0.0, p1=0.0, inv=False, hdr=False, noup=False, ht=False,
        zf=False, exp=False, tc=0.0):
     """
@@ -1385,7 +1414,7 @@ def ps(dic, data, p0=0.0, p1=0.0, inv=False, hdr=False, noup=False, ht=False,
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -1400,8 +1429,8 @@ def ps(dic, data, p0=0.0, p1=0.0, inv=False, hdr=False, noup=False, ht=False,
     noup : bool
         True to not update phasing paramters in returned ndic.
     ht : bool
-        True to perform a Hilbert transform to reconstruction imaginaries before
-        phasing.
+        True to perform a Hilbert transform to reconstruction imaginaries
+        before phasing.
     zf : bool
         True to zero fill before applied Hilbert transform.
     exp : bool
@@ -1416,30 +1445,30 @@ def ps(dic, data, p0=0.0, p1=0.0, inv=False, hdr=False, noup=False, ht=False,
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Array of NMR data which has been phased.
- 
+
     Notes
     -----
-    When inv is True this function will correctly invert an expoenential 
+    When inv is True this function will correctly invert an expoenential
     phase correction, NMRPipe's PS function does not. In addition, FDFNP0 and
     FDFNP1 are updated unless noup=True.  There are not rs and ls parameter, if
     the data need to be shifted before phasing use the :py:func:`rs` or
-    :py:func`ls` function before using this function.  
+    :py:func`ls` function before using this function.
 
     """
-    fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+    fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
 
-    if ht:  # Hilbert transform  
+    if ht:  # Hilbert transform
         dic, data = _ht(dic, data, zf=zf)
 
-    if hdr: # read from header
+    if hdr:  # read from header
         p0 = dic[fn + "P0"]
         p1 = dic[fn + "P1"]
-    
+
     if exp:
         data = p.ps_exp(data, p0=p0, tc=tc, inv=inv)
     else:
         data = p.ps(data, p0=p0, p1=p1, inv=inv)
- 
+
     if noup == False:
         dic[fn + "P0"] = p0
         dic[fn + "P1"] = p1
@@ -1448,13 +1477,14 @@ def ps(dic, data, p0=0.0, p1=0.0, inv=False, hdr=False, noup=False, ht=False,
 
     return dic, data
 
+
 def tp(dic, data, hyper=False, nohyper=False, auto=False, nohdr=False):
-    """ 
+    """
     Transpose data (2D).
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -1473,17 +1503,17 @@ def tp(dic, data, hyper=False, nohyper=False, auto=False, nohdr=False):
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Array of NMR data which has been transposed.
- 
+
     """
     # XXX test if works with TPPI
     if nohyper:
         hyper = False
 
-    fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
-    fn2 = "FDF" + str(int(dic["FDDIMORDER"][1])) # F1, F2, etc
+    fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
+    fn2 = "FDF" + str(int(dic["FDDIMORDER"][1]))  # F1, F2, etc
 
     if auto:
-        if (dic[fn + "QUADFLAG"]!=1) and (dic[fn2 + "QUADFLAG"] !=1 ):
+        if (dic[fn + "QUADFLAG"] != 1) and (dic[fn2 + "QUADFLAG"] != 1):
             hyper = True
         else:
             hyper = False
@@ -1495,15 +1525,15 @@ def tp(dic, data, hyper=False, nohyper=False, auto=False, nohdr=False):
         if dic[fn2 + "QUADFLAG"] != 1 and nohyper != True:
             # unpack complex as needed
             data = np.array(p.c2ri(data), dtype="complex64")
-        
+
     # update the dimentionality and order
     dic["FDSLICECOUNT"], dic["FDSIZE"] = data.shape[0], data.shape[1]
     dic["FDSPECNUM"] = dic["FDSLICECOUNT"]
-    
+
     dic["FDDIMORDER1"], dic["FDDIMORDER2"] = (dic["FDDIMORDER2"],
-                                              dic["FDDIMORDER1"]) 
-    
-    dic['FDDIMORDER'] = [dic["FDDIMORDER1"], dic["FDDIMORDER2"], 
+                                              dic["FDDIMORDER1"])
+
+    dic['FDDIMORDER'] = [dic["FDDIMORDER1"], dic["FDDIMORDER2"],
                          dic["FDDIMORDER3"], dic["FDDIMORDER4"]]
 
     if nohdr != True:
@@ -1512,17 +1542,21 @@ def tp(dic, data, hyper=False, nohyper=False, auto=False, nohdr=False):
     dic = clean_minmax(dic)
     return dic, data
 
+
 ytp = tp    # alias for tp
+
+
 xy2yx = tp  # alias for tp
 
-def zf(dic, data, zf=1, pad="auto", size="auto", mid=False, inter=False, 
+
+def zf(dic, data, zf=1, pad="auto", size="auto", mid=False, inter=False,
         auto=False, inv=False):
     """
     Zero fill
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -1547,21 +1581,21 @@ def zf(dic, data, zf=1, pad="auto", size="auto", mid=False, inter=False,
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Array of NMR data which has zero filled.
- 
+
     Notes
     -----
-    Only one of the `zf`, `pad` and `size` parameter should be used, the other 
-    should be left as the default value.  If any of the `mid`, `inter`, `auto` 
+    Only one of the `zf`, `pad` and `size` parameter should be used, the other
+    should be left as the default value.  If any of the `mid`, `inter`, `auto`
     and `inv` parameters are True other parameter may be ignored.
-    
-    """ 
-    fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
 
-    if inv: # recover original time domain points        
+    """
+    fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
+
+    if inv:  # recover original time domain points
         # calculation for dictionary updates
         s = dic[fn + "TDSIZE"]
         s2 = s / 2.0 + 1
-    
+
         # update the dictionary
         dic[fn + "ZF"] = -1. * s
         dic[fn + "CENTER"] = s2
@@ -1571,9 +1605,9 @@ def zf(dic, data, zf=1, pad="auto", size="auto", mid=False, inter=False,
 
     if inter:   # zero filling between points done first
         data = p.zf_inter(data, zf)
-        dic[fn + "SW"] = dic[fn + "SW"]*(zf + 1)
+        dic[fn + "SW"] = dic[fn + "SW"] * (zf + 1)
         zf = 0
-        pad = 0 # NMRPipe ignores pad after a inter zf
+        pad = 0  # NMRPipe ignores pad after a inter zf
 
     # set zpad, the number of zeros to be padded
     zpad = data.shape[-1] * 2 ** zf - data.shape[-1]
@@ -1597,10 +1631,10 @@ def zf(dic, data, zf=1, pad="auto", size="auto", mid=False, inter=False,
     # calculation for dictionary updates
     s = data.shape[-1]
     s2 = s / 2.0 + 1
-    
+
     # update the dictionary
-    dic[fn+"ZF"] = -1. * s
-    dic[fn+"CENTER"] = s2
+    dic[fn + "ZF"] = -1. * s
+    dic[fn + "CENTER"] = s2
     if dic["FD2DPHASE"] == 1 and fn != "FDF2":   # TPPI data
         dic[fn + "CENTER"] = np.round(s2 / 2. + 0.001)
     dic = recalc_orig(dic, data, fn)
@@ -1608,9 +1642,11 @@ def zf(dic, data, zf=1, pad="auto", size="auto", mid=False, inter=False,
     dic = update_minmax(dic, data)
     return dic, data
 
+
 ######################
 # Baseline Functions #
 ######################
+
 
 def base(dic, data, nl=None, nw=0, first=False, last=False):
     """
@@ -1618,7 +1654,7 @@ def base(dic, data, nl=None, nw=0, first=False, last=False):
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -1637,7 +1673,7 @@ def base(dic, data, nl=None, nw=0, first=False, last=False):
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Array of NMR data with a linear baseline correction applied.
- 
+
     """
     if first:
         nl = [1] + nl
@@ -1645,31 +1681,32 @@ def base(dic, data, nl=None, nw=0, first=False, last=False):
         nl.append(data.shape[-1])
 
     # change values in node list to start at 0
-    nl = [i-1 for i in nl]
+    nl = [i - 1 for i in nl]
 
     data = proc_bl.base(data, nl, nw)
     dic = update_minmax(dic, data)
     return dic, data
 
+
 def cbf(dic, data, last=10, reg=False, slice=slice(None)):
-    """ 
+    """
     Constant baseline correction.
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
     last : float
-        Percentage of trace to use in calculating baseline correction. 
+        Percentage of trace to use in calculating baseline correction.
     reg : slice object, optional
         Python slice object describing region(s) from which to calculate the
         baseline correction. If False (default) the last parameter will be used
         to calculate the correction.
     slice : slice object
         Python slice describing regions to apply the baseline correction
-        to.  
+        to.
 
     Returns
     -------
@@ -1677,15 +1714,15 @@ def cbf(dic, data, last=10, reg=False, slice=slice(None)):
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Array of NMR data with a constant baseline correction applied.
- 
+
     Notes
     -----
     The parameters of this function differ significantly from NMRPipe's cbf
-    function.  The parameters `ref` and `slice` are Python slice objects 
-    if explicit correction regions are desired.  The `noseq` and `nodmx` 
+    function.  The parameters `ref` and `slice` are Python slice objects
+    if explicit correction regions are desired.  The `noseq` and `nodmx`
     parameters are not implemented.
-    
-    """ 
+
+    """
     if reg != False:
         data = proc_bl.cbf_explicit(data, calc=reg, apply=slice)
     else:
@@ -1693,13 +1730,14 @@ def cbf(dic, data, last=10, reg=False, slice=slice(None)):
     dic = update_minmax(dic, data)
     return dic, data
 
+
 def med(dic, data, nw=24, sf=16, sigma=5.0):
     """
     Median baseline correction
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -1708,7 +1746,7 @@ def med(dic, data, nw=24, sf=16, sigma=5.0):
     sf : int
         Smoothing filter size in points.
     sigma : float
-        Gaussian convolution width.    
+        Gaussian convolution width.
 
     Returns
     -------
@@ -1716,17 +1754,18 @@ def med(dic, data, nw=24, sf=16, sigma=5.0):
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Array of NMR data with an median baseline correction applied.
- 
+
     Notes
     -----
     This function applies Friendrich's model-free baseline flatting algorithm
-    (Friendrichs JBNMR 1995 5 147-153).  NMRPipe applies a different and 
-    unknown algorithm. 
+    (Friendrichs JBNMR 1995 5 147-153).  NMRPipe applies a different and
+    unknown algorithm.
 
     """
     data = proc_bl.med(data, mw=nw, sf=sf, sigma=sigma)
     dic = update_minmax(dic, data)
     return dic, data
+
 
 def sol(dic, data, mode="low", fl=16, fs=1, head=0):
     """
@@ -1734,7 +1773,7 @@ def sol(dic, data, mode="low", fl=16, fs=1, head=0):
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -1743,7 +1782,7 @@ def sol(dic, data, mode="low", fl=16, fs=1, head=0):
     fl : int
         Length of filter in points.
     fs : {1, 2, 3}
-        Shape of lowpass filter 1 : boxcar, 2: sine 3 : sine squared. 
+        Shape of lowpass filter 1 : boxcar, 2: sine 3 : sine squared.
     head :
         Number of points to skip when applying filter.
 
@@ -1753,10 +1792,10 @@ def sol(dic, data, mode="low", fl=16, fs=1, head=0):
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Array of NMR data with a solvent filter applied.
- 
+
     Notes
     -----
-    This different from NMRPipe's SOL function in the only the low pass filter 
+    This different from NMRPipe's SOL function in the only the low pass filter
     has been implemented. In addition the `mir`, `noseq` and `nodmx` parameters
     are not implemented.
 
@@ -1767,22 +1806,24 @@ def sol(dic, data, mode="low", fl=16, fs=1, head=0):
         data[..., head:] = proc_bl.sol_sine(data[..., head:], w=fl * 2 + 1)
     elif fs == 3:
         data[..., head:] = proc_bl.sol_sine2(data[..., head:], w=fl * 2 + 1)
-    else: 
+    else:
         raise ValueError("fs must be 1, 2 or 3")
     dic = update_minmax(dic, data)
     return dic, data
 
-###################  
+
+###################
 # Basic Utilities #
 ###################
 
+
 def add(dic, data, r=0.0, i=0.0, c=0.0, ri=False, x1=1.0, xn='default'):
-    """ 
+    """
     Add a constant
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -1806,12 +1847,12 @@ def add(dic, data, r=0.0, i=0.0, c=0.0, ri=False, x1=1.0, xn='default'):
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Array of NMR data with a constant added.
- 
+
     Notes
     -----
     Parameter `c` is added to the real and imaginary data even when `r` and `i`
     are defined.  NMRPipe's ADD function ignores c when r or i are defined.
-    
+
     """
     mn = x1 - 1
     if xn == 'default':
@@ -1823,9 +1864,10 @@ def add(dic, data, r=0.0, i=0.0, c=0.0, ri=False, x1=1.0, xn='default'):
         data[..., mn:mx].real = p.add_ri(data[..., mn:mx])
     else:
         data[..., mn:mx] = p.add(data[..., mn:mx], r, i, c)
-    
+
     dic = update_minmax(dic, data)
     return dic, data
+
 
 def dx(dic, data):
     """
@@ -1833,7 +1875,7 @@ def dx(dic, data):
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -1844,31 +1886,32 @@ def dx(dic, data):
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Derivative of of NMR data.
- 
+
     """
     data = p.dx(data)
     dic = update_minmax(dic, data)
     return dic, data
 
-def ext(dic, data, x1="default", xn="default", y1="default", yn="default", 
+
+def ext(dic, data, x1="default", xn="default", y1="default", yn="default",
         round=1, left=False, right=False, mid=False, pow2=False, sw=True):
     """
     Extract a region.
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
     x1 : int or 'default'
-        Starting point of the X-axis extraction. 'default' will start the 
+        Starting point of the X-axis extraction. 'default' will start the
         extraction at the first point.
     xn : int or 'default'
         Ending point of the X-axis extraction. 'default' will stop the
         extraction at the last point.
     y1 : int or 'default'
-        Starting point of the Y-axis extraction. 'default' will start the 
+        Starting point of the Y-axis extraction. 'default' will start the
         extraction at the first point.
     yn : int or 'default'
         Ending point of the Y-axis extraction. 'default' will stop the
@@ -1893,14 +1936,14 @@ def ext(dic, data, x1="default", xn="default", y1="default", yn="default",
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Extracted region of NMR data.
- 
+
     Notes
     -----
-    The `time` parameter is not implemented.  Using multiple conflicting 
+    The `time` parameter is not implemented.  Using multiple conflicting
     parameters may result in different results than NMRPipe.
 
     """
-    # this function does not wrap proc_base.ext rather the slicing is 
+    # this function does not wrap proc_base.ext rather the slicing is
     # performed by this function
 
     # store old sizes
@@ -1913,7 +1956,7 @@ def ext(dic, data, x1="default", xn="default", y1="default", yn="default",
         x_min = 0
     else:
         x_min = np.round(x1) - 1
-        
+
     if xn == "default":
         x_max = data.shape[-1]
     else:
@@ -1922,19 +1965,19 @@ def ext(dic, data, x1="default", xn="default", y1="default", yn="default",
     if left:
         x_min = 0
         x_max = int(data.shape[-1] / 2)
-    
+
     if right:
         x_min = int(data.shape[-1] / 2)
         x_max = data.shape[-1]
 
     if mid:
         x_min = int(data.shape[-1] / 4)
-        x_max = int(3*data.shape[-1] / 4)
+        x_max = int(3 * data.shape[-1] / 4)
 
     r_x = round
 
     if pow2 and (x1 != "default" or xn != "default"):
-        r_x = 2 ** np.ceil(np.log2(x_max - x_min)) 
+        r_x = 2 ** np.ceil(np.log2(x_max - x_min))
 
     # round size to be multiple of r_x when axis is cut
     if x1 != "default" or xn != "default":
@@ -1950,7 +1993,7 @@ def ext(dic, data, x1="default", xn="default", y1="default", yn="default",
         x_min = x_min - (x_max - data.shape[-1])
         x_max = data.shape[-1]
 
-    if data.ndim == 2:  # 2D array so we also have to modify y        
+    if data.ndim == 2:  # 2D array so we also have to modify y
         if y1 == "default":
             y_min = 0
         else:
@@ -1988,16 +2031,16 @@ def ext(dic, data, x1="default", xn="default", y1="default", yn="default",
             dic["FDSLICECOUNT"] = y_max - y_min
         dic["FDSPECNUM"] = y_max - y_min
         dic["FDSIZE"] = x_max - x_min
-        
+
     else:       # 1D Array
         data = data[x_min:x_max]
         dic["FDSIZE"] = x_max - x_min
 
     # adjust sweep width and ppm calibration
     if sw:
-        fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+        fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
         s = data.shape[-1]
-       
+
         if dic[fn + "FTFLAG"] == 0:   # time domain
             dic[fn + "CENTER"] = float(int(s / 2. + 1))
             dic[fn + "APOD"] = s
@@ -2012,14 +2055,14 @@ def ext(dic, data, x1="default", xn="default", y1="default", yn="default",
             dic = recalc_orig(dic, data, fn)
 
         if data.ndim == 2:
-            fn = "FDF" + str(int(dic["FDDIMORDER"][1])) # F1, F2, etc
+            fn = "FDF" + str(int(dic["FDDIMORDER"][1]))  # F1, F2, etc
             s = data.shape[0]
             if dic[fn + "QUADFLAG"] == 0:
                 s = s / 2
 
-            if dic[fn + "FTFLAG"] == 0: # time domain
+            if dic[fn + "FTFLAG"] == 0:  # time domain
                 dic[fn + "CENTER"] = s / 2 + 1
-                dic[fn + "APOD"]   = s
+                dic[fn + "APOD"] = s
                 dic[fn + "TDSIZE"] = s
                 dic = recalc_orig(dic, data, fn, -2)
             else:   # freq domain
@@ -2035,13 +2078,14 @@ def ext(dic, data, x1="default", xn="default", y1="default", yn="default",
     dic = update_minmax(dic, data)
     return dic, data
 
+
 def integ(dic, data):
     """
     Integral by simple sum
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -2052,19 +2096,20 @@ def integ(dic, data):
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Integrated NMR data.
- 
+
     """
     data = p.integ(data)
     dic = update_minmax(dic, data)
     return dic, data
 
+
 def mc(dic, data, mode="mod"):
-    """ 
+    """
     Modules or magnitude calculation.
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -2091,10 +2136,11 @@ def mc(dic, data, mode="mod"):
     dic = update_minmax(dic, data)
 
     # change to mag. flags
-    fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+    fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
     dic[fn + "QUADFLAG"] = 1.0
     dic["FDQUADFLAG"] = 1.0
     return dic, data
+
 
 def mir(dic, data, mode="left", invl=False, invr=False, sw=True):
     """
@@ -2102,7 +2148,7 @@ def mir(dic, data, mode="left", invl=False, invr=False, sw=True):
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -2121,35 +2167,35 @@ def mir(dic, data, mode="left", invl=False, invr=False, sw=True):
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Array of NMR data with mirror image appended.
- 
+
     Notes
     -----
     Negations of selected region are applied regardless of the mode selected.
 
     """
-    fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+    fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
 
     if mode not in ['left', 'right', 'center', 'ps90-180', 'ps0-0']:
-        raise ValueError("invalid mode") 
+        raise ValueError("invalid mode")
 
-    if dic[fn+"FTFLAG"] == 0: # time domain
-        if mode == "left":    
-            data = p.mir_left(data) 
-        if mode == "right":   
+    if dic[fn + "FTFLAG"] == 0:  # time domain
+        if mode == "left":
+            data = p.mir_left(data)
+        if mode == "right":
             data = p.mir_right(data)
-        if mode == "center":  
+        if mode == "center":
             data = p.mir_center(data)
-        if mode == "ps90-180":    
+        if mode == "ps90-180":
             data = p.neg_edges(p.mir_center(data))
-        if invr:    
-            data = p.neg_right(data)    
-        if invl:    
+        if invr:
+            data = p.neg_right(data)
+        if invl:
             data = p.neg_left(data)
         dic["FDSIZE"] = dic["FDSIZE"] * 2
         if mode == "ps0-0":
             data = p.mir_center_onepoint(data)
             dic["FDSIZE"] = dic["FDSIZE"] - 1
-    else: # freq domain
+    else:  # freq domain
 
         old_size = int(dic["FDSIZE"])
 
@@ -2178,7 +2224,7 @@ def mir(dic, data, mode="left", invl=False, invr=False, sw=True):
         dic[fn + "APOD"] = dic["FDSIZE"]
         dic[fn + "FTSIZE"] = dic["FDSIZE"]
         dic[fn + "TDSIZE"] = dic["FDSIZE"]
-        dic[fn + "ZF"] = -dic["FDSIZE"] 
+        dic[fn + "ZF"] = -dic["FDSIZE"]
         s = dic["FDSIZE"]
         dic[fn + "SW"] = dic[fn + "SW"] * float(s) / float(old_size)
         dic = recalc_orig(dic, data, fn)  # recalculate origin
@@ -2186,14 +2232,15 @@ def mir(dic, data, mode="left", invl=False, invr=False, sw=True):
     dic = update_minmax(dic, data)
     return dic, data
 
-def mult(dic, data, r=1.0, i=1.0, c=1.0, inv=False, hdr=False, x1=1.0, 
+
+def mult(dic, data, r=1.0, i=1.0, c=1.0, inv=False, hdr=False, x1=1.0,
         xn='default'):
     """
     Multiple by a constant.
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -2210,7 +2257,7 @@ def mult(dic, data, r=1.0, i=1.0, c=1.0, inv=False, hdr=False, x1=1.0,
     x1 : int
         First point of region to multiply constant by.
     xn : int or 'default'
-        Last point of region to multiple constant by.  'default' specifies the 
+        Last point of region to multiple constant by.  'default' specifies the
         last point.
 
     Returns
@@ -2232,9 +2279,9 @@ def mult(dic, data, r=1.0, i=1.0, c=1.0, inv=False, hdr=False, x1=1.0,
     else:
         mx = xn
 
-    if hdr: # read in C from header
-        fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
-        c = dic[fn + "C1"] 
+    if hdr:  # read in C from header
+        fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
+        c = dic[fn + "C1"]
         r = 1.0
         i = 1.0
 
@@ -2248,13 +2295,14 @@ def mult(dic, data, r=1.0, i=1.0, c=1.0, inv=False, hdr=False, x1=1.0,
     dic = update_minmax(dic, data)
     return dic, data
 
+
 def rev(dic, data, sw=True):
     """
     Reverse data.
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -2267,16 +2315,17 @@ def rev(dic, data, sw=True):
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Array of NMR data which has been revesed.
- 
+
     """
     data = p.rev(data)
     dic = update_minmax(dic, data)
-    fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+    fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
     if sw and dic[fn + "FTFLAG"] == 1:
         # freq domain update NDORIG and NDCENTER
         dic[fn + "CENTER"] = dic[fn + "CENTER"] - 1
         dic = recalc_orig(dic, data, fn)
     return dic, data
+
 
 def set(dic, data, r="a", i="a", c="a", x1=1.0, xn='default'):
     """
@@ -2284,7 +2333,7 @@ def set(dic, data, r="a", i="a", c="a", x1=1.0, xn='default'):
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -2300,7 +2349,7 @@ def set(dic, data, r="a", i="a", c="a", x1=1.0, xn='default'):
     x1 : int
         First point of region to set to the constant.
     xn : int or 'default'
-        Last point of region to set to the constant.  'default' specifies the 
+        Last point of region to set to the constant.  'default' specifies the
         last point.
 
     Returns
@@ -2309,7 +2358,7 @@ def set(dic, data, r="a", i="a", c="a", x1=1.0, xn='default'):
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Array of NMR data which has been set to a constant.
- 
+
     """
     mn = x1 - 1
     if xn == 'default':
@@ -2331,7 +2380,7 @@ def set(dic, data, r="a", i="a", c="a", x1=1.0, xn='default'):
     if i != "a":
         ic = i
 
-    # this is so simple we do not use the proc_base functions 
+    # this is so simple we do not use the proc_base functions
     data[..., mn:mx].real = rc
     if np.iscomplex(data).any():
         data[..., mn:mx].imag = ic
@@ -2339,13 +2388,14 @@ def set(dic, data, r="a", i="a", c="a", x1=1.0, xn='default'):
     dic = update_minmax(dic, data)
     return dic, data
 
+
 def shuf(dic, data, mode=None):
     """
     Shuffle Utilities
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -2358,12 +2408,12 @@ def shuf(dic, data, mode=None):
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Array of NMR data after shuffle.
- 
+
 
     Notes
     -----
     'rr2ri' mode ignores any imaginary vector refusing to create a mis-sized
-    vector.  'bswap' mode may results in NaN in the data.  'r2i' and 'i2r' not 
+    vector.  'bswap' mode may results in NaN in the data.  'r2i' and 'i2r' not
     implemented.  All modes correctly update minimum and maximum values.  This
     behavor may differ from NMRPipe's SHUF function.
 
@@ -2384,10 +2434,10 @@ def shuf(dic, data, mode=None):
     ======= ===================================
 
     """
-    fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+    fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
 
     if mode == "ri2c":
-        data = p.ri2c(data) # interleave real and imaginary data
+        data = p.ri2c(data)  # interleave real and imaginary data
         # update the dictionary
         dic["FDQUADFLAG"] = 1.0
         dic[fn + "QUADFLAG"] = 1.0
@@ -2423,11 +2473,11 @@ def shuf(dic, data, mode=None):
             dic["FDSPECNUM"] = data.shape[0]
         dic["FDQUADFLAG"] = 0.0
         dic[fn + "QUADFLAG"] = 0.0
-        dic["FDSIZE"] = data.shape[-1] 
+        dic["FDSIZE"] = data.shape[-1]
     elif mode == "exlr":
-        data = p.exlr(data) # exchange left and right 
+        data = p.exlr(data)  # exchange left and right
     elif mode == "rolr":
-        data = p.rolr(data) # rotate left right halves
+        data = p.rolr(data)  # rotate left right halves
     elif mode == "swap":
         data = p.swap(data)
     elif mode == "bswap":
@@ -2440,20 +2490,21 @@ def shuf(dic, data, mode=None):
         # This does not seem to do anything....
         #XXX check data with odd number of points
         pass
-    else: 
+    else:
         raise ValueError("Invalid mode")
     # update the dictionary
     dic = update_minmax(dic, data)
     return dic, data
 
-def sign(dic, data, ri=False, r=False, i=False, left=False, right=False, 
+
+def sign(dic, data, ri=False, r=False, i=False, left=False, right=False,
         alt=False, abs=False, sign=False):
     """
     Sign manipulation utilities
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -2480,11 +2531,11 @@ def sign(dic, data, ri=False, r=False, i=False, left=False, right=False,
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Array of NMR data after sign manipulation.
- 
+
     Notes
     -----
-    All sign manupulation modes set True are applied in the order they appear in
-    the function parameter list.
+    All sign manupulation modes set True are applied in the order they appear
+    in the function parameter list.
 
     """
     if ri:
@@ -2506,9 +2557,11 @@ def sign(dic, data, ri=False, r=False, i=False, left=False, right=False,
     dic = update_minmax(dic, data)
     return dic, data
 
+
 ##################
 # Misc Functions #
 ##################
+
 
 def coadd(dic, data, cList=[1, 1], axis='x', time=False):
     """
@@ -2516,7 +2569,7 @@ def coadd(dic, data, cList=[1, 1], axis='x', time=False):
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -2534,13 +2587,13 @@ def coadd(dic, data, cList=[1, 1], axis='x', time=False):
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Array of NMR data after co-addition.
-    
+
     """
-    if axis == 'x': 
+    if axis == 'x':
         data = p.coadd(data, cList, axis=-1)
         dic["FDSIZE"] = data.shape[-1]
         idx = 0
-    elif axis == 'y': 
+    elif axis == 'y':
         data = p.coadd(data, cList, axis=0)
         dic["FDSLICECOUNT"] = dic["FDSPECNUM"] = data.shape[0]
         idx = 1
@@ -2549,12 +2602,14 @@ def coadd(dic, data, cList=[1, 1], axis='x', time=False):
 
     dic = update_minmax(dic, data)
     if time:
-        fn = "FDF" + str(int(dic["FDDIMORDER"][idx])) # F1, F2, etc
+        fn = "FDF" + str(int(dic["FDDIMORDER"][idx]))  # F1, F2, etc
         dic[fn + "APOD"] = np.floor(dic[fn + "APOD"] / len(cList))
         dic[fn + "TDSIZE"] = np.floor(dic[fn + "TDSIZE"] / len(cList))
     return dic, data
 
+
 coad = coadd    # macro for coadd
+
 
 def dev(dic, data):
     """
@@ -2562,7 +2617,7 @@ def dev(dic, data):
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -2573,9 +2628,10 @@ def dev(dic, data):
         Original dictionary of NMRPipe parameters.
     ndata : ndarray
         Original array of NMR data.
- 
+
     """
     return dic, data
+
 
 def img(dic, data, filter, dx=1.0, dy=1.0, kern=[1], conv=False, thres=None):
     """
@@ -2583,7 +2639,7 @@ def img(dic, data, filter, dx=1.0, dy=1.0, kern=[1], conv=False, thres=None):
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -2599,7 +2655,7 @@ def img(dic, data, filter, dx=1.0, dy=1.0, kern=[1], conv=False, thres=None):
         True to apply convolution filter with kernel of kern.
     thres : float or None or True
         Threshold value.  Only points above this value will have the filter
-        applied. None turns thresholding off and the filter will be applied 
+        applied. None turns thresholding off and the filter will be applied
         to all points. True will set a threshold value of 0.
 
     Returns
@@ -2608,14 +2664,14 @@ def img(dic, data, filter, dx=1.0, dy=1.0, kern=[1], conv=False, thres=None):
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Imaged processed array of NMR data.
- 
+
     Notes
     -----
     This function wraps when regions extend past the edges (NMRPipe doesn't).
     The filter is applied to both the real and imaginary channels
 
     Supported filters are:
-    
+
     ======  ==================
     Name    Description
     ======  ==================
@@ -2633,31 +2689,31 @@ def img(dic, data, filter, dx=1.0, dy=1.0, kern=[1], conv=False, thres=None):
     # deal with thres by making a masked array
     if thres != None:
         if thres == True:
-            thres = 0.0 # default value of 0.0
-        data = p.thres(data, thres) 
+            thres = 0.0  # default value of 0.0
+        data = p.thres(data, thres)
 
     if conv:    # convolution with kernal
         data = p.conv(data, kern, m="wrap")
         dic = update_minmax(dic, data)
         return dic, data
 
-    s = (2 * dy + 1, 2 * dx + 1) # size tuple
+    s = (2 * dy + 1, 2 * dx + 1)  # size tuple
     # the various filters
     if filter == "median":
         data = p.filter_median(data, s=s, m="wrap")
-    elif filter == "min":   
+    elif filter == "min":
         data = p.filter_min(data, s=s, m="wrap")
-    elif filter == "max":   
+    elif filter == "max":
         data = p.filter_max(data, s=s, m="wrap")
-    elif filter == "amin":  
+    elif filter == "amin":
         data = p.filter_amin(data, s=s, m="wrap")
-    elif filter == "amax":  
+    elif filter == "amax":
         data = p.filter_amax(data, s=s, m="wrap")
-    elif filter == "range": 
+    elif filter == "range":
         data = p.filter_range(data, s=s, m="wrap")
-    elif filter == "avg":   
+    elif filter == "avg":
         data = p.filter_avg(data, s=s, m="wrap")
-    elif filter == "dev":   
+    elif filter == "dev":
         data = p.filter_dev(data, s=s, m="wrap")
     else:
         raise ValueError("Invalid filter")
@@ -2665,13 +2721,14 @@ def img(dic, data, filter, dx=1.0, dy=1.0, kern=[1], conv=False, thres=None):
     dic = update_minmax(dic, data)
     return dic, data
 
+
 def null(dic, data):
     """
-    Null function 
-    
+    Null function
+
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -2682,18 +2739,19 @@ def null(dic, data):
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Unmodified array of NMR data.
- 
+
     """
     dic = update_minmax(dic, data)  # Null actually does update this...
     return dic, data
 
+
 def qart(dic, data, a=0.0, f=0.0, auto=False):
     """
     Scale Quad Artifacts
- 
+
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -2702,8 +2760,8 @@ def qart(dic, data, a=0.0, f=0.0, auto=False):
     f : float
         Phase adjustment value.
     auto : bool
-        True will perform a Gram-Schmidth orthorginalization to fund `a` and `f`
-        automatically.  Provided `a` and `f` parameters are ignored.
+        True will perform a Gram-Schmidth orthorginalization to fund `a` and
+        `f` automatically.  Provided `a` and `f` parameters are ignored.
 
     Returns
     -------
@@ -2711,7 +2769,7 @@ def qart(dic, data, a=0.0, f=0.0, auto=False):
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Array of NMR data with scaled quadrature artifacts.
-  
+
     Notes
     -----
     Auto mode performs Gram-Schmidt orthogonalization, a different approach
@@ -2719,12 +2777,13 @@ def qart(dic, data, a=0.0, f=0.0, auto=False):
 
     """
     if auto:
-        data = p.qart_auto(data)    
+        data = p.qart_auto(data)
     else:
         data = p.qart(data, a, f)
 
     dic = update_minmax(dic, data)
     return dic, data
+
 
 def qmix(dic, data, ic=1, oc=1, cList=[0], time=False):
     """
@@ -2732,7 +2791,7 @@ def qmix(dic, data, ic=1, oc=1, cList=[0], time=False):
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -2750,12 +2809,12 @@ def qmix(dic, data, ic=1, oc=1, cList=[0], time=False):
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Array of NMR data after complex mixing.
- 
+
     Notes
     -----
-    `ic` and `oc` must evenly divide the data. This function refuses to make 
+    `ic` and `oc` must evenly divide the data. This function refuses to make
     invalid length files, NMRPipe's qmix function will create such files.
- 
+
     """
     ic = int(ic)
     oc = int(oc)
@@ -2775,13 +2834,14 @@ def qmix(dic, data, ic=1, oc=1, cList=[0], time=False):
     dic["FDSLICECOUNT"] = data.shape[0]
 
     if time:
-        fn = "FDF" + str(int(dic["FDDIMORDER"][1])) # F1, F2, etc
-        dic[fn + "APOD"]  = data.shape[0]
+        fn = "FDF" + str(int(dic["FDDIMORDER"][1]))  # F1, F2, etc
+        dic[fn + "APOD"] = data.shape[0]
         dic[fn + "TDSIZE"] = data.shape[0]
         if dic[fn + "QUADFLAG"] == 0:
-            dic[fn + "APOD"]  = dic[fn + "APOD"] / 2.
+            dic[fn + "APOD"] = dic[fn + "APOD"] / 2.
             dic[fn + "TDSIZE"] = dic[fn + "TDSIZE"] / 2.
     return dic, data
+
 
 def save(dic, data, name, overwrite=True):
     """
@@ -2789,7 +2849,7 @@ def save(dic, data, name, overwrite=True):
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -2805,7 +2865,7 @@ def save(dic, data, name, overwrite=True):
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Unmodified array of NMR data.
- 
+
     Notes
     -----
     The resulting FDPIPECOUNT header parameter does not match the one created
@@ -2820,20 +2880,21 @@ def save(dic, data, name, overwrite=True):
     dic = update_minmax(dic, data)
     return dic, data
 
+
 def smo(dic, data, n=1, center=False):
     """
     Smooth data.
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
     n : int
         Size of smoothing window in points.
     center : bool
-        True will perform perform a centering on the data (subtract the 
+        True will perform perform a centering on the data (subtract the
         smoothed data).  False returns the smoothed data.
 
     Returns
@@ -2842,17 +2903,18 @@ def smo(dic, data, n=1, center=False):
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Array of NMR data which has been smoothed or centered.
- 
+
     """
     a = p.smo(data, n=n)
     # NMRPipe doesn't truely smooth the left edge of the vector
     for i in range(n):
-        a[..., i] = data[..., 0:(n+i)].sum(axis=-1) / (n + 1 + i)
+        a[..., i] = data[..., 0:(n + i)].sum(axis=-1) / (n + 1 + i)
     if center:
         # to avoid the same error center without use proc_base functions
         a = data - a
     dic = update_minmax(dic, a)
     return dic, a
+
 
 def zd(dic, data, wide=1.0, x0=1.0, slope=0, func=0, g=1):
     """
@@ -2860,7 +2922,7 @@ def zd(dic, data, wide=1.0, x0=1.0, slope=0, func=0, g=1):
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -2883,17 +2945,17 @@ def zd(dic, data, wide=1.0, x0=1.0, slope=0, func=0, g=1):
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Array of NMR data with a diagonal band zero-ed.
-    
+
     """
     if x0 == 0:      # pipe takes x0=0 to be x0=1
         x0 = 1.0
 
     if slope == 0:    # Auto Mode
-        fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc     
-        fn2 = "FDF" + str(int(dic["FDDIMORDER"][1])) # F1, F2, etc    
+        fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
+        fn2 = "FDF" + str(int(dic["FDDIMORDER"][1]))  # F1, F2, etc
         sw1 = dic[fn + "SW"]
         sw2 = dic[fn2 + "SW"]
-        slope = data.shape[-1] * sw1/(data.shape[0] * sw2) 
+        slope = data.shape[-1] * sw1 / (data.shape[0] * sw2)
 
     if func == 0:
         data = p.zd_boxcar(data, wide, x0 - 1, slope)
@@ -2903,24 +2965,26 @@ def zd(dic, data, wide=1.0, x0=1.0, slope=0, func=0, g=1):
         data = p.zd_sinebell(data, wide, x0 - 1, slope)
     elif func == 3:
         data = p.zd_gaussian(data, wide, x0 - 1, slope, g)
-    else:   
+    else:
         raise ValueError("func parameter must be 0, 1, 2 or 3")
     dic = update_minmax(dic, data)
     return dic, data
+
 
 ###############################
 # Linear Prediction Functions #
 ###############################
 
+
 def lp(dic, data, pred="default", x1="default", xn="default", ord=8, mode='f',
-       append='after', bad_roots='auto', mirror=None, fix_mode='on', 
+       append='after', bad_roots='auto', mirror=None, fix_mode='on',
        method='tls'):
     """
     Linear Prediction
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
@@ -2928,8 +2992,8 @@ def lp(dic, data, pred="default", x1="default", xn="default", ord=8, mode='f',
         Number of points to predict, "default" chooses the vector size for
         forward prediction, 1 for backward prediction
     x1 : int or 'default'
-        First point in 1D vector to use to extract LP filter. 'default' will use
-        the first or last point depending on the mode.
+        First point in 1D vector to use to extract LP filter. 'default' will
+        use the first or last point depending on the mode.
     xn : int or 'default'
         Last point in 1D vector to use to extract LP filter. 'default' will use
         the first or last point depending on the mode.
@@ -2941,7 +3005,7 @@ def lp(dic, data, pred="default", x1="default", xn="default", ord=8, mode='f',
     append : {'before' or 'after'}
         Location to append predicted data, 'before' or 'after' the existing
         data.
-    bad_roots {'incr', 'decr', None, 'auto'} : 
+    bad_roots {'incr', 'decr', None, 'auto'} :
         Type of roots which are will be marked as bad and stabilized. Choices
         are 'incr' for increasing roots, 'decr' for decreasing roots, or None
         for not root stabilization. The default 'auto' will set this parameter
@@ -2950,11 +3014,11 @@ def lp(dic, data, pred="default", x1="default", xn="default", ord=8, mode='f',
     mirror : {'90-180', '0-0', None}
         Mirror mode, option are '90-180' for a one point shifted mirror image,
         '0-0' for an exact mirror image, and None for no mirror imaging of the
-        data.    
+        data.
     fix_mode : {'on', 'reflect'}
-        Method used to stabilize bad roots, 'on' moves bad roots onto the unit 
+        Method used to stabilize bad roots, 'on' moves bad roots onto the unit
         circle, 'reflect' reflect bad roots across the unit circle.
-    method : {'svd', 'qr', 'choleskey', 'tls'}    
+    method : {'svd', 'qr', 'choleskey', 'tls'}
         Method to use to calculate the LP filter.
 
     Notes
@@ -2968,14 +3032,14 @@ def lp(dic, data, pred="default", x1="default", xn="default", ord=8, mode='f',
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Array of NMR data with linear prediction applied.
- 
+
     """
     # check parameter
     if mirror not in [None, '90-180', '0-0']:
         raise ValueError("mirror must be None, '90-180' or '0-0'")
-    
+
     # pred default values
-    if pred == "default":   
+    if pred == "default":
         if mode == "after":
             pred = data.shape[-1]   # double the number of points
         else:
@@ -2992,26 +3056,26 @@ def lp(dic, data, pred="default", x1="default", xn="default", ord=8, mode='f',
         x_min = x1 - pred - 1
     else:
         x_min = x1 - 1
-    
+
     if xn == "default":
         x_max = data.shape[-1]
     else:
         x_max = xn - 1
     sl = slice(x_min, x_max)
-    
+
     # mirror mode (remap to proc_lp names
-    mirror = {None:None, '90-180':'180', '0-0':'0'}[mirror]
+    mirror = {None: None, '90-180': '180', '0-0': '0'}[mirror]
 
     # mode, append, bad_roots, fix_mode, and method are passed unchanged
     # use LP-TLS for best results
-    data = proc_lp.lp(data, pred, sl, ord, mode, append, bad_roots, fix_mode, 
+    data = proc_lp.lp(data, pred, sl, ord, mode, append, bad_roots, fix_mode,
                       mirror, method)
 
     # calculation for dictionary updates
-    fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+    fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
     s = data.shape[-1]
     s2 = s / 2.0 + 1
-    
+
     # update the dictionary
     dic[fn + "CENTER"] = s2
     if dic["FD2DPHASE"] == 1 and fn != "FDF2":   # TPPI data
@@ -3024,7 +3088,9 @@ def lp(dic, data, pred="default", x1="default", xn="default", ord=8, mode='f',
     dic = update_minmax(dic, data)
     return dic, data
 
+
 lpc = lp        # macro to lp
+
 
 def lp2d(dic, data, xOrd=8, yOrd=8, xSize="default", ySize="default",
          xMirror='0', yMirror='0', fix_pts=True, method='svd'):
@@ -3033,12 +3099,12 @@ def lp2d(dic, data, xOrd=8, yOrd=8, xSize="default", ySize="default",
 
     Parameters
     ----------
-    dic : dict 
+    dic : dict
         Dictionary of NMRPipe parameters.
     data : ndarray
         Array of NMR data.
     xOrd : int
-        X dimension linear prediction order.      
+        X dimension linear prediction order.
     yOrd : int
         Y dimension linear prediction order.
     xSize : int
@@ -3046,14 +3112,14 @@ def lp2d(dic, data, xOrd=8, yOrd=8, xSize="default", ySize="default",
     ySize : int
         New size of Y-axis, 'default' double the current size.
     xMirror : {'0', '180'}
-    '   Mode in which the mirror image of the X-axis should be formed.  '0' 
+    '   Mode in which the mirror image of the X-axis should be formed.  '0'
         indicated no delay, '180' for a half-point delay.
     yMirror : {'0', '180'}
         Mode in which the mirror image of the Y-axis should be formed.
     fix_pts : bool
-        True to reduce predicted points with magnitude larger than the largest 
+        True to reduce predicted points with magnitude larger than the largest
         data point. False leaved predicted points unaltered.
-    method : {'svd', 'qr', 'cholesky', 'tls'}   
+    method : {'svd', 'qr', 'cholesky', 'tls'}
         Method used to calculate the LP prediction filter.
 
     Returns
@@ -3062,7 +3128,7 @@ def lp2d(dic, data, xOrd=8, yOrd=8, xSize="default", ySize="default",
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
         Array of NMR data with 2D linear prediction applied.
- 
+
     Notes
     -----
     This function applies the LP2D procedure as described in:
@@ -3080,7 +3146,7 @@ def lp2d(dic, data, xOrd=8, yOrd=8, xSize="default", ySize="default",
         ypred = data.shape[0]
     else:
         ypred = ySize - data.shape[0]
- 
+
     # predict the X (last) axis.
     data = proc_lp.lp2d(data, xpred, yOrd, xOrd, yMirror, fix_pts, method)
 
@@ -3091,24 +3157,24 @@ def lp2d(dic, data, xOrd=8, yOrd=8, xSize="default", ySize="default",
 
     # update dictionary
     # x-axis updates
-    fn = "FDF" + str(int(dic["FDDIMORDER"][0])) # F1, F2, etc
+    fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
     s = data.shape[1]
     s2 = s / 2.0 + 1
-    
+
     # update the dictionary
-    dic[fn+"CENTER"] = s2
+    dic[fn + "CENTER"] = s2
     if dic["FD2DPHASE"] == 1 and fn != "FDF2":   # TPPI data
-        dic[fn+"CENTER"] = np.round(s2 / 2. + 0.001)
+        dic[fn + "CENTER"] = np.round(s2 / 2. + 0.001)
     dic = recalc_orig(dic, data, fn)
     dic["FDSIZE"] = s
     dic[fn + "APOD"] = s
     dic[fn + "TDSIZE"] = s
 
     # y-axis updates
-    fn = "FDF" + str(int(dic["FDDIMORDER"][1])) # F1, F2, etc
+    fn = "FDF" + str(int(dic["FDDIMORDER"][1]))  # F1, F2, etc
     s = data.shape[0]
     s2 = s / 2.0 + 1
-    
+
     # update the dictionary
     dic[fn + "CENTER"] = s2
     if dic["FD2DPHASE"] == 1 and fn != "FDF2":   # TPPI data
@@ -3124,11 +3190,13 @@ def lp2d(dic, data, xOrd=8, yOrd=8, xSize="default", ySize="default",
 # Not Implemented Functions #
 #############################
 
+
 def ann(dic, data):
     """
     Fourier Analysis by Neural Net
     """
     raise NotImplementedError
+
 
 def ebs(dic, data):
     """
@@ -3136,11 +3204,13 @@ def ebs(dic, data):
     """
     raise NotImplementedError
 
+
 def mac(dic, data):
     """
     Macro Language Interpreter
     """
     raise NotImplementedError
+
 
 def mem(dic, data):
     """
@@ -3148,11 +3218,13 @@ def mem(dic, data):
     """
     raise NotImplementedError
 
+
 def ml(dic, data):
     """
     Maximum Likelihood Frequency Map
     """
     raise NotImplementedError
+
 
 def poly(dic, data):
     """
@@ -3160,14 +3232,16 @@ def poly(dic, data):
     """
     raise NotImplementedError
 
+
 def xyz2zyx(dic, data):
-    """ 
-    3D Matrix transpose 
+    """
+    3D Matrix transpose
     """
     raise NotImplementedError
 
+
 def ztp(dic, data):
-    """ 
-    3D Matrix Transpose 
+    """
+    3D Matrix Transpose
     """
     raise NotImplementedError
