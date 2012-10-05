@@ -65,7 +65,7 @@
 <h1>nmrglue.fileio.varian.write_fid<a class="headerlink" href="#nmrglue-fileio-varian-write-fid" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.varian.write_fid">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">write_fid</tt><big>(</big><em>filename</em>, <em>dic</em>, <em>data</em>, <em>torder='flat'</em>, <em>repack=False</em>, <em>overwrite=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/varian.py#L850"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.varian.write_fid" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">write_fid</tt><big>(</big><em>filename</em>, <em>dic</em>, <em>data</em>, <em>torder='flat'</em>, <em>repack=False</em>, <em>correct=True</em>, <em>overwrite=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/varian.py#L866"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.varian.write_fid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write a Agilent/Varian binary (fid) file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -90,6 +90,13 @@
 <p><strong>repack</strong> : bool, optional</p>
 <blockquote>
 <div><p>True to repack file and block headers. False leave as is.</p>
+</div></blockquote>
+<p><strong>correct</strong> : bool, optional</p>
+<blockquote>
+<div><p>True (the default) will correct mis-sized np and nblocks values in dic.
+False will write out the incorrect values to the file header and
+record the full data set, the resulting file will not be readable by
+nmrglue.</p>
 </div></blockquote>
 <p><strong>overwrite</strong> : bool, optional</p>
 <blockquote class="last">

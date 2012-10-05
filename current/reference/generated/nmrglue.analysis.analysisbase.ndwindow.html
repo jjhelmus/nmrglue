@@ -65,14 +65,14 @@
 <h1>nmrglue.analysis.analysisbase.ndwindow<a class="headerlink" href="#nmrglue-analysis-analysisbase-ndwindow" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="nmrglue.analysis.analysisbase.ndwindow">
-<em class="property">class </em><tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">ndwindow</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/analysisbase.py#L159"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">ndwindow</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/analysisbase.py#L164"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow" title="Permalink to this definition">¶</a></dt>
 <dd><p>An N-dimensional iterator to slice arrays into windows.</p>
 <p>Given the shape of an array and a window size, an &#8216;ndwindow&#8217; instance
-iterators over tuples of slices which slice an the array into wsize 
-sub-arrays.  At each iteration, the index of the center of the sub-array 
+iterators over tuples of slices which slice an the array into wsize
+sub-arrays.  At each iteration, the index of the center of the sub-array
 is incremented by one along the last dimension.  Array borders are ignored
 so the resulting sub-array can be smaller than wsize.  If wsize contains
-even values the window is off center containing an additional point with 
+even values the window is off center containing an additional point with
 lower index.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -123,7 +123,7 @@ the maximum size of the window.</p>
 </div>
 <dl class="method">
 <dt id="nmrglue.analysis.analysisbase.ndwindow.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/analysisbase.py#L207"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/analysisbase.py#L212"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set up the ndwindow object</p>
 </dd></dl>
 

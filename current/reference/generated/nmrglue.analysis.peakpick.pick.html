@@ -65,7 +65,7 @@
 <h1>nmrglue.analysis.peakpick.pick<a class="headerlink" href="#nmrglue-analysis-peakpick-pick" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.analysis.peakpick.pick">
-<tt class="descclassname">nmrglue.analysis.peakpick.</tt><tt class="descname">pick</tt><big>(</big><em>data, pthres, nthres=None, msep=None, algorithm='connected', est_params=True, lineshapes=None, edge=None, diag=False, c_struc=None, c_ndil=0, cluster=True, table=True, axis_names=['A', 'Z', 'Y', 'X']</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/peakpick.py#L14"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.peakpick.pick" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.analysis.peakpick.</tt><tt class="descname">pick</tt><big>(</big><em>data, pthres, nthres=None, msep=None, algorithm='connected', est_params=True, lineshapes=None, edge=None, diag=False, c_struc=None, c_ndil=0, cluster=True, table=True, axis_names=['A', 'Z', 'Y', 'X']</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/peakpick.py#L15"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.peakpick.pick" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pick (find) peaks in a region of a NMR spectrum.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -77,12 +77,12 @@
 </div></blockquote>
 <p><strong>pthres</strong> : float</p>
 <blockquote>
-<div><p>Minimum peak height for positive peaks. None to not detect positive 
+<div><p>Minimum peak height for positive peaks. None to not detect positive
 peaks.</p>
 </div></blockquote>
 <p><strong>nthres</strong> : float</p>
 <blockquote>
-<div><p>Minimum peak height for negative peaks (typically a negative value).  
+<div><p>Minimum peak height for negative peaks (typically a negative value).
 None to not detect negative peaks.</p>
 </div></blockquote>
 <p><strong>msep</strong> : tuple of ints, optional</p>
@@ -96,14 +96,14 @@ if algorithm is &#8216;thresh&#8217; or &#8216;thresh-fast&#8217;.</p>
 </div></blockquote>
 <p><strong>est_params</strong> : bool, optional</p>
 <blockquote>
-<div><p>True to perform an estimate of linewidths and amplitude for all peaks 
+<div><p>True to perform an estimate of linewidths and amplitude for all peaks
 picked.  False, the default, will return only the peak locations.</p>
 </div></blockquote>
 <p><strong>lineshapes</strong> : list, optional</p>
 <blockquote>
-<div><p>A list of lineshape classes or string shortcuts for each dimension.  
-If not specified Gaussian type lineshapes with a FWHM  linewidth 
-parameter is assumed in each dimension. This parameter if only used 
+<div><p>A list of lineshape classes or string shortcuts for each dimension.
+If not specified Gaussian type lineshapes with a FWHM  linewidth
+parameter is assumed in each dimension. This parameter if only used
 if est_params is True.</p>
 </div></blockquote>
 <p><strong>edge</strong> : tuple of ints, optional</p>
@@ -113,13 +113,13 @@ None, the default, skips this addition.</p>
 </div></blockquote>
 <p><strong>diag</strong> : bool, optional</p>
 <blockquote>
-<div><p>True to consider diagonal points to be  touching in peak finding 
+<div><p>True to consider diagonal points to be  touching in peak finding
 algorithm and clustering.</p>
 </div></blockquote>
 <p><strong>c_struc</strong> : ndarray, optional</p>
 <blockquote>
-<div><p>Structure element to use when applying dilation on segments before 
-applying clustering algorithm. None will apply a default square 
+<div><p>Structure element to use when applying dilation on segments before
+applying clustering algorithm. None will apply a default square
 structure with connectivity one will be applied.</p>
 </div></blockquote>
 <p><strong>c_ndil</strong> : int, optional</p>

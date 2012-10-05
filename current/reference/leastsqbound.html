@@ -68,7 +68,7 @@
 <h2>Developer Functions<a class="headerlink" href="#developer-functions" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="nmrglue.analysis.leastsqbound.leastsqbound">
-<tt class="descclassname">nmrglue.analysis.leastsqbound.</tt><tt class="descname">leastsqbound</tt><big>(</big><em>func</em>, <em>x0</em>, <em>args=()</em>, <em>bounds=None</em>, <em>Dfun=None</em>, <em>full_output=0</em>, <em>col_deriv=0</em>, <em>ftol=1.49012e-08</em>, <em>xtol=1.49012e-08</em>, <em>gtol=0.0</em>, <em>maxfev=0</em>, <em>epsfcn=0.0</em>, <em>factor=100</em>, <em>diag=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/leastsqbound.py#L88"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.leastsqbound.leastsqbound" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.analysis.leastsqbound.</tt><tt class="descname">leastsqbound</tt><big>(</big><em>func</em>, <em>x0</em>, <em>args=()</em>, <em>bounds=None</em>, <em>Dfun=None</em>, <em>full_output=0</em>, <em>col_deriv=0</em>, <em>ftol=1.49012e-08</em>, <em>xtol=1.49012e-08</em>, <em>gtol=0.0</em>, <em>maxfev=0</em>, <em>epsfcn=0.0</em>, <em>factor=100</em>, <em>diag=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/leastsqbound.py#L94"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.leastsqbound.leastsqbound" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bounded minimization of the sum of squares of a set of equations.</p>
 <div class="highlight-python"><pre>x = arg min(sum(func(y)**2,axis=0))
          y</pre>
@@ -207,9 +207,9 @@ function of the parameters <cite>f(xdata, params)</cite></p>
 <div class="highlight-python"><pre>  min   sum((ydata - f(xdata, params))**2, axis=0)
 params</pre>
 </div>
-<p>Contraints on the parameters are enforced using an internal parameter list 
+<p>Contraints on the parameters are enforced using an internal parameter list
 with appropiate transformations such that these internal parameters can be
-optimized without constraints. The transfomation between a given internal 
+optimized without constraints. The transfomation between a given internal
 parameter, p_i, and a external parameter, p_e, are as follows:</p>
 <p>With <tt class="docutils literal"><span class="pre">min</span></tt> and <tt class="docutils literal"><span class="pre">max</span></tt> bounds defined</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">p_i</span> <span class="o">=</span> <span class="n">arcsin</span><span class="p">((</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">p_e</span> <span class="o">-</span> <span class="nb">min</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="nb">max</span> <span class="o">-</span> <span class="nb">min</span><span class="p">))</span> <span class="o">-</span> <span class="mf">1.</span><span class="p">)</span>
@@ -226,7 +226,7 @@ parameter, p_i, and a external parameter, p_e, are as follows:</p>
 <span class="n">p_e</span> <span class="o">=</span> <span class="nb">min</span> <span class="o">-</span> <span class="mf">1.</span> <span class="o">+</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">p_i</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">1.</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>These transfomations are used in the MINUIT package, and described in 
+<p>These transfomations are used in the MINUIT package, and described in
 detail in the section 1.3.1 of the MINUIT User&#8217;s Guide.</p>
 <p class="rubric">References</p>
 <ul class="simple">

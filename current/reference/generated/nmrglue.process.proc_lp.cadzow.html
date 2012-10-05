@@ -65,7 +65,7 @@
 <h1>nmrglue.process.proc_lp.cadzow<a class="headerlink" href="#nmrglue-process-proc-lp-cadzow" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_lp.cadzow">
-<tt class="descclassname">nmrglue.process.proc_lp.</tt><tt class="descname">cadzow</tt><big>(</big><em>data</em>, <em>M</em>, <em>K</em>, <em>niter</em>, <em>min_var=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_lp.py#L456"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_lp.cadzow" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.process.proc_lp.</tt><tt class="descname">cadzow</tt><big>(</big><em>data</em>, <em>M</em>, <em>K</em>, <em>niter</em>, <em>min_var=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_lp.py#L466"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_lp.cadzow" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform a (row wise) Cadzow-like signal enhancement on 1D or 2D data.</p>
 <p>Performs a Cadzow-like signal enhancement with optional adjustment
 of singular values using the minimum variance method as desribed in:
@@ -81,7 +81,7 @@ Chen, VanHuffel, Decanniere, VanHecke, JMR, 1994, 109A, 46-55.</p>
 </div></blockquote>
 <p><strong>M</strong> : int</p>
 <blockquote>
-<div><p>Large prediction order.  For best results should be between 
+<div><p>Large prediction order.  For best results should be between
 K + 5 and 2 * K.</p>
 </div></blockquote>
 <p><strong>K</strong> : int</p>
@@ -94,8 +94,8 @@ K + 5 and 2 * K.</p>
 </div></blockquote>
 <p><strong>min_var</strong> : bool</p>
 <blockquote>
-<div><p>True to adjust retained singular values using the  minimum variance 
-method. False does not correct the singular values and is the 
+<div><p>True to adjust retained singular values using the  minimum variance
+method. False does not correct the singular values and is the
 Cadzow method.</p>
 </div></blockquote>
 </td>

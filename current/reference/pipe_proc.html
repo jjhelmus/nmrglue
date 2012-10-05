@@ -62,25 +62,25 @@
             
   <div class="section" id="module-nmrglue.process.pipe_proc">
 <span id="nmrglue-pipe-proc"></span><span id="pipe-proc"></span><h1>nmrglue.pipe_proc<a class="headerlink" href="#module-nmrglue.process.pipe_proc" title="Permalink to this headline">¶</a></h1>
-<p>NMRPipe like processing functions for use with the 
+<p>NMRPipe like processing functions for use with the
 <a class="reference internal" href="pipe.html#module-nmrglue.fileio.pipe" title="nmrglue.fileio.pipe"><tt class="xref py py-mod docutils literal"><span class="pre">nmrglue.fileio.pipe</span></tt></a> module.</p>
-<p>These functions attempt to mimic NMRPipe&#8217;s processing functions but small 
-differences exist between to two implementations.  In particular when using 
+<p>These functions attempt to mimic NMRPipe&#8217;s processing functions but small
+differences exist between to two implementations.  In particular when using
 this module:</p>
 <blockquote>
 <div><ul class="simple">
 <li>hdr=True overrides all values in the calling function.</li>
-<li>A di flag is not used, rather the <a class="reference internal" href="generated/nmrglue.process.pipe_proc.di.html#nmrglue.process.pipe_proc.di" title="nmrglue.process.pipe_proc.di"><tt class="xref py py-func docutils literal"><span class="pre">di()</span></tt></a> function should be used 
+<li>A di flag is not used, rather the <a class="reference internal" href="generated/nmrglue.process.pipe_proc.di.html#nmrglue.process.pipe_proc.di" title="nmrglue.process.pipe_proc.di"><tt class="xref py py-func docutils literal"><span class="pre">di()</span></tt></a> function should be used
 to delete the imaginary portion of a spectra.</li>
 <li>x1, xn and other limits must be expressed in points. A unit conversion
-object function should be used before calling the processing function to 
+object function should be used before calling the processing function to
 calculate these values.</li>
 <li>No functions implement the dmx or nodmx flags.</li>
 </ul>
 </div></blockquote>
-<p>Additional differences from NMRPipe&#8217;s functions are documented in the 
+<p>Additional differences from NMRPipe&#8217;s functions are documented in the
 individual processing functions.</p>
-<p>The following functions have not been implemented and will raise a 
+<p>The following functions have not been implemented and will raise a
 NotImplemented exception:</p>
 <blockquote>
 <div><ul class="simple">

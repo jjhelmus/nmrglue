@@ -65,11 +65,11 @@
 <h1>nmrglue.analysis.peakpick.find_all_thres<a class="headerlink" href="#nmrglue-analysis-peakpick-find-all-thres" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.analysis.peakpick.find_all_thres">
-<tt class="descclassname">nmrglue.analysis.peakpick.</tt><tt class="descname">find_all_thres</tt><big>(</big><em>data</em>, <em>thres</em>, <em>msep</em>, <em>find_segs=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/peakpick.py#L396"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.peakpick.find_all_thres" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.analysis.peakpick.</tt><tt class="descname">find_all_thres</tt><big>(</big><em>data</em>, <em>thres</em>, <em>msep</em>, <em>find_segs=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/peakpick.py#L402"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.peakpick.find_all_thres" title="Permalink to this definition">¶</a></dt>
 <dd><p>Peak pick a spectrum using a threshhold-minimum distance algorithm.</p>
-<p>Find peaks (local maxima) in a arbitrary dimensional NMR spectra above a 
-set threshold with a minimal distance between peaks.  When the spectrum is 
-small and multiple copies can fit into RAM use the _fast version of this 
+<p>Find peaks (local maxima) in a arbitrary dimensional NMR spectra above a
+set threshold with a minimal distance between peaks.  When the spectrum is
+small and multiple copies can fit into RAM use the _fast version of this
 function. Segments are found by finding the first point in each direction
 along each dimension which is below the threshold.</p>
 <table class="docutils field-list" frame="void" rules="none">

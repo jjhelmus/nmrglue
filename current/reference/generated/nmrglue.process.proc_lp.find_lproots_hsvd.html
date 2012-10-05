@@ -65,16 +65,16 @@
 <h1>nmrglue.process.proc_lp.find_lproots_hsvd<a class="headerlink" href="#nmrglue-process-proc-lp-find-lproots-hsvd" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_lp.find_lproots_hsvd">
-<tt class="descclassname">nmrglue.process.proc_lp.</tt><tt class="descname">find_lproots_hsvd</tt><big>(</big><em>x</em>, <em>M</em>, <em>K</em>, <em>mode</em>, <em>zmethod='sm'</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_lp.py#L929"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_lp.find_lproots_hsvd" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.process.proc_lp.</tt><tt class="descname">find_lproots_hsvd</tt><big>(</big><em>x</em>, <em>M</em>, <em>K</em>, <em>mode</em>, <em>zmethod='sm'</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_lp.py#L960"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_lp.find_lproots_hsvd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find LP roots (poles) using the HSVD method</p>
-<p>Perform a HSVD linear prediction to determind signal roots (poles) as 
+<p>Perform a HSVD linear prediction to determind signal roots (poles) as
 described in:
 Barkhuijsen, DeBeer, and Van Ormondt, JMR, 1987, 73, 553</p>
 <p>Parameters x, M and K are the same as those described in the above article.
-zmethod refer to the method used to calculate Z&#8217;, either a least-squares 
+zmethod refer to the method used to calculate Z&#8217;, either a least-squares
 method (lstsq) can be used to solve U_b*Z&#8217;=U_t or the Sherman-Morrison
 formula (sm) can be used to avoid the full matrix inversion with equation
-[12] being used to find Z&#8217;. The Sherman-Morrison method should be faster 
+[12] being used to find Z&#8217;. The Sherman-Morrison method should be faster
 with similar precision.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -99,7 +99,7 @@ smaller of M + 1 or len(x) - M.</p>
 </div></blockquote>
 <p><strong>zmethod</strong> : {&#8216;lstsq&#8217;, &#8216;sm&#8217;}</p>
 <blockquote>
-<div><p>Method used to find Z&#8217; &#8216;lstsq&#8217; for least squares, &#8216;sm&#8217; for 
+<div><p>Method used to find Z&#8217; &#8216;lstsq&#8217; for least squares, &#8216;sm&#8217; for
 Sherman-Morrison.</p>
 </div></blockquote>
 </td>

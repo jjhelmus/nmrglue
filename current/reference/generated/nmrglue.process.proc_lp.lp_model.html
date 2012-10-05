@@ -65,7 +65,7 @@
 <h1>nmrglue.process.proc_lp.lp_model<a class="headerlink" href="#nmrglue-process-proc-lp-lp-model" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_lp.lp_model">
-<tt class="descclassname">nmrglue.process.proc_lp.</tt><tt class="descname">lp_model</tt><big>(</big><em>trace</em>, <em>slice=slice(None</em>, <em>None</em>, <em>None)</em>, <em>order=8</em>, <em>mode='f'</em>, <em>mirror=None</em>, <em>method='svd'</em>, <em>full=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_lp.py#L542"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_lp.lp_model" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.process.proc_lp.</tt><tt class="descname">lp_model</tt><big>(</big><em>trace</em>, <em>slice=slice(None</em>, <em>None</em>, <em>None)</em>, <em>order=8</em>, <em>mode='f'</em>, <em>mirror=None</em>, <em>method='svd'</em>, <em>full=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_lp.py#L554"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_lp.lp_model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use Linear Prediction to model 1D NMR time domain data.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -77,7 +77,7 @@
 </div></blockquote>
 <p><strong>slice</strong> : slice object, optional</p>
 <blockquote>
-<div><p>Slice object which selects the region along the last axis to use in LP 
+<div><p>Slice object which selects the region along the last axis to use in LP
 equation.  The default, slice(None), will use all points.</p>
 </div></blockquote>
 <p><strong>order</strong> : int</p>
@@ -90,9 +90,9 @@ equation.  The default, slice(None), will use all points.</p>
 </div></blockquote>
 <p><strong>mirror</strong> : {None, &#8216;0&#8217;, &#8216;180&#8217;}</p>
 <blockquote>
-<div><p>Mode to form mirror image of data before processing.  None will 
-process the data trace as provided (no mirror image). &#8216;0&#8217; or &#8216;180&#8217; 
-forms a mirror image of the sliced trace to calculate the LP filter.  
+<div><p>Mode to form mirror image of data before processing.  None will
+process the data trace as provided (no mirror image). &#8216;0&#8217; or &#8216;180&#8217;
+forms a mirror image of the sliced trace to calculate the LP filter.
 &#8216;0&#8217; should be used with data with no delay, &#8216;180&#8217; with data
 with an initial half-point delay.</p>
 </div></blockquote>

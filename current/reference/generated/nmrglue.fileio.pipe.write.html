@@ -65,7 +65,7 @@
 <h1>nmrglue.fileio.pipe.write<a class="headerlink" href="#nmrglue-fileio-pipe-write" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.pipe.write">
-<tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">write</tt><big>(</big><em>filename</em>, <em>dic</em>, <em>data</em>, <em>overwrite=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/pipe.py#L702"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.pipe.write" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.fileio.pipe.</tt><tt class="descname">write</tt><big>(</big><em>filename</em>, <em>dic</em>, <em>data</em>, <em>overwrite=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/pipe.py#L723"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.pipe.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write a NMRPipe file to disk.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -85,7 +85,7 @@
 </div></blockquote>
 <p><strong>overwrite</strong> : bool, optional.</p>
 <blockquote class="last">
-<div><p>Set True to overwrite files, False will raise a Warning if file 
+<div><p>Set True to overwrite files, False will raise a Warning if file
 exists.</p>
 </div></blockquote>
 </td>
@@ -102,11 +102,11 @@ exists.</p>
 </dl>
 </div>
 <p class="rubric">Notes</p>
-<p>For 3D data if filename has no &#8216;%&#8217; formatter then the data is written as a 
-3D NMRPipe data stream.  When the &#8216;%&#8217; formatter is provided the data is 
+<p>For 3D data if filename has no &#8216;%&#8217; formatter then the data is written as a
+3D NMRPipe data stream.  When the &#8216;%&#8217; formatter is provided the data is
 written out as a standard NMRPipe 3D multi-file 3D.</p>
 <p>For 4D data, filename can have one, two or no &#8216;%&#8217; formatters resulting in
-a single index file (test%03d.ft), two index file(test%02d%03d.ft), or 
+a single index file (test%03d.ft), two index file(test%02d%03d.ft), or
 one file data stream (test.ft4).</p>
 <p>dic[&#8220;FDPIPEFLAG&#8221;] is not changed or checked when writing, please check
 that this value is 0.0 for standard non-data stream files, and 1.0 for data

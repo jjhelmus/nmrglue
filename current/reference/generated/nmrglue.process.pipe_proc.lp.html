@@ -65,7 +65,7 @@
 <h1>nmrglue.process.pipe_proc.lp<a class="headerlink" href="#nmrglue-process-pipe-proc-lp" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.pipe_proc.lp">
-<tt class="descclassname">nmrglue.process.pipe_proc.</tt><tt class="descname">lp</tt><big>(</big><em>dic</em>, <em>data</em>, <em>pred='default'</em>, <em>x1='default'</em>, <em>xn='default'</em>, <em>ord=8</em>, <em>mode='f'</em>, <em>append='after'</em>, <em>bad_roots='auto'</em>, <em>mirror=None</em>, <em>fix_mode='on'</em>, <em>method='tls'</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/pipe_proc.py#L2915"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.pipe_proc.lp" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.process.pipe_proc.</tt><tt class="descname">lp</tt><big>(</big><em>dic</em>, <em>data</em>, <em>pred='default'</em>, <em>x1='default'</em>, <em>xn='default'</em>, <em>ord=8</em>, <em>mode='f'</em>, <em>append='after'</em>, <em>bad_roots='auto'</em>, <em>mirror=None</em>, <em>fix_mode='on'</em>, <em>method='tls'</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/pipe_proc.py#L2979"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.pipe_proc.lp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Linear Prediction</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -86,8 +86,8 @@ forward prediction, 1 for backward prediction</p>
 </div></blockquote>
 <p><strong>x1</strong> : int or &#8216;default&#8217;</p>
 <blockquote>
-<div><p>First point in 1D vector to use to extract LP filter. &#8216;default&#8217; will use
-the first or last point depending on the mode.</p>
+<div><p>First point in 1D vector to use to extract LP filter. &#8216;default&#8217; will
+use the first or last point depending on the mode.</p>
 </div></blockquote>
 <p><strong>xn</strong> : int or &#8216;default&#8217;</p>
 <blockquote>
@@ -124,7 +124,7 @@ data.</p>
 </div></blockquote>
 <p><strong>fix_mode</strong> : {&#8216;on&#8217;, &#8216;reflect&#8217;}</p>
 <blockquote>
-<div><p>Method used to stabilize bad roots, &#8216;on&#8217; moves bad roots onto the unit 
+<div><p>Method used to stabilize bad roots, &#8216;on&#8217; moves bad roots onto the unit
 circle, &#8216;reflect&#8217; reflect bad roots across the unit circle.</p>
 </div></blockquote>
 <p><strong>method</strong> : {&#8216;svd&#8217;, &#8216;qr&#8217;, &#8216;choleskey&#8217;, &#8216;tls&#8217;}</p>

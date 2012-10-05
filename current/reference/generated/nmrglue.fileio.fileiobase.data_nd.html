@@ -65,7 +65,7 @@
 <h1>nmrglue.fileio.fileiobase.data_nd<a class="headerlink" href="#nmrglue-fileio-fileiobase-data-nd" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="nmrglue.fileio.fileiobase.data_nd">
-<em class="property">class </em><tt class="descclassname">nmrglue.fileio.fileiobase.</tt><tt class="descname">data_nd</tt><big>(</big><em>order</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/fileiobase.py#L477"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.fileiobase.data_nd" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">nmrglue.fileio.fileiobase.</tt><tt class="descname">data_nd</tt><big>(</big><em>order</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/fileiobase.py#L491"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.fileiobase.data_nd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Base class for building objects which emulate ndarray objects without
 loading data into memory.  These object have the following properties:</p>
 <ul class="simple">
@@ -94,11 +94,12 @@ methods:</p>
 <dl class="docutils">
 <dt>__fgetitem__ which takes a well formatted tuple of slices and returns a</dt>
 <dd>ndarray object with the selected data</dd>
+<dt>__fcopy__(self, order) which created a copy of the object with the new</dt>
+<dd>order</dd>
 </dl>
-<p>__fcopy__(self, order) which created a copy of the object with the new order</p>
 <dl class="method">
 <dt id="nmrglue.fileio.fileiobase.data_nd.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>order</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/fileiobase.py#L513"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.fileiobase.data_nd.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>order</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/fileiobase.py#L528"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.fileiobase.data_nd.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <p class="rubric">Methods</p>

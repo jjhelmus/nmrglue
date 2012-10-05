@@ -65,8 +65,8 @@
 <h1>nmrglue.fileio.varian.read_fid_ntraces<a class="headerlink" href="#nmrglue-fileio-varian-read-fid-ntraces" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.fileio.varian.read_fid_ntraces">
-<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">read_fid_ntraces</tt><big>(</big><em>filename</em>, <em>shape=None</em>, <em>torder='flat'</em>, <em>as_2d=False</em>, <em>read_blockhead=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/varian.py#L763"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.varian.read_fid_ntraces" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read a Agilent/Varian binary (fid) file possibility having multiple 
+<tt class="descclassname">nmrglue.fileio.varian.</tt><tt class="descname">read_fid_ntraces</tt><big>(</big><em>filename</em>, <em>shape=None</em>, <em>torder='flat'</em>, <em>as_2d=False</em>, <em>read_blockhead=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/varian.py#L778"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.varian.read_fid_ntraces" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a Agilent/Varian binary (fid) file possibility having multiple
 traces per block.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -78,7 +78,7 @@ traces per block.</p>
 </div></blockquote>
 <p><strong>shape</strong> : tuple of ints, optional</p>
 <blockquote>
-<div><p>Shape of the binary data. If not provided data is returned as a 2D 
+<div><p>Shape of the binary data. If not provided data is returned as a 2D
 array. Required if more than one trace per block (non-standard).</p>
 </div></blockquote>
 <p><strong>torder</strong> : {&#8216;f&#8217;, &#8216;n&#8217;, &#8216;o&#8217;}</p>
@@ -92,7 +92,7 @@ parameters.</p>
 </div></blockquote>
 <p><strong>read_blockhead</strong> : bool, optional</p>
 <blockquote>
-<div><p>True to read the Agilent/Varian blockheaders(s) into the returned 
+<div><p>True to read the Agilent/Varian blockheaders(s) into the returned
 dictionary. False ignores them.</p>
 </div></blockquote>
 </td>
@@ -111,13 +111,12 @@ dictionary. False ignores them.</p>
 </table>
 <div class="admonition-see-also admonition seealso">
 <p class="first admonition-title">See also</p>
-<dl class="docutils">
+<dl class="last docutils">
 <dt><a class="reference internal" href="nmrglue.fileio.varian.read_fid.html#nmrglue.fileio.varian.read_fid" title="nmrglue.fileio.varian.read_fid"><tt class="xref py py-obj docutils literal"><span class="pre">read_fid</span></tt></a></dt>
 <dd>Read a Agilent/Varian binary file with one trace per block.</dd>
 <dt><a class="reference internal" href="nmrglue.fileio.varian.read_fid_lowmem.html#nmrglue.fileio.varian.read_fid_lowmem" title="nmrglue.fileio.varian.read_fid_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">read_fid_lowmem</span></tt></a></dt>
-<dd>Read a Agilent/Varian binary file with one trace per block</dd>
+<dd>Read a Agilent/Varian binary file with one trace per block using minimal amounts of memory.</dd>
 </dl>
-<p class="last"><tt class="xref py py-obj docutils literal"><span class="pre">using</span></tt></p>
 </div>
 </dd></dl>
 

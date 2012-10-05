@@ -65,27 +65,27 @@
 <h1>nmrglue.process.proc_base.fft<a class="headerlink" href="#nmrglue-process-proc-base-fft" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_base.fft">
-<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">fft</tt><big>(</big><em>data</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L509"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.fft" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">fft</tt><big>(</big><em>data</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L530"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.fft" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fourier transform, NMR ordering of results.</p>
 <p>There are a number of definitions of the discrete Fourier transform
 the version used in this function is as follows.</p>
 <div class="math">
 \[A_k = \sum_{m=0}^{n-1} a_m \exp\left\{-2\pi i{mk \over n}
-\right\}\qquad k = 0,\ldots,n-1. \]</div>
+\right\}\qquad k = 0,\ldots,n-1.\]</div>
 <p>With the inverse DFT in the <a class="reference internal" href="nmrglue.process.proc_base.ifft.html#nmrglue.process.proc_base.ifft" title="nmrglue.process.proc_base.ifft"><tt class="xref py py-func docutils literal"><span class="pre">ifft()</span></tt></a> function defined as follows.</p>
 <div class="math">
 \[a_m = \frac{1}{n} \sum_{k=0}^{n-1} A_k \exp \left\{2\pi
 i{mk\over n} \right\}\qquad n = 0,\ldots,n-1.\]</div>
 <p>Two alternative definitions are also supported by nmrglue. One in
 which both the sum in the fft and ifft are multiplied by
-<span class="math">\(\frac{1}{\sqrt{n}}\)</span> which results in a pair of transforms in 
+<span class="math">\(\frac{1}{\sqrt{n}}\)</span> which results in a pair of transforms in
 which the total power contained in the the signals before and after the
-transforms are equal.  This is the type transforms used in the 
-Rowland NMR Toolkit. This type of transform is performed by the 
+transforms are equal.  This is the type transforms used in the
+Rowland NMR Toolkit. This type of transform is performed by the
 <a class="reference internal" href="nmrglue.process.proc_base.fft_norm.html#nmrglue.process.proc_base.fft_norm" title="nmrglue.process.proc_base.fft_norm"><tt class="xref py py-func docutils literal"><span class="pre">fft_norm()</span></tt></a> and <a class="reference internal" href="nmrglue.process.proc_base.ifft_norm.html#nmrglue.process.proc_base.ifft_norm" title="nmrglue.process.proc_base.ifft_norm"><tt class="xref py py-func docutils literal"><span class="pre">ifft_norm()</span></tt></a> functions.</p>
 <p>The second definition changes the sign of the exponent to be positive while
 keeping the normalization factors the same.  This type of transform is
-performed by the NMRPipe processing package and the functions 
+performed by the NMRPipe processing package and the functions
 <a class="reference internal" href="nmrglue.process.proc_base.fft_positive.html#nmrglue.process.proc_base.fft_positive" title="nmrglue.process.proc_base.fft_positive"><tt class="xref py py-func docutils literal"><span class="pre">fft_positive()</span></tt></a> and <a class="reference internal" href="nmrglue.process.proc_base.ifft_positive.html#nmrglue.process.proc_base.ifft_positive" title="nmrglue.process.proc_base.ifft_positive"><tt class="xref py py-func docutils literal"><span class="pre">ifft_positive()</span></tt></a>.</p>
 <p>All of the Fourier transforms perfromed by nmrglue return results in &#8216;NMR
 order&#8217;, in which the two half of the spectrum have been swapped and
