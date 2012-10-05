@@ -2,13 +2,14 @@
 Helper functions for lineshape fitting.
 """
 
-# bound functions
 
+# bound functions
 def delta(v, d):
     """
     Limits of v +/- d for array v and d.
     """
     return zip(v - d, v + d)
+
 
 def limit(vmin, vmax, npeaks):
     """
@@ -16,12 +17,14 @@ def limit(vmin, vmax, npeaks):
     """
     return [(vmin, vmax)] * npeaks
 
+
 def scale_params(rec, prefix, first, last):
     """
-    scale lineshape parameters in rec with name prefixX with X from from 
+    scale lineshape parameters in rec with name prefixX with X from from
     first to last (inclusive)
     """
     return [rec[prefix + str(z)] for z in range(first, last + 1)]
+
 
 def no_limits(nparams, npeaks):
     """
@@ -29,23 +32,23 @@ def no_limits(nparams, npeaks):
     """
     return [[(None, None)] * npeaks] * nparams
 
+
 def no_limits_amp(npeaks):
     """
     No amplitude limits for npeaks
     """
     return [(None, None)] * npeaks
 
-# misc
 
+# misc
 def super_zip(l):
     """
-    Zip a list after zipping each element.  
-    
+    Zip a list after zipping each element.
+
     Useful for lineshape parameter and bounds.
     """
     return zip(*[zip(*i) for i in l])
 
-# misc
 
 def scale_columns(prefix, first, last):
     """
@@ -53,5 +56,3 @@ def scale_columns(prefix, first, last):
     from first to last (inclusive)
     """
     return [prefix + str(i) for i in range(first, last + 1)]
-
-

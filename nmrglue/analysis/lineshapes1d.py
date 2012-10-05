@@ -11,14 +11,15 @@ pi = np.pi
 # 1D lineshape simulator functions #
 ####################################
 
+
 # Gaussian (normal) lineshape simulator functions
 def sim_gauss_sigma(x, x0, sigma):
     """
-    Simulate a Gaussian (normal) lineshape with unit height at the center. 
-    
+    Simulate a Gaussian (normal) lineshape with unit height at the center.
+
     Simulate discrete points of a continuous Gaussian (normal) distribution
     with unit height at the center.  Sigma (the standard deviation of the
-    distribution) is used as the distribution scale parameter. 
+    distribution) is used as the distribution scale parameter.
 
     Functional form:
 
@@ -44,10 +45,10 @@ def sim_gauss_sigma(x, x0, sigma):
 
 def sim_gauss_fwhm(x, x0, fwhm):
     """
-    Simulate a Gaussian (normal) lineshape with unit height at the center. 
-    
+    Simulate a Gaussian (normal) lineshape with unit height at the center.
+
     Simulate discrete points of a continuous Gaussian (normal) distribution
-    with unit height at the center.  FWHM (full-width at half-maximum ) is 
+    with unit height at the center.  FWHM (full-width at half-maximum ) is
     used as the distribution scale parameter.
 
     Functional form:
@@ -62,18 +63,19 @@ def sim_gauss_fwhm(x, x0, fwhm):
         Center (mean) of Gaussian distribution.
     fwhm : float
         Full-width at half-maximum of distribution.
- 
+
     Returns
     -------
     f : ndarray
         Distribution evaluated at points in x.
 
     """
-    return np.exp(-(x-x0)**2 * 4 * np.log(2) / (fwhm**2))
+    return np.exp(-(x - x0) ** 2 * 4 * np.log(2) / (fwhm ** 2))
+
 
 # Lorentzian lineshape simulator functions
 def sim_lorentz_gamma(x, x0, gamma):
-    """ 
+    """
     Simulate a Lorentzian lineshape with unit height at the center.
 
     Simulates discrete points of the continuous Cauchy-Lorentz (Breit-Wigner)
@@ -82,8 +84,8 @@ def sim_lorentz_gamma(x, x0, gamma):
 
     Functional form:
 
-        f(x; x0, gamma) = g ^ 2 / ((x-x0) ^ 2 + g ^ 2) 
-    
+        f(x; x0, gamma) = g ^ 2 / ((x-x0) ^ 2 + g ^ 2)
+
     Parameters
     ----------
     x : ndarray
@@ -97,12 +99,13 @@ def sim_lorentz_gamma(x, x0, gamma):
     -------
     f : ndarray
         Distribution evaluated at points in x.
- 
+
     """
     return gamma ** 2 / (gamma ** 2 + (x - x0) ** 2)
 
+
 def sim_lorentz_fwhm(x, x0, fwhm):
-    """ 
+    """
     Simulate a Lorentzian lineshape with unit height at the center.
 
     Simulates discrete points of the continuous Cauchy-Lorentz (Breit-Wigner)
@@ -111,33 +114,33 @@ def sim_lorentz_fwhm(x, x0, fwhm):
 
     Functional form:
 
-        f(x; x0, fwhm) = (0.5 * fwhm)^2 / ((x-x0)^2 + (0.5 * fwhm)^2) 
-    
+        f(x; x0, fwhm) = (0.5 * fwhm)^2 / ((x-x0)^2 + (0.5 * fwhm)^2)
+
     Parameters
-    ----------        
+    ----------
     x : ndarray
         Array of values at which to evaluate distribution.
     x0 : float
         Center of the distribution.
     fwhm : float
         Full-width at half-maximum of distribution.
- 
+
     Returns
     -------
     f : ndarray
         Distribution evaluated at points in x.
- 
+
     """
     return (0.5 * fwhm) ** 2 / ((0.5 * fwhm) ** 2 + (x - x0) ** 2)
 
-# Voigt lineshape simulator functions
 
-def sim_voigt_fwhm(x, x0, fwhm_g, fwhm_l): 
+# Voigt lineshape simulator functions
+def sim_voigt_fwhm(x, x0, fwhm_g, fwhm_l):
     """
     Simulate a Voigt lineshape with unit height at the center.
 
     Simulates discrete points of the continuous Voigt profile with unit height
-    at the center.  Full-width at half-maximum (FWHM) of each component are 
+    at the center.  Full-width at half-maximum (FWHM) of each component are
     used as the scale parameters for the Gaussian and Lorentzian distribution.
 
     Functional Form:
@@ -145,7 +148,7 @@ def sim_voigt_fwhm(x, x0, fwhm_g, fwhm_l):
         f(x; x0, fwhm_g, fwhm_l) = Re[w(z)] / Re[(w(z0)]
 
     Where:
-        
+
         z = sqrt(ln(2)) * (2 * (x - x0) + 1j * fwhm_l) / fwhm_g
         z0 = sqrt(ln(2)) * 1j * fwhm_l / fwhm_g
         w(z) is the complex error function of z
@@ -165,11 +168,12 @@ def sim_voigt_fwhm(x, x0, fwhm_g, fwhm_l):
     -------
     f : ndarray
         Distribution evaluated at points in x.
- 
+
     """
     z = np.sqrt(np.log(2)) * (2.0 * (x - x0) + 1.j * fwhm_l) / fwhm_g
-    z0 = np.sqrt(np.log(2)) * 1.j *  fwhm_l / fwhm_g
+    z0 = np.sqrt(np.log(2)) * 1.j * fwhm_l / fwhm_g
     return scipy.special.wofz(z).real / scipy.special.wofz(z0).real
+
 
 def sim_voigt_sigmagamma(x, x0, sigma, gamma):
     """
@@ -184,7 +188,7 @@ def sim_voigt_sigmagamma(x, x0, sigma, gamma):
         f(x; x0, sigma, gamma) = Re[w(z)] / Re[(w(z0)]
 
     Where:
-        
+
         z = ((x - x0) + 1j * gamma) / (sigma * sqrt(2))
         z0 = (1j * gamma) / (sigma * sqrt(2))
         w(z) is the complex error function of z
@@ -200,37 +204,37 @@ def sim_voigt_sigmagamma(x, x0, sigma, gamma):
         distribution.
     gamma : float
         Lorentzian scale component of Voigt profile.  Half-width at
-        half-maximum of the Lorentzian component. 
+        half-maximum of the Lorentzian component.
 
     Returns
     -------
     f : ndarray
         Distribution evaluated at points in x.
- 
+
     """
-    z = (x - x0 + 1j * gamma) / ( sigma * np.sqrt(2))
+    z = (x - x0 + 1j * gamma) / (sigma * np.sqrt(2))
     z0 = (1j * gamma) / (sigma * np.sqrt(2))
     return scipy.special.wofz(z).real / scipy.special.wofz(z0).real
 
-# Pseudo Voigt linehspae simulator functions
 
-def sim_pvoigt_fwhm(x, x0, fwhm, eta): 
+# Pseudo Voigt linehspae simulator functions
+def sim_pvoigt_fwhm(x, x0, fwhm, eta):
     """
     Simulate a Pseudo Voigt lineshape with unit height at the center.
 
-    Simulates discrete points of the continuous Pseudo Voigt profile with unit 
+    Simulates discrete points of the continuous Pseudo Voigt profile with unit
     heigh at the center.  Full-width at half-maximum (FWHM) of the Gaussian and
     Lorentzian distribution are used as the scale parameter as well as eta, the
-    mixing factor.  
+    mixing factor.
 
     Functional Form:
 
         f(x; x0, fwhm, eta) = (1-eta) * G(x; x0, fwhm) + eta * L(x; x0, fwhm)
 
     Where:
-        
+
         G(x; x0, fwhm) = exp( -(x-x0)^2 * 4 * ln(2)  / (fwhm^2))
-        L(x; x0, fwhm) = (0.5 * fwhm)^2 / ((x-x0)^2 + (0.5 * fwhm)^2) 
+        L(x; x0, fwhm) = (0.5 * fwhm)^2 / ((x-x0)^2 + (0.5 * fwhm)^2)
 
     Parameters
     ----------
@@ -240,14 +244,14 @@ def sim_pvoigt_fwhm(x, x0, fwhm, eta):
         Center of the distribution.
     fwhm : float
         Full-width at half-maximum of the Pseudo Voigt profile.
-    eta : float  
+    eta : float
         Lorentzian/Gaussian mixing parameter.
 
     Returns
     -------
     f : ndarray
         Distribution evaluated at points in x.
- 
+
     """
     G = sim_gauss_fwhm(x, x0, fwhm)
     L = sim_lorentz_fwhm(x, x0, fwhm)
@@ -262,21 +266,20 @@ def sim_pvoigt_fwhm(x, x0, fwhm, eta):
 # classes should have the following 6 methods:
 
 # sim(self, M, p)   - Using parameters in p simulate a lineshape of length M.
-# nparams(self, M)  - Determind the number of parameters needed for a length M 
+# nparams(self, M)  - Determind the number of parameters needed for a length M
 #                     lineshape.
-# guessp(self, sig) - Estimate parameters of signal sig, these should be 
-#                     parameter which might be used for initial least-squares 
+# guessp(self, sig) - Estimate parameters of signal sig, these should be
+#                     parameter which might be used for initial least-squares
 #                     fitting.
 # pnames(self, M)   - Give names to the parameters of a lineshape of length M.
 #
 # add_edge(self, p, (min,max))  - take into account region limits at min,max
 #                                 for parameters in p.
-# remove_edge(self, p, (min,max))   - remove the effects of region limits 
+# remove_edge(self, p, (min,max))   - remove the effects of region limits
 #                                   min, max for parameters in p.
 
 
 # location-scale lineshapes
-
 class location_scale():
     """
     Base class for building a 2 parameter location scale lineshape class.
@@ -294,11 +297,12 @@ class location_scale():
             return p
         return p[0] + min, p[1]
 
+
 class gauss_sigma(location_scale):
     """
     Gaussian (normal) lineshape class with unit height at the mean and sigma
-    scale parameter. See :py:func:`sim_gauss_sigma` for functional form and 
-    parameters. 
+    scale parameter. See :py:func:`sim_gauss_sigma` for functional form and
+    parameters.
     """
     name = "guassian"
 
@@ -314,11 +318,12 @@ class gauss_sigma(location_scale):
     def pnames(self, M):
         return ("x0", "sigma")
 
+
 class gauss_fwhm(location_scale):
     """
     Gaussian (normal) lineshape class with unit height at the mean and fwhm
-    scale parameter. See :py:func:`sim_gauss_fwhm` for functional form and 
-    parameters. 
+    scale parameter. See :py:func:`sim_gauss_fwhm` for functional form and
+    parameters.
     """
     name = "guassian"
 
@@ -334,10 +339,11 @@ class gauss_fwhm(location_scale):
     def pnames(self, M):
         return ("x0", "fwhm")
 
+
 class lorentz_gamma(location_scale):
     """
     Lorentzian lineshape class with unit height at the center and gamma scale
-    parameter.  See :py:func:`sim_lorentz_gamma` for functional form and 
+    parameter.  See :py:func:`sim_lorentz_gamma` for functional form and
     parameters.
     """
     name = "lorentz"
@@ -354,10 +360,11 @@ class lorentz_gamma(location_scale):
     def pnames(self, M):
         return("x0", "gamma")
 
+
 class lorentz_fwhm(location_scale):
     """
     Lorentzian lineshape class with unit height at the center and gamma scale
-    parameter.  See :py:func:`sim_lorentz_fwhm` for functional form and 
+    parameter.  See :py:func:`sim_lorentz_fwhm` for functional form and
     parameters.
     """
     name = "lorentz"
@@ -374,11 +381,11 @@ class lorentz_fwhm(location_scale):
     def pnames(self, M):
         return("x0", "fwhm")
 
-# Voigt (location, 2 scale-like parameters) lineshapes. 
 
+# Voigt (location, 2 scale-like parameters) lineshapes.
 class location_2params():
     """
-    Base Class for building a 3 parameter location, scale, other lineshape 
+    Base Class for building a 3 parameter location, scale, other lineshape
     classes.
     """
     def nparam(self, M):
@@ -394,10 +401,11 @@ class location_2params():
             return p
         return p[0] + min, p[1]
 
+
 class voigt_fwhm(location_2params):
     """
-    Voigt lineshape class with unit height at the center and full-width 
-    half-maximum scale parameters.  See :py:func:`sim_voigt_fwhm` for 
+    Voigt lineshape class with unit height at the center and full-width
+    half-maximum scale parameters.  See :py:func:`sim_voigt_fwhm` for
     functional form and parameters.
     """
     name = "voigt"
@@ -406,18 +414,19 @@ class voigt_fwhm(location_2params):
         x = np.arange(M)
         x0, fwhm_g, fwhm_l = p
         return sim_voigt_fwhm(x, x0, fwhm_g, fwhm_l)
-    
+
     def guessp(self, sig):
         c, fwhm = center_fwhm(sig)
-        return (c, fwhm*0.5, fwhm*0.5)
+        return (c, fwhm * 0.5, fwhm * 0.5)
 
     def pnames(self, M):
         return ("x0", "fwhm_gauss", "fwhm_lorentz")
 
+
 class voigt_sigmagamma(location_2params):
     """
     Voigt lineshape class with unit height at the center and sigma, gamma scale
-    parameters.  See :py:func:`sim_voigt_sigmagamma` for functional form and 
+    parameters.  See :py:func:`sim_voigt_sigmagamma` for functional form and
     parameters.
     """
     name = "voigt"
@@ -426,18 +435,19 @@ class voigt_sigmagamma(location_2params):
         x = np.arange(M)
         x0, sigma, gamma = p
         return sim_voigt_sigmagamma(x, x0, sigma, gamma)
-    
+
     def guessp(self, sig):
         c, fwhm = center_fwhm(sig)
-        return (c, fwhm/2.35482004503 * 0.5, fwhm * 0.5 * 0.5)
+        return (c, fwhm / 2.35482004503 * 0.5, fwhm * 0.5 * 0.5)
 
     def pnames(self, M):
         return ("x0", "fwhm_gauss", "fwhm_lorentz")
 
+
 class pvoigt_fwhm(location_2params):
     """
-    Pseudo-Voigt lineshape class with unit height at the center and full-width 
-    half-maximum scale parameter.  See :py:func:`sim_pvoigt_fwhm` for 
+    Pseudo-Voigt lineshape class with unit height at the center and full-width
+    half-maximum scale parameter.  See :py:func:`sim_pvoigt_fwhm` for
     functional form and parameters.
     """
     name = "pvoigt"
@@ -446,13 +456,14 @@ class pvoigt_fwhm(location_2params):
         x = np.arange(M)
         x0, fwhm, eta = p
         return sim_pvoigt_fwhm(x, x0, fwhm, eta)
-    
+
     def guessp(self, sig):
         c, fwhm = center_fwhm(sig)
         return (c, fwhm, 0.5)
 
     def pnames(self, M):
         return ("x0", "fwhm", "eta")
+
 
 # misc lineshape classes
 class scale():
@@ -464,7 +475,7 @@ class scale():
 
     """
     name = "scale"
-    
+
     def sim(self, M, p):
         l = np.empty(M, dtype='float')
         l[0] = 1
@@ -479,14 +490,14 @@ class scale():
 
     def pnames(self, M):
         return tuple(["a%i" % i for i in range(1, M)])
-    
+
     def add_edge(self, p, (min, max)):
         return p
 
     def remove_edge(self, p, (min, max)):
         return p
 
-# lineshape convience 
+# lineshape convience
 gauss = gauss_fwhm
 lorentz = lorentz_fwhm
 voigt = voigt_fwhm
@@ -495,26 +506,27 @@ pvoigt = pvoigt_fwhm
 # lineshape class router
 
 ls_table = {
-    "gauss"  : gauss,
-    "g"      : gauss,
+    "gauss": gauss,
+    "g": gauss,
     "lorentz": lorentz,
-    "l"      : lorentz,
-    "scale"  : scale,
-    "s"      : scale,
-    "voigt"  : voigt,
-    "v"      : voigt,
-    "pvoigt" : pvoigt,
-    "pv"     : pvoigt
+    "l": lorentz,
+    "scale": scale,
+    "s": scale,
+    "voigt": voigt,
+    "v": voigt,
+    "pvoigt": pvoigt,
+    "pv": pvoigt
 }
 
+
 def ls_str2class(l):
-    if ls_table.has_key(l):
+    if l in ls_table:
         return ls_table[l]()
     else:
-        raise ValueError("Unknown lineshape %s",(l))
+        raise ValueError("Unknown lineshape %s", (l))
+
 
 # basic lineshape analysis
-
 def center_fwhm(signal):
     """
     Estimate the center and full-width half max of a signal.
@@ -523,7 +535,7 @@ def center_fwhm(signal):
     if -signal.min() > signal.max():
         signal = -signal
 
-    # the center is the highest point in the signal 
+    # the center is the highest point in the signal
     center = signal.argmax()
 
     # find the points that bracket the first and last crossing of the
@@ -540,22 +552,22 @@ def center_fwhm(signal):
     # solve hmax = mx+b => x = y-b/m
     # for two points x_0 and x_1 this becomes y = (hmax-x_0)/(x_1-x_0)
     # to this value add the index of x_0 to get the location of the half-max.
-    
+
     # left side
     if l_idx == 0:
         left = l_idx    # this is a bad guess but the best we can do
     else:
-        x_0, x_1 = signal[l_idx-1], signal[l_idx]
-        left = l_idx - 1 + (hmax-x_0) / (x_1 - x_0)
+        x_0, x_1 = signal[l_idx - 1], signal[l_idx]
+        left = l_idx - 1 + (hmax - x_0) / (x_1 - x_0)
 
     # right side
     if r_idx == len(signal) - 1:
         right = r_idx   # this is a poor guess but the best we can do
     else:
-        x_0, x_1 = signal[r_idx], signal[r_idx+1]
+        x_0, x_1 = signal[r_idx], signal[r_idx + 1]
         right = r_idx + (hmax - x_0) / (x_1 - x_0)
 
-    return center, right-left
+    return center, right - left
 
 
 def center_fwhm_bymoments(signal):

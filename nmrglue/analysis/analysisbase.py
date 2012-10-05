@@ -7,11 +7,12 @@ import numpy as np
 
 pi = np.pi
 
+
 # helper functions
 def neighbors(pt, shape, structure):
     """
     Generate a list of all neighbors to a point.
-    
+
     Parameters
     ----------
     pt : tuple of ints
@@ -30,10 +31,10 @@ def neighbors(pt, shape, structure):
     """
     # set middle of structure to False
     s = np.copy(structure)  # copy structure
-    middle = [int(np.floor(i / 2.)) for i in s.shape] # find middle
+    middle = [int(np.floor(i / 2.)) for i in s.shape]  # find middle
     s.flat[np.ravel_multi_index(middle, s.shape)] = False
     offsets = np.argwhere(s) - middle
-    
+
     # loop over the offset adding all valid points
     pts = []
     for offset in offsets:
@@ -42,8 +43,9 @@ def neighbors(pt, shape, structure):
             pts.append(tuple(npt))
     return pts
 
+
 def valid_pt(pt, shape):
-    """ 
+    """
     Determind if a point (indices) is valid for a given shaped
     """
     for i, j in zip(pt, shape):
@@ -55,12 +57,12 @@ def valid_pt(pt, shape):
 
 dimension_names = ['A', 'Z', 'Y', 'X']
 
-# utility functions
 
+# utility functions
 def find_limits(pts):
-    """ 
-    Find the limits which outline the provided list of points 
-    
+    """
+    Find the limits which outline the provided list of points
+
     Parameters
     ----------
     pts : list of int tuples
@@ -72,7 +74,7 @@ def find_limits(pts):
         Array of minimum indices: array([zmin, ymin, xmin]
     max : ndarray
         Array of maximum indices: array([zmin, ymin, xmin]
-    
+
     See Also
     --------
     limits2slice : Create a list of slices from min, max limits
@@ -81,12 +83,13 @@ def find_limits(pts):
     arr_pts = np.array(pts)
     return np.min(arr_pts, 0), np.max(arr_pts, 0)
 
+
 def limits2slice(limits):
-    """ 
+    """
     Create a set of slice objects given an array of min, max limits.
-    
+
     Parameters
-    ----------    
+    ----------
     limits: tuple, (ndarray, ndarray)
         Two tuple consisting of array of the minimum and maximum indices.
 
@@ -99,10 +102,11 @@ def limits2slice(limits):
     --------
     find_limits : Find the minimum and maximum limits from a list of points.
     slice2limits : Find a minimum and maximum limits for a list of slices.
-    
+
     """
     mins, maxs = limits
     return tuple([slice(i, j + 1) for i, j in zip(mins, maxs)])
+
 
 def slice2limits(slices):
     """
@@ -126,10 +130,11 @@ def slice2limits(slices):
     maxs = [s.stop - 1 for s in slices]
     return mins, maxs
 
+
 def squish(r, axis):
     """
     Squish array along an axis.
-    
+
     Determine the sum along all but one axis for an array.
 
     Parameters
@@ -150,22 +155,22 @@ def squish(r, axis):
     r = r.swapaxes(axis, N - 1)
 
     # sum along leading axis N-1 times
-    for i in range(N-1):
+    for i in range(N - 1):
         r = r.sum(0)
     return r
 
-# Windowing classes
 
+# Windowing classes
 class ndwindow(object):
-    """ 
+    """
     An N-dimensional iterator to slice arrays into windows.
 
     Given the shape of an array and a window size, an 'ndwindow' instance
-    iterators over tuples of slices which slice an the array into wsize 
-    sub-arrays.  At each iteration, the index of the center of the sub-array 
+    iterators over tuples of slices which slice an the array into wsize
+    sub-arrays.  At each iteration, the index of the center of the sub-array
     is incremented by one along the last dimension.  Array borders are ignored
     so the resulting sub-array can be smaller than wsize.  If wsize contains
-    even values the window is off center containing an additional point with 
+    even values the window is off center containing an additional point with
     lower index.
 
     Parameters
@@ -175,7 +180,7 @@ class ndwindow(object):
     wsize : tuple of ints
         Window/sub-array size. Size of the area to select from array.  This is
         the maximum size of the window.
-    
+
     Examples
     --------
 
@@ -219,15 +224,16 @@ class ndwindow(object):
         start = [max(0, i - j) for i, j in zip(center, self.sub)]
         stop = [i + j + 1 for i, j in zip(center, self.add)]
         return tuple([slice(x, y) for x, y in zip(start, stop)])
-    
+
     def __iter__(self):
         """ x.__iter__() <==> iter(x) """
         return self
 
+
 class ndwindow_index(object):
     """
-    An N-dimensional interator object which returns the index of the window 
-    center and a :py:class:`ndwindow` slice array.  See :py:class:`ndwindow` 
+    An N-dimensional interator object which returns the index of the window
+    center and a :py:class:`ndwindow` slice array.  See :py:class:`ndwindow`
     for additional documentation.
 
     This class is equivalent to:
@@ -256,32 +262,33 @@ class ndwindow_index(object):
         start = [max(0, i - j) for i, j in zip(center, self.sub)]
         stop = [i + j + 1 for i, j in zip(center, self.add)]
         return center, tuple([slice(x, y) for x, y in zip(start, stop)])
-    
+
     def __iter__(self):
         """ x.__iter__() <==> iter(x) """
         return self
+
 
 class ndwindow_inside(object):
     """
     An N-dimentional iterator to slice arrays into uniform size windows.
 
-    Given the shape of an array and a window size, an 'ndwindow_inside' 
-    instance iterators over tuples of slices which slice an the array into 
-    uniform size wsize windows/sub-arrays.  At each iteration, the index of 
-    the top left of the sub-array is incremented by one along the last 
+    Given the shape of an array and a window size, an 'ndwindow_inside'
+    instance iterators over tuples of slices which slice an the array into
+    uniform size wsize windows/sub-arrays.  At each iteration, the index of
+    the top left of the sub-array is incremented by one along the last
     dimension utill the resulting windows would extend past the array border.
     All sub-arrays are equal sized (wsize).
 
     Parameters
     ----------
-    size : tuple of ints 
+    size : tuple of ints
         Size of array to generate tuples of slices from.
     wsize : tuple of ints
         Size of the area to select from array (widow size).
 
     Examples
     --------
-    
+
     >>> a = np.arange(9).reshape(3,3)
     >>> for s in ndwindow_inside(a.shape,(2,2):
     ...     print a[s]
@@ -301,7 +308,7 @@ class ndwindow_inside(object):
     See Also
     --------
     ndwindow : Iterator over non-uniform windows.
-    ndwindow_inside_index : Iterator of a ndwindow_inside and the index of the 
+    ndwindow_inside_index : Iterator of a ndwindow_inside and the index of the
         window's top left point.
 
     """
@@ -309,26 +316,27 @@ class ndwindow_inside(object):
         """ Set up the object """
         if len(shape) != len(wsize):
             raise ValueError("shape and wsize do match match")
-        self.ndindex = np.ndindex(tuple(np.array(shape) - np.array(wsize) 
+        self.ndindex = np.ndindex(tuple(np.array(shape) - np.array(wsize)
                                     + 1))
         self.wsize = wsize
-    
+
     def next(self):
         """ x.next() -> the next value, or raise StopIteration """
         start = self.ndindex.next()
         stop = np.array(start) + np.array(self.wsize)
-        return tuple([slice(x , y) for x, y in zip(start, stop)])
-    
+        return tuple([slice(x, y) for x, y in zip(start, stop)])
+
     def __iter__(self):
         """ x.__iter__() <==> iter(x) """
         return self
 
+
 class ndwindow_inside_index(object):
     """
-    An N-dimensional interator object which returns the index of the window 
+    An N-dimensional interator object which returns the index of the window
     top-left and a :py:class:`ndwindow_inside` slice array.
 
-    Similar to :py:class:`ndwindow_index` but reports top left index of 
+    Similar to :py:class:`ndwindow_index` but reports top left index of
     window.
 
     See :py:class:`ndwindow_inside` and :py:class`ndwindow_index` for addition
@@ -339,16 +347,16 @@ class ndwindow_inside_index(object):
         " Set up the object """
         if len(shape) != len(wsize):
             raise ValueError("shape and wsize do match match")
-        self.ndindex = np.ndindex(tuple(np.array(shape) - np.array(wsize) + 
+        self.ndindex = np.ndindex(tuple(np.array(shape) - np.array(wsize) +
                                     1))
         self.wsize = wsize
-    
+
     def next(self):
         """ x.next() -> the next value, or raiseStopIteration """
         start = self.ndindex.next()
         stop = np.array(start) + np.array(self.wsize)
         return (start, tuple([slice(x, y) for x, y in zip(start, stop)]))
-    
+
     def __iter__(self):
         """ x.__iter__() <==> iter(x) """
         return self

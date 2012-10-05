@@ -7,15 +7,16 @@ from numpy import empty_like, sqrt, cos, sin, arcsin
 from scipy.optimize.minpack import _check_func
 from scipy.optimize import _minpack, leastsq
 
+
 def _internal2external_grad(xi, bounds):
-    """ 
-    Calculate the internal (unconstrained) to external (constained) 
+    """
+    Calculate the internal (unconstrained) to external (constained)
     parameter gradiants.
-    """ 
+    """
     grad = empty_like(xi)
     for i, (v, bound) in enumerate(zip(xi, bounds)):
         lower, upper = bound
-        if lower is None and upper is None: # No constraints
+        if lower is None and upper is None:  # No constraints
             grad[i] = 1.0
         elif upper is None:     # only lower bound
             grad[i] = v / sqrt(v * v + 1.)
@@ -25,38 +26,41 @@ def _internal2external_grad(xi, bounds):
             grad[i] = (upper - lower) * cos(v) / 2.
     return grad
 
+
 def _internal2external_func(bounds):
-    """ 
-    Make a function which converts between internal (unconstrained) and 
+    """
+    Make a function which converts between internal (unconstrained) and
     external (constrained) parameters.
     """
     ls = [_internal2external_lambda(b) for b in bounds]
-    
+
     def convert_i2e(xi):
         xe = empty_like(xi)
         xe[:] = [l(p) for l, p in zip(ls, xi)]
         return xe
-    
+
     return convert_i2e
-        
+
+
 def _internal2external_lambda(bound):
-    """ 
+    """
     Make a lambda function which converts a single internal (uncontrained)
     parameter to a external (constrained) parameter.
     """
     lower, upper = bound
-    
-    if lower is None and upper is None: # no constraints
+
+    if lower is None and upper is None:  # no constraints
         return lambda x: x
     elif upper is None:     # only lower bound
-        return lambda x: lower - 1. + sqrt( x * x + 1.)
+        return lambda x: lower - 1. + sqrt(x * x + 1.)
     elif lower is None:     # only upper bound
-        return lambda x: upper + 1. - sqrt( x * x + 1.)
+        return lambda x: upper + 1. - sqrt(x * x + 1.)
     else:
         return lambda x: lower + ((upper - lower) / 2.) * (sin(x) + 1.)
 
+
 def _external2internal_func(bounds):
-    """ 
+    """
     Make a function which converts between external (constrained) and
     internal (unconstrained) parameters.
     """
@@ -68,22 +72,24 @@ def _external2internal_func(bounds):
         return xi
 
     return convert_e2i
- 
+
+
 def _external2internal_lambda(bound):
-    """ 
+    """
     Make a lambda function which converts an single external (constrained)
     parameter to a internal (unconstrained) parameter.
     """
     lower, upper = bound
-    
-    if lower is None and upper is None: # no constraints
+
+    if lower is None and upper is None:  # no constraints
         return lambda x: x
     elif upper is None:     # only lower bound
-        return lambda x: sqrt((x - lower + 1.)**2 - 1)
+        return lambda x: sqrt((x - lower + 1.) ** 2 - 1)
     elif lower is None:     # only upper bound
-        return lambda x: sqrt((x - upper + 1.)**2 - 1)
+        return lambda x: sqrt((x - upper + 1.) ** 2 - 1)
     else:
         return lambda x: arcsin((2. * (x - lower) / (upper - lower)) - 1.)
+
 
 def leastsqbound(func, x0, args=(), bounds=None, Dfun=None, full_output=0,
             col_deriv=0, ftol=1.49012e-8, xtol=1.49012e-8,
@@ -192,9 +198,9 @@ def leastsqbound(func, x0, args=(), bounds=None, Dfun=None, full_output=0,
            min   sum((ydata - f(xdata, params))**2, axis=0)
          params
 
-    Contraints on the parameters are enforced using an internal parameter list 
+    Contraints on the parameters are enforced using an internal parameter list
     with appropiate transformations such that these internal parameters can be
-    optimized without constraints. The transfomation between a given internal 
+    optimized without constraints. The transfomation between a given internal
     parameter, p_i, and a external parameter, p_e, are as follows:
 
     With ``min`` and ``max`` bounds defined ::
@@ -212,15 +218,15 @@ def leastsqbound(func, x0, args=(), bounds=None, Dfun=None, full_output=0,
         p_i = sqrt((p_e - min + 1.)**2 - 1.)
         p_e = min - 1. + sqrt(p_i**2 + 1.)
 
-    These transfomations are used in the MINUIT package, and described in 
+    These transfomations are used in the MINUIT package, and described in
     detail in the section 1.3.1 of the MINUIT User's Guide.
 
     To Do
     -----
-    Currently the ``factor`` and ``diag`` parameters scale the 
+    Currently the ``factor`` and ``diag`` parameters scale the
     internal parameter list, but should scale the external parameter list.
 
-    The `qtf` vector in the infodic dictionary reflects internal parameter 
+    The `qtf` vector in the infodic dictionary reflects internal parameter
     list, it should be correct to reflect the external parameter list.
 
     References
@@ -230,9 +236,9 @@ def leastsqbound(func, x0, args=(), bounds=None, Dfun=None, full_output=0,
     """
     # use leastsq if no bounds are present
     if bounds is None:
-        return leastsq(func, x0, args, Dfun, full_output, col_deriv, 
+        return leastsq(func, x0, args, Dfun, full_output, col_deriv,
                         ftol, xtol, gtol, maxfev, epsfcn, factor, diag)
-    
+
     # create function which convert between internal and external parameters
     i2e = _internal2external_func(bounds)
     e2i = _external2internal_func(bounds)
@@ -247,14 +253,15 @@ def leastsqbound(func, x0, args=(), bounds=None, Dfun=None, full_output=0,
     m = _check_func('leastsq', 'func', func, x0, args, n)[0]
     if n > m:
         raise TypeError('Improper input: N=%s must not exceed M=%s' % (n, m))
-    
+
     # define a wrapped func which accept internal parameters, converts them
     # to external parameters and calls func
-    def wfunc(x, *args): return func(i2e(x), *args)
-    
+    def wfunc(x, *args):
+        return func(i2e(x), *args)
+
     if Dfun is None:
         if (maxfev == 0):
-            maxfev = 200*(n + 1)
+            maxfev = 200 * (n + 1)
         retval = _minpack._lmdif(wfunc, i0, args, full_output, ftol, xtol,
                 gtol, maxfev, epsfcn, factor, diag)
     else:
@@ -263,33 +270,36 @@ def leastsqbound(func, x0, args=(), bounds=None, Dfun=None, full_output=0,
         else:
             _check_func('leastsq', 'Dfun', Dfun, x0, args, n, (m, n))
         if (maxfev == 0):
-            maxfev = 100*(n + 1)
-        def wDfun(x, *args): return Dfun(i2e(x), *args) # wrapped Dfun
-        retval = _minpack._lmder(func, wDfun, i0, args, full_output, 
+            maxfev = 100 * (n + 1)
+
+        def wDfun(x, *args):  # wrapped Dfun
+            return Dfun(i2e(x), *args)
+
+        retval = _minpack._lmder(func, wDfun, i0, args, full_output,
                 col_deriv, ftol, xtol, gtol, maxfev, factor, diag)
 
-    errors = {0:["Improper input parameters.", TypeError],
-              1:["Both actual and predicted relative reductions "
+    errors = {0: ["Improper input parameters.", TypeError],
+              1: ["Both actual and predicted relative reductions "
                  "in the sum of squares\n  are at most %f" % ftol, None],
-              2:["The relative error between two consecutive "
+              2: ["The relative error between two consecutive "
                  "iterates is at most %f" % xtol, None],
-              3:["Both actual and predicted relative reductions in "
+              3: ["Both actual and predicted relative reductions in "
                  "the sum of squares\n  are at most %f and the "
                  "relative error between two consecutive "
-                 "iterates is at \n  most %f" % (ftol,xtol), None],
-              4:["The cosine of the angle between func(x) and any "
+                 "iterates is at \n  most %f" % (ftol, xtol), None],
+              4: ["The cosine of the angle between func(x) and any "
                  "column of the\n  Jacobian is at most %f in "
                  "absolute value" % gtol, None],
-              5:["Number of calls to function has reached "
+              5: ["Number of calls to function has reached "
                  "maxfev = %d." % maxfev, ValueError],
-              6:["ftol=%f is too small, no further reduction "
+              6: ["ftol=%f is too small, no further reduction "
                  "in the sum of squares\n  is possible.""" % ftol, ValueError],
-              7:["xtol=%f is too small, no further improvement in "
+              7: ["xtol=%f is too small, no further improvement in "
                  "the approximate\n  solution is possible." % xtol, ValueError],
-              8:["gtol=%f is too small, func(x) is orthogonal to the "
+              8: ["gtol=%f is too small, func(x) is orthogonal to the "
                  "columns of\n  the Jacobian to machine "
                  "precision." % gtol, ValueError],
-              'unknown':["Unknown error.", TypeError]}
+              'unknown': ["Unknown error.", TypeError]}
 
     info = retval[-1]    # The FORTRAN return value
 
@@ -304,11 +314,11 @@ def leastsqbound(func, x0, args=(), bounds=None, Dfun=None, full_output=0,
 
     mesg = errors[info][0]
     x = i2e(retval[0])  # internal params to external params
-    
+
     if full_output:
         # convert fjac from internal params to external
         grad = _internal2external_grad(retval[0], bounds)
-        retval[1]['fjac'] = (retval[1]['fjac'].T / take(grad, 
+        retval[1]['fjac'] = (retval[1]['fjac'].T / take(grad,
                             retval[1]['ipvt'] - 1)).T
         cov_x = None
         if info in [1, 2, 3, 4]:
