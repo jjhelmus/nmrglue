@@ -16,6 +16,7 @@ fileio modules
     fileiobase
     pipe
     rnmrtk
+    simpson
     sparky
     table
     varian

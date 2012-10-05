@@ -30,15 +30,14 @@ nmrglue
 
     filio
     -----
-    - finish writing, documenting and testing rnmrtk module.
     - lowmemory (in-place) writing of regions of data.
         Use data_nd functionality with put_slice.
     - ability to write slices to file in all modules (ala pipe.write_slice3d)
     - global iter3D object
+    - update simpson module (write functions, tests)
     - update glue module?
     - sparky_nd object? or dimension agnostic functions?
     - spinev module?
-    - simpson module
 
     gui? 
     ----
