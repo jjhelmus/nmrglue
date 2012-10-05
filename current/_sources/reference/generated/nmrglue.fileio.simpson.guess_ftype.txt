@@ -1,0 +1,6 @@
+nmrglue.fileio.simpson.guess_ftype
+==================================
+
+.. currentmodule:: nmrglue.fileio.simpson
+
+.. autofunction:: guess_ftype

@@ -1,0 +1,6 @@
+nmrglue.fileio.simpson.bytes2float_bitarray
+===========================================
+
+.. currentmodule:: nmrglue.fileio.simpson
+
+.. autofunction:: bytes2float_bitarray

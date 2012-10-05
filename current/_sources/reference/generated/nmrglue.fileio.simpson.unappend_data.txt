@@ -1,0 +1,6 @@
+nmrglue.fileio.simpson.unappend_data
+====================================
+
+.. currentmodule:: nmrglue.fileio.simpson
+
+.. autofunction:: unappend_data

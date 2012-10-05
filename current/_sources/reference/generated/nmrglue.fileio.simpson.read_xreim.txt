@@ -1,0 +1,6 @@
+nmrglue.fileio.simpson.read_xreim
+=================================
+
+.. currentmodule:: nmrglue.fileio.simpson
+
+.. autofunction:: read_xreim

@@ -1,0 +1,202 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nmrglue.fileio.simpson.read &mdash; nmrglue 0.4-dev documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.4-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.4-dev documentation" href="../../index.html" />
+    <link rel="up" title="nmrglue.simpson" href="../simpson.html" />
+    <link rel="next" title="nmrglue.fileio.simpson.read_text" href="nmrglue.fileio.simpson.read_text.html" />
+    <link rel="prev" title="nmrglue.fileio.simpson.bytes2float_bitarray" href="nmrglue.fileio.simpson.bytes2float_bitarray.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.fileio.simpson.read_text.html" title="nmrglue.fileio.simpson.read_text"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.fileio.simpson.bytes2float_bitarray.html" title="nmrglue.fileio.simpson.bytes2float_bitarray"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">nmrglue 0.4-dev documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../simpson.html" accesskey="U">nmrglue.simpson</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="nmrglue-fileio-simpson-read">
+<h1>nmrglue.fileio.simpson.read<a class="headerlink" href="#nmrglue-fileio-simpson-read" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="nmrglue.fileio.simpson.read">
+<tt class="descclassname">nmrglue.fileio.simpson.</tt><tt class="descname">read</tt><big>(</big><em>filename</em>, <em>ftype=None</em>, <em>ndim=None</em>, <em>NP=None</em>, <em>NI=None</em>, <em>spe=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/simpson.py#L10"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.simpson.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a SIMPSON file.</p>
+<p>Read a NMR data file saved using in a number of formats produced using
+the SIMPSON simulation program.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>Name of SIMPSON file to read data from.</p>
+</div></blockquote>
+<p><strong>ftype</strong> : {None, &#8216;TEXT&#8217;, &#8216;BINARY&#8217;, &#8216;XREIM&#8217;, &#8216;XYREIM&#8217;, &#8216;RAWBIN&#8217;}, optional</p>
+<blockquote>
+<div><p>A string indicating the type of SIMPSON file:</p>
+<p><tt class="docutils literal"><span class="pre">TEXT</span></tt> : SIMPSON text format, no fsave arguments.</p>
+<p><tt class="docutils literal"><span class="pre">BINARY</span></tt> : SIMPSON binary format, -binary fsave argument.</p>
+<p><tt class="docutils literal"><span class="pre">XREIM</span></tt> : Indexed 1D format, rows of frequency/time, real and
+imaginary parts of the data.  Saved with -xreim argument.</p>
+<p><tt class="docutils literal"><span class="pre">XYREIM</span></tt> : Indexed 2D format, rows of frequency/time (indirect
+dimension then direct dimension), real and imaginary parts of the
+data. Saved with -xyreim argument.</p>
+<p><tt class="docutils literal"><span class="pre">RAWBIN</span></tt> : Raw binary format.  Saved with -raw_bin argument.  ndim
+and spe must also be provided.  In addition if ndim is 2, NP and NI
+must be defined.</p>
+<p><tt class="docutils literal"><span class="pre">None</span></tt> : Automatically determine file type.  If this fails the file
+type should be implicitly provided.</p>
+<p>Other formats of files may be created by SIMPSON, but are not currently
+supported.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of spectra parameters.  For some file formats this may be
+empty.</p>
+</div></blockquote>
+<p><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Complex array of spectral data.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first"><strong>ndim</strong> : {None, 1, 2}, optional</p>
+<blockquote>
+<div><p>Dimensionality of the data in the file, only used when ftype is
+&#8220;RAWBIN&#8221;.</p>
+</div></blockquote>
+<p><strong>NP</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of points {R|I} in the direct dimension.  Only used when
+ftype is &#8220;RAWBIN&#8221; and ndim is 2.</p>
+</div></blockquote>
+<p><strong>NI</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of points in the indirect dimension.  Only used when ftype is
+&#8220;RAWBIN&#8221; and ndim is 2.</p>
+</div></blockquote>
+<p><strong>spe</strong> : bool, optional</p>
+<blockquote class="last">
+<div><p>True when the data is in the frequency domain, False for time domain
+data.  Only used when ftype is &#8220;RAWBIN&#8221;</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="nmrglue.fileio.simpson.bytes2float_bitarray.html"
+                        title="previous chapter">nmrglue.fileio.simpson.bytes2float_bitarray</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="nmrglue.fileio.simpson.read_text.html"
+                        title="next chapter">nmrglue.fileio.simpson.read_text</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/reference/generated/nmrglue.fileio.simpson.read.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.fileio.simpson.read_text.html" title="nmrglue.fileio.simpson.read_text"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.fileio.simpson.bytes2float_bitarray.html" title="nmrglue.fileio.simpson.bytes2float_bitarray"
+             >previous</a> |</li>
+        <li><a href="../../index.html">nmrglue 0.4-dev documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../simpson.html" >nmrglue.simpson</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2012, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

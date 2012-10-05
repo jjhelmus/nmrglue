@@ -1,0 +1,6 @@
+nmrglue.util.misc.isitemsimilar
+===============================
+
+.. currentmodule:: nmrglue.util.misc
+
+.. autofunction:: isitemsimilar

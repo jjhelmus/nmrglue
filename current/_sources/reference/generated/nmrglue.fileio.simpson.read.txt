@@ -1,0 +1,6 @@
+nmrglue.fileio.simpson.read
+===========================
+
+.. currentmodule:: nmrglue.fileio.simpson
+
+.. autofunction:: read
