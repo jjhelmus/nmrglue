@@ -863,7 +863,7 @@ def read_fid_ntraces(filename, shape=None, torder='flat', as_2d=False,
     return dic, data
 
 
-def write_fid(filename, dic, data, torder='flat', repack=False,
+def write_fid(filename, dic, data, torder='flat', repack=False, correct=True,
         overwrite=False):
     """
     Write a Agilent/Varian binary (fid) file.
@@ -880,6 +880,11 @@ def write_fid(filename, dic, data, torder='flat', repack=False,
         Trace ordering.  See :py:func:`read` for details.
     repack : bool, optional
         True to repack file and block headers. False leave as is.
+    correct : bool, optional
+        True (the default) will correct mis-sized np and nblocks values in dic.
+        False will write out the incorrect values to the file header and
+        record the full data set, the resulting file will not be readable by
+        nmrglue.
     overwrite : bool, optional
         Set True to overwrite an existing file, False will raise a Warning if
         the file exists.
@@ -901,11 +906,15 @@ def write_fid(filename, dic, data, torder='flat', repack=False,
     if data.ndim >= 3:
         data = order_data(data, torder)
 
-    # error checking
-    if data.shape[1] != (dic["np"] / 2):
-        warn("data and np size mismatch")   # XXX raise Error?
+    # verify data and dic shapes
+    if data.shape[1] != (dic['np'] / 2):
+        warn("data and np size mismatch")
+        if correct:
+            dic['np'] = int(data.shape[1] * 2)
     if data.shape[0] != dic["nblocks"]:
-        warn("data and block size mismatch")    # XXX raise Error?
+        warn("data and block size mismatch")
+        if correct:
+            dic['nblocks'] = int(data.shape[0])
 
     # open file for writing
     f = fileiobase.open_towrite(filename, overwrite=overwrite)
@@ -920,7 +929,7 @@ def write_fid(filename, dic, data, torder='flat', repack=False,
     dt = find_dtype(dic)
 
     if "blockheader" in dic and len(dic["blockheader"]) == data.shape[0]:
-        for i in xrange(dic["nblocks"]):
+        for i in xrange(data.shape[0]):
             if repack:
                 bh = dic2blockheader(repack_blockheader(dic["blockheader"][0]))
             else:
@@ -931,7 +940,7 @@ def write_fid(filename, dic, data, torder='flat', repack=False,
 
     else:   # create a generic blockheader
         bh = dic2blockheader(make_blockheader(dic, 1))
-        for i in xrange(dic["nblocks"]):
+        for i in xrange(data.shape[0]):
             bh[2] = int(i + 1)
             trace = np.array(interleave_data(data[i]), dtype=dt)
             put_block(f, trace, dic["nbheaders"], bh)
@@ -960,6 +969,11 @@ def write_fid_lowmem(filename, dic, data, torder='f', repack=False,
         Trace ordering.  See :py:func:`read` for details.
     repack : bool, optional
         True to repack file and block headers. False leave as is.
+    correct : bool, optional
+        True (the default) will correct mis-sized np and nblocks values in dic.
+        False will write out the incorrect values to the file header and
+        record the full data set, the resulting file will not be readable by
+        nmrglue.
     overwrite : bool, optional
         Set True to overwrite an existing file, False will raise a Warning if
         the file exists.
@@ -976,11 +990,16 @@ def write_fid_lowmem(filename, dic, data, torder='f', repack=False,
 
     t2i = torder2t2i(torder)
 
-    # error checking
+    # verify data and dic shapes
     if data.shape[-1] != (dic["np"] / 2):
-        warn("data and np size mismatch")   # XXX raise Error?
-    if reduce(lambda x, y: x * y, data.shape[:-1]) != dic["nblocks"]:
-        warn("data and block size mismatch")    # XXX raise Error?
+        warn("data and np size mismatch")
+        if correct:
+            dic['np'] = int(data.shape[1] * 2)
+    nblocks = int(reduce(lambda x, y: x * y, data.shape[:-1]))
+    if nblocks != dic["nblocks"]:
+        warn("data and block size mismatch")
+        if correct:
+            dic['nblocks'] = nblocks
 
     # open file for writing
     f = fileiobase.open_towrite(filename, overwrite=overwrite)
@@ -995,7 +1014,7 @@ def write_fid_lowmem(filename, dic, data, torder='f', repack=False,
     dt = find_dtype(dic)
 
     if "blockheader" in dic and len(dic["blockheader"]) == dic["nblocks"]:
-        for ntrace in xrange(dic["nblocks"]):
+        for ntrace in xrange(nblocks):
             if repack:
                 bh = dic2blockheader(repack_blockheader(dic["blockheader"][0]))
             else:
@@ -1007,7 +1026,7 @@ def write_fid_lowmem(filename, dic, data, torder='f', repack=False,
 
     else:   # create a generic blockheader
         bh = dic2blockheader(make_blockheader(dic, 1))
-        for ntrace in xrange(dic["nblocks"]):
+        for ntrace in xrange(nblocks):
             bh[2] = int(ntrace + 1)
             tup = t2i(data.shape[:-1], ntrace)
             trace = np.array(interleave_data(data[tup]), dtype=dt)
