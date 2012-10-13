@@ -169,7 +169,7 @@ def put_dic(f, dic, dataset="spectrum"):
 
 
 # glue_* objects
-class glue_2d(fileiobase.data_3d):
+class glue_2d(fileiobase.data_nd):
     """
     glue_2d emulates numpy.ndarray objects without loading data into memory
 
@@ -211,7 +211,7 @@ class glue_2d(fileiobase.data_3d):
         return self.Dataset[sY, sX]
 
 
-class glue_3d(fileiobase.data_3d):
+class glue_3d(fileiobase.data_nd):
     """
     glue_3d emulates numpy.ndarray objects without loading data into memory
 
