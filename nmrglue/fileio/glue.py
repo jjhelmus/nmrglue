@@ -65,7 +65,7 @@ def create_dic(udic):
     """
     Create a glue dictionary from a universal dictionary
     """
-    return dic
+    return udic
 
 
 # file reading/writing functions
