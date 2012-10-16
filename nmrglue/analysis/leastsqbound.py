@@ -86,7 +86,7 @@ def _external2internal_lambda(bound):
     elif upper is None:     # only lower bound
         return lambda x: sqrt((x - lower + 1.) ** 2 - 1)
     elif lower is None:     # only upper bound
-        return lambda x: sqrt((x - upper + 1.) ** 2 - 1)
+        return lambda x: sqrt((upper -x + 1.) ** 2 - 1)
     else:
         return lambda x: arcsin((2. * (x - lower) / (upper - lower)) - 1.)
 
@@ -210,7 +210,7 @@ def leastsqbound(func, x0, args=(), bounds=None, Dfun=None, full_output=0,
 
     With only ``max`` defined ::
 
-        p_i = sqrt((p_e - max + 1.)**2 - 1.)
+        p_i = sqrt((max - p_e + 1.)**2 - 1.)
         p_e = max + 1. - sqrt(p_i**2 + 1.)
 
     With only ``min`` defined ::
