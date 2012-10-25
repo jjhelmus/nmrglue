@@ -252,7 +252,7 @@ def read(filename, par_file=None):
     # determine sec file parameters from parameter dictionary
     dtype = dic["format"]
     shape = dic["layout"][0]
-    cplex = {'R': False, 'C': True}[dic['nptype'][0]]
+    cplex = {'R': False, 'C': True}[dic['nptype'][-1]]
 
     # read in the data
     data = read_sec(filename, dtype, shape, cplex)
@@ -297,7 +297,7 @@ def read_lowmem(filename, par_file=None):
 
     # determine shape, complexity and endiness from dictionary
     fshape = list(dic["layout"][0])
-    cplex = {'R': False, 'C': True}[dic['nptype'][0]]
+    cplex = {'R': False, 'C': True}[dic['nptype'][-1]]
     if cplex:
         fshape[-1] /= 2
     big = {'<': False, '>': True}[dic['format'][0]]
