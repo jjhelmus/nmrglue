@@ -86,7 +86,7 @@ def _external2internal_lambda(bound):
     elif upper is None:     # only lower bound
         return lambda x: sqrt((x - lower + 1.) ** 2 - 1)
     elif lower is None:     # only upper bound
-        return lambda x: sqrt((upper -x + 1.) ** 2 - 1)
+        return lambda x: sqrt((upper - x + 1.) ** 2 - 1)
     else:
         return lambda x: arcsin((2. * (x - lower) / (upper - lower)) - 1.)
 
