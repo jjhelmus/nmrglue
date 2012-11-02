@@ -1231,7 +1231,9 @@ def parse_jcamp_line(line, f):
 
         # extract value from remainer of line
         for t in rline.split():
-            if "." in t or "e" in t:
+            if "<" in t:
+                value.append(t.replace("<", "").replace(">", ""))
+            elif "." in t or "e" in t:
                 value.append(float(t))
             else:
                 value.append(int(t))
@@ -1240,7 +1242,9 @@ def parse_jcamp_line(line, f):
         while len(value) < num:
             nline = f.readline().rstrip()
             for t in nline.split():
-                if "." in t or "e" in t:
+                if "<" in t:
+                    value.append(t.replace("<", "").replace(">", ""))
+                elif "." in t or "e" in t:
                     value.append(float(t))
                 else:
                     value.append(int(t))
@@ -1252,7 +1256,9 @@ def parse_jcamp_line(line, f):
         value = False
 
     else:   # simple value
-        if "." in text or "e" in text:
+        if "<" in text:
+            value.append(t.replace("<", "").replace(">", ""))
+        elif "." in text or "e" in text:
             value = float(text)
         else:
             value = int(text)
@@ -1366,7 +1372,10 @@ def write_jcamp_pair(f, key, value):
                 f.write("\n")
                 line = ""
 
-            to_add = repr(v)
+            if type(v) == str:
+                to_add = "<" + v + ">"
+            else:
+                to_add = repr(v)
 
             if len(line + " " + to_add) > 80:
                 f.write(line)
