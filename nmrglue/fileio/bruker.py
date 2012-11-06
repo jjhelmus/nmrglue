@@ -1222,7 +1222,7 @@ def parse_jcamp_line(line, f):
     if "<" in text:   # string
         while ">" not in text:      # grab additional text until ">" in string
             text = text + "\n" + f.readline().rstrip()
-        value = text.replace("<", "").replace(">", "")
+        value = text[1:-1]  # remove < and >
 
     elif "(" in text:   # array
         num = int(line[line.index("..") + 2:line.index(")")]) + 1
@@ -1232,7 +1232,7 @@ def parse_jcamp_line(line, f):
         # extract value from remainer of line
         for t in rline.split():
             if "<" in t:
-                value.append(t.replace("<", "").replace(">", ""))
+                value.append(t[1:-1])  # remove < and >
             elif "." in t or "e" in t:
                 value.append(float(t))
             else:
@@ -1243,7 +1243,7 @@ def parse_jcamp_line(line, f):
             nline = f.readline().rstrip()
             for t in nline.split():
                 if "<" in t:
-                    value.append(t.replace("<", "").replace(">", ""))
+                    value.append(t[1:-1])  # remove < and >
                 elif "." in t or "e" in t:
                     value.append(float(t))
                 else:
@@ -1257,7 +1257,7 @@ def parse_jcamp_line(line, f):
 
     else:   # simple value
         if "<" in text:
-            value.append(t.replace("<", "").replace(">", ""))
+            value.append(t[1:-1])  # remove < and >
         elif "." in text or "e" in text:
             value = float(text)
         else:
