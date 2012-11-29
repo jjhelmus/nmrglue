@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/csh
 
 # FULL path to data
 set DATADIR = /home/jhelmus/sandbox/nmrglue_test/nmrglue/data
