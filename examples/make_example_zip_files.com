@@ -322,6 +322,8 @@ cd ..
 # Fitting examples #
 ####################
 
+# XXX this does not include the data as it is too large.
+
 cd fitting_data
 
 # fitting_t1_data
@@ -337,3 +339,27 @@ t1_measurements/spectra.in
 mv example_fitting_t1_data.zip ../zip_files/.
 
 cd ..
+
+#####################
+# All non-test data #
+#####################
+
+# all non-test example data
+zip all_none_test_example_data.zip \
+coadd/coadd_2d_pipe/test-run01.fid  \
+coadd/coadd_2d_pipe/test-run02.fid  \
+coadd/coadd_2d_pipe/test-run03.fid  \
+coadd/coadd_pseudo3d_pipe/run02.dir/nredor_20.fid/test.fid    \
+coadd/coadd_pseudo3d_pipe/run02.dir/nredor_50.fid/test.fid    \
+coadd/coadd_pseudo3d_pipe/run02.dir/nredor_60.fid/test.fid    \
+coadd/coadd_pseudo3d_pipe/run02.dir/nredor_40.fid/test.fid    \
+coadd/coadd_pseudo3d_pipe/run01.dir/nredor_20.fid/test.fid    \
+coadd/coadd_pseudo3d_pipe/run01.dir/nredor_50.fid/test.fid    \
+coadd/coadd_pseudo3d_pipe/run01.dir/nredor_60.fid/test.fid    \
+coadd/coadd_pseudo3d_pipe/run01.dir/nredor_40.fid/test.fid    \
+separate/separate_1d_varian/arrayed_data.dir/* \
+separate/separate_2d_varian/arrayed_data.dir/* \
+separate/separate_2d_bruker/arrayed_data.dir/*
+
+mv all_none_test_example_data.zip zip_files/.
+
