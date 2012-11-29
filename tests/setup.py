@@ -1,2 +1,3 @@
 """ nmrglue test setup module """
-DATA_DIR = "../data/"   # location of the data directory
+# location of the data directory
+DATA_DIR = "/home/jhelmus/code/python/nmrglue/data/"   

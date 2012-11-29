@@ -9,7 +9,13 @@ import nmrglue as ng
 def _perform_test(glue_script, pipe_script, glue_files, pipe_files):
     """ 
     """
-    os.chdir('pipe_proc_tests')
+    cwd_backup = os.getcwd()    # save the current working directory
+
+    # decent into the pipe_proc_tests directory
+    script_dir, script_fname = os.path.split(os.path.realpath(__file__))
+    os.chdir(os.path.join(script_dir, 'pipe_proc_tests'))
+    
+    # execute the scripts and compare the files
     execfile(glue_script)
     os.system(pipe_script)
     
@@ -25,7 +31,8 @@ def _perform_test(glue_script, pipe_script, glue_files, pipe_files):
         assert r1 is True
         assert r2 is True
 
-    os.chdir('./..')
+    # return to the backup-ed directory.
+    os.chdir(cwd_backup)
     return
 
 def _standard_args(func_name, num_files):
