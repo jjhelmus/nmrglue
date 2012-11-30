@@ -224,7 +224,10 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
 
     # read the pulse program and add to the dictionary
     if read_prog:
-        dic["pprog"] = read_pprog(os.path.join(dir, pprog_file))
+        try:
+            dic["pprog"] = read_pprog(os.path.join(dir, pprog_file))
+        except:
+            warn('Error reading the pulse program')
 
     # determind file size and add to the dictionary
     dic["FILE_SIZE"] = os.stat(os.path.join(dir, bin_file)).st_size
@@ -1197,8 +1200,11 @@ def read_jcamp(filename):
         elif line[:2] == "##" and line[2] != "$":
             dic["_coreheader"].append(line)
         elif line[:3] == "##$":
-            key, value = parse_jcamp_line(line, f)
-            dic[key] = value
+            try:
+                key, value = parse_jcamp_line(line, f)
+                dic[key] = value
+            except:
+                warn("Unable to correctly parse line:" + line)
         else:
             warn("Extraneous line:" + line)
 
@@ -1231,23 +1237,13 @@ def parse_jcamp_line(line, f):
 
         # extract value from remainer of line
         for t in rline.split():
-            if "<" in t:
-                value.append(t[1:-1])  # remove < and >
-            elif "." in t or "e" in t:
-                value.append(float(t))
-            else:
-                value.append(int(t))
+            value.append(parse_jcamp_value(t))
 
         # parse additional lines as necessary
         while len(value) < num:
             nline = f.readline().rstrip()
             for t in nline.split():
-                if "<" in t:
-                    value.append(t[1:-1])  # remove < and >
-                elif "." in t or "e" in t:
-                    value.append(float(t))
-                else:
-                    value.append(int(t))
+                value.append(parse_jcamp_value(t))
 
     elif text == "yes":
         value = True
@@ -1256,14 +1252,21 @@ def parse_jcamp_line(line, f):
         value = False
 
     else:   # simple value
-        if "<" in text:
-            value.append(t[1:-1])  # remove < and >
-        elif "." in text or "e" in text:
-            value = float(text)
-        else:
-            value = int(text)
+        value = parse_jcamp_value(text)
 
     return key, value
+
+
+def parse_jcamp_value(text):
+    """
+    Parse value text from Bruker JCAMP-DX file returning the value.
+    """
+    if "<" in text:
+        return text[1:-1]  # remove < and >
+    elif "." in text or "e" in text or 'inf' in text:
+        return float(text)
+    else:
+        return int(text)
 
 
 def write_jcamp(dic, filename, overwrite=False):
