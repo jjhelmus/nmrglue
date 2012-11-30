@@ -59,6 +59,7 @@ fine control over Bruker files may be interested in these functions.
     uncomplexify_data
     rm_dig_filter
     parse_jcamp_line
+    parse_jcamp_value
     write_jcamp_pair
 
 

@@ -1,0 +1,155 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Testing &mdash; nmrglue 0.4-dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.4-dev documentation" href="../index.html" />
+    <link rel="up" title="The nmrglue developer’s Guide" href="index.html" />
+    <link rel="prev" title="The nmrglue developer’s Guide" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="The nmrglue developer’s Guide"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">nmrglue 0.4-dev documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">The nmrglue developer&#8217;s Guide</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="testing">
+<span id="id1"></span><h1>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h1>
+<p>Tests for verifying the functionality of nmrglue are available in the test
+directory.  These tests use the <a class="reference external" href="https://nose.readthedocs.org/en/latest/">nose</a> testing infrastructure.</p>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>To run these tests NumPy, SciPy, nmrglue, and nose must be installed and in the
+Python search path.  NMRPipe must be installed to run the pipe_proc tests.</p>
+<p>In addition, the location of the the test data sets must be specified in the
+<tt class="docutils literal"><span class="pre">setup.py</span></tt> file in the test directory.  The <a class="reference external" href="http://code.google.com/p/nmrglue/downloads/list?q=label:Test-Data">nmrglue test data</a> is available for download.</p>
+<p>In order to run all nmrglue unit tests, the tests data sets must be
+downloaded, unpacked, and the all conversions scripts contained in the
+archive must be run.  Many of these scripts require additional NMR software
+(NMRPipe, etc), see the <tt class="docutils literal"><span class="pre">README</span></tt> file in the test data achive for additional
+details.  A subset of the full test suite can be run without installing any
+additional software.</p>
+</div>
+<div class="section" id="running-the-unit-tests">
+<h2>Running the unit tests<a class="headerlink" href="#running-the-unit-tests" title="Permalink to this headline">¶</a></h2>
+<p>After ensuring that all required packages are installed and <tt class="docutils literal"><span class="pre">setup.py</span></tt>
+correctly points to the location of the test data directory, the unit tests can
+be run using the following:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">nosetest</span>
+</pre></div>
+</div>
+<p>Unit tests for a specific module can be run using:</p>
+<div class="highlight-python"><pre>nosetest tests/test_pipe.py</pre>
+</div>
+<p>Additional information on the <a class="reference external" href="https://nose.readthedocs.org/en/latest/usage.html">usage of the nosetest command</a> is available.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Testing</a><ul>
+<li><a class="reference internal" href="#requirements">Requirements</a></li>
+<li><a class="reference internal" href="#running-the-unit-tests">Running the unit tests</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">The nmrglue developer&#8217;s Guide</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/devel/testing.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="The nmrglue developer’s Guide"
+             >previous</a> |</li>
+        <li><a href="../index.html">nmrglue 0.4-dev documentation</a> &raquo;</li>
+          <li><a href="index.html" >The nmrglue developer&#8217;s Guide</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2012, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

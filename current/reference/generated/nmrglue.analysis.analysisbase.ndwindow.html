@@ -102,7 +102,7 @@ the maximum size of the window.</p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">ndwindow</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">,(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">ndwindow</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">,(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)):</span>
 <span class="gp">... </span>    <span class="k">print</span> <span class="n">a</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>
 <span class="go">[[0 1]</span>
 <span class="go"> [4 5]]</span>
@@ -118,12 +118,25 @@ the maximum size of the window.</p>
 <span class="go">[[ 0  1  2]</span>
 <span class="go"> [ 4  5  6]</span>
 <span class="go"> [ 8  9 10]]</span>
-<span class="gp">...</span>
+<span class="go">[[ 1  2  3]</span>
+<span class="go"> [ 5  6  7]</span>
+<span class="go"> [ 9 10 11]]</span>
+<span class="go">[[ 2  3]</span>
+<span class="go"> [ 6  7]</span>
+<span class="go"> [10 11]]</span>
+<span class="go">[[4 5]</span>
+<span class="go"> [8 9]]</span>
+<span class="go">[[ 4  5  6]</span>
+<span class="go"> [ 8  9 10]]</span>
+<span class="go">[[ 5  6  7]</span>
+<span class="go"> [ 9 10 11]]</span>
+<span class="go">[[ 6  7]</span>
+<span class="go"> [10 11]]</span>
 </pre></div>
 </div>
 <dl class="method">
 <dt id="nmrglue.analysis.analysisbase.ndwindow.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/analysisbase.py#L212"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/analysisbase.py#L225"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set up the ndwindow object</p>
 </dd></dl>
 

@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nmrglue.fileio.bruker.read_jcamp &mdash; nmrglue 0.4-dev documentation</title>
+    <title>nmrglue.fileio.bruker.parse_jcamp_value &mdash; nmrglue 0.4-dev documentation</title>
     
     <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -28,8 +28,8 @@
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="nmrglue 0.4-dev documentation" href="../../index.html" />
     <link rel="up" title="nmrglue.bruker" href="../bruker.html" />
-    <link rel="next" title="nmrglue.fileio.bruker.write_jcamp" href="nmrglue.fileio.bruker.write_jcamp.html" />
-    <link rel="prev" title="nmrglue.fileio.bruker.write_binary_lowmem" href="nmrglue.fileio.bruker.write_binary_lowmem.html" /> 
+    <link rel="next" title="nmrglue.fileio.bruker.write_jcamp_pair" href="nmrglue.fileio.bruker.write_jcamp_pair.html" />
+    <link rel="prev" title="nmrglue.fileio.bruker.parse_jcamp_line" href="nmrglue.fileio.bruker.parse_jcamp_line.html" /> 
   </head>
   <body>
     <div class="related">
@@ -45,10 +45,10 @@
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="nmrglue.fileio.bruker.write_jcamp.html" title="nmrglue.fileio.bruker.write_jcamp"
+          <a href="nmrglue.fileio.bruker.write_jcamp_pair.html" title="nmrglue.fileio.bruker.write_jcamp_pair"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="nmrglue.fileio.bruker.write_binary_lowmem.html" title="nmrglue.fileio.bruker.write_binary_lowmem"
+          <a href="nmrglue.fileio.bruker.parse_jcamp_line.html" title="nmrglue.fileio.bruker.parse_jcamp_line"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">nmrglue 0.4-dev documentation</a> &raquo;</li>
           <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
@@ -61,43 +61,12 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="nmrglue-fileio-bruker-read-jcamp">
-<h1>nmrglue.fileio.bruker.read_jcamp<a class="headerlink" href="#nmrglue-fileio-bruker-read-jcamp" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="nmrglue-fileio-bruker-parse-jcamp-value">
+<h1>nmrglue.fileio.bruker.parse_jcamp_value<a class="headerlink" href="#nmrglue-fileio-bruker-parse-jcamp-value" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="nmrglue.fileio.bruker.read_jcamp">
-<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">read_jcamp</tt><big>(</big><em>filename</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/bruker.py#L1158"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.bruker.read_jcamp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read a Bruker JCAMP-DX file into a dictionary.</p>
-<p>Creates two special dictionary keys _coreheader and _comments Bruker
-parameter &#8220;$FOO&#8221; are extracted into strings, floats or lists and assigned
-to dic[&#8220;FOO&#8221;]</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
-<blockquote>
-<div><p>Filename of Bruker JCAMP-DX file.</p>
-</div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
-<blockquote class="last">
-<div><p>Dictionary of parameters in file.</p>
-</div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition-see-also admonition seealso">
-<p class="first admonition-title">See also</p>
-<dl class="last docutils">
-<dt><a class="reference internal" href="nmrglue.fileio.bruker.write_jcamp.html#nmrglue.fileio.bruker.write_jcamp" title="nmrglue.fileio.bruker.write_jcamp"><tt class="xref py py-obj docutils literal"><span class="pre">write_jcamp</span></tt></a></dt>
-<dd>Write a Bruker JCAMP-DX file.</dd>
-</dl>
-</div>
-<p class="rubric">Notes</p>
-<p>This is not a fully functional JCAMP-DX reader, it is only intended
-to read Bruker acqus (and similar) files.</p>
+<dt id="nmrglue.fileio.bruker.parse_jcamp_value">
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">parse_jcamp_value</tt><big>(</big><em>text</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/bruker.py#L1260"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.bruker.parse_jcamp_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse value text from Bruker JCAMP-DX file returning the value.</p>
 </dd></dl>
 
 </div>
@@ -109,14 +78,14 @@ to read Bruker acqus (and similar) files.</p>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="nmrglue.fileio.bruker.write_binary_lowmem.html"
-                        title="previous chapter">nmrglue.fileio.bruker.write_binary_lowmem</a></p>
+  <p class="topless"><a href="nmrglue.fileio.bruker.parse_jcamp_line.html"
+                        title="previous chapter">nmrglue.fileio.bruker.parse_jcamp_line</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="nmrglue.fileio.bruker.write_jcamp.html"
-                        title="next chapter">nmrglue.fileio.bruker.write_jcamp</a></p>
+  <p class="topless"><a href="nmrglue.fileio.bruker.write_jcamp_pair.html"
+                        title="next chapter">nmrglue.fileio.bruker.write_jcamp_pair</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../../_sources/reference/generated/nmrglue.fileio.bruker.read_jcamp.txt"
+    <li><a href="../../_sources/reference/generated/nmrglue.fileio.bruker.parse_jcamp_value.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -149,10 +118,10 @@ to read Bruker acqus (and similar) files.</p>
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="nmrglue.fileio.bruker.write_jcamp.html" title="nmrglue.fileio.bruker.write_jcamp"
+          <a href="nmrglue.fileio.bruker.write_jcamp_pair.html" title="nmrglue.fileio.bruker.write_jcamp_pair"
              >next</a> |</li>
         <li class="right" >
-          <a href="nmrglue.fileio.bruker.write_binary_lowmem.html" title="nmrglue.fileio.bruker.write_binary_lowmem"
+          <a href="nmrglue.fileio.bruker.parse_jcamp_line.html" title="nmrglue.fileio.bruker.parse_jcamp_line"
              >previous</a> |</li>
         <li><a href="../../index.html">nmrglue 0.4-dev documentation</a> &raquo;</li>
           <li><a href="../index.html" >Reference Guide</a> &raquo;</li>

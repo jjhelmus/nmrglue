@@ -65,7 +65,7 @@
 <h1>nmrglue.analysis.analysisbase.ndwindow_inside<a class="headerlink" href="#nmrglue-analysis-analysisbase-ndwindow-inside" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="nmrglue.analysis.analysisbase.ndwindow_inside">
-<em class="property">class </em><tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">ndwindow_inside</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/analysisbase.py#L271"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow_inside" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">ndwindow_inside</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/analysisbase.py#L284"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow_inside" title="Permalink to this definition">¶</a></dt>
 <dd><p>An N-dimentional iterator to slice arrays into uniform size windows.</p>
 <p>Given the shape of an array and a window size, an &#8216;ndwindow_inside&#8217;
 instance iterators over tuples of slices which slice an the array into
@@ -100,25 +100,21 @@ All sub-arrays are equal sized (wsize).</p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">ndwindow_inside</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">,(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">):</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">ndwindow_inside</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">,(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)):</span>
 <span class="gp">... </span>    <span class="k">print</span> <span class="n">a</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>
 <span class="go">[[0 1]</span>
-<span class="go"> [4 5]]</span>
+<span class="go"> [3 4]]</span>
 <span class="go">[[1 2]</span>
-<span class="go"> [5 6]]</span>
-<span class="go">[[2 3]</span>
+<span class="go"> [4 5]]</span>
+<span class="go">[[3 4]</span>
 <span class="go"> [6 7]]</span>
 <span class="go">[[4 5]</span>
-<span class="go"> [8 9]]</span>
-<span class="go">[[ 5  6]</span>
-<span class="go"> [ 9 10]]</span>
-<span class="go">[[ 6  7]</span>
-<span class="go"> [10 11]]</span>
+<span class="go"> [7 8]]</span>
 </pre></div>
 </div>
 <dl class="method">
 <dt id="nmrglue.analysis.analysisbase.ndwindow_inside.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/analysisbase.py#L315"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow_inside.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/analysis/analysisbase.py#L324"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow_inside.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set up the object</p>
 </dd></dl>
 
