@@ -334,7 +334,19 @@ t1_measurements/extract_trajs.py    \
 t1_measurements/fit_exp_leastsq.py  \
 t1_measurements/pt.py               \
 t1_measurements/time.dat            \
-t1_measurements/spectra.in
+t1_measurements/spectra.in          \
+t1_measurements/proc.com            \
+t1_measurements/xy_s3e.com          \
+t1_measurements/data/Ytau_1000000.fid/test.fid \
+t1_measurements/data/Ytau_100000.fid/test.fid  \
+t1_measurements/data/Ytau_100.fid/test.fid     \
+t1_measurements/data/Ytau_1500000.fid/test.fid \
+t1_measurements/data/Ytau_2000000.fid/test.fid \
+t1_measurements/data/Ytau_250000.fid/test.fid  \
+t1_measurements/data/Ytau_3000000.fid/test.fid \
+t1_measurements/data/Ytau_4000000.fid/test.fid \
+t1_measurements/data/Ytau_500000.fid/test.fid  \
+t1_measurements/data/Ytau_750000.fid/test.fid
 
 mv example_fitting_t1_data.zip ../zip_files/.
 
@@ -357,6 +369,16 @@ coadd/coadd_pseudo3d_pipe/run01.dir/nredor_20.fid/test.fid    \
 coadd/coadd_pseudo3d_pipe/run01.dir/nredor_50.fid/test.fid    \
 coadd/coadd_pseudo3d_pipe/run01.dir/nredor_60.fid/test.fid    \
 coadd/coadd_pseudo3d_pipe/run01.dir/nredor_40.fid/test.fid    \
+fitting_data/t1_measurements/data/Ytau_1000000.fid/test.fid \
+fitting_data/t1_measurements/data/Ytau_100000.fid/test.fid  \
+fitting_data/t1_measurements/data/Ytau_100.fid/test.fid     \
+fitting_data/t1_measurements/data/Ytau_1500000.fid/test.fid \
+fitting_data/t1_measurements/data/Ytau_2000000.fid/test.fid \
+fitting_data/t1_measurements/data/Ytau_250000.fid/test.fid  \
+fitting_data/t1_measurements/data/Ytau_3000000.fid/test.fid \
+fitting_data/t1_measurements/data/Ytau_4000000.fid/test.fid \
+fitting_data/t1_measurements/data/Ytau_500000.fid/test.fid  \
+fitting_data/t1_measurements/data/Ytau_750000.fid/test.fid  \
 separate/separate_1d_varian/arrayed_data.dir/* \
 separate/separate_2d_varian/arrayed_data.dir/* \
 separate/separate_2d_bruker/arrayed_data.dir/*

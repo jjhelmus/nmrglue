@@ -1,20 +1,19 @@
 Items to do before article is published
 =======================================
 
-1. Check over examples, prune, update and add as needed.  Add links to raw 
-data.  Add examples of spectral analysis (peak picking, lineshape fitting).
-Add T1 measurements and TEDOR fitting?  Linear prediction, peak picking,
-fitting and segmentation examples.
+1. Check over examples, prune, update and add as needed.  Add examples of 
+spectral analysis (peak picking, linear prediction, lineshape fitting, 
+TEDOR fitting?, segmentation?). 
 
-Find way to include t1_fitting data...
-
-2. Rewrite tutorial, include mention of analysis module.
+2. Rewrite tutorial and other docs include mention of analysis modules.  Also
+update install and developer docs. 
 
 3. Release version 0.4 and write release instructions, check installer on 
 Linux, Windows, and OS-X.  Update install script, grep for XXX in all files
-and update pyPI record.
+and update PIP record.
 
-
+When article accepted add example from paper, and link directly to them on
+nmrglue.com
 
 To Do and other updates post journal article.
 =============================================
