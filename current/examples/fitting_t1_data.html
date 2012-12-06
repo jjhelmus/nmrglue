@@ -62,13 +62,15 @@
             
   <div class="section" id="fitting-example-fitting-t1-data">
 <span id="fitting-t1-data"></span><h1>fitting example: fitting_t1_data<a class="headerlink" href="#fitting-example-fitting-t1-data" title="Permalink to this headline">¶</a></h1>
-<p>This example shows how to use nmrglue and <a class="reference external" href="http://www.scipy.org/">scipy</a>
+<p>This example shows how to use nmrglue and the <a class="reference external" href="http://www.scipy.org/">SciPy</a>
 optimize module to fit T1 relaxation trajectories.  Three scripts are used in
 the process.</p>
+<p>The data used in this example is available for
+<a class="reference external" href="http://nmrglue.googlecode.com/files/example_fitting_t1_data.zip">download.</a></p>
 <p>First the <tt class="docutils literal"><span class="pre">extract_trajs.py</span></tt> script reads in box limits from <tt class="docutils literal"><span class="pre">boxes.in</span></tt> and
 a list of spectra from <tt class="docutils literal"><span class="pre">spectra.in</span></tt>.  The script integrates each peak in each
 spectrum and writes the trajectory for each peak to disk as <tt class="docutils literal"><span class="pre">traj.npy</span></tt> in
-<a class="reference external" href="http://numpy.scipy.org/">numpy</a> <tt class="docutils literal"><span class="pre">.npy</span></tt> format.</p>
+<a class="reference external" href="http://numpy.scipy.org/">NumPy</a> <tt class="docutils literal"><span class="pre">.npy</span></tt> format.</p>
 <p>[<a class="reference download internal" href="../_downloads/extract_trajs.py"><tt class="xref download docutils literal"><span class="pre">extract_trajs.py</span></tt></a>]</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c">#! /usr/bin/env python</span>
 <span class="c"># Scipt to extract trajectories from a series a 2D spectrum.</span>

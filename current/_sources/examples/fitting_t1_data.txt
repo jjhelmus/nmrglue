@@ -3,14 +3,17 @@
 fitting example: fitting_t1_data
 ================================
 
-This example shows how to use nmrglue and `scipy <http://www.scipy.org/>`_ 
+This example shows how to use nmrglue and the `SciPy <http://www.scipy.org/>`_ 
 optimize module to fit T1 relaxation trajectories.  Three scripts are used in
 the process.
+
+The data used in this example is available for 
+`download. <http://nmrglue.googlecode.com/files/example_fitting_t1_data.zip>`_
 
 First the ``extract_trajs.py`` script reads in box limits from ``boxes.in`` and
 a list of spectra from ``spectra.in``.  The script integrates each peak in each
 spectrum and writes the trajectory for each peak to disk as ``traj.npy`` in 
-`numpy <http://numpy.scipy.org/>`_ ``.npy`` format.
+`NumPy <http://numpy.scipy.org/>`_ ``.npy`` format.
 
 [:download:`extract_trajs.py <../../../examples/fitting_data/t1_measurements/extract_trajs.py>`]
 
