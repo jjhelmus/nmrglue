@@ -284,6 +284,10 @@ class location_scale():
     """
     Base class for building a 2 parameter location scale lineshape class.
     """
+
+    def __init__(self):
+        pass
+
     def nparam(self, M):
         return 2
 
@@ -388,6 +392,10 @@ class location_2params():
     Base Class for building a 3 parameter location, scale, other lineshape
     classes.
     """
+
+    def __init__(self):
+        pass
+
     def nparam(self, M):
         return 3
 
@@ -475,6 +483,9 @@ class scale():
 
     """
     name = "scale"
+
+    def __init__(self):
+        pass
 
     def sim(self, M, p):
         l = np.empty(M, dtype='float')
