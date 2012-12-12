@@ -4,6 +4,8 @@ program <http://www.bionmr.chem.au.dk/bionmr/software/simpson.php>`_.
 """
 
 import math
+from warnings import warn
+
 import numpy as np
 
 
@@ -81,11 +83,11 @@ def read(filename, ftype=None, ndim=None, NP=None, NI=None, spe=None):
         if spe is None:
             raise ValueError('spe must be True or False for raw_bin data')
         if ndim == 1:
-            read_raw_bin_1d(filename, spe)
+            return read_raw_bin_1d(filename, spe)
         elif ndim == 2:
             if NP is None or NI is None:
                 raise ValueError("NP and NI must be given for raw_bin data")
-            read_raw_bin_2d(filename, NP, NI, spe)
+            return read_raw_bin_2d(filename, NP, NI, spe)
         else:
             raise ValueError('ndim must be 1 or 2 for raw_bin data')
     else:
@@ -148,7 +150,7 @@ def read_text(filename):
             key, value = line.split("=")
             dic[key] = value
         else:
-            print "Warning, skipping line:", line
+            warn("Warning, skipping line: %s" % (line))
 
     # convert float and int keys
     for key in ['SW1', 'SW']:    # convert keys to floats
@@ -315,7 +317,7 @@ def read_binary(filename):
             key, value = line.split("=")
             dic[key] = value
         else:
-            print "Warning, skipping line:", line
+            warn("Warning, skipping line: %s" % (line))
 
     # convert float and int keys
     for key in ['SW1', 'SW']:    # convert keys to floats
@@ -380,24 +382,6 @@ def bytes2float(bytes):
     mantissa = ((b2 % 128) << 16) + (b1 << 8) + b0
     exponent = (b3 % 128) * 2 + (b2 >= 128) * 1
     negative = b3 >= 128
-
-    e = exponent - 0x7f
-    m = np.abs(mantissa) / np.float64(1 << 23)
-
-    if negative:
-        return -math.ldexp(m, e)
-    return math.ldexp(m, e)
-
-
-def bytes2float_bitarray(bits):
-    """ byte2float function using BitArray for explanation """
-    from bitstring import BitArray
-
-    float_bytes = sum([BitArray(uint=b, length=8)[::-1] for b in bits])
-
-    mantissa = float_bytes[:23][::-1].uint    # 23 bits
-    exponent = float_bytes[23:31][::-1].uint  # 8 bits
-    negative = float_bytes[31]          # 1 bit
 
     e = exponent - 0x7f
     m = np.abs(mantissa) / np.float64(1 << 23)

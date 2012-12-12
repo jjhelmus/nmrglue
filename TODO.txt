@@ -32,7 +32,7 @@ nmrglue
         Use data_nd functionality with put_slice.
     - ability to write slices to file in all modules (ala pipe.write_slice3d)
     - global iter3D object
-    - update simpson module (write functions, tests)
+    - update simpson module with write functions
     - update glue module?
     - sparky_nd object? or dimension agnostic functions?
     - spinev module?
@@ -63,7 +63,6 @@ Module          Notes
 ------          ------
 fileiobase      Tested       
 glue            Not currently imported      
-rnmrtk          
 table       
 proc_base       Partially tested with pipe_proc test     
 proc_bl         Partially tested with pipe_proc test
