@@ -8,7 +8,7 @@ fileio modules
 --------------
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 1
     
     agilent
     bruker
@@ -37,7 +37,7 @@ analysis modules
 ----------------
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 1
     
     analysisbase
     helpers

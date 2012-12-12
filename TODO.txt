@@ -5,8 +5,7 @@ Items to do before article is published
 spectral analysis (peak picking, linear prediction, lineshape fitting, 
 TEDOR fitting?, segmentation?). 
 
-2. Rewrite tutorial and other docs include mention of analysis modules.  Also
-update install and developer docs. 
+2. Rewrite tutorial including a mention of analysis modules. 
 
 3. Release version 0.4 and write release instructions, check installer on 
 Linux, Windows, and OS-X.  Update install script, grep for XXX in all files
@@ -90,8 +89,7 @@ doc
     arbitrary dimensional data.
 -   proc_bl : Flesh out the sol_* functions?
 -   helpers : Better documentation, examples?
--   lineshapes1d : fix warning during build caused by missing __init__ methods, 
-    add .. math:: in lineshape documentation?
+-   lineshapes1d : add .. math:: in lineshape documentation?
 -   peakpick : Add links to the picking algorithms.
 -   segmentation : Add See Also sections?
 
