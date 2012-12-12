@@ -11,4 +11,4 @@ Overview
     tutorial
     reference/index
     examples/index
-    devel/index
+    devel/quickstart
