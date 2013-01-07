@@ -1500,35 +1500,38 @@ def read_pprog(filename):
             #print line,"--Loop"
             continue
 
-        # increment statement have id, dd, ipu or dpu
-        # syntax foo {id/dd/ipu/dpu}N
-        # store N to incr list
-        if ("id" in text) or ("dd" in text):
-            incr[len(loop)].append(int(text.split()[1][2:]))
-            #print line,"--Increment"
-            continue
+        tokens = text.split()
+        if len(tokens) >= 2:
+            token2 = tokens[1]
+            # increment statement have id, dd, ipu or dpu
+            # syntax foo {id/dd/ipu/dpu}N
+            # store N to incr list
+            if token2.startswith('id') or token2.startswith('dd'):
+                incr[len(loop)].append(int(token2[2:]))
+                #print line,"--Increment"
+                continue
 
-        if ("ipu" in text) or ("dpu" in text):
-            incr[len(loop)].append(int(text.split()[1][3:]))
-            #print line,"--Increment"
-            continue
+            if token2.startswith("ipu") or token2.startswith("dpu"):
+                incr[len(loop)].append(int(token2[3:]))
+                #print line,"--Increment"
+                continue
 
-        # phase statement have ip or dp
-        # syntax fpp {ip/dp}N extra
-        # store N to phase list and extra to ph_extra list
-        if ("ip" in text) or ("dp" in text):
-            phase[len(loop)].append(int(text.split()[1][2:]))
+            # phase statement have ip or dp
+            # syntax fpp {ip/dp}N extra
+            # store N to phase list and extra to ph_extra list
+            if token2.startswith("ip") or token2.startswith("dp"):
+                phase[len(loop)].append(int(token2[2:]))
 
-            # find the first space after "ip" and read past there
-            last = text.find(" ", text.index("ip"))
-            if last == -1:
-                ph_extra[len(loop)].append("")
-            else:
-                ph_extra[len(loop)].append(text[last:].strip())
-            #print line,"--Phase"
-            continue
+                # find the first space after "ip" and read past there
+                last = text.find(" ", text.index("ip"))
+                if last == -1:
+                    ph_extra[len(loop)].append("")
+                else:
+                    ph_extra[len(loop)].append(text[last:].strip())
+                #print line,"--Phase"
+                continue
 
-        #print line,"--Unimportant"
+            #print line,"--Unimportant"
 
     f.close()
 
