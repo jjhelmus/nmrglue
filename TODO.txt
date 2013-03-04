@@ -1,21 +1,5 @@
-Items to do before article is published
-=======================================
-
-1. Check over examples, prune, update and add as needed.  Add examples of 
-spectral analysis (peak picking, linear prediction, lineshape fitting, 
-TEDOR fitting?, segmentation?). 
-
-2. Rewrite tutorial including a mention of analysis modules. 
-
-3. Release version 0.4 and write release instructions, check installer on 
-Linux, Windows, and OS-X.  Update install script, grep for XXX in all files
-and update PIP record.
-
-When article accepted add example from paper, and link directly to them on
-nmrglue.com
-
-To Do and other updates post journal article.
-=============================================
+To Do and other updates
+=======================
 
 Idea list broken down by directory.
 
@@ -83,6 +67,7 @@ misc
 doc
 ---
 
+-   Rewrite tutorial including a mention of analysis modules. 
 -   pipe_proc: Add References to low level function / better description
 -   proc_base : Additional documentation, indication which functions work on 
     arbitrary dimensional data.
