@@ -46,6 +46,19 @@ examples/processing/nmrpipe_2d
 examples/processing/nmrpipe_2d_tppi
 examples/processing/nmrpipe_3d
 
+# JBNMR Examples
+examples/jbnmr_examples/*/*.fid
+examples/jbnmr_examples/*/*.ft2
+examples/jbnmr_examples/*/*.ft
+examples/jbnmr_examples/*/*.ucsf
+examples/jbnmr_examples/zip_files
+examples/jbnmr_examples/s12-s15_relaxation_analysis/*.png
+examples/jbnmr_examples/s12-s15_relaxation_analysis/*.dat
+examples/jbnmr_examples/s10_covariance_processing/test.ft
+examples/jbnmr_examples/s7-s9_s3e_processing/fid
+examples/jbnmr_examples/s7-s9_s3e_processing/procpar
+
+
 #Eclipse PyDev
 .project
 .pydevproject
