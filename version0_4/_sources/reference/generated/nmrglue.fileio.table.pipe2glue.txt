@@ -1,0 +1,6 @@
+nmrglue.fileio.table.pipe2glue
+==============================
+
+.. currentmodule:: nmrglue.fileio.table
+
+.. autofunction:: pipe2glue

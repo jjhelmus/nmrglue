@@ -1,0 +1,6 @@
+nmrglue.fileio.sparky.make_uc
+=============================
+
+.. currentmodule:: nmrglue.fileio.sparky
+
+.. autofunction:: make_uc

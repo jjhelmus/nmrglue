@@ -1,0 +1,6 @@
+nmrglue.util.misc.islistsimilar
+===============================
+
+.. currentmodule:: nmrglue.util.misc
+
+.. autofunction:: islistsimilar

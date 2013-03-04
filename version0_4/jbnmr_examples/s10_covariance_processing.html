@@ -1,0 +1,201 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Covariance Processing example &mdash; nmrglue 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.4 documentation" href="../index.html" />
+    <link rel="up" title="Examples from JBNMR article" href="index.html" />
+    <link rel="next" title="3D strip plot example" href="s11_strip_plots.html" />
+    <link rel="prev" title="Processing S3E filtered data example" href="s7-s9_s3e_processing.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="s11_strip_plots.html" title="3D strip plot example"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="s7-s9_s3e_processing.html" title="Processing S3E filtered data example"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">nmrglue 0.4 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Examples from JBNMR article</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="covariance-processing-example">
+<h1>Covariance Processing example<a class="headerlink" href="#covariance-processing-example" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This example is taken from Listing S10 in the 2013 JBNMR nmrglue paper.  In
+this example covaraince processing is performed on a 2D NMRPipe file.</p>
+</div>
+<div class="section" id="instructions">
+<h2>Instructions<a class="headerlink" href="#instructions" title="Permalink to this headline">¶</a></h2>
+<p>The <cite>test.ft</cite> file is provided in the archive.  To create this from time
+domain data use the NMRPipe script <cite>x.com</cite></p>
+<p>Execute <cite>python cov_process.py</cite> to perform the covariance processing on the
+<cite>test.ft</cite> file.  The file <cite>test.ft2</cite> is created.</p>
+<p>Execute <cite>python cov_plot.py</cite> to perform the covariance processing and plot the
+results.  The output, <cite>covariance_figure.png</cite> is presented as Figure 5 in the
+article.</p>
+<p>The data used in this example is available for
+<a class="reference external" href="http://nmrglue.googlecode.com/files/jbnmr_s10_covariance_processing.zip">download.</a></p>
+<p>Listing S10</p>
+<p>[<a class="reference download internal" href="../_downloads/cov_process.py"><tt class="xref download docutils literal"><span class="pre">cov_process.py</span></tt></a>]</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">nmrglue</span> <span class="kn">as</span> <span class="nn">ng</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="c"># open the data</span>
+<span class="n">dic</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;test.ft&quot;</span><span class="p">)</span>
+
+<span class="c"># compute the covariance</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s">&#39;float32&#39;</span><span class="p">)</span>
+
+<span class="c"># update the spectral parameter of the indirect dimension</span>
+<span class="n">dic</span><span class="p">[</span><span class="s">&#39;FDF1FTFLAG&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dic</span><span class="p">[</span><span class="s">&#39;FDF2FTFLAG&#39;</span><span class="p">]</span>
+<span class="n">dic</span><span class="p">[</span><span class="s">&#39;FDF1ORIG&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dic</span><span class="p">[</span><span class="s">&#39;FDF2ORIG&#39;</span><span class="p">]</span>
+<span class="n">dic</span><span class="p">[</span><span class="s">&#39;FDF1SW&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dic</span><span class="p">[</span><span class="s">&#39;FDF2SW&#39;</span><span class="p">]</span>
+<span class="n">dic</span><span class="p">[</span><span class="s">&quot;FDSPECNUM&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="c"># write out the covariance spectrum</span>
+<span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;test.ft2&quot;</span><span class="p">,</span> <span class="n">dic</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>[<a class="reference download internal" href="../_downloads/cov_plot.py"><tt class="xref download docutils literal"><span class="pre">cov_plot.py</span></tt></a>]</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">nmrglue</span> <span class="kn">as</span> <span class="nn">ng</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="c"># open the data</span>
+<span class="n">dic</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;test.ft&quot;</span><span class="p">)</span>
+<span class="n">uc</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">make_uc</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">x0</span><span class="p">,</span> <span class="n">x1</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">ppm_limits</span><span class="p">()</span>
+
+<span class="c"># compute the covariance</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+<span class="c"># plot the spectrum</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+<span class="n">cl</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e8</span> <span class="o">*</span> <span class="mf">1.30</span> <span class="o">**</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">20</span><span class="p">)]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">cl</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">),</span> <span class="n">origin</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&quot;13C ppm&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mf">62.5</span><span class="p">,</span> <span class="mf">24.5</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&quot;13C ppm&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mf">62.5</span><span class="p">,</span> <span class="mf">24.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&#39;covariance_figure.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/covariance_figure.png" src="../_images/covariance_figure.png" />
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Covariance Processing example</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#instructions">Instructions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="s7-s9_s3e_processing.html"
+                        title="previous chapter">Processing S3E filtered data example</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="s11_strip_plots.html"
+                        title="next chapter">3D strip plot example</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/jbnmr_examples/s10_covariance_processing.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="s11_strip_plots.html" title="3D strip plot example"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="s7-s9_s3e_processing.html" title="Processing S3E filtered data example"
+             >previous</a> |</li>
+        <li><a href="../index.html">nmrglue 0.4 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Examples from JBNMR article</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2013, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

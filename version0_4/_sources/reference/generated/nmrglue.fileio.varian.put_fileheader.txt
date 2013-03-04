@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.put_fileheader
+====================================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: put_fileheader

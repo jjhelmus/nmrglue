@@ -1,0 +1,6 @@
+nmrglue.fileio.fileiobase.open_towrite
+======================================
+
+.. currentmodule:: nmrglue.fileio.fileiobase
+
+.. autofunction:: open_towrite

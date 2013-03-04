@@ -1,0 +1,6 @@
+nmrglue.fileio.simpson.read_raw_bin_2d
+======================================
+
+.. currentmodule:: nmrglue.fileio.simpson
+
+.. autofunction:: read_raw_bin_2d

@@ -1,0 +1,6 @@
+nmrglue.analysis.linesh.sim_NDregion
+====================================
+
+.. currentmodule:: nmrglue.analysis.linesh
+
+.. autofunction:: sim_NDregion

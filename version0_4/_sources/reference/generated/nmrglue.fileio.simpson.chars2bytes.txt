@@ -1,0 +1,6 @@
+nmrglue.fileio.simpson.chars2bytes
+==================================
+
+.. currentmodule:: nmrglue.fileio.simpson
+
+.. autofunction:: chars2bytes

@@ -1,0 +1,245 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Processing S3E filtered data example &mdash; nmrglue 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.4 documentation" href="../index.html" />
+    <link rel="up" title="Examples from JBNMR article" href="index.html" />
+    <link rel="next" title="Covariance Processing example" href="s10_covariance_processing.html" />
+    <link rel="prev" title="Seperated inner phase example" href="s6_seperate_inner_phase.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="s10_covariance_processing.html" title="Covariance Processing example"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="s6_seperate_inner_phase.html" title="Seperated inner phase example"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">nmrglue 0.4 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Examples from JBNMR article</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="processing-s3e-filtered-data-example">
+<h1>Processing S3E filtered data example<a class="headerlink" href="#processing-s3e-filtered-data-example" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This example is taken from Listing S7, S8 and S9 in the 2013 JBNMR nmrglue
+paper.  In this example a 2D Agilent/Varian data set collect using a S3E filter
+is seperated (<cite>seperate_s3e.py</cite>), converted to NMRPipe format (<cite>Sparky file
+(`data.ucsf</cite>) is converted to a NMRPipe file (&#8216;convert.py&#8217;) and finally
+processed (<cite>xy_s3e.py</cite>).</p>
+</div>
+<div class="section" id="instructions">
+<h2>Instructions<a class="headerlink" href="#instructions" title="Permalink to this headline">¶</a></h2>
+<p>Execute <cite>python seperate_s3e.py</cite> to seperate the S3E sum and difference
+spectra from data set in the Agilent/Varian <cite>fid</cite> file.  This creates the files
+fid_dif and fid_sum.</p>
+<p>Execute <cite>python convert.py</cite> to convert these two files to NMRPipe format.  This
+step creates the files <cite>test_sum.fid</cite> and <cite>test_dif.fid</cite>.</p>
+<p>Execute <cite>python xy_s3e.py</cite> to process and combine the sum and different
+spectra. This step creates the <cite>test.ft2</cite> file.</p>
+<p>The data used in this example is available for
+<a class="reference external" href="http://nmrglue.googlecode.com/files/jbnmr_s7-s9_s3e_processing.zip">download.</a></p>
+<p>Listing S7</p>
+<p>[<a class="reference download internal" href="../_downloads/seperate_s3e.py"><tt class="xref download docutils literal"><span class="pre">seperate_s3e.py</span></tt></a>]</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">nmrglue</span> <span class="kn">as</span> <span class="nn">ng</span>
+<span class="n">dic</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">varian</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="n">as_2d</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">dic</span><span class="p">[</span><span class="s">&#39;nblocks&#39;</span><span class="p">]</span> <span class="o">/=</span> <span class="mi">2</span>
+<span class="n">A</span> <span class="o">=</span> <span class="n">data</span><span class="p">[::</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">B</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">ng</span><span class="o">.</span><span class="n">varian</span><span class="o">.</span><span class="n">write_fid</span><span class="p">(</span><span class="s">&#39;fid_sum&#39;</span><span class="p">,</span> <span class="n">dic</span><span class="p">,</span> <span class="n">A</span> <span class="o">+</span> <span class="n">B</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">ng</span><span class="o">.</span><span class="n">varian</span><span class="o">.</span><span class="n">write_fid</span><span class="p">(</span><span class="s">&#39;fid_dif&#39;</span><span class="p">,</span> <span class="n">dic</span><span class="p">,</span> <span class="n">A</span> <span class="o">-</span> <span class="n">B</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Listing S8</p>
+<p>[<a class="reference download internal" href="../_downloads/seperate_s3e.py"><tt class="xref download docutils literal"><span class="pre">convert.py</span></tt></a>]</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">nmrglue</span> <span class="kn">as</span> <span class="nn">ng</span>
+
+<span class="c"># read in the sum data set</span>
+<span class="n">dic</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">varian</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="n">fid_file</span><span class="o">=</span><span class="s">&#39;fid_sum&#39;</span><span class="p">,</span> <span class="n">as_2d</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c"># set the spectral parameters</span>
+<span class="n">udic</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">varian</span><span class="o">.</span><span class="n">guess_udic</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+<span class="n">udic</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;size&#39;</span><span class="p">]</span>     <span class="o">=</span> <span class="mi">1500</span>             <span class="p">;</span> <span class="n">udic</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;size&#39;</span><span class="p">]</span>     <span class="o">=</span> <span class="mi">256</span>
+<span class="n">udic</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;complex&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="bp">True</span>             <span class="p">;</span> <span class="n">udic</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;complex&#39;</span><span class="p">]</span>  <span class="o">=</span> <span class="bp">True</span>
+<span class="n">udic</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;encoding&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;direct&#39;</span>         <span class="p">;</span> <span class="n">udic</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;encoding&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;states&#39;</span>
+<span class="n">udic</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;sw&#39;</span><span class="p">]</span>       <span class="o">=</span> <span class="mf">50000.000</span>        <span class="p">;</span> <span class="n">udic</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;sw&#39;</span><span class="p">]</span>       <span class="o">=</span> <span class="mf">5000.0</span>
+<span class="n">udic</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;obs&#39;</span><span class="p">]</span>      <span class="o">=</span> <span class="mf">125.690</span>          <span class="p">;</span> <span class="n">udic</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;obs&#39;</span><span class="p">]</span>      <span class="o">=</span> <span class="mf">50.648</span>
+<span class="n">udic</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;car&#39;</span><span class="p">]</span>      <span class="o">=</span> <span class="mf">174.538</span> <span class="o">*</span> <span class="mf">125.690</span><span class="p">;</span> <span class="n">udic</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;car&#39;</span><span class="p">]</span>      <span class="o">=</span> <span class="mf">119.727</span> <span class="o">*</span> <span class="mf">50.648</span>
+<span class="n">udic</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s">&#39;label&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="s">&#39;C13&#39;</span>            <span class="p">;</span> <span class="n">udic</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s">&#39;label&#39;</span><span class="p">]</span>    <span class="o">=</span> <span class="s">&#39;N15&#39;</span>
+
+<span class="c"># convert to NMRPipe format</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">convert</span><span class="o">.</span><span class="n">converter</span><span class="p">()</span>
+<span class="n">C</span><span class="o">.</span><span class="n">from_varian</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">udic</span><span class="p">)</span>
+<span class="n">pdic</span><span class="p">,</span> <span class="n">pdata</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">to_pipe</span><span class="p">()</span>
+
+<span class="c"># write out the NMRPipe file</span>
+<span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;test_sum.fid&quot;</span><span class="p">,</span> <span class="n">pdic</span><span class="p">,</span> <span class="n">pdata</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c"># repeat for the difference data set</span>
+<span class="n">dic</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">varian</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&#39;.&#39;</span><span class="p">,</span> <span class="n">fid_file</span><span class="o">=</span><span class="s">&#39;fid_dif&#39;</span><span class="p">,</span> <span class="n">as_2d</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">convert</span><span class="o">.</span><span class="n">converter</span><span class="p">()</span>
+<span class="n">C</span><span class="o">.</span><span class="n">from_varian</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">udic</span><span class="p">)</span>
+<span class="n">pdic</span><span class="p">,</span> <span class="n">pdata</span> <span class="o">=</span> <span class="n">C</span><span class="o">.</span><span class="n">to_pipe</span><span class="p">()</span>
+<span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;test_dif.fid&quot;</span><span class="p">,</span> <span class="n">pdic</span><span class="p">,</span> <span class="n">pdata</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Listing S9</p>
+<p>[<a class="reference download internal" href="../_downloads/xy_s3e.py"><tt class="xref download docutils literal"><span class="pre">xy_s3e.py</span></tt></a>]</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">nmrglue</span> <span class="kn">as</span> <span class="nn">ng</span>
+
+<span class="c"># process the direct dimension of the sum data set</span>
+<span class="n">sdic</span><span class="p">,</span> <span class="n">sdata</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&#39;test_sum.fid&#39;</span><span class="p">)</span>
+<span class="n">sdic</span><span class="p">,</span> <span class="n">sdata</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">sp</span><span class="p">(</span><span class="n">sdic</span><span class="p">,</span> <span class="n">sdata</span><span class="p">,</span> <span class="n">off</span><span class="o">=</span><span class="mf">0.45</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="nb">pow</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="n">sdic</span><span class="p">,</span> <span class="n">sdata</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">zf</span><span class="p">(</span><span class="n">sdic</span><span class="p">,</span> <span class="n">sdata</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">8192</span><span class="p">)</span>
+<span class="n">sdic</span><span class="p">,</span> <span class="n">sdata</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">ft</span><span class="p">(</span><span class="n">sdic</span><span class="p">,</span> <span class="n">sdata</span><span class="p">)</span>
+<span class="n">uc</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">make_uc</span><span class="p">(</span><span class="n">sdic</span><span class="p">,</span> <span class="n">sdata</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pts</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="s">&#39;27.5 Hz&#39;</span><span class="p">)</span> <span class="o">-</span> <span class="n">uc</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="s">&#39;0 Hz&#39;</span><span class="p">)</span>
+<span class="n">sdic</span><span class="p">,</span> <span class="n">sdata</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">fsh</span><span class="p">(</span><span class="n">sdic</span><span class="p">,</span> <span class="n">sdata</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="s">&#39;ls&#39;</span><span class="p">,</span> <span class="n">pts</span><span class="o">=</span><span class="n">pts</span><span class="p">)</span>
+<span class="n">sdic</span><span class="p">,</span> <span class="n">sdata</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">ps</span><span class="p">(</span><span class="n">sdic</span><span class="p">,</span> <span class="n">sdata</span><span class="p">,</span> <span class="n">p0</span><span class="o">=-</span><span class="mf">79.0</span><span class="p">,</span> <span class="n">p1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="n">sdic</span><span class="p">,</span> <span class="n">sdata</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">di</span><span class="p">(</span><span class="n">sdic</span><span class="p">,</span> <span class="n">sdata</span><span class="p">)</span>
+
+<span class="c"># process the direct dimension of the difference data set</span>
+<span class="n">ddic</span><span class="p">,</span> <span class="n">ddata</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&#39;test_dif.fid&#39;</span><span class="p">)</span>
+<span class="n">ddic</span><span class="p">,</span> <span class="n">ddata</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">sp</span><span class="p">(</span><span class="n">ddic</span><span class="p">,</span> <span class="n">ddata</span><span class="p">,</span> <span class="n">off</span><span class="o">=</span><span class="mf">0.45</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="nb">pow</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="n">ddic</span><span class="p">,</span> <span class="n">ddata</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">zf</span><span class="p">(</span><span class="n">ddic</span><span class="p">,</span> <span class="n">ddata</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">8192</span><span class="p">)</span>
+<span class="n">ddic</span><span class="p">,</span> <span class="n">ddata</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">ft</span><span class="p">(</span><span class="n">ddic</span><span class="p">,</span> <span class="n">ddata</span><span class="p">)</span>
+<span class="n">ddic</span><span class="p">,</span> <span class="n">ddata</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">ps</span><span class="p">(</span><span class="n">ddic</span><span class="p">,</span> <span class="n">ddata</span><span class="p">,</span> <span class="n">p0</span><span class="o">=-</span><span class="mf">90.0</span><span class="p">,</span> <span class="n">p1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="n">uc</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">make_uc</span><span class="p">(</span><span class="n">ddic</span><span class="p">,</span> <span class="n">ddata</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pts</span> <span class="o">=</span> <span class="n">uc</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="s">&#39;27.5 Hz&#39;</span><span class="p">)</span> <span class="o">-</span> <span class="n">uc</span><span class="o">.</span><span class="n">f</span><span class="p">(</span><span class="s">&#39;0 Hz&#39;</span><span class="p">)</span>
+<span class="n">ddic</span><span class="p">,</span> <span class="n">ddata</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">fsh</span><span class="p">(</span><span class="n">ddic</span><span class="p">,</span> <span class="n">ddata</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="s">&#39;rs&#39;</span><span class="p">,</span> <span class="n">pts</span><span class="o">=</span><span class="n">pts</span><span class="p">)</span>
+<span class="n">ddic</span><span class="p">,</span> <span class="n">ddata</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">ps</span><span class="p">(</span><span class="n">ddic</span><span class="p">,</span> <span class="n">ddata</span><span class="p">,</span> <span class="n">p0</span><span class="o">=-</span><span class="mf">79.0</span><span class="p">,</span> <span class="n">p1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="n">ddic</span><span class="p">,</span> <span class="n">ddata</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">di</span><span class="p">(</span><span class="n">ddic</span><span class="p">,</span> <span class="n">ddata</span><span class="p">)</span>
+
+<span class="c"># sum the different and sum data sets</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">sdata</span> <span class="o">+</span> <span class="n">ddata</span>
+<span class="n">dic</span> <span class="o">=</span> <span class="n">ddic</span>
+
+<span class="c"># process the indirect dimension</span>
+<span class="n">dic</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">tp</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+<span class="n">dic</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">sp</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">off</span><span class="o">=</span><span class="mf">0.45</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="nb">pow</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="n">dic</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">zf</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">2048</span><span class="p">)</span>
+<span class="n">dic</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">ft</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">neg</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">dic</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">ps</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">p1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="n">dic</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">di</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+<span class="n">dic</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe_proc</span><span class="o">.</span><span class="n">tp</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+<span class="c"># write out the results</span>
+<span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;test.ft2&#39;</span><span class="p">,</span> <span class="n">dic</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Processing S3E filtered data example</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#instructions">Instructions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="s6_seperate_inner_phase.html"
+                        title="previous chapter">Seperated inner phase example</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="s10_covariance_processing.html"
+                        title="next chapter">Covariance Processing example</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/jbnmr_examples/s7-s9_s3e_processing.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="s10_covariance_processing.html" title="Covariance Processing example"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="s6_seperate_inner_phase.html" title="Seperated inner phase example"
+             >previous</a> |</li>
+        <li><a href="../index.html">nmrglue 0.4 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Examples from JBNMR article</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2013, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

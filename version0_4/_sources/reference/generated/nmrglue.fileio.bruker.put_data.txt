@@ -1,0 +1,6 @@
+nmrglue.fileio.bruker.put_data
+==============================
+
+.. currentmodule:: nmrglue.fileio.bruker
+
+.. autofunction:: put_data

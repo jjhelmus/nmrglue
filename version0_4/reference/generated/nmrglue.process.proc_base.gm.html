@@ -1,0 +1,177 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nmrglue.process.proc_base.gm &mdash; nmrglue 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.4 documentation" href="../../index.html" />
+    <link rel="up" title="nmrglue.proc_base" href="../proc_base.html" />
+    <link rel="next" title="nmrglue.process.proc_base.gmb" href="nmrglue.process.proc_base.gmb.html" />
+    <link rel="prev" title="nmrglue.process.proc_base.em" href="nmrglue.process.proc_base.em.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.proc_base.gmb.html" title="nmrglue.process.proc_base.gmb"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.proc_base.em.html" title="nmrglue.process.proc_base.em"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">nmrglue 0.4 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../proc_base.html" accesskey="U">nmrglue.proc_base</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="nmrglue-process-proc-base-gm">
+<h1>nmrglue.process.proc_base.gm<a class="headerlink" href="#nmrglue-process-proc-base-gm" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="nmrglue.process.proc_base.gm">
+<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">gm</tt><big>(</big><em>data</em>, <em>g1=0.0</em>, <em>g2=0.0</em>, <em>g3=0.0</em>, <em>inv=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/v0.4/nmrglue/process/proc_base.py#L52"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.gm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lorentz-to-Gauss apodization</p>
+<p>Functional form of apodization window:</p>
+<div class="math">
+\[gm(x_i) = \exp(e - g^2)\]</div>
+<p>Where:</p>
+<div class="math">
+\[\begin{split}e = pi * i * g1 \\
+g = 0.6 * pi * g2 * (g3 * (size - 1) - i)\end{split}\]</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>g1</strong> : float</p>
+<blockquote>
+<div><p>Inverse exponential width.</p>
+</div></blockquote>
+<p><strong>g2</strong> : float</p>
+<blockquote>
+<div><p>Gaussian broadening width.</p>
+</div></blockquote>
+<p><strong>g3</strong> : float</p>
+<blockquote>
+<div><p>Location of Gaussian maximum.</p>
+</div></blockquote>
+<p><strong>inv</strong> : bool, optional</p>
+<blockquote>
+<div><p>True for inverse apodization.  False (default) for standard.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Array of NMR data with apodization applied.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="nmrglue.process.proc_base.em.html"
+                        title="previous chapter">nmrglue.process.proc_base.em</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="nmrglue.process.proc_base.gmb.html"
+                        title="next chapter">nmrglue.process.proc_base.gmb</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/reference/generated/nmrglue.process.proc_base.gm.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.proc_base.gmb.html" title="nmrglue.process.proc_base.gmb"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.proc_base.em.html" title="nmrglue.process.proc_base.em"
+             >previous</a> |</li>
+        <li><a href="../../index.html">nmrglue 0.4 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../proc_base.html" >nmrglue.proc_base</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2013, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

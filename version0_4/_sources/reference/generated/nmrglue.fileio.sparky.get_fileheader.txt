@@ -1,0 +1,6 @@
+nmrglue.fileio.sparky.get_fileheader
+====================================
+
+.. currentmodule:: nmrglue.fileio.sparky
+
+.. autofunction:: get_fileheader

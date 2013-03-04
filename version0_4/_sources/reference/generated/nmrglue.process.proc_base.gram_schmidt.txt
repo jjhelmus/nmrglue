@@ -1,0 +1,6 @@
+nmrglue.process.proc_base.gram_schmidt
+======================================
+
+.. currentmodule:: nmrglue.process.proc_base
+
+.. autofunction:: gram_schmidt

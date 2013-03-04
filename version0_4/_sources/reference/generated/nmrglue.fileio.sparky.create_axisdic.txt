@@ -1,0 +1,6 @@
+nmrglue.fileio.sparky.create_axisdic
+====================================
+
+.. currentmodule:: nmrglue.fileio.sparky
+
+.. autofunction:: create_axisdic

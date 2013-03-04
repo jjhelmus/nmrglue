@@ -1,0 +1,6 @@
+nmrglue.process.proc_lp.cof2phase
+=================================
+
+.. currentmodule:: nmrglue.process.proc_lp
+
+.. autofunction:: cof2phase

@@ -1,0 +1,6 @@
+nmrglue.analysis.segmentation.mark_useg
+=======================================
+
+.. currentmodule:: nmrglue.analysis.segmentation
+
+.. autofunction:: mark_useg

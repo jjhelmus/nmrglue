@@ -1,0 +1,6 @@
+nmrglue.analysis.helpers.limit
+==============================
+
+.. currentmodule:: nmrglue.analysis.helpers
+
+.. autofunction:: limit

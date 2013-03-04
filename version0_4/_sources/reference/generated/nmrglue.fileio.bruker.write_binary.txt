@@ -1,0 +1,6 @@
+nmrglue.fileio.bruker.write_binary
+==================================
+
+.. currentmodule:: nmrglue.fileio.bruker
+
+.. autofunction:: write_binary

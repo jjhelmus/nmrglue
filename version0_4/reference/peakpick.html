@@ -1,0 +1,203 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nmrglue.peakpick &mdash; nmrglue 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.4 documentation" href="../index.html" />
+    <link rel="up" title="Reference Guide" href="index.html" />
+    <link rel="next" title="nmrglue.analysis.peakpick.pick" href="generated/nmrglue.analysis.peakpick.pick.html" />
+    <link rel="prev" title="nmrglue.analysis.linesh.f_NDregion" href="generated/nmrglue.analysis.linesh.f_NDregion.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.analysis.peakpick.pick.html" title="nmrglue.analysis.peakpick.pick"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.analysis.linesh.f_NDregion.html" title="nmrglue.analysis.linesh.f_NDregion"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">nmrglue 0.4 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Reference Guide</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-nmrglue.analysis.peakpick">
+<span id="nmrglue-peakpick"></span><h1>nmrglue.peakpick<a class="headerlink" href="#module-nmrglue.analysis.peakpick" title="Permalink to this headline">¶</a></h1>
+<p>Peak picking routines, lineshape parameter guessing, and related functions.</p>
+<p>This modules is imported as nmrglue.peakpick and can be called as such.</p>
+<div class="section" id="user-functions">
+<h2>User Functions<a class="headerlink" href="#user-functions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.peakpick.pick.html#nmrglue.analysis.peakpick.pick" title="nmrglue.analysis.peakpick.pick"><tt class="xref py py-obj docutils literal"><span class="pre">pick</span></tt></a>(data,&nbsp;pthres[,&nbsp;nthres,&nbsp;msep,&nbsp;...])</td>
+<td>Pick (find) peaks in a region of a NMR spectrum.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="developer-functions">
+<h2>Developer Functions<a class="headerlink" href="#developer-functions" title="Permalink to this headline">¶</a></h2>
+<p>These functions are typically not used directly by users.  Developers who
+want fine control over peak picking will be interested in these functions.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.peakpick.add_edge.html#nmrglue.analysis.peakpick.add_edge" title="nmrglue.analysis.peakpick.add_edge"><tt class="xref py py-obj docutils literal"><span class="pre">add_edge</span></tt></a>(locations,&nbsp;edge)</td>
+<td>Add edge to list of locations, returning a list of edge-added locations</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.peakpick.clusters.html#nmrglue.analysis.peakpick.clusters" title="nmrglue.analysis.peakpick.clusters"><tt class="xref py py-obj docutils literal"><span class="pre">clusters</span></tt></a>(data,&nbsp;locations,&nbsp;pthres,&nbsp;nthres[,&nbsp;...])</td>
+<td>Perform cluster analysis of peak locations.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.peakpick.pack_table.html#nmrglue.analysis.peakpick.pack_table" title="nmrglue.analysis.peakpick.pack_table"><tt class="xref py py-obj docutils literal"><span class="pre">pack_table</span></tt></a>(locations[,&nbsp;cluster_ids,&nbsp;scales,&nbsp;...])</td>
+<td>Create a table from peak information.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.peakpick.guess_params_slice.html#nmrglue.analysis.peakpick.guess_params_slice" title="nmrglue.analysis.peakpick.guess_params_slice"><tt class="xref py py-obj docutils literal"><span class="pre">guess_params_slice</span></tt></a>(data,&nbsp;location,&nbsp;...)</td>
+<td>Guess the parameter of a peak in a segment.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.peakpick.extract_1d.html#nmrglue.analysis.peakpick.extract_1d" title="nmrglue.analysis.peakpick.extract_1d"><tt class="xref py py-obj docutils literal"><span class="pre">extract_1d</span></tt></a>(data,&nbsp;location,&nbsp;axis)</td>
+<td>Extract a 1D slice from data along axis at location</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.peakpick.find_all_thres.html#nmrglue.analysis.peakpick.find_all_thres" title="nmrglue.analysis.peakpick.find_all_thres"><tt class="xref py py-obj docutils literal"><span class="pre">find_all_thres</span></tt></a>(data,&nbsp;thres,&nbsp;msep[,&nbsp;find_segs])</td>
+<td>Peak pick a spectrum using a threshhold-minimum distance algorithm.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.peakpick.find_all_nthres.html#nmrglue.analysis.peakpick.find_all_nthres" title="nmrglue.analysis.peakpick.find_all_nthres"><tt class="xref py py-obj docutils literal"><span class="pre">find_all_nthres</span></tt></a>(data,&nbsp;thres,&nbsp;msep[,&nbsp;find_segs])</td>
+<td>Peak pick a spectrum using a threshhold-minimum distance algorithm.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.peakpick.find_all_thres_fast.html#nmrglue.analysis.peakpick.find_all_thres_fast" title="nmrglue.analysis.peakpick.find_all_thres_fast"><tt class="xref py py-obj docutils literal"><span class="pre">find_all_thres_fast</span></tt></a>(data,&nbsp;thres,&nbsp;msep[,&nbsp;...])</td>
+<td>Fast version of find_all_thres.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.peakpick.find_all_nthres_fast.html#nmrglue.analysis.peakpick.find_all_nthres_fast" title="nmrglue.analysis.peakpick.find_all_nthres_fast"><tt class="xref py py-obj docutils literal"><span class="pre">find_all_nthres_fast</span></tt></a>(data,&nbsp;thres,&nbsp;msep[,&nbsp;...])</td>
+<td>Fast version of find_all_nthres_fast.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.analysis.peakpick.find_pseg_slice.html#nmrglue.analysis.peakpick.find_pseg_slice" title="nmrglue.analysis.peakpick.find_pseg_slice"><tt class="xref py py-obj docutils literal"><span class="pre">find_pseg_slice</span></tt></a>(data,&nbsp;location,&nbsp;thres)</td>
+<td>Find slices which define a segment in data above thres.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.analysis.peakpick.find_nseg_slice.html#nmrglue.analysis.peakpick.find_nseg_slice" title="nmrglue.analysis.peakpick.find_nseg_slice"><tt class="xref py py-obj docutils literal"><span class="pre">find_nseg_slice</span></tt></a>(data,&nbsp;location,&nbsp;thres)</td>
+<td>Find slices which define a segment in data below thres.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">nmrglue.peakpick</a><ul>
+<li><a class="reference internal" href="#user-functions">User Functions</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#developer-functions">Developer Functions</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="generated/nmrglue.analysis.linesh.f_NDregion.html"
+                        title="previous chapter">nmrglue.analysis.linesh.f_NDregion</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="generated/nmrglue.analysis.peakpick.pick.html"
+                        title="next chapter">nmrglue.analysis.peakpick.pick</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/reference/peakpick.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.analysis.peakpick.pick.html" title="nmrglue.analysis.peakpick.pick"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.analysis.linesh.f_NDregion.html" title="nmrglue.analysis.linesh.f_NDregion"
+             >previous</a> |</li>
+        <li><a href="../index.html">nmrglue 0.4 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Reference Guide</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2013, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

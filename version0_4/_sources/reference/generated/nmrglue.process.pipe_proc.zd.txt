@@ -1,0 +1,6 @@
+nmrglue.process.pipe_proc.zd
+============================
+
+.. currentmodule:: nmrglue.process.pipe_proc
+
+.. autofunction:: zd

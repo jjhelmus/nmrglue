@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.get_block
+===============================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: get_block

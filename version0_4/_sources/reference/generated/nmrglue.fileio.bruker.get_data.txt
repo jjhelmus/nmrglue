@@ -1,0 +1,6 @@
+nmrglue.fileio.bruker.get_data
+==============================
+
+.. currentmodule:: nmrglue.fileio.bruker
+
+.. autofunction:: get_data

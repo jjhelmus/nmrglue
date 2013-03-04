@@ -1,0 +1,6 @@
+nmrglue.analysis.peakpick.guess_params_slice
+============================================
+
+.. currentmodule:: nmrglue.analysis.peakpick
+
+.. autofunction:: guess_params_slice

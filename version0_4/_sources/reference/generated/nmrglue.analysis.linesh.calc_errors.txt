@@ -1,0 +1,6 @@
+nmrglue.analysis.linesh.calc_errors
+===================================
+
+.. currentmodule:: nmrglue.analysis.linesh
+
+.. autofunction:: calc_errors

@@ -1,0 +1,6 @@
+nmrglue.fileio.rnmrtk.get_trace
+===============================
+
+.. currentmodule:: nmrglue.fileio.rnmrtk
+
+.. autofunction:: get_trace

@@ -1,0 +1,6 @@
+nmrglue.fileio.sparky.create_data
+=================================
+
+.. currentmodule:: nmrglue.fileio.sparky
+
+.. autofunction:: create_data

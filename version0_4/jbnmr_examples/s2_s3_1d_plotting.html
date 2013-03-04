@@ -1,0 +1,209 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>1D visualization examples &mdash; nmrglue 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.4 documentation" href="../index.html" />
+    <link rel="up" title="Examples from JBNMR article" href="index.html" />
+    <link rel="next" title="2D visualization example" href="s4_2d_plotting.html" />
+    <link rel="prev" title="Sparky to NMRPipe example" href="s1_sparky_to_nmrpipe.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="s4_2d_plotting.html" title="2D visualization example"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="s1_sparky_to_nmrpipe.html" title="Sparky to NMRPipe example"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">nmrglue 0.4 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Examples from JBNMR article</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="d-visualization-examples">
+<h1>1D visualization examples<a class="headerlink" href="#d-visualization-examples" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>These two examples are taken from Listing S2 and S3 in the 2013 JBNMR nmrglue
+paper.  In the first example a the 1D time domain signal from a NMRPipe file
+(<cite>test.fid</cite>) is visualized using the <cite>plot_1d_pipe_time.py</cite> script.  In the
+second example a portion of a 1D 13C CP MAS NMR spectrum is visualized from
+the NMRPipe file <cite>test.ft</cite> using the script <cite>plot_1d_pipe_freq.py</cite></p>
+</div>
+<div class="section" id="instructions">
+<h2>Instructions<a class="headerlink" href="#instructions" title="Permalink to this headline">¶</a></h2>
+<p>Execute <cite>python plot_1d_pipe_time.py</cite> to visualize the data in the file
+<cite>test.fid</cite>.  The resulting file <cite>fid.png</cite> is presented as Figure 2 in the
+paper.</p>
+<p>Execute <cite>python plot_1d_pipe_spectrum.py</cite> to visualize the data in the file
+<cite>test.ft</cite>.  The resulting file <cite>spectrum.png</cite> is presented as Figure 3 in the
+paper.</p>
+<p>The data used in this example is available for
+<a class="reference external" href="http://nmrglue.googlecode.com/files/jbnmr_s2_s3_1d_plotting.zip">download.</a></p>
+<p>Listing S2</p>
+<p>[<a class="reference download internal" href="../_downloads/plot_1d_pipe_time1.py"><tt class="xref download docutils literal"><span class="pre">plot_1d_pipe_time.py</span></tt></a>]</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">nmrglue</span> <span class="kn">as</span> <span class="nn">ng</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+<span class="c"># read in the data from a NMRPipe file</span>
+<span class="n">dic</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;test.fid&quot;</span><span class="p">)</span>
+
+<span class="c"># make a unit conversion object for the axis</span>
+<span class="n">uc</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">make_uc</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+<span class="c"># plot the spectrum</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">uc</span><span class="o">.</span><span class="n">ms_scale</span><span class="p">(),</span> <span class="n">data</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="s">&#39;k-&#39;</span><span class="p">)</span>
+
+<span class="c"># decorate axes</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&quot;Time (ms)&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">100000</span><span class="p">,</span> <span class="mi">100000</span><span class="p">)</span>
+
+<span class="c"># save the figure</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&quot;fid.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/fid1.png" src="../_images/fid1.png" />
+<p>Listing S3</p>
+<p>[<a class="reference download internal" href="../_downloads/plot_1d_pipe_spectrum.py"><tt class="xref download docutils literal"><span class="pre">plot_1d_pipe_spectrum.py</span></tt></a>]</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">nmrglue</span> <span class="kn">as</span> <span class="nn">ng</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+<span class="c"># read in the data from a NMRPipe file</span>
+<span class="n">dic</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&quot;test.ft&quot;</span><span class="p">)</span>
+
+<span class="c"># create a unit conversion object for the axis</span>
+<span class="n">uc</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">make_uc</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+<span class="c"># plot the spectrum</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">uc</span><span class="o">.</span><span class="n">ppm_scale</span><span class="p">(),</span> <span class="n">data</span><span class="p">,</span> <span class="s">&#39;k-&#39;</span><span class="p">)</span>
+
+<span class="c"># decorate axes</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&quot;13C ppm&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mi">80000</span><span class="p">,</span> <span class="mi">2500000</span><span class="p">)</span>
+
+<span class="c"># save the figure</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&quot;spectrum.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/spectrum2.png" src="../_images/spectrum2.png" />
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">1D visualization examples</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#instructions">Instructions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="s1_sparky_to_nmrpipe.html"
+                        title="previous chapter">Sparky to NMRPipe example</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="s4_2d_plotting.html"
+                        title="next chapter">2D visualization example</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/jbnmr_examples/s2_s3_1d_plotting.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="s4_2d_plotting.html" title="2D visualization example"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="s1_sparky_to_nmrpipe.html" title="Sparky to NMRPipe example"
+             >previous</a> |</li>
+        <li><a href="../index.html">nmrglue 0.4 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Examples from JBNMR article</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2013, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

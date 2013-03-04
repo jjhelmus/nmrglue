@@ -1,0 +1,6 @@
+nmrglue.analysis.lineshapes1d.ls_str2class
+==========================================
+
+.. currentmodule:: nmrglue.analysis.lineshapes1d
+
+.. autofunction:: ls_str2class

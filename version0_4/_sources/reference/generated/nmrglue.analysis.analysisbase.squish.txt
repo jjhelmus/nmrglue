@@ -1,0 +1,6 @@
+nmrglue.analysis.analysisbase.squish
+====================================
+
+.. currentmodule:: nmrglue.analysis.analysisbase
+
+.. autofunction:: squish

@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.get_parameter
+===================================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: get_parameter

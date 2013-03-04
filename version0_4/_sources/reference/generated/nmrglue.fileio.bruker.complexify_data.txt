@@ -1,0 +1,6 @@
+nmrglue.fileio.bruker.complexify_data
+=====================================
+
+.. currentmodule:: nmrglue.fileio.bruker
+
+.. autofunction:: complexify_data

@@ -1,0 +1,6 @@
+nmrglue.analysis.lineshapes1d.center_fwhm
+=========================================
+
+.. currentmodule:: nmrglue.analysis.lineshapes1d
+
+.. autofunction:: center_fwhm

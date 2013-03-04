@@ -1,0 +1,6 @@
+nmrglue.analysis.linesh.fit_spectrum
+====================================
+
+.. currentmodule:: nmrglue.analysis.linesh
+
+.. autofunction:: fit_spectrum

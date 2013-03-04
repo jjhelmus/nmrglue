@@ -1,0 +1,6 @@
+nmrglue.analysis.analysisbase.find_limits
+=========================================
+
+.. currentmodule:: nmrglue.analysis.analysisbase
+
+.. autofunction:: find_limits

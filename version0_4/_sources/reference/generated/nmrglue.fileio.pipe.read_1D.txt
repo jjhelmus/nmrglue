@@ -1,0 +1,6 @@
+nmrglue.fileio.pipe.read_1D
+===========================
+
+.. currentmodule:: nmrglue.fileio.pipe
+
+.. autofunction:: read_1D

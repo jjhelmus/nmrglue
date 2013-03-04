@@ -1,0 +1,6 @@
+nmrglue.fileio.sparky.get_data
+==============================
+
+.. currentmodule:: nmrglue.fileio.sparky
+
+.. autofunction:: get_data

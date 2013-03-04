@@ -1,0 +1,6 @@
+nmrglue.process.pipe_proc.gm
+============================
+
+.. currentmodule:: nmrglue.process.pipe_proc
+
+.. autofunction:: gm

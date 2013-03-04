@@ -1,0 +1,6 @@
+nmrglue.fileio.pipe.write_single
+================================
+
+.. currentmodule:: nmrglue.fileio.pipe
+
+.. autofunction:: write_single

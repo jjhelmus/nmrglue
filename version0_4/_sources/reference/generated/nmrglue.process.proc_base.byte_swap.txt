@@ -1,0 +1,6 @@
+nmrglue.process.proc_base.byte_swap
+===================================
+
+.. currentmodule:: nmrglue.process.proc_base
+
+.. autofunction:: byte_swap

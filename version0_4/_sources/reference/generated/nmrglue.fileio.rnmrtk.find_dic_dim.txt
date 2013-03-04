@@ -1,0 +1,6 @@
+nmrglue.fileio.rnmrtk.find_dic_dim
+==================================
+
+.. currentmodule:: nmrglue.fileio.rnmrtk
+
+.. autofunction:: find_dic_dim

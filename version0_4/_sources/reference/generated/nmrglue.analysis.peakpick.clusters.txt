@@ -1,0 +1,6 @@
+nmrglue.analysis.peakpick.clusters
+==================================
+
+.. currentmodule:: nmrglue.analysis.peakpick
+
+.. autofunction:: clusters

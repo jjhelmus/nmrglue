@@ -1,0 +1,6 @@
+nmrglue.fileio.rnmrtk.create_data
+=================================
+
+.. currentmodule:: nmrglue.fileio.rnmrtk
+
+.. autofunction:: create_data

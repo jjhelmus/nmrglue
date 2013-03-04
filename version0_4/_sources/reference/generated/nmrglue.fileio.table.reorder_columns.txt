@@ -1,0 +1,6 @@
+nmrglue.fileio.table.reorder_columns
+====================================
+
+.. currentmodule:: nmrglue.fileio.table
+
+.. autofunction:: reorder_columns

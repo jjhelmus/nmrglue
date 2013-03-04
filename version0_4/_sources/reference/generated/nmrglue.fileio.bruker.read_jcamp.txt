@@ -1,0 +1,6 @@
+nmrglue.fileio.bruker.read_jcamp
+================================
+
+.. currentmodule:: nmrglue.fileio.bruker
+
+.. autofunction:: read_jcamp

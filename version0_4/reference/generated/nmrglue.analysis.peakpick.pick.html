@@ -1,0 +1,235 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nmrglue.analysis.peakpick.pick &mdash; nmrglue 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.4 documentation" href="../../index.html" />
+    <link rel="up" title="nmrglue.peakpick" href="../peakpick.html" />
+    <link rel="next" title="nmrglue.analysis.peakpick.add_edge" href="nmrglue.analysis.peakpick.add_edge.html" />
+    <link rel="prev" title="nmrglue.analysis.peakpick.find_nseg_slice" href="nmrglue.analysis.peakpick.find_nseg_slice.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.analysis.peakpick.add_edge.html" title="nmrglue.analysis.peakpick.add_edge"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.analysis.peakpick.find_nseg_slice.html" title="nmrglue.analysis.peakpick.find_nseg_slice"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">nmrglue 0.4 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../peakpick.html" accesskey="U">nmrglue.peakpick</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="nmrglue-analysis-peakpick-pick">
+<h1>nmrglue.analysis.peakpick.pick<a class="headerlink" href="#nmrglue-analysis-peakpick-pick" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="nmrglue.analysis.peakpick.pick">
+<tt class="descclassname">nmrglue.analysis.peakpick.</tt><tt class="descname">pick</tt><big>(</big><em>data, pthres, nthres=None, msep=None, algorithm='connected', est_params=True, lineshapes=None, edge=None, diag=False, c_struc=None, c_ndil=0, cluster=True, table=True, axis_names=['A', 'Z', 'Y', 'X']</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/v0.4/nmrglue/analysis/peakpick.py#L15"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.peakpick.pick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pick (find) peaks in a region of a NMR spectrum.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Region of NMR spectrum to pick peaks from.</p>
+</div></blockquote>
+<p><strong>pthres</strong> : float</p>
+<blockquote>
+<div><p>Minimum peak height for positive peaks. None to not detect positive
+peaks.</p>
+</div></blockquote>
+<p><strong>nthres</strong> : float</p>
+<blockquote>
+<div><p>Minimum peak height for negative peaks (typically a negative value).
+None to not detect negative peaks.</p>
+</div></blockquote>
+<p><strong>msep</strong> : tuple of ints, optional</p>
+<blockquote>
+<div><p>N-tuple of minimum peak seperations along each axis. Must be provided
+if algorithm is &#8216;thresh&#8217; or &#8216;thresh-fast&#8217;.</p>
+</div></blockquote>
+<p><strong>algorithm</strong> : {&#8216;thres&#8217;, thresh-fast&#8217;, &#8216;downward&#8217;, &#8216;connected&#8217;}, optional</p>
+<blockquote>
+<div><p>Peak picking algorithm to use.  Default is &#8216;connected&#8217;.</p>
+</div></blockquote>
+<p><strong>est_params</strong> : bool, optional</p>
+<blockquote>
+<div><p>True to perform an estimate of linewidths and amplitude for all peaks
+picked.  False, the default, will return only the peak locations.</p>
+</div></blockquote>
+<p><strong>lineshapes</strong> : list, optional</p>
+<blockquote>
+<div><p>A list of lineshape classes or string shortcuts for each dimension.
+If not specified Gaussian type lineshapes with a FWHM  linewidth
+parameter is assumed in each dimension. This parameter if only used
+if est_params is True.</p>
+</div></blockquote>
+<p><strong>edge</strong> : tuple of ints, optional</p>
+<blockquote>
+<div><p>Tuple to add to peak locations representing the edge of the region.
+None, the default, skips this addition.</p>
+</div></blockquote>
+<p><strong>diag</strong> : bool, optional</p>
+<blockquote>
+<div><p>True to consider diagonal points to be  touching in peak finding
+algorithm and clustering.</p>
+</div></blockquote>
+<p><strong>c_struc</strong> : ndarray, optional</p>
+<blockquote>
+<div><p>Structure element to use when applying dilation on segments before
+applying clustering algorithm. None will apply a default square
+structure with connectivity one will be applied.</p>
+</div></blockquote>
+<p><strong>c_ndil</strong> : int, optional</p>
+<blockquote>
+<div><p>Number of dilations to perform on segments before applying clustering
+algorithm.</p>
+</div></blockquote>
+<p><strong>cluster</strong> : bool, optional</p>
+<blockquote>
+<div><p>True to cluster touching peaks. False does not apply clustering.</p>
+</div></blockquote>
+<p><strong>table</strong> : bool, optional</p>
+<blockquote>
+<div><p>True to return a table. False to return lists.</p>
+</div></blockquote>
+<p><strong>axis_names</strong> : list. optional</p>
+<blockquote>
+<div><p>List of axis names, the last n will be used for column name prefixes
+in table where n is the number of dimensions.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>locations</strong> : list, returned when table is False</p>
+<blockquote>
+<div><p>Peak locations.</p>
+</div></blockquote>
+<p><strong>cluster_ids</strong> : list, returned when table is False and cluster is True</p>
+<blockquote>
+<div><p>Cluster numbers for peaks.</p>
+</div></blockquote>
+<p><strong>scales</strong> : list, returned when table is False and est_params is True</p>
+<blockquote>
+<div><p>Estimated peak scales (linewidths).</p>
+</div></blockquote>
+<p><strong>amps</strong> : list, returned when table is False and est_params is True</p>
+<blockquote>
+<div><p>Estimated peak amplitudes.</p>
+</div></blockquote>
+<p><strong>table</strong> : recarray, returned when table is True</p>
+<blockquote class="last">
+<div><p>Table of request peak parameters.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="nmrglue.analysis.peakpick.find_nseg_slice.html"
+                        title="previous chapter">nmrglue.analysis.peakpick.find_nseg_slice</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="nmrglue.analysis.peakpick.add_edge.html"
+                        title="next chapter">nmrglue.analysis.peakpick.add_edge</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/reference/generated/nmrglue.analysis.peakpick.pick.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.analysis.peakpick.add_edge.html" title="nmrglue.analysis.peakpick.add_edge"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.analysis.peakpick.find_nseg_slice.html" title="nmrglue.analysis.peakpick.find_nseg_slice"
+             >previous</a> |</li>
+        <li><a href="../../index.html">nmrglue 0.4 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../peakpick.html" >nmrglue.peakpick</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2013, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

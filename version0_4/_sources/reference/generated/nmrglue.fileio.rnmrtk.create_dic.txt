@@ -1,0 +1,6 @@
+nmrglue.fileio.rnmrtk.create_dic
+================================
+
+.. currentmodule:: nmrglue.fileio.rnmrtk
+
+.. autofunction:: create_dic

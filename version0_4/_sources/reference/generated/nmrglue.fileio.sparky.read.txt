@@ -1,0 +1,6 @@
+nmrglue.fileio.sparky.read
+==========================
+
+.. currentmodule:: nmrglue.fileio.sparky
+
+.. autofunction:: read

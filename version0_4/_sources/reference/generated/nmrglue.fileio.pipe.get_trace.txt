@@ -1,0 +1,6 @@
+nmrglue.fileio.pipe.get_trace
+=============================
+
+.. currentmodule:: nmrglue.fileio.pipe
+
+.. autofunction:: get_trace

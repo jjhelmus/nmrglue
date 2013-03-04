@@ -1,0 +1,6 @@
+nmrglue.fileio.rnmrtk.read_par
+==============================
+
+.. currentmodule:: nmrglue.fileio.rnmrtk
+
+.. autofunction:: read_par

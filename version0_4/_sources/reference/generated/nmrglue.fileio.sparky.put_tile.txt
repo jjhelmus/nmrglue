@@ -1,0 +1,6 @@
+nmrglue.fileio.sparky.put_tile
+==============================
+
+.. currentmodule:: nmrglue.fileio.sparky
+
+.. autofunction:: put_tile

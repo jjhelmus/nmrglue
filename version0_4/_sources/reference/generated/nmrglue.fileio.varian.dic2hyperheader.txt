@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.dic2hyperheader
+=====================================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: dic2hyperheader

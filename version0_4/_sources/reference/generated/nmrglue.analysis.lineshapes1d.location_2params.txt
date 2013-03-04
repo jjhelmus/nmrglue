@@ -1,0 +1,25 @@
+nmrglue.analysis.lineshapes1d.location_2params
+==============================================
+
+.. currentmodule:: nmrglue.analysis.lineshapes1d
+
+.. autoclass:: location_2params
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~location_2params.__init__
+      ~location_2params.add_edge
+      ~location_2params.nparam
+      ~location_2params.remove_edge
+   
+   
+
+   
+   
+   

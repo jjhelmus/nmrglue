@@ -1,0 +1,6 @@
+nmrglue.fileio.pipe.transpose_3D
+================================
+
+.. currentmodule:: nmrglue.fileio.pipe
+
+.. autofunction:: transpose_3D

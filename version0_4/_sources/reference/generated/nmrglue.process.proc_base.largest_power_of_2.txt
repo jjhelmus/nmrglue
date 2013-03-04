@@ -1,0 +1,6 @@
+nmrglue.process.proc_base.largest_power_of_2
+============================================
+
+.. currentmodule:: nmrglue.process.proc_base
+
+.. autofunction:: largest_power_of_2

@@ -1,0 +1,6 @@
+nmrglue.util.misc.isdatasimilar
+===============================
+
+.. currentmodule:: nmrglue.util.misc
+
+.. autofunction:: isdatasimilar

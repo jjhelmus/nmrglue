@@ -1,0 +1,6 @@
+nmrglue.fileio.bruker.parse_jcamp_value
+=======================================
+
+.. currentmodule:: nmrglue.fileio.bruker
+
+.. autofunction:: parse_jcamp_value

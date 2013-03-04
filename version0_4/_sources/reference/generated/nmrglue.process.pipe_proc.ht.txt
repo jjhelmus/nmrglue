@@ -1,0 +1,6 @@
+nmrglue.process.pipe_proc.ht
+============================
+
+.. currentmodule:: nmrglue.process.pipe_proc
+
+.. autofunction:: ht

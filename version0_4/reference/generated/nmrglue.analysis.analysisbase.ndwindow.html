@@ -1,0 +1,224 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nmrglue.analysis.analysisbase.ndwindow &mdash; nmrglue 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.4 documentation" href="../../index.html" />
+    <link rel="up" title="nmrglue.analysisbase" href="../analysisbase.html" />
+    <link rel="next" title="nmrglue.analysis.analysisbase.ndwindow_index" href="nmrglue.analysis.analysisbase.ndwindow_index.html" />
+    <link rel="prev" title="nmrglue.analysis.analysisbase.squish" href="nmrglue.analysis.analysisbase.squish.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.analysis.analysisbase.ndwindow_index.html" title="nmrglue.analysis.analysisbase.ndwindow_index"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.analysis.analysisbase.squish.html" title="nmrglue.analysis.analysisbase.squish"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">nmrglue 0.4 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../analysisbase.html" accesskey="U">nmrglue.analysisbase</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="nmrglue-analysis-analysisbase-ndwindow">
+<h1>nmrglue.analysis.analysisbase.ndwindow<a class="headerlink" href="#nmrglue-analysis-analysisbase-ndwindow" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="nmrglue.analysis.analysisbase.ndwindow">
+<em class="property">class </em><tt class="descclassname">nmrglue.analysis.analysisbase.</tt><tt class="descname">ndwindow</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/v0.4/nmrglue/analysis/analysisbase.py#L164"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow" title="Permalink to this definition">¶</a></dt>
+<dd><p>An N-dimensional iterator to slice arrays into windows.</p>
+<p>Given the shape of an array and a window size, an &#8216;ndwindow&#8217; instance
+iterators over tuples of slices which slice an the array into wsize
+sub-arrays.  At each iteration, the index of the center of the sub-array
+is incremented by one along the last dimension.  Array borders are ignored
+so the resulting sub-array can be smaller than wsize.  If wsize contains
+even values the window is off center containing an additional point with
+lower index.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>size</strong> : tuple of ints</p>
+<blockquote>
+<div><p>Size of array to generate tuples of slices from.</p>
+</div></blockquote>
+<p><strong>wsize</strong> : tuple of ints</p>
+<blockquote class="last">
+<div><p>Window/sub-array size. Size of the area to select from array.  This is
+the maximum size of the window.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<dl class="last docutils">
+<dt><a class="reference internal" href="nmrglue.analysis.analysisbase.ndwindow_index.html#nmrglue.analysis.analysisbase.ndwindow_index" title="nmrglue.analysis.analysisbase.ndwindow_index"><tt class="xref py py-obj docutils literal"><span class="pre">ndwindow_index</span></tt></a></dt>
+<dd>Iterator of a ndwindow and index of the window center</dd>
+<dt><a class="reference internal" href="nmrglue.analysis.analysisbase.ndwindow_inside.html#nmrglue.analysis.analysisbase.ndwindow_inside" title="nmrglue.analysis.analysisbase.ndwindow_inside"><tt class="xref py py-obj docutils literal"><span class="pre">ndwindow_inside</span></tt></a></dt>
+<dd>Iterator over equal sized windows in the array.</dd>
+</dl>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">ndwindow</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">,(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">)):</span>
+<span class="gp">... </span>    <span class="k">print</span> <span class="n">a</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>
+<span class="go">[[0 1]</span>
+<span class="go"> [4 5]]</span>
+<span class="go">[[0 1 2]</span>
+<span class="go"> [4 5 6]]</span>
+<span class="go">[[1 2 3]</span>
+<span class="go"> [5 6 7]]</span>
+<span class="go">[[2 3]</span>
+<span class="go"> [6 7]]</span>
+<span class="go">[[0 1]</span>
+<span class="go"> [4 5]</span>
+<span class="go"> [8 9]]</span>
+<span class="go">[[ 0  1  2]</span>
+<span class="go"> [ 4  5  6]</span>
+<span class="go"> [ 8  9 10]]</span>
+<span class="go">[[ 1  2  3]</span>
+<span class="go"> [ 5  6  7]</span>
+<span class="go"> [ 9 10 11]]</span>
+<span class="go">[[ 2  3]</span>
+<span class="go"> [ 6  7]</span>
+<span class="go"> [10 11]]</span>
+<span class="go">[[4 5]</span>
+<span class="go"> [8 9]]</span>
+<span class="go">[[ 4  5  6]</span>
+<span class="go"> [ 8  9 10]]</span>
+<span class="go">[[ 5  6  7]</span>
+<span class="go"> [ 9 10 11]]</span>
+<span class="go">[[ 6  7]</span>
+<span class="go"> [10 11]]</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="nmrglue.analysis.analysisbase.ndwindow.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>shape</em>, <em>wsize</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/v0.4/nmrglue/analysis/analysisbase.py#L225"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.analysis.analysisbase.ndwindow.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up the ndwindow object</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#nmrglue.analysis.analysisbase.ndwindow.__init__" title="nmrglue.analysis.analysisbase.ndwindow.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">__init__</span></tt></a>(shape,&nbsp;wsize)</td>
+<td>Set up the ndwindow object</td>
+</tr>
+<tr class="row-even"><td><tt class="xref py py-obj docutils literal"><span class="pre">next</span></tt>(()&nbsp;-&gt;&nbsp;the&nbsp;next&nbsp;value,&nbsp;...)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="nmrglue.analysis.analysisbase.squish.html"
+                        title="previous chapter">nmrglue.analysis.analysisbase.squish</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="nmrglue.analysis.analysisbase.ndwindow_index.html"
+                        title="next chapter">nmrglue.analysis.analysisbase.ndwindow_index</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/reference/generated/nmrglue.analysis.analysisbase.ndwindow.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.analysis.analysisbase.ndwindow_index.html" title="nmrglue.analysis.analysisbase.ndwindow_index"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.analysis.analysisbase.squish.html" title="nmrglue.analysis.analysisbase.squish"
+             >previous</a> |</li>
+        <li><a href="../../index.html">nmrglue 0.4 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../analysisbase.html" >nmrglue.analysisbase</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2013, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

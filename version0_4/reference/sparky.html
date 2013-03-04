@@ -1,0 +1,315 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nmrglue.sparky &mdash; nmrglue 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.4 documentation" href="../index.html" />
+    <link rel="up" title="Reference Guide" href="index.html" />
+    <link rel="next" title="nmrglue.fileio.sparky.read" href="generated/nmrglue.fileio.sparky.read.html" />
+    <link rel="prev" title="nmrglue.fileio.simpson.bytes2float" href="generated/nmrglue.fileio.simpson.bytes2float.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.fileio.sparky.read.html" title="nmrglue.fileio.sparky.read"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.fileio.simpson.bytes2float.html" title="nmrglue.fileio.simpson.bytes2float"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">nmrglue 0.4 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Reference Guide</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-nmrglue.fileio.sparky">
+<span id="nmrglue-sparky"></span><h1>nmrglue.sparky<a class="headerlink" href="#module-nmrglue.fileio.sparky" title="Permalink to this headline">¶</a></h1>
+<p>Functions for reading and writing Sparky (.ucsf) files.</p>
+<p>This modules is imported as nmrglue.sparky and can be called as such.</p>
+<div class="section" id="user-information">
+<h2>User Information<a class="headerlink" href="#user-information" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="user-functions">
+<h3>User Functions<a class="headerlink" href="#user-functions" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.read.html#nmrglue.fileio.sparky.read" title="nmrglue.fileio.sparky.read"><tt class="xref py py-obj docutils literal"><span class="pre">read</span></tt></a>(filename)</td>
+<td>Read a Sparky file.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.write.html#nmrglue.fileio.sparky.write" title="nmrglue.fileio.sparky.write"><tt class="xref py py-obj docutils literal"><span class="pre">write</span></tt></a>(filename,&nbsp;dic,&nbsp;data[,&nbsp;overwrite])</td>
+<td>Write a Sparky file.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.read_lowmem.html#nmrglue.fileio.sparky.read_lowmem" title="nmrglue.fileio.sparky.read_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">read_lowmem</span></tt></a>(filename)</td>
+<td>Read a Sparky file using minimal memory.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.write_lowmem.html#nmrglue.fileio.sparky.write_lowmem" title="nmrglue.fileio.sparky.write_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">write_lowmem</span></tt></a>(filename,&nbsp;dic,&nbsp;data[,&nbsp;overwrite])</td>
+<td>Write a Sparky using minimum amounts of memory (tile by tile)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.make_uc.html#nmrglue.fileio.sparky.make_uc" title="nmrglue.fileio.sparky.make_uc"><tt class="xref py py-obj docutils literal"><span class="pre">make_uc</span></tt></a>(dic,&nbsp;data[,&nbsp;dim])</td>
+<td>Create a unit conversion object.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.guess_udic.html#nmrglue.fileio.sparky.guess_udic" title="nmrglue.fileio.sparky.guess_udic"><tt class="xref py py-obj docutils literal"><span class="pre">guess_udic</span></tt></a>(dic,&nbsp;data)</td>
+<td>Guess parameter of universal dictionary from dic,data pair.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.create_dic.html#nmrglue.fileio.sparky.create_dic" title="nmrglue.fileio.sparky.create_dic"><tt class="xref py py-obj docutils literal"><span class="pre">create_dic</span></tt></a>(udic[,&nbsp;datetimeobj,&nbsp;user])</td>
+<td>Create a Sparky parameter dictionary from universal dictionary.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.datetime2dic.html#nmrglue.fileio.sparky.datetime2dic" title="nmrglue.fileio.sparky.datetime2dic"><tt class="xref py py-obj docutils literal"><span class="pre">datetime2dic</span></tt></a>(datetimeobj,&nbsp;dic)</td>
+<td>Add datetime object to dictionary</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.dic2datetime.html#nmrglue.fileio.sparky.dic2datetime" title="nmrglue.fileio.sparky.dic2datetime"><tt class="xref py py-obj docutils literal"><span class="pre">dic2datetime</span></tt></a>(dic)</td>
+<td>Create a datetime object from a Sparky dictionary</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="developer-information">
+<h2>Developer Information<a class="headerlink" href="#developer-information" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="sparky-file-format-information">
+<h3>Sparky file format information<a class="headerlink" href="#sparky-file-format-information" title="Permalink to this headline">¶</a></h3>
+<p>Information on the Sparky file format can be found online at:</p>
+</div>
+<div class="section" id="developer-functions">
+<h3>Developer Functions<a class="headerlink" href="#developer-functions" title="Permalink to this headline">¶</a></h3>
+<p>These functions are typically not used directly by users.  Developers who
+want fine control over Sparky files may be interested in these functions.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.create_data.html#nmrglue.fileio.sparky.create_data" title="nmrglue.fileio.sparky.create_data"><tt class="xref py py-obj docutils literal"><span class="pre">create_data</span></tt></a>(data)</td>
+<td>Create a Sparky data array (recast into float32 array)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.create_axisdic.html#nmrglue.fileio.sparky.create_axisdic" title="nmrglue.fileio.sparky.create_axisdic"><tt class="xref py py-obj docutils literal"><span class="pre">create_axisdic</span></tt></a>(adic,&nbsp;tlen,&nbsp;dlen)</td>
+<td>Make an Sparky axis dictionary from a universal axis dictionary.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.calc_tshape.html#nmrglue.fileio.sparky.calc_tshape" title="nmrglue.fileio.sparky.calc_tshape"><tt class="xref py py-obj docutils literal"><span class="pre">calc_tshape</span></tt></a>(shape[,&nbsp;kbyte_max])</td>
+<td>Calculate a tile shape from data shape.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.read_2D.html#nmrglue.fileio.sparky.read_2D" title="nmrglue.fileio.sparky.read_2D"><tt class="xref py py-obj docutils literal"><span class="pre">read_2D</span></tt></a>(filename)</td>
+<td>Read a 2D sparky file. See <a class="reference internal" href="generated/nmrglue.fileio.sparky.read.html#nmrglue.fileio.sparky.read" title="nmrglue.fileio.sparky.read"><tt class="xref py py-func docutils literal"><span class="pre">read()</span></tt></a> for documentation.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.write_2D.html#nmrglue.fileio.sparky.write_2D" title="nmrglue.fileio.sparky.write_2D"><tt class="xref py py-obj docutils literal"><span class="pre">write_2D</span></tt></a>(filename,&nbsp;dic,&nbsp;data[,&nbsp;overwrite])</td>
+<td>Write a 2D Sparky file. See <a class="reference internal" href="generated/nmrglue.fileio.sparky.write.html#nmrglue.fileio.sparky.write" title="nmrglue.fileio.sparky.write"><tt class="xref py py-func docutils literal"><span class="pre">write()</span></tt></a> for documentation.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.read_3D.html#nmrglue.fileio.sparky.read_3D" title="nmrglue.fileio.sparky.read_3D"><tt class="xref py py-obj docutils literal"><span class="pre">read_3D</span></tt></a>(filename)</td>
+<td>Read a 3D Sparky file. See <a class="reference internal" href="generated/nmrglue.fileio.sparky.read.html#nmrglue.fileio.sparky.read" title="nmrglue.fileio.sparky.read"><tt class="xref py py-func docutils literal"><span class="pre">read()</span></tt></a> for documentation.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.write_3D.html#nmrglue.fileio.sparky.write_3D" title="nmrglue.fileio.sparky.write_3D"><tt class="xref py py-obj docutils literal"><span class="pre">write_3D</span></tt></a>(filename,&nbsp;dic,&nbsp;data[,&nbsp;overwrite])</td>
+<td>Write a 3D Sparky file. See <a class="reference internal" href="generated/nmrglue.fileio.sparky.write.html#nmrglue.fileio.sparky.write" title="nmrglue.fileio.sparky.write"><tt class="xref py py-func docutils literal"><span class="pre">write()</span></tt></a> for documentation.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.read_lowmem_2D.html#nmrglue.fileio.sparky.read_lowmem_2D" title="nmrglue.fileio.sparky.read_lowmem_2D"><tt class="xref py py-obj docutils literal"><span class="pre">read_lowmem_2D</span></tt></a>(filename)</td>
+<td>Read a 2D Sparky file using minimal memory. See <a class="reference internal" href="generated/nmrglue.fileio.sparky.read_lowmem.html#nmrglue.fileio.sparky.read_lowmem" title="nmrglue.fileio.sparky.read_lowmem"><tt class="xref py py-func docutils literal"><span class="pre">read_lowmem()</span></tt></a>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.read_lowmem_3D.html#nmrglue.fileio.sparky.read_lowmem_3D" title="nmrglue.fileio.sparky.read_lowmem_3D"><tt class="xref py py-obj docutils literal"><span class="pre">read_lowmem_3D</span></tt></a>(filename)</td>
+<td>Read a 3D sparky file using minimal memory. See <a class="reference internal" href="generated/nmrglue.fileio.sparky.read_lowmem.html#nmrglue.fileio.sparky.read_lowmem" title="nmrglue.fileio.sparky.read_lowmem"><tt class="xref py py-func docutils literal"><span class="pre">read_lowmem()</span></tt></a>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.get_tilen.html#nmrglue.fileio.sparky.get_tilen" title="nmrglue.fileio.sparky.get_tilen"><tt class="xref py py-obj docutils literal"><span class="pre">get_tilen</span></tt></a>(f,&nbsp;n_tile,&nbsp;tw_tuple)</td>
+<td>Read a tile from a Sparky file object.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.get_tile.html#nmrglue.fileio.sparky.get_tile" title="nmrglue.fileio.sparky.get_tile"><tt class="xref py py-obj docutils literal"><span class="pre">get_tile</span></tt></a>(f,&nbsp;num_points)</td>
+<td>Read the next tile from a Sparky file object.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.put_tile.html#nmrglue.fileio.sparky.put_tile" title="nmrglue.fileio.sparky.put_tile"><tt class="xref py py-obj docutils literal"><span class="pre">put_tile</span></tt></a>(f,&nbsp;tile)</td>
+<td>Put a tile to a Sparky file object.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.get_data.html#nmrglue.fileio.sparky.get_data" title="nmrglue.fileio.sparky.get_data"><tt class="xref py py-obj docutils literal"><span class="pre">get_data</span></tt></a>(f)</td>
+<td>Read all data from sparky file object.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.put_data.html#nmrglue.fileio.sparky.put_data" title="nmrglue.fileio.sparky.put_data"><tt class="xref py py-obj docutils literal"><span class="pre">put_data</span></tt></a>(f,&nbsp;data)</td>
+<td>Put data to a Sparky file object.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.find_tilen_2d.html#nmrglue.fileio.sparky.find_tilen_2d" title="nmrglue.fileio.sparky.find_tilen_2d"><tt class="xref py py-obj docutils literal"><span class="pre">find_tilen_2d</span></tt></a>(data,&nbsp;ntile,&nbsp;(lentY,&nbsp;lentX))</td>
+<td>Return a tile from a 2D NMR data set.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.tile_data2d.html#nmrglue.fileio.sparky.tile_data2d" title="nmrglue.fileio.sparky.tile_data2d"><tt class="xref py py-obj docutils literal"><span class="pre">tile_data2d</span></tt></a>(data,&nbsp;(lentY,&nbsp;lentX))</td>
+<td>Tile 2D data into a 1D array.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.untile_data2D.html#nmrglue.fileio.sparky.untile_data2D" title="nmrglue.fileio.sparky.untile_data2D"><tt class="xref py py-obj docutils literal"><span class="pre">untile_data2D</span></tt></a>(data,&nbsp;(lentY,&nbsp;lentX),&nbsp;(lenY,&nbsp;lenX))</td>
+<td>Rearrange 2D Tiled/Sparky formatted data into standard format.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.find_tilen_3d.html#nmrglue.fileio.sparky.find_tilen_3d" title="nmrglue.fileio.sparky.find_tilen_3d"><tt class="xref py py-obj docutils literal"><span class="pre">find_tilen_3d</span></tt></a>(data,&nbsp;ntile,&nbsp;(lentZ,&nbsp;lentY,&nbsp;lentX))</td>
+<td>Return a single tile from a 3D NMR data set.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.tile_data3d.html#nmrglue.fileio.sparky.tile_data3d" title="nmrglue.fileio.sparky.tile_data3d"><tt class="xref py py-obj docutils literal"><span class="pre">tile_data3d</span></tt></a>(data,&nbsp;(lentZ,&nbsp;lentY,&nbsp;lentX))</td>
+<td>Tile 3D data into a 1D numpy array</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.untile_data3D.html#nmrglue.fileio.sparky.untile_data3D" title="nmrglue.fileio.sparky.untile_data3D"><tt class="xref py py-obj docutils literal"><span class="pre">untile_data3D</span></tt></a>(data,&nbsp;(lentZ,&nbsp;lentY,&nbsp;lentX),&nbsp;...)</td>
+<td>Rearrange 3D tiled/Sparky formatted data into standard format.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.get_fileheader.html#nmrglue.fileio.sparky.get_fileheader" title="nmrglue.fileio.sparky.get_fileheader"><tt class="xref py py-obj docutils literal"><span class="pre">get_fileheader</span></tt></a>(f)</td>
+<td>Get fileheader from file and return a list.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.put_fileheader.html#nmrglue.fileio.sparky.put_fileheader" title="nmrglue.fileio.sparky.put_fileheader"><tt class="xref py py-obj docutils literal"><span class="pre">put_fileheader</span></tt></a>(f,&nbsp;fl)</td>
+<td>Write fileheader list to file (180-bytes).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.fileheader2dic.html#nmrglue.fileio.sparky.fileheader2dic" title="nmrglue.fileio.sparky.fileheader2dic"><tt class="xref py py-obj docutils literal"><span class="pre">fileheader2dic</span></tt></a>(header)</td>
+<td>Convert a fileheader list into a Sparky parameter dictionary.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.dic2fileheader.html#nmrglue.fileio.sparky.dic2fileheader" title="nmrglue.fileio.sparky.dic2fileheader"><tt class="xref py py-obj docutils literal"><span class="pre">dic2fileheader</span></tt></a>(dic)</td>
+<td>Convert a Sparky parameter dictionary into a fileheader list.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.get_axisheader.html#nmrglue.fileio.sparky.get_axisheader" title="nmrglue.fileio.sparky.get_axisheader"><tt class="xref py py-obj docutils literal"><span class="pre">get_axisheader</span></tt></a>(f)</td>
+<td>Get an axisheader from file and return a list.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.put_axisheader.html#nmrglue.fileio.sparky.put_axisheader" title="nmrglue.fileio.sparky.put_axisheader"><tt class="xref py py-obj docutils literal"><span class="pre">put_axisheader</span></tt></a>(f,&nbsp;al)</td>
+<td>Write an axisheader list to file (128-bytes written).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.axisheader2dic.html#nmrglue.fileio.sparky.axisheader2dic" title="nmrglue.fileio.sparky.axisheader2dic"><tt class="xref py py-obj docutils literal"><span class="pre">axisheader2dic</span></tt></a>(header)</td>
+<td>Convert an axisheader list into Sparky parameter axis dictionary.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.dic2axisheader.html#nmrglue.fileio.sparky.dic2axisheader" title="nmrglue.fileio.sparky.dic2axisheader"><tt class="xref py py-obj docutils literal"><span class="pre">dic2axisheader</span></tt></a>(dic)</td>
+<td>Convert a Sparky parameter axis diction into a axisherder list.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="developer-classes">
+<h3>Developer Classes<a class="headerlink" href="#developer-classes" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.sparky_2d.html#nmrglue.fileio.sparky.sparky_2d" title="nmrglue.fileio.sparky.sparky_2d"><tt class="xref py py-obj docutils literal"><span class="pre">sparky_2d</span></tt></a>(filename[,&nbsp;order])</td>
+<td>Emulates a ndarray object without loading data into memory for low memory</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.sparky.sparky_3d.html#nmrglue.fileio.sparky.sparky_3d" title="nmrglue.fileio.sparky.sparky_3d"><tt class="xref py py-obj docutils literal"><span class="pre">sparky_3d</span></tt></a>(filename[,&nbsp;order])</td>
+<td>Emulates a ndarray object without loading data into memory for low memory</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">nmrglue.sparky</a><ul>
+<li><a class="reference internal" href="#user-information">User Information</a><ul>
+<li><a class="reference internal" href="#user-functions">User Functions</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#developer-information">Developer Information</a><ul>
+<li><a class="reference internal" href="#sparky-file-format-information">Sparky file format information</a></li>
+<li><a class="reference internal" href="#developer-functions">Developer Functions</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#developer-classes">Developer Classes</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="generated/nmrglue.fileio.simpson.bytes2float.html"
+                        title="previous chapter">nmrglue.fileio.simpson.bytes2float</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="generated/nmrglue.fileio.sparky.read.html"
+                        title="next chapter">nmrglue.fileio.sparky.read</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/reference/sparky.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.fileio.sparky.read.html" title="nmrglue.fileio.sparky.read"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.fileio.simpson.bytes2float.html" title="nmrglue.fileio.simpson.bytes2float"
+             >previous</a> |</li>
+        <li><a href="../index.html">nmrglue 0.4 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Reference Guide</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2013, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

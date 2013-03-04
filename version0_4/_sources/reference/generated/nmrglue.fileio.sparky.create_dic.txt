@@ -1,0 +1,6 @@
+nmrglue.fileio.sparky.create_dic
+================================
+
+.. currentmodule:: nmrglue.fileio.sparky
+
+.. autofunction:: create_dic

@@ -1,0 +1,6 @@
+nmrglue.fileio.table.write
+==========================
+
+.. currentmodule:: nmrglue.fileio.table
+
+.. autofunction:: write

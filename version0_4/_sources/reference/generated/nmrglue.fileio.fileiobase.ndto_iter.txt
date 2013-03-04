@@ -1,0 +1,6 @@
+nmrglue.fileio.fileiobase.ndto_iter
+===================================
+
+.. currentmodule:: nmrglue.fileio.fileiobase
+
+.. autofunction:: ndto_iter

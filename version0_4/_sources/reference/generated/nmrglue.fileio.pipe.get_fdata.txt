@@ -1,0 +1,6 @@
+nmrglue.fileio.pipe.get_fdata
+=============================
+
+.. currentmodule:: nmrglue.fileio.pipe
+
+.. autofunction:: get_fdata

@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.interleave_data
+=====================================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: interleave_data

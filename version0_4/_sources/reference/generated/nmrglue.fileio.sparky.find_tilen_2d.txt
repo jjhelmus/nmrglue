@@ -1,0 +1,6 @@
+nmrglue.fileio.sparky.find_tilen_2d
+===================================
+
+.. currentmodule:: nmrglue.fileio.sparky
+
+.. autofunction:: find_tilen_2d

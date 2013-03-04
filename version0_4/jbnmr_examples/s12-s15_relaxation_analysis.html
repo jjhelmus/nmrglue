@@ -1,0 +1,425 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Relaxation trajectory analysis example &mdash; nmrglue 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.4 documentation" href="../index.html" />
+    <link rel="up" title="Examples from JBNMR article" href="index.html" />
+    <link rel="next" title="Developement Guide" href="../devel/index.html" />
+    <link rel="prev" title="3D strip plot example" href="s11_strip_plots.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../devel/index.html" title="Developement Guide"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="s11_strip_plots.html" title="3D strip plot example"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">nmrglue 0.4 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Examples from JBNMR article</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="relaxation-trajectory-analysis-example">
+<h1>Relaxation trajectory analysis example<a class="headerlink" href="#relaxation-trajectory-analysis-example" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>This example is taken from Listing S12 - S15 in the 2013 JBNMR nmrglue paper.
+In this example a series of 3D NMRPipe files containing relaxation trajectories
+for a solid state NMR experment and analyzed.</p>
+</div>
+<div class="section" id="instructions">
+<h2>Instructions<a class="headerlink" href="#instructions" title="Permalink to this headline">¶</a></h2>
+<p>Execute <cite>python extract_traj.py</cite> to extract the relaxation trajectories from
+the data set.  &#8216;XXX.dat&#8217; files are created for the peaks defined in the
+<cite>boxes.in</cite> file.  The <cite>spectra.in</cite> file defines which spectra the trajectories
+will be extracted from.</p>
+<p>Execute <cite>python plot_boxes.py</cite> to create plots showing the peak and
+integration limits for all peaks defined in <cite>boxes.in</cite>.
+<cite>peak_XXX_spectrum_X.png</cite> files are created for all peaks and spectra.  A
+example plot is provided as Figure 7 of the paper, which corresponds to
+<cite>peak_D40_spectrum_0.png</cite></p>
+<p>Execute <cite>python fit_exp.py</cite> to fit all relaxation trajectories.  The fitting
+results are provided in the <cite>fits.txt</cite> file.  The <cite>relaxation_times.in</cite> file
+defines the relaxation times for each spectra.</p>
+<p>Execute <cite>python plot_trajectories</cite> to create plots of all experimental and fit
+relaxation tranjectories.  This script creates a series of <cite>XXX_plot.png</cite>
+files. An example plot is provided as Figure 8 of the paper, which corresponds
+to <cite>D40_plot.png</cite>.</p>
+<p>The data used in this example is available for download
+<a class="reference external" href="http://nmrglue.googlecode.com/files/jbnmr_s12-15_relaxation_analysis_part1.zip">part1,</a>
+<a class="reference external" href="http://nmrglue.googlecode.com/files/jbnmr_s12-15_relaxation_analysis_part2.zip">part2,</a>
+<a class="reference external" href="http://nmrglue.googlecode.com/files/jbnmr_s12-15_relaxation_analysis_part3.zip">part3,</a>
+<a class="reference external" href="http://nmrglue.googlecode.com/files/jbnmr_s12-15_relaxation_analysis_part4.zip">part4.</a></p>
+<p>Listing S12</p>
+<p>[<a class="reference download internal" href="../_downloads/extract_traj.py"><tt class="xref download docutils literal"><span class="pre">extract_traj.py</span></tt></a>]</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">nmrglue</span> <span class="kn">as</span> <span class="nn">ng</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="c"># read the integration limits and list of spectra</span>
+<span class="n">peak_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">recfromtxt</span><span class="p">(</span><span class="s">&quot;boxes.in&quot;</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">spectra_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">recfromtxt</span><span class="p">(</span><span class="s">&quot;spectra.in&quot;</span><span class="p">)</span>
+
+<span class="c"># create an array to hold the trajectories</span>
+<span class="n">trajectories</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">peak_list</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">spectra_list</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s">&#39;float&#39;</span><span class="p">)</span>
+
+<span class="c"># loop over the spectra</span>
+<span class="k">for</span> <span class="n">sn</span><span class="p">,</span> <span class="n">spectra</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">spectra_list</span><span class="p">):</span>
+
+    <span class="c"># read in the spectra data</span>
+    <span class="k">print</span> <span class="s">&quot;Extracting peak intensities from:&quot;</span><span class="p">,</span> <span class="n">spectra</span>
+    <span class="n">dic</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">spectra</span><span class="p">)</span>
+
+    <span class="c"># loop over the integration limits</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">peak_list</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">x0</span> <span class="o">&gt;</span> <span class="n">x1</span><span class="p">:</span>
+            <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span> <span class="o">=</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x0</span>
+        <span class="k">if</span> <span class="n">y0</span> <span class="o">&gt;</span> <span class="n">y1</span><span class="p">:</span>
+            <span class="n">y0</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y0</span>
+
+        <span class="c"># integrate the region and save in trajectories array</span>
+        <span class="n">trajectories</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">sn</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">y0</span><span class="p">:</span><span class="n">y1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x0</span><span class="p">:</span><span class="n">x1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+<span class="c"># write out the trajectories for each peak</span>
+<span class="k">for</span> <span class="n">itraj</span><span class="p">,</span> <span class="n">peak_traj</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">trajectories</span><span class="p">):</span>
+    <span class="n">peak_traj</span> <span class="o">/=</span> <span class="n">peak_traj</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>    <span class="c"># normalize the peak&#39;s trajectory</span>
+    <span class="n">fname</span> <span class="o">=</span> <span class="n">peak_list</span><span class="o">.</span><span class="n">peak_label</span><span class="p">[</span><span class="n">itraj</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;.dat&#39;</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">peak_traj</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Listing S13</p>
+<p>[<a class="reference download internal" href="../_downloads/plot_boxes1.py"><tt class="xref download docutils literal"><span class="pre">plot_boxes.py</span></tt></a>]</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">nmrglue</span> <span class="kn">as</span> <span class="nn">ng</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.cm</span>
+
+<span class="c"># plot parameters</span>
+<span class="n">xpad</span> <span class="o">=</span> <span class="mi">5</span>                        <span class="c"># padding around peak box on x-axis</span>
+<span class="n">ypad</span> <span class="o">=</span> <span class="mi">5</span>                        <span class="c"># padding around peak box on y-axis</span>
+<span class="n">cmap</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">Blues_r</span>    <span class="c"># contour map (colors to use for contours)</span>
+
+<span class="c"># contour levels</span>
+<span class="n">cl</span> <span class="o">=</span> <span class="mi">30000</span> <span class="o">*</span> <span class="mf">1.20</span> <span class="o">**</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="c"># read in the box limits and list of spectra</span>
+<span class="n">peak_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">recfromtxt</span><span class="p">(</span><span class="s">&quot;boxes.in&quot;</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">spectra_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">recfromtxt</span><span class="p">(</span><span class="s">&quot;spectra.in&quot;</span><span class="p">)</span>
+
+<span class="c"># loop over the spectra </span>
+<span class="k">for</span> <span class="n">spec_number</span><span class="p">,</span> <span class="n">spectra</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">spectra_list</span><span class="p">):</span>
+
+    <span class="c"># read in the spectral data</span>
+    <span class="n">dic</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">spectra</span><span class="p">)</span>
+
+    <span class="c"># loop over the peaks</span>
+    <span class="k">for</span> <span class="n">peak</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="ow">in</span> <span class="n">peak_list</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="n">x0</span> <span class="o">&gt;</span> <span class="n">x1</span><span class="p">:</span>
+            <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span> <span class="o">=</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x0</span>
+        <span class="k">if</span> <span class="n">y0</span> <span class="o">&gt;</span> <span class="n">y1</span><span class="p">:</span>
+            <span class="n">y0</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y0</span>
+
+        <span class="c"># slice the data around the peak</span>
+        <span class="nb">slice</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">y0</span> <span class="o">-</span> <span class="n">ypad</span><span class="p">:</span><span class="n">y1</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">ypad</span><span class="p">,</span> <span class="n">x0</span> <span class="o">-</span> <span class="n">xpad</span><span class="p">:</span><span class="n">x1</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">xpad</span><span class="p">]</span>
+
+        <span class="c"># create the figure</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+
+        <span class="c"># plot the contours</span>
+        <span class="k">print</span> <span class="s">&quot;Plotting:&quot;</span><span class="p">,</span> <span class="n">peak</span><span class="p">,</span> <span class="n">spec_number</span>
+        <span class="n">extent</span> <span class="o">=</span> <span class="p">(</span><span class="n">x0</span> <span class="o">-</span> <span class="n">xpad</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x1</span> <span class="o">+</span> <span class="n">xpad</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y0</span> <span class="o">-</span> <span class="n">ypad</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">+</span> <span class="n">ypad</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="nb">slice</span><span class="p">,</span> <span class="n">cl</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">)</span>
+
+        <span class="c"># draw a box around the peak</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">x0</span><span class="p">],</span> <span class="p">[</span><span class="n">y0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">y0</span><span class="p">],</span> <span class="s">&#39;k--&#39;</span><span class="p">)</span>
+
+        <span class="c"># draw lighter boxes at +/- 1 point</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="p">[</span><span class="n">y0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="s">&#39;k--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.35</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">x0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x1</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x1</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span>
+                <span class="p">[</span><span class="n">y0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">y0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="s">&#39;k--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.35</span><span class="p">)</span>
+
+        <span class="c"># set the title, save the figure</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">&#39;Peak: </span><span class="si">%s</span><span class="s"> Spectrum: </span><span class="si">%i</span><span class="s">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">peak</span><span class="p">,</span> <span class="n">spec_number</span><span class="p">))</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&#39;peak_</span><span class="si">%s</span><span class="s">_spectrum_</span><span class="si">%i</span><span class="s">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">peak</span><span class="p">,</span> <span class="n">spec_number</span><span class="p">))</span>
+        <span class="k">del</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Listing S14</p>
+<p>[<a class="reference download internal" href="../_downloads/fit_exp.py"><tt class="xref download docutils literal"><span class="pre">fit_exp.py</span></tt></a>]</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">glob</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">nmrglue.analysis.leastsqbound</span> <span class="kn">import</span> <span class="n">leastsqbound</span>
+
+<span class="c"># exponential function to fit data to.</span>
+<span class="k">def</span> <span class="nf">fit_func</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="n">A</span><span class="p">,</span> <span class="n">R2</span> <span class="o">=</span> <span class="n">p</span>
+    <span class="k">return</span> <span class="n">A</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">R2</span> <span class="o">/</span> <span class="mf">1.0e6</span><span class="p">)</span>
+
+<span class="c"># residuals between fit and experimental data.</span>
+<span class="k">def</span> <span class="nf">residuals</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="n">err</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">fit_func</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">err</span>
+
+<span class="c"># prepare fitting parameters</span>
+<span class="n">relaxation_times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s">&quot;relaxation_times.in&quot;</span><span class="p">)</span>
+<span class="n">x0</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.10</span><span class="p">]</span>  <span class="c"># initial fitting parameter</span>
+<span class="n">bounds</span> <span class="o">=</span> <span class="p">[(</span><span class="mf">0.98</span><span class="p">,</span> <span class="mf">1.02</span><span class="p">),</span> <span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">)]</span> <span class="c"># fitting constraints</span>
+
+<span class="c"># create an output file to record the fitting results</span>
+<span class="n">output</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;fits.txt&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+<span class="n">output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;#Peak</span><span class="se">\t</span><span class="s">A</span><span class="se">\t\t</span><span class="s">R2</span><span class="se">\t\t</span><span class="s">ier</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+
+<span class="c"># loop over the trajecory files</span>
+<span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s">&#39;*.dat&#39;</span><span class="p">):</span>
+    
+    <span class="n">peak</span> <span class="o">=</span> <span class="n">filename</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span>
+    <span class="k">print</span> <span class="s">&quot;Fitting Peak:&quot;</span><span class="p">,</span> <span class="n">peak</span>
+
+    <span class="c"># fit the trajectory using contrainted least squares optimization</span>
+    <span class="n">trajectory</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">ier</span> <span class="o">=</span> <span class="n">leastsqbound</span><span class="p">(</span><span class="n">residuals</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span> 
+                            <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">trajectory</span><span class="p">,</span> <span class="n">relaxation_times</span><span class="p">))</span>
+    
+    <span class="c"># write fitting results to output file</span>
+    <span class="n">output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="se">\t</span><span class="si">%.6f</span><span class="se">\t</span><span class="si">%.6f</span><span class="se">\t</span><span class="si">%i</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">peak</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ier</span><span class="p">))</span>
+
+<span class="n">output</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>  <span class="c"># close the output file</span>
+</pre></div>
+</div>
+<p>Listing S15</p>
+<p>[<a class="reference download internal" href="../_downloads/plot_trajectories.py"><tt class="xref download docutils literal"><span class="pre">plot_trajectories.py</span></tt></a>]</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+<span class="c"># exponential function used to fit the data</span>
+<span class="k">def</span> <span class="nf">fit_func</span><span class="p">(</span><span class="n">p</span><span class="p">,</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">A</span><span class="p">,</span> <span class="n">R2</span> <span class="o">=</span> <span class="n">p</span>
+    <span class="k">return</span> <span class="n">A</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">R2</span> <span class="o">/</span> <span class="mf">1.0e6</span><span class="p">)</span>
+
+<span class="n">fitting_results</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">recfromtxt</span><span class="p">(</span><span class="s">&#39;fits.txt&#39;</span><span class="p">)</span>
+<span class="n">experimental_relaxation_times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s">&quot;relaxation_times.in&quot;</span><span class="p">)</span>
+<span class="n">simulated_relaxation_times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">4000000</span><span class="p">,</span><span class="mi">2000</span><span class="p">)</span>
+
+<span class="c"># loop over the fitting results</span>
+<span class="k">for</span> <span class="n">peak</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">R2</span><span class="p">,</span> <span class="n">ier</span> <span class="ow">in</span> <span class="n">fitting_results</span><span class="p">:</span>
+
+    <span class="k">print</span> <span class="s">&quot;Plotting:&quot;</span><span class="p">,</span> <span class="n">peak</span>
+    
+    <span class="c"># load the experimental and simulated relaxation trajectories</span>
+    <span class="n">experimental_trajectory</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">peak</span> <span class="o">+</span> <span class="s">&#39;.dat&#39;</span><span class="p">)</span>
+    <span class="n">simulated_trajectory</span> <span class="o">=</span> <span class="n">fit_func</span><span class="p">((</span><span class="n">A</span><span class="p">,</span> <span class="n">R2</span><span class="p">),</span> <span class="n">simulated_relaxation_times</span><span class="p">)</span>
+    
+    <span class="c"># create the figure</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">experimental_relaxation_times</span><span class="p">,</span> <span class="n">experimental_trajectory</span><span class="p">,</span> <span class="s">&#39;or&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">simulated_relaxation_times</span><span class="p">,</span> <span class="n">simulated_trajectory</span><span class="p">,</span> <span class="s">&#39;-k&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">peak</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">peak</span><span class="o">+</span><span class="s">&quot;_plot.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Example input files</p>
+<p>[<a class="reference download internal" href="../_downloads/spectra1.in"><tt class="xref download docutils literal"><span class="pre">spectra.in</span></tt></a>]</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">data</span><span class="o">/</span><span class="n">Ytau_100</span><span class="o">.</span><span class="n">fid</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">ft2</span>
+<span class="n">data</span><span class="o">/</span><span class="n">Ytau_100000</span><span class="o">.</span><span class="n">fid</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">ft2</span>
+<span class="n">data</span><span class="o">/</span><span class="n">Ytau_250000</span><span class="o">.</span><span class="n">fid</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">ft2</span>
+<span class="n">data</span><span class="o">/</span><span class="n">Ytau_500000</span><span class="o">.</span><span class="n">fid</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">ft2</span>
+<span class="n">data</span><span class="o">/</span><span class="n">Ytau_750000</span><span class="o">.</span><span class="n">fid</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">ft2</span>
+<span class="n">data</span><span class="o">/</span><span class="n">Ytau_1000000</span><span class="o">.</span><span class="n">fid</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">ft2</span>
+<span class="n">data</span><span class="o">/</span><span class="n">Ytau_1500000</span><span class="o">.</span><span class="n">fid</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">ft2</span>
+<span class="n">data</span><span class="o">/</span><span class="n">Ytau_2000000</span><span class="o">.</span><span class="n">fid</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">ft2</span>
+<span class="n">data</span><span class="o">/</span><span class="n">Ytau_3000000</span><span class="o">.</span><span class="n">fid</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">ft2</span>
+<span class="n">data</span><span class="o">/</span><span class="n">Ytau_4000000</span><span class="o">.</span><span class="n">fid</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">ft2</span>
+</pre></div>
+</div>
+<p>[<a class="reference download internal" href="../_downloads/boxes1.in"><tt class="xref download docutils literal"><span class="pre">boxes.in</span></tt></a>]</p>
+<div class="highlight-python"><pre>#peak_label    X0     Y0      X0      Y1     
+A20     4068    938     4079    913
+A24     3992    1013    4000    997
+A26     4065    962     4075    940
+A34     4009    985     4018    958
+A48     4028    1034    4036    1010
+C28     4035    1115    4044    1092
+D36     3994    987     4003    973
+D40     4076    802     4085    774
+D46     4155    899     4163    883
+D47     4053    967     4062    941
+E15     4162    1022    4170    996
+E19     4176    902     4185    875
+E27     4036    1084    4044    1054
+E42     4136    1055    4142    1026
+E56     4107    821     4115    794
+F30     4013    1060    4023    1031
+F52     4097    828     4105    799
+G09     4054    1249    4063    1220
+G14     4068    1331    4077    1304
+G38     4098    1254    4106    1227
+G41     4091    1283    4099    1259
+I06     4087    903     4096    884
+</pre>
+</div>
+<p>[<a class="reference download internal" href="../_downloads/relaxation_times.in"><tt class="xref download docutils literal"><span class="pre">relaxation_times.in</span></tt></a>]</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># time in us</span>
+<span class="mi">100</span>
+<span class="mi">100000</span>
+<span class="mi">250000</span>
+<span class="mi">500000</span>
+<span class="mi">750000</span>
+<span class="mi">1000000</span>
+<span class="mi">1500000</span>
+<span class="mi">2000000</span>
+<span class="mi">3000000</span>
+<span class="mi">4000000</span>
+</pre></div>
+</div>
+<p>Example output</p>
+<p>[<a class="reference download internal" href="../_downloads/fits1.txt"><tt class="xref download docutils literal"><span class="pre">fits.txt</span></tt></a>]</p>
+<div class="highlight-python"><pre>#Peak	A		R2		ier
+F30	0.981006	0.259152	1
+D40	0.980906	0.328635	1
+G14	0.994899	0.108697	1
+A48	0.984907	0.125793	1
+E15	0.996023	0.088139	1
+D47	0.993891	0.101194	1
+G38	1.005751	0.127826	1
+F52	1.014378	0.063087	1
+G09	0.993838	0.097431	1
+A34	1.002384	0.152056	1
+I06	0.997428	0.060497	1
+E56	0.987760	0.157588	1
+D36	0.985922	0.153331	1
+A20	0.999985	0.102821	1
+E27	0.993052	0.298782	1
+D46	0.980000	0.074505	1
+C28	0.980000	0.680741	1
+E42	0.996588	0.210449	1
+A26	0.989291	0.258348	1
+E19	0.992583	0.165457	1
+G41	0.980000	0.528399	1
+A24	0.992186	0.417901	1
+</pre>
+</div>
+<img alt="../_images/peak_D40_spectrum_0.png" src="../_images/peak_D40_spectrum_0.png" />
+<img alt="../_images/D40_plot.png" src="../_images/D40_plot.png" />
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Relaxation trajectory analysis example</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#instructions">Instructions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="s11_strip_plots.html"
+                        title="previous chapter">3D strip plot example</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../devel/index.html"
+                        title="next chapter">Developement Guide</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/jbnmr_examples/s12-s15_relaxation_analysis.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../devel/index.html" title="Developement Guide"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="s11_strip_plots.html" title="3D strip plot example"
+             >previous</a> |</li>
+        <li><a href="../index.html">nmrglue 0.4 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Examples from JBNMR article</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2013, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

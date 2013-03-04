@@ -1,0 +1,214 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nmrglue.simpson &mdash; nmrglue 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.4 documentation" href="../index.html" />
+    <link rel="up" title="Reference Guide" href="index.html" />
+    <link rel="next" title="nmrglue.fileio.simpson.read" href="generated/nmrglue.fileio.simpson.read.html" />
+    <link rel="prev" title="nmrglue.fileio.rnmrtk.rnmrtk_nd" href="generated/nmrglue.fileio.rnmrtk.rnmrtk_nd.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.fileio.simpson.read.html" title="nmrglue.fileio.simpson.read"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.fileio.rnmrtk.rnmrtk_nd.html" title="nmrglue.fileio.rnmrtk.rnmrtk_nd"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">nmrglue 0.4 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Reference Guide</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-nmrglue.fileio.simpson">
+<span id="nmrglue-simpson"></span><span id="simpson-module"></span><h1>nmrglue.simpson<a class="headerlink" href="#module-nmrglue.fileio.simpson" title="Permalink to this headline">¶</a></h1>
+<p>Functions for reading and writing files created by the <a class="reference external" href="http://www.bionmr.chem.au.dk/bionmr/software/simpson.php">SIMPSON simulations
+program</a>.</p>
+<p>This modules is imported as nmrglue.simpson and can be called as such.</p>
+<div class="section" id="user-information">
+<h2>User Information<a class="headerlink" href="#user-information" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="user-functions">
+<h3>User Functions<a class="headerlink" href="#user-functions" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.simpson.read.html#nmrglue.fileio.simpson.read" title="nmrglue.fileio.simpson.read"><tt class="xref py py-obj docutils literal"><span class="pre">read</span></tt></a>(filename[,&nbsp;ftype,&nbsp;ndim,&nbsp;NP,&nbsp;NI,&nbsp;spe])</td>
+<td>Read a SIMPSON file.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.simpson.read_text.html#nmrglue.fileio.simpson.read_text" title="nmrglue.fileio.simpson.read_text"><tt class="xref py py-obj docutils literal"><span class="pre">read_text</span></tt></a>(filename)</td>
+<td>Read a SIMPSON text file. See <a class="reference internal" href="generated/nmrglue.fileio.simpson.read.html#nmrglue.fileio.simpson.read" title="nmrglue.fileio.simpson.read"><tt class="xref py py-func docutils literal"><span class="pre">read()</span></tt></a>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.simpson.read_xreim.html#nmrglue.fileio.simpson.read_xreim" title="nmrglue.fileio.simpson.read_xreim"><tt class="xref py py-obj docutils literal"><span class="pre">read_xreim</span></tt></a>(filename)</td>
+<td>Read a 1D indexed SIMPSON file.  See <a class="reference internal" href="generated/nmrglue.fileio.simpson.read.html#nmrglue.fileio.simpson.read" title="nmrglue.fileio.simpson.read"><tt class="xref py py-func docutils literal"><span class="pre">read()</span></tt></a>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.simpson.read_xyreim.html#nmrglue.fileio.simpson.read_xyreim" title="nmrglue.fileio.simpson.read_xyreim"><tt class="xref py py-obj docutils literal"><span class="pre">read_xyreim</span></tt></a>(filename)</td>
+<td>Read a 2D indexed SIMPSON file. See <a class="reference internal" href="generated/nmrglue.fileio.simpson.read.html#nmrglue.fileio.simpson.read" title="nmrglue.fileio.simpson.read"><tt class="xref py py-func docutils literal"><span class="pre">read()</span></tt></a>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.simpson.read_raw_bin_1d.html#nmrglue.fileio.simpson.read_raw_bin_1d" title="nmrglue.fileio.simpson.read_raw_bin_1d"><tt class="xref py py-obj docutils literal"><span class="pre">read_raw_bin_1d</span></tt></a>(filename[,&nbsp;spe])</td>
+<td>Read a 1D raw binary SIMPSON file. See <a class="reference internal" href="generated/nmrglue.fileio.simpson.read.html#nmrglue.fileio.simpson.read" title="nmrglue.fileio.simpson.read"><tt class="xref py py-func docutils literal"><span class="pre">read()</span></tt></a>.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.simpson.read_raw_bin_2d.html#nmrglue.fileio.simpson.read_raw_bin_2d" title="nmrglue.fileio.simpson.read_raw_bin_2d"><tt class="xref py py-obj docutils literal"><span class="pre">read_raw_bin_2d</span></tt></a>(filename,&nbsp;NP,&nbsp;NI[,&nbsp;spe])</td>
+<td>Read a 2D raw binary SIMPSON file. See <a class="reference internal" href="generated/nmrglue.fileio.simpson.read.html#nmrglue.fileio.simpson.read" title="nmrglue.fileio.simpson.read"><tt class="xref py py-func docutils literal"><span class="pre">read()</span></tt></a>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.simpson.read_binary.html#nmrglue.fileio.simpson.read_binary" title="nmrglue.fileio.simpson.read_binary"><tt class="xref py py-obj docutils literal"><span class="pre">read_binary</span></tt></a>(filename)</td>
+<td>Read a binary SIMPSON file. See <a class="reference internal" href="generated/nmrglue.fileio.simpson.read.html#nmrglue.fileio.simpson.read" title="nmrglue.fileio.simpson.read"><tt class="xref py py-func docutils literal"><span class="pre">read()</span></tt></a>.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="developer-infomation">
+<h2>Developer Infomation<a class="headerlink" href="#developer-infomation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="developer-functions">
+<h3>Developer Functions<a class="headerlink" href="#developer-functions" title="Permalink to this headline">¶</a></h3>
+<p>These functions are typically not used directly by users.  Developers who
+want fine control over SIMPSON files will be interested in these
+functions.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.simpson.guess_ftype.html#nmrglue.fileio.simpson.guess_ftype" title="nmrglue.fileio.simpson.guess_ftype"><tt class="xref py py-obj docutils literal"><span class="pre">guess_ftype</span></tt></a>(filename)</td>
+<td>Determine a SIMPSON file type from the first few lines of the file.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.simpson.unappend_data.html#nmrglue.fileio.simpson.unappend_data" title="nmrglue.fileio.simpson.unappend_data"><tt class="xref py py-obj docutils literal"><span class="pre">unappend_data</span></tt></a>(data)</td>
+<td>Return complex data with last axis unappended.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.simpson.chars2bytes.html#nmrglue.fileio.simpson.chars2bytes" title="nmrglue.fileio.simpson.chars2bytes"><tt class="xref py py-obj docutils literal"><span class="pre">chars2bytes</span></tt></a>(chars)</td>
+<td>Convert four characters from a data block into 3 &#8216;bytes&#8217;.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.simpson.bytes2float.html#nmrglue.fileio.simpson.bytes2float" title="nmrglue.fileio.simpson.bytes2float"><tt class="xref py py-obj docutils literal"><span class="pre">bytes2float</span></tt></a>(bytes)</td>
+<td>Convert four bytes to a string.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">nmrglue.simpson</a><ul>
+<li><a class="reference internal" href="#user-information">User Information</a><ul>
+<li><a class="reference internal" href="#user-functions">User Functions</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#developer-infomation">Developer Infomation</a><ul>
+<li><a class="reference internal" href="#developer-functions">Developer Functions</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="generated/nmrglue.fileio.rnmrtk.rnmrtk_nd.html"
+                        title="previous chapter">nmrglue.fileio.rnmrtk.rnmrtk_nd</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="generated/nmrglue.fileio.simpson.read.html"
+                        title="next chapter">nmrglue.fileio.simpson.read</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/reference/simpson.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.fileio.simpson.read.html" title="nmrglue.fileio.simpson.read"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.fileio.rnmrtk.rnmrtk_nd.html" title="nmrglue.fileio.rnmrtk.rnmrtk_nd"
+             >previous</a> |</li>
+        <li><a href="../index.html">nmrglue 0.4 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Reference Guide</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2013, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

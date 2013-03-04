@@ -1,0 +1,212 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nmrglue.process.pipe_proc.shuf &mdash; nmrglue 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.4 documentation" href="../../index.html" />
+    <link rel="up" title="nmrglue.pipe_proc" href="../pipe_proc.html" />
+    <link rel="next" title="nmrglue.process.pipe_proc.sign" href="nmrglue.process.pipe_proc.sign.html" />
+    <link rel="prev" title="nmrglue.process.pipe_proc.set" href="nmrglue.process.pipe_proc.set.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.pipe_proc.sign.html" title="nmrglue.process.pipe_proc.sign"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.pipe_proc.set.html" title="nmrglue.process.pipe_proc.set"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">nmrglue 0.4 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../pipe_proc.html" accesskey="U">nmrglue.pipe_proc</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="nmrglue-process-pipe-proc-shuf">
+<h1>nmrglue.process.pipe_proc.shuf<a class="headerlink" href="#nmrglue-process-pipe-proc-shuf" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="nmrglue.process.pipe_proc.shuf">
+<tt class="descclassname">nmrglue.process.pipe_proc.</tt><tt class="descname">shuf</tt><big>(</big><em>dic</em>, <em>data</em>, <em>mode=None</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/v0.4/nmrglue/process/pipe_proc.py#L2392"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.pipe_proc.shuf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shuffle Utilities</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of NMRPipe parameters.</p>
+</div></blockquote>
+<p><strong>data</strong> : ndarray</p>
+<blockquote>
+<div><p>Array of NMR data.</p>
+</div></blockquote>
+<p><strong>modes</strong> : str</p>
+<blockquote>
+<div><p>Shuffle mode. See table below for valid modes.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of updated NMRPipe parameters.</p>
+</div></blockquote>
+<p><strong>ndata</strong> : ndarray</p>
+<blockquote class="last">
+<div><p>Array of NMR data after shuffle.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>&#8216;rr2ri&#8217; mode ignores any imaginary vector refusing to create a mis-sized
+vector.  &#8216;bswap&#8217; mode may results in NaN in the data.  &#8216;r2i&#8217; and &#8216;i2r&#8217; not
+implemented.  All modes correctly update minimum and maximum values.  This
+behavor may differ from NMRPipe&#8217;s SHUF function.</p>
+<p>Valid modes are:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="83%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">string</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>&#8216;ri2c&#8217;</td>
+<td>Interleave real and imaginary data.</td>
+</tr>
+<tr class="row-odd"><td>&#8216;c2ri&#8217;</td>
+<td>Seperate real and imaginary data.</td>
+</tr>
+<tr class="row-even"><td>&#8216;ri2rr&#8217;</td>
+<td>Append real and imaginary data.</td>
+</tr>
+<tr class="row-odd"><td>&#8216;rr2ri&#8217;</td>
+<td>Unappend real and imaginary data.</td>
+</tr>
+<tr class="row-even"><td>&#8216;exlr&#8217;</td>
+<td>Exchange left and right halfs.</td>
+</tr>
+<tr class="row-odd"><td>&#8216;rolr&#8217;</td>
+<td>Rotate left and right halfs.</td>
+</tr>
+<tr class="row-even"><td>&#8216;swap&#8217;</td>
+<td>Swap real and imaginary data.</td>
+</tr>
+<tr class="row-odd"><td>&#8216;bswap&#8217;</td>
+<td>Byte-swap data.</td>
+</tr>
+<tr class="row-even"><td>&#8216;inv&#8217;</td>
+<td>Do nothing.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="nmrglue.process.pipe_proc.set.html"
+                        title="previous chapter">nmrglue.process.pipe_proc.set</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="nmrglue.process.pipe_proc.sign.html"
+                        title="next chapter">nmrglue.process.pipe_proc.sign</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/reference/generated/nmrglue.process.pipe_proc.shuf.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.pipe_proc.sign.html" title="nmrglue.process.pipe_proc.sign"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="nmrglue.process.pipe_proc.set.html" title="nmrglue.process.pipe_proc.set"
+             >previous</a> |</li>
+        <li><a href="../../index.html">nmrglue 0.4 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
+          <li><a href="../pipe_proc.html" >nmrglue.pipe_proc</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2013, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+nmrglue.fileio.pipe.read
+========================
+
+.. currentmodule:: nmrglue.fileio.pipe
+
+.. autofunction:: read

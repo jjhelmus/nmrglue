@@ -1,0 +1,6 @@
+nmrglue.fileio.sparky.write_3D
+==============================
+
+.. currentmodule:: nmrglue.fileio.sparky
+
+.. autofunction:: write_3D

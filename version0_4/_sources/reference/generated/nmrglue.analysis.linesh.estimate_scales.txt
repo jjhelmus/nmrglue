@@ -1,0 +1,6 @@
+nmrglue.analysis.linesh.estimate_scales
+=======================================
+
+.. currentmodule:: nmrglue.analysis.linesh
+
+.. autofunction:: estimate_scales

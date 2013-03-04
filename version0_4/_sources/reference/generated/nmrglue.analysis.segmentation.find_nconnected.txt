@@ -1,0 +1,6 @@
+nmrglue.analysis.segmentation.find_nconnected
+=============================================
+
+.. currentmodule:: nmrglue.analysis.segmentation
+
+.. autofunction:: find_nconnected

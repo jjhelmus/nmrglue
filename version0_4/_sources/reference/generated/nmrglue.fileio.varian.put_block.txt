@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.put_block
+===============================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: put_block

@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.hyperheader2dic
+=====================================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: hyperheader2dic

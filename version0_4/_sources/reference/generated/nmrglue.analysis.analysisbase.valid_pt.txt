@@ -1,0 +1,6 @@
+nmrglue.analysis.analysisbase.valid_pt
+======================================
+
+.. currentmodule:: nmrglue.analysis.analysisbase
+
+.. autofunction:: valid_pt

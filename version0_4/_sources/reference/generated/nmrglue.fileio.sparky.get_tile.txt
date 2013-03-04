@@ -1,0 +1,6 @@
+nmrglue.fileio.sparky.get_tile
+==============================
+
+.. currentmodule:: nmrglue.fileio.sparky
+
+.. autofunction:: get_tile

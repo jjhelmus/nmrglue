@@ -1,0 +1,6 @@
+nmrglue.fileio.varian.write_procpar
+===================================
+
+.. currentmodule:: nmrglue.fileio.varian
+
+.. autofunction:: write_procpar

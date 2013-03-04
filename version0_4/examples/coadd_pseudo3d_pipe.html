@@ -1,0 +1,175 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>coadd example: coadd_pseudo3d_pipe &mdash; nmrglue 0.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.4 documentation" href="../index.html" />
+    <link rel="up" title="Examples" href="index.html" />
+    <link rel="next" title="convert example: agilent2pipe_1d" href="agilent2pipe_1d.html" />
+    <link rel="prev" title="coadd example: coadd_2d_pipe" href="coadd_2d_pipe.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="agilent2pipe_1d.html" title="convert example: agilent2pipe_1d"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="coadd_2d_pipe.html" title="coadd example: coadd_2d_pipe"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">nmrglue 0.4 documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Examples</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="coadd-example-coadd-pseudo3d-pipe">
+<span id="coadd-pseudo3d-pipe"></span><h1>coadd example: coadd_pseudo3d_pipe<a class="headerlink" href="#coadd-example-coadd-pseudo3d-pipe" title="Permalink to this headline">¶</a></h1>
+<p>This example shows how to use nmrglue to coadd a number of collections of 2D
+NMRPipe files which constitute a pseudo-3D data set.  The two (or more)
+psuedo-3D data sets are assumed to be in directories named  <tt class="docutils literal"><span class="pre">run*.dir</span></tt> with
+subdirectories named <tt class="docutils literal"><span class="pre">*.fid</span></tt> containing a <tt class="docutils literal"><span class="pre">test.fid</span></tt> file.  The directory
+<tt class="docutils literal"><span class="pre">coadded_data.dir</span></tt> is created with the same subdirectory structure containing
+<tt class="docutils literal"><span class="pre">test.fid</span></tt> files containing data created by coadding each pseudo-3D.</p>
+<p>The data used in this example is available for
+<a class="reference external" href="http://nmrglue.googlecode.com/files/example_coadd_pseudo3d_pipe.zip">download.</a></p>
+<p>[<a class="reference download internal" href="../_downloads/coadd_pseudo3d.py"><tt class="xref download docutils literal"><span class="pre">source</span> <span class="pre">code</span></tt></a>]</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c">#! /usr/bin/env python</span>
+
+<span class="kn">import</span> <span class="nn">nmrglue</span> <span class="kn">as</span> <span class="nn">ng</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">os.path</span>
+
+<span class="c"># create a list of directories to coadd</span>
+<span class="n">dlist</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s">&quot;run*.dir&quot;</span><span class="p">)</span>
+<span class="n">dlist</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+<span class="c"># create a list of 2D files in the first directory</span>
+<span class="n">flist</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dlist</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&quot;*.fid&quot;</span><span class="p">,</span> <span class="s">&quot;test.fid&quot;</span><span class="p">))</span>
+<span class="n">flist</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+<span class="c"># loop over the files</span>
+<span class="k">for</span> <span class="n">base_fname</span> <span class="ow">in</span> <span class="n">flist</span><span class="p">:</span>
+    
+    <span class="c"># initilize the new data</span>
+    <span class="n">dic</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">base_fname</span><span class="p">)</span>
+    <span class="n">coadd_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">coadd_dic</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
+    
+    <span class="c"># loop over the pseudo-3D directories</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">dlist</span><span class="p">:</span>
+        
+        <span class="c"># the file names is found by replace the directory name</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">base_fname</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">dlist</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">d</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>    
+        <span class="k">print</span> <span class="s">&quot;Coadding file:&quot;</span><span class="p">,</span> <span class="n">f</span>
+        <span class="n">dic</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="n">coadd_data</span> <span class="o">+=</span> <span class="n">data</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">dlist</span><span class="p">)</span>
+
+    <span class="c"># write out the file</span>
+    <span class="n">of</span> <span class="o">=</span> <span class="n">base_fname</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">dlist</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&quot;coadded_data.dir&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&quot;Writing out:&quot;</span><span class="p">,</span> <span class="n">of</span>
+    <span class="n">ng</span><span class="o">.</span><span class="n">pipe</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">of</span><span class="p">,</span> <span class="n">coadd_dic</span><span class="p">,</span> <span class="n">coadd_data</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="coadd_2d_pipe.html"
+                        title="previous chapter">coadd example: coadd_2d_pipe</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="agilent2pipe_1d.html"
+                        title="next chapter">convert example: agilent2pipe_1d</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/examples/coadd_pseudo3d_pipe.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="agilent2pipe_1d.html" title="convert example: agilent2pipe_1d"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="coadd_2d_pipe.html" title="coadd example: coadd_2d_pipe"
+             >previous</a> |</li>
+        <li><a href="../index.html">nmrglue 0.4 documentation</a> &raquo;</li>
+          <li><a href="index.html" >Examples</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2013, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

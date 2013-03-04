@@ -1,0 +1,6 @@
+nmrglue.process.proc_base.unpack_complex
+========================================
+
+.. currentmodule:: nmrglue.process.proc_base
+
+.. autofunction:: unpack_complex
