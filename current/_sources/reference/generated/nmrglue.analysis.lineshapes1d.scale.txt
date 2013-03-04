@@ -13,6 +13,7 @@ nmrglue.analysis.lineshapes1d.scale
 
    .. autosummary::
    
+      ~scale.__init__
       ~scale.add_edge
       ~scale.guessp
       ~scale.nparam

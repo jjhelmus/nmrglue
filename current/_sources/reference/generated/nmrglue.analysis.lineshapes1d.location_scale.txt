@@ -13,6 +13,7 @@ nmrglue.analysis.lineshapes1d.location_scale
 
    .. autosummary::
    
+      ~location_scale.__init__
       ~location_scale.add_edge
       ~location_scale.nparam
       ~location_scale.remove_edge

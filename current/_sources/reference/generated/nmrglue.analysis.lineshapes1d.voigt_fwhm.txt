@@ -13,6 +13,7 @@ nmrglue.analysis.lineshapes1d.voigt_fwhm
 
    .. autosummary::
    
+      ~voigt_fwhm.__init__
       ~voigt_fwhm.add_edge
       ~voigt_fwhm.guessp
       ~voigt_fwhm.nparam

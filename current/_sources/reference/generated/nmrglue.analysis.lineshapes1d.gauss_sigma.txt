@@ -13,6 +13,7 @@ nmrglue.analysis.lineshapes1d.gauss_sigma
 
    .. autosummary::
    
+      ~gauss_sigma.__init__
       ~gauss_sigma.add_edge
       ~gauss_sigma.guessp
       ~gauss_sigma.nparam

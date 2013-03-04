@@ -41,4 +41,3 @@ functions.
     unappend_data
     chars2bytes
     bytes2float
-    bytes2float_bitarray

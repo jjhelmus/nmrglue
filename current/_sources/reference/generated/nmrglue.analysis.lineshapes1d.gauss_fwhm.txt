@@ -13,6 +13,7 @@ nmrglue.analysis.lineshapes1d.gauss_fwhm
 
    .. autosummary::
    
+      ~gauss_fwhm.__init__
       ~gauss_fwhm.add_edge
       ~gauss_fwhm.guessp
       ~gauss_fwhm.nparam

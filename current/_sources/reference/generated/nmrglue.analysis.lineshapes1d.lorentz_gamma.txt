@@ -13,6 +13,7 @@ nmrglue.analysis.lineshapes1d.lorentz_gamma
 
    .. autosummary::
    
+      ~lorentz_gamma.__init__
       ~lorentz_gamma.add_edge
       ~lorentz_gamma.guessp
       ~lorentz_gamma.nparam

@@ -13,6 +13,7 @@ nmrglue.analysis.lineshapes1d.voigt_sigmagamma
 
    .. autosummary::
    
+      ~voigt_sigmagamma.__init__
       ~voigt_sigmagamma.add_edge
       ~voigt_sigmagamma.guessp
       ~voigt_sigmagamma.nparam

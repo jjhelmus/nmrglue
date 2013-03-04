@@ -13,6 +13,7 @@ nmrglue.analysis.lineshapes1d.lorentz_fwhm
 
    .. autosummary::
    
+      ~lorentz_fwhm.__init__
       ~lorentz_fwhm.add_edge
       ~lorentz_fwhm.guessp
       ~lorentz_fwhm.nparam
