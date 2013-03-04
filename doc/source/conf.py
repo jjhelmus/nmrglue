@@ -145,69 +145,7 @@ html_static_path = ['_static']
 # Additional templates that should be rendered to pages, maps page names to
 # template names.
 #html_additional_pages = {}
-# -----------------------------------------------------------------------------
-# Source code links
-# -----------------------------------------------------------------------------
 
-import inspect
-from os.path import relpath, dirname
-
-for name in ['sphinx.ext.linkcode', 'linkcode', 'numpydoc.linkcode']:
-    try:
-        __import__(name)
-        extensions.append(name)
-        break
-    except ImportError:
-        pass
-else:
-    print "NOTE: linkcode extension not found -- no links to source generated"
-
-def linkcode_resolve(domain, info):
-    """
-Determine the URL corresponding to Python object
-"""
-    if domain != 'py':
-        return None
-
-    modname = info['module']
-    fullname = info['fullname']
-
-    submod = sys.modules.get(modname)
-    if submod is None:
-        return None
-
-    obj = submod
-    for part in fullname.split('.'):
-        try:
-            obj = getattr(obj, part)
-        except:
-            return None
-
-    try:
-        fn = inspect.getsourcefile(obj)
-    except:
-        fn = None
-    if not fn:
-        return None
-
-    try:
-        source, lineno = inspect.findsource(obj)
-    except:
-        lineno = None
-
-    if lineno:
-        linespec = "#L%d" % (lineno + 1)
-    else:
-        linespec = ""
-
-    fn = relpath(fn, start=dirname(numpy.__file__))
-
-    if 'dev' in numpy.__version__:
-        return "http://github.com/numpy/numpy/blob/master/numpy/%s%s" % (
-           fn, linespec)
-    else:
-        return "http://github.com/numpy/numpy/blob/v%s/numpy/%s%s" % (
-           numpy.__version__, fn, linespec)
 # If false, no module index is generated.
 #html_domain_indices = True
 
@@ -352,5 +290,5 @@ def linkcode_resolve(domain, info):
 
     fn = relpath(fn, start=dirname(nmrglue.__file__))
 
-    return "http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/%s%s" % (
+    return "http://github.com/jjhelmus/nmrglue/blob/v0.4/nmrglue/%s%s" % (
         fn, linespec)

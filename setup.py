@@ -12,7 +12,7 @@ from distutils.core import setup
 
 setup(
     name='nmrglue',
-    version='0.3',
+    version='0.4',
     author = 'Jonathan J. Helmus',
     author_email = 'jjhelmus@gmail.com',
     packages=['nmrglue','nmrglue.fileio','nmrglue.analysis','nmrglue.process',
