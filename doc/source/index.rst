@@ -11,4 +11,5 @@ Overview
     tutorial
     reference/index
     examples/index
+    jbnmr_examples/index
     devel/index
