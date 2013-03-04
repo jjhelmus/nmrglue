@@ -1,10 +1,10 @@
 .. include:: ../../../examples/jbnmr_examples/s12-s15_relaxation_analysis/README.rst
 
 The data used in this example is available for download
-`part1, <http://nmrglue.googlecode.com/files/jbnmr_s12-15_relaxation_analysis_part1.zip>`_
-`part2, <http://nmrglue.googlecode.com/files/jbnmr_s12-15_relaxation_analysis_part2.zip>`_
-`part3, <http://nmrglue.googlecode.com/files/jbnmr_s12-15_relaxation_analysis_part3.zip>`_
-`part4. <http://nmrglue.googlecode.com/files/jbnmr_s12-15_relaxation_analysis_part4.zip>`_
+`part1, <http://nmrglue.googlecode.com/files/jbnmr_s12-s15_relaxation_analysis_part1.zip>`_
+`part2, <http://nmrglue.googlecode.com/files/jbnmr_s12-s15_relaxation_analysis_part2.zip>`_
+`part3, <http://nmrglue.googlecode.com/files/jbnmr_s12-s15_relaxation_analysis_part3.zip>`_
+`part4. <http://nmrglue.googlecode.com/files/jbnmr_s12-s15_relaxation_analysis_part4.zip>`_
 
 Listing S12
 
