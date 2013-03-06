@@ -45,6 +45,10 @@ examples/processing/nmrpipe_1d
 examples/processing/nmrpipe_2d
 examples/processing/nmrpipe_2d_tppi
 examples/processing/nmrpipe_3d
+examples/bruker_data/expnmr_00001*
+examples/bruker_data/test.fid
+examples/bruker_data/test.ft2
+
 
 # JBNMR Examples
 examples/jbnmr_examples/*/*.fid

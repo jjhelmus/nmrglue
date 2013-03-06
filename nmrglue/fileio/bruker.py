@@ -1036,7 +1036,7 @@ bruker_dsp_table = {
 
 def remove_digital_filter(dic, data):
     """
-    Remove the digial filter from Bruker data.
+    Remove the digital filter from Bruker data.
 
     Parameters
     ----------
