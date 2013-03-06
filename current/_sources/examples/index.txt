@@ -94,7 +94,9 @@ Processing Examples
 -------------------
 
 .. toctree::
+    :maxdepth: 1
 
+    proc_bruker_1d.rst
     process_pipe_1d.rst
     process_pipe_2d.rst
     process_pipe_2d_tppi.rst

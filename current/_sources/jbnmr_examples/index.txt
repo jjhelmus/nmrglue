@@ -5,9 +5,21 @@
 Examples from JBNMR article
 ###########################
 
-The following is a series of python scripts which show some uses of nmrglue
+These are all the examples from the Journal of Biomolecular NMR `article`_ 
+on nmrglue.  The full reference for this article is:
+
+J.J. Helmus, C.P. Jaroniec,
+Nmrglue: An open source Python package for the analysis of multidimensional
+NMR data, 
+J. Biomol. NMR, 
+2013, 
+10.1007/s10858-013-9718-x
+
+
+.. _article: http://dx.doi.org/10.1007/s10858-013-9718-x
 
 .. toctree::
+    :maxdepth: 1
 
     s1_sparky_to_nmrpipe
     s2_s3_1d_plotting
