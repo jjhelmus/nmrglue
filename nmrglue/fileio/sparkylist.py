@@ -92,7 +92,7 @@ def read_HN_N(peakfile):
         pf['resn'][i] = resnstr[:resie]
     out = zip(resn_one_list,resn_three_list,resi_list)
     out = np.array(out, dtype=[('oneAA','|S1'),('AA','|S3'),('resi',int)])
-    out = out.view(np.recarray)
+    #out = out.view(np.recarray)
     out = rfn.merge_arrays((pf,out),flatten=True)
     out = out.view(np.recarray)
     return(out)
