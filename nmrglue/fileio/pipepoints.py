@@ -5,8 +5,8 @@ a dictionary with data information, and structured loaded sparky list
 import numpy as np
 import numpy.lib.recfunctions as rfn
 def pts(stepX,highX,stepY,highY,HN,N):
-    ptsX=(highX-HN)/stepX; # $process[2]=HN-proton
-    ptsY=(highY-N)/stepY; # $process[1]=N-nitrogen
+    ptsX=(highX-HN)/stepX -1; # $process[2]=HN-proton
+    ptsY=(highY-N)/stepY -1; # $process[1]=N-nitrogen
     return(ptsX,ptsY)
 
 def calc(dic,slist):
