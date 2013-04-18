@@ -9,3 +9,4 @@ import varian
 import varian as agilent    # replicate varian namespace in agilent
 import table
 import sparkylist
+import pipepoints
