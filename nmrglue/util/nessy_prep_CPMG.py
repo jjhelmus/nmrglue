@@ -184,12 +184,12 @@ for exp in exp_list[:nrplots]:
     labels = ['label-%s'%x for x in range(len(exp_list))]
     if plot_ppm:
         ax.set_ylabel("15N (ppm)")
-        ax.set_xlabel("13C (ppm)")
+        ax.set_xlabel("1H (ppm)")
         ax.set_xlim(10.4,6.4)
         ax.set_ylim(132.2, 100.0)
     else:
         ax.set_ylabel("15N (pts)")
-        ax.set_xlabel("13C (pts)")
+        ax.set_xlabel("1H (pts)")
         ax.set_xlim(0, data.shape[1])
         ax.set_ylim(0, data.shape[0])
 plt.show()
