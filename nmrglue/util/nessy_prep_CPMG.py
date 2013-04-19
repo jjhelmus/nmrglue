@@ -157,7 +157,7 @@ for exp in exp_list[:nrplots]:
         ax.plot(ptsX, ptsY, "x", color='y')
         ax.text(textp, y0, resn, size=10, color='r')
         ax.text(x1, valp, "Vol=%1.6e"%vol, size=10, color='r')
-        if resn in ['D6']:
+        if resn in ['E35']:
             #print x0,x1,y0,y1
             xslice = data[ptsY_or, :]
             yslice = data[:, ptsX_or]
