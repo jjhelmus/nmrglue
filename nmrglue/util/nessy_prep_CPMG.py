@@ -50,6 +50,7 @@ for line in filelist:
     nu_list.append(nu)
     timeT2=line['timeT2']
     dic, data = ng.pipe.read(ftfile)
+    FDF1CAR=dic['FDF1CAR']
     dic_list.append(dic); data_list.append(data)
     peakfiles = ng.fileio.sparkylist.read_HN_N(peakfile)
     peakfilespoints = ng.fileio.pipepoints.calc(dic,peakfiles)
@@ -75,6 +76,8 @@ f.write("Project folder:<>nessy_files\n")
 reksp = int(round(nr_exp/30))+1
 SEQ = ["'%s',"%timeT2 for x in range(reksp)]
 f.write("CPMG delay:<>["+' '.join(SEQ)+"]\n")
+SEQ = ["'%s'"%FDF1CAR for x in range(reksp)]
+f.write("Spec freq:<>["+' ,'.join(SEQ)+"]\n")
 f.write("Number of experiments:<>%s\n"%reksp)
 max_resi = max(exp_list[0][2]['resi'])
 residual_exp = nr_exp
