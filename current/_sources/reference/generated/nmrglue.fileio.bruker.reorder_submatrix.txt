@@ -1,0 +1,6 @@
+nmrglue.fileio.bruker.reorder_submatrix
+=======================================
+
+.. currentmodule:: nmrglue.fileio.bruker
+
+.. autofunction:: reorder_submatrix

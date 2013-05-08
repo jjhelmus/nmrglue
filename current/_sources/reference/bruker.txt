@@ -18,11 +18,13 @@ These are functions which are targetted for users of nmrglue.
 
     read
     write
+    read_pdata
     remove_digital_filter
     read_lowmem
     write_lowmem
     read_binary
     write_binary
+    read_pdata_binary
     read_binary_lowmem
     write_binary_lowmem
     read_jcamp
@@ -53,10 +55,12 @@ fine control over Bruker files may be interested in these functions.
     create_data
     create_acqus_dic
     guess_shape
+    guess_shape_and_submatrix_shape
     get_data
     put_data
     complexify_data
     uncomplexify_data
+    reorder_submatrix
     rm_dig_filter
     parse_jcamp_line
     parse_jcamp_value

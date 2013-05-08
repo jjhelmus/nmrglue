@@ -83,20 +83,26 @@ files.</p>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.write.html#nmrglue.fileio.bruker.write" title="nmrglue.fileio.bruker.write"><tt class="xref py py-obj docutils literal"><span class="pre">write</span></tt></a>(dir,&nbsp;dic,&nbsp;data[,&nbsp;bin_file,&nbsp;...])</td>
 <td>Write Bruker files to disk.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.remove_digital_filter.html#nmrglue.fileio.bruker.remove_digital_filter" title="nmrglue.fileio.bruker.remove_digital_filter"><tt class="xref py py-obj docutils literal"><span class="pre">remove_digital_filter</span></tt></a>(dic,&nbsp;data)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.read_pdata.html#nmrglue.fileio.bruker.read_pdata" title="nmrglue.fileio.bruker.read_pdata"><tt class="xref py py-obj docutils literal"><span class="pre">read_pdata</span></tt></a>([dir,&nbsp;bin_files,&nbsp;procs_files,&nbsp;...])</td>
+<td>Read processed Bruker files from a directory.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.remove_digital_filter.html#nmrglue.fileio.bruker.remove_digital_filter" title="nmrglue.fileio.bruker.remove_digital_filter"><tt class="xref py py-obj docutils literal"><span class="pre">remove_digital_filter</span></tt></a>(dic,&nbsp;data)</td>
 <td>Remove the digital filter from Bruker data.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.read_lowmem.html#nmrglue.fileio.bruker.read_lowmem" title="nmrglue.fileio.bruker.read_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">read_lowmem</span></tt></a>([dir,&nbsp;bin_file,&nbsp;acqus_files,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.read_lowmem.html#nmrglue.fileio.bruker.read_lowmem" title="nmrglue.fileio.bruker.read_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">read_lowmem</span></tt></a>([dir,&nbsp;bin_file,&nbsp;acqus_files,&nbsp;...])</td>
 <td>Read Bruker files from a directory using minimal amounts of memory.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.write_lowmem.html#nmrglue.fileio.bruker.write_lowmem" title="nmrglue.fileio.bruker.write_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">write_lowmem</span></tt></a>(dir,&nbsp;dic,&nbsp;data[,&nbsp;bin_file,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.write_lowmem.html#nmrglue.fileio.bruker.write_lowmem" title="nmrglue.fileio.bruker.write_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">write_lowmem</span></tt></a>(dir,&nbsp;dic,&nbsp;data[,&nbsp;bin_file,&nbsp;...])</td>
 <td>Write Bruker files using minimal amounts of memory (trace by trace).</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.read_binary.html#nmrglue.fileio.bruker.read_binary" title="nmrglue.fileio.bruker.read_binary"><tt class="xref py py-obj docutils literal"><span class="pre">read_binary</span></tt></a>(filename[,&nbsp;shape,&nbsp;cplex,&nbsp;big])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.read_binary.html#nmrglue.fileio.bruker.read_binary" title="nmrglue.fileio.bruker.read_binary"><tt class="xref py py-obj docutils literal"><span class="pre">read_binary</span></tt></a>(filename[,&nbsp;shape,&nbsp;cplex,&nbsp;big])</td>
 <td>Read Bruker binary data from file and return dic,data pair</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.write_binary.html#nmrglue.fileio.bruker.write_binary" title="nmrglue.fileio.bruker.write_binary"><tt class="xref py py-obj docutils literal"><span class="pre">write_binary</span></tt></a>(filename,&nbsp;dic,&nbsp;data[,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.write_binary.html#nmrglue.fileio.bruker.write_binary" title="nmrglue.fileio.bruker.write_binary"><tt class="xref py py-obj docutils literal"><span class="pre">write_binary</span></tt></a>(filename,&nbsp;dic,&nbsp;data[,&nbsp;...])</td>
 <td>Write Bruker binary data to file.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.read_pdata_binary.html#nmrglue.fileio.bruker.read_pdata_binary" title="nmrglue.fileio.bruker.read_pdata_binary"><tt class="xref py py-obj docutils literal"><span class="pre">read_pdata_binary</span></tt></a>(filename[,&nbsp;shape,&nbsp;...])</td>
+<td>Read a processed Bruker binary file and return dic, data pair.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.read_binary_lowmem.html#nmrglue.fileio.bruker.read_binary_lowmem" title="nmrglue.fileio.bruker.read_binary_lowmem"><tt class="xref py py-obj docutils literal"><span class="pre">read_binary_lowmem</span></tt></a>(filename[,&nbsp;shape,&nbsp;cplex,&nbsp;big])</td>
 <td>Read Bruker binary data from file using minimal memory.</td>
@@ -162,17 +168,23 @@ fine control over Bruker files may be interested in these functions.</p>
 <tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.guess_shape.html#nmrglue.fileio.bruker.guess_shape" title="nmrglue.fileio.bruker.guess_shape"><tt class="xref py py-obj docutils literal"><span class="pre">guess_shape</span></tt></a>(dic)</td>
 <td>Determine data shape and complexity from Bruker dictionary.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.get_data.html#nmrglue.fileio.bruker.get_data" title="nmrglue.fileio.bruker.get_data"><tt class="xref py py-obj docutils literal"><span class="pre">get_data</span></tt></a>(f,&nbsp;big)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.guess_shape_and_submatrix_shape.html#nmrglue.fileio.bruker.guess_shape_and_submatrix_shape" title="nmrglue.fileio.bruker.guess_shape_and_submatrix_shape"><tt class="xref py py-obj docutils literal"><span class="pre">guess_shape_and_submatrix_shape</span></tt></a>(dic)</td>
+<td>Guess the data shape and the shape of the processed data submatrix.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.get_data.html#nmrglue.fileio.bruker.get_data" title="nmrglue.fileio.bruker.get_data"><tt class="xref py py-obj docutils literal"><span class="pre">get_data</span></tt></a>(f,&nbsp;big)</td>
 <td>Get binary data from file object with given endiness</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.put_data.html#nmrglue.fileio.bruker.put_data" title="nmrglue.fileio.bruker.put_data"><tt class="xref py py-obj docutils literal"><span class="pre">put_data</span></tt></a>(f,&nbsp;data[,&nbsp;big])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.put_data.html#nmrglue.fileio.bruker.put_data" title="nmrglue.fileio.bruker.put_data"><tt class="xref py py-obj docutils literal"><span class="pre">put_data</span></tt></a>(f,&nbsp;data[,&nbsp;big])</td>
 <td>Put data to file object with given endiness</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.complexify_data.html#nmrglue.fileio.bruker.complexify_data" title="nmrglue.fileio.bruker.complexify_data"><tt class="xref py py-obj docutils literal"><span class="pre">complexify_data</span></tt></a>(data)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.complexify_data.html#nmrglue.fileio.bruker.complexify_data" title="nmrglue.fileio.bruker.complexify_data"><tt class="xref py py-obj docutils literal"><span class="pre">complexify_data</span></tt></a>(data)</td>
 <td>Complexify data packed real, imag.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.uncomplexify_data.html#nmrglue.fileio.bruker.uncomplexify_data" title="nmrglue.fileio.bruker.uncomplexify_data"><tt class="xref py py-obj docutils literal"><span class="pre">uncomplexify_data</span></tt></a>(data_in)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.uncomplexify_data.html#nmrglue.fileio.bruker.uncomplexify_data" title="nmrglue.fileio.bruker.uncomplexify_data"><tt class="xref py py-obj docutils literal"><span class="pre">uncomplexify_data</span></tt></a>(data_in)</td>
 <td>Uncomplexify data (pack real,imag) into a int32 array</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.reorder_submatrix.html#nmrglue.fileio.bruker.reorder_submatrix" title="nmrglue.fileio.bruker.reorder_submatrix"><tt class="xref py py-obj docutils literal"><span class="pre">reorder_submatrix</span></tt></a>(data,&nbsp;shape,&nbsp;submatrix_shape)</td>
+<td>Reorder processed binary Bruker data.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.bruker.rm_dig_filter.html#nmrglue.fileio.bruker.rm_dig_filter" title="nmrglue.fileio.bruker.rm_dig_filter"><tt class="xref py py-obj docutils literal"><span class="pre">rm_dig_filter</span></tt></a>(data,&nbsp;decim,&nbsp;dspfvs[,&nbsp;grpdly])</td>
 <td>Remove the digital filter from Bruker data.</td>

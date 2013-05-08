@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nmrglue.fileio.bruker.remove_digital_filter &mdash; nmrglue 0.5-dev documentation</title>
+    <title>nmrglue.fileio.bruker.read_pdata_binary &mdash; nmrglue 0.5-dev documentation</title>
     
     <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -28,8 +28,8 @@
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="nmrglue 0.5-dev documentation" href="../../index.html" />
     <link rel="up" title="nmrglue.bruker" href="../bruker.html" />
-    <link rel="next" title="nmrglue.fileio.bruker.read_lowmem" href="nmrglue.fileio.bruker.read_lowmem.html" />
-    <link rel="prev" title="nmrglue.fileio.bruker.read_pdata" href="nmrglue.fileio.bruker.read_pdata.html" /> 
+    <link rel="next" title="nmrglue.fileio.bruker.read_binary_lowmem" href="nmrglue.fileio.bruker.read_binary_lowmem.html" />
+    <link rel="prev" title="nmrglue.fileio.bruker.write_binary" href="nmrglue.fileio.bruker.write_binary.html" /> 
   </head>
   <body>
     <div class="related">
@@ -45,10 +45,10 @@
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="nmrglue.fileio.bruker.read_lowmem.html" title="nmrglue.fileio.bruker.read_lowmem"
+          <a href="nmrglue.fileio.bruker.read_binary_lowmem.html" title="nmrglue.fileio.bruker.read_binary_lowmem"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="nmrglue.fileio.bruker.read_pdata.html" title="nmrglue.fileio.bruker.read_pdata"
+          <a href="nmrglue.fileio.bruker.write_binary.html" title="nmrglue.fileio.bruker.write_binary"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">nmrglue 0.5-dev documentation</a> &raquo;</li>
           <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
@@ -61,41 +61,49 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="nmrglue-fileio-bruker-remove-digital-filter">
-<h1>nmrglue.fileio.bruker.remove_digital_filter<a class="headerlink" href="#nmrglue-fileio-bruker-remove-digital-filter" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="nmrglue-fileio-bruker-read-pdata-binary">
+<h1>nmrglue.fileio.bruker.read_pdata_binary<a class="headerlink" href="#nmrglue-fileio-bruker-read-pdata-binary" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="nmrglue.fileio.bruker.remove_digital_filter">
-<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">remove_digital_filter</tt><big>(</big><em>dic</em>, <em>data</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/bruker.py#L1293"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.bruker.remove_digital_filter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove the digital filter from Bruker data.</p>
+<dt id="nmrglue.fileio.bruker.read_pdata_binary">
+<tt class="descclassname">nmrglue.fileio.bruker.</tt><tt class="descname">read_pdata_binary</tt><big>(</big><em>filename</em>, <em>shape=None</em>, <em>submatrix_shape=None</em>, <em>big=True</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/bruker.py#L790"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.bruker.read_pdata_binary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a processed Bruker binary file and return dic, data pair.</p>
+<p>If data cannot be reshaped as described a 1D representation of the data
+will be returned after printing a warning message.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
 <blockquote>
-<div><p>Dictionary of Bruker parameters.</p>
+<div><p>Filename of Bruker binary file.</p>
 </div></blockquote>
-<p><strong>data</strong> : ndarray</p>
+<p><strong>shape</strong> : tuple</p>
 <blockquote>
-<div><p>Array of NMR data to remove digital filter from.</p>
+<div><p>Shape of resulting data.  None will return 1D data.</p>
+</div></blockquote>
+<p><strong>submatrix_shape</strong> : tuple</p>
+<blockquote>
+<div><p>Tuple describing shape of resulting data.  None will return 1D data.</p>
+</div></blockquote>
+<p><strong>big</strong> : bool</p>
+<blockquote>
+<div><p>Endianness of binary file, True for big-endian, False for
+little-endian.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndata</strong> : ndarray</p>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary containing &#8220;FILE_SIZE&#8221; key and value.</p>
+</div></blockquote>
+<p><strong>data</strong> : ndarray</p>
 <blockquote class="last">
-<div><p>Array of NMR data with digital filter removed</p>
+<div><p>Array of raw NMR data.</p>
 </div></blockquote>
 </td>
 </tr>
 </tbody>
 </table>
-<div class="admonition-see-also admonition seealso">
-<p class="first admonition-title">See also</p>
-<dl class="last docutils">
-<dt><a class="reference internal" href="nmrglue.fileio.bruker.rm_dig_filter.html#nmrglue.fileio.bruker.rm_dig_filter" title="nmrglue.fileio.bruker.rm_dig_filter"><tt class="xref py py-obj docutils literal"><span class="pre">rm_dig_filter</span></tt></a></dt>
-<dd>Remove digital filter by specifying parameters.</dd>
-</dl>
-</div>
 </dd></dl>
 
 </div>
@@ -107,14 +115,14 @@
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="nmrglue.fileio.bruker.read_pdata.html"
-                        title="previous chapter">nmrglue.fileio.bruker.read_pdata</a></p>
+  <p class="topless"><a href="nmrglue.fileio.bruker.write_binary.html"
+                        title="previous chapter">nmrglue.fileio.bruker.write_binary</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="nmrglue.fileio.bruker.read_lowmem.html"
-                        title="next chapter">nmrglue.fileio.bruker.read_lowmem</a></p>
+  <p class="topless"><a href="nmrglue.fileio.bruker.read_binary_lowmem.html"
+                        title="next chapter">nmrglue.fileio.bruker.read_binary_lowmem</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../../_sources/reference/generated/nmrglue.fileio.bruker.remove_digital_filter.txt"
+    <li><a href="../../_sources/reference/generated/nmrglue.fileio.bruker.read_pdata_binary.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -147,10 +155,10 @@
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="nmrglue.fileio.bruker.read_lowmem.html" title="nmrglue.fileio.bruker.read_lowmem"
+          <a href="nmrglue.fileio.bruker.read_binary_lowmem.html" title="nmrglue.fileio.bruker.read_binary_lowmem"
              >next</a> |</li>
         <li class="right" >
-          <a href="nmrglue.fileio.bruker.read_pdata.html" title="nmrglue.fileio.bruker.read_pdata"
+          <a href="nmrglue.fileio.bruker.write_binary.html" title="nmrglue.fileio.bruker.write_binary"
              >previous</a> |</li>
         <li><a href="../../index.html">nmrglue 0.5-dev documentation</a> &raquo;</li>
           <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
