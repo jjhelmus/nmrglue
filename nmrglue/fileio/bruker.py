@@ -151,7 +151,7 @@ def create_acqus_dic(adic, direct=False):
 # Global read/write function and related utilities
 
 def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
-        shape=None, cplex=None, big=None, read_prog=True, read_acqus=True):
+         shape=None, cplex=None, big=None, read_prog=True, read_acqus=True):
     """
     Read Bruker files from a directory.
 
@@ -189,15 +189,16 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
 
     See Also
     --------
+    read_pdata : Read Bruker processed files.
     read_lowmem : Low memory reading of Bruker files.
     write : Write Bruker files.
 
     """
-    if os.path.isdir(dir) != True:
+    if os.path.isdir(dir) is not True:
         raise IOError("directory %s does not exist" % (dir))
 
     # determind parameter automatically
-    if bin_file == None:
+    if bin_file is None:
         if os.path.isfile(os.path.join(dir, "fid")):
             bin_file = "fid"
         elif os.path.isfile(os.path.join(dir, "ser")):
@@ -205,13 +206,13 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
         else:
             raise IOError("No Bruker binary file could be found in %s" % (dir))
 
-    if acqus_files == None:
+    if acqus_files is None:
         acqus_files = []
         for f in ["acqus", "acqu2s", "acqu3s", "acqu4s"]:
             if os.path.isfile(os.path.join(dir, f)):
                 acqus_files.append(f)
 
-    if pprog_file == None:
+    if pprog_file is None:
         pprog_file = "pulseprogram"
 
     # create an empty dictionary
@@ -233,19 +234,19 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
     dic["FILE_SIZE"] = os.stat(os.path.join(dir, bin_file)).st_size
 
     # determind shape and complexity for direct dim if needed
-    if shape == None or cplex == None:
+    if shape is None or cplex is None:
         gshape, gcplex = guess_shape(dic)
-        if gcplex == True:    # divide last dim by 2 if complex
+        if gcplex is True:    # divide last dim by 2 if complex
             t = list(gshape)
             t[-1] = t[-1] / 2
             gshape = tuple(t)
-    if shape == None:
+    if shape is None:
         shape = gshape
-    if cplex == None:
+    if cplex is None:
         cplex = gcplex
 
     # determind endianness (assume little-endian unless BYTORDA is 1)
-    if big == None:
+    if big is None:
         big = False     # default value
         if "acqus" in dic and "BYTORDA" in dic["acqus"]:
             if dic["acqus"]["BYTORDA"] == 1:
@@ -260,7 +261,8 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
 
 
 def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
-        shape=None, cplex=None, big=None, read_prog=True, read_acqus=True):
+                shape=None, cplex=None, big=None, read_prog=True,
+                read_acqus=True):
     """
     Read Bruker files from a directory using minimal amounts of memory.
 
@@ -280,11 +282,11 @@ def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
 
     """
 
-    if os.path.isdir(dir) != True:
+    if os.path.isdir(dir) is not True:
         raise IOError("Directory %s does not exist" % (dir))
 
     # determind parameter automatically
-    if bin_file == None:
+    if bin_file is None:
         if os.path.isfile(os.path.join(dir, "fid")):
             bin_file = "fid"
         elif os.path.isfile(os.path.join(dir, "ser")):
@@ -292,13 +294,13 @@ def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
         else:
             raise IOError("no Bruker binary file could be found in %s" % (dir))
 
-    if acqus_files == None:
+    if acqus_files is None:
         acqus_files = []
         for f in ["acqus", "acqu2s", "acqu3s", "acqu4s"]:
             if os.path.isfile(os.path.join(dir, f)):
                 acqus_files.append(f)
 
-    if pprog_file == None:
+    if pprog_file is None:
         pprog_file = "pulseprogram"
 
     # create an empty dictionary
@@ -317,19 +319,19 @@ def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
     dic["FILE_SIZE"] = os.stat(os.path.join(dir, bin_file)).st_size
 
     # determind shape and complexity for direct dim if needed
-    if shape == None or cplex == None:
+    if shape is None or cplex is None:
         gshape, gcplex = guess_shape(dic)
-        if gcplex == True:    # divide last dim by 2 if complex
+        if gcplex is True:    # divide last dim by 2 if complex
             t = list(gshape)
             t[-1] = t[-1] / 2
             gshape = tuple(t)
-    if shape == None:
+    if shape is None:
         shape = gshape
-    if cplex == None:
+    if cplex is None:
         cplex = gcplex
 
     # determind endianness (assume little-endian unless BYTORDA is 1)
-    if big == None:
+    if big is None:
         big = False     # default value
         if "acqus" in dic and "BYTORDA" in dic["acqus"]:
             if dic["acqus"]["BYTORDA"] == 1:
@@ -344,7 +346,7 @@ def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
 
 
 def write(dir, dic, data, bin_file=None, acqus_files=None, pprog_file=None,
-        overwrite=False, big=None, write_prog=True, write_acqus=True):
+          overwrite=False, big=None, write_prog=True, write_acqus=True):
     """
     Write Bruker files to disk.
 
@@ -381,17 +383,17 @@ def write(dir, dic, data, bin_file=None, acqus_files=None, pprog_file=None,
 
     """
     # determind parameters automatically
-    if bin_file == None:
+    if bin_file is None:
         if data.ndim == 1:
             bin_file = "fid"
         else:
             bin_file = "ser"
 
-    if acqus_files == None:
+    if acqus_files is None:
         acq = ["acqus", "acqu2s", "acqu3s", "acqu4s"]
         acqus_files = [k for k in acq if (k in dic)]
 
-    if pprog_file == None:
+    if pprog_file is None:
         pprog_file = "pulseprogram"
 
     # write out the acqus files
@@ -402,10 +404,10 @@ def write(dir, dic, data, bin_file=None, acqus_files=None, pprog_file=None,
     # write out the pulse program
     if write_prog:
         write_pprog(os.path.join(dir, pprog_file), dic["pprog"],
-                        overwrite=overwrite)
+                    overwrite=overwrite)
 
     # determind endianness (assume little-endian unless BYTORDA is 1)
-    if big == None:
+    if big is None:
         big = False     # default value
         if "acqus" in dic and "BYTORDA" in dic["acqus"]:
             if dic["acqus"]["BYTORDA"] == 1:
@@ -420,8 +422,8 @@ def write(dir, dic, data, bin_file=None, acqus_files=None, pprog_file=None,
 
 
 def write_lowmem(dir, dic, data, bin_file=None, acqus_files=None,
-        pprog_file=None, overwrite=False, big=None, write_prog=True,
-        write_acqus=True):
+                 pprog_file=None, overwrite=False, big=None, write_prog=True,
+                 write_acqus=True):
     """
     Write Bruker files using minimal amounts of memory (trace by trace).
 
@@ -434,17 +436,17 @@ def write_lowmem(dir, dic, data, bin_file=None, acqus_files=None,
 
     """
     # determind parameters automatically
-    if bin_file == None:
+    if bin_file is None:
         if data.ndim == 1:
             bin_file = "fid"
         else:
             bin_file = "ser"
 
-    if acqus_files == None:
+    if acqus_files is None:
         acq = ["acqus", "acqu2s", "acqu3s", "acqu4s"]
         acqus_files = [k for k in acq if (k in dic)]
 
-    if pprog_file == None:
+    if pprog_file is None:
         pprog_file = "pulseprogram"
 
     # write out the acqus files
@@ -458,7 +460,7 @@ def write_lowmem(dir, dic, data, bin_file=None, acqus_files=None,
                     overwrite=overwrite)
 
     # determind endianness (assume little-endian unless BYTORDA is 1)
-    if big == None:
+    if big is None:
         big = False     # default value
         if "acqus" in dic and "BYTORDA" in dic["acqus"]:
             if dic["acqus"]["BYTORDA"] == 1:
@@ -579,7 +581,7 @@ def guess_shape(dic):
 
     elif loopn == 3:  # 2D with two leading passive loops
         if (loop[0] == 2 and loop[1] == 2 and li[0] == 0 and li[1] == 0
-            and li[2] != 0):
+                and li[2] != 0):
             shape[2] = 2 * loop[2]
             shape = shape[-2:]
 
@@ -615,8 +617,262 @@ def guess_shape(dic):
 
     return tuple([int(i) for i in shape if i >= 2]), cplex
 
-# Bruker binary (fid/ser) reading and writing
 
+# Bruker processed binary (1r, 1i, 2rr, 2ri, etc) reading
+
+def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
+               shape=None, submatrix_shape=None, all_components=False,
+               big=None):
+    """
+    Read processed Bruker files from a directory.
+
+    Parameters
+    ----------
+    dir : str
+        Directory to read from.
+    bin_files : list of str, optional
+        List of filename of binary file in directory. None uses standard
+        files.
+    procs_files : list, optional
+        List of filename(s) of procs parameter files in directory. None uses
+        standard files.
+    read_procss : bool, optional
+        True to read procs files(s), False prevents reading.
+    shape : tuple, optional
+        Shape of resulting data.  None will guess the shape from the
+        parameters in the procs file(s).
+    submatrix_shape : tuple, optional
+        Shape of submatrix for 2D+ data.  None will guess the shape from
+        the metadata in the procs file(s).
+    all_components : bool
+        True to return all a list of all components, False returns just the
+        all real component (1r, 2rr, 3rrr, etc).
+    big : bool or None, optional
+        Endiness of binary file. True of big-endian, False for little-endian,
+        None to determine endiness from procs file(s).
+
+    Returns
+    -------
+    dic : dict
+        Dictionary of Bruker parameters.
+    data : ndarray or list
+        Array of NMR data.  If all_compoents is True this is a list of array
+        with each quadrature component.
+
+    Notes
+    -----
+    There is currently no support for writing Bruker processed files or
+    reading processed files using minimal memory.
+
+    """
+    # TODO read_pdata_lowmem, write_pdata
+
+    if os.path.isdir(dir) is not True:
+        raise IOError("directory %s does not exist" % (dir))
+
+    # find binary files
+    if bin_files is None:
+        if os.path.isfile(os.path.join(dir, "1r")):
+            if all_components:
+                bin_files = ['1r', '1i']
+            else:
+                bin_files = ['1r']
+        elif os.path.isfile(os.path.join(dir, "2rr")):
+            if all_components:
+                bin_files = ['2rr', '2ri', '2ir', '2ii']
+            else:
+                bin_files = ['2rr']
+        elif os.path.isfile(os.path.join(dir, "3rrr")):
+            if all_components:
+                bin_files = ['3rrr', '3rri', '3rir', '3rii', '3irr', '3iri',
+                             '3iir', '3iii']
+            else:
+                bin_files = ['3rrr']
+        else:
+            raise IOError("No Bruker binary file could be found in %s" % (dir))
+
+    if procs_files is None:
+        procs_files = []
+        for f in ["procs", "proc2s", "proc3s", "proc4s"]:
+            if os.path.isfile(os.path.join(dir, f)):
+                procs_files.append(f)
+
+    # create an empty dictionary
+    dic = dict()
+
+    # read the acqus_files and add to the dictionary
+    if read_procs:
+        for f in procs_files:
+            dic[f] = read_jcamp(os.path.join(dir, f))
+
+    # determind shape and complexity for direct dim if needed
+    if submatrix_shape is None or shape is None:
+        g_shape, g_submatrix_shape = guess_shape_and_submatrix_shape(dic)
+        if shape is None:
+            shape = g_shape
+        if submatrix_shape is None:
+            submatrix_shape = g_submatrix_shape
+
+    # issue a warning is submatrix_shape or shape are still None
+    if submatrix_shape is None:
+        warn('Submatrix shape not defined, returning 1D data')
+    if shape is None:
+        warn('Data shape not defined, returning 1D data')
+
+    # determind endianness (assume little-endian unless BYTORDA is 1)
+    if big is None:
+        big = False     # default value
+        if "procs" in dic and "BYTORDA" in dic["procs"]:
+            if dic["procs"]["BYTORDA"] == 1:
+                big = True
+            else:
+                big = False
+
+    # read the binary file
+    data = [read_pdata_binary(os.path.join(dir, f),
+                              shape, submatrix_shape, big)[1]
+            for f in bin_files]
+
+    if len(data) == 1:
+        return dic, data[0]
+    else:
+        return dic, data
+
+
+def guess_shape_and_submatrix_shape(dic):
+    """
+    Guess the data shape and the shape of the processed data submatrix.
+    """
+    if 'procs' not in dic:  # unknow dimensionality and shapes
+        return None, None
+
+    procs = dic['procs']
+    if 'SI' not in procs or 'XDIM' not in procs:
+        return None, None   # cannot determine shape
+
+    si_0 = procs['SI']
+    xdim_0 = procs['XDIM']
+
+    if 'proc2s' not in dic:  # 1D data
+        return (si_0, ), (xdim_0, )
+
+    proc2s = dic['proc2s']
+    if 'SI' not in proc2s or 'XDIM' not in proc2s:
+        return None, None   # cannot determine shape
+
+    si_1 = proc2s['SI']
+    xdim_1 = proc2s['XDIM']
+
+    if 'proc3s' not in dic:  # 2D data
+        return (si_1, si_0), (xdim_1, xdim_0)
+
+    proc3s = dic['proc3s']
+    if 'SI' not in proc3s or 'XDIM' not in proc3s:
+        return None, None   # cannot determine shape
+
+    si_2 = proc3s['SI']
+    xdim_2 = proc3s['XDIM']
+
+    if 'proc4s' not in dic:  # 3D data
+        return (si_2, si_1, si_0), (xdim_2, xdim_1, xdim_0)
+
+    proc4s = dic['proc4s']
+    if 'SI' not in proc4s or 'XDIM' not in proc4s:
+        return None, None   # cannot determine shape
+
+    si_3 = proc4s['SI']
+    xdim_3 = proc4s['XDIM']
+
+    # assume 4D data
+    return (si_3, si_2, si_1, si_0), (xdim_3, xdim_2, xdim_1, xdim_0)
+
+
+def read_pdata_binary(filename, shape=None, submatrix_shape=None, big=True):
+    """
+    Read a processed Bruker binary file and return dic, data pair.
+
+    If data cannot be reshaped as described a 1D representation of the data
+    will be returned after printing a warning message.
+
+    Parameters
+    ----------
+    filename : str
+        Filename of Bruker binary file.
+    shape : tuple
+        Shape of resulting data.  None will return 1D data.
+    submatrix_shape : tuple
+        Tuple describing shape of resulting data.  None will return 1D data.
+    big : bool
+        Endianness of binary file, True for big-endian, False for
+        little-endian.
+
+    Returns
+    -------
+    dic : dict
+        Dictionary containing "FILE_SIZE" key and value.
+    data : ndarray
+        Array of raw NMR data.
+
+    """
+    # open the file and get the data
+    f = open(filename, 'rb')
+    data = get_data(f, big=big)
+    f.close()
+
+    # create dictionary
+    dic = {"FILE_SIZE": os.stat(filename).st_size}
+
+    # submatrix reordering
+    if submatrix_shape is None or shape is None:
+        return dic, data
+    else:
+        try:
+            data = reorder_submatrix(data, shape, submatrix_shape)
+            return dic, reorder_submatrix(data, shape, submatrix_shape)
+        except:
+            warn('unable to reorder data')
+            return dic, data
+
+
+def reorder_submatrix(data, shape, submatrix_shape):
+    """
+    Reorder processed binary Bruker data.
+
+    Parameters
+    ----------
+    data : array
+
+    shape : tuple
+        Shape of final data.
+    submatrix_shape : tuple
+        Shape of submatrix.
+
+    Returns
+    -------
+    rdata : array
+        Array in which data has been reordered and correctly shaped.
+
+    """
+    if submatrix_shape is None or shape is None:
+        return data
+
+    # do nothing to 1D data
+    if len(submatrix_shape) == 1 or len(shape) == 1:
+        return data
+
+    rdata = np.empty(shape, dtype=data.dtype)
+    sub_per_dim = [int(i / j) for i, j in zip(shape, submatrix_shape)]
+    nsubs = np.product(sub_per_dim)
+    data = data.reshape([nsubs] + list(submatrix_shape))
+
+    for sub_num, sub_idx in enumerate(np.ndindex(tuple(sub_per_dim))):
+        sub_slices = [slice(i * j, (i + 1) * j) for i, j in
+                      zip(sub_idx, submatrix_shape)]
+        rdata[sub_slices] = data[sub_num]
+    return rdata
+
+
+# Bruker binary (fid/ser) reading and writing
 
 def read_binary(filename, shape=(1), cplex=True, big=True):
     """
@@ -803,7 +1059,7 @@ class bruker_nd(fileiobase.data_nd):
                 raise ValueError("shape does not agree with file size")
 
         # check order
-        if order == None:
+        if order is None:
             order = range(len(fshape))
 
         # finalize
@@ -879,7 +1135,7 @@ def get_data(f, big):
     """
     Get binary data from file object with given endiness
     """
-    if big == True:
+    if big:
         return np.frombuffer(f.read(), dtype='>i4')
     else:
         return np.frombuffer(f.read(), dtype='<i4')
@@ -900,7 +1156,7 @@ def get_trace(f, num_points, big):
     """
     Get trace of num_points from file with given endiness
     """
-    if big == True:
+    if big:
         bsize = num_points * np.dtype('>i4').itemsize
         return np.frombuffer(f.read(bsize), dtype='>i4')
     else:
@@ -970,7 +1226,7 @@ bruker_dsp_table = {
         1024 : 70.48486328125,
         1536 : 61.656575520833333,
         2048 : 70.492431640625,
-        },
+    },
     11: {
         2    : 46.,
         3    : 36.5,
@@ -993,7 +1249,7 @@ bruker_dsp_table = {
         1024 : 72.0625,
         1536 : 71.916666666666667,
         2048 : 72.03125
-        },
+    },
     12: {
         2    : 46. ,
         3    : 36.5,
@@ -1016,7 +1272,7 @@ bruker_dsp_table = {
         1024 : 72.0625,
         1536 : 71.916666666666667,
         2048 : 72.03125
-        },
+    },
     13: {
         2    : 2.75,
         3    : 2.8333333333333333,
@@ -1030,8 +1286,8 @@ bruker_dsp_table = {
         48   : 2.9895833333333333,
         64   : 2.9921875,
         96   : 2.9947916666666667
-        }
     }
+}
 
 
 def remove_digital_filter(dic, data):
@@ -1550,7 +1806,7 @@ def read_pprog(filename):
 
     # create the output dictionary
     dic = {"var": var, "incr": incr, "loop": loop, "phase": phase,
-            "ph_extra": ph_extra}
+           "ph_extra": ph_extra}
 
     return dic
 
