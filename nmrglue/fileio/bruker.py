@@ -541,12 +541,12 @@ def guess_shape(dic):
     # if there in no pulse program parameters in dictionary return currect
     # shape after removing zeros
     if "pprog" not in dic or "loop" not in dic["pprog"]:
-        return tuple([int(i) for i in shape if i >= 1]), cplex
+        return tuple([int(i) for i in shape if i > 1]), cplex
 
     # if pulseprogram dictionary is missing loop or incr return current shape
     pprog = dic["pprog"]
     if "loop" not in pprog or "incr" not in pprog:
-        return tuple([int(i) for i in shape if i >= 1]), cplex
+        return tuple([int(i) for i in shape if i > 1]), cplex
 
     # determine indirect dimension sizes from pulseprogram parameters
     loop = pprog["loop"]
@@ -558,6 +558,13 @@ def guess_shape(dic):
     for i, v in enumerate(loop):
         if v in rep.keys():
             loop[i] = rep[v]
+
+    # if the loop variables contains strings, return current shape
+    # these variables could be resolved from the var key in the pprog dict
+    # but this would require executing unknown code to perform the
+    # arithmetic present in the string.
+    if str in [type(e) for e in loop]:
+        return tuple([int(i) for i in shape if i > 1]), cplex
 
     # size of indirect dimensions based on number of loops in pulse program
     # there are two kinds of loops, active and passive.
