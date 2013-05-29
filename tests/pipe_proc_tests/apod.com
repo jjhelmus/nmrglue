@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/csh
 
 nmrPipe -in ./time_complex.fid                         \
 | nmrPipe -fn APOD -qName SP -q1 0.35 -q2 0.98 -q3 2.0 \

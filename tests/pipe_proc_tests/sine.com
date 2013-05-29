@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/csh
 
 nmrPipe -in ./time_complex.fid                              \
 | nmrPipe -fn SINE -off 0.35 -end 0.98 -pow 2 -c 1.0  \

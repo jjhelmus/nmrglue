@@ -39,8 +39,8 @@ def _standard_args(func_name, num_files):
     """ Generate a set of standard  """
     glue_files = [func_name+str(i + 1)+'.glue' for i in range(num_files)]
     pipe_files = [func_name+str(i + 1)+'.dat' for i in range(num_files)]
-    pipe_script = func_name + '.com'
-    glue_script = func_name + '.py'
+    pipe_script = './' + func_name + '.com'
+    glue_script = './' + func_name + '.py'
     return glue_script, pipe_script, glue_files, pipe_files
 
 def _standard_test(func_name, num_files):
@@ -124,8 +124,8 @@ def test_rft():
     pipe_files = ['rft1.dat', 'rft2.dat', 'rft3.dat', 'rft4.dat', 
                   'rft5.dat', 'rft6.dat', 'rft7.dat', 'rft8.dat', 
                   'rft12.dat', 'rft13.dat', 'rft14.dat'] 
-    pipe_script = 'rft.com'
-    glue_script = 'rft.py'
+    pipe_script = './rft.com'
+    glue_script = './rft.py'
     return _perform_test(glue_script, pipe_script, glue_files, pipe_files)
 
 def test_ha():
@@ -139,8 +139,8 @@ def test_ht():
                   'ht7.glue', 'ht8.glue']
     pipe_files = ['ht1.dat', 'ht2.dat', 'ht3.dat', 'ht5.dat', 'ht6.dat', 
                   'ht7.dat', 'ht8.dat']
-    pipe_script = 'ht.com'
-    glue_script = 'ht.py'
+    pipe_script = './ht.com'
+    glue_script = './ht.py'
     return _perform_test(glue_script, pipe_script, glue_files, pipe_files)
 
 ##########################
