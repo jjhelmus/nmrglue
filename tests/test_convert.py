@@ -12,7 +12,7 @@ from setup import DATA_DIR
 
 # subroutines
 def check_sdic(dic1, dic2, exclude=None, v=False):
-    """ Check two Sparky parameter dictionaries against each other """ 
+    """ Check two Sparky parameter dictionaries against each other """
     if exclude is None:
         exclude = []
     # check axis dictionaries
@@ -42,7 +42,7 @@ def check_dic(dic1, dic2, exclude=None, v=False):
         print e1
     assert len(e1) == 0
     if v:
-        print e2 
+        print e2
     assert len(e2) == 0
 
     if v:
@@ -68,14 +68,14 @@ def check_pdic(dic1, dic2, exclude=None, v=False):
         print e1
     assert len(e1) == 0
     if v:
-        print e2 
+        print e2
     assert len(e2) == 0
 
     if v:
         for k in dic1.keys():
             if k in exclude:
                 continue
-            if type(dic1[k]) == str or type(dic1[k]) == list: 
+            if type(dic1[k]) == str or type(dic1[k]) == list:
                 if dic1[k] != dic2[k]:
                     print k, dic1[k], dic2[k]
             elif abs(dic1[k] - dic2[k]) >= 0.002:
@@ -96,8 +96,8 @@ def check_rdic(dic1, dic2, ndim, exclude=None, v=True):
 
     non_list_keys = ['comment', 'format', 'ndim', 'layout']
     list_keys = ['dom', 'nacq', 'npts', 'nptype', 'cphase', 'lphase', 'quad',
-                    'sf', 'sw', 'xfirst', 'xstep', 'ppm']
-    
+                 'sf', 'sw', 'xfirst', 'xstep', 'ppm']
+
     # check keys which are not lists
     for k in non_list_keys:
         if k in exclude:
@@ -118,7 +118,7 @@ def check_rdic(dic1, dic2, ndim, exclude=None, v=True):
                         print k, i, dic1[k][i], dic2[k][i]
                 assert dic1[k][i] == dic2[k][i]
                 continue
-            
+
             if v:
                 if abs(dic1[k][i] - dic2[k][i]) > abs(dic1[k][i] / 1000.):
                     print k, i, dic1[k][i], dic2[k][i]
@@ -138,7 +138,8 @@ bad_rnmrtk_keys = ['nacq', 'cphase', 'lphase']
 
 # keys which are bad because rnmrtk sets them incorrect when outputting NMRPipe
 # formatted data
-bad_rnmrtk2pipe_keys = ["FDF1LABEL", "FDF2LABEL", "FDF3LABEL", "FDF4LABEL",
+bad_rnmrtk2pipe_keys = [
+    "FDF1LABEL", "FDF2LABEL", "FDF3LABEL", "FDF4LABEL",
     "FDF1QUADFLAG", "FDF2QUADFLAG", "FDF3QUADFLAG", "FDF4QUADFLAG",
     "FDDIMORDER1", "FDDIMORDER2", "FDDIMORDER3", "FDDIMORDER4",
     "FDF1P0", "FDF2P0", "FDF3P0", "FDF4P0",
@@ -147,7 +148,7 @@ bad_rnmrtk2pipe_keys = ["FDF1LABEL", "FDF2LABEL", "FDF3LABEL", "FDF4LABEL",
     "FDF1TDSIZE", "FDF2TDSIZE", "FDF3TDSIZE", "FDF4TDSIZE",
     "FDF1APOD", "FDF2APOD", "FDF3APOD", "FDF4APOD",
     "FDF1CENTER", "FDF2CENTER", "FDF3CENTER", "FDF4CENTER",
-    "FDF1UNITS", "FDF2UNITS", "FDF3UNITS", "FDF4UNITS", 
+    "FDF1UNITS", "FDF2UNITS", "FDF3UNITS", "FDF4UNITS",
     "FDDIMORDER", "FDREALSIZE", "FDFLTFORMAT", "FD2DVIRGIN", "FDPIPEFLAG",
     "FDCOMMENT", "FD2DPHASE", "FDFILECOUNT"]
 
@@ -156,13 +157,14 @@ bad_rnmrtk2pipe_keys = ["FDF1LABEL", "FDF2LABEL", "FDF3LABEL", "FDF4LABEL",
 def test_agilent_1d():
     """ 1D time agilent, pipe <-> agilent, pipe """
     # prepare agilent converter
-    vdic, vdata = ng.varian.read(DATA_DIR + "agilent_1d")
+    vdic, vdata = ng.varian.read(os.path.join(DATA_DIR, "agilent_1d"))
     uvdic = ng.varian.guess_udic(vdic, vdata)
     vC = ng.convert.converter()
     vC.from_varian(vdic, vdata, uvdic)
 
     # prepare Pipe converter
-    pdic, pdata = ng.pipe.read(DATA_DIR + "agilent_1d/test.fid")
+    pdic, pdata = ng.pipe.read(os.path.join(DATA_DIR, "agilent_1d",
+                                            "test.fid"))
     updic = ng.pipe.guess_udic(pdic, pdata)
     pC = ng.convert.converter()
     pC.from_pipe(pdic, pdata, updic)
@@ -171,7 +173,7 @@ def test_agilent_1d():
     cdic, cdata = vC.to_varian()
     assert_array_equal(vdata, cdata)
     check_dic(vdic, cdic, bad_varian_keys)
-    
+
     # write and readback
     td = tempfile.mkdtemp(dir=".")
     ng.varian.write(td, cdic, cdata)
@@ -219,13 +221,14 @@ def test_agilent_1d():
 def test_agilent_1d_rnmrtk():
     """ 1D time agilent, rnmrtk <-> rnmrtk """
     # prepare agilent converter
-    vdic, vdata = ng.varian.read(DATA_DIR + "agilent_1d")
+    vdic, vdata = ng.varian.read(os.path.join(DATA_DIR, "agilent_1d"))
     uvdic = ng.varian.guess_udic(vdic, vdata)
     vC = ng.convert.converter()
     vC.from_varian(vdic, vdata, uvdic)
 
     # prepare rnmrtk converter
-    rdic, rdata = ng.rnmrtk.read(DATA_DIR + "rnmrtk_1d/time_1d.sec")
+    rdic, rdata = ng.rnmrtk.read(os.path.join(DATA_DIR, "rnmrtk_1d",
+                                 "time_1d.sec"))
     urdic = ng.rnmrtk.guess_udic(rdic, rdata)
     rC = ng.convert.converter()
     rC.from_rnmrtk(rdic, rdata, urdic, agilent_compatible=True)
@@ -272,13 +275,14 @@ def test_agilent_1d_rnmrtk():
 def test_agilent_2d():
     """ 2D time agilent, pipe <-> agilent, pipe """
     # prepare Varian converter
-    vdic, vdata = ng.varian.read(DATA_DIR + "agilent_2d/")
+    vdic, vdata = ng.varian.read(os.path.join(DATA_DIR, "agilent_2d"))
     uvdic = ng.varian.guess_udic(vdic, vdata)
     vC = ng.convert.converter()
     vC.from_varian(vdic, vdata, uvdic)
 
     # prepare Pipe converter
-    pdic, pdata = ng.pipe.read(DATA_DIR + "agilent_2d/test.fid")
+    pdic, pdata = ng.pipe.read(os.path.join(DATA_DIR, "agilent_2d",
+                                            "test.fid"))
     updic = ng.pipe.guess_udic(pdic, pdata)
     pC = ng.convert.converter()
     pC.from_pipe(pdic, pdata, updic)
@@ -334,13 +338,14 @@ def test_agilent_2d():
 def test_agilent_2d_rnmrtk():
     """ 2D time agilent, rnmrtk <-> rnmrtk """
     # prepare agilent converter
-    vdic, vdata = ng.varian.read(DATA_DIR + "agilent_2d")
+    vdic, vdata = ng.varian.read(os.path.join(DATA_DIR, "agilent_2d"))
     uvdic = ng.varian.guess_udic(vdic, vdata)
     vC = ng.convert.converter()
     vC.from_varian(vdic, vdata, uvdic)
 
     # prepare rnmrtk converter
-    rdic, rdata = ng.rnmrtk.read(DATA_DIR + "rnmrtk_2d/time_2d.sec")
+    rdic, rdata = ng.rnmrtk.read(os.path.join(DATA_DIR + "rnmrtk_2d",
+                                 "time_2d.sec"))
     urdic = ng.rnmrtk.guess_udic(rdic, rdata)
     rC = ng.convert.converter()
     rC.from_rnmrtk(rdic, rdata, urdic, agilent_compatible=True)
@@ -386,13 +391,14 @@ def test_agilent_2d_rnmrtk():
 def test_agilent_3d():
     """ 3D time agilent, pipe <-> agilent, pipe """
     # prepare Agilent converter
-    vdic, vdata = ng.varian.read(DATA_DIR + "agilent_3d")
+    vdic, vdata = ng.varian.read(os.path.join(DATA_DIR, "agilent_3d"))
     uvdic = ng.varian.guess_udic(vdic, vdata)
     vC = ng.convert.converter()
     vC.from_varian(vdic, vdata, uvdic)
 
     # prepare NMRPipe converter
-    pdic, pdata = ng.pipe.read(DATA_DIR + "agilent_3d/data/test%03d.fid")
+    pdic, pdata = ng.pipe.read(os.path.join(DATA_DIR, "agilent_3d", "data",
+                                            "test%03d.fid"))
     updic = ng.pipe.guess_udic(pdic, pdata)
     pC = ng.convert.converter()
     pC.from_pipe(pdic, pdata, updic)
@@ -456,13 +462,14 @@ def test_agilent_3d():
 def test_agilent_3d_rnmrtk():
     """ 3D time agilent, rnmrtk <-> rnmrtk """
     # prepare agilent converter
-    vdic, vdata = ng.varian.read(DATA_DIR + "agilent_3d")
+    vdic, vdata = ng.varian.read(os.path.join(DATA_DIR, "agilent_3d"))
     uvdic = ng.varian.guess_udic(vdic, vdata)
     vC = ng.convert.converter()
     vC.from_varian(vdic, vdata, uvdic)
 
     # prepare rnmrtk converter
-    rdic, rdata = ng.rnmrtk.read(DATA_DIR + "rnmrtk_3d/time_3d.sec")
+    rdic, rdata = ng.rnmrtk.read(os.path.join(DATA_DIR, 'rnmrtk_3d',
+                                              'time_3d.sec'))
     urdic = ng.rnmrtk.guess_udic(rdic, rdata)
     rC = ng.convert.converter()
     rC.from_rnmrtk(rdic, rdata, urdic, agilent_compatible=True)
@@ -508,13 +515,14 @@ def test_agilent_3d_rnmrtk():
 def test_bruker_1d():
     """ 1D time bruker, pipe <-> bruker, pipe """
     # prepare Bruker converter
-    bdic, bdata = ng.bruker.read(DATA_DIR + "bruker_1d")
+    bdic, bdata = ng.bruker.read(os.path.join(DATA_DIR, "bruker_1d"))
     ubdic = ng.bruker.guess_udic(bdic, bdata)
     bC = ng.convert.converter()
     bC.from_bruker(bdic, bdata, ubdic)
 
     # prepare Pipe converter
-    pdic, pdata = ng.pipe.read(DATA_DIR + "bruker_1d/test.fid")
+    pdic, pdata = ng.pipe.read(os.path.join(DATA_DIR, "bruker_1d",
+                               "test.fid"))
     updic = ng.pipe.guess_udic(pdic, pdata)
     pC = ng.convert.converter()
     pC.from_pipe(pdic, pdata, updic)
@@ -529,7 +537,7 @@ def test_bruker_1d():
     rdic, rdata = ng.bruker.read(td)
     assert_array_equal(bdata, rdata)
     check_dic(bdic, cdic, bad_bruker_keys, v=True)
-    shutil.rmtree(td) 
+    shutil.rmtree(td)
 
     # bruker -> pipe
     cdic, cdata = bC.to_pipe()
@@ -573,13 +581,14 @@ def test_bruker_1d():
 def test_bruker_1d_rnmrtk():
     """ 1D time bruker, rnmrtk <-> rnmrtk """
     # prepare Bruker converter
-    bdic, bdata = ng.bruker.read(DATA_DIR + "bruker_1d")
+    bdic, bdata = ng.bruker.read(os.path.join(DATA_DIR, "bruker_1d"))
     ubdic = ng.bruker.guess_udic(bdic, bdata)
     bC = ng.convert.converter()
     bC.from_bruker(bdic, bdata, ubdic)
 
     # prepare Pipe converter
-    rdic, rdata = ng.rnmrtk.read(DATA_DIR + "bruker_1d/time_1d.sec")
+    rdic, rdata = ng.rnmrtk.read(os.path.join(DATA_DIR, "bruker_1d",
+                                 "time_1d.sec"))
     urdic = ng.rnmrtk.guess_udic(rdic, rdata)
     rC = ng.convert.converter()
     rC.from_rnmrtk(rdic, rdata, urdic)
@@ -626,13 +635,14 @@ def test_bruker_1d_rnmrtk():
 def test_bruker_2d():
     """ 2D time bruker, pipe <-> bruker, pipe """
     # prepare Bruker converter
-    bdic, bdata = ng.bruker.read(DATA_DIR + "bruker_2d")
+    bdic, bdata = ng.bruker.read(os.path.join(DATA_DIR, "bruker_2d"))
     ubdic = ng.bruker.guess_udic(bdic, bdata)
     bC = ng.convert.converter()
     bC.from_bruker(bdic, bdata, ubdic)
 
     # prepare Pipe converter
-    pdic, pdata = ng.pipe.read(DATA_DIR + "bruker_2d/test.fid")
+    pdic, pdata = ng.pipe.read(os.path.join(DATA_DIR, "bruker_2d",
+                                            "test.fid"))
     updic = ng.pipe.guess_udic(pdic, pdata)
     pC = ng.convert.converter()
     pC.from_pipe(pdic, pdata, updic)
@@ -647,7 +657,7 @@ def test_bruker_2d():
     rdic, rdata = ng.bruker.read(td)
     assert_array_equal(bdata, rdata)
     check_dic(bdic, cdic, bad_bruker_keys, v=True)
-    shutil.rmtree(td) 
+    shutil.rmtree(td)
 
     # bruker -> pipe
     cdic, cdata = bC.to_pipe()
@@ -666,8 +676,8 @@ def test_bruker_2d():
     assert_array_equal(pdata, cdata)
     bpk = list(bad_pipe_keys)
     bpk.append("FDREALSIZE")    # NMRPipe corrects sizes for oversampling
-    bpk.append("FDF2APOD")      
-    bpk.append("FDF2TDSIZE")    
+    bpk.append("FDF2APOD")
+    bpk.append("FDF2TDSIZE")
     check_pdic(pdic, cdic, bpk, v=True)
     # write and readback
     tf = tempfile.mktemp(dir=".")
@@ -692,13 +702,14 @@ def test_bruker_2d():
 def test_bruker_2d_rnmrtk():
     """ 2D time bruker, rnmrtk <-> rnmrtk """
     # prepare Bruker converter
-    bdic, bdata = ng.bruker.read(DATA_DIR + "bruker_2d")
+    bdic, bdata = ng.bruker.read(os.path.join(DATA_DIR, "bruker_2d"))
     ubdic = ng.bruker.guess_udic(bdic, bdata)
     bC = ng.convert.converter()
     bC.from_bruker(bdic, bdata, ubdic)
 
     # prepare Pipe converter
-    rdic, rdata = ng.rnmrtk.read(DATA_DIR + "bruker_2d/time_2d.sec")
+    rdic, rdata = ng.rnmrtk.read(os.path.join(DATA_DIR, "bruker_2d",
+                                              "time_2d.sec"))
     urdic = ng.rnmrtk.guess_udic(rdic, rdata)
     rC = ng.convert.converter()
     rC.from_rnmrtk(rdic, rdata, urdic)
@@ -745,13 +756,14 @@ def test_bruker_2d_rnmrtk():
 def test_bruker_3d():
     """ 3D time bruker, pipe <-> bruker, pipe """
     # prepare Bruker converter
-    bdic, bdata = ng.bruker.read(DATA_DIR + "bruker_3d")
+    bdic, bdata = ng.bruker.read(os.path.join(DATA_DIR, "bruker_3d"))
     ubdic = ng.bruker.guess_udic(bdic, bdata)
     bC = ng.convert.converter()
     bC.from_bruker(bdic, bdata, ubdic)
 
     # prepare Pipe converter
-    pdic, pdata = ng.pipe.read(DATA_DIR + "bruker_3d/fid/test%03d.fid")
+    pdic, pdata = ng.pipe.read(os.path.join(DATA_DIR, "bruker_3d", "fid",
+                                            "test%03d.fid"))
     updic = ng.pipe.guess_udic(pdic, pdata)
     pC = ng.convert.converter()
     pC.from_pipe(pdic, pdata, updic)
@@ -766,7 +778,7 @@ def test_bruker_3d():
     rdic, rdata = ng.bruker.read(td)
     assert_array_equal(bdata, rdata)
     check_dic(bdic, cdic, bad_bruker_keys, v=True)
-    shutil.rmtree(td) 
+    shutil.rmtree(td)
 
     # bruker -> pipe
     cdic, cdata = bC.to_pipe()
@@ -791,8 +803,8 @@ def test_bruker_3d():
     bpk.append("FDSCALEFLAG")
     bpk.append("FDMAX")
     bpk.append("FDREALSIZE")    # NMRPipe corrects sizes for oversampling
-    bpk.append("FDF2APOD")      
-    bpk.append("FDF2TDSIZE")    
+    bpk.append("FDF2APOD")
+    bpk.append("FDF2TDSIZE")
     check_pdic(pdic, cdic, bpk, v=True)
     # write and readback
     tf = tempfile.mktemp(dir=".") + "%03d"
@@ -818,13 +830,14 @@ def test_bruker_3d():
 def test_bruker_3d_rnmrtk():
     """ 3D time bruker, rnmrtk <-> rnmrtk """
     # prepare Bruker converter
-    bdic, bdata = ng.bruker.read(DATA_DIR + "bruker_3d")
+    bdic, bdata = ng.bruker.read(os.path.join(DATA_DIR, "bruker_3d"))
     ubdic = ng.bruker.guess_udic(bdic, bdata)
     bC = ng.convert.converter()
     bC.from_bruker(bdic, bdata, ubdic)
 
     # prepare Pipe converter
-    rdic, rdata = ng.rnmrtk.read(DATA_DIR + "bruker_3d/time_3d.sec")
+    rdic, rdata = ng.rnmrtk.read(os.path.join(DATA_DIR, "bruker_3d",
+                                              "time_3d.sec"))
     urdic = ng.rnmrtk.guess_udic(rdic, rdata)
     rC = ng.convert.converter()
     rC.from_rnmrtk(rdic, rdata, urdic)
@@ -872,13 +885,15 @@ def test_bruker_3d_rnmrtk():
 def test_sparky_2d():
     """ 2D freq sparky, pipe <-> sparky, pipe """
     # prepare Sparky converter
-    sdic, sdata = ng.sparky.read(DATA_DIR + "sparky_2d/data.ucsf")
+    sdic, sdata = ng.sparky.read(os.path.join(DATA_DIR,  "sparky_2d",
+                                              "data.ucsf"))
     ubdic = ng.sparky.guess_udic(sdic, sdata)
     sC = ng.convert.converter()
     sC.from_sparky(sdic, sdata, ubdic)
 
     # prepare Pipe converter
-    pdic, pdata = ng.pipe.read(DATA_DIR + "nmrpipe_2d/test.ft2")
+    pdic, pdata = ng.pipe.read(os.path.join(DATA_DIR,  "nmrpipe_2d",
+                                            "test.ft2"))
     updic = ng.pipe.guess_udic(pdic, pdata)
     pC = ng.convert.converter()
     pC.from_pipe(pdic, pdata, updic)
@@ -926,10 +941,10 @@ def test_sparky_2d():
     bpk.append("FDF2APODQ1")
     bpk.append("FDF2APODQ2")
     bpk.append("FDF2APODQ3")
-    bpk.append("FDSLICECOUNT") 
+    bpk.append("FDSLICECOUNT")
     bpk.append("FDREALSIZE")
     bpk.append("FDF2TDSIZE")
-    
+
     check_pdic(pdic, cdic, bpk, v=True)
     # write and readback
     tf = tempfile.mktemp(dir=".")
@@ -955,13 +970,15 @@ def test_sparky_2d():
 def test_sparky_3d():
     """ 3D freq sparky, pipe <-> sparky, pipe """
     # prepare Sparky converter
-    sdic, sdata = ng.sparky.read(DATA_DIR + "sparky_3d/data.ucsf")
+    sdic, sdata = ng.sparky.read(os.path.join(DATA_DIR, "sparky_3d",
+                                              "data.ucsf"))
     ubdic = ng.sparky.guess_udic(sdic, sdata)
     sC = ng.convert.converter()
     sC.from_sparky(sdic, sdata, ubdic)
 
     # prepare Pipe converter
-    pdic, pdata = ng.pipe.read(DATA_DIR + "nmrpipe_3d/ft/test%03d.ft3")
+    pdic, pdata = ng.pipe.read(os.path.join(DATA_DIR, "nmrpipe_3d", "ft",
+                                            "test%03d.ft3"))
     updic = ng.pipe.guess_udic(pdic, pdata)
     pC = ng.convert.converter()
     pC.from_pipe(pdic, pdata, updic)
@@ -1000,23 +1017,23 @@ def test_sparky_3d():
     bpk.append("FDDISPMIN")
     bpk.append("FDSCALEFLAG")
     bpk.append("FDMAX")
-    
+
     bpk.append("FDF1TDSIZE")    # we lose all processing information
     bpk.append("FDF1APOD")
     bpk.append("FDF1ZF")
-    
+
     bpk.append("FDF2TDSIZE")
     bpk.append("FDF2APOD")
     bpk.append("FDF2ZF")
- 
+
     bpk.append("FDF3TDSIZE")
     bpk.append("FDF3APOD")
     bpk.append("FDF3ZF")
     bpk.append("FDF3P0")
     bpk.append("FDF3P1")
-    
+
     bpk.append("FDREALSIZE")
-    
+
     check_pdic(pdic, cdic, bpk, v=True)
     # write and readback
     tf = tempfile.mktemp(dir=".") + "%03d"
@@ -1045,7 +1062,8 @@ def test_sparky_3d():
 def test_pipe_1d():
     """ 1D freq pipe <-> pipe """
     # prepare Pipe converter
-    pdic, pdata = ng.pipe.read(DATA_DIR + "nmrpipe_1d/test.fid")
+    pdic, pdata = ng.pipe.read(os.path.join(DATA_DIR, "nmrpipe_1d",
+                                            "test.fid"))
     updic = ng.pipe.guess_udic(pdic, pdata)
     pC = ng.convert.converter()
     pC.from_pipe(pdic, pdata, updic)
@@ -1066,13 +1084,15 @@ def test_pipe_1d():
 def test_sparky_2d_lowmem():
     """ 2D freq sparky, pipe <-> sparky, pipe low memory"""
     # prepare Sparky converter
-    sdic, sdata = ng.sparky.read_lowmem(DATA_DIR + "sparky_2d/data.ucsf")
+    sdic, sdata = ng.sparky.read_lowmem(
+        os.path.join(DATA_DIR, "sparky_2d", "data.ucsf"))
     ubdic = ng.sparky.guess_udic(sdic, sdata)
     sC = ng.convert.converter()
     sC.from_sparky(sdic, sdata, ubdic)
 
     # prepare Pipe converter
-    pdic, pdata = ng.pipe.read_lowmem(DATA_DIR + "nmrpipe_2d/test.ft2")
+    pdic, pdata = ng.pipe.read_lowmem(
+        os.path.join(DATA_DIR, "nmrpipe_2d", "test.ft2"))
     updic = ng.pipe.guess_udic(pdic, pdata)
     pC = ng.convert.converter()
     pC.from_pipe(pdic, pdata, updic)
@@ -1088,20 +1108,20 @@ def test_sparky_2d_lowmem():
     assert_array_equal(sdata[0:3, 0:4], rdata[0:3, 0:4])
     check_sdic(sdic, rdic, bad_sparky_keys, v=True)
     os.remove(tf)
-    
+
     # sparky -> pipe
     cdic, cdata = sC.to_pipe()
     assert_array_equal(pdata[0:3, 0:4], cdata[0:3, 0:4])
     #check_pdic(pdic,cdic)   # XXX don't check dictionary
     # write and readback
-    tf = tempfile.mktemp(dir=".") 
+    tf = tempfile.mktemp(dir=".")
     # XXX trace by trace writing from sparky is very slow
     ng.pipe.write(tf, cdic, cdata)
     rdic, rdata = ng.pipe.read_lowmem(tf)
     assert_array_equal(pdata[0:3, 0:4], rdata[0:3, 0:4])
     #check_pdic(pdic,cdic,v=True)   # XXX don't check dictionary
     os.remove(tf)
-    
+
     # pipe -> pipe
     cdic, cdata = pC.to_pipe()
     assert_array_equal(pdata[0:3, 0:4], cdata[0:3, 0:4])
@@ -1121,10 +1141,10 @@ def test_sparky_2d_lowmem():
     bpk.append("FDF2APODQ1")
     bpk.append("FDF2APODQ2")
     bpk.append("FDF2APODQ3")
-    bpk.append("FDSLICECOUNT") 
+    bpk.append("FDSLICECOUNT")
     bpk.append("FDREALSIZE")
     bpk.append("FDF2TDSIZE")
-    
+
     check_pdic(pdic, cdic, bpk, v=True)
     # write and readback
     tf = tempfile.mktemp(dir=".")
@@ -1149,13 +1169,15 @@ def test_sparky_2d_lowmem():
 def test_sparky_3d_lowmem():
     """ 3D freq sparky, pipe <-> sparky, pipe low memory"""
     # prepare Sparky converter
-    sdic, sdata = ng.sparky.read_lowmem(DATA_DIR + "sparky_3d/data.ucsf")
+    sdic, sdata = ng.sparky.read_lowmem(
+        os.path.join(DATA_DIR,  "sparky_3d", "data.ucsf"))
     ubdic = ng.sparky.guess_udic(sdic, sdata)
     sC = ng.convert.converter()
     sC.from_sparky(sdic, sdata, ubdic)
 
     # prepare Pipe converter
-    pdic, pdata = ng.pipe.read_lowmem(DATA_DIR + "nmrpipe_3d/ft/test%03d.ft3")
+    pdic, pdata = ng.pipe.read_lowmem(
+        os.path.join(DATA_DIR, "nmrpipe_3d", "ft", "test%03d.ft3"))
     updic = ng.pipe.guess_udic(pdic, pdata)
     pC = ng.convert.converter()
     pC.from_pipe(pdic, pdata, updic)
@@ -1195,23 +1217,23 @@ def test_sparky_3d_lowmem():
     bpk.append("FDDISPMIN")
     bpk.append("FDSCALEFLAG")
     bpk.append("FDMAX")
-    
+
     bpk.append("FDF1TDSIZE")    # we lose all processing information
     bpk.append("FDF1APOD")
     bpk.append("FDF1ZF")
-    
+
     bpk.append("FDF2TDSIZE")
     bpk.append("FDF2APOD")
     bpk.append("FDF2ZF")
- 
+
     bpk.append("FDF3TDSIZE")
     bpk.append("FDF3APOD")
     bpk.append("FDF3ZF")
     bpk.append("FDF3P0")
     bpk.append("FDF3P1")
-    
+
     bpk.append("FDREALSIZE")
-    
+
     check_pdic(pdic, cdic, bpk, v=True)
     # write and readback
     tf = tempfile.mktemp(dir=".") + "%03d"
@@ -1240,13 +1262,15 @@ def test_sparky_3d_lowmem():
 def test_bruker_2d_lowmem():
     """ 2D time bruker, pipe <-> bruker, pipe low memory"""
     # prepare Bruker converter
-    bdic, bdata = ng.bruker.read_lowmem(DATA_DIR + "bruker_2d")
+    bdic, bdata = ng.bruker.read_lowmem(
+        os.path.join(DATA_DIR, "bruker_2d"))
     ubdic = ng.bruker.guess_udic(bdic, bdata)
     bC = ng.convert.converter()
     bC.from_bruker(bdic, bdata, ubdic)
 
     # prepare Pipe converter
-    pdic, pdata = ng.pipe.read_lowmem(DATA_DIR + "bruker_2d/test.fid")
+    pdic, pdata = ng.pipe.read_lowmem(
+        os.path.join(DATA_DIR, "bruker_2d", "test.fid"))
     updic = ng.pipe.guess_udic(pdic, pdata)
     pC = ng.convert.converter()
     pC.from_pipe(pdic, pdata, updic)
@@ -1261,7 +1285,7 @@ def test_bruker_2d_lowmem():
     rdic, rdata = ng.bruker.read_lowmem(td)
     assert_array_equal(bdata[0:3, 100:200], rdata[0:3, 100:200])
     check_dic(bdic, cdic, bad_bruker_keys, v=True)
-    shutil.rmtree(td) 
+    shutil.rmtree(td)
 
     # bruker -> pipe
     cdic, cdata = bC.to_pipe()
@@ -1280,8 +1304,8 @@ def test_bruker_2d_lowmem():
     assert_array_equal(pdata[0:3, 100:200], cdata[0:3, 100:200])
     bpk = list(bad_pipe_keys)
     bpk.append("FDREALSIZE")    # NMRPipe corrects sizes for oversampling
-    bpk.append("FDF2APOD")      
-    bpk.append("FDF2TDSIZE")    
+    bpk.append("FDF2APOD")
+    bpk.append("FDF2TDSIZE")
     check_pdic(pdic, cdic, bpk, v=True)
     # write and readback
     tf = tempfile.mktemp(dir=".")
@@ -1306,13 +1330,15 @@ def test_bruker_2d_lowmem():
 def test_bruker_3d_lowmem():
     """ 3D time bruker, pipe <-> bruker, pipe low memory"""
     # prepare Bruker converter
-    bdic, bdata = ng.bruker.read_lowmem(DATA_DIR + "bruker_3d")
+    bdic, bdata = ng.bruker.read_lowmem(
+        os.path.join(DATA_DIR, "bruker_3d"))
     ubdic = ng.bruker.guess_udic(bdic, bdata)
     bC = ng.convert.converter()
     bC.from_bruker(bdic, bdata, ubdic)
 
     # prepare Pipe converter
-    pdic, pdata = ng.pipe.read_lowmem(DATA_DIR + "bruker_3d/fid/test%03d.fid")
+    pdic, pdata = ng.pipe.read_lowmem(
+        os.path.join(DATA_DIR, "bruker_3d", "fid", "test%03d.fid"))
     updic = ng.pipe.guess_udic(pdic, pdata)
     pC = ng.convert.converter()
     pC.from_pipe(pdic, pdata, updic)
@@ -1327,7 +1353,7 @@ def test_bruker_3d_lowmem():
     rdic, rdata = ng.bruker.read_lowmem(td)
     assert_array_equal(bdata[0:2, 0:3, 100:200], rdata[0:2, 0:3, 100:200])
     check_dic(bdic, cdic, bad_bruker_keys, v=True)
-    shutil.rmtree(td) 
+    shutil.rmtree(td)
 
     # bruker -> pipe
     cdic, cdata = bC.to_pipe()
@@ -1352,8 +1378,8 @@ def test_bruker_3d_lowmem():
     bpk.append("FDSCALEFLAG")
     bpk.append("FDMAX")
     bpk.append("FDREALSIZE")    # NMRPipe corrects sizes for oversampling
-    bpk.append("FDF2APOD")      
-    bpk.append("FDF2TDSIZE")    
+    bpk.append("FDF2APOD")
+    bpk.append("FDF2TDSIZE")
     check_pdic(pdic, cdic, bpk, v=True)
     # write and readback
     tf = tempfile.mktemp(dir=".") + "%03d"
@@ -1379,13 +1405,15 @@ def test_bruker_3d_lowmem():
 def test_agilent_2d_lowmem():
     """ 2D time agilent, pipe <-> agilent, pipe low memory"""
     # prepare Varian converter
-    vdic, vdata = ng.varian.read_lowmem(DATA_DIR + "agilent_2d")
+    vdic, vdata = ng.varian.read_lowmem(
+        os.path.join(DATA_DIR, "agilent_2d"))
     uvdic = ng.varian.guess_udic(vdic, vdata)
     vC = ng.convert.converter()
     vC.from_varian(vdic, vdata, uvdic)
 
     # prepare Pipe converter
-    pdic, pdata = ng.pipe.read_lowmem(DATA_DIR + "agilent_2d/test.fid")
+    pdic, pdata = ng.pipe.read_lowmem(
+        os.path.join(DATA_DIR, "agilent_2d", "test.fid"))
     updic = ng.pipe.guess_udic(pdic, pdata)
     pC = ng.convert.converter()
     pC.from_pipe(pdic, pdata, updic)
@@ -1441,13 +1469,15 @@ def test_agilent_2d_lowmem():
 def test_agilent_3d_lowmem():
     """ 3D time agilent, pipe <-> agilent, pipe low memory"""
     # prepare Agilent converter
-    vdic, vdata = ng.varian.read_lowmem(DATA_DIR + "agilent_3d")
+    vdic, vdata = ng.varian.read_lowmem(
+        os.path.join(DATA_DIR, "agilent_3d"))
     uvdic = ng.varian.guess_udic(vdic, vdata)
     vC = ng.convert.converter()
     vC.from_varian(vdic, vdata, uvdic)
 
     # prepare Pipe converter
-    pdic, pdata = ng.pipe.read_lowmem(DATA_DIR + "agilent_3d/data/test%03d.fid")
+    pdic, pdata = ng.pipe.read_lowmem(
+        os.path.join(DATA_DIR, "agilent_3d", "data", "test%03d.fid"))
     updic = ng.pipe.guess_udic(pdic, pdata)
     pC = ng.convert.converter()
     pC.from_pipe(pdic, pdata, updic)
@@ -1511,15 +1541,17 @@ def test_agilent_3d_lowmem():
 
 def test_rnmrtk_1d():
     """ 1D freq rnmrtk, pipe <-> rnmrtk, pipe """
-    
+
     # prepare rnmrtk converter
-    rdic, rdata = ng.rnmrtk.read(DATA_DIR + "rnmrtk_1d/freq_1d.sec")
+    rdic, rdata = ng.rnmrtk.read(
+        os.path.join(DATA_DIR, "rnmrtk_1d", "freq_1d.sec"))
     urdic = ng.rnmrtk.guess_udic(rdic, rdata)
     rC = ng.convert.converter()
     rC.from_rnmrtk(rdic, rdata, urdic)
 
     # prepare Pipe converter
-    pdic, pdata = ng.pipe.read(DATA_DIR + "rnmrtk_1d/test.ft")
+    pdic, pdata = ng.pipe.read(
+        os.path.join(DATA_DIR, "rnmrtk_1d", "test.ft"))
     updic = ng.pipe.guess_udic(pdic, pdata)
     pC = ng.convert.converter()
     pC.from_pipe(pdic, pdata, updic)
@@ -1533,7 +1565,7 @@ def test_rnmrtk_1d():
     ng.rnmrtk.write(tf, cdic, cdata)
     rrdic, rrdata = ng.rnmrtk.read(tf)
     assert_array_equal(cdata, rrdata)
-    check_rdic(rdic, rrdic, 1, exclude=bad_rnmrtk_keys) 
+    check_rdic(rdic, rrdic, 1, exclude=bad_rnmrtk_keys)
     os.remove(tf)
     os.remove(tf.replace('.sec', '.par'))
 
@@ -1551,7 +1583,7 @@ def test_rnmrtk_1d():
 
     # pipe -> pipe
     cdic, cdata = pC.to_pipe()
-    assert_array_equal(pdata, cdata[:]) 
+    assert_array_equal(pdata, cdata[:])
     check_pdic(pdic, cdic, bad_pipe_keys + bad_rnmrtk2pipe_keys, v=True)
     # write and readback
     tf = tempfile.mktemp(dir=".")
@@ -1576,15 +1608,17 @@ def test_rnmrtk_1d():
 
 def test_rnmrtk_2d():
     """ 2D freq rnmrtk, pipe <-> rnmrtk, pipe """
-    
+
     # prepare rnmrtk converter
-    rdic, rdata = ng.rnmrtk.read(DATA_DIR + "rnmrtk_2d/freq_2d.sec")
+    rdic, rdata = ng.rnmrtk.read(
+        os.path.join(DATA_DIR, "rnmrtk_2d", "freq_2d.sec"))
     urdic = ng.rnmrtk.guess_udic(rdic, rdata)
     rC = ng.convert.converter()
     rC.from_rnmrtk(rdic, rdata, urdic)
 
     # prepare pipe converter
-    pdic, pdata = ng.pipe.read(DATA_DIR + "rnmrtk_2d/test.ft2")
+    pdic, pdata = ng.pipe.read(
+        os.path.join(DATA_DIR, "rnmrtk_2d", "test.ft2"))
     updic = ng.pipe.guess_udic(pdic, pdata)
     pC = ng.convert.converter()
     pC.from_pipe(pdic, pdata, updic)
@@ -1617,13 +1651,13 @@ def test_rnmrtk_2d():
     # pipe -> pipe
     cdic, cdata = pC.to_pipe()
     assert_array_equal(pdata, cdata[:])
-    check_pdic(pdic, cdic, bad_pipe_keys + bad_rnmrtk2pipe_keys, v=True) 
+    check_pdic(pdic, cdic, bad_pipe_keys + bad_rnmrtk2pipe_keys, v=True)
     # write and readback
     tf = tempfile.mktemp(dir=".")
     ng.pipe.write(tf, cdic, cdata)
     rrdic, rrdata = ng.pipe.read(tf)
     assert_array_equal(pdata, rrdata[:])
-    check_pdic(pdic, cdic, bad_pipe_keys + bad_rnmrtk2pipe_keys, v=True) 
+    check_pdic(pdic, cdic, bad_pipe_keys + bad_rnmrtk2pipe_keys, v=True)
     os.remove(tf)
 
     # pipe -> rnmrtk
@@ -1641,15 +1675,17 @@ def test_rnmrtk_2d():
 
 def test_rnmrtk_3d():
     """ 3D freq rnmrtk, pipe <-> rnmrtk, pipe """
-    
+
     # prepare rnmrtk converter
-    rdic, rdata = ng.rnmrtk.read(DATA_DIR + "rnmrtk_3d/freq_3d.sec")
+    rdic, rdata = ng.rnmrtk.read(
+        os.path.join(DATA_DIR, "rnmrtk_3d", "freq_3d.sec"))
     urdic = ng.rnmrtk.guess_udic(rdic, rdata)
     rC = ng.convert.converter()
     rC.from_rnmrtk(rdic, rdata, urdic)
 
     # prepare pipe converter
-    pdic, pdata = ng.pipe.read(DATA_DIR + "rnmrtk_3d/test.ft3")
+    pdic, pdata = ng.pipe.read(
+        os.path.join(DATA_DIR, "rnmrtk_3d", "test.ft3"))
     updic = ng.pipe.guess_udic(pdic, pdata)
     pC = ng.convert.converter()
     pC.from_pipe(pdic, pdata, updic)
@@ -1673,7 +1709,7 @@ def test_rnmrtk_3d():
     check_pdic(pdic, cdic, bad_pipe_keys + bad_rnmrtk2pipe_keys, v=True)
     # write and readback
     tf = tempfile.mktemp(dir=".") + "%03d"
-    #tf = tempfile.mktemp(dir=".")      # Uncomment these lines to write 
+    #tf = tempfile.mktemp(dir=".")      # Uncomment these lines to write
     #cdic['FDPIPEFLAG'] = 1.0           # a single NMRPipe stream file
     ng.pipe.write(tf, cdic, cdata)
     rrdic, rrdata = ng.pipe.read(tf)
@@ -1682,11 +1718,11 @@ def test_rnmrtk_3d():
     #os.remove(tf)                      # this line too
     for f in glob.glob(tf[:-4] + "*"):
         os.remove(f)
-    
+
     # pipe -> pipe
     cdic, cdata = pC.to_pipe()
     assert_array_equal(pdata, cdata[:])
-    check_pdic(pdic, cdic, bad_pipe_keys + bad_rnmrtk2pipe_keys, v=True) 
+    check_pdic(pdic, cdic, bad_pipe_keys + bad_rnmrtk2pipe_keys, v=True)
     # write and readback
     tf = tempfile.mktemp(dir=".") + "%03d"
     #tf = tempfile.mktemp(dir=".")  # Uncomment these lines to write
@@ -1694,7 +1730,7 @@ def test_rnmrtk_3d():
     ng.pipe.write(tf, cdic, cdata)
     rrdic, rrdata = ng.pipe.read(tf)
     assert_array_equal(pdata, rrdata[:])
-    check_pdic(pdic, cdic, bad_pipe_keys + bad_rnmrtk2pipe_keys, v=True) 
+    check_pdic(pdic, cdic, bad_pipe_keys + bad_rnmrtk2pipe_keys, v=True)
     #os.remove(tf)                  # This line too
     for f in glob.glob(tf[:-4] + "*"):
         os.remove(f)

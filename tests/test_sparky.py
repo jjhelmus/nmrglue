@@ -45,7 +45,8 @@ def lowmem_write_readback(dic, data):
 # tests
 def test_2d():
     """ reading/writing of 2D sparky file """
-    dic, data = ng.sparky.read(os.path.join(DATA_DIR, "sparky_2d", "data.ucsf"))
+    dic, data = ng.sparky.read(
+        os.path.join(DATA_DIR, "sparky_2d", "data.ucsf"))
     assert data.shape == (2048, 4096)
     assert round(data[0, 1], 2) == 1601.83
     assert round(data[15, 20], 2) == 4281.06
@@ -53,7 +54,8 @@ def test_2d():
 
 def test_2d_lowmem():
     """ lowmemory reading/writing of 2D sparky file """
-    dic, data = ng.sparky.read_lowmem(os.path.join(DATA_DIR, "sparky_2d", "data.ucsf")
+    dic, data = ng.sparky.read_lowmem(
+        os.path.join(DATA_DIR, "sparky_2d", "data.ucsf"))
     assert data.shape == (2048, 4096)
     assert round(data[0, 1], 2) == 1601.83
     assert round(data[15, 20], 2) == 4281.06
@@ -61,7 +63,8 @@ def test_2d_lowmem():
 
 def test_3d():
     """ reading/writing of 3D sparky file """
-    dic, data = ng.sparky.read(os.path.join(DATA_DIR, "sparky_3d", "data.ucsf")
+    dic, data = ng.sparky.read(
+        os.path.join(DATA_DIR, "sparky_3d", "data.ucsf"))
     assert data.shape == (128, 128, 4096)
     assert round(data[0, 1, 2], 2) == 25980.13
     assert round(data[11, 15, 20], 2) == -15256.97
@@ -69,7 +72,8 @@ def test_3d():
 
 def test_3d_lowmem():
     """ lowmemory reading/writing of 3D sparky file """
-    dic, data = ng.sparky.read_lowmem(os.path.join(DATA_DIR, "sparky_3d", "data.ucsf")
+    dic, data = ng.sparky.read_lowmem(
+        os.path.join(DATA_DIR, "sparky_3d", "data.ucsf"))
     assert data.shape == (128, 128, 4096)
     assert round(data[0, 1, 2], 2) == 25980.13
     assert round(data[11, 15, 20], 2) == -15256.97

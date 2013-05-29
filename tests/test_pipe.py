@@ -9,7 +9,7 @@ import nmrglue as ng
 
 from setup import DATA_DIR
 
-# subroutines 
+# subroutines
 
 def write_readback(dic, data):
     """ Write out a NMRPipe file and read back in. """
@@ -79,7 +79,8 @@ def check_ppm_limits(dic, data, dim, limits):
 # tests
 def test_1d_time():
     """reading/writing of 1D NMRPipe time domain file"""
-    dic, data = ng.pipe.read(DATA_DIR + "nmrpipe_1d/test.fid")
+    dic, data = ng.pipe.read(
+        os.path.join(DATA_DIR, "nmrpipe_1d", "test.fid"))
     assert data.shape == (1500, )
     assert data.dtype == 'complex64'
     assert round(data[0].real, 2) == 91899.24
@@ -90,7 +91,8 @@ def test_1d_time():
 
 def test_1d_freq():
     """reading/writing of 1D NMRPipe freq domain file"""
-    dic, data = ng.pipe.read(DATA_DIR + "nmrpipe_1d/test.ft")
+    dic, data = ng.pipe.read(
+        os.path.join(DATA_DIR, "nmrpipe_1d", "test.ft"))
     assert data.shape == (4096, )
     assert data.dtype == 'float32'
     assert round(data[0], 2) == -63789.66
@@ -101,7 +103,8 @@ def test_1d_freq():
 
 def test_1d_cut():
     """reading/writing of 1D NMRPipe with EXTracted region"""
-    dic, data = ng.pipe.read(DATA_DIR + "nmrpipe_1d/test_cut.ft")
+    dic, data = ng.pipe.read(
+        os.path.join(DATA_DIR, "nmrpipe_1d", "test_cut.ft"))
     assert data.shape == (2766, )
     assert data.dtype == 'float32'
     assert round(data[0], 2) == -12123.67
@@ -112,7 +115,8 @@ def test_1d_cut():
 
 def test_2d_time():
     """reading/writing of 2D NMRPipe time domain file"""
-    dic, data = ng.pipe.read(DATA_DIR + "nmrpipe_2d/test.fid")
+    dic, data = ng.pipe.read(
+        os.path.join(DATA_DIR, "nmrpipe_2d", "test.fid"))
     assert data.shape == (332, 1500)
     assert data.dtype == 'complex64'
     assert round(data[0, 1].real, 2) == 360.07
@@ -123,7 +127,8 @@ def test_2d_time():
 
 def test_2d_freq():
     """reading/writing of 2D NMRPipe freq domain file"""
-    dic, data = ng.pipe.read(DATA_DIR + "nmrpipe_2d/test.ft2")
+    dic, data = ng.pipe.read(
+        os.path.join(DATA_DIR, "nmrpipe_2d", "test.ft2"))
     assert data.shape == (2048, 4096)
     assert data.dtype == 'float32'
     assert round(data[0, 1], 2) == 1601.83
@@ -134,7 +139,8 @@ def test_2d_freq():
 
 def test_2d_time_tran():
     """reading/writing of TransPosed 2D NMRPipe time domain file"""
-    dic, data = ng.pipe.read(DATA_DIR + "nmrpipe_2d/test_tp.fid")
+    dic, data = ng.pipe.read(
+        os.path.join(DATA_DIR, "nmrpipe_2d", "test_tp.fid"))
     assert data.shape == (3000, 166)
     assert data.dtype == 'complex64'
     assert round(data[0, 1].real, 2) == 99.46
@@ -145,7 +151,8 @@ def test_2d_time_tran():
 
 def test_2d_freq_tran():
     """reading/writing of TransPosed 2D NMRPipe freq domain file"""
-    dic, data = ng.pipe.read(DATA_DIR + "nmrpipe_2d/test_tp.ft2")
+    dic, data = ng.pipe.read(
+        os.path.join(DATA_DIR, "nmrpipe_2d", "test_tp.ft2"))
     assert data.shape == (4096, 2048)
     assert data.dtype == 'float32'
     assert round(data[0, 1], 2) == -1525.10
@@ -156,7 +163,8 @@ def test_2d_freq_tran():
 
 def test_2d_time_lowmem():
     """lowmemory reading/writing of 2D NMRPipe time domain file"""
-    dic, data = ng.pipe.read_lowmem(DATA_DIR + "nmrpipe_2d/test.fid")
+    dic, data = ng.pipe.read_lowmem(
+        os.path.join(DATA_DIR, "nmrpipe_2d", "test.fid"))
     assert data.shape == (332, 1500)
     assert data.dtype == 'complex64'
     assert round(data[0, 1].real, 2) == 360.07
@@ -167,7 +175,8 @@ def test_2d_time_lowmem():
 
 def test_2d_freq_lowmem():
     """lowmemory reading/writing of 2D NMRPipe freq domain file"""
-    dic, data = ng.pipe.read_lowmem(DATA_DIR + "nmrpipe_2d/test.ft2")
+    dic, data = ng.pipe.read_lowmem(
+        os.path.join(DATA_DIR, "nmrpipe_2d", "test.ft2"))
     assert data.shape == (2048, 4096)
     assert data.dtype == 'float32'
     assert round(data[0, 1], 2) == 1601.83
@@ -178,8 +187,10 @@ def test_2d_freq_lowmem():
 
 def test_3d_time():
     """reading/writing of 3D NMRPipe time domain data"""
-    dic, data = ng.pipe.read(DATA_DIR + "nmrpipe_3d/data/test%03d.fid")
-    sdic, sdata = ng.pipe.read(DATA_DIR + "nmrpipe_3d/data/test001.fid")
+    dic, data = ng.pipe.read(
+        os.path.join(DATA_DIR, "nmrpipe_3d", "data", "test%03d.fid"))
+    sdic, sdata = ng.pipe.read(
+        os.path.join(DATA_DIR, "nmrpipe_3d", "data", "test001.fid"))
     assert data.shape == (128, 88, 1250)
     assert data.dtype == 'complex64'
     assert round(data[0, 1, 2].real, 2) == -7.98
@@ -197,13 +208,15 @@ def test_3d_time():
 
     # slice/data matching
     assert_array_equal(data[0], sdata)
-    
+
     write_readback_3d(dic, data)
 
 def test_3d_freq():
     """reading/writing of 3D NMRPipe freq domain data"""
-    dic, data = ng.pipe.read(DATA_DIR + "nmrpipe_3d/ft/test%03d.ft3")
-    sdic, sdata = ng.pipe.read(DATA_DIR + "nmrpipe_3d/ft/test001.ft3")
+    dic, data = ng.pipe.read(
+        os.path.join(DATA_DIR, "nmrpipe_3d", "ft", "test%03d.ft3"))
+    sdic, sdata = ng.pipe.read(
+        os.path.join(DATA_DIR, "nmrpipe_3d", "ft", "test001.ft3"))
     assert data.shape == (128, 128, 4096)
     assert data.dtype == 'float32'
     assert round(data[0, 1, 2], 2) == 25980.13
@@ -228,7 +241,8 @@ def test_3d_freq():
 
 def test_3d_time_lowmem():
     """lowmemory reading/writing of 3D NMRPipe time domain data"""
-    dic, data = ng.pipe.read_lowmem(DATA_DIR + "nmrpipe_3d/data/test%03d.fid")
+    dic, data = ng.pipe.read_lowmem(
+        os.path.join(DATA_DIR, "nmrpipe_3d", "data", "test%03d.fid"))
     assert data.shape == (128, 88, 1250)
     assert data.dtype == 'complex64'
     assert round(data[0, 1, 2].real, 2) == -7.98
@@ -239,7 +253,8 @@ def test_3d_time_lowmem():
 
 def test_3d_freq_lowmem():
     """lowmemory reading/writing of 3D NMRPipe freq domain data"""
-    dic, data = ng.pipe.read_lowmem(DATA_DIR + "nmrpipe_3d/ft/test%03d.ft3")
+    dic, data = ng.pipe.read_lowmem(
+        os.path.join(DATA_DIR, "nmrpipe_3d", "ft", "test%03d.ft3"))
     assert data.shape == (128, 128, 4096)
     assert data.dtype == 'float32'
     assert round(data[0, 1, 2], 2) == 25980.13
@@ -248,10 +263,11 @@ def test_3d_freq_lowmem():
     check_ppm_limits(dic, data, 1, [147.42, 93.01])
     check_ppm_limits(dic, data, 2, [254.92, -142.83])
     lowmem_write_readback_3d(dic, data)
- 
+
 def test_3d_stream_time():
     """reading/writing of 3D NMRPipe data stream time domain file"""
-    dic, data = ng.pipe.read(DATA_DIR + "nmrpipe_3d/full3D.fid")
+    dic, data = ng.pipe.read(
+        os.path.join(DATA_DIR, "nmrpipe_3d", "full3D.fid"))
     assert data.shape == (128, 88, 1250)
     assert data.dtype == 'complex64'
     assert round(data[0, 1, 2].real, 2) == -7.98
@@ -262,7 +278,8 @@ def test_3d_stream_time():
 
 def test_3d_stream_freq():
     """reading/writing of 3D NMRPipe data stream freq domain file"""
-    dic, data = ng.pipe.read(DATA_DIR + "nmrpipe_3d/full3D.ft3")
+    dic, data = ng.pipe.read(
+        os.path.join(DATA_DIR, "nmrpipe_3d", "full3D.ft3"))
     assert data.shape == (128, 128, 4096)
     assert data.dtype == 'float32'
     assert round(data[0, 1, 2], 2) == 25980.13
@@ -274,7 +291,8 @@ def test_3d_stream_freq():
 
 def test_3d_stream_time_lowmem():
     """lowmemory reading/writing of 3D NMRPipe data stream time domain file"""
-    dic, data = ng.pipe.read_lowmem(DATA_DIR + "nmrpipe_3d/full3D.fid")
+    dic, data = ng.pipe.read_lowmem(
+        os.path.join(DATA_DIR, "nmrpipe_3d", "full3D.fid"))
     assert data.shape == (128, 88, 1250)
     assert data.dtype == 'complex64'
     assert round(data[0, 1, 2].real, 2) == -7.98
@@ -285,7 +303,8 @@ def test_3d_stream_time_lowmem():
 
 def test_3d_stream_freq_lowmem():
     """lowmemory reading/writing of 3D NMRPipe data stream freq domain file"""
-    dic, data = ng.pipe.read_lowmem(DATA_DIR + "nmrpipe_3d/full3D.ft3")
+    dic, data = ng.pipe.read_lowmem(
+        os.path.join(DATA_DIR, "nmrpipe_3d", "full3D.ft3"))
     assert data.shape == (128, 128, 4096)
     assert data.dtype == 'float32'
     assert round(data[0, 1, 2], 2) == 25980.13
@@ -294,11 +313,13 @@ def test_3d_stream_freq_lowmem():
     check_ppm_limits(dic, data, 1, [147.42, 93.01])
     check_ppm_limits(dic, data, 2, [254.92, -142.83])
     lowmem_write_readback(dic, data)
- 
+
 def test_3d_slicing():
     """lowmemory 3D slicing"""
-    dic, data = ng.pipe.read_lowmem(DATA_DIR + "nmrpipe_3d/ft/test%03d.ft3")
-    fdic, fdata = ng.pipe.read(DATA_DIR + "nmrpipe_3d/ft/test%03d.ft3")
+    dic, data = ng.pipe.read_lowmem(
+        os.path.join(DATA_DIR, "nmrpipe_3d", "ft", "test%03d.ft3"))
+    fdic, fdata = ng.pipe.read(
+        os.path.join(DATA_DIR, "nmrpipe_3d", "ft", "test%03d.ft3"))
 
     # null indexing
     assert_array_equal(fdata[1:0, 0, 0], data[1:0, 0, 0])
@@ -314,9 +335,9 @@ def test_3d_slicing():
 
     # ellipsis
     assert_array_equal(fdata[..., 7], data[..., 7])
-    assert_array_equal(fdata[..., 2, 100], data[..., 2, 100])    
+    assert_array_equal(fdata[..., 2, 100], data[..., 2, 100])
     assert_array_equal(fdata[..., 2:10, ...], data[..., 2:10, ...])
-    
+
     # simple slicing
     assert_array_equal(fdata[0, 1:4, 0], data[0, 1:4, 0])
     assert_array_equal(fdata[0:10, 0:12, 0:165], data[0:10, 0:12, 0:165])
@@ -338,7 +359,7 @@ def test_3d_slicing():
     # overindexing with negative extended slicing
     assert_array_equal(fdata[78:1:-1, 0, 0], data[78:1:-1, 0, 0])
     assert_array_equal(fdata[0, 90:0:-1, 0], data[0, 90:0:-1, 0])
-    
+
     # negative extended slicing with implicit ends
     assert_array_equal(fdata[0::-1, 0, 0], data[0::-1, 0, 0])
     assert_array_equal(fdata[0, :10:-2, 0], data[0, :10:-2, 0])
@@ -351,28 +372,32 @@ def test_3d_slicing():
     assert_array_equal(fdata[-5:, -2:, -3], data[-5:, -2:, -3])
     assert_array_equal(fdata[-5:-1, -5:-2, -3], data[-5:-1, -5:-2, -3])
     assert_array_equal(fdata[-900:-1, -70:, 0], data[-900:-1, -70:, 0])
-    assert_array_equal(fdata[-1:-100:-3, -1::-1, 0], 
-                        data[-1:-100:-3, -1::-1, 0])
-    
+    assert_array_equal(fdata[-1:-100:-3, -1::-1, 0],
+                       data[-1:-100:-3, -1::-1, 0])
+
 def test_3d_tranpose():
-    """lowmemory 3D axis transposing and swaps""" 
-    dic, data = ng.pipe.read_lowmem(DATA_DIR + "nmrpipe_3d/ft/test%03d.ft3")
-    fdic, fdata = ng.pipe.read(DATA_DIR + "nmrpipe_3d/ft/test%03d.ft3")
+    """lowmemory 3D axis transposing and swaps"""
+    dic, data = ng.pipe.read_lowmem(
+        os.path.join(DATA_DIR, "nmrpipe_3d", "ft", "test%03d.ft3"))
+    fdic, fdata = ng.pipe.read(
+        os.path.join(DATA_DIR, "nmrpipe_3d", "ft", "test%03d.ft3"))
 
     assert_array_equal(fdata.transpose()[0, 1, 2], data.transpose()[0, 1, 2])
     assert_array_equal(fdata.transpose((2, 0, 1))[0, 1, 2],
-                        data.transpose((2, 0, 1))[0, 1, 2])
-    assert_array_equal(fdata.swapaxes(0, 1)[0, 1, 2], 
-                        data.swapaxes(0, 1)[0, 1, 2])
+                       data.transpose((2, 0, 1))[0, 1, 2])
+    assert_array_equal(fdata.swapaxes(0, 1)[0, 1, 2],
+                       data.swapaxes(0, 1)[0, 1, 2])
     assert_array_equal(fdata.swapaxes(2, 0)[0, 1, 2],
-                        data.swapaxes(2, 0)[0, 1, 2])
+                       data.swapaxes(2, 0)[0, 1, 2])
 
 def test_4d_single_index_time():
     """reading/writing of 4D single-index NMRPipe time domain file"""
-    fmask = DATA_DIR + "nmrpipe_4d/time_1index/test%03d.fid"
+    fmask = os.path.join(DATA_DIR, "nmrpipe_4d", "time_1index",
+                         "test%03d.fid")
     dic, data = ng.pipe.read_lowmem(fmask)
 
-    fname = DATA_DIR + "nmrpipe_4d/time_1index/test018.fid"
+    fname = os.path.join(DATA_DIR, "nmrpipe_4d", "time_1index",
+                         "test018.fid")
     sdic, sdata = ng.pipe.read(fname)
 
     assert data.shape == (8, 12, 16, 1400)
@@ -397,10 +422,12 @@ def test_4d_single_index_time():
 
 def test_4d_two_index_time():
     """reading/writing of 4D double-index NMRPipe time domain file"""
-    fmask = DATA_DIR + "nmrpipe_4d/time_2index/test%02d%03d.fid"
+    fmask = os.path.join(DATA_DIR, "nmrpipe_4d", "time_2index",
+                         "test%02d%03d.fid")
     dic, data = ng.pipe.read_lowmem(fmask)
 
-    fname = DATA_DIR + "nmrpipe_4d/time_2index/test02006.fid"
+    fname = os.path.join(DATA_DIR, "nmrpipe_4d", "time_2index",
+                         "test02006.fid")
     sdic, sdata = ng.pipe.read(fname)
 
     assert data.shape == (8, 12, 16, 1400)
@@ -425,10 +452,11 @@ def test_4d_two_index_time():
 
 def test_4d_stream_time():
     """reading/writing of 4D data stream NMRPipe time domain file"""
-    fmask = DATA_DIR + "nmrpipe_4d/full4D.fid"
+    fmask = os.path.join(DATA_DIR, "nmrpipe_4d", "full4D.fid")
     dic, data = ng.pipe.read_lowmem(fmask)
 
-    fname = DATA_DIR + "nmrpipe_4d/time_2index/test02006.fid"
+    fname = os.path.join(DATA_DIR, "nmrpipe_4d", "time_2index",
+                         "test02006.fid")
     sdic, sdata = ng.pipe.read(fname)
 
     assert data.shape == (8, 12, 16, 1400)
@@ -453,10 +481,10 @@ def test_4d_stream_time():
 
 def test_4d_single_index_freq():
     """reading/writing of 4D single-index NMRPipe freq domain file"""
-    fmask = DATA_DIR + "nmrpipe_4d/ft_1index/test%03d.ft4"
+    fmask = os.path.join(DATA_DIR, "nmrpipe_4d", "ft_1index", "test%03d.ft4")
     dic, data = ng.pipe.read_lowmem(fmask)
 
-    fname = DATA_DIR + "nmrpipe_4d/ft_1index/test053.ft4"
+    fname = os.path.join(DATA_DIR, "nmrpipe_4d", "ft_1index", "test053.ft4")
     sdic, sdata = ng.pipe.read(fname)
 
     assert data.shape == (8, 16, 16, 4096)
@@ -467,7 +495,7 @@ def test_4d_single_index_freq():
     check_ppm_limits(dic, data, 1, [321.03, -93.40])
     check_ppm_limits(dic, data, 2, [232.62, -16.04])
     check_ppm_limits(dic, data, 3, [298.92, -98.83])
-    
+
     # check the slice
     assert sdata.shape == (16, 4096)
     assert sdata.dtype == 'float32'
@@ -483,10 +511,11 @@ def test_4d_single_index_freq():
 
 def test_4d_two_index_freq():
     """reading/writing of 4D double-index NMRPipe freq domain file"""
-    fmask = DATA_DIR + "nmrpipe_4d/ft_2index/test%02d%03d.ft4"
+    fmask = os.path.join(DATA_DIR, "nmrpipe_4d", "ft_2index",
+                         "test%02d%03d.ft4")
     dic, data = ng.pipe.read_lowmem(fmask)
 
-    fname = DATA_DIR + "nmrpipe_4d/ft_2index/test04005.ft4"
+    fname = os.path.join(DATA_DIR, "nmrpipe_4d", "ft_2index", "test04005.ft4")
     sdic, sdata = ng.pipe.read(fname)
 
     assert data.shape == (8, 16, 16, 4096)
@@ -497,7 +526,7 @@ def test_4d_two_index_freq():
     check_ppm_limits(dic, data, 1, [321.03, -93.40])
     check_ppm_limits(dic, data, 2, [232.62, -16.04])
     check_ppm_limits(dic, data, 3, [298.92, -98.83])
-    
+
     # check the slice
     assert sdata.shape == (16, 4096)
     assert sdata.dtype == 'float32'
@@ -513,10 +542,10 @@ def test_4d_two_index_freq():
 
 def test_4d_stream_index_freq():
     """reading/writing of 4D data stream NMRPipe freq domain file"""
-    fmask = DATA_DIR + "nmrpipe_4d/full4D.ft4"
+    fmask = os.path.join(DATA_DIR, "nmrpipe_4d", "full4D.ft4")
     dic, data = ng.pipe.read_lowmem(fmask)
 
-    fname = DATA_DIR + "nmrpipe_4d/ft_2index/test04005.ft4"
+    fname = os.path.join(DATA_DIR, "nmrpipe_4d", "ft_2index", "test04005.ft4")
     sdic, sdata = ng.pipe.read(fname)
 
     assert data.shape == (8, 16, 16, 4096)
@@ -527,7 +556,7 @@ def test_4d_stream_index_freq():
     check_ppm_limits(dic, data, 1, [321.03, -93.40])
     check_ppm_limits(dic, data, 2, [232.62, -16.04])
     check_ppm_limits(dic, data, 3, [298.92, -98.83])
-    
+
     # check the slice
     assert sdata.shape == (16, 4096)
     assert sdata.dtype == 'float32'

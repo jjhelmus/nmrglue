@@ -45,7 +45,7 @@ def lowmem_write_readback(dic, data):
 # tests
 def test_jcamp1():
     """ reading/writing of JCAMP file 1"""
-    dic = ng.bruker.read_jcamp(DATA_DIR + "bruker_1d/acqus")
+    dic = ng.bruker.read_jcamp(os.path.join(DATA_DIR, "bruker_1d", "acqus"))
     assert dic['LFILTER'] == 200
     assert len(dic['PRECHAN']) == 16
     tf = tempfile.mktemp(dir='.')
@@ -53,10 +53,10 @@ def test_jcamp1():
     ndic = ng.bruker.read_jcamp(tf)
     assert dic_similar(dic, ndic)
     os.remove(tf)
-    
+
 def test_jcamp2():
     """ reading/writing of JCAMP file 2"""
-    dic = ng.bruker.read_jcamp(DATA_DIR + "bruker_2d/acqu2s")
+    dic = ng.bruker.read_jcamp(os.path.join(DATA_DIR, "bruker_2d", "acqu2s"))
     tf = tempfile.mktemp(dir='.')
     ng.bruker.write_jcamp(dic, tf)
     ndic = ng.bruker.read_jcamp(tf)
@@ -65,7 +65,8 @@ def test_jcamp2():
 
 def test_pprog():
     """ reading/writing of pulse program"""
-    dic = ng.bruker.read_pprog(DATA_DIR + "bruker_3d/pulseprogram")
+    dic = ng.bruker.read_pprog(os.path.join(DATA_DIR, "bruker_3d",
+                                            "pulseprogram"))
     assert dic['var']['LOOPC'] == '58'
     assert len(dic['incr']) == 4
     tf = tempfile.mktemp(dir='.')
@@ -76,7 +77,7 @@ def test_pprog():
 
 def test_1d():
     """ reading/writing of 1D bruker data"""
-    dic, data = ng.bruker.read(DATA_DIR + "bruker_1d")
+    dic, data = ng.bruker.read(os.path.join(DATA_DIR, "bruker_1d"))
     assert dic['FILE_SIZE'] == 16384
     assert data.shape == (2048, )
     assert round(data[20].real, 2) == -282.0
@@ -88,7 +89,7 @@ def test_1d():
 
 def test_2d():
     """ reading/writing of 2D bruker data"""
-    dic, data = ng.bruker.read(DATA_DIR + "bruker_2d")
+    dic, data = ng.bruker.read(os.path.join(DATA_DIR, "bruker_2d"))
     assert dic['FILE_SIZE'] == 3686400
     assert data.shape == (600, 768)
     assert round(data[0, 40].real, 2) == 28.0
@@ -99,7 +100,7 @@ def test_2d():
 
 def test_2d_lowmem():
     """ lowmemory reading/writing of 2D bruker data"""
-    dic, data = ng.bruker.read_lowmem(DATA_DIR + "bruker_2d")
+    dic, data = ng.bruker.read_lowmem(os.path.join(DATA_DIR, "bruker_2d"))
     assert dic['FILE_SIZE'] == 3686400
     assert data.shape == (600, 768)
     assert round(data[0, 40].real, 2) == 28.0
@@ -110,22 +111,22 @@ def test_2d_lowmem():
 
 def test_3d():
     """ reading/writing of 3D bruker data"""
-    dic, data = ng.bruker.read(DATA_DIR + "bruker_3d")
+    dic, data = ng.bruker.read(os.path.join(DATA_DIR, "bruker_3d"))
     assert dic['FILE_SIZE'] == 91226112
     assert data.shape == (116, 128, 768)
     assert round(data[0, 0, 40].real, 2) == 18.0
     assert round(data[0, 0, 40].imag, 2) == -66.0
-    assert round(data[5, 13, 91].real, 2) == 1138.0 
+    assert round(data[5, 13, 91].real, 2) == 1138.0
     assert round(data[5, 13, 91].imag, 2) == 3482.0
     write_readback(dic, data)
 
 def test_3d_lowmem():
     """ low memory reading/writing of 3D bruker data"""
-    dic, data = ng.bruker.read_lowmem(DATA_DIR + "bruker_3d")
+    dic, data = ng.bruker.read_lowmem(os.path.join(DATA_DIR, "bruker_3d"))
     assert dic['FILE_SIZE'] == 91226112
     assert data.shape == (116, 128, 768)
     assert round(data[0, 0, 40].real, 2) == 18.0
     assert round(data[0, 0, 40].imag, 2) == -66.0
-    assert round(data[5, 13, 91].real, 2) == 1138.0 
+    assert round(data[5, 13, 91].real, 2) == 1138.0
     assert round(data[5, 13, 91].imag, 2) == 3482.0
     lowmem_write_readback(dic, data)
