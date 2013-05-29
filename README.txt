@@ -36,8 +36,8 @@ Python or by integrating Fortran and C/C++ code.
 Citing nmrglue
 --------------
 
-The article describing nmrglue is still in preparation. For the time being
-please cite nmrglue as: 
+If you find nmrglue useful in your research please cite the package as:
 
-J. J. Helmus and C.P. Jaroniec, nmrglue, http://code.google.com/p/nmrglue, The
-Ohio State University.
+J.J. Helmus, C.P. Jaroniec, Nmrglue: An open source Python package for the
+analysis of multidimensional NMR data, J. Biomol. NMR 2013, 55, 355-367,
+http://dx.doi.org/10.1007/s10858-013-9718-x.
