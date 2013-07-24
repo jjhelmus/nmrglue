@@ -112,3 +112,10 @@ Separate Examples
     separate_1d_varian.rst
     separate_2d_varian.rst
     separate_2d_bruker.rst
+
+Simulation Examples
+-------------------
+
+.. toctree::
+
+    simulate_ucsf.rst
