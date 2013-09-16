@@ -19,7 +19,7 @@ pi = np.pi
 #########################
 
 
-def em(data, lb=0.0, inv=False):
+def em(data, lb=0.0, inv=False, rev=False):
     """
     Exponential apodization
 
@@ -28,14 +28,20 @@ def em(data, lb=0.0, inv=False):
     .. math::
         em(x_i) = \\exp(-pi * i * lb)
 
+
     Parameters
     ----------
     data : ndarray
         Array of NMR data.
-    lp : float
-        Exponential line broadening, in units of points.
+    lb : float
+        Exponential line broadening, in units of points. To apply a similar
+        apodization as NMRPipe's EM function, use lb = lb_hz / sw_hz,
+        where lb_hz is the amount of broadening to apply in Hz and sw_hz
+        is the spectral width of the last dimension in Hz.
     inv : bool, optional
         True for inverse apodization.  False (default) for standard.
+    rev : bool, optional.
+        True to reverse the apodization before applying it to the data.
 
     Returns
     -------
@@ -44,12 +50,14 @@ def em(data, lb=0.0, inv=False):
 
     """
     apod = np.exp(-pi * np.arange(data.shape[-1]) * lb).astype(data.dtype)
+    if rev:
+        apod = apod[::-1]
     if inv:
         apod = 1 / apod   # invert apodization
     return apod * data
 
 
-def gm(data, g1=0.0, g2=0.0, g3=0.0, inv=False):
+def gm(data, g1=0.0, g2=0.0, g3=0.0, inv=False, rev=False):
     """
     Lorentz-to-Gauss apodization
 
@@ -76,6 +84,8 @@ def gm(data, g1=0.0, g2=0.0, g3=0.0, inv=False):
         Location of Gaussian maximum.
     inv : bool, optional
         True for inverse apodization.  False (default) for standard.
+    rev : bool, optional.
+        True to reverse the apodization before applying it to the data.
 
     Returns
     -------
@@ -87,12 +97,14 @@ def gm(data, g1=0.0, g2=0.0, g3=0.0, inv=False):
     e = pi * np.arange(size) * g1
     g = 0.6 * pi * g2 * (g3 * (size - 1) - np.arange(size))
     apod = np.exp(e - g * g).astype(data.dtype)
+    if rev:
+        apod = apod[::-1]
     if inv:
         apod = 1 / apod
     return apod * data
 
 
-def gmb(data, a=0.0, b=0.0, inv=False):
+def gmb(data, a=0.0, b=0.0, inv=False, rev=False):
     """
     Modified gaussian apodization
 
@@ -111,6 +123,8 @@ def gmb(data, a=0.0, b=0.0, inv=False):
         Gaussian term in apodization.
     inv : bool, optional
         True for inverse apodization.  False (default) for standard.
+    rev : bool, optional.
+        True to reverse the apodization before applying it to the data.
 
     Returns
     -------
@@ -121,12 +135,14 @@ def gmb(data, a=0.0, b=0.0, inv=False):
     size = data.shape[-1]
     apod = np.exp(-a * np.arange(size) - b *
                   np.arange(size) ** 2).astype(data.dtype)
+    if rev:
+        apod = apod[::-1]
     if inv:
         apod = 1 / apod
     return apod * data
 
 
-def jmod(data, e=0.0, off=0.0, end=0.0, inv=False):
+def jmod(data, e=0.0, off=0.0, end=0.0, inv=False, rev=False):
     """
     Exponentially damped J-modulation apodization
 
@@ -148,6 +164,8 @@ def jmod(data, e=0.0, off=0.0, end=0.0, inv=False):
         End of J-modulation in fractions of pi radians (180 degrees).
     inv : bool, optional
         True for inverse apodization.  False (default) for standard.
+    rev : bool, optional.
+        True to reverse the apodization before applying it to the data.
 
     Returns
     -------
@@ -158,13 +176,15 @@ def jmod(data, e=0.0, off=0.0, end=0.0, inv=False):
     size = data.shape[-1]
     apod = (np.exp(-e * np.arange(size)).astype(data.dtype) *
             np.sin(pi * off + pi * (end - off) * np.arange(size) /
-                (size - 1)).astype(data.dtype))
+            (size - 1)).astype(data.dtype))
+    if rev:
+        apod = apod[::-1]
     if inv:
         apod = 1 / apod
     return apod * data
 
 
-def sp(data, off=0, end=1.0, pow=1.0, inv=False):
+def sp(data, off=0, end=1.0, pow=1.0, inv=False, rev=False):
     """
     Shifted sine-bell apodization
 
@@ -186,6 +206,8 @@ def sp(data, off=0, end=1.0, pow=1.0, inv=False):
         Power to raise sine-bell to.
     inv : bool, optional
         True for inverse apodization.  False (default) for standard.
+    rev : bool, optional.
+        True to reverse the apodization before applying it to the data.
 
     Returns
     -------
@@ -196,6 +218,8 @@ def sp(data, off=0, end=1.0, pow=1.0, inv=False):
     size = data.shape[-1]
     apod = np.power(np.sin(pi * off + pi * (end - off) * np.arange(size) /
                     (size - 1)).astype(data.dtype), pow).astype(data.dtype)
+    if rev:
+        apod = apod[::-1]
     if inv:
         apod = 1 / apod
     return apod * data
@@ -204,7 +228,7 @@ def sp(data, off=0, end=1.0, pow=1.0, inv=False):
 sine = sp
 
 
-def tm(data, t1=0.0, t2=0.0, inv=False):
+def tm(data, t1=0.0, t2=0.0, inv=False, rev=False):
     """
     Trapezoid Apodization
 
@@ -228,6 +252,8 @@ def tm(data, t1=0.0, t2=0.0, inv=False):
         Length of right ramp in points.
     inv : bool, optional
         True for inverse apodization.  False (default) for standard.
+    rev : bool, optional.
+        True to reverse the apodization before applying it to the data.
 
     Returns
     -------
@@ -238,12 +264,14 @@ def tm(data, t1=0.0, t2=0.0, inv=False):
     size = data.shape[-1]
     apod = np.concatenate((np.linspace(0, 1, t1), np.ones(size - t1 - t2),
                            np.linspace(1, 0, t2))).astype(data.dtype)
+    if rev:
+        apod = apod[::-1]
     if inv:
         apod = 1 / apod
     return apod * data
 
 
-def tri(data, loc="auto", lHi=0.0, rHi=0.0, inv=False):
+def tri(data, loc="auto", lHi=0.0, rHi=0.0, inv=False, rev=False):
     """
     Triangle apodization.
 
@@ -269,6 +297,8 @@ def tri(data, loc="auto", lHi=0.0, rHi=0.0, inv=False):
         Starting height of the right side of the triangle.
     inv : bool, optional
         True for inverse apodization.  False (default) for standard.
+    rev : bool, optional.
+        True to reverse the apodization before applying it to the data.
 
     Returns
     -------
@@ -280,7 +310,9 @@ def tri(data, loc="auto", lHi=0.0, rHi=0.0, inv=False):
     if loc == "auto":
         loc = int(size / 2.)
     apod = np.concatenate((np.linspace(lHi, 1., loc), np.linspace(1., rHi,
-                            size - loc + 1)[1:])).astype(data.dtype)
+                          size - loc + 1)[1:])).astype(data.dtype)
+    if rev:
+        apod = apod[::-1]
     if inv:
         apod = 1 / apod
     return apod * data
@@ -422,7 +454,7 @@ def fsh(data, pts):
 
     # inplace processing
     return fft(np.exp(-2.j * pi * pts * np.arange(s) /
-                        s).astype(data.dtype) * ifft(data))
+                      s).astype(data.dtype) * ifft(data))
 
 
 def fsh2(data, pts):
@@ -644,7 +676,7 @@ def fft_positive(data):
     # the 1/N scaling
     s = float(data.shape[-1])
     return (np.fft.fftshift(np.fft.ifft(data, axis=-1).astype(data.dtype), -1)
-                    * s)
+            * s)
 
 
 def ifft(data):
@@ -732,7 +764,7 @@ def ifft_positive(data):
     # same as a FFT with negative exponentials, but with a 1/N scaling factor
     s = 1.0 / float(data.shape[-1])
     return (np.fft.fft(np.fft.ifftshift(data, -1), axis=-1).astype(data.dtype)
-             * s)
+            * s)
 
 
 # Hadamard Transform functions
@@ -1286,7 +1318,7 @@ def ext_mid(data):
 
     """
     return data[..., int(data.shape[-1] * 1. / 4.):
-                                int(data.shape[-1] * 3. / 4.)]
+                int(data.shape[-1] * 3. / 4.)]
 
 
 # Integrate
@@ -1666,7 +1698,7 @@ def neg_left(data):
     Negate left half.
     """
     data[..., 0:int(data.shape[-1] / 2.)] = \
-            -data[..., 0:int(data.shape[-1] / 2.)]
+        -data[..., 0:int(data.shape[-1] / 2.)]
     return data
 
 
@@ -1675,7 +1707,7 @@ def neg_right(data):
     Negate right half.
     """
     data[..., int(data.shape[-1] / 2.):] = \
-            -data[..., int(data.shape[-1] / 2.):]
+        -data[..., int(data.shape[-1] / 2.):]
     return data
 
 
@@ -1693,9 +1725,9 @@ def neg_edges(data):
     Negate edge half (non-middle) of spectra.
     """
     data[..., :int(data.shape[-1] * 1. / 4)] = \
-            -data[..., :int(data.shape[-1] * 1. / 4)]
+        -data[..., :int(data.shape[-1] * 1. / 4)]
     data[..., int(data.shape[-1] * 3. / 4):] = \
-            -data[..., int(data.shape[-1] * 3. / 4):]
+        -data[..., int(data.shape[-1] * 3. / 4):]
     return data
 
 
@@ -2042,9 +2074,9 @@ def filter_rank(data, rank, s=(1, 1), m="wrap", c=0.0):
 
     """
     data.real = scipy.ndimage.rank_filter(data.real, rank, size=s, mode=m,
-                                                cval=c)
+                                          cval=c)
     data.imag = scipy.ndimage.rank_filter(data.imag, rank, size=s, mode=m,
-                                                cval=c)
+                                          cval=c)
     return data
 
 
@@ -2273,7 +2305,7 @@ def filter_generic(data, filter, s=(1, 1), m="wrap", c=0.0):
 # filter functions
 
 def amin_flt(arr):
-    return  arr[np.abs(arr).argmin()]
+    return arr[np.abs(arr).argmin()]
 
 
 def amax_flt(arr):
@@ -2553,7 +2585,7 @@ def zd_triangle(data, wide=1.0, x0=0.0, slope=1.0):
 
     """
     window = np.append(np.linspace(1, 0, wide + 1),
-                    np.linspace(0, 1, wide + 1)[1:])
+                       np.linspace(0, 1, wide + 1)[1:])
     return zd(data, window, x0=x0, slope=slope)
 
 
