@@ -1,34 +1,32 @@
 """
-Functions for reading and Tecmag .tnt data files
+Functions for reading Tecmag .tnt data files.
 """
-__developer_info__ = """
+__developer_doc__ = """
 Tecmag .tnt file format information
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 The Tecmag .tnt file format is documented with C pseudo-code in the file
 "A1 - TNMR File Format.doc" distributed with the TNMR software.
 
-This file is based on the pytnt module available at
-https://www.github.com/chatcannon/pytnt
-Please inform upstream if you find a bug or want a new feature.
+This file is based on the
+`pytnt module <https://www.github.com/chatcannon/pytnt>`_.
+Please inform upstream if you find a bug or to request additional features.
 
 """
 
 import io
 import re
-from collections import OrderedDict
 
 import numpy as np
 
 from . import fileiobase
 
 
-tntMagic_re = re.compile(b"^TNT1\.\d\d\d$")
+TNTMAGIC_RE = re.compile(b"^TNT1\.\d\d\d$")
 
-tntMagic = np.dtype('a8')
-tntTLV = np.dtype([('tag', 'a4'), ('bool', '<u4'), ('length', '<u4')])
+TNTMAGIC = np.dtype('a8')
+TNTTLV = np.dtype([('tag', 'a4'), ('bool', '<u4'), ('length', '<u4')])
 
-tntTMAG = np.dtype([
+TNTTMAG = np.dtype([
     ('npts', '<i4', 4),
     ('actual_npts', '<i4', 4),
     ('acq_points', '<i4'),
@@ -109,10 +107,10 @@ tntTMAG = np.dtype([
     ('sequence', 'a32'),
     ('lock_solvent', 'a16'),
     ('lock_nucleus', 'a16')
-    ])
+])
 
 
-tntGridAndAxis = np.dtype([
+TNTGRIDANDAXIS = np.dtype([
     ('majorTickInc', '<f8', 12),
     ('minorIntNum', '<i2', 12),
     ('labelPrecision', '<i2', 12),
@@ -128,7 +126,7 @@ tntGridAndAxis = np.dtype([
 ])
 
 
-tntTMG2 = np.dtype([
+TNTTMG2 = np.dtype([
     ('real_flag', '<u4'),
     ('imag_flag', '<u4'),
     ('magn_flag', '<u4'),
@@ -155,7 +153,7 @@ tntTMG2 = np.dtype([
     ('ampCtl', '<f8'),
     ('offset', '<i4'),
 
-    ('axis_set', tntGridAndAxis),
+    ('axis_set', TNTGRIDANDAXIS),
 
     ('display_units', '<i2', 4),
     ('ref_point', '<i4', 4),
@@ -235,7 +233,7 @@ tntTMG2 = np.dtype([
 
 def read(filename):
     """
-    Read a .tnt data file
+    Read a Tecmag .tnt data file.
 
     Parameters
     ----------
@@ -250,60 +248,62 @@ def read(filename):
         Array of NMR data.
 
     """
-    tnt_sections = OrderedDict()
+    tnt_sections = dict()
 
     with open(filename, 'rb') as tntfile:
 
-        tntmagic = np.fromstring(tntfile.read(tntMagic.itemsize),
-                                 tntMagic, count=1)[0]
+        tntmagic = np.fromstring(tntfile.read(TNTMAGIC.itemsize),
+                                 TNTMAGIC, count=1)[0]
 
-        if not tntMagic_re.match(tntmagic):
-            raise ValueError("Invalid magic number (is '%s' really a TNMR file?): %s" % (filename, tntmagic))
+        if not TNTMAGIC_RE.match(tntmagic):
+            err = ("Invalid magic number (is '%s' really TNMR file?): %s" %
+                   (filename, tntmagic))
+            raise ValueError(err)
 
         ##Read in the section headers
-        tnthdrbytes = tntfile.read(tntTLV.itemsize)
-        while(tntTLV.itemsize == len(tnthdrbytes)):
-            TLV = np.fromstring(tnthdrbytes, tntTLV)[0]
-            data_length = TLV['length']
+        tnthdrbytes = tntfile.read(TNTTLV.itemsize)
+        while(TNTTLV.itemsize == len(tnthdrbytes)):
+            tlv = np.fromstring(tnthdrbytes, TNTTLV)[0]
+            data_length = tlv['length']
             hdrdict = {'offset': tntfile.tell(),
                        'length': data_length,
-                       'bool': bool(TLV['bool'])}
+                       'bool': bool(tlv['bool'])}
             if data_length <= 4096:
                 hdrdict['data'] = tntfile.read(data_length)
                 assert(len(hdrdict['data']) == data_length)
             else:
                 tntfile.seek(data_length, io.SEEK_CUR)
-            tnt_sections[TLV['tag']] = hdrdict
-            tnthdrbytes = tntfile.read(tntTLV.itemsize)
+            tnt_sections[tlv['tag']] = hdrdict
+            tnthdrbytes = tntfile.read(TNTTLV.itemsize)
 
-    assert(tnt_sections['TMAG']['length'] == tntTMAG.itemsize)
-    TMAG = np.fromstring(tnt_sections['TMAG']['data'], tntTMAG, count=1)[0]
+    assert(tnt_sections['TMAG']['length'] == TNTTMAG.itemsize)
+    tmag = np.fromstring(tnt_sections['TMAG']['data'], TNTTMAG, count=1)[0]
 
     assert(tnt_sections['DATA']['length'] ==
-           TMAG['actual_npts'].prod() * 8)
+           tmag['actual_npts'].prod() * 8)
     ## For some reason we can't set offset and shape together
     #DATA = np.memmap(tntfilename,np.dtype('<c8'), mode='r',
     #                 offset=self.tnt_sections['DATA']['offset'],
     #                 shape=self.TMAG['actual_npts'].tolist(),order='F')
-    DATA = np.memmap(filename, np.dtype('<c8'), mode='c',
+    data = np.memmap(filename, np.dtype('<c8'), mode='c',
                      offset=tnt_sections['DATA']['offset'],
-                     shape=TMAG['actual_npts'].prod())
-    DATA = np.reshape(DATA, TMAG['actual_npts'], order='F')
+                     shape=tmag['actual_npts'].prod())
+    data = np.reshape(data, tmag['actual_npts'], order='F')
 
-    assert(tnt_sections['TMG2']['length'] == tntTMG2.itemsize)
-    TMG2 = np.fromstring(tnt_sections['TMG2']['data'], tntTMG2, count=1)[0]
+    assert(tnt_sections['TMG2']['length'] == TNTTMG2.itemsize)
+    tmg2 = np.fromstring(tnt_sections['TMG2']['data'], TNTTMG2, count=1)[0]
 
     dic = dict()
-    for name in tntTMAG.names:
+    for name in TNTTMAG.names:
         if not name.startswith('space'):
-            dic[name] = TMAG[name]
-    for name in tntTMG2.names:
+            dic[name] = tmag[name]
+    for name in TNTTMG2.names:
         if name not in ['Boolean_space', 'unused', 'space', 'axis_set']:
-            dic[name] = TMG2[name]
-    for name in tntGridAndAxis.names:
-        dic[name] = TMG2['axis_set'][name]
+            dic[name] = tmg2[name]
+    for name in TNTGRIDANDAXIS.names:
+        dic[name] = tmg2['axis_set'][name]
 
-    return dic, DATA
+    return dic, data
 
 
 def guess_udic(dic, data):
