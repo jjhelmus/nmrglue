@@ -39,7 +39,7 @@ def add_to_table(rec, columns, column_names):
 
 
 def pack_table(pbest, abest, iers, rec, param_columns, amp_column,
-        ier_column=None):
+               ier_column=None):
     """
     Pack fitting parameters into table
 
@@ -72,7 +72,7 @@ def pack_table(pbest, abest, iers, rec, param_columns, amp_column,
             rec[c] = p
 
     # pack the iers
-    if ier_column != None:
+    if ier_column is not None:
         rec[ier_column] = iers
 
 
@@ -146,7 +146,7 @@ def estimate_scales(spectrum, centers, box_width, scale_axis=0):
 
 # User facing fit/simulation functions
 def fit_spectrum(spectrum, lineshapes, params, amps, bounds, ampbounds,
-            centers, rIDs, box_width, error_flag, verb=True, **kw):
+                 centers, rIDs, box_width, error_flag, verb=True, **kw):
     """
     Fit a NMR spectrum by regions which contain one or more peaks.
 
@@ -263,26 +263,26 @@ def fit_spectrum(spectrum, lineshapes, params, amps, bounds, ampbounds,
 
         # add edges to the initial parameters
         ecparams = [[ls.add_edge(p, (mn, mx)) for ls, mn, mx, p in
-                  zip(ls_classes, rmin, rmax, g)] for g in cparams]
+                    zip(ls_classes, rmin, rmax, g)] for g in cparams]
 
         # TODO make this better...
         ecbounds = [[zip(*[ls.add_edge(b, (mn, mx)) for b in zip(*db)])
-                 for ls, mn, mx, db in zip(ls_classes, rmin, rmax, pb)]
-                 for pb in cbounds]
+                    for ls, mn, mx, db in zip(ls_classes, rmin, rmax, pb)]
+                    for pb in cbounds]
 
         # fit the region
         t = fit_NDregion(region, ls_classes, ecparams, camps, ecbounds,
-                            campbounds, wmask, error_flag, **kw)
+                         campbounds, wmask, error_flag, **kw)
         if error_flag:
             ecpbest, acbest, ecpbest_err, acbest_err, ier = t
             cpbest_err = [[ls.remove_edge(p, (mn, mx)) for ls, mn, mx, p in
-                        zip(ls_classes, rmin, rmax, g)] for g in ecpbest_err]
+                          zip(ls_classes, rmin, rmax, g)] for g in ecpbest_err]
         else:
             ecpbest, acbest, ier = t
 
         # remove edges from best fit parameters
         cpbest = [[ls.remove_edge(p, (mn, mx)) for ls, mn, mx, p in
-                zip(ls_classes, rmin, rmax, g)] for g in ecpbest]
+                   zip(ls_classes, rmin, rmax, g)] for g in ecpbest]
 
         if verb:
             print "-----------------------"
@@ -300,14 +300,14 @@ def fit_spectrum(spectrum, lineshapes, params, amps, bounds, ampbounds,
                 pbest_err[i] = pb
                 abest_err[i] = ab
 
-    if error_flag == False:
+    if error_flag is False:
         return pbest, abest, iers
 
-    return  pbest, abest, pbest_err, abest_err, iers
+    return pbest, abest, pbest_err, abest_err, iers
 
 
 def fit_NDregion(region, lineshapes, params, amps, bounds=None,
-        ampbounds=None, wmask=None, error_flag=False, **kw):
+                 ampbounds=None, wmask=None, error_flag=False, **kw):
     """
     Fit a N-dimensional region.
 
@@ -431,7 +431,7 @@ def fit_NDregion(region, lineshapes, params, amps, bounds=None,
                 p0.append(g)
 
     # parse the bounds parameter
-    if bounds == None:   # No bounds
+    if bounds is None:   # No bounds
         peak_bounds = [[(None, None)] * i for i in dim_nparam]
         bounds = [peak_bounds] * n_peaks
 
@@ -442,7 +442,7 @@ def fit_NDregion(region, lineshapes, params, amps, bounds=None,
     p_bounds = []
     for i, peak_bounds in enumerate(bounds):  # peak loop
 
-        if peak_bounds == None:
+        if peak_bounds is None:
             peak_bounds = [[(None, None)] * i for i in dim_nparam]
 
         if len(peak_bounds) != ndim:
@@ -451,7 +451,7 @@ def fit_NDregion(region, lineshapes, params, amps, bounds=None,
 
         for j, dim_bounds in enumerate(peak_bounds):    # dimension loop
 
-            if dim_bounds == None:
+            if dim_bounds is None:
                 dim_bounds = [(None, None)] * dim_nparam[j]
 
             if len(dim_bounds) != dim_nparam[j]:
@@ -459,7 +459,7 @@ def fit_NDregion(region, lineshapes, params, amps, bounds=None,
                 raise ValueError(err % (i, j))
 
             for k, b in enumerate(dim_bounds):    # parameter loop
-                if b == None:
+                if b is None:
                     b = (None, None)
 
                 if len(b) != 2:
@@ -474,7 +474,7 @@ def fit_NDregion(region, lineshapes, params, amps, bounds=None,
     p0 = list(amps) + p0  # amplitudes appended to front of p0
 
     # parse ampbounds parameter
-    if ampbounds == None:
+    if ampbounds is None:
         ampbounds = [(None, None)] * n_peaks
 
     if len(ampbounds) != n_peaks:
@@ -482,7 +482,7 @@ def fit_NDregion(region, lineshapes, params, amps, bounds=None,
 
     to_add = []
     for k, b in enumerate(ampbounds):
-        if b == None:
+        if b is None:
             b = (None, None)
 
         if len(b) != 2:
@@ -492,7 +492,7 @@ def fit_NDregion(region, lineshapes, params, amps, bounds=None,
     p_bounds = to_add + p_bounds    # amplitude bound at front of p_bounds
 
     # parse the wmask parameter
-    if wmask == None:   # default is to include all points in region
+    if wmask is None:   # default is to include all points in region
         wmask = np.ones(shape, dtype='bool')
     if wmask.shape != shape:
         err = "wmask has incorrect shape:" + str(wmask.shape) +   \
@@ -538,7 +538,7 @@ def fit_NDregion(region, lineshapes, params, amps, bounds=None,
     param_best = [make_slist(l, dim_nparam) for l in p_list]
 
     # return as is if no errors requested
-    if error_flag == False:
+    if error_flag is False:
         return param_best, amp_best, ier
 
     # calculate errors

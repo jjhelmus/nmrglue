@@ -325,8 +325,8 @@ class ndwindow_inside(object):
         """ Set up the object """
         if len(shape) != len(wsize):
             raise ValueError("shape and wsize do match match")
-        self.ndindex = np.ndindex(tuple(np.array(shape) - np.array(wsize)
-                                    + 1))
+        self.ndindex = np.ndindex(
+            tuple(np.array(shape) - np.array(wsize) + 1))
         self.wsize = wsize
 
     def next(self):
@@ -356,8 +356,8 @@ class ndwindow_inside_index(object):
         " Set up the object """
         if len(shape) != len(wsize):
             raise ValueError("shape and wsize do match match")
-        self.ndindex = np.ndindex(tuple(np.array(shape) - np.array(wsize) +
-                                    1))
+        self.ndindex = np.ndindex(
+            tuple(np.array(shape) - np.array(wsize) + 1))
         self.wsize = wsize
 
     def next(self):

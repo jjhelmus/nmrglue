@@ -13,8 +13,8 @@ from ..fileio import table
 
 
 def pick(data, pthres, nthres=None, msep=None, algorithm='connected',
-    est_params=True, lineshapes=None, edge=None, diag=False, c_struc=None,
-    c_ndil=0, cluster=True, table=True, axis_names=['A', 'Z', 'Y', 'X']):
+         est_params=True, lineshapes=None, edge=None, diag=False, c_struc=None,
+         c_ndil=0, cluster=True, table=True, axis_names=['A', 'Z', 'Y', 'X']):
     """
     Pick (find) peaks in a region of a NMR spectrum.
 
@@ -94,7 +94,7 @@ def pick(data, pthres, nthres=None, msep=None, algorithm='connected',
     # check  lineshapes
     if est_params:
         # expand None
-        if lineshapes == None:
+        if lineshapes is None:
             lineshapes = [gauss() for i in range(ndim)]
         ls_classes = []
 
@@ -113,17 +113,17 @@ def pick(data, pthres, nthres=None, msep=None, algorithm='connected',
         if len(ls_classes) != ndim:
             raise ValueError("Incorrect number of lineshapes")
 
-    if edge != None and len(edge) != ndim:
+    if edge is not None and len(edge) != ndim:
         raise ValueError("edge has incorrect length")
 
     #######################
     # find positive peaks #
     #######################
-    if pthres == None:    # no locations
+    if pthres is None:    # no locations
         ploc = []
         pseg = []
 
-    elif est_params == True:  # find locations and segments
+    elif est_params is True:  # find locations and segments
         if algorithm == 'thres':
             ploc, pseg = find_all_thres_fast(data, pthres, msep, True)
         elif algorithm == 'thres-fast':
@@ -150,11 +150,11 @@ def pick(data, pthres, nthres=None, msep=None, algorithm='connected',
     #######################
     # find negative peaks #
     #######################
-    if nthres == None:    # no locations
+    if nthres is None:    # no locations
         nloc = []
         nseg = []
 
-    elif est_params == True:  # find locations and segments
+    elif est_params is True:  # find locations and segments
         if algorithm == 'thres':
             nloc, nseg = find_all_nthres(data, nthres, msep, True)
         elif algorithm == 'thres-fast':
@@ -184,14 +184,14 @@ def pick(data, pthres, nthres=None, msep=None, algorithm='connected',
     #########################################################
     # return locations if no parameter estimation requested #
     #########################################################
-    if est_params == False:
+    if est_params is False:
         if cluster:     # find clusters
             cluster_ids = clusters(data, locations, pthres, nthres, c_struc,
-                                    None, c_ndil)
+                                   None, c_ndil)
             locations = add_edge(locations, edge)
             if table:
                 return pack_table(locations, cluster_ids,
-                                    axis_names=axis_names)
+                                  axis_names=axis_names)
             else:
                 return locations, cluster_ids
         else:   # Do not determine clusters
@@ -244,7 +244,7 @@ def add_edge(locations, edge):
 
 
 def clusters(data, locations, pthres, nthres, d_struc=None, l_struc=None,
-        ndil=0):
+             ndil=0):
     """
     Perform cluster analysis of peak locations.
 
@@ -274,9 +274,9 @@ def clusters(data, locations, pthres, nthres, d_struc=None, l_struc=None,
 
     """
     # make a binary array of regions above/below the noise thresholds
-    if pthres == None:  # negative peaks only
+    if pthres is None:  # negative peaks only
         input = data < nthres
-    elif nthres == None:  # postive peaks only
+    elif nthres is None:  # postive peaks only
         input = data > pthres
     else:               # both positive and negative
         input = np.bitwise_or(data < nthres, data > pthres)
@@ -292,7 +292,7 @@ def clusters(data, locations, pthres, nthres, d_struc=None, l_struc=None,
 
 
 def pack_table(locations, cluster_ids=None, scales=None, amps=None,
-        axis_names=["A", "Z", "Y", "X"]):
+               axis_names=["A", "Z", "Y", "X"]):
     """
     Create a table from peak information.
 
@@ -329,13 +329,13 @@ def pack_table(locations, cluster_ids=None, scales=None, amps=None,
     dt = [(a + "_AXIS", np.float) for a in anames]
     rec = np.rec.array(locations, dtype=dt)
 
-    if cluster_ids != None:
+    if cluster_ids is not None:
         rec = table.append_column(rec, cluster_ids, 'cID', 'int')
-    if scales != None:
+    if scales is not None:
         names = [a + "_LW" for a in anames]
         for n, c in zip(names, np.array(scales).T):
             rec = table.append_column(rec, c, n, 'float')
-    if amps != None:
+    if amps is not None:
         rec = table.append_column(rec, amps, 'VOL', 'float')
 
     return rec

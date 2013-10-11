@@ -59,7 +59,7 @@ def find_all_connected(data, thres, find_segs=False, diag=False):
     locations = ndimage.maximum_position(data, labels, range(1, num_features +
                                                              1))
     # find segment slices if requested and return
-    if find_segs == True:
+    if find_segs is True:
         seg_slices = ndimage.find_objects(labels)
         return locations, seg_slices
     else:
@@ -116,7 +116,7 @@ def find_all_nconnected(data, thres, find_segs=False, diag=False):
     locations = ndimage.minimum_position(data, labels, range(1,
                                          num_features + 1))
     # find segment slices if requested and return
-    if find_segs == True:
+    if find_segs is True:
         seg_slices = ndimage.find_objects(labels)
         return locations, seg_slices
     else:
@@ -151,7 +151,7 @@ def mark_dseg(mdata, map, pt, mark, structure):
         Integer to mark map with.
 
     """
-    if mdata.mask[pt] == True:
+    if mdata.mask[pt] is True:
         return
     else:
         map[pt] = mark
@@ -163,7 +163,7 @@ def mark_dseg(mdata, map, pt, mark, structure):
         v = mdata.data[pt]
         # Check all neightbors
         for new_pt in neighbors(pt, mdata.shape, structure):
-            if mdata.mask[new_pt] == False and mdata[new_pt] < v:
+            if mdata.mask[new_pt] is False and mdata[new_pt] < v:
                 Q.append(new_pt)
                 map[new_pt] = mark
                 mdata[new_pt] = ma.masked
@@ -171,7 +171,7 @@ def mark_dseg(mdata, map, pt, mark, structure):
 
 
 def label_downward_seg(data, labels, seg_slice, seg_index, max_index,
-        structure):
+                       structure):
     """ Label a segment which is downward connected """
     slabels = labels[seg_slice]
     msdata = np.ma.masked_array(data[seg_slice], mask=(slabels != seg_index))
@@ -182,7 +182,7 @@ def label_downward_seg(data, labels, seg_slice, seg_index, max_index,
     mark_dseg(msdata, slabels, argmax, seg_index, structure)
 
     # mark any
-    while msdata.mask.all() == False:
+    while msdata.mask.all() is False:
         argmax = np.unravel_index(msdata.argmax(), msdata.shape)
         mark_dseg(msdata, slabels, argmax, max_index, structure)
         max_index = max_index + 1
@@ -244,7 +244,7 @@ def find_all_downward(data, thres, find_segs=False, diag=False):
                                          num_features + 1))
 
     # find segment slices if requested and return
-    if find_segs == True:
+    if find_segs is True:
         seg_slices = ndimage.find_objects(labels)
         return locations, seg_slices
     else:
@@ -269,7 +269,7 @@ def mark_useg(mdata, map, pt, mark, structure):
         Integer to mark map with.
 
     """
-    if mdata.mask[pt] == True:
+    if mdata.mask[pt] is True:
         return
     else:
         map[pt] = mark
@@ -281,7 +281,7 @@ def mark_useg(mdata, map, pt, mark, structure):
         v = mdata.data[pt]
         # Check all neightbors
         for new_pt in neighbors(pt, mdata.shape, structure):
-            if mdata.mask[new_pt] == False and mdata[new_pt] > v:
+            if mdata.mask[new_pt] is False and mdata[new_pt] > v:
                 Q.append(new_pt)
                 map[new_pt] = mark
                 mdata[new_pt] = ma.masked
@@ -289,7 +289,7 @@ def mark_useg(mdata, map, pt, mark, structure):
 
 
 def label_upward_seg(data, labels, seg_slice, seg_index, max_index,
-        structure):
+                     structure):
     """ Label a segment which is upward connected """
     slabels = labels[seg_slice]
     msdata = np.ma.masked_array(data[seg_slice],
@@ -300,7 +300,7 @@ def label_upward_seg(data, labels, seg_slice, seg_index, max_index,
     mark_useg(msdata, slabels, argmin, seg_index, structure)
 
     # mark any
-    while msdata.mask.all() == False:
+    while msdata.mask.all() is False:
         argmin = np.unravel_index(msdata.argmin(), msdata.shape)
         mark_useg(msdata, slabels, argmin, max_index, structure)
         max_index = max_index + 1
@@ -363,7 +363,7 @@ def find_all_upward(data, thres, find_segs=False, diag=False):
     locations = ndimage.minimum_position(data, labels,
                                          range(1, num_features + 1))
     # find segment slices if requested and return
-    if find_segs == True:
+    if find_segs is True:
         seg_slices = ndimage.find_objects(labels)
         return locations, seg_slices
     else:
