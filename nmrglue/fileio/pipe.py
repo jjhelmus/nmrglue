@@ -251,7 +251,7 @@ def guess_udic(dic, data):
             udic[i]["freq"] = True
 
         if i != 0:
-            if  dic["FD2DPHASE"] == 0:
+            if dic["FD2DPHASE"] == 0:
                 udic[i]["encoding"] = "magnitude"
             elif dic["FD2DPHASE"] == 1:
                 udic[i]["encoding"] = "tppi"
@@ -309,8 +309,8 @@ def create_dic(udic, datetimeobj=datetime.datetime.now()):
         dic["FDFILECOUNT"] = dic["FDF3SIZE"] * dic["FDF4SIZE"]
 
     if ((dic["FDF1QUADFLAG"] == dic["FDF2QUADFLAG"] == dic["FDF3QUADFLAG"]) and
-        (dic["FDF1QUADFLAG"] == dic["FDF4QUADFLAG"] == 1)):
-        dic["FDQUADFLAG"] = 1.0
+            (dic["FDF1QUADFLAG"] == dic["FDF4QUADFLAG"] == 1)):
+                dic["FDQUADFLAG"] = 1.0
 
     return dic
 
@@ -515,7 +515,7 @@ def read(filename):
         return read_2D(filename)
     if dic["FDPIPEFLAG"] != 0:  # open streams
         return read_stream(filename)
-    if filemask == None:     # if no filemask open as 2D
+    if filemask is None:     # if no filemask open as 2D
         return read_2D(filename)
     if order == 3:
         return read_3D(filemask)
@@ -562,7 +562,7 @@ def read_lowmem(filename):
         return read_lowmem_2D(filename)
     if dic["FDPIPEFLAG"] != 0:  # open streams
         return read_lowmem_stream(filename)
-    if filemask == None:    # if no filemask open as 2D
+    if filemask is None:    # if no filemask open as 2D
         return read_lowmem_2D(filename)
     if order == 3:
         return read_lowmem_3D(filemask)
@@ -1090,7 +1090,7 @@ def write_slice_3D(filemask, dic, data, shape, (sz, sy, sx)):
     for i, f in enumerate(fnames[sz]):
 
         #print "i:",i,"f:",f
-        if os.path.isfile(f) == False:
+        if os.path.isfile(f) is False:
             # file doesn't exist, create a empty one
             ndata = np.zeros((dy, dx), dtype=data.dtype)
             write_single(f, dic, data, False)
@@ -1544,12 +1544,12 @@ def dic2fdata(dic):
     # and the longer strings (typically blank)
     fdata[286:290] = struct.unpack('4f', struct.pack('16s', dic["FDSRCNAME"]))
     fdata[290:294] = struct.unpack('4f', struct.pack('16s',
-                                                        dic["FDUSERNAME"]))
+                                                     dic["FDUSERNAME"]))
     fdata[297:312] = struct.unpack('15f', struct.pack('60s', dic["FDTITLE"]))
     fdata[312:352] = struct.unpack('40f', struct.pack('160s',
-                                                        dic["FDCOMMENT"]))
+                                                      dic["FDCOMMENT"]))
     fdata[464:472] = struct.unpack('8f', struct.pack('32s',
-                                                        dic["FDOPERNAME"]))
+                                                     dic["FDOPERNAME"]))
 
     return fdata
 
@@ -1765,7 +1765,7 @@ class pipe_3d(fileiobase.data_nd):
         # check that all files exist if fcheck is set
         if fcheck:
             for i in range(1, lenZ + 1):
-                if os.path.exists(filemask % i) == False:
+                if os.path.exists(filemask % i) is False:
                     raise IOError("File not found: " + str(filemask % i))
 
         # check last axis quadrature
@@ -1973,7 +1973,7 @@ class pipe_4d(fileiobase.data_nd):
                         fname = filemask % (ai * lenZ + zi + 1)
                     else:
                         fname = filemask % (ai + 1, zi + 1)
-                    if os.path.exists(fname) == False:
+                    if os.path.exists(fname) is False:
                         raise IOError("File not found: " + str(fname))
 
         # check last axis quadrature
@@ -2015,7 +2015,7 @@ class pipe_4d(fileiobase.data_nd):
 
         # create an empty array to store the selected slice
         out = np.empty((len(ach), len(zch), len(ych), len(xch)),
-                        dtype=self.dtype)
+                       dtype=self.dtype)
 
         # read in the data file by file, trace by trace
         for ai, a in enumerate(ach):
@@ -2109,7 +2109,7 @@ class pipestream_4d(fileiobase.data_nd):
 
         # create an empty array to store the selected slice
         out = np.empty((len(ach), len(zch), len(ych), len(xch)),
-                        dtype=self.dtype)
+                       dtype=self.dtype)
 
         # read in the data trace by trace
         for ai, a in enumerate(ach):

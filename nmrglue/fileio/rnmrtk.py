@@ -163,7 +163,7 @@ def create_dic(udic, dim_order=None):
     dic['quad'] = [udic[i]['encoding'].lower() for i in dim_order]
 
     # xfirst and xstep are freq domains values, correct later for time domain
-    dic['xfirst'] = [-0.5 * i for i in  dic['sw']]
+    dic['xfirst'] = [-0.5 * i for i in dic['sw']]
     dic['xstep'] = [udic[i]['sw'] / udic[i]['size'] for i in dim_order]
 
     # these we guess on, they may be incorrect
@@ -565,7 +565,7 @@ class rnmrtk_nd(fileiobase.data_nd):
         Create and set up
         """
         # check and set order
-        if order == None:
+        if order is None:
             order = range(len(fshape))
         self.order = order
 
@@ -587,7 +587,7 @@ class rnmrtk_nd(fileiobase.data_nd):
         Create a copy
         """
         n = rnmrtk_nd(self.filename, self.filename, self.fshape, self.cplex,
-                        self.big, order)
+                      self.big, order)
         return n
 
     def __fgetitem__(self, slices):
@@ -775,7 +775,7 @@ def write_par(par_file, dic, overwrite):
         f.write('Format  Big-endian     IEEE-Float\n')
 
     l = "Layout  " + " ".join([j + ":" + str(i) for i, j in
-                                zip(*dic['layout'])])
+                               zip(*dic['layout'])])
     f.write(l + "\n")
     f.close()
 

@@ -574,7 +574,7 @@ class sparky_2d(fileiobase.data_nd):
         self.lentX = self.dic["w2"]["bsize"]
 
         # check order
-        if order == None:
+        if order is None:
             order = (0, 1)
 
         # finalize
@@ -706,7 +706,7 @@ class sparky_3d(fileiobase.data_nd):
         self.lentX = self.dic["w3"]["bsize"]
 
         # check order
-        if order == None:
+        if order is None:
             order = (0, 1, 2)
 
         # finalize
@@ -1182,7 +1182,7 @@ def untile_data3D(data, (lentZ, lentY, lentX), (lenZ, lenY, lenX)):
                 maxT = (ntile + 1) * tsize
 
                 out[minZ:maxZ, minY:maxY, minX:maxX] =  \
-                data[minT:maxT].reshape(t_tup)
+                    data[minT:maxT].reshape(t_tup)
 
     return out[:lenZ, :lenY, :lenX]
 

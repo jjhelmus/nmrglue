@@ -154,13 +154,13 @@ class converter(object):
         """
         # set data
         self._data = data
-        if udic != None and udic[0]['encoding'].lower() == "tppi":
+        if udic is not None and udic[0]['encoding'].lower() == "tppi":
             self._iproc = {"imagfactor": -1.0}
         else:   # states, etc needs sign alt. of indirect dim.
             self._iproc = {"alt_id_sign": True, "imagfactor": -1.0}
 
         # set the universal dictionary
-        if udic != None:
+        if udic is not None:
             self._udic = udic
         else:
             self._udic = varian.guess_udic(dic, data)
@@ -191,7 +191,7 @@ class converter(object):
             self._iproc = {}
 
         # set the universal dictionary
-        if udic != None:
+        if udic is not None:
             self._udic = udic
         else:
             self._udic = rnmrtk.guess_udic(dic, data)
@@ -215,7 +215,7 @@ class converter(object):
         self._iproc = {}
 
         # set the universal dictionary
-        if udic != None:
+        if udic is not None:
             self._udic = udic
         else:
             self._udic = pipe.guess_udic(dic, data)
@@ -239,7 +239,7 @@ class converter(object):
         self._iproc = {}
 
         # set the universal dictionary
-        if udic != None:
+        if udic is not None:
             self._udic = udic
         else:
             self._udic = sparky.guess_udic(dic, data)
@@ -263,7 +263,7 @@ class converter(object):
         self._iproc = {}
 
         # set the universal dictionary
-        if udic != None:
+        if udic is not None:
             self._udic = udic
         else:
             self._udic = bruker.guess_udic(dic, data)

@@ -180,7 +180,7 @@ class unit_conversion():
         if type(val) == str:
             return self.__str2pnt(val)
         else:
-            if unit == None:
+            if unit is None:
                 raise ValueError("invalid unit type")
             return self.__unit2pnt(val, unit)
 
@@ -334,12 +334,12 @@ def open_towrite(filename, overwrite=False):
     creates necessary directiories as needed.
     """
     # check if file exists and overwrite if False
-    if os.path.exists(filename) and (overwrite == False):
+    if os.path.exists(filename) and (overwrite is False):
         raise IOError("File exists, recall with overwrite=True")
 
     p, fn = os.path.split(filename)  # split into filename and path
     # create directories if needed
-    if p != '' and os.path.exists(p) == False:
+    if p != '' and os.path.exists(p) is False:
         os.makedirs(p)
 
     return open(filename, 'wb')

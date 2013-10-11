@@ -144,8 +144,8 @@ def create_dic(udic):
     if ndim >= 3:
         pdic['array'] = create_pdic_param('array', ['phase,phase2'])
         if udic[ndim - 3]['complex']:
-            pdic["ni2"] = create_pdic_param('ni2',
-                                [str(udic[ndim - 3]['size'] / 2)])
+            pdic["ni2"] = create_pdic_param(
+                'ni2', [str(udic[ndim - 3]['size'] / 2)])
             pdic["phase2"] = create_pdic_param('phase', ['0', '1'])
         else:
             pdic["ni2"] = create_pdic_param('ni2',
@@ -155,12 +155,12 @@ def create_dic(udic):
     if ndim >= 4:
         pdic['array'] = create_pdic_param('array', ['phase,phase2,phase3'])
         if udic[ndim - 4]['complex']:
-            pdic["ni3"] = create_pdic_param('ni3',
-                            [str(udic[ndim - 4]['size'] / 2)])
+            pdic["ni3"] = create_pdic_param(
+                'ni3', [str(udic[ndim - 4]['size'] / 2)])
             pdic["phase3"] = create_pdic_param('phase3', ['0', '1'])
         else:
-            pdic["ni3"] = create_pdic_param('ni3',
-                                            [str(udic[ndim - 4]['size'])])
+            pdic["ni3"] = create_pdic_param(
+                'ni3', [str(udic[ndim - 4]['size'])])
             pdic["phase3"] = create_pdic_param('phase3', ['0'])
 
     dic["procpar"] = pdic
@@ -193,7 +193,7 @@ def create_pdic_param(name, values):
 
 
 def read(dir=".", fid_file="fid", procpar_file="procpar", read_blockhead=False,
-        shape=None, torder=None, as_2d=False):
+         shape=None, torder=None, as_2d=False):
     """
     Read Agilent/Varian files in a directory.
 
@@ -257,17 +257,17 @@ def read(dir=".", fid_file="fid", procpar_file="procpar", read_blockhead=False,
     write : Write Agilent/Varian files.
 
     """
-    if os.path.isdir(dir) != True:
+    if os.path.isdir(dir) is True:
         raise IOError("directory %s does not exist" % (dir))
 
     # read in the procpar file
     pdic = read_procpar(os.path.join(dir, procpar_file))
 
     # determine shape and torder is needed
-    if as_2d == False:
-        if shape == None:
+    if as_2d is False:
+        if shape is None:
             shape = find_shape(pdic)
-        if torder == None and shape != None and len(shape) >= 3:
+        if torder is None and shape is not None and len(shape) >= 3:
             torder = find_torder(pdic, shape)
 
     # read in the fid file
@@ -281,7 +281,7 @@ def read(dir=".", fid_file="fid", procpar_file="procpar", read_blockhead=False,
 
 
 def read_lowmem(dir=".", fid_file="fid", procpar_file="procpar",
-        read_blockhead=False, shape=None, torder=None):
+                read_blockhead=False, shape=None, torder=None):
     """
     Read Agilent/Varian files in a directory using minimal amount of memory.
 
@@ -319,16 +319,16 @@ def read_lowmem(dir=".", fid_file="fid", procpar_file="procpar",
     write_lowmem : Write Agilent/Varian files using mimimal memory
 
     """
-    if os.path.isdir(dir) != True:
+    if os.path.isdir(dir) is not True:
         raise IOError("directory %s does not exist" % (dir))
 
     # read in the procpar file
     pdic = read_procpar(os.path.join(dir, procpar_file))
 
-    if shape == None:
+    if shape is None:
         shape = find_shape(pdic)
 
-    if torder == None:    # always try to find trace order
+    if torder is None:    # always try to find trace order
         torder = find_torder(pdic, shape)
 
     # read in the fid file
@@ -342,7 +342,7 @@ def read_lowmem(dir=".", fid_file="fid", procpar_file="procpar",
 
 
 def write(dir, dic, data, fid_file="fid", procpar_file="procpar",
-        torder=None, repack=False, overwrite=False):
+          torder=None, repack=False, overwrite=False):
     """
     Write Agilent/Varian files to a directory.
 
@@ -376,7 +376,7 @@ def write(dir, dic, data, fid_file="fid", procpar_file="procpar",
     read : Read Agilent/Varian files.
 
     """
-    if torder == None and data.ndim >= 3:
+    if torder is None and data.ndim >= 3:
         torder = find_torder(dic["procpar"], data.shape)
 
     # write out the fid file
@@ -390,7 +390,7 @@ def write(dir, dic, data, fid_file="fid", procpar_file="procpar",
 
 
 def write_lowmem(dir, dic, data, fid_file="fid", procpar_file="procpar",
-        torder=None, repack=False, overwrite=False):
+                 torder=None, repack=False, overwrite=False):
     """
     Write Agilent/Varian files to a directory using mimimal amounts of memory.
 
@@ -425,7 +425,7 @@ def write_lowmem(dir, dic, data, fid_file="fid", procpar_file="procpar",
 
     """
     # always find trace ording
-    if torder == None:
+    if torder is None:
         torder = find_torder(dic["procpar"], data.shape)
 
     # write out the fid file
@@ -506,7 +506,7 @@ def find_torder(dic, shape):
             return 'r'
 
     warn("No trace ordering for" + str(ndim) +
-            "dimensional data, torder set to 'r'")
+         "dimensional data, torder set to 'r'")
     return 'r'
 
 
@@ -635,7 +635,7 @@ def order_data(data, torder):
 
 
 def read_fid(filename, shape=None, torder='flat', as_2d=False,
-        read_blockhead=False):
+             read_blockhead=False):
     """
     Read a Agilent/Varian binary (fid) file.
 
@@ -688,7 +688,7 @@ def read_fid(filename, shape=None, torder='flat', as_2d=False,
     # read the data
     if read_blockhead:
         bdic, data = get_nblocks(f, nblocks, pts, nbheaders, dt,
-                read_blockhead)
+                                 read_blockhead)
         dic["blockheader"] = bdic
     else:
         data = get_nblocks(f, nblocks, pts, nbheaders, dt, read_blockhead)
@@ -702,7 +702,7 @@ def read_fid(filename, shape=None, torder='flat', as_2d=False,
         return dic, data
 
     # return raw data if no shape provided.
-    if shape == None:
+    if shape is None:
         warn("unknown shape, returning unshaped data")
         return dic, data
 
@@ -717,7 +717,7 @@ def read_fid(filename, shape=None, torder='flat', as_2d=False,
             return dic, reorder_data(data, shape, torder)
         except:
             warn("data cannot be re-ordered, returning raw 2D data\n" +
-                "Provided shape: " + str(shape) + " torder: " + str(torder))
+                 "Provided shape: " + str(shape) + " torder: " + str(torder))
             return dic, data
 
     try:
@@ -730,7 +730,7 @@ def read_fid(filename, shape=None, torder='flat', as_2d=False,
 
 
 def read_fid_lowmem(filename, shape=None, torder='flat', as_2d=False,
-        read_blockhead=False):
+                    read_blockhead=False):
     """
     Read a Agilent/Varian binary (fid) file using mimimal amounts of memory.
 
@@ -776,7 +776,7 @@ def read_fid_lowmem(filename, shape=None, torder='flat', as_2d=False,
 
 
 def read_fid_ntraces(filename, shape=None, torder='flat', as_2d=False,
-        read_blockhead=False):
+                     read_blockhead=False):
     """
     Read a Agilent/Varian binary (fid) file possibility having multiple
     traces per block.
@@ -846,7 +846,7 @@ def read_fid_ntraces(filename, shape=None, torder='flat', as_2d=False,
         return dic, np.squeeze(data)
 
     # try to reshape
-    if shape == None:
+    if shape is None:
         warn("unknown shape, returning unshaped data")
         return dic, data
 
@@ -864,7 +864,7 @@ def read_fid_ntraces(filename, shape=None, torder='flat', as_2d=False,
 
 
 def write_fid(filename, dic, data, torder='flat', repack=False, correct=True,
-        overwrite=False):
+              overwrite=False):
     """
     Write a Agilent/Varian binary (fid) file.
 
@@ -950,7 +950,7 @@ def write_fid(filename, dic, data, torder='flat', repack=False, correct=True,
 
 
 def write_fid_lowmem(filename, dic, data, torder='f', repack=False,
-        overwrite=False):
+                     overwrite=False):
     """
     Write a Agilent/Varian binary (fid) file using mimimal amounts of memory.
 
@@ -1113,7 +1113,7 @@ def get_block(f, pts, nbheaders, dt, read_blockhead=False):
         Array of read block.
 
     """
-    if read_blockhead == False:  # do not return blockheaders
+    if read_blockhead is False:  # do not return blockheaders
         for i in xrange(nbheaders):
             skip_blockheader(f)
         trace = get_trace(f, pts, dt)
@@ -1135,7 +1135,7 @@ def get_block(f, pts, nbheaders, dt, read_blockhead=False):
 
 
 def get_nblocks_ntraces(f, nblocks, ntraces, pts, nbheaders, dt,
-        read_blockhead):
+                        read_blockhead):
     """
     Read multiple blocks from a Agilent/Varian binary file which may have
     multiple traces per block.
@@ -1175,7 +1175,7 @@ def get_nblocks_ntraces(f, nblocks, ntraces, pts, nbheaders, dt,
     for i in xrange(nblocks):
         if read_blockhead:
             bdic[i], bdata = get_block_ntraces(f, ntraces, pts, nbheaders, dt,
-                                                True)
+                                               True)
             data[i * ntraces:(i + 1) * ntraces] = bdata
         else:
             bdata = get_block_ntraces(f, ntraces, pts, nbheaders, dt, False)
@@ -1216,7 +1216,7 @@ def get_block_ntraces(f, ntraces, pts, nbheaders, dt, read_blockhead=False):
 
     """
 
-    if read_blockhead == False:  # do not return blockheaders
+    if read_blockhead is False:  # do not return blockheaders
         for i in xrange(nbheaders):
             skip_blockheader(f)
         trace = get_trace(f, pts * ntraces, dt)
@@ -1367,7 +1367,7 @@ def put_block(f, trace, nbheaders, bh, hh=False):
         put_blockheader(f, bh)
 
     if nbheaders >= 2:
-        if hh == False:
+        if hh is False:
             raise Exception("Hyperheader required")
         put_hyperheader(f, hh)
 
@@ -1500,7 +1500,7 @@ def make_blockheader(filedic=False, index=1):
     """
     dic = dict()
 
-    if filedic != False:
+    if filedic is False:
         # common status flags
         dic["S_DATA"] = filedic["S_DATA"]
         dic["S_SPEC"] = filedic["S_SPEC"]
@@ -1619,8 +1619,8 @@ def repack_blockheader(dic):
                    dic["NP_PWRMODE"] * 0x4 + dic["NF_PHMODE"] * 0x10 +
                    dic["NF_AVMODE"] * 0x20 + dic["NF_PWRMODE"] * 0x40 +
                    dic["NI_PHMODE"] * 0x100 + dic["NI_AVMODE"] * 0x200 +
-                  dic["NI_PWRMODE"] * 0x400 + dic["NI2_PHMODE"] * 0x1000 +
-                  dic["NI2_AVMODE"] * 0x2000 + dic["NI2_PWRMODE"] * 0x4000)
+                   dic["NI_PWRMODE"] * 0x400 + dic["NI2_PHMODE"] * 0x1000 +
+                   dic["NI2_AVMODE"] * 0x2000 + dic["NI2_PWRMODE"] * 0x4000)
     return dic
 
 
@@ -1747,7 +1747,7 @@ def find_shape(pdic):
     if "array" in pdic:
         array_name = pdic['array']['values'][0]
         array_name = array_name.split(',')[-1]   # keep only innermost array
-        if array_name.startswith('phase') == False and array_name in pdic:
+        if array_name.startswith('phase') is False and array_name in pdic:
             shape.insert(0, len(pdic[array_name]["values"]))
 
     # imaging files have a seqcon parameter
@@ -1941,10 +1941,10 @@ def write_procpar(filename, dic, overwrite=False):
 
         d = dic[key]
         # print out the first line
-        print >> f, d["name"], d["subtype"], d["basictype"],     \
-                   d["maxvalue"], d["minvalue"], d["stepsize"],  \
-                   d["Ggroup"], d["Dgroup"], d["protection"],    \
-                   d["active"], d["intptr"]
+        print >> f, d["name"], d["subtype"], d["basictype"],    \
+            d["maxvalue"], d["minvalue"], d["stepsize"],        \
+            d["Ggroup"], d["Dgroup"], d["protection"],          \
+            d["active"], d["intptr"]
 
         # print out the next line(s) (and more if strings)
         if d["basictype"] == "1":   # real values, one line
@@ -1975,7 +1975,7 @@ def write_procpar(filename, dic, overwrite=False):
     return
 
 subtypes = ["undefined", "real", "string", "delay", "flag", "frequency",
-        "pulse", "integer"]
+            "pulse", "integer"]
 
 basictypes = ["undefined", "real", "string"]
 
@@ -2018,7 +2018,7 @@ class fid_nd(fileiobase.data_nd):
         f.close()
 
         # check fshape
-        if fshape == None:
+        if fshape is None:
             # by default open as 2D with nblocks,np/2 fshape
             fshape = (dic['nblocks'], int(dic["np"] / 2))
         else:
@@ -2032,7 +2032,7 @@ class fid_nd(fileiobase.data_nd):
                 raise ValueError(s)
 
         # check order
-        if order == None:
+        if order is None:
             order = range(len(fshape))
 
         # finalize

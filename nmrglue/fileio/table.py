@@ -342,12 +342,12 @@ def insert_column(rec, N, col, name=None, format=None):
     col = np.array(col)
 
     # get name and format parameter from column if not provided
-    if name == None:
-        if col.dtype.names != None:
+    if name is None:
+        if col.dtype.names is not None:
             name = col.dtype.names
         else:
             raise ValueError("Must provide a name for the column")
-    if format == None:
+    if format is None:
         format = col.dtype.str
 
     # insert the new column (name, format) to the table dtypes
