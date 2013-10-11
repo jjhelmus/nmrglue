@@ -1,0 +1,6 @@
+nmrglue.fileio.tecmag.read
+==========================
+
+.. currentmodule:: nmrglue.fileio.tecmag
+
+.. autofunction:: read

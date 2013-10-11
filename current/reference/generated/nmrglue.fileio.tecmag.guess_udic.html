@@ -8,7 +8,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>nmrglue.process.proc_base.qmix &mdash; nmrglue 0.5-dev documentation</title>
+    <title>nmrglue.fileio.tecmag.guess_udic &mdash; nmrglue 0.5-dev documentation</title>
     
     <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -27,9 +27,9 @@
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="nmrglue 0.5-dev documentation" href="../../index.html" />
-    <link rel="up" title="nmrglue.proc_base" href="../proc_base.html" />
-    <link rel="next" title="nmrglue.process.proc_base.smo" href="nmrglue.process.proc_base.smo.html" />
-    <link rel="prev" title="nmrglue.process.proc_base.gram_schmidt" href="nmrglue.process.proc_base.gram_schmidt.html" /> 
+    <link rel="up" title="nmrglue.tecmag" href="../tecmag.html" />
+    <link rel="next" title="nmrglue.varian" href="../varian.html" />
+    <link rel="prev" title="nmrglue.fileio.tecmag.read" href="nmrglue.fileio.tecmag.read.html" /> 
   </head>
   <body>
     <div class="related">
@@ -45,14 +45,14 @@
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="nmrglue.process.proc_base.smo.html" title="nmrglue.process.proc_base.smo"
+          <a href="../varian.html" title="nmrglue.varian"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="nmrglue.process.proc_base.gram_schmidt.html" title="nmrglue.process.proc_base.gram_schmidt"
+          <a href="nmrglue.fileio.tecmag.read.html" title="nmrglue.fileio.tecmag.read"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">nmrglue 0.5-dev documentation</a> &raquo;</li>
           <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
-          <li><a href="../proc_base.html" accesskey="U">nmrglue.proc_base</a> &raquo;</li> 
+          <li><a href="../tecmag.html" accesskey="U">nmrglue.tecmag</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -61,30 +61,29 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="nmrglue-process-proc-base-qmix">
-<h1>nmrglue.process.proc_base.qmix<a class="headerlink" href="#nmrglue-process-proc-base-qmix" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="nmrglue-fileio-tecmag-guess-udic">
+<h1>nmrglue.fileio.tecmag.guess_udic<a class="headerlink" href="#nmrglue-fileio-tecmag-guess-udic" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="nmrglue.process.proc_base.qmix">
-<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">qmix</tt><big>(</big><em>data</em>, <em>carr</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L2391"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.qmix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Mix input and output channels provided coefficient array.</p>
+<dt id="nmrglue.fileio.tecmag.guess_udic">
+<tt class="descclassname">nmrglue.fileio.tecmag.</tt><tt class="descname">guess_udic</tt><big>(</big><em>dic</em>, <em>data</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/fileio/tecmag.py#L309"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.fileio.tecmag.guess_udic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Guess parameters of universal dictionary from dic, data pair.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>data</strong> : 2D ndarray</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>dic</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary of Tecmag parameters.</p>
+</div></blockquote>
+<p><strong>data</strong> : ndarray</p>
 <blockquote>
 <div><p>Array of NMR data.</p>
 </div></blockquote>
-<p><strong>carr</strong> : array_liek</p>
-<blockquote>
-<div><p>Array of coefficients for mixing.  The size of carr must evenly divide
-qmix.</p>
-</div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>ndata</strong> : ndarray</p>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>udic</strong> : dict</p>
 <blockquote class="last">
-<div><p>Array of NMR data with channels mixed.</p>
+<div><p>Universal dictionary of spectral parameters.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -101,14 +100,14 @@ qmix.</p>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="nmrglue.process.proc_base.gram_schmidt.html"
-                        title="previous chapter">nmrglue.process.proc_base.gram_schmidt</a></p>
+  <p class="topless"><a href="nmrglue.fileio.tecmag.read.html"
+                        title="previous chapter">nmrglue.fileio.tecmag.read</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="nmrglue.process.proc_base.smo.html"
-                        title="next chapter">nmrglue.process.proc_base.smo</a></p>
+  <p class="topless"><a href="../varian.html"
+                        title="next chapter">nmrglue.varian</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
-    <li><a href="../../_sources/reference/generated/nmrglue.process.proc_base.qmix.txt"
+    <li><a href="../../_sources/reference/generated/nmrglue.fileio.tecmag.guess_udic.txt"
            rel="nofollow">Show Source</a></li>
   </ul>
 <div id="searchbox" style="display: none">
@@ -141,14 +140,14 @@ qmix.</p>
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="nmrglue.process.proc_base.smo.html" title="nmrglue.process.proc_base.smo"
+          <a href="../varian.html" title="nmrglue.varian"
              >next</a> |</li>
         <li class="right" >
-          <a href="nmrglue.process.proc_base.gram_schmidt.html" title="nmrglue.process.proc_base.gram_schmidt"
+          <a href="nmrglue.fileio.tecmag.read.html" title="nmrglue.fileio.tecmag.read"
              >previous</a> |</li>
         <li><a href="../../index.html">nmrglue 0.5-dev documentation</a> &raquo;</li>
           <li><a href="../index.html" >Reference Guide</a> &raquo;</li>
-          <li><a href="../proc_base.html" >nmrglue.proc_base</a> &raquo;</li> 
+          <li><a href="../tecmag.html" >nmrglue.tecmag</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

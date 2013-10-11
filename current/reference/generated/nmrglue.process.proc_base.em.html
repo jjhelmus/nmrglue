@@ -65,7 +65,7 @@
 <h1>nmrglue.process.proc_base.em<a class="headerlink" href="#nmrglue-process-proc-base-em" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_base.em">
-<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">em</tt><big>(</big><em>data</em>, <em>lb=0.0</em>, <em>inv=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L22"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.em" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">em</tt><big>(</big><em>data</em>, <em>lb=0.0</em>, <em>inv=False</em>, <em>rev=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L22"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.em" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exponential apodization</p>
 <p>Functional form of apodization window:</p>
 <div class="math">
@@ -78,13 +78,20 @@
 <blockquote>
 <div><p>Array of NMR data.</p>
 </div></blockquote>
-<p><strong>lp</strong> : float</p>
+<p><strong>lb</strong> : float</p>
 <blockquote>
-<div><p>Exponential line broadening, in units of points.</p>
+<div><p>Exponential line broadening, in units of points. To apply a similar
+apodization as NMRPipe&#8217;s EM function, use lb = lb_hz / sw_hz,
+where lb_hz is the amount of broadening to apply in Hz and sw_hz
+is the spectral width of the last dimension in Hz.</p>
 </div></blockquote>
 <p><strong>inv</strong> : bool, optional</p>
 <blockquote>
 <div><p>True for inverse apodization.  False (default) for standard.</p>
+</div></blockquote>
+<p><strong>rev</strong> : bool, optional.</p>
+<blockquote>
+<div><p>True to reverse the apodization before applying it to the data.</p>
 </div></blockquote>
 </td>
 </tr>

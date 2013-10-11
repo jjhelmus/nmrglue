@@ -1,0 +1,6 @@
+nmrglue.fileio.tecmag.guess_udic
+================================
+
+.. currentmodule:: nmrglue.fileio.tecmag
+
+.. autofunction:: guess_udic

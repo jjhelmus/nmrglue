@@ -65,7 +65,7 @@
 <h1>nmrglue.process.proc_base.jmod<a class="headerlink" href="#nmrglue-process-proc-base-jmod" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_base.jmod">
-<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">jmod</tt><big>(</big><em>data</em>, <em>e=0.0</em>, <em>off=0.0</em>, <em>end=0.0</em>, <em>inv=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L129"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.jmod" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">jmod</tt><big>(</big><em>data</em>, <em>e=0.0</em>, <em>off=0.0</em>, <em>end=0.0</em>, <em>inv=False</em>, <em>rev=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L145"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.jmod" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exponentially damped J-modulation apodization</p>
 <p>Functional form of apodization window:</p>
 <div class="math">
@@ -94,6 +94,10 @@
 <p><strong>inv</strong> : bool, optional</p>
 <blockquote>
 <div><p>True for inverse apodization.  False (default) for standard.</p>
+</div></blockquote>
+<p><strong>rev</strong> : bool, optional.</p>
+<blockquote>
+<div><p>True to reverse the apodization before applying it to the data.</p>
 </div></blockquote>
 </td>
 </tr>

@@ -65,7 +65,7 @@
 <h1>nmrglue.process.proc_base.gm<a class="headerlink" href="#nmrglue-process-proc-base-gm" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_base.gm">
-<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">gm</tt><big>(</big><em>data</em>, <em>g1=0.0</em>, <em>g2=0.0</em>, <em>g3=0.0</em>, <em>inv=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L52"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.gm" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">gm</tt><big>(</big><em>data</em>, <em>g1=0.0</em>, <em>g2=0.0</em>, <em>g3=0.0</em>, <em>inv=False</em>, <em>rev=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L60"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.gm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Lorentz-to-Gauss apodization</p>
 <p>Functional form of apodization window:</p>
 <div class="math">
@@ -97,6 +97,10 @@ g = 0.6 * pi * g2 * (g3 * (size - 1) - i)\end{split}\]</div>
 <p><strong>inv</strong> : bool, optional</p>
 <blockquote>
 <div><p>True for inverse apodization.  False (default) for standard.</p>
+</div></blockquote>
+<p><strong>rev</strong> : bool, optional.</p>
+<blockquote>
+<div><p>True to reverse the apodization before applying it to the data.</p>
 </div></blockquote>
 </td>
 </tr>

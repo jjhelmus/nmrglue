@@ -65,7 +65,7 @@
 <h1>nmrglue.process.proc_base.tri<a class="headerlink" href="#nmrglue-process-proc-base-tri" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="nmrglue.process.proc_base.tri">
-<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">tri</tt><big>(</big><em>data</em>, <em>loc='auto'</em>, <em>lHi=0.0</em>, <em>rHi=0.0</em>, <em>inv=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L246"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.tri" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">nmrglue.process.proc_base.</tt><tt class="descname">tri</tt><big>(</big><em>data</em>, <em>loc='auto'</em>, <em>lHi=0.0</em>, <em>rHi=0.0</em>, <em>inv=False</em>, <em>rev=False</em><big>)</big><a class="reference external" href="http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/process/proc_base.py#L274"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#nmrglue.process.proc_base.tri" title="Permalink to this definition">¶</a></dt>
 <dd><p>Triangle apodization.</p>
 <p>Functional form of apodization window.</p>
 <table border="1" class="docutils">
@@ -111,6 +111,10 @@ trace (default).</p>
 <p><strong>inv</strong> : bool, optional</p>
 <blockquote>
 <div><p>True for inverse apodization.  False (default) for standard.</p>
+</div></blockquote>
+<p><strong>rev</strong> : bool, optional.</p>
+<blockquote>
+<div><p>True to reverse the apodization before applying it to the data.</p>
 </div></blockquote>
 </td>
 </tr>

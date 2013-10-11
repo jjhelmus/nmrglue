@@ -1,0 +1,178 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>nmrglue.tecmag &mdash; nmrglue 0.5-dev documentation</title>
+    
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.5-dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="nmrglue 0.5-dev documentation" href="../index.html" />
+    <link rel="up" title="Reference Guide" href="index.html" />
+    <link rel="next" title="nmrglue.fileio.tecmag.read" href="generated/nmrglue.fileio.tecmag.read.html" />
+    <link rel="prev" title="nmrglue.fileio.table.guess_pformat" href="generated/nmrglue.fileio.table.guess_pformat.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.fileio.tecmag.read.html" title="nmrglue.fileio.tecmag.read"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.fileio.table.guess_pformat.html" title="nmrglue.fileio.table.guess_pformat"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">nmrglue 0.5-dev documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Reference Guide</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-nmrglue.fileio.tecmag">
+<span id="nmrglue-tecmag"></span><h1>nmrglue.tecmag<a class="headerlink" href="#module-nmrglue.fileio.tecmag" title="Permalink to this headline">¶</a></h1>
+<p>Functions for reading Tecmag .tnt data files.</p>
+<p>This modules is imported as nmrglue.tecmag and can be called as such.</p>
+<div class="section" id="user-information">
+<h2>User Information<a class="headerlink" href="#user-information" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="user-functions">
+<h3>User Functions<a class="headerlink" href="#user-functions" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/nmrglue.fileio.tecmag.read.html#nmrglue.fileio.tecmag.read" title="nmrglue.fileio.tecmag.read"><tt class="xref py py-obj docutils literal"><span class="pre">read</span></tt></a>(filename)</td>
+<td>Read a Tecmag .tnt data file.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/nmrglue.fileio.tecmag.guess_udic.html#nmrglue.fileio.tecmag.guess_udic" title="nmrglue.fileio.tecmag.guess_udic"><tt class="xref py py-obj docutils literal"><span class="pre">guess_udic</span></tt></a>(dic,&nbsp;data)</td>
+<td>Guess parameters of universal dictionary from dic, data pair.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="developer-infomation">
+<h2>Developer Infomation<a class="headerlink" href="#developer-infomation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="tecmag-tnt-file-format-information">
+<h3>Tecmag .tnt file format information<a class="headerlink" href="#tecmag-tnt-file-format-information" title="Permalink to this headline">¶</a></h3>
+<p>The Tecmag .tnt file format is documented with C pseudo-code in the file
+&#8220;A1 - TNMR File Format.doc&#8221; distributed with the TNMR software.</p>
+<p>This file is based on the
+<a class="reference external" href="https://www.github.com/chatcannon/pytnt">pytnt module</a>.
+Please inform upstream if you find a bug or to request additional features.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">nmrglue.tecmag</a><ul>
+<li><a class="reference internal" href="#user-information">User Information</a><ul>
+<li><a class="reference internal" href="#user-functions">User Functions</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#developer-infomation">Developer Infomation</a><ul>
+<li><a class="reference internal" href="#tecmag-tnt-file-format-information">Tecmag .tnt file format information</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="generated/nmrglue.fileio.table.guess_pformat.html"
+                        title="previous chapter">nmrglue.fileio.table.guess_pformat</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="generated/nmrglue.fileio.tecmag.read.html"
+                        title="next chapter">nmrglue.fileio.tecmag.read</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/reference/tecmag.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.fileio.tecmag.read.html" title="nmrglue.fileio.tecmag.read"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="generated/nmrglue.fileio.table.guess_pformat.html" title="nmrglue.fileio.table.guess_pformat"
+             >previous</a> |</li>
+        <li><a href="../index.html">nmrglue 0.5-dev documentation</a> &raquo;</li>
+          <li><a href="index.html" >Reference Guide</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2010-2013, Jonathan J. Helmus.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

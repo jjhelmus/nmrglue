@@ -19,6 +19,7 @@ fileio modules
     simpson
     sparky
     table
+    tecmag
     varian
 
 process modules
