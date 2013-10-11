@@ -30,7 +30,7 @@ import scipy.linalg
 
 
 def lp(data, pred=1, slice=slice(None), order=8, mode="f", append="after",
-    bad_roots="auto", fix_mode="on", mirror=None, method="svd"):
+       bad_roots="auto", fix_mode="on", mirror=None, method="svd"):
     """
     Linear prediction extrapolation of 1D or 2D data.
 
@@ -125,7 +125,7 @@ def lp_svd(data, pred=1, slice=slice(None), order=8, mode="f", append="after",
 
 
 def lp_qr(data, pred=1, slice=slice(None), order=8, mode="f", append="after",
-           bad_roots="auto", fix_mode="on", mirror=None):
+          bad_roots="auto", fix_mode="on", mirror=None):
     """
     Linear Prediction extrapolation of 1D or 2D data using QR decomposition.
 
@@ -145,7 +145,7 @@ def lp_cho(data, pred=1, slice=slice(None), order=8, mode="f", append="after",
     See :py:func:`lp` for documentation
     """
     return lp(data, pred, slice, order, mode, append, bad_roots, fix_mode,
-            mirror, method="cholesky")
+              mirror, method="cholesky")
 
 
 def lp_tls(data, pred=1, slice=slice(None), order=8, mode="f", append="after",
@@ -157,12 +157,12 @@ def lp_tls(data, pred=1, slice=slice(None), order=8, mode="f", append="after",
 
     """
     return lp(data, pred, slice, order, mode, append, bad_roots, fix_mode,
-            mirror, method="tls")
+              mirror, method="tls")
 
 
 # underlying 1D extrapolation
 def lp_1d(trace, pred=1, slice=slice(None), order=8, mode="f", append="after",
-    bad_roots="auto", fix_mode="on", mirror=None, method="svd"):
+          bad_roots="auto", fix_mode="on", mirror=None, method="svd"):
     """
     Linear Prediction extrapolation of 1D data.
 
@@ -252,7 +252,7 @@ def lp_1d(trace, pred=1, slice=slice(None), order=8, mode="f", append="after",
 
     x = trace[slice]    # extract region to use for finding LP coefficients
 
-    if mirror != None:  # make mirror image if selected
+    if mirror is not None:  # make mirror image if selected
         x = make_mirror(x, mirror)
 
     if mode == "fb":
@@ -267,7 +267,7 @@ def lp_1d(trace, pred=1, slice=slice(None), order=8, mode="f", append="after",
         a = find_lpc(D, d, method)  # determind the LP prediction filter
 
     # stablize roots if needed
-    if bad_roots != None:           # stablize roots if needed
+    if bad_roots is not None:           # stablize roots if needed
         poles = find_roots(a, mode)  # find roots (poles)
         poles = fix_roots(poles, bad_roots, fix_mode)  # fix roots
         # reverse filter when calculated filter is in wrong direction
@@ -552,7 +552,7 @@ def cadzow_single(x, M, K, min_var=False):
 
 
 def lp_model(trace, slice=slice(None), order=8, mode="f", mirror=None,
-        method="svd", full=False):
+             method="svd", full=False):
     """
     Use Linear Prediction to model 1D NMR time domain data.
 
@@ -612,7 +612,7 @@ def lp_model(trace, slice=slice(None), order=8, mode="f", mirror=None,
 
     x = trace[slice]    # extract region to use for finding LP coefficients
 
-    if mirror != None:  # make mirror image if requested
+    if mirror is not None:  # make mirror image if requested
         x = make_mirror(x, mirror)
 
     # calculate LP coefficient and factor to find poles
@@ -634,7 +634,7 @@ def lp_model(trace, slice=slice(None), order=8, mode="f", mirror=None,
     damp = [root2damp(pole) for pole in poles]
     freq = [root2freq(pole) for pole in poles]
 
-    if full == False:
+    if full is False:
         return damp, freq
 
     # perform Least Squares fitting to determind amplitudes and phases.
@@ -887,7 +887,7 @@ def find_lpc_fb(x, order, bad_roots, fix_mode, method):
     a = find_lpc(D, d, method)
 
     # stabilize roots if needed
-    if bad_roots != None:
+    if bad_roots is not None:
         poles = find_roots(a, 'f')
         poles = fix_roots(poles, bad_roots, fix_mode)
         a = find_coeff(poles, 'f')
@@ -902,7 +902,7 @@ def find_lpc_fb(x, order, bad_roots, fix_mode, method):
     poles = find_roots(a, 'b')
     poles = [1. / pole for pole in poles]
     # stabilize roots if needed
-    if bad_roots != None:
+    if bad_roots is not None:
         poles = fix_roots(poles, bad_roots, fix_mode)
     # find the backward predicted, forward ordered coefficients
     backward_a = find_coeff(poles, 'f')
@@ -928,7 +928,7 @@ def find_lpc_bf(x, order, bad_roots, fix_mode, method):
     a = find_lpc(D, d, method)
 
     # stabilize roots if needed
-    if bad_roots != None:
+    if bad_roots is not None:
         poles = find_roots(a, 'b')
         poles = fix_roots(poles, bad_roots, fix_mode)
         a = find_coeff(poles, 'b')
@@ -943,7 +943,7 @@ def find_lpc_bf(x, order, bad_roots, fix_mode, method):
     poles = find_roots(a, 'f')
     poles = [1. / pole for pole in poles]
     # stabilize roots if needed
-    if bad_roots != None:
+    if bad_roots is not None:
         poles = fix_roots(poles, bad_roots, fix_mode)
     # find the forward predicted, backward ordered coefficients
     forward_a = find_coeff(poles, 'b')
@@ -1200,12 +1200,12 @@ def extrapolate(trace, a, pred, append):
         ntrace[:M] = trace
         for i in xrange(pred):
             ntrace[M + i] = np.sum(np.multiply(ntrace[M - m + i:M + i],
-                                                                    a.flat))
+                                   a.flat))
         return ntrace
 
     if append == "before":   # append before trace
         ntrace[-M:] = trace
         for i in xrange(pred):
             ntrace[pred - i - 1] = np.sum(np.multiply(
-                                    ntrace[pred - i:pred + m - i], a.flat))
+                ntrace[pred - i:pred + m - i], a.flat))
         return ntrace

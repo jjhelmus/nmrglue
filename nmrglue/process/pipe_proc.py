@@ -173,7 +173,7 @@ def clean_minmax(dic):
 
 
 def apod(dic, data, qName=None, q1=1.0, q2=1.0, q3=1.0, c=1.0, start=1,
-        size='default', inv=False, one=False, hdr=False):
+         size='default', inv=False, one=False, hdr=False):
     """
     Generic apodization.
 
@@ -259,7 +259,7 @@ def apod(dic, data, qName=None, q1=1.0, q2=1.0, q3=1.0, c=1.0, start=1,
 
 
 def em(dic, data, lb=0.0, c=1.0, start=1, size='default', inv=False, one=False,
-        hdr=False):
+       hdr=False):
     """
     Exponential apodization.
 
@@ -322,7 +322,7 @@ def em(dic, data, lb=0.0, c=1.0, start=1, size='default', inv=False, one=False,
         else:
             stop = start + size
         data[..., start:stop] = p.em(data[..., start:stop], lb=flb, inv=inv)
-        if one == False:
+        if one is False:
             data[..., :start] = 0.0
             data[..., stop:] = 0.0
 
@@ -337,7 +337,7 @@ def em(dic, data, lb=0.0, c=1.0, start=1, size='default', inv=False, one=False,
 
 
 def gm(dic, data, g1=0.0, g2=0.0, g3=0.0, c=1.0, start=1, size='default',
-        inv=False, one=False, hdr=False):
+       inv=False, one=False, hdr=False):
     """
     Lorentz-to-Gauss apodization
 
@@ -415,7 +415,7 @@ def gm(dic, data, g1=0.0, g2=0.0, g3=0.0, c=1.0, start=1, size='default',
         #print start,stop,g1p,g2p,g3p
         data[..., start:stop] = p.gm(data[..., start:stop], g1p, g2p, g3p,
                                      inv=inv)
-        if one == False:
+        if one is False:
             data[..., :start] = 0.0
             data[..., stop:] = 0.0
 
@@ -498,7 +498,7 @@ def gmb(dic, data, lb=0.0, gb=0.0, c=1.0, start=1, size='default', inv=False,
         else:
             stop = start + size
         data[..., start:stop] = p.gmb(data[..., start:stop], a, b, inv=inv)
-        if one == False:
+        if one is False:
             data[..., :start] = 0.0
             data[..., stop:] = 0.0
 
@@ -513,7 +513,7 @@ def gmb(dic, data, lb=0.0, gb=0.0, c=1.0, start=1, size='default', inv=False,
 
 
 def jmod(dic, data, off=0.0, j=0.0, lb=0.0, sin=False, cos=False, c=1.0,
-        start=1, size='default', inv=False, one=False, hdr=False):
+         start=1, size='default', inv=False, one=False, hdr=False):
     """
     Exponentially Damped J-Modulation Apodization
 
@@ -598,7 +598,7 @@ def jmod(dic, data, off=0.0, j=0.0, lb=0.0, sin=False, cos=False, c=1.0,
         end = off + j * (stop - start - 1) / sw
         data[..., start:stop] = p.jmod(data[..., start:stop], e, off, end,
                                        inv=inv)
-        if one == False:
+        if one is False:
             data[..., :start] = 0.0
             data[..., stop:] = 0.0
 
@@ -612,7 +612,7 @@ def jmod(dic, data, off=0.0, j=0.0, lb=0.0, sin=False, cos=False, c=1.0,
 
 
 def sp(dic, data, off=0.0, end=1.0, pow=1.0, c=1.0, start=1, size='default',
-        inv=False, one=False, hdr=False):
+       inv=False, one=False, hdr=False):
     """
     Sine bell apodization.
 
@@ -679,7 +679,7 @@ def sp(dic, data, off=0.0, end=1.0, pow=1.0, c=1.0, start=1, size='default',
             stop = start + size
         data[..., start:stop] = p.sp(data[..., start:stop], off, end, pow,
                                      inv=inv)
-        if one == False:
+        if one is False:
             data[..., :start] = 0.0
             data[..., stop:] = 0.0
 
@@ -697,7 +697,7 @@ sine = sp   # wrapper for sine functions
 
 
 def tm(dic, data, t1=0.0, t2=0.0, c=1.0, start=1, size='default', inv=False,
-        one=False, hdr=False):
+       one=False, hdr=False):
     """
     Trapezoid apodization.
 
@@ -761,7 +761,7 @@ def tm(dic, data, t1=0.0, t2=0.0, c=1.0, start=1, size='default', inv=False,
             stop = start + size
         data[..., start:stop] = p.tm(data[..., start:stop], t1=t1, t2=t2,
                                      inv=inv)
-        if one == False:
+        if one is False:
             data[..., :start] = 0.0
             data[..., stop:] = 0.0
 
@@ -857,7 +857,7 @@ def tri(dic, data, loc="auto", lHi=0.0, rHi=0.0, c=1.0, start=1,
             stop = start + size
         data[..., start:stop] = p.tri(data[..., start:stop], loc, lHi, rHi,
                                       inv=inv)
-        if one == False:
+        if one is False:
             data[..., :start] = 0.0
             data[..., stop:] = 0.0
 
@@ -1039,7 +1039,7 @@ def fsh(dic, data, dir, pts, sw=True):
     if dir not in ["ls", "rs"]:
         raise ValueError("dir must be ls or rs")
 
-    if np.iscomplexobj(data) == False:  # real data
+    if np.iscomplexobj(data) is False:  # real data
         null, data = _ht(dict(dic), data, zf=True)
         del_imag = True
     else:   # imaginary data
@@ -1061,7 +1061,7 @@ def fsh(dic, data, dir, pts, sw=True):
     if dic[fn + "FTFLAG"] == 1 and sw:  # freq domain
         dic[fn + "CENTER"] = dic[fn + "CENTER"] + pts
         dic = recalc_orig(dic, data, fn)
-    if del_imag == False:
+    if del_imag is False:
         return dic, data
     else:
         return dic, data.real
@@ -1073,7 +1073,7 @@ def fsh(dic, data, dir, pts, sw=True):
 
 
 def ft(dic, data, auto=False, real=False, inv=False, alt=False, neg=False,
-    null=False, bruk=False):
+       null=False, bruk=False):
     """
     Complex Fourier transform.
 
@@ -1131,17 +1131,17 @@ def ft(dic, data, auto=False, real=False, inv=False, alt=False, neg=False,
             # Real, TPPI and Sequential data is real transform
             if dic["FDDIMCOUNT"] >= 2.:
                 if (dic["FD2DPHASE"] == 0 or dic["FD2DPHASE"] == 1 and
-                    fn != "FDF2"):
-                    real = True
+                        fn != "FDF2"):
+                            real = True
 
             # sign and negation in AQSIGN
             if dic[fn + "AQSIGN"] == 1 or dic[fn + "AQSIGN"] == 2:
                 alt = True
 
             if (dic[fn + "AQSIGN"] == 16 or dic[fn + "AQSIGN"] == 17 or
-                dic[fn + "AQSIGN"] == 18):
-                alt = True
-                neg = True
+                    dic[fn + "AQSIGN"] == 18):
+                        alt = True
+                        neg = True
 
         # DEBUG
         #print "real:", real
@@ -1160,7 +1160,7 @@ def ft(dic, data, auto=False, real=False, inv=False, alt=False, neg=False,
             data.imag = 0.0
 
     if alt:  # sign alternate
-        if inv == False:    # inv with alt, alternates the inverse
+        if inv is False:    # inv with alt, alternates the inverse
             data[..., 1::2] = data[..., 1::2] * -1.
 
     if neg:  # negate the imaginary
@@ -1469,7 +1469,7 @@ def ps(dic, data, p0=0.0, p1=0.0, inv=False, hdr=False, noup=False, ht=False,
     else:
         data = p.ps(data, p0=p0, p1=p1, inv=inv)
 
-    if noup == False:
+    if noup is False:
         dic[fn + "P0"] = p0
         dic[fn + "P1"] = p1
 
@@ -1522,7 +1522,7 @@ def tp(dic, data, hyper=False, nohyper=False, auto=False, nohdr=False):
         data = np.array(p.tp_hyper(data), dtype="complex64")
     else:
         data = p.tp(data)
-        if dic[fn2 + "QUADFLAG"] != 1 and nohyper != True:
+        if dic[fn2 + "QUADFLAG"] != 1 and nohyper is not True:
             # unpack complex as needed
             data = np.array(p.c2ri(data), dtype="complex64")
 
@@ -1536,7 +1536,7 @@ def tp(dic, data, hyper=False, nohyper=False, auto=False, nohdr=False):
     dic['FDDIMORDER'] = [dic["FDDIMORDER1"], dic["FDDIMORDER2"],
                          dic["FDDIMORDER3"], dic["FDDIMORDER4"]]
 
-    if nohdr != True:
+    if nohdr is not True:
         dic["FDTRANSPOSED"] = (dic["FDTRANSPOSED"] + 1) % 2
 
     dic = clean_minmax(dic)
@@ -1550,7 +1550,7 @@ xy2yx = tp  # alias for tp
 
 
 def zf(dic, data, zf=1, pad="auto", size="auto", mid=False, inter=False,
-        auto=False, inv=False):
+       auto=False, inv=False):
     """
     Zero fill
 
@@ -1723,7 +1723,7 @@ def cbf(dic, data, last=10, reg=False, slice=slice(None)):
     parameters are not implemented.
 
     """
-    if reg != False:
+    if reg is not False:
         data = proc_bl.cbf_explicit(data, calc=reg, apply=slice)
     else:
         data = proc_bl.cbf(data, last, slice)
@@ -2234,7 +2234,7 @@ def mir(dic, data, mode="left", invl=False, invr=False, sw=True):
 
 
 def mult(dic, data, r=1.0, i=1.0, c=1.0, inv=False, hdr=False, x1=1.0,
-        xn='default'):
+         xn='default'):
     """
     Multiple by a constant.
 
@@ -2498,7 +2498,7 @@ def shuf(dic, data, mode=None):
 
 
 def sign(dic, data, ri=False, r=False, i=False, left=False, right=False,
-        alt=False, abs=False, sign=False):
+         alt=False, abs=False, sign=False):
     """
     Sign manipulation utilities
 
@@ -2687,8 +2687,8 @@ def img(dic, data, filter, dx=1.0, dy=1.0, kern=[1], conv=False, thres=None):
 
     """
     # deal with thres by making a masked array
-    if thres != None:
-        if thres == True:
+    if thres is not None:
+        if thres is True:
             thres = 0.0  # default value of 0.0
         data = p.thres(data, thres)
 
