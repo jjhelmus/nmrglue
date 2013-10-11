@@ -11,7 +11,7 @@ DTOL = 1.001e-01
 
 
 def pair_similar(dic1, data1, dic2, data2, verb=False, atol=ATOL, rtol=RTOL,
-    dtol=DTOL):
+                 dtol=DTOL):
     """
     Check a dic, data pair against a second dic, data pair for differences.
 
@@ -77,7 +77,7 @@ def isdatasimilar(data1, data2, verb=False, atol=ATOL, rtol=RTOL):
         r = False
         if verb:
             print "Shapes do not match:", data1.shape, data2.shape
-    if np.allclose(data1, data2, rtol=rtol, atol=atol) == False:
+    if np.allclose(data1, data2, rtol=rtol, atol=atol) is False:
         r = False
         if verb:
             print "Data does not match"
