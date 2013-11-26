@@ -402,12 +402,12 @@ class location_2params():
     def add_edge(self, p, (min, max)):
         if p[0] is None:
             return p
-        return p[0] - min, p[1]
+        return p[0] - min, p[1], p[2]
 
     def remove_edge(self, p, (min, max)):
         if p[0] is None:
             return p
-        return p[0] + min, p[1]
+        return p[0] + min, p[1], p[2]
 
 
 class voigt_fwhm(location_2params):
