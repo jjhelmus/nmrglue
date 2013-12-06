@@ -257,7 +257,7 @@ def read(dir=".", fid_file="fid", procpar_file="procpar", read_blockhead=False,
     write : Write Agilent/Varian files.
 
     """
-    if os.path.isdir(dir) is True:
+    if os.path.isdir(dir) is False:
         raise IOError("directory %s does not exist" % (dir))
 
     # read in the procpar file
@@ -319,7 +319,7 @@ def read_lowmem(dir=".", fid_file="fid", procpar_file="procpar",
     write_lowmem : Write Agilent/Varian files using mimimal memory
 
     """
-    if os.path.isdir(dir) is not True:
+    if os.path.isdir(dir) is False:
         raise IOError("directory %s does not exist" % (dir))
 
     # read in the procpar file
