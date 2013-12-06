@@ -7,7 +7,7 @@ import numpy as np
 # default tolerences
 RTOL = 1.001e-01
 ATOL = 1.001e-01
-DTOL = 1.001e-01
+DTOL = 5.001e-01
 
 
 def pair_similar(dic1, data1, dic2, data2, verb=False, atol=ATOL, rtol=RTOL,

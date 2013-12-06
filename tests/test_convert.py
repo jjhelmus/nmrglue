@@ -344,7 +344,7 @@ def test_agilent_2d_rnmrtk():
     vC.from_varian(vdic, vdata, uvdic)
 
     # prepare rnmrtk converter
-    rdic, rdata = ng.rnmrtk.read(os.path.join(DATA_DIR + "rnmrtk_2d",
+    rdic, rdata = ng.rnmrtk.read(os.path.join(DATA_DIR, "rnmrtk_2d",
                                  "time_2d.sec"))
     urdic = ng.rnmrtk.guess_udic(rdic, rdata)
     rC = ng.convert.converter()
