@@ -95,9 +95,9 @@ def test_1d_freq():
         os.path.join(DATA_DIR, "nmrpipe_1d", "test.ft"))
     assert data.shape == (4096, )
     assert data.dtype == 'float32'
-    assert round(data[0], 1) == -63789.6
+    assert round(data[0], 0) == -63790.
     assert round(data[1], 1) == -63159.9
-    assert round(data[100], 1) == -29308.4
+    assert round(data[100], 0) == -29308.
     write_readback(dic, data)
     check_ppm_limits(dic, data, 0, [297.92, -99.82])
 
