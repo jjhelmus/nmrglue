@@ -4,6 +4,11 @@ python:
 virtualenv:
     system_site_packages: true
 before_install:
-    - sudo apt-get install -qq python-scipy 
+    - sudo apt-get install -qq python-scipy
+    - pip install --use-mirrors nose-cov
+    - pip install --use-mirrors python-coveralls
 install: python setup.py build_ext --inplace
-script: nosetests -v nmrglue/
+script: 
+    - nosetests -v --with-cov --cov nmrglue nmrglue/
+after_success:
+    - coveralls
