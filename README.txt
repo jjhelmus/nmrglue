@@ -33,6 +33,9 @@ picking, multidimensional lineshape fitting (peak fitting), and peak
 integration. New analysis methods can be rapidly developed and tested in
 Python or by integrating Fortran and C/C++ code.
 
+To get started, see our online documentation:
+http://nmrglue.readthedocs.org/en/latest/index.html
+
 Citing nmrglue
 --------------
 
