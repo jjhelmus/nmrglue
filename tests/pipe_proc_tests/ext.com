@@ -27,3 +27,33 @@ nmrPipe -in ./time_complex.fid                \
 nmrPipe -in ./time_complex.fid                \
 | nmrPipe  -fn EXT -x1 5 -xn 200 -round 10 -sw \
 -ov -out ext7.dat
+
+
+nmrPipe -in ./time_complex.fid                \
+| nmrPipe  -fn FT -auto \
+-ov -out time-freq.c.ft1
+
+nmrPipe -in ./time-freq.c.ft1                \
+| nmrPipe  -fn EXT -left -sw\
+-ov -out ext8.dat
+
+nmrPipe -in ./time-freq.c.ft1                \
+| nmrPipe  -fn EXT -right -sw\
+-ov -out ext9.dat
+
+rm -f time-freq.c.ft1
+
+
+nmrPipe -in ./time_complex.fid                \
+| nmrPipe  -fn FT -auto -di \
+-ov -out time-freq.r.ft1
+
+nmrPipe -in ./time-freq.r.ft1                \
+| nmrPipe  -fn EXT -left -sw\
+-ov -out ext10.dat
+
+nmrPipe -in ./time-freq.r.ft1                \
+| nmrPipe  -fn EXT -right -sw\
+-ov -out ext11.dat
+
+rm -f time-freq.r.ft1
