@@ -184,7 +184,7 @@ def test_dx():
 
 def test_ext():
     """ EXT function """
-    return _standard_test('ext', 7)
+    return _standard_test('ext', 11, ignore_pipe_display=True)
 
 def test_integ():
     """ INTEG function """

@@ -2033,7 +2033,7 @@ def ext(dic, data, x1="default", xn="default", y1="default", yn="default",
         data = data[y_min:y_max, x_min:x_max]
         if y_min != 1 and y_max != data.shape[0]:  # only update when sliced
             dic["FDSLICECOUNT"] = y_max - y_min
-        dic["FDSPECNUM"] = y_max - y_min
+            dic["FDSPECNUM"] = y_max - y_min
         dic["FDSIZE"] = x_max - x_min
 
     else:       # 1D Array
