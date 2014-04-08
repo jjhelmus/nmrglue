@@ -295,7 +295,9 @@ def create_dic(udic, datetimeobj=datetime.datetime.now()):
     # FD2DPHASE
     if udic[0]["encoding"] == "tppi":
         dic["FD2DPHASE"] = 1.0
-    elif udic[0]["encoding"] == "states":
+    elif (udic[0]["encoding"] == "complex" or
+          udic[0]["encoding"] == "states" or
+          udic[0]["encoding"] == "states-tppi"):
         dic["FD2DPHASE"] = 2.0
     else:
         dic["FD2DPHASE"] = 0.0
@@ -376,7 +378,13 @@ def add_axis_to_dic(dic, adic, n):
 
     if n == 1:  # first indirect
         dic["FDSPECNUM"] = float(adic["size"])  # R+I
-
+        if adic["encoding"] == 'complex':
+            dic["FDF1AQSIGN"] = 0
+        if adic["encoding"] == 'states':
+            dic["FDF1AQSIGN"] = 2
+        elif adic["encoding"] == 'states-tppi':
+            dic["FDF1AQSIGN"] = 16
+    
     if n == 2:  # second indirect
         if adic["complex"]:
             dic["FDF3SIZE"] = psize * 2

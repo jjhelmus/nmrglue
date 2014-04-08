@@ -244,7 +244,8 @@ class converter(object):
         else:
             self._udic = sparky.guess_udic(dic, data)
 
-    def from_bruker(self, dic, data, udic=None):
+    def from_bruker(self, dic, data, udic=None, 
+                    remove_filter_delay = True, convert_indirect=True):
         """
         Load converter with Bruker data.
 
@@ -258,15 +259,43 @@ class converter(object):
             Universal dictionary, if not provided will be guesses from dic.
 
         """
-        # set data
-        self._data = data
+        # set data, possibly with removal of filter delay
+        if remove_filter_delay == True:
+            self._data = bruker.remove_digital_filter(dic, data)
+        else:
+            self._data = data
+
         self._iproc = {}
 
         # set the universal dictionary
         if udic is not None:
             self._udic = udic
         else:
-            self._udic = bruker.guess_udic(dic, data)
+            self._udic = bruker.guess_udic(dic, self._data)
+            
+        for dim in range(self._udic['ndim']):
+            if self._udic[dim]["encoding"] == "qf":
+                self._udic[dim]["encoding"] = "magnitude"
+                self._udic[dim]["complex"] = False
+            elif (self._udic[dim]["encoding"] == "qsim" or 
+                  self._udic[dim]["encoding"] =="qsec"):
+                self._udic[dim]["encoding"] = "complex"
+            elif self._udic[dim]["encoding"] == "states-tppi":
+                if convert_indirect:
+                    self._udic[dim]["encoding"] = "states"
+                else:
+                    self._iproc = {"alt_id_sign": True}
+            elif self._udic[dim]["encoding"] == "echo-antiecho" :
+                if convert_indirect:
+                    shuffled_data = np.empty(self._data.shape, dtype=self._data.dtype)
+                    for i in range(0, self._data.shape[0], 2):
+                        shuffled_data[i] = (1.*(self._data[i].real - self._data[i+1].real) +
+                                            1.*(self._data[i].imag - self._data[i+1].imag)*1j)
+                        shuffled_data[i+1] = (-1.*(self._data[i].imag + self._data[i+1].imag) +
+                                              1.*(self._data[i].real + self._data[i+1].real)*1j)
+                    self._data = shuffled_data
+                    self._udic[0]["encoding"] = "complex"
+
 
     # EXPORTERS (to_*)
     def to_universal(self):

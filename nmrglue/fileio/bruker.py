@@ -70,9 +70,65 @@ def guess_udic(dic, data):
     udic = fileiobase.create_blank_udic(data.ndim)
 
     # update default values
-    for i in xrange(data.ndim):
-        udic[i]["size"] = data.shape[i]
-
+    for dim in range(data.ndim):
+        udic[dim]["size"] = data.shape[dim]
+           
+        acq_file =  "acqu" + str(dim+1) + "s"
+        if acq_file == "acqu1s": acq_file = "acqus" # Because they're inconsistent,...
+        
+        dim = udic['ndim'] - dim - 1
+            
+        udic[dim]["sw"] = dic[acq_file]["SW_h"]
+        udic[dim]["label"] = dic[acq_file]["NUC1"]
+        udic[dim]["car"] = dic[acq_file]["O1"]
+    
+        if dic["acqus"]["NUC2"] == "15N": # Gyromagnetic ratio of 15N is negative
+            udic[dim]["obs"] = dic[acq_file]["BF1"] - dic[acq_file]["O1"] / 1.e6
+        else:
+            udic[dim]["obs"] = dic[acq_file]["BF1"] + dic[acq_file]["O1"] / 1.e6
+            
+        if  dic["acqu2s"]["FnMODE"] == 0:
+            udic[0]["encoding"] = "undefined"
+        elif dic["acqu2s"]["FnMODE"] == 1:
+            udic[0]["encoding"] = "qf"
+        elif dic["acqu2s"]["FnMODE"] == 2:
+            udic[0]["encoding"] = "qsec"
+        elif dic["acqu2s"]["FnMODE"] == 3:
+            udic[0]["encoding"] = "tppi"
+        elif dic["acqu2s"]["FnMODE"] == 4:
+            udic[0]["encoding"] = "states"
+        elif dic["acqu2s"]["FnMODE"] == 5:
+            udic[0]["encoding"] = "states-tppi"
+        elif dic["acqu2s"]["FnMODE"] == 6:
+            udic[0]["encoding"] = "echo-antiecho"
+        else:
+            udic[0]["encoding"] = "unknown"
+    
+    direct_dim = udic['ndim'] - 1
+    
+    try:
+        udic[direct_dim]["grpdly"] = dic["acqus"]["GRPDLY"]
+        udic[direct_dim]["decim"] = dic["acqus"]["DECIM"]
+        udic[direct_dim]["dspfvs"] = dic["acqus"]["DSPFVS"]
+    except:
+        warn('Bruker digital filter info not found!')
+    
+    # Acquisition mode codes are (mostly) different in direct dimension
+    if  dic["acqus"]["AQ_mod"] == 0:
+        udic[direct_dim]["encoding"] = "qf"
+    elif  dic["acqus"]["AQ_mod"] == 1:
+        udic[direct_dim]["encoding"] = "qsim"
+#    elif  dic["acqus"]["AQ_mod"] == 2:
+#        udic[direct_dim]["encoding"] = "qsec"
+    elif  dic["acqus"]["AQ_mod"] == 3:
+        udic[direct_dim]["encoding"] = "dqd"
+    elif  dic["acqus"]["AQ_mod"] == 4:
+        udic[direct_dim]["encoding"] = "parallelqsim"
+    elif  dic["acqus"]["AQ_mod"] == 5:
+        udic[direct_dim]["encoding"] = "paralleldqd"
+    else:
+        udic[direct_dim]["encoding"] = "unknown"
+        
     return udic
 
 
