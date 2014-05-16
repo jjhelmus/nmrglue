@@ -1535,9 +1535,9 @@ def tp(dic, data, hyper=False, nohyper=False, auto=False, nohdr=False):
 
     dic['FDDIMORDER'] = [dic["FDDIMORDER1"], dic["FDDIMORDER2"],
                          dic["FDDIMORDER3"], dic["FDDIMORDER4"]]
-    
+
     if dic["FD2DPHASE"] == 0:
-        dic['FDF1QUADFLAG'], dic['FDF2QUADFLAG'] = (dic['FDF2QUADFLAG'], 
+        dic['FDF1QUADFLAG'], dic['FDF2QUADFLAG'] = (dic['FDF2QUADFLAG'],
                                                     dic['FDF1QUADFLAG'])
 
     if nohdr is not True:
