@@ -6,7 +6,8 @@ import nmrglue as ng
 
 # Framework functions
 
-def _perform_test(glue_script, pipe_script, glue_files, pipe_files):
+def _perform_test(glue_script, pipe_script, glue_files, pipe_files, 
+                  ignore_pipe_display=False):
     """ 
     """
     cwd_backup = os.getcwd()    # save the current working directory
@@ -26,7 +27,8 @@ def _perform_test(glue_script, pipe_script, glue_files, pipe_files):
         os.remove(glue_file)
         os.remove(pipe_file)
         r1, r2 = ng.misc.pair_similar(glue_dic, glue_data, pipe_dic,
-                                        pipe_data, True)
+                                        pipe_data, True, 
+                                        ignore_pipe_display=ignore_pipe_display)
         print glue_file, pipe_file, r1, r2
         assert r1 is True
         assert r2 is True
@@ -43,8 +45,9 @@ def _standard_args(func_name, num_files):
     glue_script = './' + func_name + '.py'
     return glue_script, pipe_script, glue_files, pipe_files
 
-def _standard_test(func_name, num_files):
-    return _perform_test(*_standard_args(func_name, num_files))
+def _standard_test(func_name, num_files, ignore_pipe_display=False):
+    return _perform_test(*_standard_args(func_name, num_files), 
+                         ignore_pipe_display =ignore_pipe_display)
 
 
 #########################
@@ -153,7 +156,7 @@ def test_ps():
 
 def test_tp():
     """ TP function """
-    return _standard_test('tp', 3)
+    return _standard_test('tp', 7, ignore_pipe_display=True)
 
 def test_ytp():
     """ YTP function """
@@ -181,7 +184,7 @@ def test_dx():
 
 def test_ext():
     """ EXT function """
-    return _standard_test('ext', 7)
+    return _standard_test('ext', 11, ignore_pipe_display=True)
 
 def test_integ():
     """ INTEG function """

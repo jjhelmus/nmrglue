@@ -11,7 +11,7 @@ DTOL = 5.001e-01
 
 
 def pair_similar(dic1, data1, dic2, data2, verb=False, atol=ATOL, rtol=RTOL,
-                 dtol=DTOL):
+                 dtol=DTOL, ignore_pipe_display=False):
     """
     Check a dic, data pair against a second dic, data pair for differences.
 
@@ -41,7 +41,8 @@ def pair_similar(dic1, data1, dic2, data2, verb=False, atol=ATOL, rtol=RTOL,
 
     """
     r1 = isdatasimilar(data1, data2, verb, atol, rtol)
-    r2 = isdicsimilar(dict(dic1), dict(dic2), verb, dtol)
+    r2 = isdicsimilar(dict(dic1), dict(dic2), verb, dtol, 
+                      ignore_pipe_display=ignore_pipe_display)
     return r1, r2
 
 
@@ -124,7 +125,7 @@ def isitemsimilar(v1, v2, verb=False, dtol=DTOL):
     return r
 
 
-def isdicsimilar(dic1, dic2, verb=False, dtol=DTOL):
+def isdicsimilar(dic1, dic2, verb=False, dtol=DTOL, ignore_pipe_display=False):
     """
     Compare two dictionaries for differences
 
@@ -161,6 +162,13 @@ def isdicsimilar(dic1, dic2, verb=False, dtol=DTOL):
     kset2 = set(dic2.keys())
     dset = set.difference(kset1, kset2)
     iset = set.intersection(kset1, kset2)
+    
+    if ignore_pipe_display == True:
+        iset.discard('FDMIN')
+        iset.discard('FDMAX')
+        iset.discard('FDDISPMIN')
+        iset.discard('FDDISPMAX')
+        iset.discard('FDSCALEFLAG')
 
     # print out any keys not in both dictionaries
     if len(dset) != 0:
