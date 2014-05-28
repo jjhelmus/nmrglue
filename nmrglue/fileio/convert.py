@@ -286,15 +286,7 @@ class converter(object):
                 else:
                     self._iproc = {"alt_id_sign": True}
             elif self._udic[dim]["encoding"] == "echo-antiecho" :
-                if convert_indirect:
-                    shuffled_data = np.empty(self._data.shape, dtype=self._data.dtype)
-                    for i in range(0, self._data.shape[0], 2):
-                        shuffled_data[i] = (1.*(self._data[i].real - self._data[i+1].real) +
-                                            1.*(self._data[i].imag - self._data[i+1].imag)*1j)
-                        shuffled_data[i+1] = (-1.*(self._data[i].imag + self._data[i+1].imag) +
-                                              1.*(self._data[i].real + self._data[i+1].real)*1j)
-                    self._data = shuffled_data
-                    self._udic[0]["encoding"] = "complex"
+                 self._udic[0]["encoding"] = "complex"
 
 
     # EXPORTERS (to_*)

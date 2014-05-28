@@ -4,6 +4,7 @@ import tempfile
 import os
 import shutil
 import glob
+from re import sub
 
 import nmrglue as ng
 from numpy.testing import assert_array_equal
@@ -51,7 +52,7 @@ def check_dic(dic1, dic2, exclude=None, v=False):
                 continue
             if dic1[k] != dic2[k]:
                 print k, dic1[k], dic2[k]
-
+                
     for k in dic1.keys():
         if k in exclude:
             continue
@@ -131,7 +132,7 @@ def check_rdic(dic1, dic2, ndim, exclude=None, v=True):
 
 bad_varian_keys = ["procpar"]
 bad_pipe_keys = ["FDYEAR", "FDMONTH", "FDDAY", "FDHOURS", "FDMINS", "FDSECS"]
-bad_bruker_keys = ["pprog", "acqus", "acqu2s"]
+bad_bruker_keys = ["pprog", "acqus", "acqu2s", "acqu3s"]
 bad_sparky_keys = ['bsize', 'extended', 'date', 'owner']
 #bad_rnmrtk_keys = ['layout', 'comment', 'p0', 'p1']
 bad_rnmrtk_keys = ['nacq', 'cphase', 'lphase']
@@ -518,7 +519,7 @@ def test_bruker_1d():
     bdic, bdata = ng.bruker.read(os.path.join(DATA_DIR, "bruker_1d"))
     ubdic = ng.bruker.guess_udic(bdic, bdata)
     bC = ng.convert.converter()
-    bC.from_bruker(bdic, bdata, ubdic)
+    bC.from_bruker(bdic, bdata, ubdic, remove_filter_delay = False)
 
     # prepare Pipe converter
     pdic, pdata = ng.pipe.read(os.path.join(DATA_DIR, "bruker_1d",
@@ -638,7 +639,7 @@ def test_bruker_2d():
     bdic, bdata = ng.bruker.read(os.path.join(DATA_DIR, "bruker_2d"))
     ubdic = ng.bruker.guess_udic(bdic, bdata)
     bC = ng.convert.converter()
-    bC.from_bruker(bdic, bdata, ubdic)
+    bC.from_bruker(bdic, bdata, ubdic, remove_filter_delay = False)
 
     # prepare Pipe converter
     pdic, pdata = ng.pipe.read(os.path.join(DATA_DIR, "bruker_2d",
@@ -755,11 +756,45 @@ def test_bruker_2d_rnmrtk():
 
 def test_bruker_3d():
     """ 3D time bruker, pipe <-> bruker, pipe """
+
+    # copy the acqu2s file to acqu3s and modify it for testing.
+    # this is a hack until more complete datasets can be added for testing
+    acqu3s = os.path.join(DATA_DIR, "bruker_3d", "acqu3s")
+    shutil.copy2(os.path.join(DATA_DIR, "bruker_3d", "acqu2s"), acqu3s)
+    with open(acqu3s) as f:
+        out_name = acqu3s + ".tmp"
+        out = open(out_name, 'w')
+        for line in f:
+            line = sub("##ORIGIN= .+",
+                       "##ORIGIN= Fake acqu3s file generated for testing",
+                       line)
+            line = sub("\$BF1.+",
+                       "$BF1= 201.192849",
+                          line)
+            line = sub("\$NUC1.+",
+                       "$NUC1= <13C>",
+                          line)
+            line = sub("\$O1.+",
+                       "$O1= 10663.220997003",
+                          line)
+            line = sub("\$SFO1.+",
+                       "$SFO1= 201.203512220997",
+                          line)
+            line = sub("\$SW=.+",
+                       "$SW=27.611626113",
+                          line)
+            line = sub("\$SW_h.+",
+                       "$SW_h= 5555.556152",
+                          line)
+            out.write(line)
+        out.close()
+        os.rename(out_name, acqu3s)
+
     # prepare Bruker converter
     bdic, bdata = ng.bruker.read(os.path.join(DATA_DIR, "bruker_3d"))
     ubdic = ng.bruker.guess_udic(bdic, bdata)
     bC = ng.convert.converter()
-    bC.from_bruker(bdic, bdata, ubdic)
+    bC.from_bruker(bdic, bdata, ubdic, remove_filter_delay = False)
 
     # prepare Pipe converter
     pdic, pdata = ng.pipe.read(os.path.join(DATA_DIR, "bruker_3d", "fid",
@@ -826,6 +861,8 @@ def test_bruker_3d():
     assert_array_equal(bdata, rdata)
     check_dic(bdic, cdic, bad_bruker_keys)
     shutil.rmtree(td)
+
+    os.remove(acqu3s)
 
 def test_bruker_3d_rnmrtk():
     """ 3D time bruker, rnmrtk <-> rnmrtk """
@@ -1266,7 +1303,7 @@ def test_bruker_2d_lowmem():
         os.path.join(DATA_DIR, "bruker_2d"))
     ubdic = ng.bruker.guess_udic(bdic, bdata)
     bC = ng.convert.converter()
-    bC.from_bruker(bdic, bdata, ubdic)
+    bC.from_bruker(bdic, bdata, ubdic, remove_filter_delay = False)
 
     # prepare Pipe converter
     pdic, pdata = ng.pipe.read_lowmem(
@@ -1329,12 +1366,46 @@ def test_bruker_2d_lowmem():
 
 def test_bruker_3d_lowmem():
     """ 3D time bruker, pipe <-> bruker, pipe low memory"""
+
+    # copy the acqu2s file to acqu3s and modify it for testing.
+    # this is a hack until more complete datasets can be added for testing
+    acqu3s = os.path.join(DATA_DIR, "bruker_3d", "acqu3s")
+    shutil.copy2(os.path.join(DATA_DIR, "bruker_3d", "acqu2s"), acqu3s)
+    with open(acqu3s) as f:
+        out_name = acqu3s + ".tmp"
+        out = open(out_name, 'w')
+        for line in f:
+            line = sub("##ORIGIN= .+",
+                       "##ORIGIN= Fake acqu3s file generated for testing",
+                       line)
+            line = sub("\$BF1.+",
+                       "$BF1= 201.192849",
+                          line)
+            line = sub("\$NUC1.+",
+                       "$NUC1= <13C>",
+                          line)
+            line = sub("\$O1.+",
+                       "$O1= 10663.220997003",
+                          line)
+            line = sub("\$SFO1.+",
+                       "$SFO1= 201.203512220997",
+                          line)
+            line = sub("\$SW=.+",
+                       "$SW=27.611626113",
+                          line)
+            line = sub("\$SW_h.+",
+                       "$SW_h= 5555.556152",
+                          line)
+            out.write(line)
+        out.close()
+        os.rename(out_name, acqu3s)
+
     # prepare Bruker converter
     bdic, bdata = ng.bruker.read_lowmem(
         os.path.join(DATA_DIR, "bruker_3d"))
     ubdic = ng.bruker.guess_udic(bdic, bdata)
     bC = ng.convert.converter()
-    bC.from_bruker(bdic, bdata, ubdic)
+    bC.from_bruker(bdic, bdata, ubdic, remove_filter_delay = False)
 
     # prepare Pipe converter
     pdic, pdata = ng.pipe.read_lowmem(
@@ -1401,6 +1472,8 @@ def test_bruker_3d_lowmem():
     assert_array_equal(bdata[0:2, 0:3, 100:200], rdata[0:2, 0:3, 100:200])
     check_dic(bdic, cdic, bad_bruker_keys)
     shutil.rmtree(td)
+
+    os.remove(acqu3s)
 
 def test_agilent_2d_lowmem():
     """ 2D time agilent, pipe <-> agilent, pipe low memory"""
