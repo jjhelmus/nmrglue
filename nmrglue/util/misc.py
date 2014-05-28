@@ -41,7 +41,7 @@ def pair_similar(dic1, data1, dic2, data2, verb=False, atol=ATOL, rtol=RTOL,
 
     """
     r1 = isdatasimilar(data1, data2, verb, atol, rtol)
-    r2 = isdicsimilar(dict(dic1), dict(dic2), verb, dtol, 
+    r2 = isdicsimilar(dict(dic1), dict(dic2), verb, dtol,
                       ignore_pipe_display=ignore_pipe_display)
     return r1, r2
 
@@ -162,8 +162,8 @@ def isdicsimilar(dic1, dic2, verb=False, dtol=DTOL, ignore_pipe_display=False):
     kset2 = set(dic2.keys())
     dset = set.difference(kset1, kset2)
     iset = set.intersection(kset1, kset2)
-    
-    if ignore_pipe_display == True:
+
+    if ignore_pipe_display is True:
         iset.discard('FDMIN')
         iset.discard('FDMAX')
         iset.discard('FDDISPMIN')

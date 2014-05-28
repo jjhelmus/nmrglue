@@ -1527,7 +1527,13 @@ def tp(dic, data, hyper=False, nohyper=False, auto=False, nohdr=False):
             data = np.array(p.c2ri(data), dtype="complex64")
 
     # update the dimentionality and order
-    dic["FDSLICECOUNT"], dic["FDSIZE"] = data.shape[0], data.shape[1]
+    dic["FDSLICECOUNT"] = data.shape[0]
+    if data.dtype == 'float32':
+        dic["FDSIZE"] = data.shape[1] / 2
+    else:
+        dic["FDSIZE"] = data.shape[1]
+
+
     dic["FDSPECNUM"] = dic["FDSLICECOUNT"]
 
     dic["FDDIMORDER1"], dic["FDDIMORDER2"] = (dic["FDDIMORDER2"],
@@ -1535,9 +1541,9 @@ def tp(dic, data, hyper=False, nohyper=False, auto=False, nohdr=False):
 
     dic['FDDIMORDER'] = [dic["FDDIMORDER1"], dic["FDDIMORDER2"],
                          dic["FDDIMORDER3"], dic["FDDIMORDER4"]]
-    
+
     if dic["FD2DPHASE"] == 0:
-        dic['FDF1QUADFLAG'], dic['FDF2QUADFLAG'] = (dic['FDF2QUADFLAG'], 
+        dic['FDF1QUADFLAG'], dic['FDF2QUADFLAG'] = (dic['FDF2QUADFLAG'],
                                                     dic['FDF1QUADFLAG'])
 
     if nohdr is not True:

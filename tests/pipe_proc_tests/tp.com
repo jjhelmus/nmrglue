@@ -40,3 +40,12 @@ nmrPipe -in ./time-freq.r.ft1                \
 -ov -out tp7.dat
 
 rm -f time-freq.r.ft1
+
+nmrPipe -in ./time_real.fid                \
+| nmrPipe  -fn TP -auto \
+-ov -out tp8.dat
+
+nmrPipe -in ./time_real.fid                \
+| nmrPipe  -fn TP -nohyper \
+-ov -out tp9.dat
+

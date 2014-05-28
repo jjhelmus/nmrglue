@@ -2,6 +2,7 @@
 """ Create files for tp unit test """
 
 from subprocess import check_output
+import os
 
 import nmrglue.fileio.pipe as pipe
 import nmrglue.process.pipe_proc as p
@@ -50,3 +51,12 @@ d, a = p.tp(d, a, auto=True)
 pipe.write("tp7.glue", d, a, overwrite=True)
 
 os.remove("time-freq.r.ft1")
+
+d, a = pipe.read("time_real.fid")
+d, a = p.tp(d, a, auto=True)
+pipe.write("tp8.glue", d, a, overwrite=True)
+
+d, a = pipe.read("time_real.fid")
+d, a = p.tp(d, a, nohyper=True)
+pipe.write("tp9.glue", d, a, overwrite=True)
+

@@ -176,7 +176,7 @@ def jmod(data, e=0.0, off=0.0, end=0.0, inv=False, rev=False):
     size = data.shape[-1]
     apod = (np.exp(-e * np.arange(size)).astype(data.dtype) *
             np.sin(pi * off + pi * (end - off) * np.arange(size) /
-            (size - 1)).astype(data.dtype))
+                   (size - 1)).astype(data.dtype))
     if rev:
         apod = apod[::-1]
     if inv:
