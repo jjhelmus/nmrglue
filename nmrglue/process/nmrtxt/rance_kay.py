@@ -21,7 +21,7 @@ def bruk_ranceY(dic, data, rotate_phase=True):
         Array of NMR data which has been reshuffled according to the Rance-Kay scheme.
 
     """
-    shuffled_data = np.empty(data.shape, data.dtype)
+    shuffled_data = empty(data.shape, data.dtype)
 
     for i in range(0, data.shape[0], 2):
         shuffled_data[i] = (1.*(data[i].real - data[i+1].real) +
@@ -34,4 +34,3 @@ def bruk_ranceY(dic, data, rotate_phase=True):
                                   1.*(data[i].imag + data[i+1].imag)*1j)
 
     return dic, shuffled_data
-

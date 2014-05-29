@@ -286,10 +286,6 @@ def test_2D_complex_processing():
     """ 2D complex mode processing pipeline """
     return _standard_test('2d_complex_processing', 1)
 
-#def test_2D_mixed_processing():
-#    """ 2D mixed mode processing pipeline """
-#    return _standard_test('2d_mixed_processing', 2)
-
 ####################################################
 # Test which are known to fail for various reasons.#
 ####################################################

@@ -389,7 +389,7 @@ def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
     if cplex is None:
         cplex = gcplex
 
-    # determind endianness (assume little-endian unless BYTORDA is 1)
+    # determine endianness (assume little-endian unless BYTORDA is 1)
     if big is None:
         big = False     # default value
         if "acqus" in dic and "BYTORDA" in dic["acqus"]:
