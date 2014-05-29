@@ -73,7 +73,7 @@ def guess_udic(dic, data):
     for b_dim in range(data.ndim):
         udic[b_dim]["size"] = data.shape[b_dim]
            
-        acq_file =  "acqu" + str(b_dim+1) + "s"
+        acq_file = "acqu" + str(b_dim+1) + "s"
 
         if acq_file == "acqu1s":
             acq_file = "acqus" # Because they're inconsistent,...
