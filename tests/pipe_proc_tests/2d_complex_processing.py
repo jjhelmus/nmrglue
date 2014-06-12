@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-""" Create files for unit_conversion unit test """
+""" Create files for complex_processing unit test """
 
 import nmrglue.fileio.pipe as pipe
 import nmrglue.process.pipe_proc as p
