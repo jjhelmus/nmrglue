@@ -3237,7 +3237,7 @@ def MAC(dic, data, macro=None, noRd=False, noWr=False, all=False, **kwargs):
         return dic, data
 
     if noRd and noWr:
-        return macro(dic, data, kwargs)
+        return macro(dic, data, **kwargs)
 
     raise NotImplementedError("Only noRd and noWr macros work for now.")
     #TODO: Add reading and writing routines (as calls to generators) and the relevant setup code

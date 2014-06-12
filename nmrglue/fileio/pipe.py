@@ -257,8 +257,10 @@ def guess_udic(dic, data):
                 udic[i]["encoding"] = "tppi"
             elif dic["FD2DPHASE"] == 2:
                 udic[i]["encoding"] = "states"
-            elif dic["FD2DPHASE"] == 2:
+            elif dic["FD2DPHASE"] == 3:
                 udic[i]["encoding"] = "image"
+            elif dic["FD2DPHASE"] == 4:
+                udic[i]["encoding"] = "array"
             else:
                 udic[i]["encoding"] = "unknown"
     return udic

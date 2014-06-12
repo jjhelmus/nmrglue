@@ -90,48 +90,68 @@ def guess_udic(dic, data):
             udic[p_dim]["obs"] = dic[acq_file]["BF1"] + dic[acq_file]["O1"] / 1.e6
 
         if acq_file == "acqus":
-                direct_dim = udic['ndim'] - 1
+            udic = add_direct_axis_to_udic(udic, dic)
+        elif acq_file == "acqu2s":
+            udic = add_indirect_axis_to_udic(udic, dic)
 
-                try:
-                    udic[direct_dim]["grpdly"] = dic["acqus"]["GRPDLY"]
-                    udic[direct_dim]["decim"] = dic["acqus"]["DECIM"]
-                    udic[direct_dim]["dspfvs"] = dic["acqus"]["DSPFVS"]
-                except:
-                    warn('Bruker digital filter info not found!')
+    return udic
 
-                # Acquisition mode codes are (mostly) different in direct dimension
-                if  dic["acqus"]["AQ_mod"] == 0:
-                    udic[direct_dim]["encoding"] = "qf"
-                elif  dic["acqus"]["AQ_mod"] == 1:
-                    udic[direct_dim]["encoding"] = "qsim"
-                elif  dic["acqus"]["AQ_mod"] == 2:
-                    udic[direct_dim]["encoding"] = "qsec"
-                elif  dic["acqus"]["AQ_mod"] == 3:
-                    udic[direct_dim]["encoding"] = "dqd"
-                elif  dic["acqus"]["AQ_mod"] == 4:
-                    udic[direct_dim]["encoding"] = "parallelqsim"
-                elif  dic["acqus"]["AQ_mod"] == 5:
-                    udic[direct_dim]["encoding"] = "paralleldqd"
-                else:
-                    udic[direct_dim]["encoding"] = "unknown"
-        else:
-            if  dic["acqu2s"]["FnMODE"] == 0:
-                udic[0]["encoding"] = "undefined"
-            elif dic["acqu2s"]["FnMODE"] == 1:
-                udic[0]["encoding"] = "qf"
-            elif dic["acqu2s"]["FnMODE"] == 2:
-                udic[0]["encoding"] = "qsec"
-            elif dic["acqu2s"]["FnMODE"] == 3:
-                udic[0]["encoding"] = "tppi"
-            elif dic["acqu2s"]["FnMODE"] == 4:
-                udic[0]["encoding"] = "states"
-            elif dic["acqu2s"]["FnMODE"] == 5:
-                udic[0]["encoding"] = "states-tppi"
-            elif dic["acqu2s"]["FnMODE"] == 6:
-                udic[0]["encoding"] = "echo-antiecho"
-            else:
-                udic[0]["encoding"] = "unknown"
-        
+
+def add_direct_axis_to_udic(udic, bdic):
+    """
+    Translate from Bruker direct dimension dictionary (bdic) to a universal dictionary (udic).
+    """
+
+    direct_dim = udic['ndim'] - 1
+
+    try:
+        udic[direct_dim]["grpdly"] = bdic["acqus"]["GRPDLY"]
+        udic[direct_dim]["decim"] = bdic["acqus"]["DECIM"]
+        udic[direct_dim]["dspfvs"] = bdic["acqus"]["DSPFVS"]
+    except:
+        warn('Bruker digital filter info not found!')
+
+    udic[direct_dim]['encoding'] = 'unknown'
+    try:
+        aq_mod = bdic['acqus']['AQ_mod']
+        if aq_mod == 0: # qf
+            udic[direct_dim]['complex'] = False
+    except:
+        warn("Acquisition mode info not found")
+
+    return udic
+
+
+
+def add_indirect_axis_to_udic(udic, bdic):
+    """
+    Translate from Bruker indirect dimension dictionary (bdic) to a universal dictionary (udic).
+
+    Note
+    ----
+    Currently only works for the F1 dimension.
+
+    """
+
+    try:
+        aq_mod = bdic["acqu2s"]["FnMODE"]
+        if aq_mod == 0:
+            udic[0]["encoding"] = "undefined"
+        elif aq_mod == 1:
+            udic[0]["encoding"] = "magnitude" # qf
+        elif aq_mod == 2:
+            udic[0]["encoding"] = "magnitude" # qsec
+        elif aq_mod == 3:
+            udic[0]["encoding"] = "tppi"
+        elif aq_mod == 4:
+            udic[0]["encoding"] = "states"
+        elif aq_mod == 5:
+            udic[0]["encoding"] = "states" #states-tppi
+        elif aq_mod == 6:
+            udic[0]["encoding"] = "complex" # echo-antiecho
+    except:
+        warn("Indirect quadrature mode info not found, defaulting to 'states'.")
+
     return udic
 
 

@@ -1,8 +1,8 @@
-from numpy import *
+import numpy as np
 
-def bruk_ranceY(dic, data, rotate_phase=True):
+def bruk_ranceY(dic, data, rotate_phase=True, **kwargs):
     """
-    Create a unit conversion object which accepts/returns NMRPipe indices.
+    Reshuffle the data according to the Rance-Kay quadrature scheme.
 
     Parameters
     ----------
@@ -21,7 +21,7 @@ def bruk_ranceY(dic, data, rotate_phase=True):
         Array of NMR data which has been reshuffled according to the Rance-Kay scheme.
 
     """
-    shuffled_data = empty(data.shape, data.dtype)
+    shuffled_data = np.empty(data.shape, data.dtype)
 
     for i in range(0, data.shape[0], 2):
         shuffled_data[i] = (1.*(data[i].real - data[i+1].real) +

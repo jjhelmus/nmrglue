@@ -273,20 +273,6 @@ class converter(object):
         else:
             self._udic = bruker.guess_udic(dic, self._data)
             
-        for dim in range(self._udic['ndim']):
-            if self._udic[dim]["encoding"] == "qf":
-                self._udic[dim]["encoding"] = "magnitude"
-                self._udic[dim]["complex"] = False
-            elif (self._udic[dim]["encoding"] == "qsim" or 
-                  self._udic[dim]["encoding"] =="qsec"):
-                self._udic[dim]["encoding"] = "complex"
-            elif self._udic[dim]["encoding"] == "states-tppi":
-                if convert_indirect:
-                    self._udic[dim]["encoding"] = "states"
-                else:
-                    self._iproc = {"alt_id_sign": True}
-            elif self._udic[dim]["encoding"] == "echo-antiecho" :
-                 self._udic[0]["encoding"] = "complex"
 
 
     # EXPORTERS (to_*)
