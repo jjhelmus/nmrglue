@@ -1130,7 +1130,7 @@ def ft(dic, data, auto=False, real=False, inv=False, alt=False, neg=False,
         else:  # freq domain
             # Real, TPPI and Sequential data is real transform
             if dic["FDDIMCOUNT"] >= 2.:
-                if (dic["FD2DPHASE"] == 0 or dic["FD2DPHASE"] == 1 and
+                if ((dic["FD2DPHASE"] == 0 or dic["FD2DPHASE"] == 1) and
                         fn != "FDF2"):
                             real = True
 
@@ -1169,7 +1169,8 @@ def ft(dic, data, auto=False, real=False, inv=False, alt=False, neg=False,
 
     # update the dictionary
     fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
-    dic[fn + "FTFLAG"] = (dic[fn + "FTFLAG"] + 1) % 2   # troggle FT flag
+    dic[fn + "AQSIGN"] = 0.0                       # we don't need sign alternation or negation anymore
+    dic[fn + "FTFLAG"] = (dic[fn + "FTFLAG"] + 1) % 2   # toggle FT flag
     if dic[fn + "FTFLAG"] == 1:
         dic[fn + "FTSIZE"] = data.shape[-1]
 
@@ -1527,7 +1528,13 @@ def tp(dic, data, hyper=False, nohyper=False, auto=False, nohdr=False):
             data = np.array(p.c2ri(data), dtype="complex64")
 
     # update the dimentionality and order
-    dic["FDSLICECOUNT"], dic["FDSIZE"] = data.shape[0], data.shape[1]
+    dic["FDSLICECOUNT"] = data.shape[0]
+    if data.dtype == 'float32':
+        dic["FDSIZE"] = data.shape[1] / 2
+    else:
+        dic["FDSIZE"] = data.shape[1]
+
+
     dic["FDSPECNUM"] = dic["FDSLICECOUNT"]
 
     dic["FDDIMORDER1"], dic["FDDIMORDER2"] = (dic["FDDIMORDER2"],

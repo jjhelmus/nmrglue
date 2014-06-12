@@ -156,7 +156,7 @@ def test_ps():
 
 def test_tp():
     """ TP function """
-    return _standard_test('tp', 7, ignore_pipe_display=True)
+    return _standard_test('tp', 9, ignore_pipe_display=True)
 
 def test_ytp():
     """ YTP function """
@@ -277,6 +277,18 @@ def test_cbf():
 def test_units():
     """ Units """
     return _standard_test('units', 17)
+
+#####################
+# Inetgration Tests #
+#####################
+
+def test_2D_complex_processing():
+    """ 2D complex mode processing pipeline """
+    return _standard_test('2d_complex_processing', 1)
+
+#def test_2D_mixed_processing():
+#    """ 2D mixed mode processing pipeline """
+#    return _standard_test('2d_mixed_processing', 2)
 
 ####################################################
 # Test which are known to fail for various reasons.#
