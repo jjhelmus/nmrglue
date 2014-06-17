@@ -386,7 +386,7 @@ def add_axis_to_dic(dic, adic, n):
             dic["FDF1AQSIGN"] = 0  # should this be 2?
         elif adic["encoding"] == 'states-tppi':
             dic["FDF1AQSIGN"] = 16
-    
+
     if n == 2:  # second indirect
         if adic["complex"]:
             dic["FDF3SIZE"] = psize * 2

@@ -244,8 +244,7 @@ class converter(object):
         else:
             self._udic = sparky.guess_udic(dic, data)
 
-    def from_bruker(self, dic, data, udic=None, 
-                    remove_filter_delay = True, convert_indirect=True):
+    def from_bruker(self, dic, data, udic=None, remove_digital_filter=False):
         """
         Load converter with Bruker data.
 
@@ -257,10 +256,15 @@ class converter(object):
             NMR data.
         udic : dict, optional
             Universal dictionary, if not provided will be guesses from dic.
+        remove_digital_filter : bool, optional
+            True to remove the Bruker digital filter.  Do not use this
+            option with low memory data or when the `udic` parameter is
+            specified.  False leave the digital filter in place.
+
 
         """
         # set data, possibly with removal of filter delay
-        if remove_filter_delay == True:
+        if remove_digital_filter:
             self._data = bruker.remove_digital_filter(dic, data)
         else:
             self._data = data
@@ -272,8 +276,6 @@ class converter(object):
             self._udic = udic
         else:
             self._udic = bruker.guess_udic(dic, self._data)
-            
-
 
     # EXPORTERS (to_*)
     def to_universal(self):

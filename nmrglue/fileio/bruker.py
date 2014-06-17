@@ -72,85 +72,69 @@ def guess_udic(dic, data):
     # update default values
     for b_dim in range(data.ndim):
         udic[b_dim]["size"] = data.shape[b_dim]
-           
-        acq_file = "acqu" + str(b_dim+1) + "s"
 
-        if acq_file == "acqu1s":
-            acq_file = "acqus" # Because they're inconsistent,...
+        # try to add additional parameter from acqus dictionary keys
+        try:
+            add_axis_to_udic(udic, dic, b_dim)
+        except:
+            warn("Failed to determine udic parameters for dim: %i" % (b_dim))
+    return udic
 
-        p_dim = udic['ndim'] - b_dim - 1
-            
-        udic[p_dim]["sw"] = dic[acq_file]["SW_h"]
-        udic[p_dim]["label"] = dic[acq_file]["NUC1"]
-        udic[p_dim]["car"] = dic[acq_file]["O1"]
-    
-        if dic["acqus"]["NUC2"] == "15N": # Gyromagnetic ratio of 15N is negative
-            udic[p_dim]["obs"] = dic[acq_file]["BF1"] - dic[acq_file]["O1"] / 1.e6
+
+def add_axis_to_udic(udic, dic, udim):
+    """
+    Add axis parameters to a udic.
+
+    Parameters
+    ----------
+    udic : dict
+        Universal dictionary to update, modified in place.
+    dic : dict
+        Bruker dictionary used to determine axes parameters.
+    dim : int
+        Universal dictionary dimension to update.
+
+    """
+    # This could still use some work
+    b_dim = udic['ndim'] - udim - 1  # last dim
+    acq_file = "acqu" + str(b_dim + 1) + "s"
+
+    if acq_file == "acqu1s":
+        acq_file = "acqus"   # Because they're inconsistent,...
+
+    udic[udim]["sw"] = dic[acq_file]["SW_h"]
+    udic[udim]["label"] = dic[acq_file]["NUC1"]
+    udic[udim]["car"] = dic[acq_file]["O1"]
+
+    if "acqus" in dic and dic["acqus"]["NUC2"] == "15N":
+        # Gyromagnetic ratio of 15N is negative
+        udic[udim]["obs"] = (dic[acq_file]["BF1"] -
+                             dic[acq_file]["O1"] / 1.e6)
+    else:
+        udic[udim]["obs"] = (dic[acq_file]["BF1"] +
+                             dic[acq_file]["O1"] / 1.e6)
+
+    if acq_file == "acqus":
+        if dic['acqus']['AQ_mod'] == 0:     # qf
+            udic[udim]['complex'] = False
         else:
-            udic[p_dim]["obs"] = dic[acq_file]["BF1"] + dic[acq_file]["O1"] / 1.e6
-
-        if acq_file == "acqus":
-            udic = add_direct_axis_to_udic(udic, dic)
-        elif acq_file == "acqu2s":
-            udic = add_indirect_axis_to_udic(udic, dic)
-
-    return udic
-
-
-def add_direct_axis_to_udic(udic, bdic):
-    """
-    Translate from Bruker direct dimension dictionary (bdic) to a universal dictionary (udic).
-    """
-
-    direct_dim = udic['ndim'] - 1
-
-    try:
-        udic[direct_dim]["grpdly"] = bdic["acqus"]["GRPDLY"]
-        udic[direct_dim]["decim"] = bdic["acqus"]["DECIM"]
-        udic[direct_dim]["dspfvs"] = bdic["acqus"]["DSPFVS"]
-    except:
-        warn('Bruker digital filter info not found!')
-
-    udic[direct_dim]['encoding'] = 'unknown'
-    try:
-        aq_mod = bdic['acqus']['AQ_mod']
-        if aq_mod == 0: # qf
-            udic[direct_dim]['complex'] = False
-    except:
-        warn("Acquisition mode info not found")
-
-    return udic
-
-
-
-def add_indirect_axis_to_udic(udic, bdic):
-    """
-    Translate from Bruker indirect dimension dictionary (bdic) to a universal dictionary (udic).
-
-    Note
-    ----
-    Currently only works for the F1 dimension.
-
-    """
-
-    try:
-        aq_mod = bdic["acqu2s"]["FnMODE"]
+            udic[udim]['complex'] = True
+    else:
+        aq_mod = dic[acq_file]["FnMODE"]
         if aq_mod == 0:
-            udic[0]["encoding"] = "undefined"
+            udic[udim]["encoding"] = "undefined"
         elif aq_mod == 1:
-            udic[0]["encoding"] = "magnitude" # qf
+            udic[udim]["encoding"] = "magnitude"  # qf
         elif aq_mod == 2:
-            udic[0]["encoding"] = "magnitude" # qsec
+            udic[udim]["encoding"] = "magnitude"  # qsec
         elif aq_mod == 3:
-            udic[0]["encoding"] = "tppi"
+            udic[udim]["encoding"] = "tppi"
         elif aq_mod == 4:
-            udic[0]["encoding"] = "states"
+            udic[udim]["encoding"] = "states"
         elif aq_mod == 5:
-            udic[0]["encoding"] = "states" #states-tppi
+            udic[udim]["encoding"] = "states-tppi"  # states-tppi
         elif aq_mod == 6:
-            udic[0]["encoding"] = "complex" # echo-antiecho
-    except:
-        warn("Indirect quadrature mode info not found, defaulting to 'states'.")
+            udic[udim]["encoding"] = "echo-antiecho"  # echo-antiecho
 
     return udic
 

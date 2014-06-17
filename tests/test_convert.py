@@ -52,7 +52,7 @@ def check_dic(dic1, dic2, exclude=None, v=False):
                 continue
             if dic1[k] != dic2[k]:
                 print k, dic1[k], dic2[k]
-                
+
     for k in dic1.keys():
         if k in exclude:
             continue
@@ -519,7 +519,7 @@ def test_bruker_1d():
     bdic, bdata = ng.bruker.read(os.path.join(DATA_DIR, "bruker_1d"))
     ubdic = ng.bruker.guess_udic(bdic, bdata)
     bC = ng.convert.converter()
-    bC.from_bruker(bdic, bdata, ubdic, remove_filter_delay = False)
+    bC.from_bruker(bdic, bdata, ubdic)
 
     # prepare Pipe converter
     pdic, pdata = ng.pipe.read(os.path.join(DATA_DIR, "bruker_1d",
@@ -639,7 +639,7 @@ def test_bruker_2d():
     bdic, bdata = ng.bruker.read(os.path.join(DATA_DIR, "bruker_2d"))
     ubdic = ng.bruker.guess_udic(bdic, bdata)
     bC = ng.convert.converter()
-    bC.from_bruker(bdic, bdata, ubdic, remove_filter_delay = False)
+    bC.from_bruker(bdic, bdata, ubdic)
 
     # prepare Pipe converter
     pdic, pdata = ng.pipe.read(os.path.join(DATA_DIR, "bruker_2d",
@@ -794,7 +794,7 @@ def test_bruker_3d():
     bdic, bdata = ng.bruker.read(os.path.join(DATA_DIR, "bruker_3d"))
     ubdic = ng.bruker.guess_udic(bdic, bdata)
     bC = ng.convert.converter()
-    bC.from_bruker(bdic, bdata, ubdic, remove_filter_delay = False)
+    bC.from_bruker(bdic, bdata, ubdic)
 
     # prepare Pipe converter
     pdic, pdata = ng.pipe.read(os.path.join(DATA_DIR, "bruker_3d", "fid",
@@ -1303,7 +1303,7 @@ def test_bruker_2d_lowmem():
         os.path.join(DATA_DIR, "bruker_2d"))
     ubdic = ng.bruker.guess_udic(bdic, bdata)
     bC = ng.convert.converter()
-    bC.from_bruker(bdic, bdata, ubdic, remove_filter_delay = False)
+    bC.from_bruker(bdic, bdata, ubdic)
 
     # prepare Pipe converter
     pdic, pdata = ng.pipe.read_lowmem(
@@ -1405,7 +1405,7 @@ def test_bruker_3d_lowmem():
         os.path.join(DATA_DIR, "bruker_3d"))
     ubdic = ng.bruker.guess_udic(bdic, bdata)
     bC = ng.convert.converter()
-    bC.from_bruker(bdic, bdata, ubdic, remove_filter_delay = False)
+    bC.from_bruker(bdic, bdata, ubdic)
 
     # prepare Pipe converter
     pdic, pdata = ng.pipe.read_lowmem(

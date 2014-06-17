@@ -22,7 +22,6 @@ NotImplemented exception:
 
     * ann      Fourier Analysis by Neural Net
     * ebs      EBS Reconstruction
-    * mac      Macro Language Interpreter
     * mem      Maximum Entropy
     * ml       Maximum likelyhood frequency
     * poly     Polynomail baseline correction
@@ -1171,7 +1170,8 @@ def ft(dic, data, auto=False, real=False, inv=False, alt=False, neg=False,
 
     # update the dictionary
     fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
-    dic[fn + "AQSIGN"] = 0.0                       # we don't need sign alternation or negation anymore
+    # we don't need sign alternation or negation anymore
+    dic[fn + "AQSIGN"] = 0.0
     dic[fn + "FTFLAG"] = (dic[fn + "FTFLAG"] + 1) % 2   # toggle FT flag
     if dic[fn + "FTFLAG"] == 1:
         dic[fn + "FTSIZE"] = data.shape[-1]
@@ -1536,12 +1536,9 @@ def tp(dic, data, hyper=False, nohyper=False, auto=False, nohdr=False):
     else:
         dic["FDSIZE"] = data.shape[1]
 
-
     dic["FDSPECNUM"] = dic["FDSLICECOUNT"]
-
     dic["FDDIMORDER1"], dic["FDDIMORDER2"] = (dic["FDDIMORDER2"],
                                               dic["FDDIMORDER1"])
-
     dic['FDDIMORDER'] = [dic["FDDIMORDER1"], dic["FDDIMORDER2"],
                          dic["FDDIMORDER3"], dic["FDDIMORDER4"]]
 
@@ -3204,7 +3201,7 @@ def lp2d(dic, data, xOrd=8, yOrd=8, xSize="default", ySize="default",
 # Macro interpreter #
 #####################
 
-def MAC(dic, data, macro=None, noRd=False, noWr=False, all=False, **kwargs):
+def mac(dic, data, macro=None, noRd=False, noWr=False, all=False, **kwargs):
     """
     Dispatcher similar to the MAC command.
 
@@ -3215,7 +3212,7 @@ def MAC(dic, data, macro=None, noRd=False, noWr=False, all=False, **kwargs):
     data : ndarray
         Array of NMR data.
     macro : callable
-        The processing script
+        Python function to apply.
     kwargs : keyword arguments
         Keyword arguments that get passed to the macro
 
@@ -3224,23 +3221,25 @@ def MAC(dic, data, macro=None, noRd=False, noWr=False, all=False, **kwargs):
     ndic : dict
         Dictionary of updated NMRPipe parameters.
     ndata : ndarray
-        Array of NMR data which has been reshuffled according to the Rance-Kay scheme.
+        Array of data with macro function applied.
 
     Notes
     -----
-    This is not intended to be a true macro interpreter.  Instead, the purpose is to act as a dispatch mechanism to
-    other python code so that the look and feel of nmrPipe is maintained.  The -var and -str parameters are not used, as
-    they can be passed directly to the macro as keyword arguements.
+    This is not intended to be a true macro interpreter.  Instead, the purpose
+    is to act as a dispatch mechanism to other Python code so that the
+    look and feel of nmrPipe is maintained.  The -var and -str parameters
+    are not used, as they can be passed directly to the macro as keyword
+    arguements.
     """
-
-    if macro == None:
+    if macro is None:
         return dic, data
 
     if noRd and noWr:
         return macro(dic, data, **kwargs)
 
     raise NotImplementedError("Only noRd and noWr macros work for now.")
-    #TODO: Add reading and writing routines (as calls to generators) and the relevant setup code
+    # TODO: Add reading and writing routines (as calls to generators) and
+    # the relevant setup code
 
 
 #############################
@@ -3258,13 +3257,6 @@ def ann(dic, data):
 def ebs(dic, data):
     """
     EBS Reconstruction
-    """
-    raise NotImplementedError
-
-
-def mac(dic, data):
-    """
-    Macro Language Interpreter
     """
     raise NotImplementedError
 

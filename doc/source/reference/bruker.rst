@@ -53,6 +53,7 @@ fine control over Bruker files may be interested in these functions.
     :toctree: generated/
 
     create_data
+    add_axis_to_udic
     create_acqus_dic
     guess_shape
     guess_shape_and_submatrix_shape
