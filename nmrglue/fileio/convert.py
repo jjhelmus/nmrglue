@@ -244,7 +244,8 @@ class converter(object):
         else:
             self._udic = sparky.guess_udic(dic, data)
 
-    def from_bruker(self, dic, data, udic=None):
+    def from_bruker(self, dic, data, udic=None, 
+                    remove_filter_delay = True, convert_indirect=True):
         """
         Load converter with Bruker data.
 
@@ -258,15 +259,21 @@ class converter(object):
             Universal dictionary, if not provided will be guesses from dic.
 
         """
-        # set data
-        self._data = data
+        # set data, possibly with removal of filter delay
+        if remove_filter_delay == True:
+            self._data = bruker.remove_digital_filter(dic, data)
+        else:
+            self._data = data
+
         self._iproc = {}
 
         # set the universal dictionary
         if udic is not None:
             self._udic = udic
         else:
-            self._udic = bruker.guess_udic(dic, data)
+            self._udic = bruker.guess_udic(dic, self._data)
+            
+
 
     # EXPORTERS (to_*)
     def to_universal(self):

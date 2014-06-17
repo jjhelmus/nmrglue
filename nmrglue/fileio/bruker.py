@@ -70,8 +70,87 @@ def guess_udic(dic, data):
     udic = fileiobase.create_blank_udic(data.ndim)
 
     # update default values
-    for i in xrange(data.ndim):
-        udic[i]["size"] = data.shape[i]
+    for b_dim in range(data.ndim):
+        udic[b_dim]["size"] = data.shape[b_dim]
+           
+        acq_file = "acqu" + str(b_dim+1) + "s"
+
+        if acq_file == "acqu1s":
+            acq_file = "acqus" # Because they're inconsistent,...
+
+        p_dim = udic['ndim'] - b_dim - 1
+            
+        udic[p_dim]["sw"] = dic[acq_file]["SW_h"]
+        udic[p_dim]["label"] = dic[acq_file]["NUC1"]
+        udic[p_dim]["car"] = dic[acq_file]["O1"]
+    
+        if dic["acqus"]["NUC2"] == "15N": # Gyromagnetic ratio of 15N is negative
+            udic[p_dim]["obs"] = dic[acq_file]["BF1"] - dic[acq_file]["O1"] / 1.e6
+        else:
+            udic[p_dim]["obs"] = dic[acq_file]["BF1"] + dic[acq_file]["O1"] / 1.e6
+
+        if acq_file == "acqus":
+            udic = add_direct_axis_to_udic(udic, dic)
+        elif acq_file == "acqu2s":
+            udic = add_indirect_axis_to_udic(udic, dic)
+
+    return udic
+
+
+def add_direct_axis_to_udic(udic, bdic):
+    """
+    Translate from Bruker direct dimension dictionary (bdic) to a universal dictionary (udic).
+    """
+
+    direct_dim = udic['ndim'] - 1
+
+    try:
+        udic[direct_dim]["grpdly"] = bdic["acqus"]["GRPDLY"]
+        udic[direct_dim]["decim"] = bdic["acqus"]["DECIM"]
+        udic[direct_dim]["dspfvs"] = bdic["acqus"]["DSPFVS"]
+    except:
+        warn('Bruker digital filter info not found!')
+
+    udic[direct_dim]['encoding'] = 'unknown'
+    try:
+        aq_mod = bdic['acqus']['AQ_mod']
+        if aq_mod == 0: # qf
+            udic[direct_dim]['complex'] = False
+    except:
+        warn("Acquisition mode info not found")
+
+    return udic
+
+
+
+def add_indirect_axis_to_udic(udic, bdic):
+    """
+    Translate from Bruker indirect dimension dictionary (bdic) to a universal dictionary (udic).
+
+    Note
+    ----
+    Currently only works for the F1 dimension.
+
+    """
+
+    try:
+        aq_mod = bdic["acqu2s"]["FnMODE"]
+        if aq_mod == 0:
+            udic[0]["encoding"] = "undefined"
+        elif aq_mod == 1:
+            udic[0]["encoding"] = "magnitude" # qf
+        elif aq_mod == 2:
+            udic[0]["encoding"] = "magnitude" # qsec
+        elif aq_mod == 3:
+            udic[0]["encoding"] = "tppi"
+        elif aq_mod == 4:
+            udic[0]["encoding"] = "states"
+        elif aq_mod == 5:
+            udic[0]["encoding"] = "states" #states-tppi
+        elif aq_mod == 6:
+            udic[0]["encoding"] = "complex" # echo-antiecho
+    except:
+        warn("Indirect quadrature mode info not found, defaulting to 'states'.")
 
     return udic
 
@@ -330,7 +409,7 @@ def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
     if cplex is None:
         cplex = gcplex
 
-    # determind endianness (assume little-endian unless BYTORDA is 1)
+    # determine endianness (assume little-endian unless BYTORDA is 1)
     if big is None:
         big = False     # default value
         if "acqus" in dic and "BYTORDA" in dic["acqus"]:

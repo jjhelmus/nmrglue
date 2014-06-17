@@ -1073,7 +1073,7 @@ def fsh(dic, data, dir, pts, sw=True):
 
 
 def ft(dic, data, auto=False, real=False, inv=False, alt=False, neg=False,
-       null=False, bruk=False):
+       null=False, bruk=False, debug=False):
     """
     Complex Fourier transform.
 
@@ -1098,6 +1098,8 @@ def ft(dic, data, auto=False, real=False, inv=False, alt=False, neg=False,
     bruk : bool
         True to process Redfield sequential data, this is the same as setting
         alt and real to True.
+    debug : bool
+        True to print debug info.
 
     Returns
     -------
@@ -1143,13 +1145,13 @@ def ft(dic, data, auto=False, real=False, inv=False, alt=False, neg=False,
                         alt = True
                         neg = True
 
-        # DEBUG
-        #print "real:", real
-        #print "inv:", inv
-        #print "alt:", alt
-        #print "neg:", neg
-        #print "null:", null
-        #print "bruk:", bruk
+    if debug:
+        print "real:", real
+        print "inv:", inv
+        print "alt:", alt
+        print "neg:", neg
+        print "null:", null
+        print "bruk:", bruk
 
     if bruk:
         real = True
@@ -3196,6 +3198,50 @@ def lp2d(dic, data, xOrd=8, yOrd=8, xSize="default", ySize="default",
 
     dic = update_minmax(dic, data)
     return dic, data
+
+
+#####################
+# Macro interpreter #
+#####################
+
+def MAC(dic, data, macro=None, noRd=False, noWr=False, all=False, **kwargs):
+    """
+    Dispatcher similar to the MAC command.
+
+    Parameters
+    ----------
+    dic : dict
+        Dictionary of NMRPipe parameters
+    data : ndarray
+        Array of NMR data.
+    macro : callable
+        The processing script
+    kwargs : keyword arguments
+        Keyword arguments that get passed to the macro
+
+    Returns
+    -------
+    ndic : dict
+        Dictionary of updated NMRPipe parameters.
+    ndata : ndarray
+        Array of NMR data which has been reshuffled according to the Rance-Kay scheme.
+
+    Notes
+    -----
+    This is not intended to be a true macro interpreter.  Instead, the purpose is to act as a dispatch mechanism to
+    other python code so that the look and feel of nmrPipe is maintained.  The -var and -str parameters are not used, as
+    they can be passed directly to the macro as keyword arguements.
+    """
+
+    if macro == None:
+        return dic, data
+
+    if noRd and noWr:
+        return macro(dic, data, **kwargs)
+
+    raise NotImplementedError("Only noRd and noWr macros work for now.")
+    #TODO: Add reading and writing routines (as calls to generators) and the relevant setup code
+
 
 #############################
 # Not Implemented Functions #
