@@ -18,6 +18,7 @@ high level functions.
     :toctree: generated/
 
     create_blank_udic
+    uc_from_udic
     open_towrite
     ndfrom_iter 
     ndto_iter

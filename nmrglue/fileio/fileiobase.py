@@ -326,6 +326,30 @@ class unit_conversion():
     __call__ = i    # calling the object x is the same as x.i
 
 
+def uc_from_udic(udic, dim=-1):
+    """
+    Create a unit conversion object from a Universal dictionary.
+
+    Parameters
+    ----------
+    udic : dic
+        Universal dictionary of spectral parameters.
+    dim : int. optional
+        Dimension number to create unit conversion object for.  Default is for
+        last dimension.
+
+    Returns
+    -------
+    uc : unit conversion object.
+        Unit conversion object for given dimension.
+    """
+    if dim == -1:
+        dim = udic['ndim'] - 1  # last dimension
+    adic = udic[dim]
+    return unit_conversion(adic['size'], adic['complex'], adic['sw'],
+                           adic['obs'], adic['car'])
+
+
 def open_towrite(filename, overwrite=False):
     """
     Open filename for writing and return file object
