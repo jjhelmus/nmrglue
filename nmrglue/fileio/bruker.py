@@ -214,7 +214,8 @@ def create_acqus_dic(adic, direct=False):
 # Global read/write function and related utilities
 
 def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
-         shape=None, cplex=None, big=None, read_prog=True, read_acqus=True):
+         shape=None, cplex=None, big=None, read_pulseprogram=True,
+         read_acqus=True):
     """
     Read Bruker files from a directory.
 
@@ -238,7 +239,7 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
     big : bool or None, optional
         Endiness of binary file. True of big-endian, False for little-endian,
         None to determine endiness from acqus file(s).
-    read_pprog : bool, optional
+    read_pulseprogram : bool, optional
         True to read pulse program, False prevents reading.
     read_acqus : bool, optional
         True to read acqus files(s), False prevents reading.
@@ -287,7 +288,7 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
             dic[f] = read_jcamp(os.path.join(dir, f))
 
     # read the pulse program and add to the dictionary
-    if read_prog:
+    if read_pulseprogram:
         try:
             dic["pprog"] = read_pprog(os.path.join(dir, pprog_file))
         except:
@@ -324,7 +325,7 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
 
 
 def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
-                shape=None, cplex=None, big=None, read_prog=True,
+                shape=None, cplex=None, big=None, read_pulseprogram=True,
                 read_acqus=True):
     """
     Read Bruker files from a directory using minimal amounts of memory.
@@ -375,7 +376,7 @@ def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
             dic[f] = read_jcamp(os.path.join(dir, f))
 
     # read the pulse program and add to the dictionary
-    if read_prog:
+    if read_pulseprogram:
         dic["pprog"] = read_pprog(os.path.join(dir, pprog_file))
 
     # determind file size and add to the dictionary
