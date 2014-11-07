@@ -36,9 +36,9 @@ pipe.write("ext7.glue", d, a, overwrite=True)
 
 
 pipe_command = """\
-nmrPipe -in ./time_complex.fid                \
+/bin/csh -c 'nmrPipe -in ./time_complex.fid                \
 | nmrPipe  -fn FT  -auto \
--ov -out time-freq.c.ft1"""
+-ov -out time-freq.c.ft1'"""
 check_output(pipe_command, shell=True)
 
 d, a = pipe.read("time-freq.c.ft1")
@@ -53,9 +53,9 @@ os.remove("time-freq.c.ft1")
 
 
 pipe_command = """\
-nmrPipe -in ./time_complex.fid                \
+/bin/csh -c 'nmrPipe -in ./time_complex.fid                \
 | nmrPipe  -fn FT  -auto -di \
--ov -out time-freq.r.ft1"""
+-ov -out time-freq.r.ft1'"""
 check_output(pipe_command, shell=True)
 
 d, a = pipe.read("time-freq.r.ft1")
