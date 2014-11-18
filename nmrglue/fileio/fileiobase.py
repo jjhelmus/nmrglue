@@ -17,7 +17,7 @@ def create_blank_udic(ndim):
     udic = dict()
     udic["ndim"] = ndim
 
-    for i in xrange(ndim):
+    for i in range(ndim):
         d = dict()
         d["sw"] = 999.99        # spectral width in Hz
         d["complex"] = True     # Quadrature, True when dimension is complex
@@ -627,7 +627,7 @@ class data_nd(object):
 
     def __iter__(self):
         """ x.__iter__() <==> iter(x) """
-        for index in xrange(0, self.shape[0]):
+        for index in range(0, self.shape[0]):
             yield self[index]
 
     def swapaxes(self, axis1, axis2):

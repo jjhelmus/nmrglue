@@ -2419,7 +2419,7 @@ def qmix(data, carr):
     n = np.empty(s, data.dtype)
 
     # remix each block
-    for i in xrange(int(data.shape[0] / float(ic))):
+    for i in range(int(data.shape[0] / float(ic))):
         block = data[i * ic:(i + 1) * ic]
         n[i * oc:(i + 1) * oc] = np.dot(carr, block)
 
@@ -2518,7 +2518,7 @@ def zd(data, window, x0=0.0, slope=1.0):
     max_r = int(min(rows, np.floor((cols - c_start + wide) / slope) + 1))
 
     # apply window to band row by row
-    for r in xrange(max_r):  # r from 0 to max_r-1
+    for r in range(max_r):  # r from 0 to max_r-1
         w_min = 0           # window min
         w_max = width       # window max
 

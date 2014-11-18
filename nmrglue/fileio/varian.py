@@ -65,7 +65,7 @@ def guess_udic(dic, data):
     udic = fileiobase.create_blank_udic(data.ndim)
 
     # update default values
-    for i in xrange(data.ndim):
+    for i in range(data.ndim):
         udic[i]["size"] = data.shape[i]
 
     return udic
@@ -95,7 +95,7 @@ def create_dic(udic):
 
     # number of blocks is product of R+I of all other dimensions
     num_blocks = 1
-    for f in [udic[k]["size"] for k in xrange(udic["ndim"] - 1)]:
+    for f in [udic[k]["size"] for k in range(udic["ndim"] - 1)]:
         num_blocks = num_blocks * f
 
     # create the varian dictionary
@@ -625,7 +625,7 @@ def order_data(data, torder):
     t2i = torder2t2i(torder)
 
     # loop over all non-direct dimension indices
-    for ntrace in xrange(ntraces):
+    for ntrace in range(ntraces):
         tup = t2i(data.shape[:-1], ntrace)
         ndata[ntrace] = data[tup]
     return ndata
@@ -931,7 +931,7 @@ def write_fid(filename, dic, data, torder='flat', repack=False, correct=True,
     dt = find_dtype(dic)
 
     if "blockheader" in dic and len(dic["blockheader"]) == data.shape[0]:
-        for i in xrange(data.shape[0]):
+        for i in range(data.shape[0]):
             if repack:
                 bh = dic2blockheader(repack_blockheader(dic["blockheader"][0]))
             else:
@@ -942,7 +942,7 @@ def write_fid(filename, dic, data, torder='flat', repack=False, correct=True,
 
     else:   # create a generic blockheader
         bh = dic2blockheader(make_blockheader(dic, 1))
-        for i in xrange(data.shape[0]):
+        for i in range(data.shape[0]):
             bh[2] = int(i + 1)
             trace = np.array(interleave_data(data[i]), dtype=dt)
             put_block(f, trace, dic["nbheaders"], bh)
@@ -1016,7 +1016,7 @@ def write_fid_lowmem(filename, dic, data, torder='f', repack=False,
     dt = find_dtype(dic)
 
     if "blockheader" in dic and len(dic["blockheader"]) == dic["nblocks"]:
-        for ntrace in xrange(nblocks):
+        for ntrace in range(nblocks):
             if repack:
                 bh = dic2blockheader(repack_blockheader(dic["blockheader"][0]))
             else:
@@ -1028,7 +1028,7 @@ def write_fid_lowmem(filename, dic, data, torder='f', repack=False,
 
     else:   # create a generic blockheader
         bh = dic2blockheader(make_blockheader(dic, 1))
-        for ntrace in xrange(nblocks):
+        for ntrace in range(nblocks):
             bh[2] = int(ntrace + 1)
             tup = t2i(data.shape[:-1], ntrace)
             trace = np.array(interleave_data(data[tup]), dtype=dt)
@@ -1076,7 +1076,7 @@ def get_nblocks(f, nblocks, pts, nbheaders, dt, read_blockhead):
         bdic = [0] * nblocks
 
     # read the data
-    for i in xrange(nblocks):
+    for i in range(nblocks):
         if read_blockhead:
             bdic[i], data[i] = get_block(f, pts, nbheaders, dt, read_blockhead)
         else:
@@ -1116,7 +1116,7 @@ def get_block(f, pts, nbheaders, dt, read_blockhead=False):
 
     """
     if read_blockhead is False:  # do not return blockheaders
-        for i in xrange(nbheaders):
+        for i in range(nbheaders):
             skip_blockheader(f)
         trace = get_trace(f, pts, dt)
         return trace
@@ -1128,7 +1128,7 @@ def get_block(f, pts, nbheaders, dt, read_blockhead=False):
         if nbheaders >= 2:
             dic["hyperhead"] = hyperheader2dic(get_hyperheader(f))
         if nbheaders >= 3:
-            for i in xrange(2, nbheaders):
+            for i in range(2, nbheaders):
                 skip_blockheader(f)
         # read the data
         trace = get_trace(f, pts, dt)
@@ -1174,7 +1174,7 @@ def get_nblocks_ntraces(f, nblocks, ntraces, pts, nbheaders, dt,
         bdic = [0] * nblocks
 
     # read the data
-    for i in xrange(nblocks):
+    for i in range(nblocks):
         if read_blockhead:
             bdic[i], bdata = get_block_ntraces(f, ntraces, pts, nbheaders, dt,
                                                True)
@@ -1219,7 +1219,7 @@ def get_block_ntraces(f, ntraces, pts, nbheaders, dt, read_blockhead=False):
     """
 
     if read_blockhead is False:  # do not return blockheaders
-        for i in xrange(nbheaders):
+        for i in range(nbheaders):
             skip_blockheader(f)
         trace = get_trace(f, pts * ntraces, dt)
         return trace.reshape(ntraces, pts)
@@ -1231,7 +1231,7 @@ def get_block_ntraces(f, ntraces, pts, nbheaders, dt, read_blockhead=False):
         if nbheaders >= 2:
             dic["hyperhead"] = hyperheader2dic(get_hyperheader(f))
         if nbheaders >= 3:
-            for i in xrange(2, nbheaders):
+            for i in range(2, nbheaders):
                 skip_blockheader(f)
         # read the data
         trace = get_trace(file, pts * ntraces, dt)
@@ -1374,7 +1374,7 @@ def put_block(f, trace, nbheaders, bh, hh=False):
         put_hyperheader(f, hh)
 
     # write any additional blockheaders as 0s if needed
-    for i in xrange(nbheaders - 2):
+    for i in range(nbheaders - 2):
         put_blockheader(f, [0] * 9)
 
     # write the trace

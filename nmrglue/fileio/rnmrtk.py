@@ -91,7 +91,7 @@ def guess_udic(dic, data):
     udic = fileiobase.create_blank_udic(ndim)
 
     # fill in parameters from RNMRTK dictionary for each dimension
-    for iudim in xrange(ndim):
+    for iudim in range(ndim):
 
         # find the corresponding dimension in the RNMRTK parameter dictionary
         idim = find_dic_dim(dic, iudim)

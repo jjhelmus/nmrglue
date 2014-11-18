@@ -87,7 +87,7 @@ def guess_udic(dic, data):
     udic = fileiobase.create_blank_udic(data.ndim)
 
     # update default values
-    for i in xrange(data.ndim):
+    for i in range(data.ndim):
         adic = dic["w" + str(i + 1)]
         udic[i]["size"] = data.shape[i]
         udic[i]["sw"] = adic['spectral_width']
@@ -123,7 +123,7 @@ def create_dic(udic, datetimeobj=datetime.datetime.now(), user='user'):
     dic = dict()
 
     # determind shape of array
-    shape = [udic[k]["size"] for k in xrange(udic["ndim"])]
+    shape = [udic[k]["size"] for k in range(udic["ndim"])]
 
     # populate the dictionary
     dic["ident"] = 'UCSF NMR'
@@ -387,7 +387,7 @@ def read_2D(filename):
         raise IOError("Bad file size %s vs %s", (seek_pos, dic["seek_pos"]))
 
     # read the axis headers...
-    for i in xrange(dic['naxis']):
+    for i in range(dic['naxis']):
         dic["w" + str(i + 1)] = axisheader2dic(get_axisheader(f))
 
     # read the data and untile
@@ -423,7 +423,7 @@ def write_2D(filename, dic, data, overwrite=False):
     ttY = np.ceil(data.shape[0] / float(lentY))  # total tiles in Y dim
     tt = ttX * ttY
 
-    for i in xrange(int(tt)):
+    for i in range(int(tt)):
         put_data(f, find_tilen_2d(data, i, (t_tup)))
 
     f.close()
@@ -445,7 +445,7 @@ def read_3D(filename):
         raise IOError("Bad file size %s vs %s", (seek_pos, dic["seek_pos"]))
 
     # read the axis headers...
-    for i in xrange(dic['naxis']):
+    for i in range(dic['naxis']):
         dic["w" + str(i + 1)] = axisheader2dic(get_axisheader(f))
 
     # read the data and untile
@@ -488,7 +488,7 @@ def write_3D(filename, dic, data, overwrite=False):
 
     tt = ttX * ttY * ttZ
 
-    for i in xrange(int(tt)):
+    for i in range(int(tt)):
         put_data(f, find_tilen_3d(data, i, (t_tup)))
     f.close()
     return
@@ -986,7 +986,7 @@ def tile_data2d(data, tile_size):
     # create an empty array to store file data
     out = np.empty((tt * tsize), dtype="float32")
 
-    for i in xrange(int(tt)):
+    for i in range(int(tt)):
         out[i * tsize:(i + 1) * tsize] = find_tilen_2d(data, i, t_tup)
 
     return out
@@ -1025,8 +1025,8 @@ def untile_data2D(data, tile_size, data_size):
     # create an empty array to store file data
     out = np.empty((ttY * lentY, ttX * lentX), dtype="float32")
 
-    for iY in xrange(int(ttY)):
-        for iX in xrange(int(ttX)):
+    for iY in range(int(ttY)):
+        for iX in range(int(ttX)):
             minX = iX * lentX
             maxX = (iX + 1) * lentX
 
@@ -1138,7 +1138,7 @@ def tile_data3d(data, tile_size):
     # create an empty array to store file data
     out = np.empty((tt * tsize), dtype="float32")
 
-    for i in xrange(int(tt)):
+    for i in range(int(tt)):
         out[i * tsize:(i + 1) * tsize] = find_tilen_3d(data, i, t_tup)
     return out
 
@@ -1178,9 +1178,9 @@ def untile_data3D(data, tile_size, data_size):
     # create an empty array to store file data
     out = np.empty((ttZ * lentZ, ttY * lentY, ttX * lentX), dtype="float32")
 
-    for iZ in xrange(int(ttZ)):
-        for iY in xrange(int(ttY)):
-            for iX in xrange(int(ttX)):
+    for iZ in range(int(ttZ)):
+        for iY in range(int(ttY)):
+            for iX in range(int(ttX)):
 
                 minX = iX * lentX
                 maxX = (iX + 1) * lentX

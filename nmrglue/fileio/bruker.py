@@ -165,7 +165,7 @@ def create_dic(udic):
     else:
         bytes = 4
 
-    for k in xrange(ndim):
+    for k in range(ndim):
         bytes *= udic[k]["size"]
 
     dic = {"FILE_SIZE": bytes}

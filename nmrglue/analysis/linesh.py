@@ -659,7 +659,7 @@ def split_list(l, N):
     """ Split list l into N sublists of equal size """
     step = int(len(l) / N)
     div_points = range(0, len(l) + 1, step)
-    return [l[div_points[i]:div_points[i + 1]] for i in xrange(N)]
+    return [l[div_points[i]:div_points[i + 1]] for i in range(N)]
 
 
 def calc_errors(region, ls_classes, p, cov, n_peaks, wmask):
@@ -717,7 +717,7 @@ def s_NDregion(p, shape, ls_classes, n_peaks):
 
     """
     # split the parameter list into a list of amplitudes and peak param lists
-    As = [p.pop(0) for i in xrange(n_peaks)]
+    As = [p.pop(0) for i in range(n_peaks)]
     ps = split_list(p, n_peaks)
 
     # simulate the first region
@@ -758,7 +758,7 @@ def s_single_NDregion(p, shape, ls_classes):
 
     for length, ls_class in zip(shape, ls_classes):
         #print("Making lineshape of", ls_class.name, "with length:", length)
-        s_p = [p.pop(0) for i in xrange(ls_class.nparam(length))]
+        s_p = [p.pop(0) for i in range(ls_class.nparam(length))]
         ls = ls_class.sim(length, s_p)
         #print("Lineshape is:", ls)
         r = np.kron(r, ls)   # vector direct product flattened

@@ -339,7 +339,7 @@ def read_binary(filename):
     nquads, mod = divmod(len(chardata), 4)
     assert mod == 0     # character should be in blocks of 4
     bytes = []
-    for i in xrange(nquads):
+    for i in range(nquads):
         bytes += chars2bytes(chardata[i * 4:(i + 1) * 4])
 
     # DEBUGGING
@@ -348,7 +348,7 @@ def read_binary(filename):
     num_points, _num_pad = divmod(len(bytes), 4)
     data = np.empty((num_points, ), dtype='float32')
 
-    for i in xrange(num_points):
+    for i in range(num_points):
         data[i] = bytes2float(bytes[i * 4: (i + 1) * 4])
     data = data.view('complex64')
 

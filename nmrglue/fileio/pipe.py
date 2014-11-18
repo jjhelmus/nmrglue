@@ -232,7 +232,7 @@ def guess_udic(dic, data):
     udic = fileiobase.create_blank_udic(data.ndim)
 
     # update default values
-    for i in xrange(data.ndim):
+    for i in range(data.ndim):
         udic[i]["size"] = data.shape[i]     # size from data shape
 
         # determind NMRPipe axis name
@@ -311,7 +311,7 @@ def create_dic(udic, datetimeobj=datetime.datetime.now()):
         dic["FD2DPHASE"] = 0.0
 
     # fill in parameters for each dimension
-    for i, adic in enumerate([udic[k] for k in xrange(udic["ndim"])]):
+    for i, adic in enumerate([udic[k] for k in range(udic["ndim"])]):
         n = int((dic["FDDIMCOUNT"] - 1) - i)
         dic = add_axis_to_dic(dic, adic, n)
 
@@ -908,7 +908,7 @@ def write_lowmem_2D(filename, dic, data, overwrite=False):
 
     # put data trace by trace
     lenY, lenX = data.shape
-    for y in xrange(lenY):
+    for y in range(lenY):
         put_trace(fh, data[y])
     fh.close()
     return
@@ -930,11 +930,11 @@ def write_lowmem_3D(filename, dic, data, overwrite=False):
 
     # put data trace by trace
     lenZ, lenY, lenX = data.shape
-    for z in xrange(lenZ):
+    for z in range(lenZ):
         # open the file to store the 2D plane
         fh = fileiobase.open_towrite(filename % (z + 1), overwrite=overwrite)
         put_fdata(fh, fdata)
-        for y in xrange(lenY):
+        for y in range(lenY):
             put_trace(fh, data[z, y])
         fh.close()
     return
@@ -955,8 +955,8 @@ def write_lowmem_3Ds(filename, dic, data, overwrite=False):
 
     # put data trace by trace
     lenZ, lenY, lenX = data.shape
-    for z in xrange(lenZ):
-        for y in xrange(lenY):
+    for z in range(lenZ):
+        for y in range(lenY):
             put_trace(fh, data[z, y])
     fh.close()
     return
@@ -979,8 +979,8 @@ def write_lowmem_4D(filename, dic, data, overwrite=False):
 
     # put data trace by trace
     lenA, lenZ, lenY, lenX = data.shape
-    for a in xrange(lenA):
-        for z in xrange(lenZ):
+    for a in range(lenA):
+        for z in range(lenZ):
             # open the file to store the 2D plane
             if filename.count("%") == 1:
                 fname = filename % (a * lenZ + z + 1)
@@ -988,7 +988,7 @@ def write_lowmem_4D(filename, dic, data, overwrite=False):
                 fname = filename % (a + 1, z + 1)
             fh = fileiobase.open_towrite(fname, overwrite=overwrite)
             put_fdata(fh, fdata)
-            for y in xrange(lenY):
+            for y in range(lenY):
                 put_trace(fh, data[a, z, y])
             fh.close()
     return
@@ -1009,9 +1009,9 @@ def write_lowmem_4Ds(filename, dic, data, overwrite=False):
 
     # put data trace by trace
     lenA, lenZ, lenY, lenX = data.shape
-    for a in xrange(lenA):
-        for z in xrange(lenZ):
-            for y in xrange(lenY):
+    for a in range(lenA):
+        for z in range(lenZ):
+            for y in range(lenY):
                 put_trace(fh, data[a, z, y])
     fh.close()
     return

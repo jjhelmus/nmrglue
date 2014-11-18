@@ -394,15 +394,15 @@ def extrapolate_2d(x, C, pred, fix_points, mirror):
     last = new.shape[0]     # number of rows in new matrix
 
     # fill the matrix with the mirrored version of each column
-    for i in xrange(N_1):
+    for i in range(N_1):
         new[:, i] = make_mirror(x[:, i], mirror)
 
     # fill each new column with predicted values
     # i,j give coordinates of top-left corner of PxM reading matrix
     # after filling a column, replace the whole column with the mirrored column
 
-    for j in xrange(N_1 - M, N_1 - M + pred):  # column index loop
-        for i in xrange(plane - P + 1, last - P + 1):  # row index loop
+    for j in range(N_1 - M, N_1 - M + pred):  # column index loop
+        for i in range(plane - P + 1, last - P + 1):  # row index loop
             new[i + P - 1, j + M] = np.sum(new[i:i + P, j:j + M].flat * c)
 
             if fix_points:  # reduce predicted point is needed
@@ -453,8 +453,8 @@ def make_lp2d_Dd(x, P, M, mode='f'):
 
     # fill D and d' row by row (i,j) give coordinates of top-left corner of
     # PxM reading matrix
-    for j in xrange(count_M):
-        for i in xrange(count_P):
+    for j in range(count_M):
+        for i in range(count_P):
             D[j * count_P + i] = x[i:i + P, j:j + M].flat
             d[j * count_P + i] = x[i + P - 1, j + M]
     return D, d
@@ -498,12 +498,12 @@ def cadzow(data, M, K, niter, min_var=False):
 
     """
     if data.ndim == 1:
-        for i in xrange(niter):
+        for i in range(niter):
             data = cadzow_single(data, M, K, min_var)
         return data
     elif data.ndim == 2:
         for trace in data:
-            for i in xrange(niter):
+            for i in range(niter):
                 trace = cadzow_single(trace, M, K, min_var)
         return data
     else:
@@ -542,7 +542,7 @@ def cadzow_single(x, M, K, min_var=False):
     Xp = Ul * Sl * Vlh
 
     xp = np.empty_like(x)
-    for i, v in enumerate(xrange(M - 1, -L, -1)):
+    for i, v in enumerate(range(M - 1, -L, -1)):
         # the anti-diagonal is the diagonal with rows reversed
         xp[i] = np.diag(Xp[:, ::-1], v).mean()
     return xp
@@ -1200,14 +1200,14 @@ def extrapolate(trace, a, pred, append):
 
     if append == "after":   # append after trace
         ntrace[:M] = trace
-        for i in xrange(pred):
+        for i in range(pred):
             ntrace[M + i] = np.sum(np.multiply(ntrace[M - m + i:M + i],
                                    a.flat))
         return ntrace
 
     if append == "before":   # append before trace
         ntrace[-M:] = trace
-        for i in xrange(pred):
+        for i in range(pred):
             ntrace[pred - i - 1] = np.sum(np.multiply(
                 ntrace[pred - i:pred + m - i], a.flat))
         return ntrace
