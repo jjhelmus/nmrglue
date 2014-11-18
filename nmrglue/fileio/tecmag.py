@@ -273,7 +273,7 @@ def read(filename):
                 assert(len(hdrdict['data']) == data_length)
             else:
                 tntfile.seek(data_length, io.SEEK_CUR)
-            tnt_sections[tlv['tag']] = hdrdict
+            tnt_sections[tlv['tag'].decode()] = hdrdict
             tnthdrbytes = tntfile.read(TNTTLV.itemsize)
 
     assert(tnt_sections['TMAG']['length'] == TNTTMAG.itemsize)
