@@ -2,6 +2,8 @@
 Linear Prediction (LP) functions for extrapolating and modeling NMR signals.
 """
 
+from __future__ import print_function
+
 __developer_info__ = """
 Notes
 ^^^^^
@@ -1145,7 +1147,7 @@ def fix_roots(poles, fix_roots="incr", fix_mode="reflect"):
     if fix_roots == "incr":     # remove increasing signals
         for i, pole in enumerate(poles):
             if np.abs(pole) > 1:
-                #print "Fixing root:",i
+                #print("Fixing root:",i)
                 if fix_mode == "on":
                     poles[i] = pole / np.abs(pole)
                 else:
@@ -1153,7 +1155,7 @@ def fix_roots(poles, fix_roots="incr", fix_mode="reflect"):
     else:   # remove decreasing signals
         for i, pole in enumerate(poles):
             if np.abs(pole) < 1:
-                #print "Fixing root:",i
+                #print("Fixing root:",i)
                 if fix_mode == "on":
                     poles[i] = pole / np.abs(pole)
                 else:

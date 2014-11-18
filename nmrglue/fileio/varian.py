@@ -3,6 +3,8 @@ Functions for reading and writing Agilent/Varian binary (fid) files and
 parameter (procpar) files.
 """
 
+from __future__ import print_function
+
 __developer_doc__ = """
 Agilent/Varian file format information
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1940,35 +1942,35 @@ def write_procpar(filename, dic, overwrite=False):
     for key in dic.keys():  # loop over the parameters
 
         d = dic[key]
-        # print out the first line
-        print >> f, d["name"], d["subtype"], d["basictype"],    \
-            d["maxvalue"], d["minvalue"], d["stepsize"],        \
-            d["Ggroup"], d["Dgroup"], d["protection"],          \
-            d["active"], d["intptr"]
+        # print(out the first line)
+        print(d["name"], d["subtype"], d["basictype"],
+              d["maxvalue"], d["minvalue"], d["stepsize"],
+              d["Ggroup"], d["Dgroup"], d["protection"],
+              d["active"], d["intptr"], file=f)
 
         # print out the next line(s) (and more if strings)
         if d["basictype"] == "1":   # real values, one line
-            print >> f, len(d["values"]),  # don't end the line
+            print(len(d["values"]), end='', file=f)  # don't end the line
             for value in d["values"]:
-                print >> f, value,    # still not yet
-            print >> f, ""   # now end the line
+                print(value, end='', file=f)    # still not yet
+            print("", file=f)   # now end the line
 
         elif d["basictype"] == "2":     # strings, may have multiple lines
-            print >> f, len(d["values"]),    # don't end the line
+            print(len(d["values"], end='', file=f))  # don't end the line
             for value in d["values"]:
                 # now end the line (for each string)
-                print >> f, '"' + value + '"'
+                print('"' + value + '"', file=f)
 
         # print out the last line
-        print >> f, d["enumerable"],
+        print(d["enumerable"], end='', file=f)
 
         if d["enumerable"] != "0":
             for e in d["enumerables"]:
                 if d["basictype"] == "1":  # reals
-                    print >> f, e,
+                    print(e, file=f, end='')
                 elif d["basictype"] == "2":  # strings
-                    print >> f, '"' + e + '"',
-        print >> f, ""   # end the enumerable line
+                    print('"' + e + '"', end='', file=f)
+        print("", file=f)   # end the enumerable line
 
     f.close()
 

@@ -3,6 +3,9 @@ Functions for reading and writing Bruker binary (ser/fid) files, Bruker
 JCAMP-DX parameter (acqus) files, and Bruker pulse program (pulseprogram)
 files.
 """
+
+from __future__ import print_function
+
 __developer_info__ = """
 Bruker file format information
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1469,7 +1472,7 @@ def rm_dig_filter(data, decim, dspfvs, grpdly=0):
     add = int(max(skip - 6, 0))           # 6 less, or 0
 
     # DEBUG
-    #print "phase: %f, skip: %i add: %i"%(phase,skip,add)
+    #print("phase: %f, skip: %i add: %i"%(phase,skip,add))
 
     # frequency shift
     pdata = proc_base.fsh2(data, phase)
@@ -1520,7 +1523,7 @@ def read_jcamp(filename):
         line = f.readline().rstrip()    # read a line
 
         if line[:6] == "##END=":
-            #print "End of file"
+            #print("End of file")
             break
         elif line[:2] == "$$":
             dic["_comments"].append(line)
@@ -1793,7 +1796,7 @@ def read_pprog(filename):
 
         # skip blank lines and include lines
         if text == "" or text[0] == "#":
-            #print line,"--Blank, Comment or Include"
+            #print(line,"--Blank, Comment or Include")
             continue
 
         # see if we have quotes and have an assigment
@@ -1807,13 +1810,13 @@ def read_pprog(filename):
                 if len(t) >= 2:
                     key, value = t[0], t[1]
                     var[key] = value
-                    #print line,"--Assignment"
+                    #print(line,"--Assignment")
                 else:
                     pass
-                    #print line,"--Statement"
+                    #print(line,"--Statement")
                 continue
             else:
-                #print line,"--Statement"
+                #print(line,"--Statement")
                 continue
 
         # loops begin with lo
@@ -1824,7 +1827,7 @@ def read_pprog(filename):
             incr.append([])
             phase.append([])
             ph_extra.append([])
-            #print line,"--Loop"
+            #print(line,"--Loop")
             continue
 
         tokens = text.split()
@@ -1835,12 +1838,12 @@ def read_pprog(filename):
             # store N to incr list
             if token2.startswith('id') or token2.startswith('dd'):
                 incr[len(loop)].append(int(token2[2:]))
-                #print line,"--Increment"
+                #print(line,"--Increment")
                 continue
 
             if token2.startswith("ipu") or token2.startswith("dpu"):
                 incr[len(loop)].append(int(token2[3:]))
-                #print line,"--Increment"
+                #print(line,"--Increment")
                 continue
 
             # phase statement have ip or dp
@@ -1855,10 +1858,10 @@ def read_pprog(filename):
                     ph_extra[len(loop)].append("")
                 else:
                     ph_extra[len(loop)].append(text[last:].strip())
-                #print line,"--Phase"
+                #print(line,"--Phase")
                 continue
 
-            #print line,"--Unimportant"
+            #print(line,"--Unimportant")
 
     f.close()
 

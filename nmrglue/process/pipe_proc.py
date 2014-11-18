@@ -30,6 +30,8 @@ NotImplemented exception:
 
 """
 
+from __future__ import print_function
+
 import numpy as np
 
 # nmrglue modules
@@ -128,13 +130,13 @@ def recalc_orig(dic, data, fn, axis=-1):
     s2 = float(dic[fn + "CENTER"])
 
     # DEBUG
-    #print "Recalc of origin"
-    #print "s:",s
-    #print "axis:",axis
-    #print "sw:",sw
-    #print "car:",car
-    #print "obs:",obs
-    #print "s2:",s2
+    #print("Recalc of origin")
+    #print("s:",s)
+    #print("axis:",axis)
+    #print("sw:",sw)
+    #print("car:",car)
+    #print("obs:",obs)
+    #print("s2:",s2)
 
     dic[fn + "ORIG"] = car * obs - sw * ((s - s2) / s)
     return dic
@@ -411,7 +413,7 @@ def gm(dic, data, g1=0.0, g2=0.0, g3=0.0, c=1.0, start=1, size='default',
         # pipe sets the maximum to the actual data maximum not
         # the maximum of the windowed region, so adj. g3p as necessary
         g3p = g3p * data.shape[-1] / (stop - start)
-        #print start,stop,g1p,g2p,g3p
+        #print(start,stop,g1p,g2p,g3p)
         data[..., start:stop] = p.gm(data[..., start:stop], g1p, g2p, g3p,
                                      inv=inv)
         if one is False:
@@ -593,7 +595,7 @@ def jmod(dic, data, off=0.0, j=0.0, lb=0.0, sin=False, cos=False, c=1.0,
             stop = data.shape[-1]
         else:
             stop = start + size
-        #print start,stop,e,off,end
+        #print(start,stop,e,off,end)
         end = off + j * (stop - start - 1) / sw
         data[..., start:stop] = p.jmod(data[..., start:stop], e, off, end,
                                        inv=inv)
@@ -1145,12 +1147,12 @@ def ft(dic, data, auto=False, real=False, inv=False, alt=False, neg=False,
                         neg = True
 
     if debug:
-        print "real:", real
-        print "inv:", inv
-        print "alt:", alt
-        print "neg:", neg
-        print "null:", null
-        print "bruk:", bruk
+        print("real:", real)
+        print("inv:", inv)
+        print("alt:", alt)
+        print("neg:", neg)
+        print("null:", null)
+        print("bruk:", bruk)
 
     if bruk:
         real = True
@@ -2033,8 +2035,8 @@ def ext(dic, data, x1="default", xn="default", y1="default", yn="default",
             y_min = y_min - (y_max - data.shape[0])
             y_min = data.shape[0]
 
-        #print "ymin:",y_min,"ymax:",y_max
-        #print "xmin:",x_min,"xmax:",x_max
+        #print("ymin:",y_min,"ymax:",y_max)
+        #print("xmin:",x_min,"xmax:",x_max)
 
         data = data[y_min:y_max, x_min:x_max]
         if y_min != 1 and y_max != data.shape[0]:  # only update when sliced

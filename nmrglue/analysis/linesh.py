@@ -3,6 +3,8 @@ Functions for fitting and simulating arbitrary dimensional lineshapes commonly
 found in NMR experiments
 """
 
+from __future__ import print_function
+
 import numpy as np
 
 from .leastsqbound import leastsqbound
@@ -285,10 +287,10 @@ def fit_spectrum(spectrum, lineshapes, params, amps, bounds, ampbounds,
                    zip(ls_classes, rmin, rmax, g)] for g in ecpbest]
 
         if verb:
-            print "-----------------------"
-            print "cID:", cID, "ier:", ier, "Peaks fit", cpeaks
-            print "fit parameters:", cpbest
-            print "fit amplitudes", acbest
+            print("-----------------------")
+            print("cID:", cID, "ier:", ier, "Peaks fit", cpeaks)
+            print("fit parameters:", cpbest)
+            print("fit amplitudes", acbest)
 
         for i, pb, ab in zip(cpeaks, cpbest, acbest):
             pbest[i] = pb
@@ -500,16 +502,16 @@ def fit_NDregion(region, lineshapes, params, amps, bounds=None,
         raise ValueError(err)
 
     # DEBUGGING
-    #print "--------------------------------"
-    #print region
-    #print ls_classes
-    #print p0
-    #print p_bounds
-    #print n_peaks
-    #print dim_nparam
-    #print "================================="
+    #print("--------------------------------")
+    #print(region)
+    #print(ls_classes)
+    #print(p0)
+    #print(p_bounds)
+    #print(n_peaks)
+    #print(dim_nparam)
+    #print("=================================")
     #for i,j in zip(p0,p_bounds):
-    #    print i,j
+    #    print(i, j)
 
     # include full_output=True when errors requested
     if error_flag:
@@ -519,7 +521,7 @@ def fit_NDregion(region, lineshapes, params, amps, bounds=None,
     r = f_NDregion(region, ls_classes, p0, p_bounds, n_peaks, wmask, **kw)
 
     # DEBUGGING
-    #print r
+    #print(r)
 
     # unpack results depending of if full output requested
     if "full_output" in kw and kw["full_output"]:
@@ -620,10 +622,10 @@ def sim_NDregion(shape, lineshapes, params, amps):
     p = list(amps) + p   # amplitudes appended to front of p
 
     # DEBUGGING
-    #print "p",p
-    #print "shape",shape
-    #print "ls_classes",ls_classes
-    #print "n_peaks",n_peaks
+    #print("p",p)
+    #print("shape",shape)
+    #print("ls_classes",ls_classes)
+    #print("n_peaks",n_peaks)
 
     return s_NDregion(p, shape, ls_classes, n_peaks)
 
@@ -755,10 +757,10 @@ def s_single_NDregion(p, shape, ls_classes):
     r = np.array(A, dtype='float')
 
     for length, ls_class in zip(shape, ls_classes):
-        #print "Making lineshape of", ls_class.name, "with length:", length
+        #print("Making lineshape of", ls_class.name, "with length:", length)
         s_p = [p.pop(0) for i in xrange(ls_class.nparam(length))]
         ls = ls_class.sim(length, s_p)
-        #print "Lineshape is:", ls
+        #print("Lineshape is:", ls)
         r = np.kron(r, ls)   # vector direct product flattened
     return r.reshape(shape)
 
