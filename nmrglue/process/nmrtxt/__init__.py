@@ -1,1 +1,1 @@
-from rance_kay import *
+from .rance_kay import *
