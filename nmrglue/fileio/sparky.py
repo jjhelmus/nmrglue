@@ -593,12 +593,13 @@ class sparky_2d(fileiobase.data_nd):
         n = sparky_2d(self.filename, order)
         return n
 
-    def __fgetitem__(self, (sY, sX)):
+    def __fgetitem__(self, slices):
         """
         Returns ndarray of selected values.
 
         (sY, sX) is a well formatted tuple of slices
         """
+        sY, sX = slices
         f = open(self.filename, 'rb')
 
         #print(sY,sX)
@@ -725,12 +726,13 @@ class sparky_3d(fileiobase.data_nd):
         n = sparky_3d(self.filename, order)
         return n
 
-    def __fgetitem__(self, (sZ, sY, sX)):
+    def __fgetitem__(self, slices):
         """
         Returns ndarray of selected values.
 
         (sZ, sY, sX) is a well formateed tuple of slices
         """
+        sZ, sY, sX = slices
         f = open(self.filename, 'rb')
 
         gZ = range(self.lenZ)[sZ]  # list of values to take in Z
@@ -904,7 +906,7 @@ def put_data(f, data):
 
 
 # tiling/untiling functions
-def find_tilen_2d(data, ntile, (lentY, lentX)):
+def find_tilen_2d(data, ntile, tile_size):
     """
     Return a tile from a 2D NMR data set.
 
@@ -927,6 +929,7 @@ def find_tilen_2d(data, ntile, (lentY, lentX)):
     Edge tiles are zero filled to the indicated tile size.
 
     """
+    lentY, lentX = tile_size
     ttX = np.ceil(data.shape[1] / float(lentX))  # total tiles in X dim
     ttY = np.ceil(data.shape[0] / float(lentY))  # total tiles in Y dim
 
@@ -953,7 +956,7 @@ def find_tilen_2d(data, ntile, (lentY, lentX)):
         return new_tile.flatten()
 
 
-def tile_data2d(data, (lentY, lentX)):
+def tile_data2d(data, tile_size):
     """
     Tile 2D data into a 1D array.
 
@@ -970,6 +973,7 @@ def tile_data2d(data, (lentY, lentX)):
         Tiled/Sparky formatted NMR data, returned as 1D array.
 
     """
+    lentY, lentX = tile_size
     # determind the number of tiles in data
     ttX = np.ceil(data.shape[1] / float(lentX))  # total tiles in X dim
     ttY = np.ceil(data.shape[0] / float(lentY))  # total tiles in Y dim
@@ -988,7 +992,7 @@ def tile_data2d(data, (lentY, lentX)):
     return out
 
 
-def untile_data2D(data, (lentY, lentX), (lenY, lenX)):
+def untile_data2D(data, tile_size, data_size):
     """
     Rearrange 2D Tiled/Sparky formatted data into standard format.
 
@@ -1007,6 +1011,8 @@ def untile_data2D(data, (lentY, lentX), (lenY, lenX)):
         NMR data, untiled/standard format.
 
     """
+    lentY, lentX = tile_size
+    lenY, lenX = data_size
     # determind the number of tiles in data
     ttX = np.ceil(lenX / float(lentX))  # total tiles in X dim
     ttY = np.ceil(lenY / float(lentY))  # total tiles in Y dim
@@ -1045,7 +1051,7 @@ def untile_data2D(data, (lentY, lentX), (lenY, lenX)):
     return out[:lenY, :lenX]
 
 
-def find_tilen_3d(data, ntile, (lentZ, lentY, lentX)):
+def find_tilen_3d(data, ntile, tile_size):
     """
     Return a single tile from a 3D NMR data set.
 
@@ -1068,6 +1074,7 @@ def find_tilen_3d(data, ntile, (lentZ, lentY, lentX)):
     Edge tiles are zero filled to the indicated tile size.
 
     """
+    lentZ, lentY, lentX = tile_size
     ttX = np.ceil(data.shape[2] / float(lentX))  # total tiles in X dim
     ttY = np.ceil(data.shape[1] / float(lentY))  # total tiles in Y dim
     ttZ = np.ceil(data.shape[0] / float(lentZ))  # total tiles in Z dim
@@ -1099,7 +1106,7 @@ def find_tilen_3d(data, ntile, (lentZ, lentY, lentX)):
         return new_tile.flatten()
 
 
-def tile_data3d(data, (lentZ, lentY, lentX)):
+def tile_data3d(data, tile_size):
     """
     Tile 3D data into a 1D numpy array
 
@@ -1116,6 +1123,7 @@ def tile_data3d(data, (lentZ, lentY, lentX)):
         Tiled/Sparky formatted NMR data, returned as 1D array.
 
     """
+    lentZ, lentY, lentX = tile_size
     # determind the number of tiles in data
     ttX = np.ceil(data.shape[2] / float(lentX))  # total tiles in X dim
     ttY = np.ceil(data.shape[1] / float(lentY))  # total tiles in Y dim
@@ -1135,7 +1143,7 @@ def tile_data3d(data, (lentZ, lentY, lentX)):
     return out
 
 
-def untile_data3D(data, (lentZ, lentY, lentX), (lenZ, lenY, lenX)):
+def untile_data3D(data, tile_size, data_size):
     """
     Rearrange 3D tiled/Sparky formatted data into standard format.
 
@@ -1154,6 +1162,9 @@ def untile_data3D(data, (lentZ, lentY, lentX), (lenZ, lenY, lenX)):
         NMR data, untiled/standard format.
 
     """
+    lentZ, lentY, lentX = tile_size
+    lenZ, lenY, lenX = data_size
+
     # determind the number of tiles in data
     ttX = np.ceil(lenX / float(lentX))  # total tiles in X dim
     ttY = np.ceil(lenY / float(lentY))  # total tiles in Y dim
