@@ -2,7 +2,7 @@
 Functions for reading and writing NMRPipe files and table (.tab) files
 """
 
-from __future__ import print_function
+from __future__ import print_function, division
 
 __developer_info__ = """
 NMRPipe file structure is described in the NMRPipe man pages and fdatap.h
@@ -1525,16 +1525,19 @@ def fdata2dic(fdata):
     dic["FDDIMORDER"] = [dic["FDDIMORDER1"], dic["FDDIMORDER2"],
                          dic["FDDIMORDER3"], dic["FDDIMORDER4"]]
 
+    def _unpack_str(fmt, d):
+        return struct.unpack(fmt, d)[0].decode().strip('\x00')
+
     # Populate the dictionary with FDATA which contains strings
-    dic["FDF2LABEL"] = struct.unpack('8s', fdata[16:18])[0].rstrip('\x00')
-    dic["FDF1LABEL"] = struct.unpack('8s', fdata[18:20])[0].rstrip('\x00')
-    dic["FDF3LABEL"] = struct.unpack('8s', fdata[20:22])[0].rstrip('\x00')
-    dic["FDF4LABEL"] = struct.unpack('8s', fdata[22:24])[0].rstrip('\x00')
-    dic["FDSRCNAME"] = struct.unpack('16s', fdata[286:290])[0].rstrip('\x00')
-    dic["FDUSERNAME"] = struct.unpack('16s', fdata[290:294])[0].rstrip('\x00')
-    dic["FDTITLE"] = struct.unpack('60s', fdata[297:312])[0].rstrip('\x00')
-    dic["FDCOMMENT"] = struct.unpack('160s', fdata[312:352])[0].rstrip('\x00')
-    dic["FDOPERNAME"] = struct.unpack('32s', fdata[464:472])[0].rstrip('\x00')
+    dic["FDF2LABEL"] = _unpack_str('8s', fdata[16:18])
+    dic["FDF1LABEL"] = _unpack_str('8s', fdata[18:20])
+    dic["FDF3LABEL"] = _unpack_str('8s', fdata[20:22])
+    dic["FDF4LABEL"] = _unpack_str('8s', fdata[22:24])
+    dic["FDSRCNAME"] = _unpack_str('16s', fdata[286:290])
+    dic["FDUSERNAME"] = _unpack_str('16s', fdata[290:294])
+    dic["FDTITLE"] = _unpack_str('60s', fdata[297:312])
+    dic["FDCOMMENT"] = _unpack_str('160s', fdata[312:352])
+    dic["FDOPERNAME"] = _unpack_str('32s', fdata[464:472])
     return dic
 
 
@@ -1554,20 +1557,26 @@ def dic2fdata(dic):
 
     # Pack the various strings into terminated strings of the correct length
     # then into floats in the fdata array
-    fdata[16:18] = struct.unpack('2f', struct.pack('8s', dic["FDF2LABEL"]))
-    fdata[18:20] = struct.unpack('2f', struct.pack('8s', dic["FDF1LABEL"]))
-    fdata[20:22] = struct.unpack('2f', struct.pack('8s', dic["FDF3LABEL"]))
-    fdata[22:24] = struct.unpack('2f', struct.pack('8s', dic["FDF4LABEL"]))
+    fdata[16:18] = struct.unpack(
+        '2f', struct.pack('8s', dic["FDF2LABEL"].encode()))
+    fdata[18:20] = struct.unpack(
+        '2f', struct.pack('8s', dic["FDF1LABEL"].encode()))
+    fdata[20:22] = struct.unpack(
+        '2f', struct.pack('8s', dic["FDF3LABEL"].encode()))
+    fdata[22:24] = struct.unpack(
+        '2f', struct.pack('8s', dic["FDF4LABEL"].encode()))
 
     # and the longer strings (typically blank)
-    fdata[286:290] = struct.unpack('4f', struct.pack('16s', dic["FDSRCNAME"]))
-    fdata[290:294] = struct.unpack('4f', struct.pack('16s',
-                                                     dic["FDUSERNAME"]))
-    fdata[297:312] = struct.unpack('15f', struct.pack('60s', dic["FDTITLE"]))
-    fdata[312:352] = struct.unpack('40f', struct.pack('160s',
-                                                      dic["FDCOMMENT"]))
-    fdata[464:472] = struct.unpack('8f', struct.pack('32s',
-                                                     dic["FDOPERNAME"]))
+    fdata[286:290] = struct.unpack(
+        '4f', struct.pack('16s', dic["FDSRCNAME"].encode()))
+    fdata[290:294] = struct.unpack(
+        '4f', struct.pack('16s', dic["FDUSERNAME"].encode()))
+    fdata[297:312] = struct.unpack(
+        '15f', struct.pack('60s', dic["FDTITLE"].encode()))
+    fdata[312:352] = struct.unpack(
+        '40f', struct.pack('160s', dic["FDCOMMENT"].encode()))
+    fdata[464:472] = struct.unpack(
+        '8f', struct.pack('32s', dic["FDOPERNAME"].encode()))
 
     return fdata
 
@@ -1690,7 +1699,7 @@ class pipe_2d(fileiobase.data_nd):
         else:
             self.cplex = True
             self.dtype = np.dtype('complex64')
-            fshape[1] = fshape[1] / 2
+            fshape[1] = fshape[1] // 2
 
         # finalize
         self.fshape = tuple(fshape)
@@ -1795,7 +1804,7 @@ class pipe_3d(fileiobase.data_nd):
         else:
             self.cplex = True
             self.dtype = np.dtype('complex64')
-            fshape[2] = fshape[2] / 2
+            fshape[2] = fshape[2] // 2
 
         # finalize
         self.filemask = filemask
@@ -1879,7 +1888,7 @@ class pipestream_3d(fileiobase.data_nd):
         else:
             self.cplex = True
             self.dtype = np.dtype('complex64')
-            fshape[2] = fshape[2] / 2
+            fshape[2] = fshape[2] // 2
 
         # finalize
         self.filename = filename
@@ -2005,7 +2014,7 @@ class pipe_4d(fileiobase.data_nd):
         else:
             self.cplex = True
             self.dtype = np.dtype('complex64')
-            fshape[3] = fshape[3] / 2
+            fshape[3] = fshape[3] // 2
 
         # finalize
         self.filemask = filemask
@@ -2100,7 +2109,7 @@ class pipestream_4d(fileiobase.data_nd):
         else:
             self.cplex = True
             self.dtype = np.dtype('complex64')
-            fshape[3] = fshape[3] / 2
+            fshape[3] = fshape[3] // 2
 
         # finalize
         self.fshape = tuple(fshape)
