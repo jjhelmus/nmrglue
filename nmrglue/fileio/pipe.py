@@ -1059,7 +1059,7 @@ def put_data(filename, fdata, data, overwrite=False):
     return
 
 
-def write_slice_3D(filemask, dic, data, shape, (sz, sy, sx)):
+def write_slice_3D(filemask, dic, data, shape, slices):
     """
     Write a slice of a 3D data array to file.
 
@@ -1090,6 +1090,7 @@ def write_slice_3D(filemask, dic, data, shape, (sz, sy, sx)):
     iter3D : Users should use this object, not this function.
 
     """
+    sz, sy, sx = slices
     if data.ndim != 3:
         raise ValueError("passed array must be 3D")
 
@@ -1195,10 +1196,11 @@ def pack_complex(data):
     return np.array(data[..., ::2] + data[..., 1::2] * 1.j, dtype="complex64")
 
 
-def transpose_3D(dic, data, (a1, a2, a3)=(2, 1, 0)):
+def transpose_3D(dic, data, axes=(2, 1, 0)):
     """
     Transpose pipe_3d object and dictionary
     """
+    a1, a2, a3 = axes
     rdic = dict(dic)    # create a copy of the dictionary
 
     # transpose the data
@@ -1698,12 +1700,13 @@ class pipe_2d(fileiobase.data_nd):
         n = pipe_2d(self.filename, order)
         return n
 
-    def __fgetitem__(self, (sY, sX)):
+    def __fgetitem__(self, slices):
         """
         Return ndarray of selected values.
 
         (sY, sX) is a well formated tuple of slices
         """
+        sY, sX = slices
         f = open(self.filename, 'rb')  # open the file for reading
 
         # determine which objects should be selected
@@ -1804,12 +1807,13 @@ class pipe_3d(fileiobase.data_nd):
         n = pipe_3d(self.filemask, order)
         return n
 
-    def __fgetitem__(self, (sZ, sY, sX)):
+    def __fgetitem__(self, slices):
         """
         Return ndarray of selected values
 
         (sZ, sY, sX) is a well formated tuple of slices
         """
+        sZ, sY, sX = slices
         # determine which objects should be selected
         lenZ, lenY, lenX = self.fshape
         xch = range(lenX)[sX]
@@ -1887,12 +1891,13 @@ class pipestream_3d(fileiobase.data_nd):
         n = pipestream_3d(self.filename, order)
         return n
 
-    def __fgetitem__(self, (sZ, sY, sX)):
+    def __fgetitem__(self, slices):
         """
         Return ndarray of selected values
 
         (sZ, sY, sX) is a well formated tuple of slices
         """
+        sZ, sY, sX = slices
         f = open(self.filename, 'rb')  # open the file for reading
 
         # determine which objects should be selected
@@ -2012,13 +2017,14 @@ class pipe_4d(fileiobase.data_nd):
         n = pipe_4d(self.filemask, order)
         return n
 
-    def __fgetitem__(self, (sA, sZ, sY, sX)):
+    def __fgetitem__(self, slices):
         """
         Return ndarray of selected values
 
         (sZ, sY, sX) is a well formated tuple of slices
 
         """
+        sA, sZ, sY, sX = slices
         # determine which objects should be selected
         lenA, lenZ, lenY, lenX = self.fshape
         xch = range(lenX)[sX]
@@ -2104,13 +2110,14 @@ class pipestream_4d(fileiobase.data_nd):
         n = pipestream_4d(self.filename, order)
         return n
 
-    def __fgetitem__(self, (sA, sZ, sY, sX)):
+    def __fgetitem__(self, slices):
         """
         Return ndarray of selected values
 
         (sA, sZ, sY, sX) is a well formated tuple of slices
 
         """
+        sA, sZ, sY, sX = slices
         f = open(self.filename, 'rb')  # open the file for reading
 
         # determine which objects should be selected
