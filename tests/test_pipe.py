@@ -1,15 +1,19 @@
 """ Tests for the fileio.pipe submodule """
 
+from __future__ import print_function
+
 import tempfile
 import os
 import glob
 
+import numpy as np
 from numpy.testing import assert_array_equal
 import nmrglue as ng
 
 from setup import DATA_DIR
 
 # subroutines
+
 
 def write_readback(dic, data):
     """ Write out a NMRPipe file and read back in. """
@@ -21,6 +25,7 @@ def write_readback(dic, data):
     assert_array_equal(data, rdata)
     assert dic == rdic
 
+
 def write_readback_3d(dic, data):
     """ Write out a 3D NMRPipe file and read back in. """
     tf = tempfile.mktemp(dir=".") + "%03d"
@@ -30,6 +35,7 @@ def write_readback_3d(dic, data):
         os.remove(f)
     assert_array_equal(data, rdata)
     assert dic == rdic
+
 
 def lowmem_write_readback_3d(dic, data):
     """ Lowmemory write out and readback of 3D NMRPipe file. """
@@ -42,6 +48,7 @@ def lowmem_write_readback_3d(dic, data):
     assert dic == rdic
     for f in glob.glob(tf[:-4] + "*"):
         os.remove(f)
+
 
 def lowmem_write_readback_4d(dic, data):
     """ Lowmemory write out and readback of 4D NMRPipe file. """
@@ -56,6 +63,7 @@ def lowmem_write_readback_4d(dic, data):
     for f in glob.glob(tf[:-8] + "*"):
         os.remove(f)
 
+
 def lowmem_write_readback(dic, data):
     """ Lowmemory write out and readback of NMRPipe file. """
     # lowmemory write out and read back
@@ -68,13 +76,15 @@ def lowmem_write_readback(dic, data):
     assert dic == rdic
     os.remove(tf)
 
+
 def check_ppm_limits(dic, data, dim, limits):
     """ Check PPM Limits """
     uc0 = ng.pipe.make_uc(dic, data, dim=dim)
     climits = [round(i, 2) for i in uc0.ppm_limits()]
-    print limits
-    print climits
+    print(limits)
+    print(climits)
     assert limits == climits
+
 
 # tests
 def test_1d_time():
@@ -83,11 +93,12 @@ def test_1d_time():
         os.path.join(DATA_DIR, "nmrpipe_1d", "test.fid"))
     assert data.shape == (1500, )
     assert data.dtype == 'complex64'
-    assert round(data[0].real, 2) == 91899.24
-    assert round(data[0].imag, 2) == 1964.70
-    assert round(data[1].real, 2) == 168844.25
-    assert round(data[1].imag, 2) == 49503.41
+    assert np.abs(data[0].real - 91899.24) <= 0.01
+    assert np.abs(data[0].imag - 1964.70) <= 0.01
+    assert np.abs(data[1].real - 168844.25) <= 0.01
+    assert np.abs(data[1].imag - 49503.41) <= 0.01
     write_readback(dic, data)
+
 
 def test_1d_freq():
     """reading/writing of 1D NMRPipe freq domain file"""
@@ -95,11 +106,12 @@ def test_1d_freq():
         os.path.join(DATA_DIR, "nmrpipe_1d", "test.ft"))
     assert data.shape == (4096, )
     assert data.dtype == 'float32'
-    assert round(data[0], 0) == -63790.
-    assert round(data[1], 1) == -63159.9
-    assert round(data[100], 0) == -29308.
+    assert np.abs(data[0] - -63790.) <= 1.
+    assert np.abs(data[1] - -63159.9) <= 0.1
+    assert np.abs(data[100] - -29308.) <= 1.
     write_readback(dic, data)
     check_ppm_limits(dic, data, 0, [297.92, -99.82])
+
 
 def test_1d_cut():
     """reading/writing of 1D NMRPipe with EXTracted region"""
@@ -107,11 +119,12 @@ def test_1d_cut():
         os.path.join(DATA_DIR, "nmrpipe_1d", "test_cut.ft"))
     assert data.shape == (2766, )
     assert data.dtype == 'float32'
-    assert round(data[0], 1) == -12123.7
-    assert round(data[1], 0) == -8979
-    assert round(data[100], 1) == -7625.3
+    assert np.abs(data[0] - -12123.7) <= 0.1
+    assert np.abs(data[1] - -8979) <= 1.
+    assert np.abs(data[100] - -7625.3) <= 0.1
     write_readback(dic, data)
     check_ppm_limits(dic, data, 0, [278.59, 10.03])
+
 
 def test_2d_time():
     """reading/writing of 2D NMRPipe time domain file"""
@@ -119,11 +132,12 @@ def test_2d_time():
         os.path.join(DATA_DIR, "nmrpipe_2d", "test.fid"))
     assert data.shape == (332, 1500)
     assert data.dtype == 'complex64'
-    assert round(data[0, 1].real, 2) == 360.07
-    assert round(data[0, 1].imag, 2) == 223.20
-    assert round(data[10, 22].real, 2) == -26.76
-    assert round(data[10, 22].imag, 2) == 42.67
+    assert np.abs(data[0, 1].real - 360.07) <= 0.01
+    assert np.abs(data[0, 1].imag - 223.20) <= 0.01
+    assert np.abs(data[10, 22].real - -26.76) <= 0.01
+    assert np.abs(data[10, 22].imag - 42.67) <= 0.01
     write_readback(dic, data)
+
 
 def test_2d_freq():
     """reading/writing of 2D NMRPipe freq domain file"""
@@ -131,11 +145,12 @@ def test_2d_freq():
         os.path.join(DATA_DIR, "nmrpipe_2d", "test.ft2"))
     assert data.shape == (2048, 4096)
     assert data.dtype == 'float32'
-    assert round(data[0, 1], 2) == 1601.83
-    assert round(data[10, 22], 2) == 3079.44
+    assert np.abs(data[0, 1] - 1601.83) <= 0.01
+    assert np.abs(data[10, 22] - 3079.44) <= 0.01
     write_readback(dic, data)
     check_ppm_limits(dic, data, 0, [174.84, 65.21])
     check_ppm_limits(dic, data, 1, [253.90, -143.80])
+
 
 def test_2d_time_tran():
     """reading/writing of TransPosed 2D NMRPipe time domain file"""
@@ -143,11 +158,12 @@ def test_2d_time_tran():
         os.path.join(DATA_DIR, "nmrpipe_2d", "test_tp.fid"))
     assert data.shape == (3000, 166)
     assert data.dtype == 'complex64'
-    assert round(data[0, 1].real, 2) == 99.46
-    assert round(data[0, 1].imag, 2) == -80.63
-    assert round(data[10, 22].real, 2) == 34.66
-    assert round(data[10, 22].imag, 2) == 35.00
+    assert np.abs(data[0, 1].real - 99.46) <= 0.01
+    assert np.abs(data[0, 1].imag - -80.63) <= 0.01
+    assert np.abs(data[10, 22].real - 34.66) <= 0.01
+    assert np.abs(data[10, 22].imag - 35.00) <= 0.01
     write_readback(dic, data)
+
 
 def test_2d_freq_tran():
     """reading/writing of TransPosed 2D NMRPipe freq domain file"""
@@ -155,11 +171,12 @@ def test_2d_freq_tran():
         os.path.join(DATA_DIR, "nmrpipe_2d", "test_tp.ft2"))
     assert data.shape == (4096, 2048)
     assert data.dtype == 'float32'
-    assert round(data[0, 1], 2) == -1525.10
-    assert round(data[10, 22], 2) == 1731.94
+    assert np.abs(data[0, 1] - -1525.10) <= 0.01
+    assert np.abs(data[10, 22] - 1731.94) <= 0.01
     write_readback(dic, data)
     check_ppm_limits(dic, data, 0, [253.90, -143.80])
     check_ppm_limits(dic, data, 1, [174.84, 65.21])
+
 
 def test_2d_time_lowmem():
     """lowmemory reading/writing of 2D NMRPipe time domain file"""
@@ -167,11 +184,12 @@ def test_2d_time_lowmem():
         os.path.join(DATA_DIR, "nmrpipe_2d", "test.fid"))
     assert data.shape == (332, 1500)
     assert data.dtype == 'complex64'
-    assert round(data[0, 1].real, 2) == 360.07
-    assert round(data[0, 1].imag, 2) == 223.20
-    assert round(data[10, 22].real, 2) == -26.76
-    assert round(data[10, 22].imag, 2) == 42.67
+    assert np.abs(data[0, 1].real - 360.07) <= 0.01
+    assert np.abs(data[0, 1].imag - 223.20) <= 0.01
+    assert np.abs(data[10, 22].real - -26.76) <= 0.01
+    assert np.abs(data[10, 22].imag - 42.67) <= 0.01
     lowmem_write_readback(dic, data)
+
 
 def test_2d_freq_lowmem():
     """lowmemory reading/writing of 2D NMRPipe freq domain file"""
@@ -179,11 +197,12 @@ def test_2d_freq_lowmem():
         os.path.join(DATA_DIR, "nmrpipe_2d", "test.ft2"))
     assert data.shape == (2048, 4096)
     assert data.dtype == 'float32'
-    assert round(data[0, 1], 2) == 1601.83
-    assert round(data[10, 22], 2) == 3079.44
+    assert np.abs(data[0, 1] - 1601.83) <= 0.01
+    assert np.abs(data[10, 22] - 3079.44) <= 0.01
     lowmem_write_readback(dic, data)
     check_ppm_limits(dic, data, 0, [174.84, 65.21])
     check_ppm_limits(dic, data, 1, [253.90, -143.80])
+
 
 def test_3d_time():
     """reading/writing of 3D NMRPipe time domain data"""
@@ -193,23 +212,24 @@ def test_3d_time():
         os.path.join(DATA_DIR, "nmrpipe_3d", "data", "test001.fid"))
     assert data.shape == (128, 88, 1250)
     assert data.dtype == 'complex64'
-    assert round(data[0, 1, 2].real, 2) == -7.98
-    assert round(data[0, 1, 2].imag, 2) == 33.82
-    assert round(data[10, 22, 5].real, 2) == 15.71
-    assert round(data[10, 22, 5].imag, 2) == 15.1
+    assert np.abs(data[0, 1, 2].real - -7.98) <= 0.01
+    assert np.abs(data[0, 1, 2].imag - 33.82) <= 0.01
+    assert np.abs(data[10, 22, 5].real - 15.71) <= 0.01
+    assert np.abs(data[10, 22, 5].imag - 15.1) <= 0.01
 
     # and the first slice
     assert sdata.shape == (88, 1250)
     assert sdata.dtype == 'complex64'
-    assert round(sdata[1, 2].real, 2) == -7.98
-    assert round(sdata[1, 2].imag, 2) == 33.82
-    assert round(sdata[22, 5].real, 2) == 22.65
-    assert round(sdata[22, 5].imag, 2) == 13.65
+    assert np.abs(sdata[1, 2].real - -7.98) <= 0.01
+    assert np.abs(sdata[1, 2].imag - 33.82) <= 0.01
+    assert np.abs(sdata[22, 5].real - 22.65) <= 0.01
+    assert np.abs(sdata[22, 5].imag - 13.65) <= 0.01
 
     # slice/data matching
     assert_array_equal(data[0], sdata)
 
     write_readback_3d(dic, data)
+
 
 def test_3d_freq():
     """reading/writing of 3D NMRPipe freq domain data"""
@@ -219,8 +239,8 @@ def test_3d_freq():
         os.path.join(DATA_DIR, "nmrpipe_3d", "ft", "test001.ft3"))
     assert data.shape == (128, 128, 4096)
     assert data.dtype == 'float32'
-    assert round(data[0, 1, 2], 2) == 25980.13
-    assert round(data[10, 22, 5], 2) == 1561.09
+    assert np.abs(data[0, 1, 2] - 25980.13) <= 0.01
+    assert np.abs(data[10, 22, 5] - 1561.09) <= 0.01
     check_ppm_limits(dic, data, 0, [78.10, 34.24])
     check_ppm_limits(dic, data, 1, [147.42, 93.01])
     check_ppm_limits(dic, data, 2, [254.92, -142.83])
@@ -228,8 +248,8 @@ def test_3d_freq():
     # and the first slice
     assert sdata.shape == (128, 4096)
     assert sdata.dtype == 'float32'
-    assert round(sdata[1, 2], 0) == 25980
-    assert round(sdata[22, 5], 0) == -8336
+    assert np.abs(sdata[1, 2] - 25980) <= 1.
+    assert np.abs(sdata[22, 5] - -8336) <= 1.
     check_ppm_limits(sdic, sdata, 0, [147.42, 93.01])
     check_ppm_limits(sdic, sdata, 1, [254.92, -142.83])
 
@@ -245,11 +265,12 @@ def test_3d_time_lowmem():
         os.path.join(DATA_DIR, "nmrpipe_3d", "data", "test%03d.fid"))
     assert data.shape == (128, 88, 1250)
     assert data.dtype == 'complex64'
-    assert round(data[0, 1, 2].real, 2) == -7.98
-    assert round(data[0, 1, 2].imag, 2) == 33.82
-    assert round(data[10, 22, 5].real, 2) == 15.71
-    assert round(data[10, 22, 5].imag, 2) == 15.1
+    assert np.abs(data[0, 1, 2].real - -7.98) <= 0.01
+    assert np.abs(data[0, 1, 2].imag - 33.82) <= 0.01
+    assert np.abs(data[10, 22, 5].real - 15.71) <= 0.01
+    assert np.abs(data[10, 22, 5].imag - 15.1) <= 0.01
     lowmem_write_readback_3d(dic, data)
+
 
 def test_3d_freq_lowmem():
     """lowmemory reading/writing of 3D NMRPipe freq domain data"""
@@ -257,12 +278,13 @@ def test_3d_freq_lowmem():
         os.path.join(DATA_DIR, "nmrpipe_3d", "ft", "test%03d.ft3"))
     assert data.shape == (128, 128, 4096)
     assert data.dtype == 'float32'
-    assert round(data[0, 1, 2], 2) == 25980.13
-    assert round(data[10, 22, 5], 2) == 1561.09
+    assert np.abs(data[0, 1, 2] - 25980.13) <= 0.01
+    assert np.abs(data[10, 22, 5] - 1561.09) <= 0.01
     check_ppm_limits(dic, data, 0, [78.10, 34.24])
     check_ppm_limits(dic, data, 1, [147.42, 93.01])
     check_ppm_limits(dic, data, 2, [254.92, -142.83])
     lowmem_write_readback_3d(dic, data)
+
 
 def test_3d_stream_time():
     """reading/writing of 3D NMRPipe data stream time domain file"""
@@ -270,11 +292,12 @@ def test_3d_stream_time():
         os.path.join(DATA_DIR, "nmrpipe_3d", "full3D.fid"))
     assert data.shape == (128, 88, 1250)
     assert data.dtype == 'complex64'
-    assert round(data[0, 1, 2].real, 2) == -7.98
-    assert round(data[0, 1, 2].imag, 2) == 33.82
-    assert round(data[10, 22, 5].real, 2) == 15.71
-    assert round(data[10, 22, 5].imag, 2) == 15.1
+    assert np.abs(data[0, 1, 2].real - -7.98) <= 0.01
+    assert np.abs(data[0, 1, 2].imag - 33.82) <= 0.01
+    assert np.abs(data[10, 22, 5].real - 15.71) <= 0.01
+    assert np.abs(data[10, 22, 5].imag - 15.1) <= 0.01
     write_readback(dic, data)
+
 
 def test_3d_stream_freq():
     """reading/writing of 3D NMRPipe data stream freq domain file"""
@@ -282,12 +305,13 @@ def test_3d_stream_freq():
         os.path.join(DATA_DIR, "nmrpipe_3d", "full3D.ft3"))
     assert data.shape == (128, 128, 4096)
     assert data.dtype == 'float32'
-    assert round(data[0, 1, 2], 2) == 25980.13
-    assert round(data[10, 22, 5], 2) == 1561.09
+    assert np.abs(data[0, 1, 2] - 25980.13) <= 0.01
+    assert np.abs(data[10, 22, 5] - 1561.09) <= 0.01
     check_ppm_limits(dic, data, 0, [78.10, 34.24])
     check_ppm_limits(dic, data, 1, [147.42, 93.01])
     check_ppm_limits(dic, data, 2, [254.92, -142.83])
     write_readback(dic, data)
+
 
 def test_3d_stream_time_lowmem():
     """lowmemory reading/writing of 3D NMRPipe data stream time domain file"""
@@ -295,11 +319,12 @@ def test_3d_stream_time_lowmem():
         os.path.join(DATA_DIR, "nmrpipe_3d", "full3D.fid"))
     assert data.shape == (128, 88, 1250)
     assert data.dtype == 'complex64'
-    assert round(data[0, 1, 2].real, 2) == -7.98
-    assert round(data[0, 1, 2].imag, 2) == 33.82
-    assert round(data[10, 22, 5].real, 2) == 15.71
-    assert round(data[10, 22, 5].imag, 2) == 15.1
+    assert np.abs(data[0, 1, 2].real - -7.98) <= 0.01
+    assert np.abs(data[0, 1, 2].imag - 33.82) <= 0.01
+    assert np.abs(data[10, 22, 5].real - 15.71) <= 0.01
+    assert np.abs(data[10, 22, 5].imag - 15.1) <= 0.01
     lowmem_write_readback(dic, data)
+
 
 def test_3d_stream_freq_lowmem():
     """lowmemory reading/writing of 3D NMRPipe data stream freq domain file"""
@@ -307,12 +332,13 @@ def test_3d_stream_freq_lowmem():
         os.path.join(DATA_DIR, "nmrpipe_3d", "full3D.ft3"))
     assert data.shape == (128, 128, 4096)
     assert data.dtype == 'float32'
-    assert round(data[0, 1, 2], 2) == 25980.13
-    assert round(data[10, 22, 5], 2) == 1561.09
+    assert np.abs(data[0, 1, 2] - 25980.13) <= 0.01
+    assert np.abs(data[10, 22, 5] - 1561.09) <= 0.01
     check_ppm_limits(dic, data, 0, [78.10, 34.24])
     check_ppm_limits(dic, data, 1, [147.42, 93.01])
     check_ppm_limits(dic, data, 2, [254.92, -142.83])
     lowmem_write_readback(dic, data)
+
 
 def test_3d_slicing():
     """lowmemory 3D slicing"""
@@ -375,6 +401,7 @@ def test_3d_slicing():
     assert_array_equal(fdata[-1:-100:-3, -1::-1, 0],
                        data[-1:-100:-3, -1::-1, 0])
 
+
 def test_3d_tranpose():
     """lowmemory 3D axis transposing and swaps"""
     dic, data = ng.pipe.read_lowmem(
@@ -390,6 +417,7 @@ def test_3d_tranpose():
     assert_array_equal(fdata.swapaxes(2, 0)[0, 1, 2],
                        data.swapaxes(2, 0)[0, 1, 2])
 
+
 def test_4d_single_index_time():
     """reading/writing of 4D single-index NMRPipe time domain file"""
     fmask = os.path.join(DATA_DIR, "nmrpipe_4d", "time_1index",
@@ -402,23 +430,24 @@ def test_4d_single_index_time():
 
     assert data.shape == (8, 12, 16, 1400)
     assert data.dtype == 'complex64'
-    assert round(data[0, 1, 2, 3].real, 2) == -395.11
-    assert round(data[0, 1, 2, 3].imag, 2) == 52.72
-    assert round(data[5, 9, 11, 987].real, 2) == -35.09
-    assert round(data[5, 9, 11, 987].imag, 2) == 33.07
+    assert np.abs(data[0, 1, 2, 3].real - -395.11) <= 0.01
+    assert np.abs(data[0, 1, 2, 3].imag - 52.72) <= 0.01
+    assert np.abs(data[5, 9, 11, 987].real - -35.09) <= 0.01
+    assert np.abs(data[5, 9, 11, 987].imag - 33.07) <= 0.01
 
     # check the slice
     assert sdata.shape == (16, 1400)
     assert sdata.dtype == 'complex64'
-    assert round(sdata[1, 2].real, 2) == 75.93
-    assert round(sdata[1, 2].imag, 2) == 5.55
-    assert round(sdata[7, 800].real, 2) == -8.93
-    assert round(sdata[7, 800].imag, 2) == -10.24
+    assert np.abs(sdata[1, 2].real - 75.93) <= 0.01
+    assert np.abs(sdata[1, 2].imag - 5.55) <= 0.01
+    assert np.abs(sdata[7, 800].real - -8.93) <= 0.01
+    assert np.abs(sdata[7, 800].imag - -10.24) <= 0.01
 
     # slice/data matching
     assert_array_equal(data[1, 5], sdata)
 
     lowmem_write_readback_3d(dic, data)
+
 
 def test_4d_two_index_time():
     """reading/writing of 4D double-index NMRPipe time domain file"""
@@ -432,23 +461,24 @@ def test_4d_two_index_time():
 
     assert data.shape == (8, 12, 16, 1400)
     assert data.dtype == 'complex64'
-    assert round(data[0, 1, 2, 3].real, 2) == -395.11
-    assert round(data[0, 1, 2, 3].imag, 2) == 52.72
-    assert round(data[5, 9, 11, 987].real, 2) == -35.09
-    assert round(data[5, 9, 11, 987].imag, 2) == 33.07
+    assert np.abs(data[0, 1, 2, 3].real - -395.11) <= 0.01
+    assert np.abs(data[0, 1, 2, 3].imag - 52.72) <= 0.01
+    assert np.abs(data[5, 9, 11, 987].real - -35.09) <= 0.01
+    assert np.abs(data[5, 9, 11, 987].imag - 33.07) <= 0.01
 
     # check the slice
     assert sdata.shape == (16, 1400)
     assert sdata.dtype == 'complex64'
-    assert round(sdata[1, 2].real, 2) == 75.93
-    assert round(sdata[1, 2].imag, 2) == 5.55
-    assert round(sdata[7, 800].real, 2) == -8.93
-    assert round(sdata[7, 800].imag, 2) == -10.24
+    assert np.abs(sdata[1, 2].real - 75.93) <= 0.01
+    assert np.abs(sdata[1, 2].imag - 5.55) <= 0.01
+    assert np.abs(sdata[7, 800].real - -8.93) <= 0.01
+    assert np.abs(sdata[7, 800].imag - -10.24) <= 0.01
 
     # slice/data matching
     assert_array_equal(data[1, 5], sdata)
 
     lowmem_write_readback_4d(dic, data)
+
 
 def test_4d_stream_time():
     """reading/writing of 4D data stream NMRPipe time domain file"""
@@ -461,23 +491,24 @@ def test_4d_stream_time():
 
     assert data.shape == (8, 12, 16, 1400)
     assert data.dtype == 'complex64'
-    assert round(data[0, 1, 2, 3].real, 2) == -395.11
-    assert round(data[0, 1, 2, 3].imag, 2) == 52.72
-    assert round(data[5, 9, 11, 987].real, 2) == -35.09
-    assert round(data[5, 9, 11, 987].imag, 2) == 33.07
+    assert np.abs(data[0, 1, 2, 3].real - -395.11) <= 0.01
+    assert np.abs(data[0, 1, 2, 3].imag - 52.72) <= 0.01
+    assert np.abs(data[5, 9, 11, 987].real - -35.09) <= 0.01
+    assert np.abs(data[5, 9, 11, 987].imag - 33.07) <= 0.01
 
     # check the slice
     assert sdata.shape == (16, 1400)
     assert sdata.dtype == 'complex64'
-    assert round(sdata[1, 2].real, 2) == 75.93
-    assert round(sdata[1, 2].imag, 2) == 5.55
-    assert round(sdata[7, 800].real, 2) == -8.93
-    assert round(sdata[7, 800].imag, 2) == -10.24
+    assert np.abs(sdata[1, 2].real - 75.93) <= 0.01
+    assert np.abs(sdata[1, 2].imag - 5.55) <= 0.01
+    assert np.abs(sdata[7, 800].real - -8.93) <= 0.01
+    assert np.abs(sdata[7, 800].imag - -10.24) <= 0.01
 
     # slice/data matching
     assert_array_equal(data[1, 5], sdata)
 
     lowmem_write_readback(dic, data)
+
 
 def test_4d_single_index_freq():
     """reading/writing of 4D single-index NMRPipe freq domain file"""
@@ -489,8 +520,8 @@ def test_4d_single_index_freq():
 
     assert data.shape == (8, 16, 16, 4096)
     assert data.dtype == 'float32'
-    assert round(data[0, 1, 2, 3], 2) == -2703.98
-    assert round(data[5, 9, 11, 891], 2) == 5212.07
+    assert np.abs(data[0, 1, 2, 3] - -2703.98) <= 0.01
+    assert np.abs(data[5, 9, 11, 891] - 5212.07) <= 0.01
     check_ppm_limits(dic, data, 0, [321.03, -65.77])
     check_ppm_limits(dic, data, 1, [321.03, -93.40])
     check_ppm_limits(dic, data, 2, [232.62, -16.04])
@@ -499,8 +530,8 @@ def test_4d_single_index_freq():
     # check the slice
     assert sdata.shape == (16, 4096)
     assert sdata.dtype == 'float32'
-    assert round(sdata[1, 2], 2) == 602.70
-    assert round(sdata[12, 900], 2) == 2717.60
+    assert np.abs(sdata[1, 2] - 602.70) <= 0.01
+    assert np.abs(sdata[12, 900] - 2717.60) <= 0.01
     check_ppm_limits(sdic, sdata, 0, [232.62, -16.04])
     check_ppm_limits(sdic, sdata, 1, [298.92, -98.83])
 
@@ -508,6 +539,7 @@ def test_4d_single_index_freq():
     assert_array_equal(data[3, 4], sdata)
 
     lowmem_write_readback_3d(dic, data)
+
 
 def test_4d_two_index_freq():
     """reading/writing of 4D double-index NMRPipe freq domain file"""
@@ -520,8 +552,8 @@ def test_4d_two_index_freq():
 
     assert data.shape == (8, 16, 16, 4096)
     assert data.dtype == 'float32'
-    assert round(data[0, 1, 2, 3], 2) == -2703.98
-    assert round(data[5, 9, 11, 891], 2) == 5212.07
+    assert np.abs(data[0, 1, 2, 3] - -2703.98) <= 0.01
+    assert np.abs(data[5, 9, 11, 891] - 5212.07) <= 0.01
     check_ppm_limits(dic, data, 0, [321.03, -65.77])
     check_ppm_limits(dic, data, 1, [321.03, -93.40])
     check_ppm_limits(dic, data, 2, [232.62, -16.04])
@@ -530,8 +562,8 @@ def test_4d_two_index_freq():
     # check the slice
     assert sdata.shape == (16, 4096)
     assert sdata.dtype == 'float32'
-    assert round(sdata[1, 2], 2) == 602.70
-    assert round(sdata[12, 900], 2) == 2717.60
+    assert np.abs(sdata[1, 2] - 602.70) <= 0.01
+    assert np.abs(sdata[12, 900] - 2717.60) <= 0.01
     check_ppm_limits(sdic, sdata, 0, [232.62, -16.04])
     check_ppm_limits(sdic, sdata, 1, [298.92, -98.83])
 
@@ -539,6 +571,7 @@ def test_4d_two_index_freq():
     assert_array_equal(data[3, 4], sdata)
 
     lowmem_write_readback_4d(dic, data)
+
 
 def test_4d_stream_index_freq():
     """reading/writing of 4D data stream NMRPipe freq domain file"""
@@ -550,8 +583,8 @@ def test_4d_stream_index_freq():
 
     assert data.shape == (8, 16, 16, 4096)
     assert data.dtype == 'float32'
-    assert round(data[0, 1, 2, 3], 2) == -2703.98
-    assert round(data[5, 9, 11, 891], 2) == 5212.07
+    assert np.abs(data[0, 1, 2, 3] - -2703.98) <= 0.01
+    assert np.abs(data[5, 9, 11, 891] - 5212.07) <= 0.01
     check_ppm_limits(dic, data, 0, [321.03, -65.77])
     check_ppm_limits(dic, data, 1, [321.03, -93.40])
     check_ppm_limits(dic, data, 2, [232.62, -16.04])
@@ -560,8 +593,8 @@ def test_4d_stream_index_freq():
     # check the slice
     assert sdata.shape == (16, 4096)
     assert sdata.dtype == 'float32'
-    assert round(sdata[1, 2], 2) == 602.70
-    assert round(sdata[12, 900], 2) == 2717.60
+    assert np.abs(sdata[1, 2] - 602.70) <= 0.01
+    assert np.abs(sdata[12, 900] - 2717.60) <= 0.01
     check_ppm_limits(sdic, sdata, 0, [232.62, -16.04])
     check_ppm_limits(sdic, sdata, 1, [298.92, -98.83])
 
