@@ -11,7 +11,10 @@ NMRPipe file structure is described in the NMRPipe man pages and fdatap.h
 import struct
 import datetime
 import os
-from StringIO import StringIO
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 from warnings import warn
 
 import numpy as np
