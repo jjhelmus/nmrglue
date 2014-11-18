@@ -30,7 +30,7 @@ NotImplemented exception:
 
 """
 
-from __future__ import print_function
+from __future__ import print_function, division
 
 import numpy as np
 
@@ -2073,7 +2073,7 @@ def ext(dic, data, x1="default", xn="default", y1="default", yn="default",
                 s = s / 2
 
             if dic[fn + "FTFLAG"] == 0:  # time domain
-                dic[fn + "CENTER"] = s / 2 + 1
+                dic[fn + "CENTER"] = s // 2 + 1
                 dic[fn + "APOD"] = s
                 dic[fn + "TDSIZE"] = s
                 dic = recalc_orig(dic, data, fn, -2)
