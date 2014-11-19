@@ -3,7 +3,7 @@ Functions for reading and writing Agilent/Varian binary (fid) files and
 parameter (procpar) files.
 """
 
-from __future__ import print_function
+from __future__ import print_function, division
 
 __developer_doc__ = """
 Agilent/Varian file format information
@@ -23,6 +23,7 @@ import os
 import struct
 import inspect
 from warnings import warn
+from functools import reduce
 
 import numpy as np
 
@@ -909,7 +910,7 @@ def write_fid(filename, dic, data, torder='flat', repack=False, correct=True,
         data = order_data(data, torder)
 
     # verify data and dic shapes
-    if data.shape[1] != (dic['np'] / 2):
+    if data.shape[1] != (dic['np'] // 2):
         warn("data and np size mismatch")
         if correct:
             dic['np'] = int(data.shape[1] * 2)
@@ -919,7 +920,7 @@ def write_fid(filename, dic, data, torder='flat', repack=False, correct=True,
             dic['nblocks'] = int(data.shape[0])
 
     # open file for writing
-    f = fileiobase.open_towrite(filename, overwrite=overwrite)
+    f = fileiobase.open_towrite(filename, overwrite=overwrite, mode='wb')
 
     if repack:
         dic = repack_fileheader(dic)
@@ -993,7 +994,7 @@ def write_fid_lowmem(filename, dic, data, torder='f', repack=False,
     t2i = torder2t2i(torder)
 
     # verify data and dic shapes
-    if data.shape[-1] != (dic["np"] / 2):
+    if data.shape[-1] != (dic["np"] // 2):
         warn("data and np size mismatch")
         if correct:
             dic['np'] = int(data.shape[1] * 2)
@@ -1004,7 +1005,7 @@ def write_fid_lowmem(filename, dic, data, torder='f', repack=False,
             dic['nblocks'] = nblocks
 
     # open file for writing
-    f = fileiobase.open_towrite(filename, overwrite=overwrite)
+    f = fileiobase.open_towrite(filename, overwrite=overwrite, mode='wb')
 
     if repack:
         dic = repack_fileheader(dic)
@@ -1460,7 +1461,7 @@ def hyperheader2dic(head):
     dic["f_spare2"] = head[8]
 
     #unpack the status bits
-    dic["UHYPERCOMPLEX"] = (dic["status"] & 0x2) / 0x2
+    dic["UHYPERCOMPLEX"] = (dic["status"] & 0x2) // 0x2
 
     return dic
 
@@ -1572,35 +1573,35 @@ def blockheader2dic(head):
     dic["tlt"] = head[8]
 
     # unpack the status parameters
-    dic["S_DATA"] = (dic["status"] & 0x1) / 0x1
-    dic["S_SPEC"] = (dic["status"] & 0x2) / 0x2
-    dic["S_32"] = (dic["status"] & 0x4) / 0x4
-    dic["S_FLOAT"] = (dic["status"] & 0x8) / 0x8
-    dic["S_COMPLEX"] = (dic["status"] & 0x10) / 0x10
-    dic["S_HYPERCOMPLEX"] = (dic["status"] & 0x20) / 0x20
+    dic["S_DATA"] = (dic["status"] & 0x1) // 0x1
+    dic["S_SPEC"] = (dic["status"] & 0x2) // 0x2
+    dic["S_32"] = (dic["status"] & 0x4) // 0x4
+    dic["S_FLOAT"] = (dic["status"] & 0x8) // 0x8
+    dic["S_COMPLEX"] = (dic["status"] & 0x10) // 0x10
+    dic["S_HYPERCOMPLEX"] = (dic["status"] & 0x20) // 0x20
 
-    dic["MORE_BLOCKS"] = (dic["status"] & 0x80) / 0x80
-    dic["NP_CMPLX"] = (dic["status"] & 0x100) / 0x100
-    dic["NF_CMPLX"] = (dic["status"] & 0x200) / 0x200
-    dic["NI_CMPLX"] = (dic["status"] & 0x400) / 0x400
-    dic["NI2_CMPLX"] = (dic["status"] & 0x800) / 0x800
+    dic["MORE_BLOCKS"] = (dic["status"] & 0x80) // 0x80
+    dic["NP_CMPLX"] = (dic["status"] & 0x100) // 0x100
+    dic["NF_CMPLX"] = (dic["status"] & 0x200) // 0x200
+    dic["NI_CMPLX"] = (dic["status"] & 0x400) // 0x400
+    dic["NI2_CMPLX"] = (dic["status"] & 0x800) // 0x800
 
     # unpack the mode parameter
-    dic["NP_PHMODE"] = (dic["mode"] & 0x1) / 0x1
-    dic["NP_AVMODE"] = (dic["mode"] & 0x2) / 0x2
-    dic["NP_PWRMODE"] = (dic["mode"] & 0x4) / 0x4
+    dic["NP_PHMODE"] = (dic["mode"] & 0x1) // 0x1
+    dic["NP_AVMODE"] = (dic["mode"] & 0x2) // 0x2
+    dic["NP_PWRMODE"] = (dic["mode"] & 0x4) // 0x4
 
-    dic["NF_PHMODE"] = (dic["mode"] & 0x10) / 0x10
-    dic["NF_AVMODE"] = (dic["mode"] & 0x20) / 0x20
-    dic["NF_PWRMODE"] = (dic["mode"] & 0x40) / 0x40
+    dic["NF_PHMODE"] = (dic["mode"] & 0x10) // 0x10
+    dic["NF_AVMODE"] = (dic["mode"] & 0x20) // 0x20
+    dic["NF_PWRMODE"] = (dic["mode"] & 0x40) // 0x40
 
-    dic["NI_PHMODE"] = (dic["mode"] & 0x100) / 0x100
-    dic["NI_AVMODE"] = (dic["mode"] & 0x200) / 0x200
-    dic["NI_PWRMODE"] = (dic["mode"] & 0x400) / 0x400
+    dic["NI_PHMODE"] = (dic["mode"] & 0x100) // 0x100
+    dic["NI_AVMODE"] = (dic["mode"] & 0x200) // 0x200
+    dic["NI_PWRMODE"] = (dic["mode"] & 0x400) // 0x400
 
-    dic["NI2_PHMODE"] = (dic["mode"] & 0x1000) / 0x1000
-    dic["NI2_AVMODE"] = (dic["mode"] & 0x2000) / 0x2000
-    dic["NI2_PWRMODE"] = (dic["mode"] & 0x4000) / 0x4000
+    dic["NI2_PHMODE"] = (dic["mode"] & 0x1000) // 0x1000
+    dic["NI2_AVMODE"] = (dic["mode"] & 0x2000) // 0x2000
+    dic["NI2_PWRMODE"] = (dic["mode"] & 0x4000) // 0x4000
 
     return dic
 
@@ -1661,19 +1662,19 @@ def fileheader2dic(head):
     dic["nbheaders"] = head[8]
 
     # unpack the status parameter
-    dic["S_DATA"] = (dic["status"] & 0x1) / 0x1
-    dic["S_SPEC"] = (dic["status"] & 0x2) / 0x2
-    dic["S_32"] = (dic["status"] & 0x4) / 0x4
-    dic["S_FLOAT"] = (dic["status"] & 0x8) / 0x8
-    dic["S_COMPLEX"] = (dic["status"] & 0x10) / 0x10
-    dic["S_HYPERCOMPLEX"] = (dic["status"] & 0x20) / 0x20
-    dic["S_ACQPAR"] = (dic["status"] & 0x80) / 0x80
-    dic["S_SECND"] = (dic["status"] & 0x100) / 0x100
-    dic["S_TRANSF"] = (dic["status"] & 0x200) / 0x200
-    dic["S_NP"] = (dic["status"] & 0x800) / 0x800
-    dic["S_NF"] = (dic["status"] & 0x1000) / 0x1000
-    dic["S_NI"] = (dic["status"] & 0x2000) / 0x2000
-    dic["S_NI2"] = (dic["status"] & 0x4000) / 0x4000
+    dic["S_DATA"] = (dic["status"] & 0x1) // 0x1
+    dic["S_SPEC"] = (dic["status"] & 0x2) // 0x2
+    dic["S_32"] = (dic["status"] & 0x4) // 0x4
+    dic["S_FLOAT"] = (dic["status"] & 0x8) // 0x8
+    dic["S_COMPLEX"] = (dic["status"] & 0x10) // 0x10
+    dic["S_HYPERCOMPLEX"] = (dic["status"] & 0x20) // 0x20
+    dic["S_ACQPAR"] = (dic["status"] & 0x80) // 0x80
+    dic["S_SECND"] = (dic["status"] & 0x100) // 0x100
+    dic["S_TRANSF"] = (dic["status"] & 0x200) // 0x200
+    dic["S_NP"] = (dic["status"] & 0x800) // 0x800
+    dic["S_NF"] = (dic["status"] & 0x1000) // 0x1000
+    dic["S_NI"] = (dic["status"] & 0x2000) // 0x2000
+    dic["S_NI2"] = (dic["status"] & 0x4000) // 0x4000
 
     return dic
 
@@ -1891,7 +1892,7 @@ def get_parameter(f):
     dic = dict()
 
     # read and decode the first line
-    line = f.readline().split()
+    line = f.readline().decode().split()
 
     dic["name"] = line[0]
     dic["subtype"] = line[1]
@@ -1906,7 +1907,7 @@ def get_parameter(f):
     dic["intptr"] = line[10]
 
     # read in the values of the parameter
-    line = f.readline()
+    line = f.readline().decode()
     num = int(line.split()[0])
     values = []
 
@@ -1915,10 +1916,10 @@ def get_parameter(f):
     elif dic["basictype"] == "2":   # strings, may have multiple lines
         values.append(line.split("\"")[1])  # split on "s
         for i in range(num - 1):
-            values.append(f.readline().split("\"")[1])
+            values.append(f.readline().decode().split("\"")[1])
 
     dic["values"] = values
-    line = f.readline()
+    line = f.readline().decode()
 
     # read and decode the enumerables
     dic["enumerable"] = line.split()[0]
