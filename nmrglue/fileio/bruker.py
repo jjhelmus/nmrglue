@@ -4,7 +4,7 @@ JCAMP-DX parameter (acqus) files, and Bruker pulse program (pulseprogram)
 files.
 """
 
-from __future__ import print_function
+from __future__ import print_function, division
 
 __developer_info__ = """
 Bruker file format information
@@ -27,6 +27,7 @@ the file with nmrglue.
 
 """
 
+from functools import reduce
 import os
 from warnings import warn
 
@@ -390,7 +391,7 @@ def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
         gshape, gcplex = guess_shape(dic)
         if gcplex is True:    # divide last dim by 2 if complex
             t = list(gshape)
-            t[-1] = t[-1] / 2
+            t[-1] = t[-1] // 2
             gshape = tuple(t)
     if shape is None:
         shape = gshape
@@ -602,8 +603,8 @@ def guess_shape(dic):
 
     # additional dimension given by data size
     if shape[2] != 0 and shape[3] != 0:
-        shape[1] = fsize / (shape[3] * shape[2] * 4)
-        shape[0] = fsize / (shape[3] * shape[2] * 16 * 4)
+        shape[1] = fsize // (shape[3] * shape[2] * 4)
+        shape[0] = fsize // (shape[3] * shape[2] * 16 * 4)
 
     # if there in no pulse program parameters in dictionary return currect
     # shape after removing zeros
@@ -1048,7 +1049,7 @@ def write_binary(filename, dic, data, overwrite=False, big=True):
 
     """
     # open the file for writing
-    f = fileiobase.open_towrite(filename, overwrite=overwrite)
+    f = fileiobase.open_towrite(filename, overwrite=overwrite, mode='wb')
 
     # convert objec to an array if it is not already one...
     if type(data) != np.ndarray:
@@ -1074,7 +1075,7 @@ def write_binary_lowmem(filename, dic, data, overwrite=False, big=True):
 
     """
     # open the file for writing
-    f = fileiobase.open_towrite(filename, overwrite=overwrite)
+    f = fileiobase.open_towrite(filename, overwrite=overwrite, mode='wb')
 
     cplex = np.iscomplexobj(data)
 
@@ -1514,13 +1515,13 @@ def read_jcamp(filename):
 
     """
     dic = {"_coreheader": [], "_comments": []}  # create empty dictionary
-    f = open(filename, 'rb')
+    f = open(filename, 'r')
 
-    # loop until EOF
-    while len(f.read(1)):
+    while True:     # loop until end of file is found
 
-        f.seek(-1, os.SEEK_CUR)  # rewind 1 byte
         line = f.readline().rstrip()    # read a line
+        if line == '':      # end of file found
+            break
 
         if line[:6] == "##END=":
             #print("End of file")
@@ -1655,7 +1656,7 @@ def write_jcamp(dic, filename, overwrite=False):
         f.write(line)
         f.write("\n")
 
-    keys = d.keys()
+    keys = [i for i in d.keys()]
     keys.sort()
 
     # write out each key,value pair
@@ -1766,7 +1767,7 @@ def read_pprog(filename):
     """
 
     # open the file
-    f = open(filename, 'rb')
+    f = open(filename, 'r')
 
     # initilize lists and dictionaries
     var = dict()
@@ -1917,7 +1918,7 @@ def write_pprog(filename, dic, overwrite=False):
     f.write("; Minimal Bruker pulseprogram created by write_pprog\n")
 
     # write our the variables
-    for k, v in dic["var"].iteritems():
+    for k, v in dic["var"].items():
         f.write("\"" + k + "=" + v + "\"\n")
 
     # write out each loop
