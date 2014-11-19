@@ -1234,16 +1234,16 @@ def fileheader2dic(header):
     Convert a fileheader list into a Sparky parameter dictionary.
     """
     dic = dict()
-    dic["ident"] = str(header[0]).strip('\x00')
-    dic["naxis"] = ord(header[1])
-    dic["ncomponents"] = ord(header[2])
-    dic["encoding"] = ord(header[3])
-    dic["version"] = ord(header[4])
-    dic["owner"] = str(header[5]).strip('\x00')
-    dic["date"] = str(header[6]).strip('\x00')
-    dic["comment"] = str(header[7]).strip('\x00')
+    dic["ident"] = str(header[0].decode()).strip('\x00')
+    dic["naxis"] = ord(header[1].decode())
+    dic["ncomponents"] = ord(header[2].decode())
+    dic["encoding"] = ord(header[3].decode())
+    dic["version"] = ord(header[4].decode())
+    dic["owner"] = str(header[5].decode()).strip('\x00')
+    dic["date"] = str(header[6].decode()).strip('\x00')
+    dic["comment"] = str(header[7].decode()).strip('\x00')
     dic["seek_pos"] = header[8]     # eof seek position
-    dic["scratch"] = str(header[9]).strip('\x00')
+    dic["scratch"] = str(header[9].decode()).strip('\x00')
     return dic
 
 
@@ -1252,16 +1252,16 @@ def dic2fileheader(dic):
     Convert a Sparky parameter dictionary into a fileheader list.
     """
     fl = [0] * 10
-    fl[0] = dic["ident"]
-    fl[1] = chr(dic["naxis"])
-    fl[2] = chr(dic["ncomponents"])
-    fl[3] = chr(dic["encoding"])
-    fl[4] = chr(dic["version"])
-    fl[5] = dic["owner"]
-    fl[6] = dic["date"]
-    fl[7] = dic["comment"]
+    fl[0] = dic["ident"].encode()
+    fl[1] = chr(dic["naxis"]).encode()
+    fl[2] = chr(dic["ncomponents"]).encode()
+    fl[3] = chr(dic["encoding"]).encode()
+    fl[4] = chr(dic["version"]).encode()
+    fl[5] = dic["owner"].encode()
+    fl[6] = dic["date"].encode()
+    fl[7] = dic["comment"].encode()
     fl[8] = dic["seek_pos"]
-    fl[9] = dic["scratch"]
+    fl[9] = dic["scratch"].encode()
     return fl
 
 
@@ -1296,7 +1296,7 @@ def axisheader2dic(header):
     Convert an axisheader list into Sparky parameter axis dictionary.
     """
     dic = dict()
-    dic["nucleus"] = str(header[0]).strip('\x00')
+    dic["nucleus"] = str(header[0].decode()).strip('\x00')
     dic["spectral_shift"] = header[1]
     dic["npoints"] = header[2]
     dic["size"] = header[3]
@@ -1316,7 +1316,7 @@ def dic2axisheader(dic):
     Convert a Sparky parameter axis diction into a axisherder list.
     """
     al = [0] * 12
-    al[0] = dic["nucleus"]
+    al[0] = dic["nucleus"].encode()
     al[1] = dic["spectral_shift"]
     al[2] = dic["npoints"]
     al[3] = dic["size"]
