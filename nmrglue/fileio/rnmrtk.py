@@ -2,6 +2,8 @@
 Fuctions for reading and writing Rowland NMR Toolkit (RNMRTK) files
 """
 
+from __future__ import division
+
 __developer_info__ = """
 Information of the Rowland NMR Toolkit file format
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -191,7 +193,7 @@ def create_dic(udic, dim_order=None):
 
         # half the number of points if dimension is complex
         if dic['nptype'][i] == 'C':
-            dic['npts'][i] /= 2
+            dic['npts'][i] //= 2
 
     # determine and set layout
     size = [udic[i]['size'] for i in range(ndim)]
@@ -299,7 +301,7 @@ def read_lowmem(filename, par_file=None):
     fshape = list(dic["layout"][0])
     cplex = {'R': False, 'C': True}[dic['nptype'][-1]]
     if cplex:
-        fshape[-1] /= 2
+        fshape[-1] //= 2
     big = {'<': False, '>': True}[dic['format'][0]]
     data = rnmrtk_nd(filename, fshape, cplex, big)
     return dic, data
@@ -369,7 +371,7 @@ def write_lowmem(filename, dic, data, par_file=None, overwrite=False):
     write_par(par_file, dic, overwrite)
 
     # open the file for writing
-    f = fileiobase.open_towrite(filename, overwrite=overwrite)
+    f = fileiobase.open_towrite(filename, overwrite=overwrite, mode='wb')
 
     # write out the file trace by trace
     for tup in np.ndindex(data.shape[:-1]):
@@ -404,7 +406,7 @@ def write_sec(filename, data, dtype='f4', overwrite=False):
 
     """
     # open file
-    f = fileiobase.open_towrite(filename, overwrite)
+    f = fileiobase.open_towrite(filename, overwrite, mode='wb')
 
     # interleave read/imag if needed
     if np.iscomplexobj(data):
@@ -706,7 +708,7 @@ def read_par(filename):
 
     """
     dic = {}
-    f = open(filename, 'rb')
+    f = open(filename, 'r')
     for line in f:
         if len(line.split()) >= 2:
             parse_par_line(line, dic)
@@ -736,7 +738,7 @@ def write_par(par_file, dic, overwrite):
 
     """
     # open file for writing
-    f = fileiobase.open_towrite(par_file, overwrite)
+    f = fileiobase.open_towrite(par_file, overwrite, mode='w')
 
     # write comment line
     f.write('Comment \'' + dic['comment'] + '\'\n')
