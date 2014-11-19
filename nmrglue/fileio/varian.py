@@ -1950,26 +1950,26 @@ def write_procpar(filename, dic, overwrite=False):
 
         # print out the next line(s) (and more if strings)
         if d["basictype"] == "1":   # real values, one line
-            print(len(d["values"]), end='', file=f)  # don't end the line
+            print(len(d["values"]), end=' ', file=f)  # don't end the line
             for value in d["values"]:
-                print(value, end='', file=f)    # still not yet
+                print(value, end=' ', file=f)    # still not yet
             print("", file=f)   # now end the line
 
         elif d["basictype"] == "2":     # strings, may have multiple lines
-            print(len(d["values"], end='', file=f))  # don't end the line
+            print(len(d["values"]), end=' ', file=f)  # don't end the line
             for value in d["values"]:
                 # now end the line (for each string)
                 print('"' + value + '"', file=f)
 
         # print out the last line
-        print(d["enumerable"], end='', file=f)
+        print(d["enumerable"], end=' ', file=f)
 
         if d["enumerable"] != "0":
             for e in d["enumerables"]:
                 if d["basictype"] == "1":  # reals
-                    print(e, file=f, end='')
+                    print(e, end=' ', file=f)
                 elif d["basictype"] == "2":  # strings
-                    print('"' + e + '"', end='', file=f)
+                    print('"' + e + '"', end=' ', file=f)
         print("", file=f)   # end the enumerable line
 
     f.close()
