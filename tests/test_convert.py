@@ -3,6 +3,7 @@
 import tempfile
 import os
 import shutil
+import sys
 import glob
 from re import sub
 
@@ -10,6 +11,13 @@ import nmrglue as ng
 from numpy.testing import assert_array_equal
 
 from setup import DATA_DIR
+
+
+if sys.version_info[0] == 2:
+    _string_type = basestring
+else:
+    _string_type = str
+
 
 # subroutines
 def check_sdic(dic1, dic2, exclude=None, v=False):
@@ -76,7 +84,7 @@ def check_pdic(dic1, dic2, exclude=None, v=False):
         for k in dic1.keys():
             if k in exclude:
                 continue
-            if type(dic1[k]) == str or type(dic1[k]) == list:
+            if isinstance(dic1[k], _string_type) or type(dic1[k]) == list:
                 if dic1[k] != dic2[k]:
                     print k, dic1[k], dic2[k]
             elif abs(dic1[k] - dic2[k]) >= 0.002:
@@ -85,7 +93,7 @@ def check_pdic(dic1, dic2, exclude=None, v=False):
     for k in dic1.keys():
         if k in exclude:
             continue
-        if type(dic1[k]) == str or type(dic1[k]) == list:
+        if isinstance(dic1[k], _string_type) or type(dic1[k]) == list:
             assert dic1[k] == dic2[k]
         else:
             assert abs(dic1[k] - dic2[k]) <= 0.002
