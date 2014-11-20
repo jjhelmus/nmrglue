@@ -920,7 +920,7 @@ def write_fid(filename, dic, data, torder='flat', repack=False, correct=True,
             dic['nblocks'] = int(data.shape[0])
 
     # open file for writing
-    f = fileiobase.open_towrite(filename, overwrite=overwrite, mode='wb')
+    f = fileiobase.open_towrite(filename, overwrite=overwrite)
 
     if repack:
         dic = repack_fileheader(dic)
@@ -1005,7 +1005,7 @@ def write_fid_lowmem(filename, dic, data, torder='f', repack=False,
             dic['nblocks'] = nblocks
 
     # open file for writing
-    f = fileiobase.open_towrite(filename, overwrite=overwrite, mode='wb')
+    f = fileiobase.open_towrite(filename, overwrite=overwrite)
 
     if repack:
         dic = repack_fileheader(dic)
@@ -1938,7 +1938,7 @@ def write_procpar(filename, dic, overwrite=False):
     Write a Agilent/Varian procpar file from a dictionary
     """
     # open the file for writing
-    f = fileiobase.open_towrite(filename, overwrite=overwrite)
+    f = fileiobase.open_towrite(filename, overwrite=overwrite, mode='w')
 
     for key in dic.keys():  # loop over the parameters
 

@@ -1049,7 +1049,7 @@ def write_binary(filename, dic, data, overwrite=False, big=True):
 
     """
     # open the file for writing
-    f = fileiobase.open_towrite(filename, overwrite=overwrite, mode='wb')
+    f = fileiobase.open_towrite(filename, overwrite=overwrite)
 
     # convert objec to an array if it is not already one...
     if type(data) != np.ndarray:
@@ -1075,7 +1075,7 @@ def write_binary_lowmem(filename, dic, data, overwrite=False, big=True):
 
     """
     # open the file for writing
-    f = fileiobase.open_towrite(filename, overwrite=overwrite, mode='wb')
+    f = fileiobase.open_towrite(filename, overwrite=overwrite)
 
     cplex = np.iscomplexobj(data)
 
@@ -1637,7 +1637,7 @@ def write_jcamp(dic, filename, overwrite=False):
     """
 
     # open the file for writing
-    f = fileiobase.open_towrite(filename, overwrite=overwrite)
+    f = fileiobase.open_towrite(filename, overwrite=overwrite, mode='w')
 
     # create a copy of the dictionary
     d = dict(dic)
@@ -1912,7 +1912,7 @@ def write_pprog(filename, dic, overwrite=False):
     """
 
     # open the file for writing
-    f = fileiobase.open_towrite(filename, overwrite=overwrite)
+    f = fileiobase.open_towrite(filename, overwrite=overwrite, mode='w')
 
     # write a comment
     f.write("; Minimal Bruker pulseprogram created by write_pprog\n")

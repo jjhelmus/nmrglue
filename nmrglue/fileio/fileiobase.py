@@ -354,7 +354,7 @@ def uc_from_udic(udic, dim=-1):
                            adic['obs'], adic['car'])
 
 
-def open_towrite(filename, overwrite=False, mode=None):
+def open_towrite(filename, overwrite=False, mode='wb'):
     """
     Open filename for writing and return file object
 
@@ -369,12 +369,6 @@ def open_towrite(filename, overwrite=False, mode=None):
     # create directories if needed
     if p != '' and os.path.exists(p) is False:
         os.makedirs(p)
-
-    if mode is None:
-        if sys.version_info[0] == "2":
-            mode = 'wb'
-        else:
-            mode = 'w'  # Python 3 works modes out.
 
     return open(filename, mode)
 
