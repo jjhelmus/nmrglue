@@ -1,8 +1,11 @@
 """ Tests for the fileio.convert submodule """
 
+from __future__ import print_function
+
 import tempfile
 import os
 import shutil
+import sys
 import glob
 from re import sub
 
@@ -10,6 +13,13 @@ import nmrglue as ng
 from numpy.testing import assert_array_equal
 
 from setup import DATA_DIR
+
+
+if sys.version_info[0] == 2:
+    _string_type = basestring
+else:
+    _string_type = str
+
 
 # subroutines
 def check_sdic(dic1, dic2, exclude=None, v=False):
@@ -32,6 +42,7 @@ def check_sdic(dic1, dic2, exclude=None, v=False):
     # check remainder
     check_pdic(dic1, dic2, exclude=exclude, v=v)
 
+
 def check_dic(dic1, dic2, exclude=None, v=False):
     """ Compare two parameter dictionaries """
     if exclude is None:
@@ -40,10 +51,10 @@ def check_dic(dic1, dic2, exclude=None, v=False):
     e2 = [k for k in dic2.keys() if k not in dic2.keys() and k not in exclude]
 
     if v:
-        print e1
+        print(e1)
     assert len(e1) == 0
     if v:
-        print e2
+        print(e2)
     assert len(e2) == 0
 
     if v:
@@ -51,12 +62,13 @@ def check_dic(dic1, dic2, exclude=None, v=False):
             if k in exclude:
                 continue
             if dic1[k] != dic2[k]:
-                print k, dic1[k], dic2[k]
+                print(k, dic1[k], dic2[k])
 
     for k in dic1.keys():
         if k in exclude:
             continue
         assert dic1[k] == dic2[k]
+
 
 def check_pdic(dic1, dic2, exclude=None, v=False):
     """ Compare two NMRPipe parameter dictionaries """
@@ -66,29 +78,30 @@ def check_pdic(dic1, dic2, exclude=None, v=False):
     e2 = [k for k in dic2.keys() if k not in dic2.keys() and k not in exclude]
 
     if v:
-        print e1
+        print(e1)
     assert len(e1) == 0
     if v:
-        print e2
+        print(e2)
     assert len(e2) == 0
 
     if v:
         for k in dic1.keys():
             if k in exclude:
                 continue
-            if type(dic1[k]) == str or type(dic1[k]) == list:
+            if isinstance(dic1[k], _string_type) or type(dic1[k]) == list:
                 if dic1[k] != dic2[k]:
-                    print k, dic1[k], dic2[k]
+                    print(k, dic1[k], dic2[k])
             elif abs(dic1[k] - dic2[k]) >= 0.002:
-                print k, dic1[k], dic2[k], dic1[k] - dic2[k]
+                print(k, dic1[k], dic2[k], dic1[k] - dic2[k])
 
     for k in dic1.keys():
         if k in exclude:
             continue
-        if type(dic1[k]) == str or type(dic1[k]) == list:
+        if isinstance(dic1[k], _string_type) or type(dic1[k]) == list:
             assert dic1[k] == dic2[k]
         else:
             assert abs(dic1[k] - dic2[k]) <= 0.002
+
 
 def check_rdic(dic1, dic2, ndim, exclude=None, v=True):
     """ Compare two RNMRTK parameter dictionaries up to dimension ndim"""
@@ -105,26 +118,26 @@ def check_rdic(dic1, dic2, ndim, exclude=None, v=True):
             continue
         if v:
             if dic1[k] != dic2[k]:
-                print k, dic1[k], dic2[k]
+                print(k, dic1[k], dic2[k])
         assert dic1[k] == dic2[k]
 
     # check keys which are lists for first ndim parameters
     for k in list_keys:
         if k in exclude:
             continue
-        for i in xrange(ndim):
+        for i in range(ndim):
             if k in ['dom', 'nptype', 'quad']:  # these are strings
                 if v:
                     if dic1[k][i] != dic2[k][i]:
-                        print k, i, dic1[k][i], dic2[k][i]
+                        print(k, i, dic1[k][i], dic2[k][i])
                 assert dic1[k][i] == dic2[k][i]
                 continue
 
             if v:
                 if abs(dic1[k][i] - dic2[k][i]) > abs(dic1[k][i] / 1000.):
-                    print k, i, dic1[k][i], dic2[k][i]
+                    print(k, i, dic1[k][i], dic2[k][i])
                 if abs(dic1[k][i] - dic2[k][i]) > abs(dic2[k][i] / 1000.):
-                    print k, i, dic1[k][i], dic2[k][i]
+                    print(k, i, dic1[k][i], dic2[k][i])
             assert abs(dic1[k][i] - dic2[k][i]) <= abs(dic1[k][i] / 1000.)
             assert abs(dic1[k][i] - dic2[k][i]) <= abs(dic2[k][i] / 1000.)
     return
@@ -153,7 +166,9 @@ bad_rnmrtk2pipe_keys = [
     "FDDIMORDER", "FDREALSIZE", "FDFLTFORMAT", "FD2DVIRGIN", "FDPIPEFLAG",
     "FDCOMMENT", "FD2DPHASE", "FDFILECOUNT"]
 
+
 # tests
+
 
 def test_agilent_1d():
     """ 1D time agilent, pipe <-> agilent, pipe """
@@ -218,6 +233,7 @@ def test_agilent_1d():
     assert_array_equal(vdata, rdata)
     check_dic(vdic, cdic, bad_varian_keys)
     shutil.rmtree(td)
+
 
 def test_agilent_1d_rnmrtk():
     """ 1D time agilent, rnmrtk <-> rnmrtk """
@@ -336,6 +352,7 @@ def test_agilent_2d():
     check_dic(vdic, cdic, bad_varian_keys)
     shutil.rmtree(td)
 
+
 def test_agilent_2d_rnmrtk():
     """ 2D time agilent, rnmrtk <-> rnmrtk """
     # prepare agilent converter
@@ -388,6 +405,7 @@ def test_agilent_2d_rnmrtk():
     assert_array_equal(vdata, rrdata)
     check_dic(vdic, cdic, bad_varian_keys)
     shutil.rmtree(td)
+
 
 def test_agilent_3d():
     """ 3D time agilent, pipe <-> agilent, pipe """
@@ -460,6 +478,7 @@ def test_agilent_3d():
     check_dic(vdic, cdic, bad_varian_keys)
     shutil.rmtree(td)
 
+
 def test_agilent_3d_rnmrtk():
     """ 3D time agilent, rnmrtk <-> rnmrtk """
     # prepare agilent converter
@@ -512,6 +531,7 @@ def test_agilent_3d_rnmrtk():
     assert_array_equal(vdata, rrdata)
     check_dic(vdic, cdic, bad_varian_keys)
     shutil.rmtree(td)
+
 
 def test_bruker_1d():
     """ 1D time bruker, pipe <-> bruker, pipe """
@@ -578,6 +598,7 @@ def test_bruker_1d():
     assert_array_equal(bdata, rdata)
     check_dic(bdic, cdic, bad_bruker_keys)
     shutil.rmtree(td)
+
 
 def test_bruker_1d_rnmrtk():
     """ 1D time bruker, rnmrtk <-> rnmrtk """
@@ -700,6 +721,7 @@ def test_bruker_2d():
     check_dic(bdic, cdic, bad_bruker_keys)
     shutil.rmtree(td)
 
+
 def test_bruker_2d_rnmrtk():
     """ 2D time bruker, rnmrtk <-> rnmrtk """
     # prepare Bruker converter
@@ -770,22 +792,22 @@ def test_bruker_3d():
                        line)
             line = sub("\$BF1.+",
                        "$BF1= 201.192849",
-                          line)
+                       line)
             line = sub("\$NUC1.+",
                        "$NUC1= <13C>",
-                          line)
+                       line)
             line = sub("\$O1.+",
                        "$O1= 10663.220997003",
-                          line)
+                       line)
             line = sub("\$SFO1.+",
                        "$SFO1= 201.203512220997",
-                          line)
+                       line)
             line = sub("\$SW=.+",
                        "$SW=27.611626113",
-                          line)
+                       line)
             line = sub("\$SW_h.+",
                        "$SW_h= 5555.556152",
-                          line)
+                       line)
             out.write(line)
         out.close()
         os.rename(out_name, acqu3s)
@@ -864,6 +886,7 @@ def test_bruker_3d():
 
     os.remove(acqu3s)
 
+
 def test_bruker_3d_rnmrtk():
     """ 3D time bruker, rnmrtk <-> rnmrtk """
     # prepare Bruker converter
@@ -916,7 +939,6 @@ def test_bruker_3d_rnmrtk():
     assert_array_equal(bdata, rdata)
     check_dic(bdic, cdic, bad_bruker_keys)
     shutil.rmtree(td)
-
 
 
 def test_sparky_2d():
@@ -1096,6 +1118,7 @@ def test_sparky_3d():
     check_sdic(sdic, rdic, bsk, True)
     os.remove(tf)
 
+
 def test_pipe_1d():
     """ 1D freq pipe <-> pipe """
     # prepare Pipe converter
@@ -1116,6 +1139,7 @@ def test_pipe_1d():
     assert_array_equal(pdata, rdata)
     check_pdic(pdic, cdic, bad_pipe_keys)
     os.remove(tf)
+
 
 #### lowmemory tests ###
 def test_sparky_2d_lowmem():
@@ -1202,6 +1226,7 @@ def test_sparky_2d_lowmem():
     assert_array_equal(sdata[0:3, 0:4], rdata[0:3, 0:4])
     check_sdic(sdic, rdic, bad_sparky_keys, True)
     os.remove(tf)
+
 
 def test_sparky_3d_lowmem():
     """ 3D freq sparky, pipe <-> sparky, pipe low memory"""
@@ -1296,6 +1321,7 @@ def test_sparky_3d_lowmem():
     check_sdic(sdic, rdic, bsk, True)
     os.remove(tf)
 
+
 def test_bruker_2d_lowmem():
     """ 2D time bruker, pipe <-> bruker, pipe low memory"""
     # prepare Bruker converter
@@ -1364,6 +1390,7 @@ def test_bruker_2d_lowmem():
     check_dic(bdic, cdic, bad_bruker_keys)
     shutil.rmtree(td)
 
+
 def test_bruker_3d_lowmem():
     """ 3D time bruker, pipe <-> bruker, pipe low memory"""
 
@@ -1380,22 +1407,22 @@ def test_bruker_3d_lowmem():
                        line)
             line = sub("\$BF1.+",
                        "$BF1= 201.192849",
-                          line)
+                       line)
             line = sub("\$NUC1.+",
                        "$NUC1= <13C>",
-                          line)
+                       line)
             line = sub("\$O1.+",
                        "$O1= 10663.220997003",
-                          line)
+                       line)
             line = sub("\$SFO1.+",
                        "$SFO1= 201.203512220997",
-                          line)
+                       line)
             line = sub("\$SW=.+",
                        "$SW=27.611626113",
-                          line)
+                       line)
             line = sub("\$SW_h.+",
                        "$SW_h= 5555.556152",
-                          line)
+                       line)
             out.write(line)
         out.close()
         os.rename(out_name, acqu3s)
@@ -1475,6 +1502,7 @@ def test_bruker_3d_lowmem():
 
     os.remove(acqu3s)
 
+
 def test_agilent_2d_lowmem():
     """ 2D time agilent, pipe <-> agilent, pipe low memory"""
     # prepare Varian converter
@@ -1538,6 +1566,7 @@ def test_agilent_2d_lowmem():
     assert_array_equal(vdata[0:4, 0:20], rdata[0:4, 0:20])
     check_dic(vdic, cdic, bad_varian_keys)
     shutil.rmtree(td)
+
 
 def test_agilent_3d_lowmem():
     """ 3D time agilent, pipe <-> agilent, pipe low memory"""
@@ -1679,6 +1708,7 @@ def test_rnmrtk_1d():
     os.remove(tf)
     os.remove(tf.replace('.sec', '.par'))
 
+
 def test_rnmrtk_2d():
     """ 2D freq rnmrtk, pipe <-> rnmrtk, pipe """
 
@@ -1745,6 +1775,7 @@ def test_rnmrtk_2d():
     check_rdic(rdic, rrdic, 2, exclude=bad_rnmrtk_keys)
     os.remove(tf)
     os.remove(tf.replace('.sec', '.par'))
+
 
 def test_rnmrtk_3d():
     """ 3D freq rnmrtk, pipe <-> rnmrtk, pipe """
@@ -1826,61 +1857,76 @@ def test_rnmrtk_3d():
 
 from nose.exc import SkipTest
 
+
 #def test_agilent_1d():
 #    """ 1D time agilent, pipe <-> agilent, pipe """
 #    raise SkipTest
+
 
 #def test_agilent_2d():
 #    """ 2D time agilent, pipe <-> agilent, pipe """
 #    raise SkipTest
 
+
 #def test_agilent_3d():
 #    """ 3D time agilent, pipe <-> agilent, pipe """
 #    raise SkipTest
+
 
 #def test_bruker_1d():
 #    """ 1D time bruker, pipe <-> bruker, pipe """
 #    raise SkipTest
 
+
 #def test_bruker_2d():
 #    """ 2D time bruker, pipe <-> bruker, pipe """
 #    raise SkipTest
+
 
 #def test_bruker_3d():
 #    """ 3D time bruker, pipe <-> bruker, pipe """
 #    raise SkipTest
 
+
 #def test_pipe_1d():
 #    """ 1D freq pipe <-> pipe """
 #    raise SkipTest
+
 
 #def test_sparky_2d():
 #    """ 2D freq sparky, pipe <-> sparky, pipe """
 #    raise SkipTest
 
+
 #def test_sparky_3d():
 #    """ 3D freq sparky, pipe <-> sparky, pipe """
 #    raise SkipTest
+
 
 #def test_sparky_2d_lowmem():
 #    """ 2D freq sparky, pipe <-> sparky, pipe low memory"""
 #    raise SkipTest
 
+
 #def test_sparky_3d_lowmem():
 #    """ 3D freq sparky, pipe <-> sparky, pipe low memory"""
 #    raise SkipTest
+
 
 #def test_bruker_2d_lowmem():
 #    """ 2D time bruker, pipe <-> bruker, pipe low memory"""
 #    raise SkipTest
 
+
 #def test_bruker_3d_lowmem():
 #    """ 3D time bruker, pipe <-> bruker, pipe low memory"""
 #    raise SkipTest
 
+
 #def test_agilent_2d_lowmem():
 #    """ 2D time agilent, pipe <-> agilent, pipe low memory"""
 #    raise SkipTest
+
 
 #def test_agilent_3d_lowmem():
 #    """ 3D time agilent, pipe <-> agilent, pipe low memory"""

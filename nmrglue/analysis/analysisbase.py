@@ -186,7 +186,7 @@ class ndwindow(object):
 
     >>> a = np.arange(12).reshape(3,4)
     >>> for s in ndwindow(a.shape,(3,3)):
-    ...     print a[s]
+    ...     print(a[s])
     [[0 1]
      [4 5]]
     [[0 1 2]
@@ -304,7 +304,7 @@ class ndwindow_inside(object):
 
     >>> a = np.arange(9).reshape(3,3)
     >>> for s in ndwindow_inside(a.shape,(2,2)):
-    ...     print a[s]
+    ...     print(a[s])
     [[0 1]
      [3 4]]
     [[1 2]

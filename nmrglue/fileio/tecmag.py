@@ -273,7 +273,7 @@ def read(filename):
                 assert(len(hdrdict['data']) == data_length)
             else:
                 tntfile.seek(data_length, io.SEEK_CUR)
-            tnt_sections[tlv['tag']] = hdrdict
+            tnt_sections[tlv['tag'].decode()] = hdrdict
             tnthdrbytes = tntfile.read(TNTTLV.itemsize)
 
     assert(tnt_sections['TMAG']['length'] == TNTTMAG.itemsize)
@@ -328,7 +328,7 @@ def guess_udic(dic, data):
     udic = fileiobase.create_blank_udic(4)
 
     # update default values
-    for i in xrange(4):
+    for i in range(4):
         udic[i]["size"] = dic['actual_npts'][i]
         udic[i]["sw"] = dic['sw'][i]
         udic[i]["complex"] = True

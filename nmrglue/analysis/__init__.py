@@ -1,7 +1,7 @@
-import analysisbase
-import leastsqbound
-import segmentation
-import peakpick
-import linesh
-import lineshapes1d
-import helpers
+from . import analysisbase
+from . import leastsqbound
+from . import segmentation
+from . import peakpick
+from . import linesh
+from . import lineshapes1d
+from . import helpers

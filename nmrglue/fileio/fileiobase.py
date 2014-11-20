@@ -3,9 +3,13 @@ fileiobase provides general purpose NMR file IO functions and classes
 used by multiple nmrglue.fileio modules.
 """
 
+from __future__ import division
+
 import os
 import string
+import sys
 import itertools
+from functools import reduce
 
 import numpy as np
 
@@ -17,7 +21,7 @@ def create_blank_udic(ndim):
     udic = dict()
     udic["ndim"] = ndim
 
-    for i in xrange(ndim):
+    for i in range(ndim):
         d = dict()
         d["sw"] = 999.99        # spectral width in Hz
         d["complex"] = True     # Quadrature, True when dimension is complex
@@ -350,7 +354,7 @@ def uc_from_udic(udic, dim=-1):
                            adic['obs'], adic['car'])
 
 
-def open_towrite(filename, overwrite=False):
+def open_towrite(filename, overwrite=False, mode='wb'):
     """
     Open filename for writing and return file object
 
@@ -366,7 +370,7 @@ def open_towrite(filename, overwrite=False):
     if p != '' and os.path.exists(p) is False:
         os.makedirs(p)
 
-    return open(filename, 'wb')
+    return open(filename, mode)
 
 ################################################
 # numpy ndarray emulation and helper functions #
@@ -443,7 +447,7 @@ def index2trace_opp(shape, index):
     nphase = index2trace_flat([2] * n, phases[::-1])
     # deal with the remainer
     pindex = [v // 2 for v in index]
-    pshape = [i / 2 for i in shape]
+    pshape = [i // 2 for i in shape]
     nbase = index2trace_flat(pshape, pindex)
     return nbase * 2 ** n + nphase
 
@@ -456,7 +460,7 @@ def trace2index_opp(shape, ntrace):
     n = len(shape)
     q, r = divmod(ntrace, 2 ** n)
     to_add = list(trace2index_flat([2] * n, r))[::-1]
-    pshape = [i / 2 for i in shape]
+    pshape = [i // 2 for i in shape]
     base = list(trace2index_flat(pshape, q))
     total = [b * 2 + a for b, a in zip(base, to_add)]
     return tuple(total)
@@ -473,7 +477,7 @@ def index2trace_reg(shape, index):
     nphase = index2trace_flat([2] * n, phases)
     # deal with the remainer
     pindex = [v // 2 for v in index]
-    pshape = [i / 2 for i in shape]
+    pshape = [i // 2 for i in shape]
     nbase = index2trace_flat(pshape, pindex)
     return nbase * 2 ** n + nphase
 
@@ -486,7 +490,7 @@ def trace2index_reg(shape, ntrace):
     n = len(shape)
     q, r = divmod(ntrace, 2 ** n)
     to_add = list(trace2index_flat([2] * n, r))
-    pshape = [i / 2 for i in shape]
+    pshape = [i // 2 for i in shape]
     base = list(trace2index_flat(pshape, q))
     total = [b * 2 + a for b, a in zip(base, to_add)]
     return tuple(total)
@@ -627,7 +631,7 @@ class data_nd(object):
 
     def __iter__(self):
         """ x.__iter__() <==> iter(x) """
-        for index in xrange(0, self.shape[0]):
+        for index in range(0, self.shape[0]):
             yield self[index]
 
     def swapaxes(self, axis1, axis2):

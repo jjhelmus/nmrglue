@@ -3,6 +3,8 @@ Functions for reading and writing Agilent/Varian binary (fid) files and
 parameter (procpar) files.
 """
 
+from __future__ import print_function, division
+
 __developer_doc__ = """
 Agilent/Varian file format information
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -21,6 +23,7 @@ import os
 import struct
 import inspect
 from warnings import warn
+from functools import reduce
 
 import numpy as np
 
@@ -63,7 +66,7 @@ def guess_udic(dic, data):
     udic = fileiobase.create_blank_udic(data.ndim)
 
     # update default values
-    for i in xrange(data.ndim):
+    for i in range(data.ndim):
         udic[i]["size"] = data.shape[i]
 
     return udic
@@ -93,7 +96,7 @@ def create_dic(udic):
 
     # number of blocks is product of R+I of all other dimensions
     num_blocks = 1
-    for f in [udic[k]["size"] for k in xrange(udic["ndim"] - 1)]:
+    for f in [udic[k]["size"] for k in range(udic["ndim"] - 1)]:
         num_blocks = num_blocks * f
 
     # create the varian dictionary
@@ -135,7 +138,7 @@ def create_dic(udic):
     if ndim >= 2:
         if udic[ndim - 2]['complex']:
             pdic["ni"] = create_pdic_param('ni',
-                                           [str(udic[ndim - 2]['size'] / 2)])
+                                           [str(udic[ndim - 2]['size'] // 2)])
             pdic["phase"] = create_pdic_param('phase', ['0', '1'])
         else:
             pdic["ni"] = create_pdic_param('ni', [str(udic[ndim - 2]['size'])])
@@ -145,7 +148,7 @@ def create_dic(udic):
         pdic['array'] = create_pdic_param('array', ['phase,phase2'])
         if udic[ndim - 3]['complex']:
             pdic["ni2"] = create_pdic_param(
-                'ni2', [str(udic[ndim - 3]['size'] / 2)])
+                'ni2', [str(udic[ndim - 3]['size'] // 2)])
             pdic["phase2"] = create_pdic_param('phase', ['0', '1'])
         else:
             pdic["ni2"] = create_pdic_param('ni2',
@@ -156,7 +159,7 @@ def create_dic(udic):
         pdic['array'] = create_pdic_param('array', ['phase,phase2,phase3'])
         if udic[ndim - 4]['complex']:
             pdic["ni3"] = create_pdic_param(
-                'ni3', [str(udic[ndim - 4]['size'] / 2)])
+                'ni3', [str(udic[ndim - 4]['size'] // 2)])
             pdic["phase3"] = create_pdic_param('phase3', ['0', '1'])
         else:
             pdic["ni3"] = create_pdic_param(
@@ -623,7 +626,7 @@ def order_data(data, torder):
     t2i = torder2t2i(torder)
 
     # loop over all non-direct dimension indices
-    for ntrace in xrange(ntraces):
+    for ntrace in range(ntraces):
         tup = t2i(data.shape[:-1], ntrace)
         ndata[ntrace] = data[tup]
     return ndata
@@ -907,7 +910,7 @@ def write_fid(filename, dic, data, torder='flat', repack=False, correct=True,
         data = order_data(data, torder)
 
     # verify data and dic shapes
-    if data.shape[1] != (dic['np'] / 2):
+    if data.shape[1] != (dic['np'] // 2):
         warn("data and np size mismatch")
         if correct:
             dic['np'] = int(data.shape[1] * 2)
@@ -929,7 +932,7 @@ def write_fid(filename, dic, data, torder='flat', repack=False, correct=True,
     dt = find_dtype(dic)
 
     if "blockheader" in dic and len(dic["blockheader"]) == data.shape[0]:
-        for i in xrange(data.shape[0]):
+        for i in range(data.shape[0]):
             if repack:
                 bh = dic2blockheader(repack_blockheader(dic["blockheader"][0]))
             else:
@@ -940,7 +943,7 @@ def write_fid(filename, dic, data, torder='flat', repack=False, correct=True,
 
     else:   # create a generic blockheader
         bh = dic2blockheader(make_blockheader(dic, 1))
-        for i in xrange(data.shape[0]):
+        for i in range(data.shape[0]):
             bh[2] = int(i + 1)
             trace = np.array(interleave_data(data[i]), dtype=dt)
             put_block(f, trace, dic["nbheaders"], bh)
@@ -991,7 +994,7 @@ def write_fid_lowmem(filename, dic, data, torder='f', repack=False,
     t2i = torder2t2i(torder)
 
     # verify data and dic shapes
-    if data.shape[-1] != (dic["np"] / 2):
+    if data.shape[-1] != (dic["np"] // 2):
         warn("data and np size mismatch")
         if correct:
             dic['np'] = int(data.shape[1] * 2)
@@ -1014,7 +1017,7 @@ def write_fid_lowmem(filename, dic, data, torder='f', repack=False,
     dt = find_dtype(dic)
 
     if "blockheader" in dic and len(dic["blockheader"]) == dic["nblocks"]:
-        for ntrace in xrange(nblocks):
+        for ntrace in range(nblocks):
             if repack:
                 bh = dic2blockheader(repack_blockheader(dic["blockheader"][0]))
             else:
@@ -1026,7 +1029,7 @@ def write_fid_lowmem(filename, dic, data, torder='f', repack=False,
 
     else:   # create a generic blockheader
         bh = dic2blockheader(make_blockheader(dic, 1))
-        for ntrace in xrange(nblocks):
+        for ntrace in range(nblocks):
             bh[2] = int(ntrace + 1)
             tup = t2i(data.shape[:-1], ntrace)
             trace = np.array(interleave_data(data[tup]), dtype=dt)
@@ -1074,7 +1077,7 @@ def get_nblocks(f, nblocks, pts, nbheaders, dt, read_blockhead):
         bdic = [0] * nblocks
 
     # read the data
-    for i in xrange(nblocks):
+    for i in range(nblocks):
         if read_blockhead:
             bdic[i], data[i] = get_block(f, pts, nbheaders, dt, read_blockhead)
         else:
@@ -1114,7 +1117,7 @@ def get_block(f, pts, nbheaders, dt, read_blockhead=False):
 
     """
     if read_blockhead is False:  # do not return blockheaders
-        for i in xrange(nbheaders):
+        for i in range(nbheaders):
             skip_blockheader(f)
         trace = get_trace(f, pts, dt)
         return trace
@@ -1126,7 +1129,7 @@ def get_block(f, pts, nbheaders, dt, read_blockhead=False):
         if nbheaders >= 2:
             dic["hyperhead"] = hyperheader2dic(get_hyperheader(f))
         if nbheaders >= 3:
-            for i in xrange(2, nbheaders):
+            for i in range(2, nbheaders):
                 skip_blockheader(f)
         # read the data
         trace = get_trace(f, pts, dt)
@@ -1172,7 +1175,7 @@ def get_nblocks_ntraces(f, nblocks, ntraces, pts, nbheaders, dt,
         bdic = [0] * nblocks
 
     # read the data
-    for i in xrange(nblocks):
+    for i in range(nblocks):
         if read_blockhead:
             bdic[i], bdata = get_block_ntraces(f, ntraces, pts, nbheaders, dt,
                                                True)
@@ -1217,7 +1220,7 @@ def get_block_ntraces(f, ntraces, pts, nbheaders, dt, read_blockhead=False):
     """
 
     if read_blockhead is False:  # do not return blockheaders
-        for i in xrange(nbheaders):
+        for i in range(nbheaders):
             skip_blockheader(f)
         trace = get_trace(f, pts * ntraces, dt)
         return trace.reshape(ntraces, pts)
@@ -1229,7 +1232,7 @@ def get_block_ntraces(f, ntraces, pts, nbheaders, dt, read_blockhead=False):
         if nbheaders >= 2:
             dic["hyperhead"] = hyperheader2dic(get_hyperheader(f))
         if nbheaders >= 3:
-            for i in xrange(2, nbheaders):
+            for i in range(2, nbheaders):
                 skip_blockheader(f)
         # read the data
         trace = get_trace(file, pts * ntraces, dt)
@@ -1372,7 +1375,7 @@ def put_block(f, trace, nbheaders, bh, hh=False):
         put_hyperheader(f, hh)
 
     # write any additional blockheaders as 0s if needed
-    for i in xrange(nbheaders - 2):
+    for i in range(nbheaders - 2):
         put_blockheader(f, [0] * 9)
 
     # write the trace
@@ -1458,7 +1461,7 @@ def hyperheader2dic(head):
     dic["f_spare2"] = head[8]
 
     #unpack the status bits
-    dic["UHYPERCOMPLEX"] = (dic["status"] & 0x2) / 0x2
+    dic["UHYPERCOMPLEX"] = (dic["status"] & 0x2) // 0x2
 
     return dic
 
@@ -1570,35 +1573,35 @@ def blockheader2dic(head):
     dic["tlt"] = head[8]
 
     # unpack the status parameters
-    dic["S_DATA"] = (dic["status"] & 0x1) / 0x1
-    dic["S_SPEC"] = (dic["status"] & 0x2) / 0x2
-    dic["S_32"] = (dic["status"] & 0x4) / 0x4
-    dic["S_FLOAT"] = (dic["status"] & 0x8) / 0x8
-    dic["S_COMPLEX"] = (dic["status"] & 0x10) / 0x10
-    dic["S_HYPERCOMPLEX"] = (dic["status"] & 0x20) / 0x20
+    dic["S_DATA"] = (dic["status"] & 0x1) // 0x1
+    dic["S_SPEC"] = (dic["status"] & 0x2) // 0x2
+    dic["S_32"] = (dic["status"] & 0x4) // 0x4
+    dic["S_FLOAT"] = (dic["status"] & 0x8) // 0x8
+    dic["S_COMPLEX"] = (dic["status"] & 0x10) // 0x10
+    dic["S_HYPERCOMPLEX"] = (dic["status"] & 0x20) // 0x20
 
-    dic["MORE_BLOCKS"] = (dic["status"] & 0x80) / 0x80
-    dic["NP_CMPLX"] = (dic["status"] & 0x100) / 0x100
-    dic["NF_CMPLX"] = (dic["status"] & 0x200) / 0x200
-    dic["NI_CMPLX"] = (dic["status"] & 0x400) / 0x400
-    dic["NI2_CMPLX"] = (dic["status"] & 0x800) / 0x800
+    dic["MORE_BLOCKS"] = (dic["status"] & 0x80) // 0x80
+    dic["NP_CMPLX"] = (dic["status"] & 0x100) // 0x100
+    dic["NF_CMPLX"] = (dic["status"] & 0x200) // 0x200
+    dic["NI_CMPLX"] = (dic["status"] & 0x400) // 0x400
+    dic["NI2_CMPLX"] = (dic["status"] & 0x800) // 0x800
 
     # unpack the mode parameter
-    dic["NP_PHMODE"] = (dic["mode"] & 0x1) / 0x1
-    dic["NP_AVMODE"] = (dic["mode"] & 0x2) / 0x2
-    dic["NP_PWRMODE"] = (dic["mode"] & 0x4) / 0x4
+    dic["NP_PHMODE"] = (dic["mode"] & 0x1) // 0x1
+    dic["NP_AVMODE"] = (dic["mode"] & 0x2) // 0x2
+    dic["NP_PWRMODE"] = (dic["mode"] & 0x4) // 0x4
 
-    dic["NF_PHMODE"] = (dic["mode"] & 0x10) / 0x10
-    dic["NF_AVMODE"] = (dic["mode"] & 0x20) / 0x20
-    dic["NF_PWRMODE"] = (dic["mode"] & 0x40) / 0x40
+    dic["NF_PHMODE"] = (dic["mode"] & 0x10) // 0x10
+    dic["NF_AVMODE"] = (dic["mode"] & 0x20) // 0x20
+    dic["NF_PWRMODE"] = (dic["mode"] & 0x40) // 0x40
 
-    dic["NI_PHMODE"] = (dic["mode"] & 0x100) / 0x100
-    dic["NI_AVMODE"] = (dic["mode"] & 0x200) / 0x200
-    dic["NI_PWRMODE"] = (dic["mode"] & 0x400) / 0x400
+    dic["NI_PHMODE"] = (dic["mode"] & 0x100) // 0x100
+    dic["NI_AVMODE"] = (dic["mode"] & 0x200) // 0x200
+    dic["NI_PWRMODE"] = (dic["mode"] & 0x400) // 0x400
 
-    dic["NI2_PHMODE"] = (dic["mode"] & 0x1000) / 0x1000
-    dic["NI2_AVMODE"] = (dic["mode"] & 0x2000) / 0x2000
-    dic["NI2_PWRMODE"] = (dic["mode"] & 0x4000) / 0x4000
+    dic["NI2_PHMODE"] = (dic["mode"] & 0x1000) // 0x1000
+    dic["NI2_AVMODE"] = (dic["mode"] & 0x2000) // 0x2000
+    dic["NI2_PWRMODE"] = (dic["mode"] & 0x4000) // 0x4000
 
     return dic
 
@@ -1659,19 +1662,19 @@ def fileheader2dic(head):
     dic["nbheaders"] = head[8]
 
     # unpack the status parameter
-    dic["S_DATA"] = (dic["status"] & 0x1) / 0x1
-    dic["S_SPEC"] = (dic["status"] & 0x2) / 0x2
-    dic["S_32"] = (dic["status"] & 0x4) / 0x4
-    dic["S_FLOAT"] = (dic["status"] & 0x8) / 0x8
-    dic["S_COMPLEX"] = (dic["status"] & 0x10) / 0x10
-    dic["S_HYPERCOMPLEX"] = (dic["status"] & 0x20) / 0x20
-    dic["S_ACQPAR"] = (dic["status"] & 0x80) / 0x80
-    dic["S_SECND"] = (dic["status"] & 0x100) / 0x100
-    dic["S_TRANSF"] = (dic["status"] & 0x200) / 0x200
-    dic["S_NP"] = (dic["status"] & 0x800) / 0x800
-    dic["S_NF"] = (dic["status"] & 0x1000) / 0x1000
-    dic["S_NI"] = (dic["status"] & 0x2000) / 0x2000
-    dic["S_NI2"] = (dic["status"] & 0x4000) / 0x4000
+    dic["S_DATA"] = (dic["status"] & 0x1) // 0x1
+    dic["S_SPEC"] = (dic["status"] & 0x2) // 0x2
+    dic["S_32"] = (dic["status"] & 0x4) // 0x4
+    dic["S_FLOAT"] = (dic["status"] & 0x8) // 0x8
+    dic["S_COMPLEX"] = (dic["status"] & 0x10) // 0x10
+    dic["S_HYPERCOMPLEX"] = (dic["status"] & 0x20) // 0x20
+    dic["S_ACQPAR"] = (dic["status"] & 0x80) // 0x80
+    dic["S_SECND"] = (dic["status"] & 0x100) // 0x100
+    dic["S_TRANSF"] = (dic["status"] & 0x200) // 0x200
+    dic["S_NP"] = (dic["status"] & 0x800) // 0x800
+    dic["S_NF"] = (dic["status"] & 0x1000) // 0x1000
+    dic["S_NI"] = (dic["status"] & 0x2000) // 0x2000
+    dic["S_NI2"] = (dic["status"] & 0x4000) // 0x4000
 
     return dic
 
@@ -1889,7 +1892,7 @@ def get_parameter(f):
     dic = dict()
 
     # read and decode the first line
-    line = f.readline().split()
+    line = f.readline().decode().split()
 
     dic["name"] = line[0]
     dic["subtype"] = line[1]
@@ -1904,7 +1907,7 @@ def get_parameter(f):
     dic["intptr"] = line[10]
 
     # read in the values of the parameter
-    line = f.readline()
+    line = f.readline().decode()
     num = int(line.split()[0])
     values = []
 
@@ -1913,10 +1916,10 @@ def get_parameter(f):
     elif dic["basictype"] == "2":   # strings, may have multiple lines
         values.append(line.split("\"")[1])  # split on "s
         for i in range(num - 1):
-            values.append(f.readline().split("\"")[1])
+            values.append(f.readline().decode().split("\"")[1])
 
     dic["values"] = values
-    line = f.readline()
+    line = f.readline().decode()
 
     # read and decode the enumerables
     dic["enumerable"] = line.split()[0]
@@ -1935,40 +1938,40 @@ def write_procpar(filename, dic, overwrite=False):
     Write a Agilent/Varian procpar file from a dictionary
     """
     # open the file for writing
-    f = fileiobase.open_towrite(filename, overwrite=overwrite)
+    f = fileiobase.open_towrite(filename, overwrite=overwrite, mode='w')
 
     for key in dic.keys():  # loop over the parameters
 
         d = dic[key]
-        # print out the first line
-        print >> f, d["name"], d["subtype"], d["basictype"],    \
-            d["maxvalue"], d["minvalue"], d["stepsize"],        \
-            d["Ggroup"], d["Dgroup"], d["protection"],          \
-            d["active"], d["intptr"]
+        # print(out the first line)
+        print(d["name"], d["subtype"], d["basictype"],
+              d["maxvalue"], d["minvalue"], d["stepsize"],
+              d["Ggroup"], d["Dgroup"], d["protection"],
+              d["active"], d["intptr"], file=f)
 
         # print out the next line(s) (and more if strings)
         if d["basictype"] == "1":   # real values, one line
-            print >> f, len(d["values"]),  # don't end the line
+            print(len(d["values"]), end=' ', file=f)  # don't end the line
             for value in d["values"]:
-                print >> f, value,    # still not yet
-            print >> f, ""   # now end the line
+                print(value, end=' ', file=f)    # still not yet
+            print("", file=f)   # now end the line
 
         elif d["basictype"] == "2":     # strings, may have multiple lines
-            print >> f, len(d["values"]),    # don't end the line
+            print(len(d["values"]), end=' ', file=f)  # don't end the line
             for value in d["values"]:
                 # now end the line (for each string)
-                print >> f, '"' + value + '"'
+                print('"' + value + '"', file=f)
 
         # print out the last line
-        print >> f, d["enumerable"],
+        print(d["enumerable"], end=' ', file=f)
 
         if d["enumerable"] != "0":
             for e in d["enumerables"]:
                 if d["basictype"] == "1":  # reals
-                    print >> f, e,
+                    print(e, end=' ', file=f)
                 elif d["basictype"] == "2":  # strings
-                    print >> f, '"' + e + '"',
-        print >> f, ""   # end the enumerable line
+                    print('"' + e + '"', end=' ', file=f)
+        print("", file=f)   # end the enumerable line
 
     f.close()
 

@@ -2,6 +2,8 @@
 Misc. functions
 """
 
+from __future__ import print_function
+
 import numpy as np
 
 # default tolerences
@@ -73,15 +75,15 @@ def isdatasimilar(data1, data2, verb=False, atol=ATOL, rtol=RTOL):
     if data1.dtype != data2.dtype:
         r = False
         if verb:
-            print "Dtypes do not match:", data1.dtype, data2.dtype
+            print("Dtypes do not match:", data1.dtype, data2.dtype)
     if data1.shape != data2.shape:
         r = False
         if verb:
-            print "Shapes do not match:", data1.shape, data2.shape
+            print("Shapes do not match:", data1.shape, data2.shape)
     if np.allclose(data1, data2, rtol=rtol, atol=atol) is False:
         r = False
         if verb:
-            print "Data does not match"
+            print("Data does not match")
     return r
 
 
@@ -99,7 +101,7 @@ def isitemsimilar(v1, v2, verb=False, dtol=DTOL):
     if type(v1) != type(v2):
         r = False
         if verb:
-            print "Item has different type", type(v1), type(v2)
+            print("Item has different type", type(v1), type(v2))
 
     # iterable checking
     elif isinstance(v1, dict):
@@ -113,14 +115,14 @@ def isitemsimilar(v1, v2, verb=False, dtol=DTOL):
         if abs(v1 - v2) > dtol:
             r = False
             if verb:
-                print "Key mismatch:", v1, v2
+                print("Key mismatch:", v1, v2)
 
     # all other types: just check if equal
     else:
         if v1 != v2:
             r = False
             if verb:
-                print "Key mismatch:", v1, v2
+                print("Key mismatch:", v1, v2)
 
     return r
 
@@ -174,14 +176,14 @@ def isdicsimilar(dic1, dic2, verb=False, dtol=DTOL, ignore_pipe_display=False):
     if len(dset) != 0:
         r = False
         if verb:
-            print "Keys not in both dictionaries:", dset
+            print("Keys not in both dictionaries:", dset)
 
     # loop over keys in both sets
     for k in iset:
         v1, v2 = dic1[k], dic2[k]
 
         if not isitemsimilar(v1, v2, verb=verb, dtol=dtol):
-            print "For key:", k
+            print("For key:", k)
             r = False
 
     return r
@@ -201,7 +203,7 @@ def islistsimilar(l1, l2, verb=False, dtol=DTOL):
     if len(l1) != len(l2):
         r = False
         if verb:
-            print "Lists not of same length:", len(l1), len(l2)
+            print("Lists not of same length:", len(l1), len(l2))
 
     # loop over keys in both sets
     for v1, v2 in zip(l1, l2):

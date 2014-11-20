@@ -291,12 +291,14 @@ class location_scale():
     def nparam(self, M):
         return 2
 
-    def add_edge(self, p, (min, max)):
+    def add_edge(self, p, limits):
+        min, max = limits
         if p[0] is None:
             return p
         return p[0] - min, p[1]
 
-    def remove_edge(self, p, (min, max)):
+    def remove_edge(self, p, limits):
+        min, max = limits
         if p[0] is None:
             return p
         return p[0] + min, p[1]
@@ -399,12 +401,14 @@ class location_2params():
     def nparam(self, M):
         return 3
 
-    def add_edge(self, p, (min, max)):
+    def add_edge(self, p, limits):
+        min, max = limits
         if p[0] is None:
             return p
         return p[0] - min, p[1], p[2]
 
-    def remove_edge(self, p, (min, max)):
+    def remove_edge(self, p, limits):
+        min, max = limits
         if p[0] is None:
             return p
         return p[0] + min, p[1], p[2]
@@ -502,10 +506,10 @@ class scale():
     def pnames(self, M):
         return tuple(["a%i" % i for i in range(1, M)])
 
-    def add_edge(self, p, (min, max)):
+    def add_edge(self, p, limits):
         return p
 
-    def remove_edge(self, p, (min, max)):
+    def remove_edge(self, p, limits):
         return p
 
 # lineshape convience

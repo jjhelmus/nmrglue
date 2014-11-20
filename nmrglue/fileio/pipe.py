@@ -1,6 +1,9 @@
 """
 Functions for reading and writing NMRPipe files and table (.tab) files
 """
+
+from __future__ import print_function, division
+
 __developer_info__ = """
 NMRPipe file structure is described in the NMRPipe man pages and fdatap.h
 """
@@ -8,7 +11,10 @@ NMRPipe file structure is described in the NMRPipe man pages and fdatap.h
 import struct
 import datetime
 import os
-from StringIO import StringIO
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 from warnings import warn
 
 import numpy as np
@@ -73,7 +79,7 @@ def read_table(filename):
     dtd['formats'] = [p2f[i[-1]] for i in pformat]
 
     # DEBUG
-    #print  dtd['names'],dtd['formats']
+    #print(dtd['names'],dtd['formats'])
     s = StringIO("".join(dl))
 
     rec = np.recfromtxt(s, dtype=dtd, comments='XXXXXXXXXXX')
@@ -226,7 +232,7 @@ def guess_udic(dic, data):
     udic = fileiobase.create_blank_udic(data.ndim)
 
     # update default values
-    for i in xrange(data.ndim):
+    for i in range(data.ndim):
         udic[i]["size"] = data.shape[i]     # size from data shape
 
         # determind NMRPipe axis name
@@ -305,7 +311,7 @@ def create_dic(udic, datetimeobj=datetime.datetime.now()):
         dic["FD2DPHASE"] = 0.0
 
     # fill in parameters for each dimension
-    for i, adic in enumerate([udic[k] for k in xrange(udic["ndim"])]):
+    for i, adic in enumerate([udic[k] for k in range(udic["ndim"])]):
         n = int((dic["FDDIMCOUNT"] - 1) - i)
         dic = add_axis_to_dic(dic, adic, n)
 
@@ -365,12 +371,12 @@ def add_axis_to_dic(dic, adic, n):
 
     # origin (last point) is CAR*OBS-SW*(N/2-1)/N
     # see Fig 3.1 on p.36 of Hoch and Stern
-    #print "fn:",n
-    #print  "CAR:",dic[fn+"CAR"]
-    #print  "OBS:",dic[fn+"OBS"]
-    #print  "SW:",dic[fn+"SW"]
-    #print  "osize:",osize
-    #print  "CENTER:",dic[fn+"CENTER"]
+    #print("fn:",n)
+    #print("CAR:",dic[fn+"CAR"])
+    #print("OBS:",dic[fn+"OBS"])
+    #print("SW:",dic[fn+"SW"])
+    #print("osize:",osize)
+    #print("CENTER:",dic[fn+"CENTER"])
     dic[fn + "ORIG"] = (dic[fn + "CAR"] * dic[fn + "OBS"] - dic[fn + "SW"] *
                         (osize - dic[fn + "CENTER"]) / osize)
 
@@ -439,7 +445,7 @@ def create_empty_dic():
     dic["FDF4LABEL"] = "A"
 
     # misc values
-    dic["FDFLTFORMAT"] = struct.unpack('f', '\xef\xeenO')[0]
+    dic["FDFLTFORMAT"] = struct.unpack('f', b'\xef\xeenO')[0]
     dic["FDFLTORDER"] = float(2.3450000286102295)
 
     return dic
@@ -902,7 +908,7 @@ def write_lowmem_2D(filename, dic, data, overwrite=False):
 
     # put data trace by trace
     lenY, lenX = data.shape
-    for y in xrange(lenY):
+    for y in range(lenY):
         put_trace(fh, data[y])
     fh.close()
     return
@@ -924,11 +930,11 @@ def write_lowmem_3D(filename, dic, data, overwrite=False):
 
     # put data trace by trace
     lenZ, lenY, lenX = data.shape
-    for z in xrange(lenZ):
+    for z in range(lenZ):
         # open the file to store the 2D plane
         fh = fileiobase.open_towrite(filename % (z + 1), overwrite=overwrite)
         put_fdata(fh, fdata)
-        for y in xrange(lenY):
+        for y in range(lenY):
             put_trace(fh, data[z, y])
         fh.close()
     return
@@ -949,8 +955,8 @@ def write_lowmem_3Ds(filename, dic, data, overwrite=False):
 
     # put data trace by trace
     lenZ, lenY, lenX = data.shape
-    for z in xrange(lenZ):
-        for y in xrange(lenY):
+    for z in range(lenZ):
+        for y in range(lenY):
             put_trace(fh, data[z, y])
     fh.close()
     return
@@ -973,8 +979,8 @@ def write_lowmem_4D(filename, dic, data, overwrite=False):
 
     # put data trace by trace
     lenA, lenZ, lenY, lenX = data.shape
-    for a in xrange(lenA):
-        for z in xrange(lenZ):
+    for a in range(lenA):
+        for z in range(lenZ):
             # open the file to store the 2D plane
             if filename.count("%") == 1:
                 fname = filename % (a * lenZ + z + 1)
@@ -982,7 +988,7 @@ def write_lowmem_4D(filename, dic, data, overwrite=False):
                 fname = filename % (a + 1, z + 1)
             fh = fileiobase.open_towrite(fname, overwrite=overwrite)
             put_fdata(fh, fdata)
-            for y in xrange(lenY):
+            for y in range(lenY):
                 put_trace(fh, data[a, z, y])
             fh.close()
     return
@@ -1003,9 +1009,9 @@ def write_lowmem_4Ds(filename, dic, data, overwrite=False):
 
     # put data trace by trace
     lenA, lenZ, lenY, lenX = data.shape
-    for a in xrange(lenA):
-        for z in xrange(lenZ):
-            for y in xrange(lenY):
+    for a in range(lenA):
+        for z in range(lenZ):
+            for y in range(lenY):
                 put_trace(fh, data[a, z, y])
     fh.close()
     return
@@ -1043,7 +1049,7 @@ def put_data(filename, fdata, data, overwrite=False):
     Put fdata and data to 2D NMRPipe.
     """
     if data.dtype != 'float32':
-        #print data.dtype
+        #print(data.dtype)
         raise TypeError('data.dtype is not float32')
     if fdata.dtype != 'float32':
         raise TypeError('fdata.dtype is not float32')
@@ -1056,7 +1062,7 @@ def put_data(filename, fdata, data, overwrite=False):
     return
 
 
-def write_slice_3D(filemask, dic, data, shape, (sz, sy, sx)):
+def write_slice_3D(filemask, dic, data, shape, slices):
     """
     Write a slice of a 3D data array to file.
 
@@ -1087,6 +1093,7 @@ def write_slice_3D(filemask, dic, data, shape, (sz, sy, sx)):
     iter3D : Users should use this object, not this function.
 
     """
+    sz, sy, sx = slices
     if data.ndim != 3:
         raise ValueError("passed array must be 3D")
 
@@ -1099,7 +1106,7 @@ def write_slice_3D(filemask, dic, data, shape, (sz, sy, sx)):
     # loop over the requested z-slice
     for i, f in enumerate(fnames[sz]):
 
-        #print "i:",i,"f:",f
+        #print("i:",i,"f:",f)
         if os.path.isfile(f) is False:
             # file doesn't exist, create a empty one
             ndata = np.zeros((dy, dx), dtype=data.dtype)
@@ -1192,10 +1199,11 @@ def pack_complex(data):
     return np.array(data[..., ::2] + data[..., 1::2] * 1.j, dtype="complex64")
 
 
-def transpose_3D(dic, data, (a1, a2, a3)=(2, 1, 0)):
+def transpose_3D(dic, data, axes=(2, 1, 0)):
     """
     Transpose pipe_3d object and dictionary
     """
+    a1, a2, a3 = axes
     rdic = dict(dic)    # create a copy of the dictionary
 
     # transpose the data
@@ -1396,11 +1404,11 @@ class iter3D(object):
             raise ValueError("invalid in_lead")  # this should never be raised
 
         # DEBUGGING
-        #print "Writing out slice :",self.i
-        #print "shape:",shape
-        #print "plane.shape",plane.shape
-        #print "sx,sy,sz",sx,sy,sz
-        #print dic["FDFILECOUNT"]
+        #print("Writing out slice :",self.i)
+        #print("shape:",shape)
+        #print("plane.shape",plane.shape)
+        #print("sx,sy,sz",sx,sy,sz)
+        #print(dic["FDFILECOUNT"])
         write_slice_3D(filemask, dic, plane, shape, (sz, sy, sx))
 
 #####################
@@ -1517,16 +1525,19 @@ def fdata2dic(fdata):
     dic["FDDIMORDER"] = [dic["FDDIMORDER1"], dic["FDDIMORDER2"],
                          dic["FDDIMORDER3"], dic["FDDIMORDER4"]]
 
+    def _unpack_str(fmt, d):
+        return struct.unpack(fmt, d)[0].decode().strip('\x00')
+
     # Populate the dictionary with FDATA which contains strings
-    dic["FDF2LABEL"] = struct.unpack('8s', fdata[16:18])[0].rstrip('\x00')
-    dic["FDF1LABEL"] = struct.unpack('8s', fdata[18:20])[0].rstrip('\x00')
-    dic["FDF3LABEL"] = struct.unpack('8s', fdata[20:22])[0].rstrip('\x00')
-    dic["FDF4LABEL"] = struct.unpack('8s', fdata[22:24])[0].rstrip('\x00')
-    dic["FDSRCNAME"] = struct.unpack('16s', fdata[286:290])[0].rstrip('\x00')
-    dic["FDUSERNAME"] = struct.unpack('16s', fdata[290:294])[0].rstrip('\x00')
-    dic["FDTITLE"] = struct.unpack('60s', fdata[297:312])[0].rstrip('\x00')
-    dic["FDCOMMENT"] = struct.unpack('160s', fdata[312:352])[0].rstrip('\x00')
-    dic["FDOPERNAME"] = struct.unpack('32s', fdata[464:472])[0].rstrip('\x00')
+    dic["FDF2LABEL"] = _unpack_str('8s', fdata[16:18])
+    dic["FDF1LABEL"] = _unpack_str('8s', fdata[18:20])
+    dic["FDF3LABEL"] = _unpack_str('8s', fdata[20:22])
+    dic["FDF4LABEL"] = _unpack_str('8s', fdata[22:24])
+    dic["FDSRCNAME"] = _unpack_str('16s', fdata[286:290])
+    dic["FDUSERNAME"] = _unpack_str('16s', fdata[290:294])
+    dic["FDTITLE"] = _unpack_str('60s', fdata[297:312])
+    dic["FDCOMMENT"] = _unpack_str('160s', fdata[312:352])
+    dic["FDOPERNAME"] = _unpack_str('32s', fdata[464:472])
     return dic
 
 
@@ -1546,20 +1557,26 @@ def dic2fdata(dic):
 
     # Pack the various strings into terminated strings of the correct length
     # then into floats in the fdata array
-    fdata[16:18] = struct.unpack('2f', struct.pack('8s', dic["FDF2LABEL"]))
-    fdata[18:20] = struct.unpack('2f', struct.pack('8s', dic["FDF1LABEL"]))
-    fdata[20:22] = struct.unpack('2f', struct.pack('8s', dic["FDF3LABEL"]))
-    fdata[22:24] = struct.unpack('2f', struct.pack('8s', dic["FDF4LABEL"]))
+    fdata[16:18] = struct.unpack(
+        '2f', struct.pack('8s', dic["FDF2LABEL"].encode()))
+    fdata[18:20] = struct.unpack(
+        '2f', struct.pack('8s', dic["FDF1LABEL"].encode()))
+    fdata[20:22] = struct.unpack(
+        '2f', struct.pack('8s', dic["FDF3LABEL"].encode()))
+    fdata[22:24] = struct.unpack(
+        '2f', struct.pack('8s', dic["FDF4LABEL"].encode()))
 
     # and the longer strings (typically blank)
-    fdata[286:290] = struct.unpack('4f', struct.pack('16s', dic["FDSRCNAME"]))
-    fdata[290:294] = struct.unpack('4f', struct.pack('16s',
-                                                     dic["FDUSERNAME"]))
-    fdata[297:312] = struct.unpack('15f', struct.pack('60s', dic["FDTITLE"]))
-    fdata[312:352] = struct.unpack('40f', struct.pack('160s',
-                                                      dic["FDCOMMENT"]))
-    fdata[464:472] = struct.unpack('8f', struct.pack('32s',
-                                                     dic["FDOPERNAME"]))
+    fdata[286:290] = struct.unpack(
+        '4f', struct.pack('16s', dic["FDSRCNAME"].encode()))
+    fdata[290:294] = struct.unpack(
+        '4f', struct.pack('16s', dic["FDUSERNAME"].encode()))
+    fdata[297:312] = struct.unpack(
+        '15f', struct.pack('60s', dic["FDTITLE"].encode()))
+    fdata[312:352] = struct.unpack(
+        '40f', struct.pack('160s', dic["FDCOMMENT"].encode()))
+    fdata[464:472] = struct.unpack(
+        '8f', struct.pack('32s', dic["FDOPERNAME"].encode()))
 
     return fdata
 
@@ -1682,7 +1699,7 @@ class pipe_2d(fileiobase.data_nd):
         else:
             self.cplex = True
             self.dtype = np.dtype('complex64')
-            fshape[1] = fshape[1] / 2
+            fshape[1] = fshape[1] // 2
 
         # finalize
         self.fshape = tuple(fshape)
@@ -1695,12 +1712,13 @@ class pipe_2d(fileiobase.data_nd):
         n = pipe_2d(self.filename, order)
         return n
 
-    def __fgetitem__(self, (sY, sX)):
+    def __fgetitem__(self, slices):
         """
         Return ndarray of selected values.
 
         (sY, sX) is a well formated tuple of slices
         """
+        sY, sX = slices
         f = open(self.filename, 'rb')  # open the file for reading
 
         # determine which objects should be selected
@@ -1786,7 +1804,7 @@ class pipe_3d(fileiobase.data_nd):
         else:
             self.cplex = True
             self.dtype = np.dtype('complex64')
-            fshape[2] = fshape[2] / 2
+            fshape[2] = fshape[2] // 2
 
         # finalize
         self.filemask = filemask
@@ -1801,12 +1819,13 @@ class pipe_3d(fileiobase.data_nd):
         n = pipe_3d(self.filemask, order)
         return n
 
-    def __fgetitem__(self, (sZ, sY, sX)):
+    def __fgetitem__(self, slices):
         """
         Return ndarray of selected values
 
         (sZ, sY, sX) is a well formated tuple of slices
         """
+        sZ, sY, sX = slices
         # determine which objects should be selected
         lenZ, lenY, lenX = self.fshape
         xch = range(lenX)[sX]
@@ -1869,7 +1888,7 @@ class pipestream_3d(fileiobase.data_nd):
         else:
             self.cplex = True
             self.dtype = np.dtype('complex64')
-            fshape[2] = fshape[2] / 2
+            fshape[2] = fshape[2] // 2
 
         # finalize
         self.filename = filename
@@ -1884,12 +1903,13 @@ class pipestream_3d(fileiobase.data_nd):
         n = pipestream_3d(self.filename, order)
         return n
 
-    def __fgetitem__(self, (sZ, sY, sX)):
+    def __fgetitem__(self, slices):
         """
         Return ndarray of selected values
 
         (sZ, sY, sX) is a well formated tuple of slices
         """
+        sZ, sY, sX = slices
         f = open(self.filename, 'rb')  # open the file for reading
 
         # determine which objects should be selected
@@ -1994,7 +2014,7 @@ class pipe_4d(fileiobase.data_nd):
         else:
             self.cplex = True
             self.dtype = np.dtype('complex64')
-            fshape[3] = fshape[3] / 2
+            fshape[3] = fshape[3] // 2
 
         # finalize
         self.filemask = filemask
@@ -2009,13 +2029,14 @@ class pipe_4d(fileiobase.data_nd):
         n = pipe_4d(self.filemask, order)
         return n
 
-    def __fgetitem__(self, (sA, sZ, sY, sX)):
+    def __fgetitem__(self, slices):
         """
         Return ndarray of selected values
 
         (sZ, sY, sX) is a well formated tuple of slices
 
         """
+        sA, sZ, sY, sX = slices
         # determine which objects should be selected
         lenA, lenZ, lenY, lenX = self.fshape
         xch = range(lenX)[sX]
@@ -2088,7 +2109,7 @@ class pipestream_4d(fileiobase.data_nd):
         else:
             self.cplex = True
             self.dtype = np.dtype('complex64')
-            fshape[3] = fshape[3] / 2
+            fshape[3] = fshape[3] // 2
 
         # finalize
         self.fshape = tuple(fshape)
@@ -2101,13 +2122,14 @@ class pipestream_4d(fileiobase.data_nd):
         n = pipestream_4d(self.filename, order)
         return n
 
-    def __fgetitem__(self, (sA, sZ, sY, sX)):
+    def __fgetitem__(self, slices):
         """
         Return ndarray of selected values
 
         (sA, sZ, sY, sX) is a well formated tuple of slices
 
         """
+        sA, sZ, sY, sX = slices
         f = open(self.filename, 'rb')  # open the file for reading
 
         # determine which objects should be selected

@@ -3,6 +3,9 @@ Functions for reading and writing Bruker binary (ser/fid) files, Bruker
 JCAMP-DX parameter (acqus) files, and Bruker pulse program (pulseprogram)
 files.
 """
+
+from __future__ import print_function, division
+
 __developer_info__ = """
 Bruker file format information
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -24,6 +27,7 @@ the file with nmrglue.
 
 """
 
+from functools import reduce
 import os
 from warnings import warn
 
@@ -162,7 +166,7 @@ def create_dic(udic):
     else:
         bytes = 4
 
-    for k in xrange(ndim):
+    for k in range(ndim):
         bytes *= udic[k]["size"]
 
     dic = {"FILE_SIZE": bytes}
@@ -178,13 +182,13 @@ def create_dic(udic):
     dic['acqus'] = create_acqus_dic(udic[ndim - 1], direct=True)
     if ndim >= 2:
         dic["acqu2s"] = create_acqus_dic(udic[ndim - 2])
-        dic["pprog"]["loop"][1] = udic[ndim - 2]["size"] / 2
+        dic["pprog"]["loop"][1] = udic[ndim - 2]["size"] // 2
     if ndim >= 3:
         dic["acqu3s"] = create_acqus_dic(udic[ndim - 3])
-        dic["pprog"]["loop"][3] = udic[ndim - 3]["size"] / 2
+        dic["pprog"]["loop"][3] = udic[ndim - 3]["size"] // 2
     if ndim >= 4:
         dic["acqu4s"] = create_acqus_dic(udic[ndim - 4])
-        dic["pprog"]["loop"][5] = udic[ndim - 4]["size"] / 2
+        dic["pprog"]["loop"][5] = udic[ndim - 4]["size"] // 2
 
     return dic
 
@@ -387,7 +391,7 @@ def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
         gshape, gcplex = guess_shape(dic)
         if gcplex is True:    # divide last dim by 2 if complex
             t = list(gshape)
-            t[-1] = t[-1] / 2
+            t[-1] = t[-1] // 2
             gshape = tuple(t)
     if shape is None:
         shape = gshape
@@ -599,8 +603,8 @@ def guess_shape(dic):
 
     # additional dimension given by data size
     if shape[2] != 0 and shape[3] != 0:
-        shape[1] = fsize / (shape[3] * shape[2] * 4)
-        shape[0] = fsize / (shape[3] * shape[2] * 16 * 4)
+        shape[1] = fsize // (shape[3] * shape[2] * 4)
+        shape[0] = fsize // (shape[3] * shape[2] * 16 * 4)
 
     # if there in no pulse program parameters in dictionary return currect
     # shape after removing zeros
@@ -1469,7 +1473,7 @@ def rm_dig_filter(data, decim, dspfvs, grpdly=0):
     add = int(max(skip - 6, 0))           # 6 less, or 0
 
     # DEBUG
-    #print "phase: %f, skip: %i add: %i"%(phase,skip,add)
+    #print("phase: %f, skip: %i add: %i"%(phase,skip,add))
 
     # frequency shift
     pdata = proc_base.fsh2(data, phase)
@@ -1511,16 +1515,16 @@ def read_jcamp(filename):
 
     """
     dic = {"_coreheader": [], "_comments": []}  # create empty dictionary
-    f = open(filename, 'rb')
+    f = open(filename, 'r')
 
-    # loop until EOF
-    while len(f.read(1)):
+    while True:     # loop until end of file is found
 
-        f.seek(-1, os.SEEK_CUR)  # rewind 1 byte
         line = f.readline().rstrip()    # read a line
+        if line == '':      # end of file found
+            break
 
         if line[:6] == "##END=":
-            #print "End of file"
+            #print("End of file")
             break
         elif line[:2] == "$$":
             dic["_comments"].append(line)
@@ -1633,7 +1637,7 @@ def write_jcamp(dic, filename, overwrite=False):
     """
 
     # open the file for writing
-    f = fileiobase.open_towrite(filename, overwrite=overwrite)
+    f = fileiobase.open_towrite(filename, overwrite=overwrite, mode='w')
 
     # create a copy of the dictionary
     d = dict(dic)
@@ -1652,7 +1656,7 @@ def write_jcamp(dic, filename, overwrite=False):
         f.write(line)
         f.write("\n")
 
-    keys = d.keys()
+    keys = [i for i in d.keys()]
     keys.sort()
 
     # write out each key,value pair
@@ -1763,7 +1767,7 @@ def read_pprog(filename):
     """
 
     # open the file
-    f = open(filename, 'rb')
+    f = open(filename, 'r')
 
     # initilize lists and dictionaries
     var = dict()
@@ -1793,7 +1797,7 @@ def read_pprog(filename):
 
         # skip blank lines and include lines
         if text == "" or text[0] == "#":
-            #print line,"--Blank, Comment or Include"
+            #print(line,"--Blank, Comment or Include")
             continue
 
         # see if we have quotes and have an assigment
@@ -1807,13 +1811,13 @@ def read_pprog(filename):
                 if len(t) >= 2:
                     key, value = t[0], t[1]
                     var[key] = value
-                    #print line,"--Assignment"
+                    #print(line,"--Assignment")
                 else:
                     pass
-                    #print line,"--Statement"
+                    #print(line,"--Statement")
                 continue
             else:
-                #print line,"--Statement"
+                #print(line,"--Statement")
                 continue
 
         # loops begin with lo
@@ -1824,7 +1828,7 @@ def read_pprog(filename):
             incr.append([])
             phase.append([])
             ph_extra.append([])
-            #print line,"--Loop"
+            #print(line,"--Loop")
             continue
 
         tokens = text.split()
@@ -1835,12 +1839,12 @@ def read_pprog(filename):
             # store N to incr list
             if token2.startswith('id') or token2.startswith('dd'):
                 incr[len(loop)].append(int(token2[2:]))
-                #print line,"--Increment"
+                #print(line,"--Increment")
                 continue
 
             if token2.startswith("ipu") or token2.startswith("dpu"):
                 incr[len(loop)].append(int(token2[3:]))
-                #print line,"--Increment"
+                #print(line,"--Increment")
                 continue
 
             # phase statement have ip or dp
@@ -1855,10 +1859,10 @@ def read_pprog(filename):
                     ph_extra[len(loop)].append("")
                 else:
                     ph_extra[len(loop)].append(text[last:].strip())
-                #print line,"--Phase"
+                #print(line,"--Phase")
                 continue
 
-            #print line,"--Unimportant"
+            #print(line,"--Unimportant")
 
     f.close()
 
@@ -1908,13 +1912,13 @@ def write_pprog(filename, dic, overwrite=False):
     """
 
     # open the file for writing
-    f = fileiobase.open_towrite(filename, overwrite=overwrite)
+    f = fileiobase.open_towrite(filename, overwrite=overwrite, mode='w')
 
     # write a comment
     f.write("; Minimal Bruker pulseprogram created by write_pprog\n")
 
     # write our the variables
-    for k, v in dic["var"].iteritems():
+    for k, v in dic["var"].items():
         f.write("\"" + k + "=" + v + "\"\n")
 
     # write out each loop

@@ -1,4 +1,4 @@
-import proc_base
-import proc_bl
-import pipe_proc
-import proc_lp
+from . import proc_base
+from . import proc_bl
+from . import pipe_proc
+from . import proc_lp
