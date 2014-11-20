@@ -16,9 +16,11 @@ before_install:
   - sudo ln -s /run/shm /dev/shm
 # Install packages
 install:
-    - conda install --yes python=$TRAVIS_PYTHON_VERSION numpy scipy
+    - conda install --yes python=$TRAVIS_PYTHON_VERSION numpy scipy nose
     # Coverage packages from Dan Blanchard's binstar channel
-    - conda install --yes -c dan_blanchard python-coveralls nose-cov
+    #- conda install --yes -c dan_blanchard python-coveralls nose-cov
+    - pip install --use-mirrors nose-cov
+    - pip install --use-mirrors python-coveralls
     - python setup.py build_ext --inplace
 script: 
     - nosetests -v --with-cov --cover-package nmrglue nmrglue/
