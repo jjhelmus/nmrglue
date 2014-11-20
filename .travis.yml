@@ -1,14 +1,23 @@
 language: python
 python:
-    - "2.7"
-    - "3.3"  
-virtualenv:
-    system_site_packages: true
+  - 2.7
+  - 3.3
+# Setup anaconda
 before_install:
-    - sudo apt-get install -qq python-scipy
-    - pip install --use-mirrors nose-cov
-    - pip install --use-mirrors python-coveralls
-install: python setup.py build_ext --inplace
+  - wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
+  - chmod +x miniconda.sh
+  - ./miniconda.sh -b
+  - export PATH=/home/travis/miniconda/bin:$PATH
+  - conda update --yes conda
+  # The next couple lines fix a crash with multiprocessing on Travis and are not specific to using Miniconda
+  - sudo rm -rf /dev/shm
+  - sudo ln -s /run/shm /dev/shm
+# Install packages
+install:
+    - conda install --yes python=$TRAVIS_PYTHON_VERSION numpy scipy
+    # Coverage packages from Dan Blanchard's binstar channel
+    - conda install --yes -c dan_blanchard python-coveralls nose-cov
+    - python setup.py build_ext --inplace
 script: 
     - nosetests -v --with-cov --cov nmrglue nmrglue/
 after_success:
