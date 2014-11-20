@@ -182,13 +182,13 @@ def create_dic(udic):
     dic['acqus'] = create_acqus_dic(udic[ndim - 1], direct=True)
     if ndim >= 2:
         dic["acqu2s"] = create_acqus_dic(udic[ndim - 2])
-        dic["pprog"]["loop"][1] = udic[ndim - 2]["size"] / 2
+        dic["pprog"]["loop"][1] = udic[ndim - 2]["size"] // 2
     if ndim >= 3:
         dic["acqu3s"] = create_acqus_dic(udic[ndim - 3])
-        dic["pprog"]["loop"][3] = udic[ndim - 3]["size"] / 2
+        dic["pprog"]["loop"][3] = udic[ndim - 3]["size"] // 2
     if ndim >= 4:
         dic["acqu4s"] = create_acqus_dic(udic[ndim - 4])
-        dic["pprog"]["loop"][5] = udic[ndim - 4]["size"] / 2
+        dic["pprog"]["loop"][5] = udic[ndim - 4]["size"] // 2
 
     return dic
 
