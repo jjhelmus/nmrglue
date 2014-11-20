@@ -19,6 +19,6 @@ install:
     - conda install --yes -c dan_blanchard python-coveralls nose-cov
     - python setup.py build_ext --inplace
 script: 
-    - nosetests -v --with-cov --cov nmrglue nmrglue/
+    - nosetests -v --with-cov --cover-package nmrglue nmrglue/
 after_success:
     - coveralls
