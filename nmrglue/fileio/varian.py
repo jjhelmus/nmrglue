@@ -138,7 +138,7 @@ def create_dic(udic):
     if ndim >= 2:
         if udic[ndim - 2]['complex']:
             pdic["ni"] = create_pdic_param('ni',
-                                           [str(udic[ndim - 2]['size'] / 2)])
+                                           [str(udic[ndim - 2]['size'] // 2)])
             pdic["phase"] = create_pdic_param('phase', ['0', '1'])
         else:
             pdic["ni"] = create_pdic_param('ni', [str(udic[ndim - 2]['size'])])
@@ -148,7 +148,7 @@ def create_dic(udic):
         pdic['array'] = create_pdic_param('array', ['phase,phase2'])
         if udic[ndim - 3]['complex']:
             pdic["ni2"] = create_pdic_param(
-                'ni2', [str(udic[ndim - 3]['size'] / 2)])
+                'ni2', [str(udic[ndim - 3]['size'] // 2)])
             pdic["phase2"] = create_pdic_param('phase', ['0', '1'])
         else:
             pdic["ni2"] = create_pdic_param('ni2',
@@ -159,7 +159,7 @@ def create_dic(udic):
         pdic['array'] = create_pdic_param('array', ['phase,phase2,phase3'])
         if udic[ndim - 4]['complex']:
             pdic["ni3"] = create_pdic_param(
-                'ni3', [str(udic[ndim - 4]['size'] / 2)])
+                'ni3', [str(udic[ndim - 4]['size'] // 2)])
             pdic["phase3"] = create_pdic_param('phase3', ['0', '1'])
         else:
             pdic["ni3"] = create_pdic_param(

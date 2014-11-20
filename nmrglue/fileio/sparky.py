@@ -190,7 +190,7 @@ def create_axisdic(adic, tlen, dlen):
     dic["zero_order"] = 0.0
     dic["first_order"] = 0.0
     dic["first_pt_scale"] = 0.0
-    dic["extended"] = '\x80'  # transform bit set
+    dic["extended"] = b'\x80'  # transform bit set
     return dic
 
 

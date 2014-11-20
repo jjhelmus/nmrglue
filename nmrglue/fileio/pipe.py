@@ -445,7 +445,7 @@ def create_empty_dic():
     dic["FDF4LABEL"] = "A"
 
     # misc values
-    dic["FDFLTFORMAT"] = struct.unpack('f', '\xef\xeenO')[0]
+    dic["FDFLTFORMAT"] = struct.unpack('f', b'\xef\xeenO')[0]
     dic["FDFLTORDER"] = float(2.3450000286102295)
 
     return dic
