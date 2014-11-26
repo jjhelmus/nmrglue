@@ -17,6 +17,7 @@ and in the Sparky source file ucsffile.cc.
 import os
 import struct
 import datetime
+from warnings import warn
 
 import numpy as np
 
@@ -384,7 +385,7 @@ def read_2D(filename):
 
     # check for file size mismatch
     if seek_pos != dic["seek_pos"]:
-        raise IOError("Bad file size %s vs %s", (seek_pos, dic["seek_pos"]))
+        warn('Bad file size in header %s vs %s' % (seek_pos, dic['seek_pos']))
 
     # read the axis headers...
     for i in range(dic['naxis']):
@@ -442,7 +443,7 @@ def read_3D(filename):
 
     # check for file size mismatch
     if seek_pos != dic["seek_pos"]:
-        raise IOError("Bad file size %s vs %s", (seek_pos, dic["seek_pos"]))
+        warn('Bad file size in header %s vs %s' % (seek_pos, dic['seek_pos']))
 
     # read the axis headers...
     for i in range(dic['naxis']):
@@ -507,7 +508,7 @@ def read_lowmem_2D(filename):
 
     # check for file size mismatch
     if seek_pos != dic["seek_pos"]:
-        raise IOError("Bad file size %s vs %s", (seek_pos, dic["seek_pos"]))
+        warn('Bad file size in header %s vs %s' % (seek_pos, dic['seek_pos']))
     return dic, data
 
 
@@ -523,7 +524,7 @@ def read_lowmem_3D(filename):
 
     # check for file size mismatch
     if seek_pos != dic["seek_pos"]:
-        raise IOError("Bad file size %s vs %s", (seek_pos, dic["seek_pos"]))
+        warn('Bad file size in header %s vs %s' % (seek_pos, dic['seek_pos']))
 
     return dic, data
 
