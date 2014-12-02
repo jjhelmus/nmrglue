@@ -45,5 +45,5 @@ setup(
         'nmrglue.process.nmrtxt',
         'nmrglue.util'],
     package_data={
-        'nmrglue': ['fileio/tests/data/*', 'fileio/tests/data/*.dir/*']},
+        'nmrglue': ['fileio/tests/data/*.f*', 'fileio/tests/data/*.dir/*']},
 )
