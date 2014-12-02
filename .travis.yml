@@ -13,7 +13,7 @@ before_install:
   - conda update --yes conda
 # install packages
 install:
-    - conda create -n testenv --yes python=$TRAVIS_PYTHON_VERSION numpy scipy nose pip
+    - conda create -n testenv --yes python=$TRAVIS_PYTHON_VERSION numpy scipy nose pip coverage
     - source activate testenv  
     - pip install --use-mirrors nose-cov
     - pip install --use-mirrors python-coveralls
@@ -21,6 +21,6 @@ install:
 script:
     - mkdir tmp  # so that we don't pick up source directory
     - cd tmp
-    - nosetests -v --with-cov --cover-package nmrglue --exe nmrglue
+    - nosetests -v --with-cov --cov nmrglue --exe nmrglue
 after_success:
     - coveralls
