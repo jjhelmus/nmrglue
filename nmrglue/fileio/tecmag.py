@@ -14,6 +14,7 @@ Please inform upstream if you find a bug or to request additional features.
 """
 
 import io
+import os
 import re
 
 import numpy as np
@@ -272,7 +273,7 @@ def read(filename):
                 hdrdict['data'] = tntfile.read(data_length)
                 assert(len(hdrdict['data']) == data_length)
             else:
-                tntfile.seek(data_length, io.SEEK_CUR)
+                tntfile.seek(data_length, os.SEEK_CUR)
             tnt_sections[tlv['tag'].decode()] = hdrdict
             tnthdrbytes = tntfile.read(TNTTLV.itemsize)
 

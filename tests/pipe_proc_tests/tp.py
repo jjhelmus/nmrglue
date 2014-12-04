@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 """ Create files for tp unit test """
 
-from subprocess import check_output
+from subprocess import check_call
 import os
 
 import nmrglue.fileio.pipe as pipe
@@ -24,7 +24,7 @@ pipe_command = """\
 /bin/csh -c 'nmrPipe -in ./time_complex.fid                \
 | nmrPipe  -fn FT  -auto \
 -ov -out time-freq.c.ft1'"""
-check_output(pipe_command, shell=True)
+check_call(pipe_command, shell=True)
 
 d, a = pipe.read("time-freq.c.ft1")
 d, a = p.tp(d, a, hyper=True)
@@ -40,7 +40,7 @@ pipe_command = """\
 /bin/csh -c 'nmrPipe -in ./time_complex.fid                \
 | nmrPipe  -fn FT  -auto -di \
 -ov -out time-freq.r.ft1'"""
-check_output(pipe_command, shell=True)
+check_call(pipe_command, shell=True)
 
 d, a = pipe.read("time-freq.r.ft1")
 d, a = p.tp(d, a)
@@ -59,4 +59,3 @@ pipe.write("tp8.glue", d, a, overwrite=True)
 d, a = pipe.read("time_real.fid")
 d, a = p.tp(d, a, nohyper=True)
 pipe.write("tp9.glue", d, a, overwrite=True)
-

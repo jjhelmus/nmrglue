@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 """ Create files for ext unit test """
 
-from subprocess import check_output
+from subprocess import check_call
 
 import nmrglue.fileio.pipe as pipe
 import nmrglue.process.pipe_proc as p
@@ -39,7 +39,7 @@ pipe_command = """\
 /bin/csh -c 'nmrPipe -in ./time_complex.fid                \
 | nmrPipe  -fn FT  -auto \
 -ov -out time-freq.c.ft1'"""
-check_output(pipe_command, shell=True)
+check_call(pipe_command, shell=True)
 
 d, a = pipe.read("time-freq.c.ft1")
 d, a = p.ext(d, a, left=True, sw=True)
@@ -56,7 +56,7 @@ pipe_command = """\
 /bin/csh -c 'nmrPipe -in ./time_complex.fid                \
 | nmrPipe  -fn FT  -auto -di \
 -ov -out time-freq.r.ft1'"""
-check_output(pipe_command, shell=True)
+check_call(pipe_command, shell=True)
 
 d, a = pipe.read("time-freq.r.ft1")
 d, a = p.ext(d, a, left=True, sw=True)
