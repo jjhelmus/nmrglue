@@ -35,4 +35,3 @@ pipe.write("sign7.glue", d, a, overwrite=True)
 d, a = pipe.read("time_complex.fid")
 d, a = p.sign(d, a, sign=True)
 pipe.write("sign8.glue", d, a, overwrite=True)
-

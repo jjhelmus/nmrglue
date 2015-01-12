@@ -11,6 +11,3 @@ pipe.write("tri1.glue", d, a, overwrite=True)
 d, a = pipe.read("time_complex.fid")
 d, a = p.tri(d, a, loc=750, lHi=0.1, rHi=0.5)
 pipe.write("tri2.glue", d, a, overwrite=True)
-
-
-

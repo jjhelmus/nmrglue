@@ -134,7 +134,7 @@ def estimate_scales(spectrum, centers, box_width, scale_axis=0):
     # loop over the box centers
     for bc in bcenters:
 
-    # calculate box limits
+        # calculate box limits
         bmin = [max(c - w, 0) for c, w in zip(bc, box_width)]
         bmax = [min(c + w + 1, s) for c, w, s in zip(bc, box_width, shape)]
 
@@ -502,16 +502,16 @@ def fit_NDregion(region, lineshapes, params, amps, bounds=None,
         raise ValueError(err)
 
     # DEBUGGING
-    #print("--------------------------------")
-    #print(region)
-    #print(ls_classes)
-    #print(p0)
-    #print(p_bounds)
-    #print(n_peaks)
-    #print(dim_nparam)
-    #print("=================================")
-    #for i,j in zip(p0,p_bounds):
-    #    print(i, j)
+    # print("--------------------------------")
+    # print(region)
+    # print(ls_classes)
+    # print(p0)
+    # print(p_bounds)
+    # print(n_peaks)
+    # print(dim_nparam)
+    # print("=================================")
+    # for i,j in zip(p0,p_bounds):
+    #     print(i, j)
 
     # include full_output=True when errors requested
     if error_flag:
@@ -521,7 +521,7 @@ def fit_NDregion(region, lineshapes, params, amps, bounds=None,
     r = f_NDregion(region, ls_classes, p0, p_bounds, n_peaks, wmask, **kw)
 
     # DEBUGGING
-    #print(r)
+    # print(r)
 
     # unpack results depending of if full output requested
     if "full_output" in kw and kw["full_output"]:
@@ -622,10 +622,10 @@ def sim_NDregion(shape, lineshapes, params, amps):
     p = list(amps) + p   # amplitudes appended to front of p
 
     # DEBUGGING
-    #print("p",p)
-    #print("shape",shape)
-    #print("ls_classes",ls_classes)
-    #print("n_peaks",n_peaks)
+    # print("p",p)
+    # print("shape",shape)
+    # print("ls_classes",ls_classes)
+    # print("n_peaks",n_peaks)
 
     return s_NDregion(p, shape, ls_classes, n_peaks)
 
@@ -757,10 +757,10 @@ def s_single_NDregion(p, shape, ls_classes):
     r = np.array(A, dtype='float')
 
     for length, ls_class in zip(shape, ls_classes):
-        #print("Making lineshape of", ls_class.name, "with length:", length)
+        # print("Making lineshape of", ls_class.name, "with length:", length)
         s_p = [p.pop(0) for i in range(ls_class.nparam(length))]
         ls = ls_class.sim(length, s_p)
-        #print("Lineshape is:", ls)
+        # print("Lineshape is:", ls)
         r = np.kron(r, ls)   # vector direct product flattened
     return r.reshape(shape)
 

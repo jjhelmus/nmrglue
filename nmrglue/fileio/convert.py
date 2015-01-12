@@ -88,7 +88,7 @@ class converter(object):
         # processing for input type
         # sign alt. indirect dimension
         if data.ndim >= 2 and "alt_id_sign" in self._iproc:
-            #data[1::2] = -data[1::2]
+            # data[1::2] = -data[1::2]
             s = [slice(None, None, None)] * data.ndim
             for i in range(data.ndim - 1):
                 s[i] = slice(1, None, 2)

@@ -79,7 +79,7 @@ def read_table(filename):
     dtd['formats'] = [p2f[i[-1]] for i in pformat]
 
     # DEBUG
-    #print(dtd['names'],dtd['formats'])
+    # print(dtd['names'],dtd['formats'])
     s = StringIO("".join(dl))
 
     rec = np.recfromtxt(s, dtype=dtd, comments='XXXXXXXXXXX')
@@ -371,12 +371,12 @@ def add_axis_to_dic(dic, adic, n):
 
     # origin (last point) is CAR*OBS-SW*(N/2-1)/N
     # see Fig 3.1 on p.36 of Hoch and Stern
-    #print("fn:",n)
-    #print("CAR:",dic[fn+"CAR"])
-    #print("OBS:",dic[fn+"OBS"])
-    #print("SW:",dic[fn+"SW"])
-    #print("osize:",osize)
-    #print("CENTER:",dic[fn+"CENTER"])
+    # print("fn:",n)
+    # print("CAR:",dic[fn+"CAR"])
+    # print("OBS:",dic[fn+"OBS"])
+    # print("SW:",dic[fn+"SW"])
+    # print("osize:",osize)
+    # print("CENTER:",dic[fn+"CENTER"])
     dic[fn + "ORIG"] = (dic[fn + "CAR"] * dic[fn + "OBS"] - dic[fn + "SW"] *
                         (osize - dic[fn + "CENTER"]) / osize)
 
@@ -1049,7 +1049,7 @@ def put_data(filename, fdata, data, overwrite=False):
     Put fdata and data to 2D NMRPipe.
     """
     if data.dtype != 'float32':
-        #print(data.dtype)
+        # print(data.dtype)
         raise TypeError('data.dtype is not float32')
     if fdata.dtype != 'float32':
         raise TypeError('fdata.dtype is not float32')
@@ -1106,7 +1106,7 @@ def write_slice_3D(filemask, dic, data, shape, slices):
     # loop over the requested z-slice
     for i, f in enumerate(fnames[sz]):
 
-        #print("i:",i,"f:",f)
+        # print("i:",i,"f:",f)
         if os.path.isfile(f) is False:
             # file doesn't exist, create a empty one
             ndata = np.zeros((dy, dx), dtype=data.dtype)
@@ -1331,7 +1331,7 @@ class iter3D(object):
         elif self.in_lead == "z":
             # transpose to Y(XZ)
             self.idic, self.pipe_3d = transpose_3D(self.dic, self.pipe_3d,
-                                                  (1, 2, 0))
+                                                   (1, 2, 0))
             fn = "FDF" + str(int(self.idic["FDDIMORDER1"]))
             if self.idic[fn + "QUADFLAG"] != 1.0:   # z axis is complex
                 self.needs_pack_complex = True
@@ -1408,11 +1408,11 @@ class iter3D(object):
             raise ValueError("invalid in_lead")  # this should never be raised
 
         # DEBUGGING
-        #print("Writing out slice :",self.i)
-        #print("shape:",shape)
-        #print("plane.shape",plane.shape)
-        #print("sx,sy,sz",sx,sy,sz)
-        #print(dic["FDFILECOUNT"])
+        # print("Writing out slice :",self.i)
+        # print("shape:",shape)
+        # print("plane.shape",plane.shape)
+        # print("sx,sy,sz",sx,sy,sz)
+        # print(dic["FDFILECOUNT"])
         write_slice_3D(filemask, dic, plane, shape, (sz, sy, sx))
 
 #####################

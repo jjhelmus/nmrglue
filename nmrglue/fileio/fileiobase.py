@@ -27,10 +27,10 @@ def create_blank_udic(ndim):
         d["complex"] = True     # Quadrature, True when dimension is complex
         d["obs"] = 999.99       # Observation frequency in MHz
         d["car"] = 999.99       # Carrier frequency in Hz
-        d["size"] = 1           # Number of points in dimension based on the
-                                # shape of the data array. As such the direct
-                                # dimension (-1) size is R|I, all indirect
-                                # dimensions are R+I
+        # Number of points in dimension based on the shape of the data array.
+        # As such the direct dimension (-1) size is R|I, all indirect
+        # dimensions are R+I
+        d["size"] = 1
 
         d["label"] = ["X", "Y", "Z", "A"][i]    # name of dimension
 
@@ -141,9 +141,9 @@ class unit_conversion():
             pts = self.__us2pts(val)
         else:
             raise ValueError("invalid unit type")
-        #if self._cplx:
-        #    return pts+round(pts)
-        #else:
+        # if self._cplx:
+        #     return pts+round(pts)
+        # else:
         return pts
 
     def __pnt2unit(self, val, units):
@@ -151,8 +151,8 @@ class unit_conversion():
         Convert points to units
         """
         units = units.upper()
-        #if self._cplx:
-        #    val = val-round(val)
+        # if self._cplx:
+        #     val = val-round(val)
         if units == "PPM":
             k = self.__pts2ppm(val)
         elif units == "HZ":

@@ -11,6 +11,3 @@ pipe.write("sp1.glue", d, a, overwrite=True)
 d, a = pipe.read("time_complex.fid")
 d, a = p.sp(d, a, off=0.10, end=0.75, pow=1.0, c=0.5, size=200, one=True)
 pipe.write("sp2.glue", d, a, overwrite=True)
-
-
-

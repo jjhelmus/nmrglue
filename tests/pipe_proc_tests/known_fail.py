@@ -33,26 +33,26 @@ d, a = pipe.read("time_real.fid")
 d, a = p.shuf(d, a, mode="rr2ri")
 pipe.write("shuf9.glue", d, a, overwrite=True)
 
-# This function can result in nan in the array (as does pipe) and 
+# This function can result in nan in the array (as does pipe) and
 # therefore will not return true in np.allclose()
 # Also NMRPipe does not set the scaleflag parameter
 d, a = pipe.read("time_complex.fid")
 d, a = p.shuf(d, a, mode="bswap")
 pipe.write("shuf10.glue", d, a, overwrite=True)
 
-# r2i and i2r and not implemented in prop_par 
+# r2i and i2r and not implemented in prop_par
 # as pipe does not implement integer format
-#d, a = pipe.read("time_complex.fid")
-#d, a = p.shuf(d, a, mode="r2i")
-#pipe.write("shuf11.glue", d, a, overwrite=True)
+# d, a = pipe.read("time_complex.fid")
+# d, a = p.shuf(d, a, mode="r2i")
+# pipe.write("shuf11.glue", d, a, overwrite=True)
 
-#d, a = pipe.read("time_complex.fid")
-#d, a = p.shuf(d, a, mode="i2r")
-#pipe.write("shuf12.glue", d, a, overwrite=True)
+# d, a = pipe.read("time_complex.fid")
+# d, a = p.shuf(d, a, mode="i2r")
+# pipe.write("shuf12.glue", d, a, overwrite=True)
 
 # DEV
 # NMRPipe DEV functions goes into a infinite loop, oviously we don't
 # want to reproduce this.
-#d, a = pipe.read("time_complex.fid")
-#d, a = p.dev(d, a)
-#pipe.write("dev1.glue", d, a, overwrite=True)
+# d, a = pipe.read("time_complex.fid")
+# d, a = p.dev(d, a)
+# pipe.write("dev1.glue", d, a, overwrite=True)

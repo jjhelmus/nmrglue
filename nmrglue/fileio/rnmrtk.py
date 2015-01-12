@@ -524,12 +524,12 @@ def interleave_data(data):
     Interleave real, imag data in data
     """
     return data.view('float32')
-    #size = list(data.shape)
-    #size[-1] = size[-1]*2
-    #data_out = np.empty(size,dtype="float32")
-    #data_out[...,::2] = data.real
-    #data_out[...,1::2] = data.imag
-    #return data_out
+    # size = list(data.shape)
+    # size[-1] = size[-1]*2
+    # data_out = np.empty(size,dtype="float32")
+    # data_out[...,::2] = data.real
+    # data_out[...,1::2] = data.imag
+    # return data_out
 
 ######################
 # low-memory objects #

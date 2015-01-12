@@ -147,7 +147,7 @@ bad_varian_keys = ["procpar"]
 bad_pipe_keys = ["FDYEAR", "FDMONTH", "FDDAY", "FDHOURS", "FDMINS", "FDSECS"]
 bad_bruker_keys = ["pprog", "acqus", "acqu2s", "acqu3s"]
 bad_sparky_keys = ['bsize', 'extended', 'date', 'owner']
-#bad_rnmrtk_keys = ['layout', 'comment', 'p0', 'p1']
+# bad_rnmrtk_keys = ['layout', 'comment', 'p0', 'p1']
 bad_rnmrtk_keys = ['nacq', 'cphase', 'lphase']
 
 # keys which are bad because rnmrtk sets them incorrect when outputting NMRPipe
@@ -201,13 +201,13 @@ def test_agilent_1d():
     # agilent -> pipe
     cdic, cdata = vC.to_pipe()
     assert_array_equal(pdata, cdata)
-    #check_pdic(pdic, cdic)   # XXX don't check dictionary
+    # check_pdic(pdic, cdic)   # XXX don't check dictionary
     # write and readback
     tf = tempfile.mktemp(dir=".")
     ng.pipe.write(tf, cdic, cdata)
     rdic, rdata = ng.pipe.read(tf)
     assert_array_equal(pdata, rdata)
-    #check_pdic(pdic, cdic)   # XXX don't check dictionary
+    # check_pdic(pdic, cdic)   # XXX don't check dictionary
     os.remove(tf)
 
     # pipe -> pipe
@@ -253,7 +253,7 @@ def test_agilent_1d_rnmrtk():
     # agilent -> rnmrtk
     cdic, cdata = vC.to_rnmrtk(agilent_compatible=True)
     assert_array_equal(rdata, cdata)
-    #check_rdic(rdic, cdic, 1, bad_rnmrtk_keys)     # XXX do not check
+    # check_rdic(rdic, cdic, 1, bad_rnmrtk_keys)     # XXX do not check
     # write and readback
     tf = tempfile.mktemp(suffix='.sec', dir='.')
     ng.rnmrtk.write(tf, cdic, cdata)
@@ -319,13 +319,13 @@ def test_agilent_2d():
     # varian -> pipe
     cdic, cdata = vC.to_pipe()
     assert_array_equal(pdata, cdata)
-    #check_pdic(pdic,cdic)   # XXX don't check dictionary
+    # check_pdic(pdic,cdic)   # XXX don't check dictionary
     # write and readback
     tf = tempfile.mktemp(dir=".")
     ng.pipe.write(tf, cdic, cdata)
     rdic, rdata = ng.pipe.read(tf)
     assert_array_equal(pdata, rdata)
-    #check_pdic(pdic,cdic)   # XXX don't check dictionary
+    # check_pdic(pdic,cdic)   # XXX don't check dictionary
     os.remove(tf)
 
     # pipe -> pipe
@@ -371,7 +371,7 @@ def test_agilent_2d_rnmrtk():
     # agilent -> rnmrtk
     cdic, cdata = vC.to_rnmrtk(agilent_compatible=True)
     assert_array_equal(rdata, cdata)
-    #check_rdic(rdic, cdic, 2, bad_rnmrtk_keys)     # XXX do not check
+    # check_rdic(rdic, cdic, 2, bad_rnmrtk_keys)     # XXX do not check
     # write and readback
     tf = tempfile.mktemp(suffix='.sec', dir='.')
     ng.rnmrtk.write(tf, cdic, cdata)
@@ -437,13 +437,13 @@ def test_agilent_3d():
     # agilent -> pipe
     cdic, cdata = vC.to_pipe()
     assert_array_equal(pdata, cdata)
-    #check_pdic(pdic,cdic)   # XXX don't check dictionary
+    # check_pdic(pdic,cdic)   # XXX don't check dictionary
     # write and readback
     tf = tempfile.mktemp(dir=".") + "%03d"
     ng.pipe.write(tf, cdic, cdata)
     rdic, rdata = ng.pipe.read(tf)
     assert_array_equal(pdata, rdata)
-    #check_pdic(pdic,cdic)   # XXX don't check dictionary
+    # check_pdic(pdic,cdic)   # XXX don't check dictionary
     for f in glob.glob(tf[:-4] + "*"):
         os.remove(f)
 
@@ -497,7 +497,7 @@ def test_agilent_3d_rnmrtk():
     # agilent -> rnmrtk
     cdic, cdata = vC.to_rnmrtk(agilent_compatible=True)
     assert_array_equal(rdata, cdata)
-    #check_rdic(rdic, cdic, 3, bad_rnmrtk_keys)     # XXX do not check
+    # check_rdic(rdic, cdic, 3, bad_rnmrtk_keys)     # XXX do not check
     # write and readback
     tf = tempfile.mktemp(suffix='.sec', dir='.')
     ng.rnmrtk.write(tf, cdic, cdata)
@@ -563,21 +563,21 @@ def test_bruker_1d():
     # bruker -> pipe
     cdic, cdata = bC.to_pipe()
     assert_array_equal(pdata, cdata)
-    #check_pdic(pdic,cdic)   # XXX don't check dictionary
+    # check_pdic(pdic,cdic)   # XXX don't check dictionary
     # write and readback
     tf = tempfile.mktemp(dir=".")
     ng.pipe.write(tf, cdic, cdata)
     rdic, rdata = ng.pipe.read(tf)
     assert_array_equal(pdata, rdata)
-    #check_pdic(pdic,cdic)   # XXX don't check dictionary
+    # check_pdic(pdic,cdic)   # XXX don't check dictionary
     os.remove(tf)
 
     # pipe -> pipe
     cdic, cdata = pC.to_pipe()
     assert_array_equal(pdata, cdata)
-    #bpdk = list(bad_pipe_keys)
-    #bpdk.append("FDF2ORIG")         # these are roundoff errors
-    #bpdk.append("FDFLTORDER")       # not a problem when written
+    # bpdk = list(bad_pipe_keys)
+    # bpdk.append("FDF2ORIG")         # these are roundoff errors
+    # bpdk.append("FDFLTORDER")       # not a problem when written
     check_pdic(pdic, cdic, bad_pipe_keys)
     # write and readback
     tf = tempfile.mktemp(dir=".")
@@ -618,13 +618,13 @@ def test_bruker_1d_rnmrtk():
     # bruker -> rnmrtk
     cdic, cdata = bC.to_rnmrtk()
     assert_array_equal(rdata, cdata)
-    #check_rdic(rdic, cdic, 1)   # XXX don't check dictionary
+    # check_rdic(rdic, cdic, 1)   # XXX don't check dictionary
     # write and readback
     tf = tempfile.mktemp(suffix='.sec', dir='.')
     ng.rnmrtk.write(tf, cdic, cdata)
     rrdic, rrdata = ng.rnmrtk.read(tf)
     assert_array_equal(rdata, rrdata)
-    #check_pdic(rdic, rrdic , 1)   # XXX don't check dictionary
+    # check_pdic(rdic, rrdic , 1)   # XXX don't check dictionary
     os.remove(tf)
     os.remove(tf.replace('.sec', '.par'))
 
@@ -684,13 +684,13 @@ def test_bruker_2d():
     # bruker -> pipe
     cdic, cdata = bC.to_pipe()
     assert_array_equal(pdata, cdata)
-    #check_pdic(pdic,cdic)   # XXX don't check dictionary
+    # check_pdic(pdic,cdic)   # XXX don't check dictionary
     # write and readback
     tf = tempfile.mktemp(dir=".")
     ng.pipe.write(tf, cdic, cdata)
     rdic, rdata = ng.pipe.read(tf)
     assert_array_equal(pdata, rdata)
-    #check_pdic(pdic,cdic)   # XXX don't check dictionary
+    # check_pdic(pdic,cdic)   # XXX don't check dictionary
     os.remove(tf)
 
     # pipe -> pipe
@@ -740,13 +740,13 @@ def test_bruker_2d_rnmrtk():
     # bruker -> rnmrtk
     cdic, cdata = bC.to_rnmrtk()
     assert_array_equal(rdata, cdata)
-    #check_rdic(rdic, cdic, 1)   # XXX don't check dictionary
+    # check_rdic(rdic, cdic, 1)   # XXX don't check dictionary
     # write and readback
     tf = tempfile.mktemp(suffix='.sec', dir='.')
     ng.rnmrtk.write(tf, cdic, cdata)
     rrdic, rrdata = ng.rnmrtk.read(tf)
     assert_array_equal(rdata, rrdata)
-    #check_pdic(rdic, rrdic , 1)   # XXX don't check dictionary
+    # check_pdic(rdic, rrdic , 1)   # XXX don't check dictionary
     os.remove(tf)
     os.remove(tf.replace('.sec', '.par'))
 
@@ -840,13 +840,13 @@ def test_bruker_3d():
     # bruker -> pipe
     cdic, cdata = bC.to_pipe()
     assert_array_equal(pdata, cdata)
-    #check_pdic(pdic,cdic)   # XXX don't check dictionary
+    # check_pdic(pdic,cdic)   # XXX don't check dictionary
     # write and readback
     tf = tempfile.mktemp(dir=".") + "%03d"
     ng.pipe.write(tf, cdic, cdata)
     rdic, rdata = ng.pipe.read(tf)
     assert_array_equal(pdata, rdata)
-    #check_pdic(pdic,cdic)   # XXX don't check dictionary
+    # check_pdic(pdic,cdic)   # XXX don't check dictionary
     for f in glob.glob(tf[:-4] + "*"):
         os.remove(f)
 
@@ -905,13 +905,13 @@ def test_bruker_3d_rnmrtk():
     # bruker -> rnmrtk
     cdic, cdata = bC.to_rnmrtk()
     assert_array_equal(rdata, cdata)
-    #check_rdic(rdic, cdic, 3)   # XXX don't check dictionary
+    # check_rdic(rdic, cdic, 3)   # XXX don't check dictionary
     # write and readback
     tf = tempfile.mktemp(suffix='.sec', dir='.')
     ng.rnmrtk.write(tf, cdic, cdata)
     rrdic, rrdata = ng.rnmrtk.read(tf)
     assert_array_equal(rdata, rrdata)
-    #check_pdic(rdic, rrdic , 3)   # XXX don't check dictionary
+    # check_pdic(rdic, rrdic , 3)   # XXX don't check dictionary
     os.remove(tf)
     os.remove(tf.replace('.sec', '.par'))
 
@@ -972,13 +972,13 @@ def test_sparky_2d():
     # sparky -> pipe
     cdic, cdata = sC.to_pipe()
     assert_array_equal(pdata, cdata[:])
-    #check_pdic(pdic,cdic)   # XXX don't check dictionary
+    # check_pdic(pdic,cdic)   # XXX don't check dictionary
     # write and readback
     tf = tempfile.mktemp(dir=".")
     ng.pipe.write(tf, cdic, cdata)
     rdic, rdata = ng.pipe.read(tf)
     assert_array_equal(pdata, rdata[:])
-    #check_pdic(pdic,cdic)   # XXX don't check dictionary
+    # check_pdic(pdic,cdic)   # XXX don't check dictionary
     os.remove(tf)
 
     # pipe -> pipe
@@ -1057,13 +1057,13 @@ def test_sparky_3d():
     # sparky -> pipe
     cdic, cdata = sC.to_pipe()
     assert_array_equal(pdata, cdata[:])
-    #check_pdic(pdic,cdic)   # XXX don't check dictionary
+    # check_pdic(pdic,cdic)   # XXX don't check dictionary
     # write and readback
     tf = tempfile.mktemp(dir=".") + "%03d"
     ng.pipe.write(tf, cdic, cdata)
     rdic, rdata = ng.pipe.read(tf)
     assert_array_equal(pdata, rdata[:])
-    #check_pdic(pdic,cdic)   # XXX don't check dictionary
+    # check_pdic(pdic,cdic)   # XXX don't check dictionary
     for f in glob.glob(tf[:-4]+"*"):
         os.remove(f)
 
@@ -1107,8 +1107,8 @@ def test_sparky_3d():
     cdic, cdata = pC.to_sparky()
     assert_array_equal(sdata, cdata[:])
     bsk = list(bad_sparky_keys)
-    bsk.append("nucleus")           # the NMRPipe nucleus labels are passed
-                                    # to sparky not 13C, 15N, etc
+    # the NMRPipe nucleus labels are passed to sparky not 13C, 15N, etc
+    bsk.append("nucleus")
     check_sdic(sdic, cdic, bsk, True)
     # write and readback
     tf = tempfile.mktemp(dir=".")
@@ -1141,7 +1141,7 @@ def test_pipe_1d():
     os.remove(tf)
 
 
-#### lowmemory tests ###
+# lowmemory tests ###
 def test_sparky_2d_lowmem():
     """ 2D freq sparky, pipe <-> sparky, pipe low memory"""
     # prepare Sparky converter
@@ -1173,14 +1173,14 @@ def test_sparky_2d_lowmem():
     # sparky -> pipe
     cdic, cdata = sC.to_pipe()
     assert_array_equal(pdata[0:3, 0:4], cdata[0:3, 0:4])
-    #check_pdic(pdic,cdic)   # XXX don't check dictionary
+    # check_pdic(pdic,cdic)   # XXX don't check dictionary
     # write and readback
     tf = tempfile.mktemp(dir=".")
     # XXX trace by trace writing from sparky is very slow
     ng.pipe.write(tf, cdic, cdata)
     rdic, rdata = ng.pipe.read_lowmem(tf)
     assert_array_equal(pdata[0:3, 0:4], rdata[0:3, 0:4])
-    #check_pdic(pdic,cdic,v=True)   # XXX don't check dictionary
+    # check_pdic(pdic,cdic,v=True)   # XXX don't check dictionary
     os.remove(tf)
 
     # pipe -> pipe
@@ -1259,16 +1259,16 @@ def test_sparky_3d_lowmem():
     # sparky -> pipe
     cdic, cdata = sC.to_pipe()
     assert_array_equal(pdata[0:3, 0:4, 0:5], cdata[0:3, 0:4, 0:5])
-    #check_pdic(pdic,cdic)   # XXX don't check dictionary
+    # check_pdic(pdic,cdic)   # XXX don't check dictionary
     # write and readback
     # XXX trace by trace writing from sparky is very slow.
-    #tf = tempfile.mktemp(dir=".") + "%03d"
-    #ng.pipe.write_lowmem(tf, cdic, cdata)
-    #rdic, rdata = ng.pipe.read_lowmem(tf)
-    #assert_array_equal(pdata, rdata[:])
-    #check_pdic(pdic, cdic)   # XXX don't check dictionary
-    #for f in glob.glob(tf[:-4] + "*"):
-    #    os.remove(f)
+    # tf = tempfile.mktemp(dir=".") + "%03d"
+    # ng.pipe.write_lowmem(tf, cdic, cdata)
+    # rdic, rdata = ng.pipe.read_lowmem(tf)
+    # assert_array_equal(pdata, rdata[:])
+    # check_pdic(pdic, cdic)   # XXX don't check dictionary
+    # for f in glob.glob(tf[:-4] + "*"):
+    #     os.remove(f)
 
     # pipe -> pipe
     cdic, cdata = pC.to_pipe()
@@ -1310,8 +1310,8 @@ def test_sparky_3d_lowmem():
     cdic, cdata = pC.to_sparky()
     assert_array_equal(sdata[0:3, 0:4, 0:5], cdata[0:3, 0:4, 0:5])
     bsk = list(bad_sparky_keys)
-    bsk.append("nucleus")           # the NMRPipe nucleus labels are passed
-                                    # to sparky not 13C, 15N, etc
+    bsk.append("nucleus")
+    # the NMRPipe nucleus labels are passed to sparky not 13C, 15N, etc
     check_sdic(sdic, cdic, bsk, True)
     # write and readback
     tf = tempfile.mktemp(dir=".")
@@ -1353,13 +1353,13 @@ def test_bruker_2d_lowmem():
     # bruker -> pipe
     cdic, cdata = bC.to_pipe()
     assert_array_equal(pdata[0:3, 100:200], cdata[0:3, 100:200])
-    #check_pdic(pdic,cdic)   # XXX don't check dictionary
+    # check_pdic(pdic,cdic)   # XXX don't check dictionary
     # write and readback
     tf = tempfile.mktemp(dir=".")
     ng.pipe.write_lowmem(tf, cdic, cdata)
     rdic, rdata = ng.pipe.read_lowmem(tf)
     assert_array_equal(pdata[0:3, 100:200], rdata[0:3, 100:200])
-    #check_pdic(pdic,cdic)   # XXX don't check dictionary
+    # check_pdic(pdic,cdic)   # XXX don't check dictionary
     os.remove(tf)
 
     # pipe -> pipe
@@ -1456,13 +1456,13 @@ def test_bruker_3d_lowmem():
     # bruker -> pipe
     cdic, cdata = bC.to_pipe()
     assert_array_equal(pdata[0:2, 0:3, 100:200], cdata[0:2, 0:3, 100:200])
-    #check_pdic(pdic,cdic)   # XXX don't check dictionary
+    # check_pdic(pdic,cdic)   # XXX don't check dictionary
     # write and readback
     tf = tempfile.mktemp(dir=".") + "%03d"
     ng.pipe.write_lowmem(tf, cdic, cdata)
     rdic, rdata = ng.pipe.read_lowmem(tf)
     assert_array_equal(pdata[0:2, 0:3, 100:200], rdata[0:2, 0:3, 100:200])
-    #check_pdic(pdic,cdic)   # XXX don't check dictionary
+    # check_pdic(pdic,cdic)   # XXX don't check dictionary
     for f in glob.glob(tf[:-4] + "*"):
         os.remove(f)
 
@@ -1534,13 +1534,13 @@ def test_agilent_2d_lowmem():
     # varian -> pipe
     cdic, cdata = vC.to_pipe()
     assert_array_equal(pdata[0:4, 0:20], cdata[0:4, 0:20])
-    #check_pdic(pdic,cdic)   # XXX don't check dictionary
+    # check_pdic(pdic,cdic)   # XXX don't check dictionary
     # write and readback
     tf = tempfile.mktemp(dir=".")
     ng.pipe.write_lowmem(tf, cdic, cdata)
     rdic, rdata = ng.pipe.read_lowmem(tf)
     assert_array_equal(pdata[0:4, 0:20], rdata[0:4, 0:20])
-    #check_pdic(pdic,cdic)   # XXX don't check dictionary
+    # check_pdic(pdic,cdic)   # XXX don't check dictionary
     os.remove(tf)
 
     # pipe -> pipe
@@ -1599,13 +1599,13 @@ def test_agilent_3d_lowmem():
     # agilent -> pipe
     cdic, cdata = vC.to_pipe()
     assert_array_equal(pdata[0:3, 0:4, 0:20], cdata[0:3, 0:4, 0:20])
-    #check_pdic(pdic,cdic)   # XXX don't check dictionary
+    # check_pdic(pdic,cdic)   # XXX don't check dictionary
     # write and readback
     tf = tempfile.mktemp(dir=".") + "%03d"
     ng.pipe.write_lowmem(tf, cdic, cdata)
     rdic, rdata = ng.pipe.read_lowmem(tf)
     assert_array_equal(pdata[0:3, 0:4, 0:20], rdata[0:3, 0:4, 0:20])
-    #check_pdic(pdic,cdic)   # XXX don't check dictionary
+    # check_pdic(pdic,cdic)   # XXX don't check dictionary
     for f in glob.glob(tf[:-4] + "*"):
         os.remove(f)
 
@@ -1813,13 +1813,13 @@ def test_rnmrtk_3d():
     check_pdic(pdic, cdic, bad_pipe_keys + bad_rnmrtk2pipe_keys, v=True)
     # write and readback
     tf = tempfile.mktemp(dir=".") + "%03d"
-    #tf = tempfile.mktemp(dir=".")      # Uncomment these lines to write
-    #cdic['FDPIPEFLAG'] = 1.0           # a single NMRPipe stream file
+    # tf = tempfile.mktemp(dir=".")      # Uncomment these lines to write
+    # cdic['FDPIPEFLAG'] = 1.0           # a single NMRPipe stream file
     ng.pipe.write(tf, cdic, cdata)
     rrdic, rrdata = ng.pipe.read(tf)
     assert_array_equal(pdata, rrdata)
     check_pdic(pdic, cdic, bad_pipe_keys + bad_rnmrtk2pipe_keys, v=True)
-    #os.remove(tf)                      # this line too
+    # os.remove(tf)                      # this line too
     for f in glob.glob(tf[:-4] + "*"):
         os.remove(f)
 
@@ -1829,13 +1829,13 @@ def test_rnmrtk_3d():
     check_pdic(pdic, cdic, bad_pipe_keys + bad_rnmrtk2pipe_keys, v=True)
     # write and readback
     tf = tempfile.mktemp(dir=".") + "%03d"
-    #tf = tempfile.mktemp(dir=".")  # Uncomment these lines to write
-    #cdic['FDPIPEFLAG'] = 1.0       # a single NMRPipe stream file
+    # tf = tempfile.mktemp(dir=".")  # Uncomment these lines to write
+    # cdic['FDPIPEFLAG'] = 1.0       # a single NMRPipe stream file
     ng.pipe.write(tf, cdic, cdata)
     rrdic, rrdata = ng.pipe.read(tf)
     assert_array_equal(pdata, rrdata[:])
     check_pdic(pdic, cdic, bad_pipe_keys + bad_rnmrtk2pipe_keys, v=True)
-    #os.remove(tf)                  # This line too
+    # os.remove(tf)                  # This line too
     for f in glob.glob(tf[:-4] + "*"):
         os.remove(f)
 
@@ -1858,76 +1858,76 @@ def test_rnmrtk_3d():
 from nose.exc import SkipTest
 
 
-#def test_agilent_1d():
-#    """ 1D time agilent, pipe <-> agilent, pipe """
-#    raise SkipTest
+# def test_agilent_1d():
+#     """ 1D time agilent, pipe <-> agilent, pipe """
+#     raise SkipTest
 
 
-#def test_agilent_2d():
-#    """ 2D time agilent, pipe <-> agilent, pipe """
-#    raise SkipTest
+# def test_agilent_2d():
+#     """ 2D time agilent, pipe <-> agilent, pipe """
+#     raise SkipTest
 
 
-#def test_agilent_3d():
-#    """ 3D time agilent, pipe <-> agilent, pipe """
-#    raise SkipTest
+# def test_agilent_3d():
+#     """ 3D time agilent, pipe <-> agilent, pipe """
+#     raise SkipTest
 
 
-#def test_bruker_1d():
-#    """ 1D time bruker, pipe <-> bruker, pipe """
-#    raise SkipTest
+# def test_bruker_1d():
+#     """ 1D time bruker, pipe <-> bruker, pipe """
+#     raise SkipTest
 
 
-#def test_bruker_2d():
-#    """ 2D time bruker, pipe <-> bruker, pipe """
-#    raise SkipTest
+# def test_bruker_2d():
+#     """ 2D time bruker, pipe <-> bruker, pipe """
+#     raise SkipTest
 
 
-#def test_bruker_3d():
-#    """ 3D time bruker, pipe <-> bruker, pipe """
-#    raise SkipTest
+# def test_bruker_3d():
+#     """ 3D time bruker, pipe <-> bruker, pipe """
+#     raise SkipTest
 
 
-#def test_pipe_1d():
-#    """ 1D freq pipe <-> pipe """
-#    raise SkipTest
+# def test_pipe_1d():
+#     """ 1D freq pipe <-> pipe """
+#     raise SkipTest
 
 
-#def test_sparky_2d():
-#    """ 2D freq sparky, pipe <-> sparky, pipe """
-#    raise SkipTest
+# def test_sparky_2d():
+#     """ 2D freq sparky, pipe <-> sparky, pipe """
+#     raise SkipTest
 
 
-#def test_sparky_3d():
-#    """ 3D freq sparky, pipe <-> sparky, pipe """
-#    raise SkipTest
+# def test_sparky_3d():
+#     """ 3D freq sparky, pipe <-> sparky, pipe """
+#     raise SkipTest
 
 
-#def test_sparky_2d_lowmem():
-#    """ 2D freq sparky, pipe <-> sparky, pipe low memory"""
-#    raise SkipTest
+# def test_sparky_2d_lowmem():
+#     """ 2D freq sparky, pipe <-> sparky, pipe low memory"""
+#     raise SkipTest
 
 
-#def test_sparky_3d_lowmem():
-#    """ 3D freq sparky, pipe <-> sparky, pipe low memory"""
-#    raise SkipTest
+# def test_sparky_3d_lowmem():
+#     """ 3D freq sparky, pipe <-> sparky, pipe low memory"""
+#     raise SkipTest
 
 
-#def test_bruker_2d_lowmem():
-#    """ 2D time bruker, pipe <-> bruker, pipe low memory"""
-#    raise SkipTest
+# def test_bruker_2d_lowmem():
+#     """ 2D time bruker, pipe <-> bruker, pipe low memory"""
+#     raise SkipTest
 
 
-#def test_bruker_3d_lowmem():
-#    """ 3D time bruker, pipe <-> bruker, pipe low memory"""
-#    raise SkipTest
+# def test_bruker_3d_lowmem():
+#     """ 3D time bruker, pipe <-> bruker, pipe low memory"""
+#     raise SkipTest
 
 
-#def test_agilent_2d_lowmem():
-#    """ 2D time agilent, pipe <-> agilent, pipe low memory"""
-#    raise SkipTest
+# def test_agilent_2d_lowmem():
+#     """ 2D time agilent, pipe <-> agilent, pipe low memory"""
+#     raise SkipTest
 
 
-#def test_agilent_3d_lowmem():
-#    """ 3D time agilent, pipe <-> agilent, pipe low memory"""
-#    raise SkipTest
+# def test_agilent_3d_lowmem():
+#     """ 3D time agilent, pipe <-> agilent, pipe low memory"""
+#     raise SkipTest

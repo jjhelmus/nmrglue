@@ -25,7 +25,7 @@ d, a = pipe.read("1D_freq_complex.dat")
 d, a = p.fsh(d, a, dir="ls", pts=9.5)
 pipe.write("fsh4.glue", d, a, overwrite=True)
 
-# RFT 
+# RFT
 # these are off by small amounts, mostly min/max values
 d, a = pipe.read("1D_freq_complex.dat")
 d, a = p.rft(d, a)
@@ -50,7 +50,7 @@ pipe.write("ht4.glue", d, a, overwrite=True)
 d, a = pipe.read("time_real.fid")
 d, a = p.gmb(d, a, gb=0.1, lb=-8, c=0.5)
 d, a = p.zf(d, a, auto=True)
-d, a = p.ft(d, a, alt=True) # BUG glue seems to double the data...?
+d, a = p.ft(d, a, alt=True)  # BUG glue seems to double the data...?
 d, a = p.ps(d, a, p0=0, p1=0)
 d, a = p.tp(d, a, hyper=True)
 d, a = p.sp(d, a, off=0.5, pow=2, c=0.5)

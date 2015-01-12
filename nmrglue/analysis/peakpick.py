@@ -207,8 +207,8 @@ def pick(data, pthres, nthres=None, msep=None, algorithm='connected',
     seg_slices = pseg + nseg
     scales = [[]] * len(locations)
     amps = [[]] * len(locations)
-    #scales = np.zeros(np.array(locations).shape,dtype=float)
-    #amps = np.zeros(len(locations),dtype=float)
+    # scales = np.zeros(np.array(locations).shape,dtype=float)
+    # amps = np.zeros(len(locations),dtype=float)
 
     for i, (l, seg_slice) in enumerate(zip(locations, seg_slices)):
         null, scales[i], amps[i] = guess_params_slice(data, l, seg_slice,

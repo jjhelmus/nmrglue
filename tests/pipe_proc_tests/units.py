@@ -42,7 +42,7 @@ xc = p.make_uc(d, a)
 d, a = p.ext(d, a, x1=xc("67.23 ppm"), xn=xc("11.2 ppm"))
 pipe.write("units7.glue", d, a, overwrite=True)
 
-#2D points
+# 2D points
 d, a = pipe.read("freq_real.ft2")
 x1 = 193
 xn = 1812
@@ -109,4 +109,3 @@ y1 = yc("23.0 ppm")
 yn = yc("-14.2 ppm")
 d, a = p.ext(d, a, x1=xc("12.3 ppm"), xn=xc("-101.2 ppm"), y1=y1, yn=yn)
 pipe.write("units17.glue", d, a, overwrite=True)
-

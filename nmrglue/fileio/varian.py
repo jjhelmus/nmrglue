@@ -1460,7 +1460,7 @@ def hyperheader2dic(head):
     dic["f_spare1"] = head[7]
     dic["f_spare2"] = head[8]
 
-    #unpack the status bits
+    # unpack the status bits
     dic["UHYPERCOMPLEX"] = (dic["status"] & 0x2) // 0x2
 
     return dic

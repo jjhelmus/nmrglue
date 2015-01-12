@@ -427,12 +427,13 @@ def make_lp2d_Dd(x, P, M, mode='f'):
     # (P-1,M) (P-1,M-1) ... (P-1,1) (P-2,M-1) ... (P-2,1) (P-3,M-1) ... ...
     # (2,1) (1,M-1) ... (1,1) (0,M-1) ... (0,1)
     if mode == 'b':
-        raise NotImplemented    # backward mode not implemented
-                                # this would have the d' value as the
-                                # top left corner
-                                # this can be done with the same code
-                                # after reversing x,
-                                # x = x[::-1,::-1]
+        # backward mode not implemented
+        # this would have the d' value as the
+        # top left corner
+        # this can be done with the same code
+        # after reversing x,
+        # x = x[::-1,::-1]
+        raise NotImplemented
 
     # Build D and d' row by row by flattening a PxM region of the x matrix
     # starting at 0, 0 and moving down to the bottom of the matrix, then moving
@@ -443,9 +444,10 @@ def make_lp2d_Dd(x, P, M, mode='f'):
     N_0, N_1 = x.shape  # length of the matrix
 
     count_P = N_0 - P + 1   # number of valid starting position vertically
-    count_M = N_1 - M       # number of valid starting position horizontally
-                            # taking into account the element next to the
-                            # bottom right corner is the predicted value.
+    # number of valid starting position horizontally
+    # taking into account the element next to the
+    # bottom right corner is the predicted value.
+    count_M = N_1 - M
 
     # create an empty D matrix
     D = np.empty((count_P * count_M, P * M), dtype=x.dtype)
@@ -1147,7 +1149,7 @@ def fix_roots(poles, fix_roots="incr", fix_mode="reflect"):
     if fix_roots == "incr":     # remove increasing signals
         for i, pole in enumerate(poles):
             if np.abs(pole) > 1:
-                #print("Fixing root:",i)
+                # print("Fixing root:",i)
                 if fix_mode == "on":
                     poles[i] = pole / np.abs(pole)
                 else:
@@ -1155,7 +1157,7 @@ def fix_roots(poles, fix_roots="incr", fix_mode="reflect"):
     else:   # remove decreasing signals
         for i, pole in enumerate(poles):
             if np.abs(pole) < 1:
-                #print("Fixing root:",i)
+                # print("Fixing root:",i)
                 if fix_mode == "on":
                     poles[i] = pole / np.abs(pole)
                 else:

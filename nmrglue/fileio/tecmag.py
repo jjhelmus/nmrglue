@@ -261,7 +261,7 @@ def read(filename):
                    (filename, tntmagic))
             raise ValueError(err)
 
-        ##Read in the section headers
+        # Read in the section headers
         tnthdrbytes = tntfile.read(TNTTLV.itemsize)
         while(TNTTLV.itemsize == len(tnthdrbytes)):
             tlv = np.fromstring(tnthdrbytes, TNTTLV)[0]
@@ -282,10 +282,10 @@ def read(filename):
 
     assert(tnt_sections['DATA']['length'] ==
            tmag['actual_npts'].prod() * 8)
-    ## For some reason we can't set offset and shape together
-    #DATA = np.memmap(tntfilename,np.dtype('<c8'), mode='r',
-    #                 offset=self.tnt_sections['DATA']['offset'],
-    #                 shape=self.TMAG['actual_npts'].tolist(),order='F')
+    #  For some reason we can't set offset and shape together
+    # DATA = np.memmap(tntfilename,np.dtype('<c8'), mode='r',
+    #                  offset=self.tnt_sections['DATA']['offset'],
+    #                  shape=self.TMAG['actual_npts'].tolist(),order='F')
     data = np.memmap(filename, np.dtype('<c8'), mode='c',
                      offset=tnt_sections['DATA']['offset'],
                      shape=tmag['actual_npts'].prod())

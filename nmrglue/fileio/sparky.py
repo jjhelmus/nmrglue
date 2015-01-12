@@ -603,7 +603,7 @@ class sparky_2d(fileiobase.data_nd):
         sY, sX = slices
         f = open(self.filename, 'rb')
 
-        #print(sY,sX)
+        # print(sY,sX)
         gY = range(self.lenY)[sY]  # list of values to take in Y
         gX = range(self.lenX)[sX]  # list of values to take in X
 
@@ -642,17 +642,17 @@ class sparky_2d(fileiobase.data_nd):
                 ctile = tile.take(XinT, axis=1).take(YinT, axis=0)
 
                 # DEBUGGING info
-                #print("-------------------------------")
-                #print("iX:",iX,"iY:",iY,"ntile:",ntile)
-                #print("tile.shape",tile.shape)
-                #print("minX:",minX,"maxX",maxX)
-                #print("minY:",minY,"maxY",maxY)
-                #print("XinX",XinX)
-                #print("XinT",XinT)
-                #print("XinO",XinO)
-                #print("YinY",YinY)
-                #print("YinT",YinT)
-                #print("YinO",YinO)
+                # print("-------------------------------")
+                # print("iX:",iX,"iY:",iY,"ntile:",ntile)
+                # print("tile.shape",tile.shape)
+                # print("minX:",minX,"maxX",maxX)
+                # print("minY:",minY,"maxY",maxY)
+                # print("XinX",XinX)
+                # print("XinT",XinT)
+                # print("XinO",XinO)
+                # print("YinY",YinY)
+                # print("YinT",YinT)
+                # print("YinO",YinO)
 
                 # put the cut tile to the out array (uses some fancy indexing)
                 out[np.ix_(YinO, XinO)] = ctile
@@ -792,22 +792,22 @@ class sparky_3d(fileiobase.data_nd):
                     ctile = ctile.take(ZinT, axis=0)
 
                     # DEBUGGING info
-                    #print("-------------------------------")
-                    #print("iX:",iX,"iY:",iY,"iZ:",iZ,"ntile:",ntile)
-                    #print("ttX:",ttX,"ttY:",ttY,"ttZ",ttZ)
-                    #print("tile.shape",tile.shape)
-                    #print("minX:",minX,"maxX",maxX)
-                    #print("minY:",minY,"maxY",maxY)
-                    #print("minZ:",minZ,"maxZ",maxZ)
-                    #print("XinX",XinX)
-                    #print("XinT",XinT)
-                    #print("XinO",XinO)
-                    #print("YinY",YinY)
-                    #print("YinT",YinT)
-                    #print("YinO",YinO)
-                    #print("ZinZ",ZinZ)
-                    #print("ZinT",ZinT)
-                    #print("ZinO",ZinO)
+                    # print("-------------------------------")
+                    # print("iX:",iX,"iY:",iY,"iZ:",iZ,"ntile:",ntile)
+                    # print("ttX:",ttX,"ttY:",ttY,"ttZ",ttZ)
+                    # print("tile.shape",tile.shape)
+                    # print("minX:",minX,"maxX",maxX)
+                    # print("minY:",minY,"maxY",maxY)
+                    # print("minZ:",minZ,"maxZ",maxZ)
+                    # print("XinX",XinX)
+                    # print("XinT",XinT)
+                    # print("XinO",XinO)
+                    # print("YinY",YinY)
+                    # print("YinT",YinT)
+                    # print("YinO",YinO)
+                    # print("ZinZ",ZinZ)
+                    # print("ZinT",ZinT)
+                    # print("ZinO",ZinO)
 
                     # put the cut tile to the out array
                     out[np.ix_(ZinO, YinO, XinO)] = ctile
@@ -1039,13 +1039,13 @@ def untile_data2D(data, tile_size, data_size):
             maxT = (ntile + 1) * tsize
 
             # DEBUG
-            #print("ntile",ntile)
-            #print("minX",minX,"maxX",maxX)
-            #print("minY",minY,"maxY",maxY)
-            #print("minT",minT,"maxT",maxT)
+            # print("ntile",ntile)
+            # print("minX",minX,"maxX",maxX)
+            # print("minY",minY,"maxY",maxY)
+            # print("minT",minT,"maxT",maxT)
 
-            #print(out[minY:maxY,minX:maxX].shape)
-            #print(data[minT:maxT].reshape(t_tup).shape)
+            # print(out[minY:maxY,minX:maxX].shape)
+            # print(data[minT:maxT].reshape(t_tup).shape)
 
             out[minY:maxY, minX:maxX] = data[minT:maxT].reshape(t_tup)
 

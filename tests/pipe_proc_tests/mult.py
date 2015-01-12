@@ -15,4 +15,3 @@ pipe.write("mult2.glue", d, a, overwrite=True)
 d, a = pipe.read("time_complex.fid")
 d, a = p.mult(d, a, r=1.5, i=0.9, x1=90, xn=600)
 pipe.write("mult3.glue", d, a, overwrite=True)
-

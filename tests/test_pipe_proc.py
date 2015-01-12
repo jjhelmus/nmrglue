@@ -142,7 +142,7 @@ def test_ft():
 
 def test_rft():
     """ RFT function """
-    #return _standard_test('rft', 14)    # XXX tests 9-11 fail
+    # return _standard_test('rft', 14)    # XXX tests 9-11 fail
     glue_files = ['rft1.glue', 'rft2.glue', 'rft3.glue', 'rft4.glue',
                   'rft5.glue', 'rft6.glue', 'rft7.glue', 'rft8.glue',
                   'rft12.glue', 'rft13.glue', 'rft14.glue']
@@ -161,7 +161,7 @@ def test_ha():
 
 def test_ht():
     """ HT function """
-    #return _standard_test('ht', 8)  # XXX test 4 fails
+    # return _standard_test('ht', 8)  # XXX test 4 fails
     glue_files = ['ht1.glue', 'ht2.glue', 'ht3.glue', 'ht5.glue', 'ht6.glue',
                   'ht7.glue', 'ht8.glue']
     pipe_files = ['ht1.dat', 'ht2.dat', 'ht3.dat', 'ht5.dat', 'ht6.dat',

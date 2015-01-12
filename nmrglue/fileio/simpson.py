@@ -161,7 +161,7 @@ def read_text(filename):
             dic[key] = int(dic[key])
 
     # DEBUGGING
-    #return dic
+    # return dic
 
     if "NI" in dic:     # 2D data
         data = np.empty((dic['NI'], dic['NP']), dtype='complex64')
@@ -328,7 +328,7 @@ def read_binary(filename):
             dic[key] = int(dic[key])
 
     # DEBUGGING
-    #return dic, f
+    # return dic, f
 
     # extract characters from data block
     chardata = "".join([line.strip('\n') for line in f])
@@ -343,7 +343,7 @@ def read_binary(filename):
         bytes += chars2bytes(chardata[i * 4:(i + 1) * 4])
 
     # DEBUGGING
-    #return dic, bytes
+    # return dic, bytes
     # convert every 4 'bytes' to a float, then complex data
     num_points, _num_pad = divmod(len(bytes), 4)
     data = np.empty((num_points, ), dtype='float32')
