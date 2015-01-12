@@ -1052,7 +1052,7 @@ def write_binary(filename, dic, data, overwrite=False, big=True):
     f = fileiobase.open_towrite(filename, overwrite=overwrite)
 
     # convert objec to an array if it is not already one...
-    if type(data) != np.ndarray:
+    if not isinstance(data, np.ndarray):
         data = np.array(data)
 
     if np.iscomplexobj(data):
@@ -1678,10 +1678,11 @@ def write_jcamp_pair(f, key, value):
     # the parameter name and such
     line = "##$" + key + "= "
 
+    # need to be type not isinstance since isinstance(bool, int) == True
     if type(value) == float or type(value) == int:  # simple numbers
         line = line + repr(value)
 
-    elif type(value) == str:        # string
+    elif isinstance(value, str):    # string
         line = line + "<" + value + ">"
 
     elif type(value) == bool:   # yes or no
@@ -1690,7 +1691,7 @@ def write_jcamp_pair(f, key, value):
         else:
             line = line + "no"
 
-    elif type(value) == list:   # lists
+    elif isinstance(value, list):
         # write out the current line
         line = line + "(0.." + repr(len(value) - 1) + ")"
         f.write(line)
@@ -1706,7 +1707,7 @@ def write_jcamp_pair(f, key, value):
                 f.write("\n")
                 line = ""
 
-            if type(v) == str:
+            if isinstance(v, str):
                 to_add = "<" + v + ">"
             else:
                 to_add = repr(v)

@@ -775,7 +775,7 @@ def write(filename, dic, data, overwrite=False):
 
     """
     # load all data if the data is not a numpy ndarray
-    if type(data) != np.ndarray:
+    if not isinstance(data, np.ndarray):
         data = data[:]
 
     if filename.count("%") == 0:

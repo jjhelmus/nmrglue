@@ -82,7 +82,7 @@ def pick(data, pthres, nthres=None, msep=None, algorithm='connected',
     ndim = len(data.shape)
 
     # check msep
-    if type(msep) == int:
+    if isinstance(msep, int):
         msep = (msep, )
     if algorithm in ['thres', 'thres-fast'] and len(msep) != ndim:
         raise ValueError("msep has incorrect length")
@@ -100,7 +100,7 @@ def pick(data, pthres, nthres=None, msep=None, algorithm='connected',
 
         # replace strings
         for l in lineshapes:
-            if type(l) is str:
+            if isinstance(l, str):
                 ls_classes.append(ls_str2class(l))
             else:
                 ls_classes.append(l)

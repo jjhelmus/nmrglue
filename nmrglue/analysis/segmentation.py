@@ -403,7 +403,7 @@ def find_downward(data, pt, thres, diag=False):
     else:
         structure = ndimage.generate_binary_structure(ndim, 1)
 
-    if type(pt) == int:
+    if isinstance(pt, int):
         pt = (pt, )
     pt = tuple(pt)
     shape = data.shape
@@ -451,7 +451,7 @@ def find_connected(data, pt, thres, diag=False):
     else:
         structure = ndimage.generate_binary_structure(ndim, 1)
 
-    if type(pt) == int:
+    if isinstance(pt, int):
         pt = (pt, )
     pt = tuple(pt)
     shape = data.shape
@@ -498,7 +498,7 @@ def find_nconnected(data, pt, thres, diag=False):
     else:
         structure = ndimage.generate_binary_structure(ndim, 1)
 
-    if type(pt) == int:
+    if isinstance(pt, int):
         pt = (pt, )
     pt = tuple(pt)
     shape = data.shape
@@ -545,7 +545,7 @@ def find_upward(data, pt, thres, diag=False):
     else:
         structure = ndimage.generate_binary_structure(ndim, 1)
 
-    if type(pt) == int:
+    if isinstance(pt, int):
         pt = (pt, )
     pt = tuple(pt)
     shape = data.shape

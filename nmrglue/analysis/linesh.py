@@ -217,7 +217,7 @@ def fit_spectrum(spectrum, lineshapes, params, amps, bounds, ampbounds,
 
     ls_classes = []
     for l in lineshapes:
-        if type(l) is str:
+        if isinstance(l, str):
             ls_classes.append(ls_str2class(l))
         else:
             ls_classes.append(l)
@@ -408,7 +408,7 @@ def fit_NDregion(region, lineshapes, params, amps, bounds=None,
 
     ls_classes = []
     for l in lineshapes:
-        if type(l) is str:
+        if isinstance(l, str):
             ls_classes.append(ls_str2class(l))
         else:
             ls_classes.append(l)
@@ -593,7 +593,7 @@ def sim_NDregion(shape, lineshapes, params, amps):
 
     ls_classes = []
     for l in lineshapes:
-        if type(l) is str:
+        if isinstance(l, str):
             ls_classes.append(ls_str2class(l))
         else:
             ls_classes.append(l)

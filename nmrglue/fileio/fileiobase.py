@@ -181,7 +181,7 @@ class unit_conversion():
         """
         Convert string or value/unit pair
         """
-        if type(val) == str:
+        if isinstance(val, str):
             return self.__str2pnt(val)
         else:
             if unit is None:
@@ -573,7 +573,7 @@ class data_nd(object):
         x.__getitem__(y) <==> x[y]
         """
         # convert the key into a list
-        if type(key) != tuple:
+        if not isinstance(key, tuple):
             rlist = [key]
         else:
             rlist = list(key)
@@ -590,7 +590,7 @@ class data_nd(object):
 
         # replace none-slices with slice objects
         for i, v in enumerate(rlist):
-            if type(v) != slice:
+            if not isinstance(v, slice):
 
                 # check for out of range indexes
                 if v >= self.shape[i]:

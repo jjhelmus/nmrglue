@@ -248,7 +248,7 @@ def leastsqbound(func, x0, args=(), bounds=None, Dfun=None, full_output=0,
     n = len(x0)
     if len(bounds) != n:
         raise ValueError('length of x0 != length of bounds')
-    if type(args) != type(()):
+    if not isinstance(args, tuple):
         args = (args,)
     m = _check_func('leastsq', 'func', func, x0, args, n)[0]
     if n > m:
