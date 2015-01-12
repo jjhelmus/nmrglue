@@ -231,6 +231,10 @@ class ndwindow(object):
         self.sub = np.ceil((wsize - 1.) / 2.)
         self.add = wsize - 1. - self.sub
 
+    def __next__(self):
+        """ next iterator. """
+        return self.next()
+
     def next(self):
         """ x.next() -> the next value, or raise StopIteration """
         center = self.ndindex.next()
@@ -268,6 +272,10 @@ class ndwindow_index(object):
         wsize = np.array(wsize)
         self.sub = np.ceil((wsize - 1.) / 2.)
         self.add = wsize - 1. - self.sub
+
+    def __next__(self):
+        """ next iterator. """
+        return self.next()
 
     def next(self):
         """ x.next() -> the next value, or raise StopIteration """
@@ -329,6 +337,10 @@ class ndwindow_inside(object):
             tuple(np.array(shape) - np.array(wsize) + 1))
         self.wsize = wsize
 
+    def __next__(self):
+        """ next iterator. """
+        return self.next()
+
     def next(self):
         """ x.next() -> the next value, or raise StopIteration """
         start = self.ndindex.next()
@@ -359,6 +371,10 @@ class ndwindow_inside_index(object):
         self.ndindex = np.ndindex(
             tuple(np.array(shape) - np.array(wsize) + 1))
         self.wsize = wsize
+
+    def __next__(self):
+        """ next iterator. """
+        return self.next()
 
     def next(self):
         """ x.next() -> the next value, or raiseStopIteration """

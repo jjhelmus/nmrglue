@@ -1347,6 +1347,10 @@ class iter3D(object):
         """
         return self
 
+    def __next__(self):
+        """ next iterator. """
+        return self.next()
+
     def next(self):
         """
         Return the next dic, plane or raise StopIteration
