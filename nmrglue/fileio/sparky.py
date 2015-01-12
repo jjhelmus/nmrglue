@@ -562,7 +562,7 @@ class sparky_2d(fileiobase.data_nd):
         self.dic = fileheader2dic(get_fileheader(f))
 
         if self.dic["naxis"] != 2:
-            raise StandardError("file is not a 2D Sparky file")
+            raise Exception("file is not a 2D Sparky file")
 
         # read in the axisheaders
         self.dic["w1"] = axisheader2dic(get_axisheader(f))
@@ -692,7 +692,7 @@ class sparky_3d(fileiobase.data_nd):
         self.dic = fileheader2dic(get_fileheader(f))
 
         if self.dic["naxis"] != 3:
-            raise StandardError("file not 3D Sparky file")
+            raise Exception("file not 3D Sparky file")
 
         # read in the axisheaders
         self.dic["w1"] = axisheader2dic(get_axisheader(f))
