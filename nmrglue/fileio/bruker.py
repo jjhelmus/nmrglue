@@ -1656,8 +1656,7 @@ def write_jcamp(dic, filename, overwrite=False):
         f.write(line)
         f.write("\n")
 
-    keys = [i for i in d.keys()]
-    keys.sort()
+    keys = sorted([i for i in d.keys()])
 
     # write out each key,value pair
     for key in keys:
