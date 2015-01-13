@@ -47,7 +47,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'nmrglue'
-copyright = u'2010-2013, Jonathan J. Helmus'
+copyright = u'2010-2015, Jonathan J. Helmus'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -290,5 +290,5 @@ def linkcode_resolve(domain, info):
 
     fn = relpath(fn, start=dirname(nmrglue.__file__))
 
-    return "http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/%s%s" % (
+    return "http://github.com/jjhelmus/nmrglue/blob/v0.5/nmrglue/%s%s" % (
         fn, linespec)

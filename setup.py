@@ -14,7 +14,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 setup(
     name='nmrglue',
-    version='0.5-dev',  # change this in nmrglue/__init__.py also
+    version='0.5',  # change this in nmrglue/__init__.py also
     description='A module for working with NMR data in Python',
     long_description=long_description,
     url='http://www.nmrglue.com',
@@ -30,7 +30,7 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4'
+        'Programming Language :: Python :: 3.4',
         'Topic :: Scientific/Engineering',
         'Operating System :: MacOS :: MacOS X',
         'Operating System :: Microsoft :: Windows',
