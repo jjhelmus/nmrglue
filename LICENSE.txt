@@ -1,8 +1,7 @@
 Copyright Notice and Statement for the nmrglue Project
 
 
-Copyright (c) 2010 Jonathan J. Helmus
-http://code.google.com/p/nmrglue/
+Copyright (c) 2010-2015 Jonathan J. Helmus
 All rights reserved.
 
 
