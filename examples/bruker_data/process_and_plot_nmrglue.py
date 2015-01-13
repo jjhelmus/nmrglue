@@ -12,7 +12,7 @@ data = ng.bruker.remove_digital_filter(dic, data)
 # process the spectrum
 data = ng.proc_base.zf_size(data, 32768)    # zero fill to 32768 points
 data = ng.proc_base.fft(data)               # Fourier transform
-data = ng.proc_base.ps(data, p0=-88.0)      # phase correction
+data = ng.proc_base.ps(data, p0=-50.0)      # phase correction
 data = ng.proc_base.di(data)                # discard the imaginaries
 data = ng.proc_base.rev(data)               # reverse the data
 

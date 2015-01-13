@@ -1365,7 +1365,7 @@ bruker_dsp_table = {
 }
 
 
-def remove_digital_filter(dic, data):
+def remove_digital_filter(dic, data, truncate=True):
     """
     Remove the digital filter from Bruker data.
 
@@ -1375,6 +1375,11 @@ def remove_digital_filter(dic, data):
         Dictionary of Bruker parameters.
     data : ndarray
         Array of NMR data to remove digital filter from.
+    truncate : bool, optional
+        True to truncate the phase shift prior to removing the digital filter.
+        This typically produces a better looking spectrum but may remove
+        useful data.  False uses a non-truncated phase.
+
 
     Returns
     -------
@@ -1402,10 +1407,10 @@ def remove_digital_filter(dic, data):
     else:
         grpdly = dic['acqus']['GRPDLY']
 
-    return rm_dig_filter(data, decim, dspfvs, grpdly)
+    return rm_dig_filter(data, decim, dspfvs, grpdly, truncate)
 
 
-def rm_dig_filter(data, decim, dspfvs, grpdly=0):
+def rm_dig_filter(data, decim, dspfvs, grpdly=0, truncate_grpdly=True):
     """
     Remove the digital filter from Bruker data.
 
@@ -1418,8 +1423,13 @@ def rm_dig_filter(data, decim, dspfvs, grpdly=0):
     dspfvs : int
         Firmware version (Bruker DSPFVS parameter).
     grpdly : float, optional
-        Group delay. (Bruker GRPDLY parameter). When non-zero decom and
+        Group delay. (Bruker GRPDLY parameter). When non-zero decim and
         dspfvs are ignored.
+    truncate_grpdly : bool, optional
+        True to truncate the value of grpdly provided or determined from
+        the decim and dspfvs parameters before removing the digital filter.
+        This typically produces a better looking spectrum but may remove useful
+        data.  False uses a non-truncated grpdly value.
 
     Returns
     -------
@@ -1467,6 +1477,9 @@ def rm_dig_filter(data, decim, dspfvs, grpdly=0):
             if decim not in bruker_dsp_table[dspfvs]:
                 raise ValueError("decim not in lookup table")
             phase = bruker_dsp_table[dspfvs][decim]
+
+    if truncate_grpdly:     # truncate the phase
+        phase = np.floor(phase)
 
     # and the number of points to remove (skip) and add to the beginning
     skip = int(np.floor(phase + 2.))    # round up two integers
