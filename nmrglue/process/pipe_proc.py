@@ -1527,13 +1527,16 @@ def tp(dic, data, hyper=False, nohyper=False, auto=False, nohdr=False):
         data = np.array(p.tp_hyper(data), dtype="complex64")
     else:
         data = p.tp(data)
-        if dic[fn2 + "QUADFLAG"] != 1 and nohyper is not True:
+        if dic[fn2 + "QUADFLAG"] != 1 and nohyper is False:
             # unpack complex as needed
             data = np.array(p.c2ri(data), dtype="complex64")
 
     # update the dimentionality and order
     dic["FDSLICECOUNT"] = data.shape[0]
-    if data.dtype == 'float32':
+    if (data.dtype == 'float32') and (nohyper is True):
+        # when nohyper is True and the new last dimension was complex
+        # prior to transposing then FDSIZE is set as if the dimension was
+        # converted to complex data, that is half the actual size.
         dic["FDSIZE"] = data.shape[1] / 2
     else:
         dic["FDSIZE"] = data.shape[1]
