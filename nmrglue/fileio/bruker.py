@@ -696,10 +696,14 @@ def guess_shape(dic):
 # Bruker processed binary (1r, 1i, 2rr, 2ri, etc) reading
 
 def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
-               shape=None, submatrix_shape=None, all_components=False,
-               big=None):
+               scale_data=False, shape=None, submatrix_shape=None,
+               all_components=False, big=None):
     """
     Read processed Bruker files from a directory.
+
+    In Topspin and other programs this data is typically scaled by dividing by
+    2 ** -NC_proc where NC_proc is defined in the procs file.  This scaling
+    can be accomplished by setting the scale_data parameter to True.
 
     Parameters
     ----------
@@ -711,8 +715,11 @@ def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
     procs_files : list, optional
         List of filename(s) of procs parameter files in directory. None uses
         standard files.
-    read_procss : bool, optional
+    read_procs : bool, optional
         True to read procs files(s), False prevents reading.
+    scale_data : bool, optional
+        True to apply scaling defined in the procs file.  False, the default,
+        returns the data as it appears in the file.
     shape : tuple, optional
         Shape of resulting data.  None will guess the shape from the
         parameters in the procs file(s).
@@ -808,10 +815,38 @@ def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
                               shape, submatrix_shape, big)[1]
             for f in bin_files]
 
+    # scale data if requested
+    if scale_data:
+        data = [scale_pdata(dic, d) for d in data]
+
     if len(data) == 1:
         return dic, data[0]
     else:
         return dic, data
+
+
+def scale_pdata(dic, data):
+    """
+    Scale Bruker processed data using parameters from the procs file.
+
+    Parameters
+    ----------
+    dic : dict
+        Dictionary of Bruker parameters.
+    data : ndarray
+        Array of NMR data.
+
+    Returns
+    -------
+    sdata : array
+        Scaled data.
+    """
+    try:
+        scale = np.power(2., -float(dic['procs']['NC_proc']))
+    except KeyError:
+        warn('Unable to scale data, returning unscaled data')
+        scale = 1
+    return data / scale
 
 
 def guess_shape_and_submatrix_shape(dic):

@@ -25,6 +25,7 @@ These are functions which are targetted for users of nmrglue.
     read_binary
     write_binary
     read_pdata_binary
+    scale_pdata
     read_binary_lowmem
     write_binary_lowmem
     read_jcamp
