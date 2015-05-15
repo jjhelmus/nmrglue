@@ -691,6 +691,8 @@ def calc_errors(region, ls_classes, p, cov, n_peaks, wmask):
     n = region.size  # size of sample XXX not sure if this always makes sense
     k = p.size - 1   # free parameters
     st_err = np.sqrt(SS_err / (n - k - 1))    # standard error of estimate
+    if cov is None:   # indicate that parameter errors cannot be calculated.
+        return [None] * len(p)
     return st_err * np.sqrt(np.diag(cov))
 
 
