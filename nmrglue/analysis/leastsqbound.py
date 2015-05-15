@@ -330,7 +330,7 @@ def leastsqbound(func, x0, args=(), bounds=None, Dfun=None, full_output=0,
             R = dot(r, perm)
             try:
                 cov_x = inv(dot(transpose(R), R))
-            except LinAlgError:
+            except (LinAlgError, ValueError):
                 pass
         return (x, cov_x) + retval[1:-1] + (mesg, info)
     else:
