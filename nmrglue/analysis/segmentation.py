@@ -163,7 +163,7 @@ def mark_dseg(mdata, map, pt, mark, structure):
         v = mdata.data[pt]
         # Check all neightbors
         for new_pt in neighbors(pt, mdata.shape, structure):
-            if mdata.mask[new_pt] is False and mdata[new_pt] < v:
+            if mdata.mask[new_pt] == False and mdata[new_pt] < v:
                 Q.append(new_pt)
                 map[new_pt] = mark
                 mdata[new_pt] = ma.masked
@@ -182,7 +182,7 @@ def label_downward_seg(data, labels, seg_slice, seg_index, max_index,
     mark_dseg(msdata, slabels, argmax, seg_index, structure)
 
     # mark any
-    while msdata.mask.all() is False:
+    while msdata.mask.all() == False:
         argmax = np.unravel_index(msdata.argmax(), msdata.shape)
         mark_dseg(msdata, slabels, argmax, max_index, structure)
         max_index = max_index + 1
@@ -281,7 +281,7 @@ def mark_useg(mdata, map, pt, mark, structure):
         v = mdata.data[pt]
         # Check all neightbors
         for new_pt in neighbors(pt, mdata.shape, structure):
-            if mdata.mask[new_pt] is False and mdata[new_pt] > v:
+            if mdata.mask[new_pt] == False and mdata[new_pt] > v:
                 Q.append(new_pt)
                 map[new_pt] = mark
                 mdata[new_pt] = ma.masked
@@ -300,7 +300,7 @@ def label_upward_seg(data, labels, seg_slice, seg_index, max_index,
     mark_useg(msdata, slabels, argmin, seg_index, structure)
 
     # mark any
-    while msdata.mask.all() is False:
+    while msdata.mask.all() == False:
         argmin = np.unravel_index(msdata.argmin(), msdata.shape)
         mark_useg(msdata, slabels, argmin, max_index, structure)
         max_index = max_index + 1
