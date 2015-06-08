@@ -28,6 +28,7 @@ process modules
 .. toctree::
     :maxdepth: 2
 
+    proc_autophase
     proc_base
     proc_bl
     proc_lp
