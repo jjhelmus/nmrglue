@@ -236,7 +236,7 @@ def guess_udic(dic, data):
         udic[i]["size"] = data.shape[i]     # size from data shape
 
         # determind NMRPipe axis name
-        fn = ["FDF2", "FDF1", "FDF3", "FDF4"][(data.ndim - 1) - i]
+        fn = "FDF" + str(int(dic["FDDIMORDER"][data.ndim - 1 - i]))
 
         # directly corresponding
         udic[i]["sw"] = dic[fn + "SW"]
