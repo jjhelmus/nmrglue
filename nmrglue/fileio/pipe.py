@@ -181,13 +181,12 @@ def make_uc(dic, data, dim=-1):
     if obs == 0.0:
         obs = 1.0
 
-    car = dic[fn + "CAR"] * obs
-    # NMRPipe keeps the carrier constant during extractions storing the
-    # location of this point as CENTER.  This may not be the actual "center" of
-    # the spectrum and may not even be a valid index in that dimension. We need
-    # to re-center the carrier value so that actually represents the
-    # frequency of the central point in the dimension.
-    car = car + sw / size * (dic[fn + "CENTER"] - 1. - size / 2.)
+    # calculate the carrier from the origin, the left most point which has a
+    # frequency of CAR*OBS - SW * (N/2 - 1) / 2,
+    # see Fig 3.1 on p.36 of Hoch and Stern
+    # The carried should have units on MHz so solve the above for CAR*OBS
+    orig = dic[fn + "ORIG"]
+    car = orig + sw / 2. - sw / size
     return fileiobase.unit_conversion(size, cplx, sw, obs, car)
 
 ############################
