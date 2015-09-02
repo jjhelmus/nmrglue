@@ -8,6 +8,8 @@ for a provided spectrum.
 
 import numpy as np
 import scipy.optimize
+from matplotlib.widgets import Slider
+import matplotlib.pyplot as plt
 
 from .proc_base import ps
 
@@ -128,3 +130,93 @@ def _ps_peak_minima_score(ph, data):
     minb = np.min(data[i:i+100])
 
     return np.abs(mina - minb)
+    
+
+def manual_ps(data):
+    '''
+    Interactive Phase correction for 1-D and 2-D datasets
+    
+    Usage:
+    manual_ps(data)
+    
+    Needs:
+    Matplotlib with an interactive backend (eg. QT)
+    
+    Parameters
+    ----------
+    data : ndarray for a fourier transformed dataset
+           if array dimansions > 1
+           data for the first dimension is used
+           
+           
+    Other internal parameters used in interactive phase correction:
+    -----------------------------------------------------
+    pc0 = 1st order phase correction
+    pc1 = 1st order phase correction
+    piv = pivot point 
+
+    While using other phase corrections modules, eg. proc_base.ps(),
+    these parameters translate to p0 and p1 as follows:
+
+    p0 = pc0 - pc1 * piv
+    p1 = pc1
+    
+
+   Returns
+   -------
+   A global variable phcorr (tuple), 
+   with phcorr[0] = p0 and phcorr[1] = p1
+
+
+    How to use:
+    -----------
+    1. put matplotlib to an interactive backend
+       %matplotlib qt (if you are using ipython)
+    2. manual_ps(data)
+    3. Use phcorr[0] and phcorr[1] as 0th and 1st order phase
+       corrections in phase correction programs
+       eg. phase_corrected_data = ng.proc_base.ps(data, p0=phcorr[0], 
+                                                        p1=phcorr[1])      
+    
+    '''
+     
+
+    plt.subplots_adjust(left=0.25, bottom=0.30)
+     
+    
+    if len(data.shape) > 1:
+        data = data[0]
+    
+    global phcorr
+    phcorr = (0, 0) # (p0, p1)
+    
+    interactive, = plt.plot(data, lw=1, color='black')
+ 
+    axcolor = 'white'
+    axpc0 = plt.axes([0.25, 0.10, 0.65, 0.03], axisbg=axcolor)
+    axpc1 = plt.axes([0.25, 0.15, 0.65, 0.03], axisbg=axcolor)
+    axpiv = plt.axes([0.25, 0.20, 0.65, 0.03], axisbg=axcolor)
+
+    spc0 = Slider(axpc0, 'p0', -360, 360, valinit=0)
+    spc1 = Slider(axpc1, 'p1', -360, 360, valinit=0)
+    spiv = Slider(axpiv, 'pivot', 0, data.size, valinit=0)
+
+    def update(val):
+        pc0 = spc0.val * np.pi / 180
+        pc1 = spc1.val * np.pi / 180
+        pivot = spiv.val
+        interactive.set_ydata(data * np.exp(1.0j *  
+             (pc0 + (pc1 * np.arange(-pivot, -pivot + data.size) / data.size)))
+             .astype(data.dtype))
+        plt.draw()     
+        
+        global phcorr
+        phcorr = ( spc0.val-spc1.val*spiv.val, spc1.val  ) 
+
+    spc0.on_changed(update)
+    spc1.on_changed(update)
+    spiv.on_changed(update)        
+
+    plt.show()
+    
+    
