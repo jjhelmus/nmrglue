@@ -8,8 +8,6 @@ for a provided spectrum.
 
 import numpy as np
 import scipy.optimize
-from matplotlib.widgets import Slider
-import matplotlib.pyplot as plt
 
 from .proc_base import ps
 
@@ -132,57 +130,60 @@ def _ps_peak_minima_score(ph, data):
     return np.abs(mina - minb)
     
 
+
 def manual_ps(data):
-    '''
-    Interactive Phase correction for 1-D and 2-D datasets
-    
-    Usage:
-    manual_ps(data)
-    
-    Needs:
-    Matplotlib with an interactive backend (eg. QT)
-    
+    """
+    Manual Phase correction using matplotlib 
+
+    A matplotlib widget is used to manually correct the phase of a fourier 
+    transfomed dataset. If the dataset has more than 1 dimensions, the first 
+    array will be picked up for phase correction
+ 
     Parameters
     ----------
-    data : ndarray for a fourier transformed dataset
-           if array dimansions > 1
-           data for the first dimension is used
-           
-           
-    Other internal parameters used in interactive phase correction:
-    -----------------------------------------------------
-    pc0 = 1st order phase correction
-    pc1 = 1st order phase correction
-    piv = pivot point 
-
-    While using other phase corrections modules, eg. proc_base.ps(),
-    these parameters translate to p0 and p1 as follows:
-
-    p0 = pc0 - pc1 * piv
-    p1 = pc1
+    data : ndarray
+        Array of NMR data.
+    phcorr : tuple
+        Values of p0 and p1, set to (0, 0) initially.
+        Will not be used in function call
     
-
-   Returns
-   -------
-   A global variable phcorr (tuple), 
-   with phcorr[0] = p0 and phcorr[1] = p1
-
-
-    How to use:
-    -----------
-    1. put matplotlib to an interactive backend
-       %matplotlib qt (if you are using ipython)
-    2. manual_ps(data)
-    3. Use phcorr[0] and phcorr[1] as 0th and 1st order phase
-       corrections in phase correction programs
-       eg. phase_corrected_data = ng.proc_base.ps(data, p0=phcorr[0], 
-                                                        p1=phcorr[1])      
+    Returns
+    -------
+    phcorr : tuple
+        a global tuple variable (p0, p1), set to the phase correction currently
+        diaplayed in the interactive window. Will change if the phase setting 
+        in the window is changed. Will be reset to (0, 0) on each function 
+        call. p0 and p1 are related to pc0, pc1, piv in the following 
+        manner::
+            p0 = pc0 - pc1*piv and p1 = pc1
     
-    '''
-     
+    Attributes
+    ----------
+    pc0 : float
+      0th order phase correction
+    pc1 : float
+      1st order phase correction
+    piv : float
+      pivot point 
+
+    Examples
+    --------
+    >>> import nmrglue as ng
+    >>> ng.process.proc_autophase.manual_ps(data)
+    >>> # do manual phase correction and close window
+    >>> phased_data = ng.proc_base.ps(data, p0=phcorr[0], p1=phcorr[1])
+
+    .. note:: Needs MATPLOTLIB with and interactive backend.
+
+
+
+    """
+    
+    from matplotlib.widgets import Slider
+    import matplotlib.pyplot as plt
 
     plt.subplots_adjust(left=0.25, bottom=0.30)
-     
+   
     
     if len(data.shape) > 1:
         data = data[0]
