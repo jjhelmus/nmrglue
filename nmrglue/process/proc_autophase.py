@@ -179,17 +179,17 @@ def manual_ps(data):
 
     """
     
-    from matplotlib.widgets import Slider
+    from matplotlib.widgets import Slider, Button
     import matplotlib.pyplot as plt
 
-    plt.subplots_adjust(left=0.25, bottom=0.30)
+    plt.subplots_adjust(left=0.25, bottom=0.35)
    
     
     if len(data.shape) > 1:
         data = data[0]
     
-    global phcorr
-    phcorr = (0, 0) # (p0, p1)
+   # global phcorr
+   # phcorr = (0, 0) # (p0, p1)
     
     interactive, = plt.plot(data, lw=1, color='black')
  
@@ -197,10 +197,13 @@ def manual_ps(data):
     axpc0 = plt.axes([0.25, 0.10, 0.65, 0.03], axisbg=axcolor)
     axpc1 = plt.axes([0.25, 0.15, 0.65, 0.03], axisbg=axcolor)
     axpiv = plt.axes([0.25, 0.20, 0.65, 0.03], axisbg=axcolor)
+    axpst = plt.axes([0.25, 0.25, 0.10, 0.04], axisbg=axcolor)
 
     spc0 = Slider(axpc0, 'p0', -360, 360, valinit=0)
     spc1 = Slider(axpc1, 'p1', -360, 360, valinit=0)
     spiv = Slider(axpiv, 'pivot', 0, data.size, valinit=0)
+    axps = Button(axpst, 'Set Phase', color=axcolor)
+
 
     def update(val):
         pc0 = spc0.val * np.pi / 180
@@ -209,15 +212,23 @@ def manual_ps(data):
         interactive.set_ydata(data * np.exp(1.0j *  
              (pc0 + (pc1 * np.arange(-pivot, -pivot + data.size) / data.size)))
              .astype(data.dtype))
-        plt.draw()     
+        plt.draw() 
         
-        global phcorr
-        phcorr = ( spc0.val-spc1.val*spiv.val, spc1.val  ) 
+    def setphase(val):
+        p0 = spc0.val-spc1.val*spiv.val/data.size
+        p1 = spc1.val
+        print(p0, p1)
+        
+  #      global phcorr
+  #      phcorr = ( spc0.val-spc1.val*spiv.val, spc1.val  ) 
+
+
 
     spc0.on_changed(update)
     spc1.on_changed(update)
     spiv.on_changed(update)        
-
+    axps.on_clicked(setphase)
+    
     plt.show()
     
     
