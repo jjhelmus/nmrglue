@@ -6,6 +6,8 @@ a set of private functions for calculating a spectral phase quality score
 for a provided spectrum.
 """
 
+from __future__ import print_function
+
 import numpy as np
 import scipy.optimize
 
@@ -128,3 +130,81 @@ def _ps_peak_minima_score(ph, data):
     minb = np.min(data[i:i+100])
 
     return np.abs(mina - minb)
+
+
+def manual_ps(data):
+    """
+    Manual Phase correction using matplotlib
+
+    A matplotlib widget is used to manually correct the phase of a Fourier
+    transformed dataset. If the dataset has more than 1 dimensions, the first
+    trace will be picked up for phase correction.  Clicking the 'Set Phase'
+    button will print the current linear phase parameters to the console.
+
+    .. note:: Needs matplotlib with and interactive backend.
+
+    Parameters
+    ----------
+    data : ndarray
+        Array of NMR data.
+
+    Returns
+    -------
+    p0, p1 : float
+        Linear phase correction parameters. Zero and first order phase
+        corrections in degrees calculated from pc0, pc1 and pivot displayed
+        in the interactive window.
+
+    Examples
+    --------
+    >>> import nmrglue as ng
+    >>> p0, p1 = ng.process.proc_autophase.manual_ps(data)
+    >>> # do manual phase correction and close window
+    >>> phased_data = ng.proc_base.ps(data, p0=p0, p1=p1)
+
+    """
+
+    from matplotlib.widgets import Slider, Button
+    import matplotlib.pyplot as plt
+
+    plt.subplots_adjust(left=0.25, bottom=0.35)
+
+    if len(data.shape) > 1:
+        data = data[..., 0]
+
+    interactive, = plt.plot(data.real, lw=1, color='black')
+
+    axcolor = 'white'
+    axpc0 = plt.axes([0.25, 0.10, 0.65, 0.03], axisbg=axcolor)
+    axpc1 = plt.axes([0.25, 0.15, 0.65, 0.03], axisbg=axcolor)
+    axpiv = plt.axes([0.25, 0.20, 0.65, 0.03], axisbg=axcolor)
+    axpst = plt.axes([0.25, 0.25, 0.10, 0.04], axisbg=axcolor)
+
+    spc0 = Slider(axpc0, 'p0', -360, 360, valinit=0)
+    spc1 = Slider(axpc1, 'p1', -360, 360, valinit=0)
+    spiv = Slider(axpiv, 'pivot', 0, data.size, valinit=0)
+    axps = Button(axpst, 'Set Phase', color=axcolor)
+
+    def update(val):
+        pc0 = spc0.val * np.pi / 180
+        pc1 = spc1.val * np.pi / 180
+        pivot = spiv.val
+        interactive.set_ydata((data * np.exp(
+            1.0j * (pc0 + (pc1 * np.arange(-pivot, -pivot + data.size) /
+                    data.size))).astype(data.dtype)).real)
+        plt.draw()
+
+    def setphase(val):
+        p0 = spc0.val-spc1.val*spiv.val/data.size
+        p1 = spc1.val
+        print(p0, p1)
+
+    spc0.on_changed(update)
+    spc1.on_changed(update)
+    spiv.on_changed(update)
+    axps.on_clicked(setphase)
+
+    plt.show(block=True)
+    p0 = spc0.val-spc1.val*spiv.val/data.size
+    p1 = spc1.val
+    return p0, p1
