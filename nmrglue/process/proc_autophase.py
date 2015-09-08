@@ -6,6 +6,8 @@ a set of private functions for calculating a spectral phase quality score
 for a provided spectrum.
 """
 
+from __future__ import print_function
+
 import numpy as np
 import scipy.optimize
 
@@ -128,71 +130,50 @@ def _ps_peak_minima_score(ph, data):
     minb = np.min(data[i:i+100])
 
     return np.abs(mina - minb)
-    
 
 
 def manual_ps(data):
     """
-    Manual Phase correction using matplotlib 
+    Manual Phase correction using matplotlib
 
-    A matplotlib widget is used to manually correct the phase of a fourier 
-    transfomed dataset. If the dataset has more than 1 dimensions, the first 
-    array will be picked up for phase correction
- 
+    A matplotlib widget is used to manually correct the phase of a Fourier
+    transformed dataset. If the dataset has more than 1 dimensions, the first
+    trace will be picked up for phase correction.  Clicking the 'Set Phase'
+    button will print the current linear phase parameters to the console.
+
+    .. note:: Needs matplotlib with and interactive backend.
+
     Parameters
     ----------
     data : ndarray
         Array of NMR data.
-    phcorr : tuple
-        Values of p0 and p1, set to (0, 0) initially.
-        Will not be used in function call
-    
+
     Returns
     -------
-    phcorr : tuple
-        a global tuple variable (p0, p1), set to the phase correction currently
-        diaplayed in the interactive window. Will change if the phase setting 
-        in the window is changed. Will be reset to (0, 0) on each function 
-        call. p0 and p1 are related to pc0, pc1, piv in the following 
-        manner::
-            p0 = pc0 - pc1*piv and p1 = pc1
-    
-    Attributes
-    ----------
-    pc0 : float
-      0th order phase correction
-    pc1 : float
-      1st order phase correction
-    piv : float
-      pivot point 
+    p0, p1 : float
+        Linear phase correction parameters. Zero and first order phase
+        corrections in degrees calculated from pc0, pc1 and pivot displayed
+        in the interactive window.
 
     Examples
     --------
     >>> import nmrglue as ng
-    >>> ng.process.proc_autophase.manual_ps(data)
+    >>> p0, p1 = ng.process.proc_autophase.manual_ps(data)
     >>> # do manual phase correction and close window
-    >>> phased_data = ng.proc_base.ps(data, p0=phcorr[0], p1=phcorr[1])
-
-    .. note:: Needs MATPLOTLIB with and interactive backend.
-
-
+    >>> phased_data = ng.proc_base.ps(data, p0=p0, p1=p1)
 
     """
-    
+
     from matplotlib.widgets import Slider, Button
     import matplotlib.pyplot as plt
 
     plt.subplots_adjust(left=0.25, bottom=0.35)
-   
-    
+
     if len(data.shape) > 1:
-        data = data[0]
-    
-   # global phcorr
-   # phcorr = (0, 0) # (p0, p1)
-    
-    interactive, = plt.plot(data, lw=1, color='black')
- 
+        data = data[..., 0]
+
+    interactive, = plt.plot(data.real, lw=1, color='black')
+
     axcolor = 'white'
     axpc0 = plt.axes([0.25, 0.10, 0.65, 0.03], axisbg=axcolor)
     axpc1 = plt.axes([0.25, 0.15, 0.65, 0.03], axisbg=axcolor)
@@ -204,31 +185,26 @@ def manual_ps(data):
     spiv = Slider(axpiv, 'pivot', 0, data.size, valinit=0)
     axps = Button(axpst, 'Set Phase', color=axcolor)
 
-
     def update(val):
         pc0 = spc0.val * np.pi / 180
         pc1 = spc1.val * np.pi / 180
         pivot = spiv.val
-        interactive.set_ydata(data * np.exp(1.0j *  
-             (pc0 + (pc1 * np.arange(-pivot, -pivot + data.size) / data.size)))
-             .astype(data.dtype))
-        plt.draw() 
-        
+        interactive.set_ydata((data * np.exp(
+            1.0j * (pc0 + (pc1 * np.arange(-pivot, -pivot + data.size) /
+                    data.size))).astype(data.dtype)).real)
+        plt.draw()
+
     def setphase(val):
         p0 = spc0.val-spc1.val*spiv.val/data.size
         p1 = spc1.val
         print(p0, p1)
-        
-  #      global phcorr
-  #      phcorr = ( spc0.val-spc1.val*spiv.val, spc1.val  ) 
-
-
 
     spc0.on_changed(update)
     spc1.on_changed(update)
-    spiv.on_changed(update)        
+    spiv.on_changed(update)
     axps.on_clicked(setphase)
-    
-    plt.show()
-    
-    
+
+    plt.show(block=True)
+    p0 = spc0.val-spc1.val*spiv.val/data.size
+    p1 = spc1.val
+    return p0, p1

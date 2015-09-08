@@ -14,6 +14,7 @@ User Functions
     :toctree: generated/
 
     autops
+    manual_ps
 
 Developer Functions
 -------------------
