@@ -128,17 +128,16 @@ def _ps_peak_minima_score(ph, data):
     minb = np.min(data[i:i+100])
 
     return np.abs(mina - minb)
-    
 
 
 def manual_ps(data):
     """
-    Manual Phase correction using matplotlib 
+    Manual Phase correction using matplotlib
 
-    A matplotlib widget is used to manually correct the phase of a fourier 
-    transfomed dataset. If the dataset has more than 1 dimensions, the first 
+    A matplotlib widget is used to manually correct the phase of a fourier
+    transfomed dataset. If the dataset has more than 1 dimensions, the first
     array will be picked up for phase correction
- 
+
     Parameters
     ----------
     data : ndarray
@@ -146,17 +145,17 @@ def manual_ps(data):
     phcorr : tuple
         Values of p0 and p1, set to (0, 0) initially.
         Will not be used in function call
-    
+
     Returns
     -------
     phcorr : tuple
         a global tuple variable (p0, p1), set to the phase correction currently
-        diaplayed in the interactive window. Will change if the phase setting 
-        in the window is changed. Will be reset to (0, 0) on each function 
-        call. p0 and p1 are related to pc0, pc1, piv in the following 
+        diaplayed in the interactive window. Will change if the phase setting
+        in the window is changed. Will be reset to (0, 0) on each function
+        call. p0 and p1 are related to pc0, pc1, piv in the following
         manner::
             p0 = pc0 - pc1*piv and p1 = pc1
-    
+
     Attributes
     ----------
     pc0 : float
@@ -164,7 +163,7 @@ def manual_ps(data):
     pc1 : float
       1st order phase correction
     piv : float
-      pivot point 
+      pivot point
 
     Examples
     --------
@@ -175,24 +174,21 @@ def manual_ps(data):
 
     .. note:: Needs MATPLOTLIB with and interactive backend.
 
-
-
     """
-    
+
     from matplotlib.widgets import Slider, Button
     import matplotlib.pyplot as plt
 
     plt.subplots_adjust(left=0.25, bottom=0.35)
-   
-    
+
     if len(data.shape) > 1:
         data = data[0]
-    
-   # global phcorr
-   # phcorr = (0, 0) # (p0, p1)
-    
+
+    # global phcorr
+    # phcorr = (0, 0) # (p0, p1)
+
     interactive, = plt.plot(data, lw=1, color='black')
- 
+
     axcolor = 'white'
     axpc0 = plt.axes([0.25, 0.10, 0.65, 0.03], axisbg=axcolor)
     axpc1 = plt.axes([0.25, 0.15, 0.65, 0.03], axisbg=axcolor)
@@ -204,31 +200,26 @@ def manual_ps(data):
     spiv = Slider(axpiv, 'pivot', 0, data.size, valinit=0)
     axps = Button(axpst, 'Set Phase', color=axcolor)
 
-
     def update(val):
         pc0 = spc0.val * np.pi / 180
         pc1 = spc1.val * np.pi / 180
         pivot = spiv.val
-        interactive.set_ydata(data * np.exp(1.0j *  
-             (pc0 + (pc1 * np.arange(-pivot, -pivot + data.size) / data.size)))
-             .astype(data.dtype))
-        plt.draw() 
-        
+        interactive.set_ydata(data * np.exp(
+            1.0j * (pc0 + (pc1 * np.arange(-pivot, -pivot + data.size) /
+                    data.size))).astype(data.dtype))
+        plt.draw()
+
     def setphase(val):
         p0 = spc0.val-spc1.val*spiv.val/data.size
         p1 = spc1.val
         print(p0, p1)
-        
-  #      global phcorr
-  #      phcorr = ( spc0.val-spc1.val*spiv.val, spc1.val  ) 
 
-
+    #      global phcorr
+    #      phcorr = ( spc0.val-spc1.val*spiv.val, spc1.val  )
 
     spc0.on_changed(update)
     spc1.on_changed(update)
-    spiv.on_changed(update)        
+    spiv.on_changed(update)
     axps.on_clicked(setphase)
-    
+
     plt.show()
-    
-    
