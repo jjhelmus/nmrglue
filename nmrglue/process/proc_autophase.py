@@ -172,7 +172,7 @@ def manual_ps(data):
     if len(data.shape) > 1:
         data = data[..., 0]
 
-    interactive, = plt.plot(data, lw=1, color='black')
+    interactive, = plt.plot(data.real, lw=1, color='black')
 
     axcolor = 'white'
     axpc0 = plt.axes([0.25, 0.10, 0.65, 0.03], axisbg=axcolor)
@@ -189,9 +189,9 @@ def manual_ps(data):
         pc0 = spc0.val * np.pi / 180
         pc1 = spc1.val * np.pi / 180
         pivot = spiv.val
-        interactive.set_ydata(data * np.exp(
+        interactive.set_ydata((data * np.exp(
             1.0j * (pc0 + (pc1 * np.arange(-pivot, -pivot + data.size) /
-                    data.size))).astype(data.dtype))
+                    data.size))).astype(data.dtype)).real)
         plt.draw()
 
     def setphase(val):
