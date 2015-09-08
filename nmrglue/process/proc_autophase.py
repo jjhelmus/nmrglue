@@ -136,45 +136,31 @@ def manual_ps(data):
     """
     Manual Phase correction using matplotlib
 
-    A matplotlib widget is used to manually correct the phase of a fourier
-    transfomed dataset. If the dataset has more than 1 dimensions, the first
-    array will be picked up for phase correction
+    A matplotlib widget is used to manually correct the phase of a Fourier
+    transformed dataset. If the dataset has more than 1 dimensions, the first
+    trace will be picked up for phase correction.  Clicking the 'Set Phase'
+    button will print the current linear phase parameters to the console.
+
+    .. note:: Needs matplotlib with and interactive backend.
 
     Parameters
     ----------
     data : ndarray
         Array of NMR data.
-    phcorr : tuple
-        Values of p0 and p1, set to (0, 0) initially.
-        Will not be used in function call
 
     Returns
     -------
-    phcorr : tuple
-        a global tuple variable (p0, p1), set to the phase correction currently
-        diaplayed in the interactive window. Will change if the phase setting
-        in the window is changed. Will be reset to (0, 0) on each function
-        call. p0 and p1 are related to pc0, pc1, piv in the following
-        manner::
-            p0 = pc0 - pc1*piv and p1 = pc1
-
-    Attributes
-    ----------
-    pc0 : float
-      0th order phase correction
-    pc1 : float
-      1st order phase correction
-    piv : float
-      pivot point
+    p0, p1 : float
+        Linear phase correction parameters. Zero and first order phase
+        corrections in degrees calculated from pc0, pc1 and pivot displayed
+        in the interactive window.
 
     Examples
     --------
     >>> import nmrglue as ng
-    >>> ng.process.proc_autophase.manual_ps(data)
+    >>> p0, p1 = ng.process.proc_autophase.manual_ps(data)
     >>> # do manual phase correction and close window
-    >>> phased_data = ng.proc_base.ps(data, p0=phcorr[0], p1=phcorr[1])
-
-    .. note:: Needs MATPLOTLIB with and interactive backend.
+    >>> phased_data = ng.proc_base.ps(data, p0=p0, p1=p1)
 
     """
 
