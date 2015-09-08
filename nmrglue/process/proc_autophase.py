@@ -6,6 +6,8 @@ a set of private functions for calculating a spectral phase quality score
 for a provided spectrum.
 """
 
+from __future__ import print_function
+
 import numpy as np
 import scipy.optimize
 
@@ -182,10 +184,7 @@ def manual_ps(data):
     plt.subplots_adjust(left=0.25, bottom=0.35)
 
     if len(data.shape) > 1:
-        data = data[0]
-
-    # global phcorr
-    # phcorr = (0, 0) # (p0, p1)
+        data = data[..., 0]
 
     interactive, = plt.plot(data, lw=1, color='black')
 
@@ -214,12 +213,12 @@ def manual_ps(data):
         p1 = spc1.val
         print(p0, p1)
 
-    #      global phcorr
-    #      phcorr = ( spc0.val-spc1.val*spiv.val, spc1.val  )
-
     spc0.on_changed(update)
     spc1.on_changed(update)
     spiv.on_changed(update)
     axps.on_clicked(setphase)
 
-    plt.show()
+    plt.show(block=True)
+    p0 = spc0.val-spc1.val*spiv.val/data.size
+    p1 = spc1.val
+    return p0, p1
