@@ -202,7 +202,6 @@ def manual_ps(data):
         p0 = spc0.val-spc1.val*spiv.val/data.size
         p1 = spc1.val
         print(p0, p1)
-        
 
     spc0.on_changed(update)
     spc1.on_changed(update)
