@@ -169,8 +169,12 @@ def manual_ps(data):
 
     plt.subplots_adjust(left=0.25, bottom=0.35)
 
-    if len(data.shape) > 1:
-        data = data[..., 0]
+    if len(data.shape) == 2:
+        data = data[0, ...]
+    elif len(data.shape) == 3:
+        data = data[0, 0, ...]
+    elif len(data.shape) == 4:
+        data = data[0, 0, 0, ...]
 
     interactive, = plt.plot(data.real, lw=1, color='black')
 
@@ -178,7 +182,7 @@ def manual_ps(data):
     axpc0 = plt.axes([0.25, 0.10, 0.65, 0.03], axisbg=axcolor)
     axpc1 = plt.axes([0.25, 0.15, 0.65, 0.03], axisbg=axcolor)
     axpiv = plt.axes([0.25, 0.20, 0.65, 0.03], axisbg=axcolor)
-    axpst = plt.axes([0.25, 0.25, 0.10, 0.04], axisbg=axcolor)
+    axpst = plt.axes([0.25, 0.25, 0.15, 0.04], axisbg=axcolor)
 
     spc0 = Slider(axpc0, 'p0', -360, 360, valinit=0)
     spc1 = Slider(axpc1, 'p1', -360, 360, valinit=0)
@@ -198,6 +202,7 @@ def manual_ps(data):
         p0 = spc0.val-spc1.val*spiv.val/data.size
         p1 = spc1.val
         print(p0, p1)
+        
 
     spc0.on_changed(update)
     spc1.on_changed(update)
@@ -205,6 +210,7 @@ def manual_ps(data):
     axps.on_clicked(setphase)
 
     plt.show(block=True)
+
     p0 = spc0.val-spc1.val*spiv.val/data.size
     p1 = spc1.val
     return p0, p1
