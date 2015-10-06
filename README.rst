@@ -7,7 +7,16 @@ What is nmrglue?
 
 nmrglue is a module for working with NMR data in Python. When used with the
 numpy, scipy, and matplotlib packages nmrglue provides a robust interpreted
-environment for processing, analysing, and inspecting NMR data.
+environment for processing, analyzing, and inspecting NMR data.
+
+Important Links
+---------------
+
+* Landing page: http://www.nmrglue.com
+* Documentation: http://nmrglue.readthedocs.org/en/latest/index.html
+* Examples: http://nmrglue.readthedocs.org/en/latest/examples/index.html
+* Mailing List: https://groups.google.com/forum/#!forum/nmrglue-discuss
+* Source code: https://github.com/jjhelmus/nmrglue
 
 What can nmrglue do?
 --------------------
