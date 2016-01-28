@@ -6,6 +6,9 @@ correcting spectral baselines.
 import numpy as np
 import scipy
 import scipy.ndimage
+from scipy.interpolate import InterpolatedUnivariateSpline
+from itertools import groupby
+from operator import itemgetter
 
 
 # Linear (First order) baseline correction
@@ -206,7 +209,93 @@ def calc_bl_med(x, mw, sf, sigma):
     g = g / g.sum()
     return scipy.signal.convolve(m, g, mode='same')
 
+# Distribution based classification method for calculation of baseline in 1D spectra
+def baslineCorrector(Y,wd=20):
+    """
+    Calculate a baseline using a distribution based classification method.
 
+    Algorithm described in: Wang et al. Anal. Chem. 2013, 85, 1231-1239
+
+    Parameters
+    ----------
+    Y : 1D ndarray
+        One dimensional NMR data
+    wd : float
+        Median window size in pts.
+
+    Returns
+    -------
+    baseline : 1D ndarray
+        Baseline calculated using distribution based classification
+
+    """
+    SDset = GetSD(Y, wd)
+
+    sigma = FindNoiseSD(SDset, 0.999)
+
+    SNvector = IsSignal(sigma, SDset, 3)
+
+    sStart = GetSignalStart(SNvector)
+
+    sEnd = np.sort(len(Y)-1 - GetSignalStart((SNvector[::-1])))
+
+    R = GetTempBaseLine(Y, sStart, sEnd,7)
+    
+    B = Smooth(R, 60)
+    
+    return B
+    
+def rolling_window(a, window):
+    shape = a.shape[:-1] + (a.shape[-1] - window + 1, window)
+    strides = a.strides + (a.strides[-1],)
+    return np.lib.stride_tricks.as_strided(a, shape=shape, strides=strides)
+
+def GetSD(x,k):
+    return np.std(rolling_window(x, k), -1)
+
+def FindNoiseSD( SDset, ratio):
+    '''Calculate the median m1 from SDset. exclude the elements greater
+    than 2m1from SDset and recalculate the median m2. Repeat until
+    m2/m1 converges and set m2 as the expected value of the noise std'''
+    m1=np.median(SDset)
+    S=SDset <= 2.0*m1
+    tmp=S*SDset
+    SDset=tmp[tmp!=0]
+    m2=np.median(SDset)
+    while m2/m1 < ratio:
+        m1=np.median(SDset)
+        S=SDset <= 2.0*m1
+        tmp=S*SDset
+        SDset=tmp[tmp!=0]
+    return m2
+
+def IsSignal(sigma,SDset,w):
+    SNvector=SDset*0
+    for i in np.arange(len(SNvector)):
+        if SDset[i]>sigma*1.1:
+            SNvector[np.maximum(0,i-w):np.minimum(i+w,len(SNvector))]=1
+    return SNvector
+
+def GetSignalStart(SNvector):
+    sStart=[]
+    for k,v in groupby(enumerate(SNvector),key=itemgetter(1)):
+        if k:
+            v = list(v)
+            sStart.append(v[0][0])
+    return np.array(sStart)
+
+def GetTempBaseLine(Y,sStart,sEnd,w):
+    xi=np.arange(len(Y))
+    x=np.vstack((sStart,sEnd))[0]
+    y=np.convolve(Y[x], np.ones((7,))/7, mode='same')
+    R=InterpolatedUnivariateSpline(x, y, k=1)
+    tmp = R(xi)
+    return tmp
+
+def Smooth(R,w):
+    return signal.medfilt(R,(2*w+1))
+    
+    
 # Solvent Filter
 def sol_general(data, filter, w=16, mode='same'):
     """
