@@ -6,7 +6,7 @@ correcting spectral baselines.
 import numpy as np
 import scipy
 import scipy.ndimage
-from scipy.interpolate import interpolated_univariate_spline
+from scipy.interpolate import InterpolatedUnivariateSpline
 from itertools import groupby
 from operator import itemgetter
 from scipy.signal import signal
