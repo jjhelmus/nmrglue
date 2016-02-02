@@ -211,7 +211,7 @@ def calc_bl_med(x, mw, sf, sigma):
 
 
 # Distribution based classification method for calculation of baseline in 1D spectra
-def baseline_corrector(data,wd=20):
+def baseline_corrector(data, wd=20):
     """
     Calculate a baseline using a distribution based classification method.
 
