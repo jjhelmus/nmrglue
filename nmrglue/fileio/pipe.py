@@ -1790,7 +1790,11 @@ class pipe_3d(fileiobase.data_nd):
 
         # find the length of the third dimension
         f3 = "FDF" + str(int(dic["FDDIMORDER3"]))
-        lenZ = int(dic[f3 + "SIZE"])
+        quadrature_factor = [2, 1][int(dic[f3 + 'QUADFLAG'])]
+        if dic[f3 + 'FTFLAG']:
+            lenZ = int(dic[f3 + 'FTSIZE'] * quadrature_factor)
+        else:
+            lenZ = int(dic[f3 + 'TDSIZE'] * quadrature_factor)
         fshape.insert(0, lenZ)   # insert as leading size of fshape
 
         # check that all files exist if fcheck is set
@@ -1801,7 +1805,7 @@ class pipe_3d(fileiobase.data_nd):
 
         # check last axis quadrature
         fn = "FDF" + str(int(dic["FDDIMORDER1"]))
-        if dic[fn + "QUADFLAG"] == 1.0:
+        if dic[fn + "FTFLAG"] == 1.0:
             self.cplex = False
             self.dtype = np.dtype('float32')
         else:
@@ -1990,12 +1994,20 @@ class pipe_4d(fileiobase.data_nd):
 
         # find the length of the third dimension
         f3 = "FDF" + str(int(dic["FDDIMORDER3"]))
-        lenZ = int(dic[f3 + "SIZE"])
+        quadrature_factor = [2, 1][int(dic[f3 + 'QUADFLAG'])]
+        if dic[f3 + 'QUADFLAG']:
+            lenZ = int(dic[f3 + 'FTSIZE'] * quadrature_factor)
+        else:
+            lenZ = int(dic[f3 + 'TDSIZE'] * quadrature_factor)
         fshape.insert(0, lenZ)   # insert as leading size of fshape
 
         # find the length of the fourth dimension
         f4 = "FDF" + str(int(dic["FDDIMORDER4"]))
-        lenA = int(dic[f4 + "SIZE"])
+        quadrature_factor = [2, 1][int(dic[f4 + 'QUADFLAG'])]
+        if dic[f4 + 'QUADFLAG']:
+            lenA = int(dic[f4 + 'FTSIZE'] * quadrature_factor)
+        else:
+            lenA = int(dic[f4 + 'TDSIZE'] * quadrature_factor)
         fshape.insert(0, lenA)   # insert as leading size of fshape
 
         # check that all files exist if fcheck is set
