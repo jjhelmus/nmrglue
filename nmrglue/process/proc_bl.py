@@ -259,10 +259,10 @@ def _find_noise_sd(sd_set, ratio):
     sd_set = tmp[tmp != 0]
     m2 = np.median(sd_set)
     while m2/m1 < ratio:
-        m1=np.median(sd_set)
-        S=sd_set <= 2.0 * m1
+        m1 = np.median(sd_set)
+        S = sd_set <= 2.0 * m1
         tmp = S * sd_set
-        sd_set=tmp[tmp != 0]
+        sd_set = tmp[tmp != 0]
     return m2
 
 
