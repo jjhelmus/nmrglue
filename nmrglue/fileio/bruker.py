@@ -1015,7 +1015,7 @@ def reorder_submatrix(data, shape, submatrix_shape):
 
 def read_binary(filename, shape=(1), cplex=True, big=True):
     """
-    Read Bruker binary data from file and return dic,data pair
+    Read Bruker binary data from file and return dic,data pair.
 
     If data cannot be reshaped as described a 1D representation of the data
     will be returned after printing a warning message.
@@ -1217,14 +1217,14 @@ class bruker_nd(fileiobase.data_nd):
 
     def __fcopy__(self, order):
         """
-        Create a copy
+        Create a copy.
         """
         n = bruker_nd(self.filename, self.fshape, self.cplex, self.big, order)
         return n
 
     def __fgetitem__(self, slices):
         """
-        return ndarray of selected values
+        Return ndarray of selected values.
 
         slices is a well formatted tuple of slices
         """
@@ -1272,7 +1272,7 @@ class bruker_nd(fileiobase.data_nd):
 
 def get_data(f, big):
     """
-    Get binary data from file object with given endiness
+    Get binary data from file object with given endiness.
     """
     if big:
         return np.frombuffer(f.read(), dtype='>i4')
@@ -1282,7 +1282,7 @@ def get_data(f, big):
 
 def put_data(f, data, big=True):
     """
-    Put data to file object with given endiness
+    Put data to file object with given endiness.
     """
     if big:
         f.write(data.astype('>i4').tostring())
@@ -1293,7 +1293,7 @@ def put_data(f, data, big=True):
 
 def get_trace(f, num_points, big):
     """
-    Get trace of num_points from file with given endiness
+    Get trace of num_points from file with given endiness.
     """
     if big:
         bsize = num_points * np.dtype('>i4').itemsize
@@ -1315,7 +1315,7 @@ def complexify_data(data):
 
 def uncomplexify_data(data_in):
     """
-    Uncomplexify data (pack real,imag) into a int32 array
+    Uncomplexify data (pack real,imag) into a int32 array.
     """
     size = list(data_in.shape)
     size[-1] = size[-1] * 2
@@ -1621,7 +1621,7 @@ def read_jcamp(filename):
 
 def parse_jcamp_line(line, f):
     """
-    Parse a single JCAMP-DX line
+    Parse a single JCAMP-DX line.
 
     Extract the Bruker parameter name and value from a line from a JCAMP-DX
     file.  This may entail reading additional lines from the fileobj f if the
@@ -1679,7 +1679,7 @@ def parse_jcamp_value(text):
 
 def write_jcamp(dic, filename, overwrite=False):
     """
-    Write a Bruker JCAMP-DX file from a dictionary
+    Write a Bruker JCAMP-DX file from a dictionary.
 
     Written file will differ slightly from Bruker's JCAMP-DX files in that all
     multi-value parameters will be written on multiple lines. Bruker is
@@ -1959,7 +1959,6 @@ def read_pprog(filename):
     # create the output dictionary
     dic = {"var": var, "incr": incr, "loop": loop, "phase": phase,
            "ph_extra": ph_extra}
-
     return dic
 
 
