@@ -2015,6 +2015,7 @@ def write_pprog(filename, dic, overwrite=False):
     return
 
 
-def _merge_dict(dic_a, dic_b):
-    new_dic = dic_a.copy()
-    return new_dic.update(dic_b)
+def _merge_dict(a, b):
+    c = a.copy()
+    c.update(b)
+    return c
