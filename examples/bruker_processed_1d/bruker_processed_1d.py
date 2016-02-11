@@ -7,7 +7,7 @@ import nmrglue as ng
 import matplotlib.pyplot as plt
 
 # read in the data
-data_dir = "data/bruker_processed_1d/1/pdata/1"
+data_dir = "data/bruker_exp/1/pdata/1"
 
 # From pre-procced data.
 dic, data = ng.bruker.read_pdata(data_dir, scale_data=True)
