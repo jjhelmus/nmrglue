@@ -108,15 +108,14 @@ def add_axis_to_udic(udic, dic, udim):
 
     udic[udim]["sw"] = dic[acq_file]["SW_h"]
     udic[udim]["label"] = dic[acq_file]["NUC1"]
-    udic[udim]["car"] = dic[acq_file]["O1"]
+    try:
+        udic[udim]["car"] = (dic[acq_file]["SFO1"]-dic['procs']["SF"]) * 1e6
+        udic[udim]["obs"] = dic['procs']["SF"]
 
-    if "acqus" in dic and dic["acqus"]["NUC2"] == "15N":
-        # Gyromagnetic ratio of 15N is negative
-        udic[udim]["obs"] = (dic[acq_file]["BF1"] -
-                             dic[acq_file]["O1"] / 1.e6)
-    else:
-        udic[udim]["obs"] = (dic[acq_file]["BF1"] +
-                             dic[acq_file]["O1"] / 1.e6)
+    except KeyError:
+        warn('The chemical shift referencing will be off.')
+        udic[udim]["car"] = dic[acq_file]["O1"]
+        udic[udim]["obs"] = dic[acq_file]["SFO1"]
 
     if acq_file == "acqus":
         if dic['acqus']['AQ_mod'] == 0:     # qf
@@ -139,6 +138,7 @@ def add_axis_to_udic(udic, dic, udim):
             udic[udim]["encoding"] = "states-tppi"  # states-tppi
         elif aq_mod == 6:
             udic[udim]["encoding"] = "echo-antiecho"  # echo-antiecho
+
 
     return udic
 
@@ -696,8 +696,8 @@ def guess_shape(dic):
 # Bruker processed binary (1r, 1i, 2rr, 2ri, etc) reading
 
 def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
-               scale_data=False, shape=None, submatrix_shape=None,
-               all_components=False, big=None):
+               read_acqus=True, scale_data=False, shape=None,
+               submatrix_shape=None, all_components=False, big=None):
     """
     Read processed Bruker files from a directory.
 
@@ -786,6 +786,15 @@ def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
     if read_procs:
         for f in procs_files:
             dic[f] = read_jcamp(os.path.join(dir, f))
+
+    if read_acqus:
+        acqus_dir = os.path.dirname(os.path.dirname(dir))
+        acqus_dic = read(acqus_dir)[0]
+
+        new_dic = dic.copy()
+        new_dic.update(acqus_dic)
+        dic = new_dic
+
 
     # determind shape and complexity for direct dim if needed
     if submatrix_shape is None or shape is None:
