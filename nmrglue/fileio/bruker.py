@@ -139,7 +139,6 @@ def add_axis_to_udic(udic, dic, udim):
         elif aq_mod == 6:
             udic[udim]["encoding"] = "echo-antiecho"  # echo-antiecho
 
-
     return udic
 
 
@@ -274,22 +273,15 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
         else:
             raise IOError("No Bruker binary file could be found in %s" % (dir))
 
-    if acqus_files is None:
-        acqus_files = []
-        for f in ["acqus", "acqu2s", "acqu3s", "acqu4s"]:
-            if os.path.isfile(os.path.join(dir, f)):
-                acqus_files.append(f)
+    if read_acqus:
+        # read the acqus_files and add to the dictionary
+        dic = read_acqus_file(dir, acqus_files)
+    else:
+        # create an empty dictionary
+        dic = dict()
 
     if pprog_file is None:
         pprog_file = "pulseprogram"
-
-    # create an empty dictionary
-    dic = dict()
-
-    # read the acqus_files and add to the dictionary
-    if read_acqus:
-        for f in acqus_files:
-            dic[f] = read_jcamp(os.path.join(dir, f))
 
     # read the pulse program and add to the dictionary
     if read_pulseprogram:
@@ -362,22 +354,15 @@ def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
         else:
             raise IOError("no Bruker binary file could be found in %s" % (dir))
 
-    if acqus_files is None:
-        acqus_files = []
-        for f in ["acqus", "acqu2s", "acqu3s", "acqu4s"]:
-            if os.path.isfile(os.path.join(dir, f)):
-                acqus_files.append(f)
-
     if pprog_file is None:
         pprog_file = "pulseprogram"
 
-    # create an empty dictionary
-    dic = dict()
-
-    # read the acqus_files and add to the dictionary
     if read_acqus:
-        for f in acqus_files:
-            dic[f] = read_jcamp(os.path.join(dir, f))
+        # read the acqus_files and add to the dictionary
+        dic = read_acqus_file(dir, acqus_files)
+    else:
+        # create an empty dictionary
+        dic = dict()
 
     # read the pulse program and add to the dictionary
     if read_pulseprogram:
@@ -411,6 +396,38 @@ def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
     f = os.path.join(dir, bin_file)
     null, data = read_binary_lowmem(f, shape=shape, cplex=cplex, big=big)
     return dic, data
+
+
+def read_acqus_file(dir='.', acqus_files=None):
+    """
+    Read Bruker acquisition files from a directory.
+
+    Parameters
+    ----------
+    dir : str
+        Directory to read from.
+    acqus_files : list, optional
+        List of filename(s) of acqus parameter files in directory. None uses
+        standard files.
+
+    Returns
+    -------
+    dic : dict
+        Dictionary of Bruker parameters.
+    """
+    if acqus_files is None:
+        acqus_files = []
+        for f in ["acqus", "acqu2s", "acqu3s", "acqu4s"]:
+            if os.path.isfile(os.path.join(dir, f)):
+                acqus_files.append(f)
+
+    # create an empty dictionary
+    dic = dict()
+
+    # read the acqus_files and add to the dictionary
+    for f in acqus_files:
+        dic[f] = read_jcamp(os.path.join(dir, f))
+    return dic
 
 
 def write(dir, dic, data, bin_file=None, acqus_files=None, pprog_file=None,
@@ -789,12 +806,9 @@ def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
 
     if read_acqus:
         acqus_dir = os.path.dirname(os.path.dirname(dir))
-        acqus_dic = read(acqus_dir)[0]
-
-        new_dic = dic.copy()
-        new_dic.update(acqus_dic)
-        dic = new_dic
-
+        acqus_dic = read_acqus(acqus_dir)
+        # Merge the two dicts.
+        dic = _merge_dict(dic, acqus_dic)
 
     # determind shape and complexity for direct dim if needed
     if submatrix_shape is None or shape is None:
@@ -1993,5 +2007,9 @@ def write_pprog(filename, dic, overwrite=False):
 
     # close the file
     f.close()
-
     return
+
+
+def _merge_dict(dic_a, dic_b):
+    new_dic = dic_a.copy()
+    return new_dic.update(dic_b)
