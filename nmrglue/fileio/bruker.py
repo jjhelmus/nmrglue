@@ -102,18 +102,24 @@ def add_axis_to_udic(udic, dic, udim):
     # This could still use some work
     b_dim = udic['ndim'] - udim - 1  # last dim
     acq_file = "acqu" + str(b_dim + 1) + "s"
+    pro_file = "proc" + str(b_dim + 1) + "s"
 
+    # Because they're inconsistent,..
     if acq_file == "acqu1s":
-        acq_file = "acqus"   # Because they're inconsistent,...
+        acq_file = "acqus"
+
+    if pro_file == "proc1s":
+        pro_file = "procs"
 
     udic[udim]["sw"] = dic[acq_file]["SW_h"]
     udic[udim]["label"] = dic[acq_file]["NUC1"]
+
     try:
-        udic[udim]["car"] = (dic[acq_file]["SFO1"]-dic['procs']["SF"]) * 1e6
-        udic[udim]["obs"] = dic['procs']["SF"]
+        udic[udim]["car"] = (dic[acq_file]["SFO1"]-dic[pro_file]["SF"]) * 1e6
+        udic[udim]["obs"] = dic[pro_file]["SF"]
 
     except KeyError:
-        warn('The chemical shift referencing will be off.')
+        warn('The chemical shift referencing was not corrected for "sr".')
         udic[udim]["car"] = dic[acq_file]["O1"]
         udic[udim]["obs"] = dic[acq_file]["SFO1"]
 
@@ -806,7 +812,7 @@ def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
 
     if read_acqus:
         acqus_dir = os.path.dirname(os.path.dirname(dir))
-        acqus_dic = read_acqus(acqus_dir)
+        acqus_dic = read_acqus_file(acqus_dir)
         # Merge the two dicts.
         dic = _merge_dict(dic, acqus_dic)
 
