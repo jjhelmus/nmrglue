@@ -68,6 +68,7 @@ fine control over Bruker files may be interested in these functions.
     parse_jcamp_value
     write_jcamp_pair
     read_acqus_file
+    read_procs_file
 
 
 Developer Classes

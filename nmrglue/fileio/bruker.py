@@ -68,7 +68,7 @@ def guess_udic(dic, data):
         Universal dictionary of spectral parameters.
 
     """
-    # XXX if pprog, acqus are in dic use them
+    # TODO if pprog, acqus, procs are in dic use them better.
 
     # create an empty universal dictionary
     udic = fileiobase.create_blank_udic(data.ndim)
@@ -252,6 +252,11 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
         True to read pulse program, False prevents reading.
     read_acqus : bool, optional
         True to read acqus files(s), False prevents reading.
+    procs_files : list, optional
+        List of filename(s) of procs parameter files in directory. None uses
+        standard files.
+    read_procs : bool, optional
+        True to read procs files(s), False prevents reading.
 
     Returns
     -------
@@ -286,6 +291,8 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
 
         # Look two directory levels lower.
         elif os.path.isdir(os.path.dirname(os.path.dirname(dir))):
+
+            # ! change the dir
             dir = os.path.dirname(os.path.dirname(dir))
 
             if os.path.isfile(os.path.join(dir, "fid")):
@@ -293,9 +300,11 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
             elif os.path.isfile(os.path.join(dir, "ser")):
                 bin_file = "ser"
             else:
-                raise IOError("No Bruker binary file could be found in %s" % (dir))
+                mesg = "No Bruker binary file could be found in %s"
+                raise IOError(mesg % (dir))
         else:
-            raise IOError("No Bruker binary file could be found in %s" % (dir))
+            mesg = "No Bruker binary file could be found in %s"
+            raise IOError(mesg % (dir))
 
     if read_acqus:
         # read the acqus_files and add to the dictionary
@@ -344,7 +353,7 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
 
 def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
                 shape=None, cplex=None, big=None, read_pulseprogram=True,
-                read_acqus=True):
+                read_acqus=True, procs_files=None, read_procs=True):
     """
     Read Bruker files from a directory using minimal amounts of memory.
 
@@ -365,7 +374,14 @@ def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
     """
 
     if os.path.isdir(dir) is not True:
-        raise IOError("Directory %s does not exist" % (dir))
+        raise IOError("directory %s does not exist" % (dir))
+
+    # Take a shot at reading the procs file
+    if read_procs:
+        dic = read_procs_file(dir, procs_files)
+    else:
+        # create an empty dictionary
+        dic = dict()
 
     # determind parameter automatically
     if bin_file is None:
@@ -373,18 +389,31 @@ def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
             bin_file = "fid"
         elif os.path.isfile(os.path.join(dir, "ser")):
             bin_file = "ser"
-        else:
-            raise IOError("no Bruker binary file could be found in %s" % (dir))
 
-    if pprog_file is None:
-        pprog_file = "pulseprogram"
+        # Look two directory levels lower.
+        elif os.path.isdir(os.path.dirname(os.path.dirname(dir))):
+
+            # ! change the dir
+            dir = os.path.dirname(os.path.dirname(dir))
+
+            if os.path.isfile(os.path.join(dir, "fid")):
+                bin_file = "fid"
+            elif os.path.isfile(os.path.join(dir, "ser")):
+                bin_file = "ser"
+            else:
+                mesg = "No Bruker binary file could be found in %s"
+                raise IOError(mesg % (dir))
+        else:
+            mesg = "No Bruker binary file could be found in %s"
+            raise IOError(mesg % (dir))
 
     if read_acqus:
         # read the acqus_files and add to the dictionary
-        dic = read_acqus_file(dir, acqus_files)
-    else:
-        # create an empty dictionary
-        dic = dict()
+        acqus_dic = read_acqus_file(dir, acqus_files)
+        dic = _merge_dict(dic, acqus_dic)
+
+    if pprog_file is None:
+        pprog_file = "pulseprogram"
 
     # read the pulse program and add to the dictionary
     if read_pulseprogram:
@@ -788,6 +817,11 @@ def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
         standard files.
     read_procs : bool, optional
         True to read procs files(s), False prevents reading.
+    acqus_files : list, optional
+        List of filename(s) of acqus parameter files in directory. None uses
+        standard files.
+    read_acqus : bool, optional
+        True to read acqus files(s), False prevents reading.
     scale_data : bool, optional
         True to apply scaling defined in the procs file.  False, the default,
         returns the data as it appears in the file.
