@@ -224,7 +224,7 @@ def create_acqus_dic(adic, direct=False):
 
 def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
          shape=None, cplex=None, big=None, read_pulseprogram=True,
-         read_acqus=True):
+         read_acqus=True, procs_files=None, read_procs=True):
     """
     Read Bruker files from a directory.
 
@@ -270,21 +270,37 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
     if os.path.isdir(dir) is not True:
         raise IOError("directory %s does not exist" % (dir))
 
+    # Take a shot at reading the procs file
+    if read_procs:
+        dic = read_procs_file(dir, procs_files)
+    else:
+        # create an empty dictionary
+        dic = dict()
+
     # determind parameter automatically
     if bin_file is None:
         if os.path.isfile(os.path.join(dir, "fid")):
             bin_file = "fid"
         elif os.path.isfile(os.path.join(dir, "ser")):
             bin_file = "ser"
+
+        # Look two directory levels lower.
+        elif os.path.isdir(os.path.dirname(os.path.dirname(dir))):
+            dir = os.path.dirname(os.path.dirname(dir))
+
+            if os.path.isfile(os.path.join(dir, "fid")):
+                bin_file = "fid"
+            elif os.path.isfile(os.path.join(dir, "ser")):
+                bin_file = "ser"
+            else:
+                raise IOError("No Bruker binary file could be found in %s" % (dir))
         else:
             raise IOError("No Bruker binary file could be found in %s" % (dir))
 
     if read_acqus:
         # read the acqus_files and add to the dictionary
-        dic = read_acqus_file(dir, acqus_files)
-    else:
-        # create an empty dictionary
-        dic = dict()
+        acqus_dic = read_acqus_file(dir, acqus_files)
+        dic = _merge_dict(dic, acqus_dic)
 
     if pprog_file is None:
         pprog_file = "pulseprogram"
@@ -432,6 +448,38 @@ def read_acqus_file(dir='.', acqus_files=None):
 
     # read the acqus_files and add to the dictionary
     for f in acqus_files:
+        dic[f] = read_jcamp(os.path.join(dir, f))
+    return dic
+
+
+def read_procs_file(dir='.', procs_files=None):
+    """
+    Read Bruker processing files from a directory.
+
+    Parameters
+    ----------
+    dir : str
+        Directory to read from.
+    procs_files : list, optional
+        List of filename(s) of procs parameter files in directory. None uses
+        standard files.
+
+    Returns
+    -------
+    dic : dict
+        Dictionary of Bruker parameters.
+    """
+    if procs_files is None:
+        procs_files = []
+        for f in ["procs", "proc2s", "proc3s", "proc4s"]:
+            if os.path.isfile(os.path.join(dir, f)):
+                procs_files.append(f)
+
+    # create an empty dictionary
+    dic = dict()
+
+    # read the acqus_files and add to the dictionary
+    for f in procs_files:
         dic[f] = read_jcamp(os.path.join(dir, f))
     return dic
 
@@ -719,7 +767,7 @@ def guess_shape(dic):
 # Bruker processed binary (1r, 1i, 2rr, 2ri, etc) reading
 
 def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
-               read_acqus=True, scale_data=False, shape=None,
+               acqus_files=None, read_acqus=True, scale_data=False, shape=None,
                submatrix_shape=None, all_components=False, big=None):
     """
     Read processed Bruker files from a directory.
@@ -796,25 +844,25 @@ def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
         else:
             raise IOError("No Bruker binary file could be found in %s" % (dir))
 
-    if procs_files is None:
-        procs_files = []
-        for f in ["procs", "proc2s", "proc3s", "proc4s"]:
-            if os.path.isfile(os.path.join(dir, f)):
-                procs_files.append(f)
-
-    # create an empty dictionary
-    dic = dict()
-
-    # read the acqus_files and add to the dictionary
     if read_procs:
-        for f in procs_files:
-            dic[f] = read_jcamp(os.path.join(dir, f))
+        # read the acqus_files and add to the dictionary
+        dic = read_procs_file(dir, procs_files)
+    else:
+        # create an empty dictionary
+        dic = dict()
 
     if read_acqus:
+        # If acqus files were not listed check in the usual place.
         acqus_dir = os.path.dirname(os.path.dirname(dir))
-        acqus_dic = read_acqus_file(acqus_dir)
-        # Merge the two dicts.
-        dic = _merge_dict(dic, acqus_dic)
+        if acqus_files is not None:
+            acqus_dic = read_acqus_file(dir, acqus_files)
+            # Merge the two dicts.
+            dic = _merge_dict(dic, acqus_dic)
+
+        elif os.path.isdir(acqus_dir):
+            acqus_dic = read_acqus_file(acqus_dir)
+            # Merge the two dicts.
+            dic = _merge_dict(dic, acqus_dic)
 
     # determind shape and complexity for direct dim if needed
     if submatrix_shape is None or shape is None:
