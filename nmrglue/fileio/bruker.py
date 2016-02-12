@@ -796,7 +796,7 @@ def guess_shape(dic):
 # Bruker processed binary (1r, 1i, 2rr, 2ri, etc) reading
 
 def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
-               acqus_files=None, read_acqus=True, scale_data=False, shape=None,
+               acqus_files=None, read_acqus=True, scale_data=True, shape=None,
                submatrix_shape=None, all_components=False, big=None):
     """
     Read processed Bruker files from a directory.
@@ -823,8 +823,9 @@ def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
     read_acqus : bool, optional
         True to read acqus files(s), False prevents reading.
     scale_data : bool, optional
-        True to apply scaling defined in the procs file.  False, the default,
-        returns the data as it appears in the file.
+        True, the default, to apply scaling defined in the procs file.  The
+        data should almost always be scaled. False, returns the
+        data as it appears in the file.
     shape : tuple, optional
         Shape of resulting data.  None will guess the shape from the
         parameters in the procs file(s).
