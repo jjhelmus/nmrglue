@@ -68,7 +68,7 @@ def guess_udic(dic, data):
         Universal dictionary of spectral parameters.
 
     """
-    # XXX if pprog, acqus are in dic use them
+    # TODO if pprog, acqus, procs are in dic use them better.
 
     # create an empty universal dictionary
     udic = fileiobase.create_blank_udic(data.ndim)
@@ -102,21 +102,26 @@ def add_axis_to_udic(udic, dic, udim):
     # This could still use some work
     b_dim = udic['ndim'] - udim - 1  # last dim
     acq_file = "acqu" + str(b_dim + 1) + "s"
+    pro_file = "proc" + str(b_dim + 1) + "s"
 
+    # Because they're inconsistent,..
     if acq_file == "acqu1s":
-        acq_file = "acqus"   # Because they're inconsistent,...
+        acq_file = "acqus"
+
+    if pro_file == "proc1s":
+        pro_file = "procs"
 
     udic[udim]["sw"] = dic[acq_file]["SW_h"]
     udic[udim]["label"] = dic[acq_file]["NUC1"]
-    udic[udim]["car"] = dic[acq_file]["O1"]
 
-    if "acqus" in dic and dic["acqus"]["NUC2"] == "15N":
-        # Gyromagnetic ratio of 15N is negative
-        udic[udim]["obs"] = (dic[acq_file]["BF1"] -
-                             dic[acq_file]["O1"] / 1.e6)
-    else:
-        udic[udim]["obs"] = (dic[acq_file]["BF1"] +
-                             dic[acq_file]["O1"] / 1.e6)
+    try:
+        udic[udim]["car"] = (dic[acq_file]["SFO1"]-dic[pro_file]["SF"]) * 1e6
+        udic[udim]["obs"] = dic[pro_file]["SF"]
+
+    except KeyError:
+        warn('The chemical shift referencing was not corrected for "sr".')
+        udic[udim]["car"] = dic[acq_file]["O1"]
+        udic[udim]["obs"] = dic[acq_file]["SFO1"]
 
     if acq_file == "acqus":
         if dic['acqus']['AQ_mod'] == 0:     # qf
@@ -219,7 +224,7 @@ def create_acqus_dic(adic, direct=False):
 
 def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
          shape=None, cplex=None, big=None, read_pulseprogram=True,
-         read_acqus=True):
+         read_acqus=True, procs_files=None, read_procs=True):
     """
     Read Bruker files from a directory.
 
@@ -247,6 +252,11 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
         True to read pulse program, False prevents reading.
     read_acqus : bool, optional
         True to read acqus files(s), False prevents reading.
+    procs_files : list, optional
+        List of filename(s) of procs parameter files in directory. None uses
+        standard files.
+    read_procs : bool, optional
+        True to read procs files(s), False prevents reading.
 
     Returns
     -------
@@ -265,31 +275,44 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
     if os.path.isdir(dir) is not True:
         raise IOError("directory %s does not exist" % (dir))
 
+    # Take a shot at reading the procs file
+    if read_procs:
+        dic = read_procs_file(dir, procs_files)
+    else:
+        # create an empty dictionary
+        dic = dict()
+
     # determind parameter automatically
     if bin_file is None:
         if os.path.isfile(os.path.join(dir, "fid")):
             bin_file = "fid"
         elif os.path.isfile(os.path.join(dir, "ser")):
             bin_file = "ser"
-        else:
-            raise IOError("No Bruker binary file could be found in %s" % (dir))
 
-    if acqus_files is None:
-        acqus_files = []
-        for f in ["acqus", "acqu2s", "acqu3s", "acqu4s"]:
-            if os.path.isfile(os.path.join(dir, f)):
-                acqus_files.append(f)
+        # Look two directory levels lower.
+        elif os.path.isdir(os.path.dirname(os.path.dirname(dir))):
+
+            # ! change the dir
+            dir = os.path.dirname(os.path.dirname(dir))
+
+            if os.path.isfile(os.path.join(dir, "fid")):
+                bin_file = "fid"
+            elif os.path.isfile(os.path.join(dir, "ser")):
+                bin_file = "ser"
+            else:
+                mesg = "No Bruker binary file could be found in %s"
+                raise IOError(mesg % (dir))
+        else:
+            mesg = "No Bruker binary file could be found in %s"
+            raise IOError(mesg % (dir))
+
+    if read_acqus:
+        # read the acqus_files and add to the dictionary
+        acqus_dic = read_acqus_file(dir, acqus_files)
+        dic = _merge_dict(dic, acqus_dic)
 
     if pprog_file is None:
         pprog_file = "pulseprogram"
-
-    # create an empty dictionary
-    dic = dict()
-
-    # read the acqus_files and add to the dictionary
-    if read_acqus:
-        for f in acqus_files:
-            dic[f] = read_jcamp(os.path.join(dir, f))
 
     # read the pulse program and add to the dictionary
     if read_pulseprogram:
@@ -330,7 +353,7 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
 
 def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
                 shape=None, cplex=None, big=None, read_pulseprogram=True,
-                read_acqus=True):
+                read_acqus=True, procs_files=None, read_procs=True):
     """
     Read Bruker files from a directory using minimal amounts of memory.
 
@@ -351,7 +374,14 @@ def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
     """
 
     if os.path.isdir(dir) is not True:
-        raise IOError("Directory %s does not exist" % (dir))
+        raise IOError("directory %s does not exist" % (dir))
+
+    # Take a shot at reading the procs file
+    if read_procs:
+        dic = read_procs_file(dir, procs_files)
+    else:
+        # create an empty dictionary
+        dic = dict()
 
     # determind parameter automatically
     if bin_file is None:
@@ -359,25 +389,31 @@ def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
             bin_file = "fid"
         elif os.path.isfile(os.path.join(dir, "ser")):
             bin_file = "ser"
-        else:
-            raise IOError("no Bruker binary file could be found in %s" % (dir))
 
-    if acqus_files is None:
-        acqus_files = []
-        for f in ["acqus", "acqu2s", "acqu3s", "acqu4s"]:
-            if os.path.isfile(os.path.join(dir, f)):
-                acqus_files.append(f)
+        # Look two directory levels lower.
+        elif os.path.isdir(os.path.dirname(os.path.dirname(dir))):
+
+            # ! change the dir
+            dir = os.path.dirname(os.path.dirname(dir))
+
+            if os.path.isfile(os.path.join(dir, "fid")):
+                bin_file = "fid"
+            elif os.path.isfile(os.path.join(dir, "ser")):
+                bin_file = "ser"
+            else:
+                mesg = "No Bruker binary file could be found in %s"
+                raise IOError(mesg % (dir))
+        else:
+            mesg = "No Bruker binary file could be found in %s"
+            raise IOError(mesg % (dir))
+
+    if read_acqus:
+        # read the acqus_files and add to the dictionary
+        acqus_dic = read_acqus_file(dir, acqus_files)
+        dic = _merge_dict(dic, acqus_dic)
 
     if pprog_file is None:
         pprog_file = "pulseprogram"
-
-    # create an empty dictionary
-    dic = dict()
-
-    # read the acqus_files and add to the dictionary
-    if read_acqus:
-        for f in acqus_files:
-            dic[f] = read_jcamp(os.path.join(dir, f))
 
     # read the pulse program and add to the dictionary
     if read_pulseprogram:
@@ -411,6 +447,70 @@ def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
     f = os.path.join(dir, bin_file)
     null, data = read_binary_lowmem(f, shape=shape, cplex=cplex, big=big)
     return dic, data
+
+
+def read_acqus_file(dir='.', acqus_files=None):
+    """
+    Read Bruker acquisition files from a directory.
+
+    Parameters
+    ----------
+    dir : str
+        Directory to read from.
+    acqus_files : list, optional
+        List of filename(s) of acqus parameter files in directory. None uses
+        standard files.
+
+    Returns
+    -------
+    dic : dict
+        Dictionary of Bruker parameters.
+    """
+    if acqus_files is None:
+        acqus_files = []
+        for f in ["acqus", "acqu2s", "acqu3s", "acqu4s"]:
+            if os.path.isfile(os.path.join(dir, f)):
+                acqus_files.append(f)
+
+    # create an empty dictionary
+    dic = dict()
+
+    # read the acqus_files and add to the dictionary
+    for f in acqus_files:
+        dic[f] = read_jcamp(os.path.join(dir, f))
+    return dic
+
+
+def read_procs_file(dir='.', procs_files=None):
+    """
+    Read Bruker processing files from a directory.
+
+    Parameters
+    ----------
+    dir : str
+        Directory to read from.
+    procs_files : list, optional
+        List of filename(s) of procs parameter files in directory. None uses
+        standard files.
+
+    Returns
+    -------
+    dic : dict
+        Dictionary of Bruker parameters.
+    """
+    if procs_files is None:
+        procs_files = []
+        for f in ["procs", "proc2s", "proc3s", "proc4s"]:
+            if os.path.isfile(os.path.join(dir, f)):
+                procs_files.append(f)
+
+    # create an empty dictionary
+    dic = dict()
+
+    # read the acqus_files and add to the dictionary
+    for f in procs_files:
+        dic[f] = read_jcamp(os.path.join(dir, f))
+    return dic
 
 
 def write(dir, dic, data, bin_file=None, acqus_files=None, pprog_file=None,
@@ -696,8 +796,8 @@ def guess_shape(dic):
 # Bruker processed binary (1r, 1i, 2rr, 2ri, etc) reading
 
 def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
-               scale_data=False, shape=None, submatrix_shape=None,
-               all_components=False, big=None):
+               acqus_files=None, read_acqus=True, scale_data=True, shape=None,
+               submatrix_shape=None, all_components=False, big=None):
     """
     Read processed Bruker files from a directory.
 
@@ -717,9 +817,15 @@ def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
         standard files.
     read_procs : bool, optional
         True to read procs files(s), False prevents reading.
+    acqus_files : list, optional
+        List of filename(s) of acqus parameter files in directory. None uses
+        standard files.
+    read_acqus : bool, optional
+        True to read acqus files(s), False prevents reading.
     scale_data : bool, optional
-        True to apply scaling defined in the procs file.  False, the default,
-        returns the data as it appears in the file.
+        True, the default, to apply scaling defined in the procs file.  The
+        data should almost always be scaled. False, returns the
+        data as it appears in the file.
     shape : tuple, optional
         Shape of resulting data.  None will guess the shape from the
         parameters in the procs file(s).
@@ -773,19 +879,25 @@ def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
         else:
             raise IOError("No Bruker binary file could be found in %s" % (dir))
 
-    if procs_files is None:
-        procs_files = []
-        for f in ["procs", "proc2s", "proc3s", "proc4s"]:
-            if os.path.isfile(os.path.join(dir, f)):
-                procs_files.append(f)
-
-    # create an empty dictionary
-    dic = dict()
-
-    # read the acqus_files and add to the dictionary
     if read_procs:
-        for f in procs_files:
-            dic[f] = read_jcamp(os.path.join(dir, f))
+        # read the acqus_files and add to the dictionary
+        dic = read_procs_file(dir, procs_files)
+    else:
+        # create an empty dictionary
+        dic = dict()
+
+    if read_acqus:
+        # If acqus files were not listed check in the usual place.
+        acqus_dir = os.path.dirname(os.path.dirname(dir))
+        if acqus_files is not None:
+            acqus_dic = read_acqus_file(dir, acqus_files)
+            # Merge the two dicts.
+            dic = _merge_dict(dic, acqus_dic)
+
+        elif os.path.isdir(acqus_dir):
+            acqus_dic = read_acqus_file(acqus_dir)
+            # Merge the two dicts.
+            dic = _merge_dict(dic, acqus_dic)
 
     # determind shape and complexity for direct dim if needed
     if submatrix_shape is None or shape is None:
@@ -986,7 +1098,7 @@ def reorder_submatrix(data, shape, submatrix_shape):
 
 def read_binary(filename, shape=(1), cplex=True, big=True):
     """
-    Read Bruker binary data from file and return dic,data pair
+    Read Bruker binary data from file and return dic,data pair.
 
     If data cannot be reshaped as described a 1D representation of the data
     will be returned after printing a warning message.
@@ -1188,14 +1300,14 @@ class bruker_nd(fileiobase.data_nd):
 
     def __fcopy__(self, order):
         """
-        Create a copy
+        Create a copy.
         """
         n = bruker_nd(self.filename, self.fshape, self.cplex, self.big, order)
         return n
 
     def __fgetitem__(self, slices):
         """
-        return ndarray of selected values
+        Return ndarray of selected values.
 
         slices is a well formatted tuple of slices
         """
@@ -1243,7 +1355,7 @@ class bruker_nd(fileiobase.data_nd):
 
 def get_data(f, big):
     """
-    Get binary data from file object with given endiness
+    Get binary data from file object with given endiness.
     """
     if big:
         return np.frombuffer(f.read(), dtype='>i4')
@@ -1253,7 +1365,7 @@ def get_data(f, big):
 
 def put_data(f, data, big=True):
     """
-    Put data to file object with given endiness
+    Put data to file object with given endiness.
     """
     if big:
         f.write(data.astype('>i4').tostring())
@@ -1264,7 +1376,7 @@ def put_data(f, data, big=True):
 
 def get_trace(f, num_points, big):
     """
-    Get trace of num_points from file with given endiness
+    Get trace of num_points from file with given endiness.
     """
     if big:
         bsize = num_points * np.dtype('>i4').itemsize
@@ -1286,7 +1398,7 @@ def complexify_data(data):
 
 def uncomplexify_data(data_in):
     """
-    Uncomplexify data (pack real,imag) into a int32 array
+    Uncomplexify data (pack real,imag) into a int32 array.
     """
     size = list(data_in.shape)
     size[-1] = size[-1] * 2
@@ -1592,7 +1704,7 @@ def read_jcamp(filename):
 
 def parse_jcamp_line(line, f):
     """
-    Parse a single JCAMP-DX line
+    Parse a single JCAMP-DX line.
 
     Extract the Bruker parameter name and value from a line from a JCAMP-DX
     file.  This may entail reading additional lines from the fileobj f if the
@@ -1650,7 +1762,7 @@ def parse_jcamp_value(text):
 
 def write_jcamp(dic, filename, overwrite=False):
     """
-    Write a Bruker JCAMP-DX file from a dictionary
+    Write a Bruker JCAMP-DX file from a dictionary.
 
     Written file will differ slightly from Bruker's JCAMP-DX files in that all
     multi-value parameters will be written on multiple lines. Bruker is
@@ -1930,7 +2042,6 @@ def read_pprog(filename):
     # create the output dictionary
     dic = {"var": var, "incr": incr, "loop": loop, "phase": phase,
            "ph_extra": ph_extra}
-
     return dic
 
 
@@ -1984,5 +2095,10 @@ def write_pprog(filename, dic, overwrite=False):
 
     # close the file
     f.close()
-
     return
+
+
+def _merge_dict(a, b):
+    c = a.copy()
+    c.update(b)
+    return c

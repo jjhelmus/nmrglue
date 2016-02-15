@@ -33,7 +33,7 @@ These are functions which are targetted for users of nmrglue.
     read_pprog
     write_pprog
     guess_udic
-    create_dic                
+    create_dic
 
 
 
@@ -42,12 +42,12 @@ Developer Infomation
 
 .. include:: ../../../nmrglue/fileio/bruker.py
     :start-line: 6
-    :end-line: 24 
+    :end-line: 24
 
 Developer Functions
 ^^^^^^^^^^^^^^^^^^^
 
-These functions are typically not used directly by users.  Developers who want 
+These functions are typically not used directly by users.  Developers who want
 fine control over Bruker files may be interested in these functions.
 
 .. autosummary::
@@ -67,6 +67,8 @@ fine control over Bruker files may be interested in these functions.
     parse_jcamp_line
     parse_jcamp_value
     write_jcamp_pair
+    read_acqus_file
+    read_procs_file
 
 
 Developer Classes
