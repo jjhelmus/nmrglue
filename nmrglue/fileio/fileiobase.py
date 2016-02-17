@@ -354,6 +354,55 @@ def uc_from_udic(udic, dim=-1):
                            adic['obs'], adic['car'])
 
 
+def uc_from_freqscale(scale, obs, unit='ppm'):
+    """
+    Create a unit conversion object from a spectrum frequency scale axis.
+
+    Parameters
+    ----------
+    scale : array like
+        array of spectrum axis
+    obs : float
+        Observation frequency in MHz.
+    unit: {'ppm', 'Hz', 'kHz'}
+        The unit of the scale axis.
+
+    Returns
+    -------
+    uc : unit conversion object.
+        Unit conversion object for given axis.
+    """
+    scale = np.array(scale)
+    size = len(scale)
+
+    if unit in {'ppm', 'hz', 'khz'}:
+        complex = False
+
+        min = scale.min()
+        max = scale.max()
+
+        # The scale needs be corrected by extending each extremum by half the
+        # bin width (to convert from centers to edges).
+        dx = abs(scale[1]-scale[0])
+
+        if unit is 'ppm':
+            sw = ((max + dx/2.0) - (min - dx/2.0)) * obs
+            car = (min-dx/2.0 + (max-min)/2.0) * obs
+        elif unit is 'hz':
+            sw = ((max + dx/2.0) - (min - dx/2.0))
+            car = (min-dx/2.0 + (max-min)/2.0)
+        else:
+            # unit is 'kHz':
+            sw = ((max + dx/2.0) - (min - dx/2.0)) / 1.e3
+            car = (min-dx/2.0 + (max-min)/2.0) / 1.e3
+
+    else:
+        mesg = '{} is not a supported unit.'.format(unit)
+        raise ValueError(mesg)
+
+    return unit_conversion(size, complex, sw, obs, car)
+
+
 def open_towrite(filename, overwrite=False, mode='wb'):
     """
     Open filename for writing and return file object
