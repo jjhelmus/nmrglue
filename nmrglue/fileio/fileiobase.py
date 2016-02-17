@@ -364,7 +364,7 @@ def uc_from_freqscale(scale, obs, unit='ppm'):
         array of spectrum axis
     obs : float
         Observation frequency in MHz.
-    unit: {'ppm', 'Hz', 'kHz'}
+    unit: {'ppm', 'hz', 'khz'}
         The unit of the scale axis.
 
     Returns
