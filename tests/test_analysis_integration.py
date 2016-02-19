@@ -59,7 +59,7 @@ def test_1d_integrate():
 
 
 def test_1d_integrate_withnoise():
-    """ Test integration of synthetic 1D data with two peaks. and noise"""
+    """ Test integration of synthetic 1D data with two peaks and noise"""
     # generate test scale
     ppm_scale = _build_1d_ppm_scale()
     uc = ng.fileio.fileiobase.uc_from_freqscale(ppm_scale, 100)
@@ -67,7 +67,7 @@ def test_1d_integrate_withnoise():
     # generate test data
     data = (multivariate_normal.pdf(ppm_scale, mean=5, cov=0.01) +
             multivariate_normal.pdf(ppm_scale, mean=8, cov=0.01) * 2)
-    noise = np.random.randn(*data.shape) * 0.1
+    noise = np.random.randn(*data.shape) * 0.01
     data = data + noise
 
     # import matplotlib.pyplot as plt
@@ -77,8 +77,8 @@ def test_1d_integrate_withnoise():
 
     # estimate of how much the noise can throw off the the integral
     limits = (4.0, 6.0)
-    dx = abs(ppm_scale[1]-ppm_scale[0])
-    max_error = np.std(data) * dx * abs(limits[0]-limits[1]) * 3
+    n = abs(uc(4.5, 'ppm')-uc(5.5, 'ppm'))
+    max_error = np.std(noise) * np.sqrt(n)
 
     # Test with a single integral region sanity check.
     assert abs(integrate(data, uc, limits) - 1) <= max_error

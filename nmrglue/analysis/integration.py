@@ -4,7 +4,29 @@ import numpy as np
 def integrate(data, unit_conv, limits, unit='ppm', noise_limits=None,
               norm_to_range=None, calibrate=1.0):
     """
-    Integrate one 1D data array within limits given in units.
+    Integrate one 1D data array within limits given in units. Data points must
+    be equally spaced.
+
+    Functional form of integration is:
+
+    .. math::
+        value = \sum_a^b s(x_{i}) dx
+
+    Where:
+    s is the signal, a and b are the limits of integration and dx is the width
+    of each bin.
+
+    A simple error analysis is optionally performed as:
+
+    ..math::
+        error = \sigma_{vol} = \sigma \sqrt{n}
+
+    Where:
+    .. math::
+        n = \frac{|b-a|}{dx}+1
+
+    sigma is the standard deviation of the baseline noise. n is the number
+    of bins in the integration range.
 
     Parameters
     ----------
@@ -44,7 +66,7 @@ def integrate(data, unit_conv, limits, unit='ppm', noise_limits=None,
     if limits.size == 2:
         limits = np.expand_dims(limits, axis=0)
     inds = [(unit_conv(x0, unit), unit_conv(x1, unit)) for (x0, x1) in limits]
-    inds = [sorted(ind) for ind in inds]
+    inds = np.array([sorted(ind) for ind in inds])
 
     # sum part of the integral
     sum_slice = np.array([np.sum(data[slice(*ind)]) for ind in inds])
@@ -63,10 +85,10 @@ def integrate(data, unit_conv, limits, unit='ppm', noise_limits=None,
                       unit_conv(noise_limits[1], unit))
         noise_inds = sorted(noise_inds)
 
-        integral_range = np.abs(limits[:, 1] - limits[:, 0])
 
         # the error (from noise) is  std * dx * limits range
-        errors = np.std(data[slice(*noise_inds)]) * dx * integral_range
+        std = np.std(data[slice(*noise_inds)])
+        errors = std * np.sqrt(inds[:, 1] - inds[:, 0])
 
         if norm_to_range is not None:
             # You must normalize the error before you normalize the value!
