@@ -14,3 +14,4 @@ These are functions which are targeted for users of nmrglue.
     :toctree: generated/
 
     integrate
+    ndintegrate

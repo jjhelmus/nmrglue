@@ -5,7 +5,7 @@ from scipy.stats import multivariate_normal
 from numpy.testing import assert_array_almost_equal
 
 import nmrglue as ng
-from nmrglue.analysis.integration import integrate
+from nmrglue.analysis.integration import integrate, ndintegrate
 
 
 # test helper functions
@@ -89,3 +89,39 @@ def test_1d_integrate_withnoise():
 
     # Test renormalization of values.
     assert abs(resutls[0, 0] - 0.5) <= max_error
+
+def test_1d_ndintegrate():
+    # generate test scale
+    ppm_scale = _build_1d_ppm_scale()
+    uc = ng.fileio.fileiobase.uc_from_freqscale(ppm_scale, 100)
+
+    # generate test data
+    data = (multivariate_normal.pdf(ppm_scale, mean=5, cov=0.01) +
+            multivariate_normal.pdf(ppm_scale, mean=8, cov=0.01) * 2.)
+
+    # Test with a single  integral region
+    assert abs(ndintegrate(data, uc, (4, 6)) - 1.0) <= 1e-10
+    assert abs(ndintegrate(data, uc, ((7, 9))) - 2.0) <= 1e-10
+
+
+def test_2d_ndintegrate():
+    # generate test scale
+    ppm_scale = _build_1d_ppm_scale()
+    uc = ng.fileio.fileiobase.uc_from_freqscale(ppm_scale, 100)
+
+    # generate test data
+    x, y = np.meshgrid(ppm_scale, ppm_scale)
+    pos = np.empty(x.shape + (2,))
+    pos[:, :, 0] = x
+    pos[:, :, 1] = y
+    rv = multivariate_normal([5, 8], [0.01, 0.01])
+    data = rv.pdf(pos)
+
+    # import matplotlib.pyplot as plt
+    # plt.figure()
+    # plt.contour(x, y, data)
+    # plt.show()
+
+    limits = ((4, 6), (7, 9))
+
+    assert abs(ndintegrate(data, [uc, uc], limits) - 1.0) <= 1e-10
