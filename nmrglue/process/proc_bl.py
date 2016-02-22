@@ -9,7 +9,7 @@ import scipy.ndimage
 from scipy.interpolate import InterpolatedUnivariateSpline
 from itertools import groupby
 from operator import itemgetter
-from scipy.signal import signal
+import scipy.signal
 
 # Linear (First order) baseline correction
 def base(data, nl, nw=0):
