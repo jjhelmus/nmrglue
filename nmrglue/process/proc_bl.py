@@ -210,7 +210,8 @@ def calc_bl_med(x, mw, sf, sigma):
     return scipy.signal.convolve(m, g, mode='same')
 
 
-# Distribution based classification method for calculation of baseline in 1D spectra
+# Distribution based classification method for calculation of baseline 
+# in 1D spectra
 def baseline_corrector(data, wd=20):
     """
     Calculate a baseline using a distribution based classification method.
@@ -227,7 +228,8 @@ def baseline_corrector(data, wd=20):
     Returns
     -------
     data : 1D ndarray
-        Baseline corrected spectrum  calculated using distribution based classification
+        Baseline corrected spectrum  calculated using distribution based
+        classification
 
     """
     sd_set = _get_sd(data, wd)
@@ -238,15 +240,15 @@ def baseline_corrector(data, wd=20):
     r = _get_temp_baseline(data, s_start, s_end, 7)
     baseline = _smooth(r, 60)
     return data - baseline
-    
-    
+
+
 def _rolling_window(a, window):
     shape = a.shape[:-1] + (a.shape[-1] - window + 1, window)
     strides = a.strides + (a.strides[-1],)
     return np.lib.stride_tricks.as_strided(a, shape=shape, strides=strides)
 
 
-def _get_sd(data,k):
+def _get_sd(data, k):
     return np.std(_rolling_window(data, k), -1)
 
 
@@ -255,7 +257,7 @@ def _find_noise_sd(sd_set, ratio):
     than 2m1from SDset and recalculate the median m2. Repeat until
     m2/m1 converge(sd_set)'''
     S = sd_set <= 2.0 * m1
-    tmp=S * sd_set
+    tmp = S * sd_set
     sd_set = tmp[tmp != 0]
     m2 = np.median(sd_set)
     while m2/m1 < ratio:
@@ -275,7 +277,7 @@ def _is_signal(sigma, sd_set, w):
 
 
 def _get_signal_start(sn_vector):
-    s_start=[]
+    s_start = []
     for k, v in groupby(enumerate(sn_vector), key=itemgetter(1)):
         if k:
             v = list(v)
@@ -283,7 +285,7 @@ def _get_signal_start(sn_vector):
     return np.array(s_start)
 
 
-def _get_temp_baseline(data, s_start, s_end,w):
+def _get_temp_baseline(data, s_start, s_end, w):
     xi = np.arange(len(data))
     x = np.vstack((s_start, s_end))[0]
     y = np.convolve(data[x], np.ones((7,)) / 7, mode='same')
@@ -294,8 +296,8 @@ def _get_temp_baseline(data, s_start, s_end,w):
 
 def _smooth(r, w):
     return signal.medfilt(r, (2 * w + 1))
-    
-    
+
+
 # Solvent Filter
 def sol_general(data, filter, w=16, mode='same'):
     """
