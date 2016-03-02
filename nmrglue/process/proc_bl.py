@@ -6,10 +6,11 @@ correcting spectral baselines.
 import numpy as np
 import scipy
 import scipy.ndimage
+import scipy.signal
 from scipy.interpolate import InterpolatedUnivariateSpline
 from itertools import groupby
 from operator import itemgetter
-import scipy.signal
+
 
 # Linear (First order) baseline correction
 def base(data, nl, nw=0):
@@ -210,7 +211,7 @@ def calc_bl_med(x, mw, sf, sigma):
     return scipy.signal.convolve(m, g, mode='same')
 
 
-# Distribution based classification method for calculation of baseline 
+# Distribution based classification method for calculation of baseline
 # in 1D spectra
 def baseline_corrector(data, wd=20):
     """
@@ -256,6 +257,7 @@ def _find_noise_sd(sd_set, ratio):
     '''Calculate the median m1 from SDset. exclude the elements greater
     than 2m1from SDset and recalculate the median m2. Repeat until
     m2/m1 converge(sd_set)'''
+    m1 = np.median(sd_set)
     S = sd_set <= 2.0 * m1
     tmp = S * sd_set
     sd_set = tmp[tmp != 0]
@@ -295,7 +297,7 @@ def _get_temp_baseline(data, s_start, s_end, w):
 
 
 def _smooth(r, w):
-    return signal.medfilt(r, (2 * w + 1))
+    return scipy.signal.medfilt(r, (2 * w + 1))
 
 
 # Solvent Filter
