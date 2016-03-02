@@ -14,7 +14,7 @@ def _build_1d_ppm_scale():
     sw = 1/1000e-6
     obs = 100  # Mhz
 
-    dx = (sw /n)/obs
+    dx = (sw / n)/obs
     ppm_scale = np.arange(dx, dx * n, dx)
 
     # To match the apparent NMR convention the array has to be reversed.
@@ -60,6 +60,10 @@ def test_1d_integrate():
 
 def test_1d_integrate_withnoise():
     """ Test integration of synthetic 1D data with two peaks and noise"""
+
+    # seed random number
+    np.random.seed(0)
+
     # generate test scale
     ppm_scale = _build_1d_ppm_scale()
     uc = ng.fileio.fileiobase.uc_from_freqscale(ppm_scale, 100)
@@ -84,13 +88,16 @@ def test_1d_integrate_withnoise():
     assert abs(integrate(data, uc, limits) - 1) <= max_error
 
     # Test renormalization of norms
-    resutls= integrate(data, uc, ((4, 6), (7, 9)), noise_limits=(1, 2),
-                       norm_to_range=1)
+    resutls = integrate(data, uc, ((4, 6), (7, 9)), noise_limits=(1, 2),
+                        norm_to_range=1)
 
     # Test renormalization of values.
     assert abs(resutls[0, 0] - 0.5) <= max_error
 
+
 def test_1d_ndintegrate():
+    """ Test integration of synthetic with ndintegrate.
+    """
     # generate test scale
     ppm_scale = _build_1d_ppm_scale()
     uc = ng.fileio.fileiobase.uc_from_freqscale(ppm_scale, 100)
@@ -101,10 +108,11 @@ def test_1d_ndintegrate():
 
     # Test with a single  integral region
     assert abs(ndintegrate(data, uc, (4, 6)) - 1.0) <= 1e-10
-    assert abs(ndintegrate(data, uc, ((7, 9))) - 2.0) <= 1e-10
+    assert abs(ndintegrate(data, uc, [(7, 9), ]) - 2.0) <= 1e-10
 
 
 def test_2d_ndintegrate():
+    """ Test integration of synthetic 2D data with ndintegrate. """
     # generate test scale
     ppm_scale = _build_1d_ppm_scale()
     uc = ng.fileio.fileiobase.uc_from_freqscale(ppm_scale, 100)
