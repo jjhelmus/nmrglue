@@ -17,6 +17,7 @@ User Functions
     cbf
     cbf_explicit
     med
+    baseline_corrector
     sol_general
     sol_boxcar
     sol_sine
