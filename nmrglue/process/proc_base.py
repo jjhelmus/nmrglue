@@ -1324,7 +1324,8 @@ def ext_mid(data):
 # Integrate
 def integ(data):
     """
-    Integrate by cumulative sum.
+    Integrate by cumulative sum. The units of the integral is in points (i.e.
+    dx is equal to 1).
 
     Parameters
     ----------

@@ -19,6 +19,7 @@ high level functions.
 
     create_blank_udic
     uc_from_udic
+    uc_from_freqscale
     open_towrite
     ndfrom_iter 
     ndto_iter
