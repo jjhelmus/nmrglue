@@ -164,7 +164,7 @@ def ndintegrate(data, unit_conv, limits, unit='ppm', noise_limits=None):
         raise ValueError(mesg)
 
     limits = np.array(limits)
-    if limits.size == 2:
+    if limits.ndim == 1:
         limits = np.expand_dims(limits, axis=0)
 
     if limits.shape[0] != d and limits.shape[1] != 2:
