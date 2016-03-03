@@ -39,6 +39,7 @@ setup(
     packages=[
         'nmrglue',
         'nmrglue.analysis',
+        'nmrglue.analysis.tests',
         'nmrglue.fileio',
         'nmrglue.fileio.tests',
         'nmrglue.process',
