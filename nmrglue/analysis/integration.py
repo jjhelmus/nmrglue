@@ -18,14 +18,15 @@ def integrate(data, unit_conv, limits, unit='ppm', noise_limits=None,
 
     The integration error due to baseline noise is calculated as:
 
-    ..math::
-        error = \sigma_{vol} = \sigma \sqrt{n},
+    .. math::
+        error = \sigma_{vol} = \sigma \sqrt{n}
 
     if the noise_limits are set.
 
     Where:
+
     .. math::
-        n = \frac{|b-a|}{dx}+1
+        n =  \\frac{|b-a|}{dx}+1
 
     sigma is the standard deviation of the baseline noise. n is the number
     of bins in the integration range.
@@ -110,7 +111,8 @@ def ndintegrate(data, unit_conv, limits, unit='ppm', noise_limits=None):
     be equally spaced. Can only integrate one region per function call.
 
     The integration error due to baseline noise is calculated as:
-    ..math::
+
+    .. math::
         error = \sigma_{vol} = \sigma \sqrt{\prod_i^{d} n_{i}},
 
     if the noise_limits are set.
@@ -136,6 +138,7 @@ def ndintegrate(data, unit_conv, limits, unit='ppm', noise_limits=None):
         with only noise. A larger range will likely yield a more accurate
         estimate. It is unwise to use the very end of the spectrum for the
         noise range.
+
     Returns
     -------
     array

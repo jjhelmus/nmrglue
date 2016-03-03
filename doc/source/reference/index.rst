@@ -43,6 +43,7 @@ analysis modules
     
     analysisbase
     helpers
+    integration
     leastsqbound
     lineshapes1d
     linesh
