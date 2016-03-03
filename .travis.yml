@@ -1,9 +1,11 @@
+sudo: false    # Use container-based infrastructure
 language: python
 python:
   - 2.6    
   - 2.7
   - 3.3
   - 3.4
+  - 3.5
 # setup miniconda
 before_install:
   - wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
