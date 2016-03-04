@@ -68,35 +68,42 @@ def _ps_acme_score(ph, data):
         Value of the objective function (phase score)
 
     """
-    stepsize = 1
-
+ """
+    Phase correction using ACME algorithm by Chen Li et al.
+    Journal of Magnetic Resonance 158 (2002) 164-168
+    Parameters
+    ----------
+    pd : tuple
+        Current p0 and p1 values
+    data : ndarray
+        Array of NMR data.
+    Returns
+    -------
+    score : float
+        Value of the objective function (phase score)
+    """
+    nderiv = 2
     phc0, phc1 = ph
 
     s0 = ps(data, p0=phc0, p1=phc1)
     data = np.real(s0)
 
     # Calculation of first derivatives
-    ds1 = np.abs((data[1:]-data[:-1]) / (stepsize*2))
+    ds1 = np.diff(data, nderiv)
     p1 = ds1 / np.sum(ds1)
 
     # Calculation of entropy
-    p1[p1 == 0] = 1
-
     h1 = -p1 * np.log(p1)
     h1s = np.sum(h1)
 
     # Calculation of penalty
-    pfun = 0.0
-    as_ = data - np.abs(data)
-    sumas = np.sum(as_)
+    gamma = 5.0e-3
+    fr = p1
+    fr[fr >= 0] = 0
+    fr[fr < 0] = 1
+    pr = gamma * np.sum(fr * p1**2)
 
-    if sumas < 0:
-        pfun = pfun + np.sum((as_/2) ** 2)
-
-    p = 1000 * pfun
-
-    return h1s + p
-
+    return h1s + pr
 
 def _ps_peak_minima_score(ph, data):
     """
