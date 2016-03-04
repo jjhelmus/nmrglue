@@ -89,7 +89,7 @@ def _ps_acme_score(ph, data):
     data = np.real(s0)
 
     # Calculation of first derivatives
-    ds1 = np.diff(data, nderiv)
+    ds1 = np.abs(np.diff(data, nderiv))
     p1 = ds1 / np.sum(ds1)
 
     # Calculation of entropy
