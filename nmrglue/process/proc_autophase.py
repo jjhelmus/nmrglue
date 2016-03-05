@@ -14,7 +14,7 @@ import scipy.optimize
 from .proc_base import ps
 
 
-def autops(data, fn, p0=0.0, p1=0.0):
+def autops(data, fn, p0=0.0, p1=0.0, gamma=5.0e-3, optreturn=False):
     """
     Automatic linear phase correction
 
@@ -29,11 +29,17 @@ def autops(data, fn, p0=0.0, p1=0.0):
         Initial zero order phase in degrees.
     p1 : float
         Initial first order phase in degrees.
+    gamma : float
+        scale factor set to balance the penalty and entropy in acme
+    optreturn : boolean
+        If True the optimum phases is returned. Default is False 
 
     Returns
     -------
     ndata : ndarray
         Phased NMR data.
+    ph : tuple (optional)
+        optimum p0 and p1 phases if optreturn is True
 
     """
     if not callable(fn):
@@ -43,24 +49,29 @@ def autops(data, fn, p0=0.0, p1=0.0):
         }[fn]
 
     opt = [p0, p1]
-    opt = scipy.optimize.fmin(fn, x0=opt, args=(data, ))
+    opt = scipy.optimize.fmin(fn, x0=opt, args=(data, gamma))
 
     phasedspc = ps(data, p0=opt[0], p1=opt[1])
+    
+    if optreturn:
+        return tuple(opt), phasedspc
+    else:
+        return phasedspc
 
-    return phasedspc
 
-
-def _ps_acme_score(ph, data):
+def _ps_acme_score(ph, data, gamma):
     """
     Phase correction using ACME algorithm by Chen Li et al.
     Journal of Magnetic Resonance 158 (2002) 164-168
 
     Parameters
     ----------
-    pd : tuple
+    ph : tuple
         Current p0 and p1 values
     data : ndarray
         Array of NMR data.
+    gamma : float
+        scale factor set to balance the penalty and entropy
 
     Returns
     -------
@@ -68,28 +79,14 @@ def _ps_acme_score(ph, data):
         Value of the objective function (phase score)
 
     """
- """
-    Phase correction using ACME algorithm by Chen Li et al.
-    Journal of Magnetic Resonance 158 (2002) 164-168
-    Parameters
-    ----------
-    pd : tuple
-        Current p0 and p1 values
-    data : ndarray
-        Array of NMR data.
-    Returns
-    -------
-    score : float
-        Value of the objective function (phase score)
-    """
-    nderiv = 2
+    
     phc0, phc1 = ph
 
     s0 = ps(data, p0=phc0, p1=phc1)
     data = np.real(s0)
 
     # Calculation of first derivatives
-    ds1 = np.abs(np.diff(data, nderiv))
+    ds1 = np.abs(np.diff(data, 1))
     p1 = ds1 / np.sum(ds1)
 
     # Calculation of entropy
@@ -97,13 +94,13 @@ def _ps_acme_score(ph, data):
     h1s = np.sum(h1)
 
     # Calculation of penalty
-    gamma = 5.0e-3
     fr = p1
     fr[fr >= 0] = 0
     fr[fr < 0] = 1
     pr = gamma * np.sum(fr * p1**2)
 
     return h1s + pr
+
 
 def _ps_peak_minima_score(ph, data):
     """
