@@ -14,52 +14,7 @@ import scipy.optimize
 from .proc_base import ps
 
 
-def autops(data, fn, p0=0.0, p1=0.0, gamma=5.0e-3, optreturn=False):
-    """
-    Automatic linear phase correction
-
-    Parameters
-    ----------
-    data : ndarray
-        Array of NMR data.
-    fn : str or function
-        Algorithm to use for phase scoring. Built in functions can be
-        specified by one of the following strings: "acme", "peak_minima"
-    p0 : float
-        Initial zero order phase in degrees.
-    p1 : float
-        Initial first order phase in degrees.
-    gamma : float
-        scale factor set to balance the penalty and entropy in acme
-    optreturn : boolean
-        If True the optimum phases is returned. Default is False 
-
-    Returns
-    -------
-    ndata : ndarray
-        Phased NMR data.
-    ph : tuple (optional)
-        optimum p0 and p1 phases if optreturn is True
-
-    """
-    if not callable(fn):
-        fn = {
-            'peak_minima': _ps_peak_minima_score,
-            'acme': _ps_acme_score,
-        }[fn]
-
-    opt = [p0, p1]
-    opt = scipy.optimize.fmin(fn, x0=opt, args=(data, gamma))
-
-    phasedspc = ps(data, p0=opt[0], p1=opt[1])
-    
-    if optreturn:
-        return tuple(opt), phasedspc
-    else:
-        return phasedspc
-
-
-def _ps_acme_score(ph, data, gamma):
+def psacme(autops(data, p0=0.0, p1=0.0, gamma=5.0e-3, optreturn=False):
     """
     Phase correction using ACME algorithm by Chen Li et al.
     Journal of Magnetic Resonance 158 (2002) 164-168
@@ -72,14 +27,63 @@ def _ps_acme_score(ph, data, gamma):
         Array of NMR data.
     gamma : float
         scale factor set to balance the penalty and entropy
+    optreturn : boolean
+        option to return the optimum p0 and p1
 
     Returns
     -------
     score : float
         Value of the objective function (phase score)
+    opt : tuple
+        phases returned by algoritm in a tuple
 
     """
+    opt = [p0, p1]
+    opt = scipy.optimize.fmin(_ps_acme_score, x0=opt, args=(data, gamma))
+
+    phasedspc = ps(data, p0=opt[0], p1=opt[1])
     
+    if optreturn:
+        return tuple(opt), phasedspc
+    else:
+        return phasedspc
+  
+
+def pspmin(autops(data, p0=0.0, p1=0.0, optreturn=False):
+     """
+    Phase correction using simple minima-minimisation around highest peak
+
+    This is a naive approach but is quick and often achieves reasonable
+    results.  The optimisation is performed by finding the highest peak in the
+    spectra (e.g. TMSP) and then attempting to reduce minima surrounding it.
+
+    Parameters
+    ----------
+    pd : tuple
+        Current p0 and p1 values
+    data : ndarray
+        Array of NMR data.
+
+    Returns
+    -------
+    score : float
+        Value of the objective function (phase score)
+    opt : tuple
+        phases returned by algoritm in a tuple
+
+    """
+    opt = [p0, p1]
+    opt = scipy.optimize.fmin(_ps_acme_score, x0=opt, args=(data,))
+
+    phasedspc = ps(data, p0=opt[0], p1=opt[1])
+    
+    if optreturn:
+        return tuple(opt), phasedspc
+    else:
+        return phasedspc
+    
+
+def _ps_acme_score(ph, data, gamma):
     phc0, phc1 = ph
 
     s0 = ps(data, p0=phc0, p1=phc1)
@@ -103,27 +107,6 @@ def _ps_acme_score(ph, data, gamma):
 
 
 def _ps_peak_minima_score(ph, data):
-    """
-    Phase correction using simple minima-minimisation around highest peak
-
-    This is a naive approach but is quick and often achieves reasonable
-    results.  The optimisation is performed by finding the highest peak in the
-    spectra (e.g. TMSP) and then attempting to reduce minima surrounding it.
-
-    Parameters
-    ----------
-    pd : tuple
-        Current p0 and p1 values
-    data : ndarray
-        Array of NMR data.
-
-    Returns
-    -------
-    score : float
-        Value of the objective function (phase score)
-
-    """
-
     phc0, phc1 = ph
 
     s0 = ps(data, p0=phc0, p1=phc1)
