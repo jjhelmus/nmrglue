@@ -38,6 +38,7 @@ def psacme(autops(data, p0=0.0, p1=0.0, gamma=5.0e-3, optreturn=False):
         phases returned by algoritm in a tuple
 
     """
+
     opt = [p0, p1]
     opt = scipy.optimize.fmin(_ps_acme_score, x0=opt, args=(data, gamma))
 
@@ -72,6 +73,7 @@ def pspmin(autops(data, p0=0.0, p1=0.0, optreturn=False):
         phases returned by algoritm in a tuple
 
     """
+
     opt = [p0, p1]
     opt = scipy.optimize.fmin(_ps_acme_score, x0=opt, args=(data,))
 
