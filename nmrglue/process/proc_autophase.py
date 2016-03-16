@@ -14,7 +14,7 @@ import scipy.optimize
 from .proc_base import ps
 
 
-def psacme(autops(data, p0=0.0, p1=0.0, gamma=5.0e-3, optreturn=False):
+def psacme(data, p0=0.0, p1=0.0, gamma=5.0e-3, optreturn=False):
     """
     Phase correction using ACME algorithm by Chen Li et al.
     Journal of Magnetic Resonance 158 (2002) 164-168
@@ -50,7 +50,7 @@ def psacme(autops(data, p0=0.0, p1=0.0, gamma=5.0e-3, optreturn=False):
         return phasedspc
   
 
-def pspmin(autops(data, p0=0.0, p1=0.0, optreturn=False):
+def pspmin( data, p0=0.0, p1=0.0, optreturn=False):
      """
     Phase correction using simple minima-minimisation around highest peak
 
