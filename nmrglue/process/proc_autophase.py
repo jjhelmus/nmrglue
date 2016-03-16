@@ -14,7 +14,7 @@ import scipy.optimize
 from .proc_base import ps
 
 
-def psacme(data, p0=0.0, p1=0.0, gamma=5.0e-3, optreturn=False):
+def psacme(data, p0=0.0, p1=0.0, gamma=5.0e-3):
     """
     Phase correction using ACME algorithm by Chen Li et al.
     Journal of Magnetic Resonance 158 (2002) 164-168
@@ -43,15 +43,12 @@ def psacme(data, p0=0.0, p1=0.0, gamma=5.0e-3, optreturn=False):
     opt = scipy.optimize.fmin(_ps_acme_score, x0=opt, args=(data, gamma))
 
     phasedspc = ps(data, p0=opt[0], p1=opt[1])
-    
-    if optreturn:
-        return tuple(opt), phasedspc
-    else:
-        return phasedspc
-  
 
-def pspmin( data, p0=0.0, p1=0.0, optreturn=False):
-     """
+    return tuple(opt), phasedspc
+
+
+def pspmin(data, p0=0.0, p1=0.0):
+    """
     Phase correction using simple minima-minimisation around highest peak
 
     This is a naive approach but is quick and often achieves reasonable
@@ -79,10 +76,7 @@ def pspmin( data, p0=0.0, p1=0.0, optreturn=False):
 
     phasedspc = ps(data, p0=opt[0], p1=opt[1])
     
-    if optreturn:
-        return tuple(opt), phasedspc
-    else:
-        return phasedspc
+    return tuple(opt), phasedspc
     
 
 def _ps_acme_score(ph, data, gamma):
