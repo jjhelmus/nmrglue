@@ -51,7 +51,7 @@ def create_data(data):
 
 # universal dictionary functions
 
-def guess_udic(dic, data):
+def guess_udic(dic, data, strip_fake=False):
     """
     Guess parameters of universal dictionary from dic, data pair.
 
@@ -61,6 +61,12 @@ def guess_udic(dic, data):
         Dictionary of Bruker parameters.
     data : ndarray
         Array of NMR data.
+    strip_fake: bool
+        If data is proceed (i.e. read using `bruker.read_pdata`) and the Bruker
+        processing parameters STSI and/or STSR are set, the returned sweep
+        width and carrier frequencies is changed to values that are incorrect
+        but instead can are intended to trick the normal unit_conversion object
+        into producing the correct result.
 
     Returns
     -------
@@ -79,13 +85,13 @@ def guess_udic(dic, data):
 
         # try to add additional parameter from acqus dictionary keys
         try:
-            add_axis_to_udic(udic, dic, b_dim)
+            add_axis_to_udic(udic, dic, b_dim, strip_fake)
         except:
             warn("Failed to determine udic parameters for dim: %i" % (b_dim))
     return udic
 
 
-def add_axis_to_udic(udic, dic, udim):
+def add_axis_to_udic(udic, dic, udim, strip_fake):
     """
     Add axis parameters to a udic.
 
@@ -97,6 +103,8 @@ def add_axis_to_udic(udic, dic, udim):
         Bruker dictionary used to determine axes parameters.
     dim : int
         Universal dictionary dimension to update.
+    strip_fake: bool
+        See `bruker.guess_udic`
 
     """
     # This could still use some work
@@ -111,17 +119,36 @@ def add_axis_to_udic(udic, dic, udim):
     if pro_file == "proc1s":
         pro_file = "procs"
 
-    udic[udim]["sw"] = dic[acq_file]["SW_h"]
+    sw = dic[acq_file]["SW_h"]
     udic[udim]["label"] = dic[acq_file]["NUC1"]
 
     try:
-        udic[udim]["car"] = (dic[acq_file]["SFO1"]-dic[pro_file]["SF"]) * 1e6
-        udic[udim]["obs"] = dic[pro_file]["SF"]
+        obs = dic[pro_file]["SF"]
+        car = (dic[acq_file]["SFO1"]-obs) * 1e6
 
     except KeyError:
         warn('The chemical shift referencing was not corrected for "sr".')
-        udic[udim]["car"] = dic[acq_file]["O1"]
-        udic[udim]["obs"] = dic[acq_file]["SFO1"]
+        obs = dic[acq_file]["SFO1"]
+        car = dic[acq_file]["O1"]
+
+    if strip_fake:
+        try:
+
+            # Temporary parameters
+            w = sw/float(dic[pro_file]["FTSIZE"])
+            d = (w * dic[pro_file]["STSR"]) + (w * dic[pro_file]["STSI"]/2.0)
+
+            # Fake car frequency
+            car -= (d-(sw/2.0))
+
+            # Fake sw frequency
+            sw = w * dic[pro_file]["STSI"]
+        except KeyError:
+            pass
+
+    udic[udim]["sw"] = sw
+    udic[udim]["car"] = car
+    udic[udim]["obs"] = obs
 
     if acq_file == "acqus":
         if dic['acqus']['AQ_mod'] == 0:     # qf
@@ -833,7 +860,7 @@ def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
         Shape of submatrix for 2D+ data.  None will guess the shape from
         the metadata in the procs file(s).
     all_components : bool
-        True to return all a list of all components, False returns just the
+        True to return a list of all components, False returns just the
         all real component (1r, 2rr, 3rrr, etc).
     big : bool or None, optional
         Endiness of binary file. True of big-endian, False for little-endian,
