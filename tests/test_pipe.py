@@ -362,7 +362,7 @@ def test_3d_slicing():
     # ellipsis
     assert_array_equal(fdata[..., 7], data[..., 7])
     assert_array_equal(fdata[..., 2, 100], data[..., 2, 100])
-    assert_array_equal(fdata[..., 2:10, ...], data[..., 2:10, ...])
+    assert_array_equal(fdata[..., 2:10, :], data[..., 2:10, :])
 
     # simple slicing
     assert_array_equal(fdata[0, 1:4, 0], data[0, 1:4, 0])

@@ -96,7 +96,7 @@ def cbf(data, last=10, apply=slice(None)):
 
     """
     # calculate the correction
-    n = data.shape[-1] * last / 100. + 1.
+    n = data.shape[-1] * last // 100 + 1
     corr = data[..., -n:].sum(axis=-1) / n
 
     # apply correction

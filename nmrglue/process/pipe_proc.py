@@ -829,7 +829,7 @@ def tri(dic, data, loc="auto", lHi=0.0, rHi=0.0, c=1.0, start=1,
     start = start - 1  # arrays should start at 0
 
     if loc == "auto":
-        loc = data.shape[-1] / 2
+        loc = data.shape[-1] // 2
 
     fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
 
@@ -1196,7 +1196,7 @@ def ft(dic, data, auto=False, real=False, inv=False, alt=False, neg=False,
 
     if real:
         # return a complex array with double size
-        data = np.array(data[..., size / 2:], dtype="complex64")
+        data = np.array(data[..., size // 2:], dtype="complex64")
 
         # adjust quadrature
         dic[fn + "QUADFLAG"] = 0.0
@@ -1351,7 +1351,7 @@ def ht(dic, data, mode="ps0-0", zf=False, td=False, auto=False):
         # XXX determine how this works....
         pass
     if zf:
-        N = 2 ** (np.ceil(np.log2(data.shape[-1])))  # not same as NMRPipe
+        N = int(2 ** (np.ceil(np.log2(data.shape[-1]))))  # not same as NMRPipe
     else:
         N = data.shape[-1]
 
@@ -1616,7 +1616,7 @@ def zf(dic, data, zf=1, pad="auto", size="auto", mid=False, inter=False,
         dic[fn + "CENTER"] = s2
         dic = recalc_orig(dic, data, fn)
         dic["FDSIZE"] = s
-        return dic, data[..., :s]
+        return dic, data[..., :int(s)]
 
     if inter:   # zero filling between points done first
         data = p.zf_inter(data, zf)
@@ -1869,11 +1869,11 @@ def add(dic, data, r=0.0, i=0.0, c=0.0, ri=False, x1=1.0, xn='default'):
     are defined.  NMRPipe's ADD function ignores c when r or i are defined.
 
     """
-    mn = x1 - 1
+    mn = int(x1 - 1)
     if xn == 'default':
         mx = data.shape[-1]
     else:
-        mx = xn
+        mx = int(xn)
 
     if ri:
         data[..., mn:mx].real = p.add_ri(data[..., mn:mx])
@@ -2041,14 +2041,14 @@ def ext(dic, data, x1="default", xn="default", y1="default", yn="default",
         # print("ymin:",y_min,"ymax:",y_max)
         # print("xmin:",x_min,"xmax:",x_max)
 
-        data = data[y_min:y_max, x_min:x_max]
+        data = data[int(y_min):int(y_max), int(x_min):int(x_max)]
         if y_min != 1 and y_max != data.shape[0]:  # only update when sliced
             dic["FDSLICECOUNT"] = y_max - y_min
             dic["FDSPECNUM"] = y_max - y_min
         dic["FDSIZE"] = x_max - x_min
 
     else:       # 1D Array
-        data = data[x_min:x_max]
+        data = data[int(x_min):int(x_max)]
         dic["FDSIZE"] = x_max - x_min
 
     # adjust sweep width and ppm calibration
@@ -2288,7 +2288,7 @@ def mult(dic, data, r=1.0, i=1.0, c=1.0, inv=False, hdr=False, x1=1.0,
     function ignores c when r or i are defined.
 
     """
-    mn = x1 - 1
+    mn = int(x1 - 1)
     if xn == 'default':
         mx = data.shape[-1]
     else:
@@ -2396,9 +2396,9 @@ def set(dic, data, r="a", i="a", c="a", x1=1.0, xn='default'):
         ic = i
 
     # this is so simple we do not use the proc_base functions
-    data[..., mn:mx].real = rc
+    data[..., int(mn):int(mx)].real = rc
     if np.iscomplex(data).any():
-        data[..., mn:mx].imag = ic
+        data[..., int(mn):int(mx)].imag = ic
 
     dic = update_minmax(dic, data)
     return dic, data
