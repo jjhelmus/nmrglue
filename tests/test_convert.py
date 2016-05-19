@@ -9,6 +9,10 @@ import sys
 import glob
 from re import sub
 
+# Ignore UserWarnings when converting Bruker data
+import warnings
+warnings.simplefilter('ignore', UserWarning)
+
 import nmrglue as ng
 from numpy.testing import assert_array_equal
 

@@ -1,6 +1,10 @@
 #! /usr/bin/env python
 """ Create files for tm unit test """
 
+# ignore RuntimeWarnings created by division by zero when appling apodization
+import warnings
+warnings.simplefilter('ignore', RuntimeWarning)
+
 import nmrglue.fileio.pipe as pipe
 import nmrglue.process.pipe_proc as p
 
