@@ -420,8 +420,8 @@ def write_2D(filename, dic, data, overwrite=False):
     lentY = dic["w1"]["bsize"]
     t_tup = (lentY, lentX)
 
-    ttX = np.ceil(data.shape[1] / float(lentX))  # total tiles in X dim
-    ttY = np.ceil(data.shape[0] / float(lentY))  # total tiles in Y dim
+    ttX = int(np.ceil(data.shape[1] / float(lentX)))  # total tiles in X dim
+    ttY = int(np.ceil(data.shape[0] / float(lentY)))  # total tiles in Y dim
     tt = ttX * ttY
 
     for i in range(int(tt)):
@@ -483,9 +483,9 @@ def write_3D(filename, dic, data, overwrite=False):
 
     t_tup = (lentZ, lentY, lentX)
 
-    ttX = np.ceil(data.shape[2] / float(lentX))  # total tiles in X dim
-    ttY = np.ceil(data.shape[1] / float(lentY))  # total tiles in Y dim
-    ttZ = np.ceil(data.shape[0] / float(lentZ))  # total tiles in Z dim
+    ttX = int(np.ceil(data.shape[2] / float(lentX)))  # total tiles in X dim
+    ttY = int(np.ceil(data.shape[1] / float(lentY)))  # total tiles in Y dim
+    ttZ = int(np.ceil(data.shape[0] / float(lentZ)))  # total tiles in Z dim
 
     tt = ttX * ttY * ttZ
 
@@ -608,8 +608,10 @@ class sparky_2d(fileiobase.data_nd):
         gX = range(self.lenX)[sX]  # list of values to take in X
 
         # tiles to get in each dim to read
-        gtY = set([np.floor(i / self.lentY) for i in gY])  # Y tile to read
-        gtX = set([np.floor(i / self.lentX) for i in gX])  # X tile to read
+        # Y tile to read
+        gtY = set([int(np.floor(i / self.lentY)) for i in gY])
+        # X tile to read
+        gtX = set([int(np.floor(i / self.lentX)) for i in gX])
 
         # create a empty output directory
         out = np.empty((len(gY), len(gX)), dtype=self.dtype)
@@ -618,7 +620,7 @@ class sparky_2d(fileiobase.data_nd):
             for iX in gtX:  # loop over X tiles to get
 
                 # get the tile and reshape it
-                ntile = iY * np.ceil(self.lenX / self.lentX) + iX
+                ntile = int(iY * np.ceil(self.lenX / self.lentX) + iX)
                 tile = get_tilen(f, ntile, (self.lentX, self.lentY))
                 tile = tile.reshape(self.lentY, self.lentX)
 
@@ -741,14 +743,17 @@ class sparky_3d(fileiobase.data_nd):
         gX = range(self.lenX)[sX]  # list of values to take in X
 
         # tiles to get in each dim to read
-        gtZ = set([np.floor(float(i) / self.lentZ) for i in gZ])  # Z tiles
-        gtY = set([np.floor(float(i) / self.lentY) for i in gY])  # Y tiles
-        gtX = set([np.floor(float(i) / self.lentX) for i in gX])  # X tiles
+        # Z tiles
+        gtZ = set([int(np.floor(float(i) / self.lentZ)) for i in gZ])
+        # Y tiles
+        gtY = set([int(np.floor(float(i) / self.lentY)) for i in gY])
+        # X tiles
+        gtX = set([int(np.floor(float(i) / self.lentX)) for i in gX])
 
         # total tiles in each dim
-        ttX = np.ceil(self.lenX / float(self.lentX))  # total tiles in X
-        ttY = np.ceil(self.lenY / float(self.lentY))  # total tiles in Y
-        ttZ = np.ceil(self.lenZ / float(self.lentZ))  # total tiles in Z
+        ttX = int(np.ceil(self.lenX / float(self.lentX)))  # total tiles in X
+        ttY = int(np.ceil(self.lenY / float(self.lentY)))  # total tiles in Y
+        ttZ = int(np.ceil(self.lenZ / float(self.lentZ)))  # total tiles in Z
 
         tile_tup = (self.lentZ, self.lentY, self.lentX)
 
@@ -931,8 +936,8 @@ def find_tilen_2d(data, ntile, tile_size):
 
     """
     lentY, lentX = tile_size
-    ttX = np.ceil(data.shape[1] / float(lentX))  # total tiles in X dim
-    ttY = np.ceil(data.shape[0] / float(lentY))  # total tiles in Y dim
+    ttX = int(np.ceil(data.shape[1] / float(lentX)))  # total tiles in X dim
+    ttY = int(np.ceil(data.shape[0] / float(lentY)))  # total tiles in Y dim
 
     # tile number in each dim
     Xt = ntile % ttX
@@ -976,8 +981,8 @@ def tile_data2d(data, tile_size):
     """
     lentY, lentX = tile_size
     # determind the number of tiles in data
-    ttX = np.ceil(data.shape[1] / float(lentX))  # total tiles in X dim
-    ttY = np.ceil(data.shape[0] / float(lentY))  # total tiles in Y dim
+    ttX = int(np.ceil(data.shape[1] / float(lentX)))  # total tiles in X dim
+    ttY = int(np.ceil(data.shape[0] / float(lentY)))  # total tiles in Y dim
     tt = ttX * ttY  # total number of tiles
 
     # calc some basic parameter
@@ -1015,8 +1020,8 @@ def untile_data2D(data, tile_size, data_size):
     lentY, lentX = tile_size
     lenY, lenX = data_size
     # determind the number of tiles in data
-    ttX = np.ceil(lenX / float(lentX))  # total tiles in X dim
-    ttY = np.ceil(lenY / float(lentY))  # total tiles in Y dim
+    ttX = int(np.ceil(lenX / float(lentX)))  # total tiles in X dim
+    ttY = int(np.ceil(lenY / float(lentY)))  # total tiles in Y dim
     tt = ttX * ttY
 
     # calc some basic parameter
@@ -1076,9 +1081,9 @@ def find_tilen_3d(data, ntile, tile_size):
 
     """
     lentZ, lentY, lentX = tile_size
-    ttX = np.ceil(data.shape[2] / float(lentX))  # total tiles in X dim
-    ttY = np.ceil(data.shape[1] / float(lentY))  # total tiles in Y dim
-    ttZ = np.ceil(data.shape[0] / float(lentZ))  # total tiles in Z dim
+    ttX = int(np.ceil(data.shape[2] / float(lentX)))  # total tiles in X dim
+    ttY = int(np.ceil(data.shape[1] / float(lentY)))  # total tiles in Y dim
+    ttZ = int(np.ceil(data.shape[0] / float(lentZ)))  # total tiles in Z dim
 
     # tile number in each dim
     Xt = ntile % ttX
@@ -1126,9 +1131,9 @@ def tile_data3d(data, tile_size):
     """
     lentZ, lentY, lentX = tile_size
     # determind the number of tiles in data
-    ttX = np.ceil(data.shape[2] / float(lentX))  # total tiles in X dim
-    ttY = np.ceil(data.shape[1] / float(lentY))  # total tiles in Y dim
-    ttZ = np.ceil(data.shape[0] / float(lentZ))  # total tiles in Z dim
+    ttX = int(np.ceil(data.shape[2] / float(lentX)))  # total tiles in X dim
+    ttY = int(np.ceil(data.shape[1] / float(lentY)))  # total tiles in Y dim
+    ttZ = int(np.ceil(data.shape[0] / float(lentZ)))  # total tiles in Z dim
 
     tt = ttX * ttY * ttZ    # total number of tiles
 
@@ -1167,9 +1172,9 @@ def untile_data3D(data, tile_size, data_size):
     lenZ, lenY, lenX = data_size
 
     # determind the number of tiles in data
-    ttX = np.ceil(lenX / float(lentX))  # total tiles in X dim
-    ttY = np.ceil(lenY / float(lentY))  # total tiles in Y dim
-    ttZ = np.ceil(lenZ / float(lentZ))  # total tiles in Z dim
+    ttX = int(np.ceil(lenX / float(lentX)))  # total tiles in X dim
+    ttY = int(np.ceil(lenY / float(lentY)))  # total tiles in Y dim
+    ttZ = int(np.ceil(lenZ / float(lentZ)))  # total tiles in Z dim
     tt = ttX * ttY * ttZ
 
     # calc some basic parameter

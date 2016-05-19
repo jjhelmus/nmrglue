@@ -1119,7 +1119,7 @@ def write_slice_3D(filemask, dic, data, shape, slices):
 
         # unpack into rdata,[idata] depending on quadrature
         if data.dtype == 'complex64':
-            h = mdata.shape[-1] / 2.0
+            h = mdata.shape[-1] // 2.0
             rdata = mdata[..., :h]
             idata = mdata[..., h:]
         else:
@@ -1492,7 +1492,7 @@ def unappend_data(data):
     Data should have imaginary data vector appended to real data vector
 
     """
-    h = data.shape[-1] / 2.0
+    h = int(data.shape[-1] / 2)
     return np.array(data[..., :h] + data[..., h:] * 1.j, dtype="complex64")
 
 

@@ -421,9 +421,9 @@ def roll(data, pts=0.0, neg=False):
     data = np.roll(data, int(pts), axis=-1)
     if neg:
         if pts > 0:
-            data[..., :pts] = -data[..., :pts]
+            data[..., :int(pts)] = -data[..., :int(pts)]
         else:
-            data[..., pts:] = -data[..., pts:]
+            data[..., int(pts):] = -data[..., int(pts):]
     return data
 
 
@@ -521,9 +521,9 @@ def rft(x):
     # XXX figure out what exactly this is doing...
     s = x.shape[-1]
     xp = np.zeros(x.shape, dtype="complex64")
-    xp[..., 1:s / 2] = x[..., 1:-1:2] + x[..., 2::2] * 1.j
+    xp[..., 1:int(s / 2)] = x[..., 1:-1:2] + x[..., 2::2] * 1.j
     xp[..., 0] = x[..., 0] / 2.
-    xp[..., s / 2] = x[..., -1] / 2.
+    xp[..., int(s / 2)] = x[..., -1] / 2.
     return np.array(nmr_reorder(np.fft.fft(2 * xp, axis=-1).real),
                     dtype="float32")
 
@@ -551,10 +551,10 @@ def irft(xp):
     x = np.zeros(xp.shape, dtype="float32")
 
     # unpack ifft data
-    x[..., 1:-1:2] = xp[..., 1:s / 2].real
-    x[..., 2::2] = xp[..., 1:s / 2].imag
+    x[..., 1:-1:2] = xp[..., 1:int(s / 2)].real
+    x[..., 2::2] = xp[..., 1:int(s / 2)].imag
     x[..., 0] = xp[..., 0].real
-    x[..., -1] = xp[..., s / 2].real
+    x[..., -1] = xp[..., int(s / 2)].real
     return x
 
 
@@ -1064,7 +1064,7 @@ def zf_pad(data, pad=0, mid=False):
 
     """
     size = list(data.shape)
-    size[-1] = pad
+    size[-1] = int(pad)
     z = np.zeros(size, dtype=data.dtype)
 
     if mid:
@@ -1380,8 +1380,8 @@ def mir_center(data):
     Append a mirror image of the data in the center.
     """
     s = data.shape[-1]
-    return np.concatenate((data[..., s / 2:], data, data[..., :s / 2]),
-                          axis=-1)
+    return np.concatenate(
+        (data[..., int(s / 2):], data, data[..., :int(s / 2)]), axis=-1)
 
 
 def mir_center_onepoint(data):
@@ -1829,13 +1829,13 @@ def coadd(data, clist, axis=-1):
     k = len(clist)          # length of coefficient list
 
     if axis == 1 or axis == -1:   # 'x' axis
-        s[-1] = np.floor(float(s[-1]) / k)
+        s[-1] = int(np.floor(float(s[-1]) / k))
         n = np.zeros(s, dtype=data.dtype)
         m = s[-1] * k   # last element read
         for i in range(k):
             n = n + clist[i] * data[..., i:m:k]
     else:   # 'y' axis
-        s[0] = np.floor(float(s[0]) / k)
+        s[0] = int(np.floor(float(s[0]) / k))
         n = np.zeros(s, dtype=data.dtype)
         m = s[0] * k
         for i in range(k):
@@ -2416,7 +2416,7 @@ def qmix(data, carr):
 
     # create an empty blank output array
     s = list(data.shape)
-    s[0] = s[0] * float(oc) / float(ic)
+    s[0] = int(s[0] * float(oc) / float(ic))
     n = np.empty(s, data.dtype)
 
     # remix each block
@@ -2509,11 +2509,11 @@ def zd(data, window, x0=0.0, slope=1.0):
 
 
     """
-    width = len(window)         # full width
-    wide = (width - 1.) / 2     # half width
-    rows = data.shape[0]        # rows in data
-    cols = data.shape[-1]       # columns in data
-    c_start = x0 + slope        # start of center diagonal band
+    width = len(window)             # full width
+    wide = int((width - 1.) / 2)    # half width
+    rows = data.shape[0]            # rows in data
+    cols = data.shape[-1]           # columns in data
+    c_start = x0 + slope            # start of center diagonal band
 
     # last row to apply window to is last row or where we run off the grid
     max_r = int(min(rows, np.floor((cols - c_start + wide) / slope) + 1))
@@ -2539,7 +2539,7 @@ def zd(data, window, x0=0.0, slope=1.0):
     return data
 
 
-def zd_boxcar(data, wide=1.0, x0=0.0, slope=1.0):
+def zd_boxcar(data, wide=1, x0=0.0, slope=1.0):
     """
     Zero diagonal band with a boxcar function.
 
@@ -2560,7 +2560,7 @@ def zd_boxcar(data, wide=1.0, x0=0.0, slope=1.0):
         Array of NMR data with diagonal band set to zero.
 
     """
-    window = np.zeros(2 * wide + 1)
+    window = np.zeros(2 * int(wide) + 1)
     return zd(data, window, x0=x0, slope=slope)
 
 

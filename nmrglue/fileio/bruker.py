@@ -356,7 +356,7 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
         gshape, gcplex = guess_shape(dic)
         if gcplex is True:    # divide last dim by 2 if complex
             t = list(gshape)
-            t[-1] = t[-1] / 2
+            t[-1] = t[-1] // 2
             gshape = tuple(t)
     if shape is None:
         shape = gshape
