@@ -81,7 +81,7 @@ class unit_conversion():
 
         # derived units (these are in ppm)
         self._delta = -self._sw / (self._size * self._obs)
-        self._first = self._car / self._obs - self._delta * self._size / 2.
+        self._first = self._car / self._obs - self._delta * (self._size - 1) / 2.
 
     # individual unit conversion functions
     def __percent2pts(self, percent):
