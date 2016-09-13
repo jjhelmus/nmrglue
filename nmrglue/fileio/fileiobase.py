@@ -387,14 +387,14 @@ def uc_from_freqscale(scale, obs, unit='ppm'):
 
         if unit is 'ppm':
             sw = ((max + dx/2.0) - (min - dx/2.0)) * obs
-            car = (min-dx/2.0 + (max-min)/2.0) * obs
+            car = (min-dx/2.0 + (max-min+dx)/2.0) * obs
         elif unit is 'hz':
             sw = ((max + dx/2.0) - (min - dx/2.0))
-            car = (min-dx/2.0 + (max-min)/2.0)
+            car = (min-dx/2.0 + (max-min+dx)/2.0)
         else:
             # unit is 'kHz':
             sw = ((max + dx/2.0) - (min - dx/2.0)) / 1.e3
-            car = (min-dx/2.0 + (max-min)/2.0) / 1.e3
+            car = (min-dx/2.0 + (max-min+dx)/2.0) / 1.e3
 
     else:
         mesg = '{} is not a supported unit.'.format(unit)
