@@ -78,10 +78,10 @@ class unit_conversion():
         self._sw = sw
         self._obs = obs
         self._car = car
-
+        
         # derived units (these are in ppm)
         self._delta = -self._sw / (self._size * self._obs)
-        self._first = self._car / self._obs - self._delta * (self._size - 1) / 2.
+        self._first = self._car / self._obs - self._delta * (self._size//2).
 
     # individual unit conversion functions
     def __percent2pts(self, percent):
@@ -385,16 +385,19 @@ def uc_from_freqscale(scale, obs, unit='ppm'):
         # bin width (to convert from centers to edges).
         dx = abs(scale[1]-scale[0])
 
+        # car is assumed to be in the middle of the scale array
+        # and on the lower frequency side of the array for even size
+        # (corresponding to the behaviour of np.fft.fftshift)
         if unit is 'ppm':
             sw = ((max + dx/2.0) - (min - dx/2.0)) * obs
-            car = (min-dx/2.0 + (max-min+dx)/2.0) * obs
+            car = (min + dx*(size//2)) * obs
         elif unit is 'hz':
             sw = ((max + dx/2.0) - (min - dx/2.0))
-            car = (min-dx/2.0 + (max-min+dx)/2.0)
+            car = (min + dx*(size//2))
         else:
             # unit is 'kHz':
             sw = ((max + dx/2.0) - (min - dx/2.0)) / 1.e3
-            car = (min-dx/2.0 + (max-min+dx)/2.0) / 1.e3
+            car = (min + dx*(size//2)) / 1.e3
 
     else:
         mesg = '{} is not a supported unit.'.format(unit)
