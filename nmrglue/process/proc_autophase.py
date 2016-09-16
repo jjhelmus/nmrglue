@@ -86,18 +86,18 @@ def _ps_acme_score(ph, data, gamma):
     data = np.real(s0)
 
     # Calculation of first derivatives
-    ds1 = np.abs(np.diff(data, 1))
-    p1 = ds1 / np.sum(ds1)
+    ds1 = np.diff(data, 1)
+    p1 = np.abs(ds1) / np.abs(np.sum(ds1))
 
     # Calculation of entropy
     h1 = -p1 * np.log(p1)
     h1s = np.sum(h1)
 
     # Calculation of penalty
-    fr = p1
+    fr = data
     fr[fr >= 0] = 0
     fr[fr < 0] = 1
-    pr = gamma * np.sum(fr * p1**2)
+    pr = gamma * np.sum(fr * data**2)
 
     return h1s + pr
 
