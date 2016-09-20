@@ -14,7 +14,10 @@ import scipy.optimize
 from .proc_base import ps
 
 
-def psacme(data, p0=0.0, p1=0.0, gamma=5.0e-3):
+
+    
+
+def _ps_acme_score(ph, data, kwargs):
     """
     Phase correction using ACME algorithm by Chen Li et al.
     Journal of Magnetic Resonance 158 (2002) 164-168
@@ -24,70 +27,25 @@ def psacme(data, p0=0.0, p1=0.0, gamma=5.0e-3):
     ph : tuple
         Current p0 and p1 values
     data : ndarray
-        Array of NMR data.
-    gamma : float
-        scale factor set to balance the penalty and entropy
-    optreturn : boolean
-        option to return the optimum p0 and p1
+        Array of NMR data
+    kwargs: dictionary
+        gamma : constant for penalty term for 'acme'
+        order : order of derivative used in 'acme'
 
     Returns
     -------
     score : float
         Value of the objective function (phase score)
-    opt : tuple
-        phases returned by algoritm in a tuple
 
     """
-
-    opt = [p0, p1]
-    opt = scipy.optimize.fmin(_ps_acme_score, x0=opt, args=(data, gamma))
-
-    phasedspc = ps(data, p0=opt[0], p1=opt[1])
-
-    return tuple(opt), phasedspc
-
-
-def pspmin(data, p0=0.0, p1=0.0):
-    """
-    Phase correction using simple minima-minimisation around highest peak
-
-    This is a naive approach but is quick and often achieves reasonable
-    results.  The optimisation is performed by finding the highest peak in the
-    spectra (e.g. TMSP) and then attempting to reduce minima surrounding it.
-
-    Parameters
-    ----------
-    pd : tuple
-        Current p0 and p1 values
-    data : ndarray
-        Array of NMR data.
-
-    Returns
-    -------
-    score : float
-        Value of the objective function (phase score)
-    opt : tuple
-        phases returned by algoritm in a tuple
-
-    """
-
-    opt = [p0, p1]
-    opt = scipy.optimize.fmin(_ps_acme_score, x0=opt, args=(data,))
-
-    phasedspc = ps(data, p0=opt[0], p1=opt[1])
-    
-    return tuple(opt), phasedspc
-    
-
-def _ps_acme_score(ph, data, gamma):
     phc0, phc1 = ph
+    s = ng.proc_base.ps(data, p0=phc0, p1=phc1)
+    data = np.real(s)
 
-    s0 = ps(data, p0=phc0, p1=phc1)
-    data = np.real(s0)
-
-    # Calculation of first derivatives
-    ds1 = np.diff(data, 1)
-    p1 = np.abs(ds1) / np.abs(np.sum(ds1))
+    # Calculation of derivatives
+    ds = np.diff(data,kwargs['order'])
+    dsn = np.abs(ds)
+    p1 = dsn / np.nansum(dsn)
 
     # Calculation of entropy
     h1 = -p1 * np.log(p1)
@@ -97,15 +55,37 @@ def _ps_acme_score(ph, data, gamma):
     fr = data
     fr[fr >= 0] = 0
     fr[fr < 0] = 1
-    pr = gamma * np.sum(fr * data**2)
-
+    pr = kwargs['gamma'] * np.nansum(fr * data**2)
+    
     return h1s + pr
 
 
-def _ps_peak_minima_score(ph, data):
+def _ps_peak_minima_score(ph, data, kwargs):
+    """
+    Phase correction using simple minima-minimisation around highest peak
+
+    This is a naive approach but is quick and often achieves reasonable
+    results.  The optimisation is performed by finding the highest peak in the
+    spectra (e.g. TMSP) and then attempting to reduce minima surrounding it.
+
+    Parameters
+    ----------
+    ph : tuple
+        Current p0 and p1 values
+    data : ndarray
+        Array of NMR data.
+    kwargs : to keep compatibility with autops
+
+    Returns
+    -------
+    score : float
+        Value of the objective function (phase score)
+
+    """
+
     phc0, phc1 = ph
 
-    s0 = ps(data, p0=phc0, p1=phc1)
+    s0 = ng.proc_base.ps(data, p0=phc0, p1=phc1)
     data = np.real(s0)
 
     i = np.argmax(data)
