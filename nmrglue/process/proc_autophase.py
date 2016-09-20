@@ -14,7 +14,45 @@ import scipy.optimize
 from .proc_base import ps
 
 
+def autops(data, fn, p0=0.0, p1=0.0, **kwargs):
+    """
+    Automatic linear phase correction
 
+    Parameters
+    ----------
+    data : ndarray
+        Array of NMR data.
+    fn : str or function
+        Algorithm to use for phase scoring. Built in functions can be
+        specified by one of the following strings: "acme", "peak_minima"
+    p0 : float
+        Initial zero order phase in degrees.
+    p1 : float
+        Initial first order phase in degrees.
+    kwargs: keyword arguments
+        gamma : constant for penalty term for 'acme' to penalize negative peaks. 
+        order : order of derivative used in 'acme'
+
+    Returns
+    -------
+    ndata : ndarray
+        Phased NMR data.
+    opt : tuple
+        optimized 0th and 1st order phases
+        
+    """
+    if not callable(fn):
+        fn = {
+            'peak_minima': _ps_peak_minima_score,
+            'acme': _ps_acme_score,
+        }[fn]
+
+    opt = [p0, p1]
+    opt = scipy.optimize.fmin(fn, x0=opt, args=(data, kwargs))
+
+    phasedspc = ng.proc_base.ps(data, p0=opt[0], p1=opt[1])
+
+    return tuple(opt), phasedspc
     
 
 def _ps_acme_score(ph, data, kwargs):
