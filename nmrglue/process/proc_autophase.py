@@ -29,7 +29,7 @@ def autops(data, fn, p0=0.0, p1=0.0, **kwargs):
         Initial zero order phase in degrees.
     p1 : float
         Initial first order phase in degrees.
-    kwargs: keyword arguments
+    kwargs : keyword arguments
         gamma : constant for penalty term for 'acme' to penalize negative peaks. 
         order : order of derivative used in 'acme'
 
@@ -66,7 +66,7 @@ def _ps_acme_score(ph, data, kwargs):
         Current p0 and p1 values
     data : ndarray
         Array of NMR data
-    kwargs: dictionary
+    kwargs : dictionary
         gamma : constant for penalty term for 'acme'
         order : order of derivative used in 'acme'
 
@@ -87,7 +87,7 @@ def _ps_acme_score(ph, data, kwargs):
 
     # Calculation of entropy
     h1 = -p1 * np.log(p1)
-    h1s = np.sum(h1)
+    h1s = np.nansum(h1)
 
     # Calculation of penalty
     fr = data
