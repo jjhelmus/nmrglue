@@ -50,7 +50,7 @@ def autops(data, fn, p0=0.0, p1=0.0, **kwargs):
     opt = [p0, p1]
     opt = scipy.optimize.fmin(fn, x0=opt, args=(data, kwargs))
 
-    phasedspc = ng.proc_base.ps(data, p0=opt[0], p1=opt[1])
+    phasedspc = ps(data, p0=opt[0], p1=opt[1])
 
     return tuple(opt), phasedspc
     
@@ -77,7 +77,7 @@ def _ps_acme_score(ph, data, kwargs):
 
     """
     phc0, phc1 = ph
-    s = ng.proc_base.ps(data, p0=phc0, p1=phc1)
+    s = ps(data, p0=phc0, p1=phc1)
     data = np.real(s)
 
     # Calculation of derivatives
@@ -123,7 +123,7 @@ def _ps_peak_minima_score(ph, data, kwargs):
 
     phc0, phc1 = ph
 
-    s0 = ng.proc_base.ps(data, p0=phc0, p1=phc1)
+    s0 = ps(data, p0=phc0, p1=phc1)
     data = np.real(s0)
 
     i = np.argmax(data)
