@@ -6,8 +6,8 @@ Where to get nmrglue
 --------------------
 
 Downloads for all platforms are available at 
-`<http://code.google.com/p/nmrglue/>`_. Tar files are available for UNIX-like
-systems (Linux or OSX) and a binary installer for Windows.
+`<https://github.com/jjhelmus/nmrglue/releases>`_.  Tar files are available
+for UNIX-like systems (Linux or OSX) and a binary installer for Windows.
 
 Requirements
 ------------
