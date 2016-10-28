@@ -1077,7 +1077,7 @@ def read_pdata_binary(filename, shape=None, submatrix_shape=None, big=True):
     else:
         try:
             data = reorder_submatrix(data, shape, submatrix_shape)
-            return dic, reorder_submatrix(data, shape, submatrix_shape)
+            return dic, data
         except:
             warn('unable to reorder data')
             return dic, data
