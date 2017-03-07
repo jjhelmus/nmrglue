@@ -14,6 +14,7 @@ fileio modules
     bruker
     convert
     fileiobase
+    nmrml
     pipe
     rnmrtk
     simpson
