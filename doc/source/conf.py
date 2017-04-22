@@ -288,5 +288,5 @@ def linkcode_resolve(domain, info):
 
     fn = relpath(fn, start=dirname(nmrglue.__file__))
 
-    return "http://github.com/jjhelmus/nmrglue/blob/v0.6/nmrglue/%s%s" % (
+    return "http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/%s%s" % (
         fn, linespec)
