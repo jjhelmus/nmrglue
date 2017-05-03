@@ -175,18 +175,18 @@ def create_pdic_param(name, values):
     Create a fake procpar dictionary element of with given name and values.
     """
     dic = dict()
-    dic["Dgroup"] = '1'
-    dic["Ggroup"] = '2'
-    dic["active"] = '1'
-    dic["basictype"] = '1'
+    dic["Dgroup"] = 1
+    dic["Ggroup"] = 2
+    dic["active"] = 1
+    dic["basictype"] = 1
     dic["enumerable"] = '0'
-    dic["intptr"] = '64'
-    dic["maxvalue"] = '32767'   # 2^15-1
-    dic["minvalue"] = '0'
+    dic["intptr"] = 64
+    dic["maxvalue"] = 32767   # 2^15-1
+    dic["minvalue"] = 0
     dic["name"] = name
-    dic["protection"] = '0'
-    dic["stepsize"] = '0'
-    dic["subtype"] = '7'
+    dic["protection"] = np.uint32(0)
+    dic["stepsize"] = 0
+    dic["subtype"] = 7
     dic["values"] = values
     return dic
 
@@ -1737,7 +1737,7 @@ def find_shape(pdic):
     # information on imaging experiments
 
     try:
-        shape = [int(pdic["np"]["values"][0]) // 2]
+        shape = [int(pdic["np"]["values"][0]) / 2]
     except:
         # when shape finding fails issue warning and return None
         warn("shape cannot be determined.")
@@ -1756,16 +1756,16 @@ def find_shape(pdic):
     # imaging files have a seqcon parameter
     if 'seqcon' in pdic:
         if "nv" in pdic:
-            s = max(int(pdic["nv"]["values"][0]), 1)
+            s = max(pdic["nv"]["values"][0], 1)
             if s > 1:
                 shape.insert(0, s)
         if "nv2" in pdic:
-            s = max(int(pdic["nv2"]["values"][0]), 1)
+            s = max(pdic["nv2"]["values"][0], 1)
             if s > 1:
                 shape.insert(0, s)
 
         if "nv3" in pdic:
-            s = max(int(pdic["nv3"]["values"][0]), 1)
+            s = max(pdic["nv3"]["values"][0], 1)
             if s > 1:
                 shape.insert(0, s)
         return tuple(shape)
@@ -1775,21 +1775,21 @@ def find_shape(pdic):
         multi = 2       # assume R+I in cases where no phase parameter.
         if "phase" in pdic:
             multi = len(pdic["phase"]["values"])
-        s = max(int(pdic["ni"]["values"][0]), 1)
+        s = max(pdic["ni"]["values"][0], 1)
         shape.insert(0, s * multi)
 
     if "ni2" in pdic:
         multi = 2
         if "phase2" in pdic:
             multi = len(pdic["phase2"]["values"])
-        s = max(int(pdic["ni2"]["values"][0]), 1)
+        s = max(pdic["ni2"]["values"][0], 1)
         shape.insert(0, s * multi)
 
     if "ni3" in pdic:
         multi = 2
         if "phase3" in pdic:
             multi = len(pdic["phase"]["values"])
-        s = max(int(pdic["ni3"]["values"][0]), 1)
+        s = max(pdic["ni3"]["values"][0], 1)
         shape.insert(0, s * multi)
 
     return tuple(shape)
@@ -1895,25 +1895,26 @@ def get_parameter(f):
     line = f.readline().decode().split()
 
     dic["name"] = line[0]
-    dic["subtype"] = line[1]
-    dic["basictype"] = line[2]
-    dic["maxvalue"] = line[3]
-    dic["minvalue"] = line[4]
-    dic["stepsize"] = line[5]
-    dic["Ggroup"] = line[6]
-    dic["Dgroup"] = line[7]
-    dic["protection"] = line[8]
-    dic["active"] = line[9]
-    dic["intptr"] = line[10]
+    dic["subtype"] = int(line[1])
+    dic["basictype"] = int(line[2])
+    dic["maxvalue"] = float(line[3])
+    dic["minvalue"] = float(line[4])
+    dic["stepsize"] = float(line[5])
+    dic["Ggroup"] = int(line[6])
+    dic["Dgroup"] = int(line[7])
+    dic["protection"] = np.uint32(line[8])
+    dic["active"] = int(line[9])
+    dic["intptr"] = int(line[10])
 
     # read in the values of the parameter
     line = f.readline().decode()
     num = int(line.split()[0])
     values = []
 
-    if dic["basictype"] == "1":     # real values, only one line
-        values = line.split()[1:]
-    elif dic["basictype"] == "2":   # strings, may have multiple lines
+    if dic["basictype"] == 1:     # real values, only one line
+        values = list(map(np.float, line.split()[1:]))
+        values = [int(v) if v.is_integer() else v for v in values]
+    elif dic["basictype"] == 2:   # strings, may have multiple lines
         values.append(line.split("\"")[1])  # split on "s
         for i in range(num - 1):
             values.append(f.readline().decode().split("\"")[1])
@@ -1925,9 +1926,9 @@ def get_parameter(f):
     dic["enumerable"] = line.split()[0]
 
     if dic["enumerable"] != "0":
-        if dic["basictype"] == "1":     # reals
+        if dic["basictype"] == 1:     # reals
             dic["enumerables"] = line.split()[1:]
-        elif dic["basictype"] == "2":   # strings
+        elif dic["basictype"] == 2:   # strings
             dic["enumerables"] = line.split("\"")[1::2]
 
     return dic
@@ -1950,13 +1951,13 @@ def write_procpar(filename, dic, overwrite=False):
               d["active"], d["intptr"], file=f)
 
         # print out the next line(s) (and more if strings)
-        if d["basictype"] == "1":   # real values, one line
+        if d["basictype"] == 1:   # real values, one line
             print(len(d["values"]), end=' ', file=f)  # don't end the line
             for value in d["values"]:
                 print(value, end=' ', file=f)    # still not yet
             print("", file=f)   # now end the line
 
-        elif d["basictype"] == "2":     # strings, may have multiple lines
+        elif d["basictype"] == 2:     # strings, may have multiple lines
             print(len(d["values"]), end=' ', file=f)  # don't end the line
             for value in d["values"]:
                 # now end the line (for each string)
@@ -1967,9 +1968,9 @@ def write_procpar(filename, dic, overwrite=False):
 
         if d["enumerable"] != "0":
             for e in d["enumerables"]:
-                if d["basictype"] == "1":  # reals
+                if d["basictype"] == 1:  # reals
                     print(e, end=' ', file=f)
-                elif d["basictype"] == "2":  # strings
+                elif d["basictype"] == 2:  # strings
                     print('"' + e + '"', end=' ', file=f)
         print("", file=f)   # end the enumerable line
 
