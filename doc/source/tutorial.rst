@@ -33,7 +33,7 @@ how simple this can be let's read a 2D NMRPipe file.
 Here we have imported the ``nmrglue`` module and opened the NMRPipe file 
 ``test.fid``.  nmrglue contains a number of modules for reading and writing NMR
 files and all of these modules have a ``read`` function which opens a file
-or directory containing NMR data, reads in any necessary information,and loads 
+or directory containing NMR data, reads in any necessary information, and loads 
 the spectral data into memory.  The ``read`` function returns a 2-tuple 
 containing a python dictionary with file and spectral parameters and a 
 `numpy <http://numpy.scipy.org/>`_ array object containing the numeric 
@@ -62,23 +62,24 @@ We can see that this is a two dimensional data set with 1500 complex points
 in the direct dimension and 332 points in the indirect dimension.  nmrglue 
 takes care of converting the raw data in the file into an array of appropiate 
 type, dimensionality, and quadrature.  For complex data the last axis, 
-typically the direct dimension, is convert to a complex data type.  The other
-axes are not converted. 
-In some cases not all of the information needed to represent the spectral data 
-as a well formed numpy array is not stored in the file or the values determined 
-automatically are incorrect. In many of these cases this information can be 
-specified directly in the function call.  
+typically the direct dimension, is converted to a complex data type.  The other
+axes are not converted.
 
-For example the ``read`` function in the ``varian`` module sometimes cannot 
+In some cases, not all of the information needed to represent the spectral data 
+as a well formed numpy array is stored in the file, or the values determined 
+automatically are incorrect. In many of these cases, this information can be 
+specified directly in the function call.
+
+For example, the ``read`` function in the ``varian`` module sometimes cannot 
 determine the shape or fid ordering of 3D files correctly.  These parameters 
 can be explicitly provided in the function call with the shape and torder
-keywords. See :ref:`varian_module` for details. 
+keywords. See :ref:`varian_module` for details.
 
 Universal dictionaries
 ======================
 
-In addition to the spectral data the read function also determines various 
-spectral parameters that were stored in the file and stores them in a 
+In addition to the spectral data, the ``read`` function also determines 
+various spectral parameters that were stored in the file and stores them in a 
 python dictionary:
 
     
@@ -89,23 +90,24 @@ python dictionary:
 
 Here we see NMRPipe files stores the spectal width of the direct dimension 
 (50000.0 Hz) and the name of the indirect dimension (15N) as well as a number 
-of additional parameter.  
+of additional parameters.
+
 Some file formats describe well the spectral data, listing a large number of 
-parameters, other only a few.  In addition, the different format express the 
-parameters in different units and under different names.  For user who are 
-familar with the specific file format or working with only a single file type 
-this is not a problem, the dictionary allows direct access to these parameters.
-If a more uniform listing of spectal parameter is desired the ``guess_udic`` 
-function can be used to create a 'universal' dictionary.
+parameters, other only a few.  In addition, different formats express 
+parameters in different units and under different names.  For users who are 
+familar with the specific file format or are working with only a single file
+type, this is not a problem; the dictionary allows direct access to these
+parameters. If a more uniform listing of spectal parameters is desired, the
+``guess_udic`` function can be used to create a 'universal' dictionary.
 
     >>> udic = ng.pipe.guess_udic(dic,data)
     >>> udic.keys()
     ['ndim', 0, 1]
     >>>
 
-This 'universal' dictionary of spectral parameter contains only the most 
-fundamental parameters, the dimensionality of the data and a dictionary of 
-parameters for each axis numbered according to the data array ordering 
+This 'universal' dictionary of spectral parameters contains only the most
+fundamental parameters, the dimensionality of the data, and a dictionary
+of parameters for each axis numbered according to the data array ordering 
 (the direct dimension is the highest numbered dimension).  The axis
 dictionaries contain the following keys:
 
@@ -124,7 +126,7 @@ time        True for time domain data, False got frequency domain.
 ========    ======================================================
 
 
-For our 2D NMRPipe file these parameter for the indirect dimension are:
+For our 2D NMRPipe file, these parameters for the indirect dimension are:
 
     >>> for k,v in udic[0].iteritems(): print k,v
     ...
@@ -147,15 +149,15 @@ data:
     (332, 1500)
 
 
-Not all NMR files formats contain all the information necessary to determind
-uniquely all of the universal dictionary parameters.  In these cases the
+Not all NMR files formats contain all the information necessary to determine
+uniquely all of the universal dictionary parameters.  In these cases, the
 dictionary will be filled with generic values (999.99, "X", "Y", etc) and
 should be updated by the user with the correct values.
 In converting to a 'universal' dictionary we have sacrificed additional 
 information about the data which was contained in the original file in order
 to provide a common description of NMR data.  Despite the universal 
-dictionaries limited information, together with the data array it is sufficient
-for most NMR tasks.  We will see later that the universal dictionary allows
+dictionary's limited information, together with the data array, it is sufficient
+for most NMR tasks.  We will later see that the universal dictionary allows
 for conversions between file formats.
 
 
