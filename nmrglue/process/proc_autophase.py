@@ -132,7 +132,7 @@ def _ps_peak_minima_score(ph, data):
     return np.abs(mina - minb)
 
 
-def manual_ps(data):
+def manual_ps(data, notebook=False):
     """
     Manual Phase correction using matplotlib
 
@@ -140,13 +140,18 @@ def manual_ps(data):
     transformed dataset. If the dataset has more than 1 dimensions, the first
     trace will be picked up for phase correction.  Clicking the 'Set Phase'
     button will print the current linear phase parameters to the console.
+    A ipywidget is provided for use with Jupyter Notebook to avoid changing 
+    backends. This can be accessed with notebook=True option in this function
 
-    .. note:: Needs matplotlib with and interactive backend.
+    .. note:: Needs matplotlib with an interactive backend.
 
     Parameters
     ----------
     data : ndarray
         Array of NMR data.
+    notebook : Bool
+        True for plotting interactively in Jupyter Notebook
+        Uses ipywidgets instead of matplotlib widgets
 
     Returns
     -------
@@ -161,13 +166,14 @@ def manual_ps(data):
     >>> p0, p1 = ng.process.proc_autophase.manual_ps(data)
     >>> # do manual phase correction and close window
     >>> phased_data = ng.proc_base.ps(data, p0=p0, p1=p1)
+    
+    In  [1] # if you are using the Jupyter Notebook 
+    In  [2] ng.process.proc_autophase.manual_ps(data)
+    Out [2] # do manual phase correction. p0 and p1 values will be updated 
+            # continuously as you do so and are printed below the plot
+    In  [3] phased_data = ng.proc_base.ps(data, p0=p0, p1=p1)
 
     """
-
-    from matplotlib.widgets import Slider, Button
-    import matplotlib.pyplot as plt
-
-    plt.subplots_adjust(left=0.25, bottom=0.35)
 
     if len(data.shape) == 2:
         data = data[0, ...]
@@ -176,40 +182,71 @@ def manual_ps(data):
     elif len(data.shape) == 4:
         data = data[0, 0, 0, ...]
 
-    interactive, = plt.plot(data.real, lw=1, color='black')
+    if notebook:
+        from ipywidgets import interact, fixed
+        import matplotlib.pyplot as plt
 
-    axcolor = 'white'
-    axpc0 = plt.axes([0.25, 0.10, 0.65, 0.03], axisbg=axcolor)
-    axpc1 = plt.axes([0.25, 0.15, 0.65, 0.03], axisbg=axcolor)
-    axpiv = plt.axes([0.25, 0.20, 0.65, 0.03], axisbg=axcolor)
-    axpst = plt.axes([0.25, 0.25, 0.15, 0.04], axisbg=axcolor)
+        def phasecorr(dataset, phcorr0, phcorr1, pivot):
+            fig, ax = plt.subplots(figsize=(10, 7))
+            phaseddata = dataset * np.exp(1j*(phcorr0 + 
+                                 phcorr1*(np.arange(-pivot, -pivot+dataset.size)/dataset.size)))
 
-    spc0 = Slider(axpc0, 'p0', -360, 360, valinit=0)
-    spc1 = Slider(axpc1, 'p1', -360, 360, valinit=0)
-    spiv = Slider(axpiv, 'pivot', 0, data.size, valinit=0)
-    axps = Button(axpst, 'Set Phase', color=axcolor)
+            ax.plot(np.real(phaseddata))
+            ax.set(ylim=(np.min(np.real(data))*2, np.max(np.real(data))*2))
+            ax.axvline(pivot, color='r', alpha=0.5)
+            plt.show()
+  
+            p0 = np.round((phcorr0 - phcorr1*pivot/dataset.size)*360/2/np.pi, 3)
+            p1 = np.round(phcorr1*360/2/np.pi, 3)
+ 
+            print('p0 =', p0, 'p1 =', p1)            
 
-    def update(val):
-        pc0 = spc0.val * np.pi / 180
-        pc1 = spc1.val * np.pi / 180
-        pivot = spiv.val
-        interactive.set_ydata((data * np.exp(
-            1.0j * (pc0 + (pc1 * np.arange(-pivot, -pivot + data.size) /
-                    data.size))).astype(data.dtype)).real)
-        plt.draw()
 
-    def setphase(val):
+        interact(phasecorr, dataset=fixed(data), phcorr0=(-np.pi, np.pi, 0.01),
+                                                 phcorr1=(-10*np.pi, 10*np.pi, 0.01),
+                                                 pivot=(0, data.size, 1))
+
+    else:              
+       
+        from matplotlib.widgets import Slider, Button
+        import matplotlib.pyplot as plt
+
+        plt.subplots_adjust(left=0.25, bottom=0.35)
+
+        interactive, = plt.plot(data.real, lw=1, color='black')
+
+        axcolor = 'white'
+        axpc0 = plt.axes([0.25, 0.10, 0.65, 0.03], axisbg=axcolor)
+        axpc1 = plt.axes([0.25, 0.15, 0.65, 0.03], axisbg=axcolor)
+        axpiv = plt.axes([0.25, 0.20, 0.65, 0.03], axisbg=axcolor)
+        axpst = plt.axes([0.25, 0.25, 0.15, 0.04], axisbg=axcolor)
+
+        spc0 = Slider(axpc0, 'p0', -360, 360, valinit=0)
+        spc1 = Slider(axpc1, 'p1', -360, 360, valinit=0)
+        spiv = Slider(axpiv, 'pivot', 0, data.size, valinit=0)
+        axps = Button(axpst, 'Set Phase', color=axcolor)
+
+        def update(val):
+            pc0 = spc0.val * np.pi / 180
+            pc1 = spc1.val * np.pi / 180
+            pivot = spiv.val
+            interactive.set_ydata((data * np.exp(
+                1.0j * (pc0 + (pc1 * np.arange(-pivot, -pivot + data.size) /
+                        data.size))).astype(data.dtype)).real)
+            plt.draw()
+
+        def setphase(val):
+            p0 = spc0.val-spc1.val*spiv.val/data.size
+            p1 = spc1.val
+            print(p0, p1)
+
+        spc0.on_changed(update)
+        spc1.on_changed(update)
+        spiv.on_changed(update)
+        axps.on_clicked(setphase)
+
+        plt.show(block=True)
+
         p0 = spc0.val-spc1.val*spiv.val/data.size
         p1 = spc1.val
-        print(p0, p1)
-
-    spc0.on_changed(update)
-    spc1.on_changed(update)
-    spiv.on_changed(update)
-    axps.on_clicked(setphase)
-
-    plt.show(block=True)
-
-    p0 = spc0.val-spc1.val*spiv.val/data.size
-    p1 = spc1.val
-    return p0, p1
+        return p0, p1
