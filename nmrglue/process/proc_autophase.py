@@ -140,7 +140,7 @@ def manual_ps(data, notebook=False):
     transformed dataset. If the dataset has more than 1 dimensions, the first
     trace will be picked up for phase correction.  Clicking the 'Set Phase'
     button will print the current linear phase parameters to the console.
-    A ipywidget is provided for use with Jupyter Notebook to avoid changing 
+    A ipywidget is provided for use with Jupyter Notebook to avoid changing
     backends. This can be accessed with notebook=True option in this function
 
     .. note:: Needs matplotlib with an interactive backend.
@@ -166,10 +166,10 @@ def manual_ps(data, notebook=False):
     >>> p0, p1 = ng.process.proc_autophase.manual_ps(data)
     >>> # do manual phase correction and close window
     >>> phased_data = ng.proc_base.ps(data, p0=p0, p1=p1)
-    
-    In  [1] # if you are using the Jupyter Notebook 
+
+    In  [1] # if you are using the Jupyter Notebook
     In  [2] ng.process.proc_autophase.manual_ps(data)
-    Out [2] # do manual phase correction. p0 and p1 values will be updated 
+    Out [2] # do manual phase correction. p0 and p1 values will be updated
             # continuously as you do so and are printed below the plot
     In  [3] phased_data = ng.proc_base.ps(data, p0=p0, p1=p1)
 
@@ -188,26 +188,30 @@ def manual_ps(data, notebook=False):
 
         def phasecorr(dataset, phcorr0, phcorr1, pivot):
             fig, ax = plt.subplots(figsize=(10, 7))
-            phaseddata = dataset * np.exp(1j*(phcorr0 + 
-                                 phcorr1*(np.arange(-pivot, -pivot+dataset.size)/dataset.size)))
+            phaseddata = dataset * np.exp(
+                1j * (phcorr0 + phcorr1 * (
+                    np.arange(-pivot, -pivot+dataset.size)/dataset.size)))
 
             ax.plot(np.real(phaseddata))
             ax.set(ylim=(np.min(np.real(data))*2, np.max(np.real(data))*2))
             ax.axvline(pivot, color='r', alpha=0.5)
             plt.show()
-  
-            p0 = np.round((phcorr0 - phcorr1*pivot/dataset.size)*360/2/np.pi, 3)
+
+            p0 = np.round(
+                (phcorr0 - phcorr1 * pivot/dataset.size) * 360 / 2 / np.pi, 3)
             p1 = np.round(phcorr1*360/2/np.pi, 3)
- 
-            print('p0 =', p0, 'p1 =', p1)            
 
+            print('p0 =', p0, 'p1 =', p1)
 
-        interact(phasecorr, dataset=fixed(data), phcorr0=(-np.pi, np.pi, 0.01),
-                                                 phcorr1=(-10*np.pi, 10*np.pi, 0.01),
-                                                 pivot=(0, data.size, 1))
+        interact(
+            phasecorr,
+            dataset=fixed(data),
+            phcorr0=(-np.pi, np.pi, 0.01),
+            phcorr1=(-10*np.pi, 10*np.pi, 0.01),
+            pivot=(0, data.size, 1))
 
-    else:              
-       
+    else:
+
         from matplotlib.widgets import Slider, Button
         import matplotlib.pyplot as plt
 
