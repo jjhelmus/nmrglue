@@ -133,8 +133,7 @@ def add_axis_to_udic(udic, dic, udim, strip_fake):
 
     try:
         obs = dic[pro_file]["SF"]
-        car = (dic[acq_file]["SFO1"]-obs) * 1e6
-
+        car = dic[pro_file]["OFFSET"]*obs - sw/2
     except KeyError:
         warn('The chemical shift referencing was not corrected for "sr".')
         obs = dic[acq_file]["SFO1"]
@@ -142,7 +141,6 @@ def add_axis_to_udic(udic, dic, udim, strip_fake):
 
     if strip_fake:
         try:
-
             # Temporary parameters
             w = sw/float(dic[pro_file]["FTSIZE"])
             d = (w * dic[pro_file]["STSR"]) + (w * dic[pro_file]["STSI"]/2.0)
@@ -159,28 +157,32 @@ def add_axis_to_udic(udic, dic, udim, strip_fake):
     udic[udim]["car"] = car
     udic[udim]["obs"] = obs
 
-    if acq_file == "acqus":
-        if dic['acqus']['AQ_mod'] == 0:     # qf
-            udic[udim]['complex'] = False
-        else:
-            udic[udim]['complex'] = True
-    else:
-        aq_mod = dic[acq_file]["FnMODE"]
-        if aq_mod == 0:
-            udic[udim]["encoding"] = "undefined"
-        elif aq_mod == 1:
-            udic[udim]["encoding"] = "magnitude"  # qf
-        elif aq_mod == 2:
-            udic[udim]["encoding"] = "magnitude"  # qsec
-        elif aq_mod == 3:
-            udic[udim]["encoding"] = "tppi"
-        elif aq_mod == 4:
-            udic[udim]["encoding"] = "states"
-        elif aq_mod == 5:
-            udic[udim]["encoding"] = "states-tppi"  # states-tppi
-        elif aq_mod == 6:
-            udic[udim]["encoding"] = "echo-antiecho"  # echo-antiecho
 
+    if acq_file in dic:
+        if acq_file == "acqus":
+            if dic['acqus']['AQ_mod'] == 0:     # qf
+                udic[udim]['complex'] = False
+            else:
+                udic[udim]['complex'] = True
+        else:
+            aq_mod = dic[acq_file]["FnMODE"]
+            if aq_mod == 0:
+                udic[udim]["encoding"] = "undefined"
+            elif aq_mod == 1:
+                udic[udim]["encoding"] = "magnitude"  # qf
+            elif aq_mod == 2:
+                udic[udim]["encoding"] = "magnitude"  # qsec
+            elif aq_mod == 3:
+                udic[udim]["encoding"] = "tppi"
+            elif aq_mod == 4:
+                udic[udim]["encoding"] = "states"
+            elif aq_mod == 5:
+                udic[udim]["encoding"] = "states-tppi"  # states-tppi
+            elif aq_mod == 6:
+                udic[udim]["encoding"] = "echo-antiecho"  # echo-antiecho
+    else:
+        warn("Acqusition mode cannot be found for dim: %i" % (b_dim))
+        udic[udim]["encoding"] = "undefined"
     return udic
 
 
