@@ -119,8 +119,17 @@ def add_axis_to_udic(udic, dic, udim, strip_fake):
     if pro_file == "proc1s":
         pro_file = "procs"
 
-    sw = dic[acq_file]["SW_h"]
-    udic[udim]["label"] = dic[acq_file]["NUC1"]
+    try:
+        sw = dic[acq_file]["SW_h"]
+    except KeyError:
+        sw = dic[pro_file]["SW_p"]   
+        # for some reason, the procs and proc2s file sw in Hz is 
+        # stored with the 'SW_p' key. This is a bug in bruker as of TopSpin3.5pl7
+
+    try:
+        udic[udim]["label"] = dic[acq_file]["NUC1"]
+    except KeyError:
+        udic[udim]["label"] = dic[pro_file]["AXNUC"]
 
     try:
         obs = dic[pro_file]["SF"]
