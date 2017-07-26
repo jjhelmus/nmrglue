@@ -188,22 +188,25 @@ def add_axis_to_udic(udic, dic, udim, strip_fake):
             elif aq_mod == 6:
                 udic[udim]["encoding"] = "echo-antiecho"  # echo-antiecho
     else:
-        aq_mod = dic[pro_file]["MC2"]
-        if aq_mod == 0:
-            udic[udim]["encoding"] = "undefined"
-        elif aq_mod == 1:
-            udic[udim]["encoding"] = "magnitude"  # qf
-        elif aq_mod == 2:
-            udic[udim]["encoding"] = "magnitude"  # qsec
-        elif aq_mod == 3:
-            udic[udim]["encoding"] = "tppi"
-        elif aq_mod == 4:
-            udic[udim]["encoding"] = "states"
-        elif aq_mod == 5:
-            udic[udim]["encoding"] = "states-tppi"  
-        elif aq_mod == 6:
-            udic[udim]["encoding"] = "echo-antiecho"  
-    return udic
+        if pro_file == "procs":
+            udic[udim]["complex"] = "undefined"
+        else:
+
+            aq_mod = dic[pro_file]["MC2"]
+            if aq_mod == 0:
+                udic[udim]["encoding"] = "magnitude"  # qf
+            elif aq_mod == 1:
+                udic[udim]["encoding"] = "magnitude"  # qsec
+            elif aq_mod == 2:
+                udic[udim]["encoding"] = "tppi"
+            elif aq_mod == 3:
+                udic[udim]["encoding"] = "states"
+            elif aq_mod == 4:
+                udic[udim]["encoding"] = "states-tppi"  
+            elif aq_mod == 5:
+                udic[udim]["encoding"] = "echo-antiecho"  
+ 
+   return udic
 
 
 def create_dic(udic):
