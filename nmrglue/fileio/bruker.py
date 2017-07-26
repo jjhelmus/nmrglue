@@ -133,7 +133,13 @@ def add_axis_to_udic(udic, dic, udim, strip_fake):
 
     try:
         obs = dic[pro_file]["SF"]
-        car = dic[pro_file]["OFFSET"]*obs - sw/2
+        try:
+        car = (dic[acq_file]["SFO1"] - obs) * 1e6
+        except KeyError:
+            # ideally only the procs file can be used. But this does not reporduce
+            # spectra processed by TopSpin, most likely because the procs file 
+            # does not store the OFFSET key to a high precision
+            car = dic[pro_file]["OFFSET"]*obs - sw/2
     except KeyError:
         warn('The chemical shift referencing was not corrected for "sr".')
         obs = dic[acq_file]["SFO1"]
