@@ -123,8 +123,8 @@ def add_axis_to_udic(udic, dic, udim, strip_fake):
         sw = dic[acq_file]["SW_h"]
     elif pro_file in dic:
         sw = dic[pro_file]["SW_p"]   
-        # for some reason, the procs and proc2s file sw in Hz is 
-        # stored with the 'SW_p' key. This is a bug in bruker as of TopSpin3.5pl7
+        # procNs files store sw (in Hz) with the 'SW_p' key instead of 'SW_h'.
+        # this is a bug in TopSpin (TopSpin3.5pl7)
 
     if acq_file in dic:
         udic[udim]["label"] = dic[acq_file]["NUC1"]
@@ -136,9 +136,10 @@ def add_axis_to_udic(udic, dic, udim, strip_fake):
         if acq_file in dic:
             car = (dic[acq_file]["SFO1"] - obs) * 1e6
         else:
-            # ideally only the procs file can be used. But this does not reporduce
-            # spectra processed by TopSpin, most likely because the procs file 
-            # does not store the OFFSET to a high precision
+            # we should be able to use the 'OFFSET' parameter in procNs to 
+            # calculate 'car'. But this is slightly off (~ 5E-3 Hz)
+            # most likely because the procs file does not store the OFFSET 
+            # to a high precision. Hence the value in acquNs is given priority
             car = dic[pro_file]["OFFSET"]*obs - sw/2
  
     except KeyError:
@@ -164,7 +165,6 @@ def add_axis_to_udic(udic, dic, udim, strip_fake):
     udic[udim]["car"] = car
     udic[udim]["obs"] = obs
 
-
     if acq_file in dic:
         if acq_file == "acqus":
             if dic['acqus']['AQ_mod'] == 0:     # qf
@@ -189,9 +189,12 @@ def add_axis_to_udic(udic, dic, udim, strip_fake):
                 udic[udim]["encoding"] = "echo-antiecho"  # echo-antiecho
     else:
         if pro_file == "procs":
+            # this seems to have the 'MC2' parameter always set to 0
+            # irrespective of what the actual data is
             udic[udim]["complex"] = "undefined"
         else:
-
+            # these are only used when params in acquNs are 'undefined'
+            # but in absence of acqus, this is the best that can be done
             aq_mod = dic[pro_file]["MC2"]
             if aq_mod == 0:
                 udic[udim]["encoding"] = "magnitude"  # qf
@@ -206,7 +209,7 @@ def add_axis_to_udic(udic, dic, udim, strip_fake):
             elif aq_mod == 5:
                 udic[udim]["encoding"] = "echo-antiecho"  
  
-   return udic
+    return udic
 
 
 def create_dic(udic):
