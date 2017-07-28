@@ -1539,7 +1539,7 @@ bruker_dsp_table = {
 }
 
 
-def remove_digital_filter(dic, data, truncate=True):
+def remove_digital_filter(dic, data, truncate=True, post_proc=False):
     """
     Remove the digital filter from Bruker data.
 
@@ -1553,7 +1553,10 @@ def remove_digital_filter(dic, data, truncate=True):
         True to truncate the phase shift prior to removing the digital filter.
         This typically produces a better looking spectrum but may remove
         useful data.  False uses a non-truncated phase.
-
+    post_proc : bool, optional
+        True if the digitial filter is to be removed post processing, i.e after
+        fourier transformation. The corrected FID will not be returned, only a 
+        corrected spectrum in the frequency dimension will be returned
 
     Returns
     -------
@@ -1581,10 +1584,9 @@ def remove_digital_filter(dic, data, truncate=True):
     else:
         grpdly = dic['acqus']['GRPDLY']
 
-    return rm_dig_filter(data, decim, dspfvs, grpdly, truncate)
+    return rm_dig_filter(data, decim, dspfvs, grpdly, truncate, post_proc)
 
-
-def rm_dig_filter(data, decim, dspfvs, grpdly=0, truncate_grpdly=True):
+def rm_dig_filter(data, decim, dspfvs, grpdly=0, truncate_grpdly=True, post_proc=False):
     """
     Remove the digital filter from Bruker data.
 
@@ -1604,6 +1606,10 @@ def rm_dig_filter(data, decim, dspfvs, grpdly=0, truncate_grpdly=True):
         the decim and dspfvs parameters before removing the digital filter.
         This typically produces a better looking spectrum but may remove useful
         data.  False uses a non-truncated grpdly value.
+    post_proc : bool, optional
+        True if the digitial filter is to be removed post processing, i.e after 
+        fourier transformation. The corrected time domain data will not be returned, 
+        only the corrected spectrum in the frequency dimension will be returned
 
     Returns
     -------
@@ -1615,6 +1621,7 @@ def rm_dig_filter(data, decim, dspfvs, grpdly=0, truncate_grpdly=True):
     remove_digital_filter : Remove digital filter using Bruker dictionary.
 
     """
+    # Case I: post_proc flag is set to False (default)
     # This algorithm gives results similar but not exactly the same
     # as NMRPipe.  It was worked out by examining sample FID converted using
     # NMRPipe against spectra shifted with nmrglue's processing functions.
@@ -1638,6 +1645,17 @@ def rm_dig_filter(data, decim, dspfvs, grpdly=0, truncate_grpdly=True):
     #    6 points, reverse the remaining points, and add then to the beginning
     #    of the spectra.  If less that 6 points were removed, leave the FID
     #    alone.
+    # -----------------------------------------------------------------------
+
+    # Case II : post_proc flag is True
+    # 1. In this case, it is assumed that the data is already fourier transformed 
+    # 2. A first order phase correction equal to 2*PI*GRPDLY is applied to the 
+    #    data and the time-corrected FT data is returned
+
+    # The frequency dimension will have the same number of points as the original time
+    # domain data, but the time domain data will remain uncorrected 
+    # -----------------------------------------------------------------------
+
     if grpdly > 0:  # use group delay value if provided (not 0 or -1)
         phase = grpdly
 
@@ -1662,14 +1680,20 @@ def rm_dig_filter(data, decim, dspfvs, grpdly=0, truncate_grpdly=True):
     # DEBUG
     # print("phase: %f, skip: %i add: %i"%(phase,skip,add))
 
-    # frequency shift
-    pdata = proc_base.fsh2(data, phase)
+    if post_proc:
+        s = data.shape[-1]
+        pdata = data * np.exp( 2.j * np.pi * phase * np.arange(s)/
+                s).astype(data.dtype)
+        return pdata
 
-    # add points at the end of the specta to beginning
-    pdata[..., :add] = pdata[..., :add] + pdata[..., :-(add + 1):-1]
-    # remove points at end of spectra
-    return pdata[..., :-skip]
+    else:
+        # frequency shift
+        pdata = proc_base.fsh2(data, phase)
 
+        # add points at the end of the specta to beginning
+        pdata[..., :add] = pdata[..., :add] + pdata[..., :-(add + 1):-1]
+        # remove points at end of spectra
+        return pdata[..., :-skip]
 
 # JCAMP-DX functions
 
