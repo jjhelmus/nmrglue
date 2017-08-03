@@ -40,6 +40,7 @@ NMRPIPE_4D_FREQ_1 = os.path.join(DATA_DIR, 'nmrpipe_4d_freq_1.dir',
 NMRPIPE_4D_FREQ_2 = os.path.join(DATA_DIR, 'nmrpipe_4d_freq_2.dir',
                                  'nmrpipe_4d_freq_%03d_%03d.ft4')
 NMRPIPE_4D_FREQ_STREAM = os.path.join(DATA_DIR, 'nmrpipe_4d_freq.ft4')
+NMRPIPE_TABLE = os.path.join(DATA_DIR, 'test.tab')
 
 
 def check_simple_roundtrip(dic, data, n_percents=0, lowmem=False):
@@ -577,3 +578,21 @@ def test_guess_udic():
     assert udic[1]['sw'] == 50000.0
     assert udic[1]['time'] is True
     assert udic['ndim'] == 2
+
+
+def test_read_table():
+    comments, tbl_format, tbl = ng.pipe.read_table(NMRPIPE_TABLE)
+
+    assert len(comments) == 13
+    assert len(tbl_format) == 25
+    assert len(tbl) == 5
+    assert len(tbl[0]) == 25
+
+    assert tbl_format[0] == '%5d'
+    assert tbl_format[1] == '%9.3f'
+
+    assert tbl['INDEX'][0] == 1
+    assert tbl['INDEX'][-1] == 5
+
+    assert tbl['X1'][0] == 1328
+    assert tbl['X1'][-1] == 1161
