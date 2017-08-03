@@ -119,20 +119,21 @@ def write_table(filename, pcomments, pformats, rec, overwrite=False):
     # write out the VARS line
     names = rec.dtype.names
     s = "VARS   " + " ".join(names) + "\n"
-    f.write(s)
+    f.write(s.encode('utf-8'))
 
     # write out the FORMAT line
     s = "FORMAT " + " ".join(pformats) + "\n"
-    f.write(s)
+    f.write(s.encode('utf-8'))
 
     # write out any comment lines
     for c in pcomments:
-        f.write(c)
+        f.write(c.encode('utf-8'))
 
     # write out each line of the records array
     s = " ".join(pformats) + "\n"
     for row in rec:
-        f.write(s % tuple(row))
+        drow = [i.decode('utf-8') if i.dtype.kind == 'S' else i for i in row]
+        f.write((s % tuple(drow)).encode('utf-8'))
     f.close()
     return
 
