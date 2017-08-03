@@ -52,7 +52,7 @@ def read_table(filename):
     """
     # divide up into comment lines and data lines
     specials = ["VARS", "FORMAT", "NULLSTRING", "NULLVALUE", "REMARK", "DATA"]
-    f = open(filename, 'rb')
+    f = open(filename, 'r')
     cl = []
     dl = []
     for line in f:
@@ -80,7 +80,7 @@ def read_table(filename):
 
     # DEBUG
     # print(dtd['names'],dtd['formats'])
-    s = StringIO("".join(dl))
+    s = [l.encode('utf-8') for l in dl]
 
     rec = np.recfromtxt(s, dtype=dtd, comments='XXXXXXXXXXX')
     return cl, pformat, np.atleast_1d(rec)
