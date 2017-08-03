@@ -596,3 +596,16 @@ def test_read_table():
 
     assert tbl['X1'][0] == 1328
     assert tbl['X1'][-1] == 1161
+
+
+def test_write_table():
+    ref_comments, ref_tbl_format, ref_tbl = ng.pipe.read_table(NMRPIPE_TABLE)
+    try:
+        tbl_fname = tempfile.mktemp(dir='.')
+        ng.pipe.write_table(tbl_fname, ref_comments, ref_tbl_format, ref_tbl)
+        comments, tbl_format, tbl = ng.pipe.read_table(tbl_fname)
+        assert all(ref_tbl == tbl)
+        assert ref_comments == comments
+        assert ref_tbl_format == tbl_format
+    finally:
+        os.remove(tbl_fname)
