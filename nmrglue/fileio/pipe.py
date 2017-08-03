@@ -52,7 +52,7 @@ def read_table(filename):
     """
     # divide up into comment lines and data lines
     specials = ["VARS", "FORMAT", "NULLSTRING", "NULLVALUE", "REMARK", "DATA"]
-    f = open(filename, 'rb')
+    f = open(filename, 'r')
     cl = []
     dl = []
     for line in f:
@@ -80,7 +80,7 @@ def read_table(filename):
 
     # DEBUG
     # print(dtd['names'],dtd['formats'])
-    s = StringIO("".join(dl))
+    s = [l.encode('utf-8') for l in dl]
 
     rec = np.recfromtxt(s, dtype=dtd, comments='XXXXXXXXXXX')
     return cl, pformat, np.atleast_1d(rec)
@@ -119,20 +119,21 @@ def write_table(filename, pcomments, pformats, rec, overwrite=False):
     # write out the VARS line
     names = rec.dtype.names
     s = "VARS   " + " ".join(names) + "\n"
-    f.write(s)
+    f.write(s.encode('utf-8'))
 
     # write out the FORMAT line
     s = "FORMAT " + " ".join(pformats) + "\n"
-    f.write(s)
+    f.write(s.encode('utf-8'))
 
     # write out any comment lines
     for c in pcomments:
-        f.write(c)
+        f.write(c.encode('utf-8'))
 
     # write out each line of the records array
     s = " ".join(pformats) + "\n"
     for row in rec:
-        f.write(s % tuple(row))
+        drow = [i.decode('utf-8') if i.dtype.kind == 'S' else i for i in row]
+        f.write((s % tuple(drow)).encode('utf-8'))
     f.close()
     return
 
