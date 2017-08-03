@@ -1555,7 +1555,7 @@ def remove_digital_filter(dic, data, truncate=True, post_proc=False):
         useful data.  False uses a non-truncated phase.
     post_proc : bool, optional
         True if the digitial filter is to be removed post processing, i.e after
-        fourier transformation. The corrected FID will not be returned, only a 
+        fourier transformation. The corrected FID will not be returned, only a
         corrected spectrum in the frequency dimension will be returned
 
     Returns
@@ -1586,7 +1586,9 @@ def remove_digital_filter(dic, data, truncate=True, post_proc=False):
 
     return rm_dig_filter(data, decim, dspfvs, grpdly, truncate, post_proc)
 
-def rm_dig_filter(data, decim, dspfvs, grpdly=0, truncate_grpdly=True, post_proc=False):
+
+def rm_dig_filter(
+        data, decim, dspfvs, grpdly=0, truncate_grpdly=True, post_proc=False):
     """
     Remove the digital filter from Bruker data.
 
@@ -1607,9 +1609,10 @@ def rm_dig_filter(data, decim, dspfvs, grpdly=0, truncate_grpdly=True, post_proc
         This typically produces a better looking spectrum but may remove useful
         data.  False uses a non-truncated grpdly value.
     post_proc : bool, optional
-        True if the digitial filter is to be removed post processing, i.e after 
-        fourier transformation. The corrected time domain data will not be returned, 
-        only the corrected spectrum in the frequency dimension will be returned
+        True if the digitial filter is to be removed post processing, i.e after
+        fourier transformation. The corrected time domain data will not be
+        returned, only the corrected spectrum in the frequency dimension will
+        be returned
 
     Returns
     -------
@@ -1648,12 +1651,14 @@ def rm_dig_filter(data, decim, dspfvs, grpdly=0, truncate_grpdly=True, post_proc
     # -----------------------------------------------------------------------
 
     # Case II : post_proc flag is True
-    # 1. In this case, it is assumed that the data is already fourier transformed 
-    # 2. A first order phase correction equal to 2*PI*GRPDLY is applied to the 
+    # 1. In this case, it is assumed that the data is already fourier
+    #    transformed
+    # 2. A first order phase correction equal to 2*PI*GRPDLY is applied to the
     #    data and the time-corrected FT data is returned
 
-    # The frequency dimension will have the same number of points as the original time
-    # domain data, but the time domain data will remain uncorrected 
+    # The frequency dimension will have the same number of points as the
+    # original time domain data, but the time domain data will remain
+    # uncorrected
     # -----------------------------------------------------------------------
 
     if grpdly > 0:  # use group delay value if provided (not 0 or -1)
@@ -1682,8 +1687,8 @@ def rm_dig_filter(data, decim, dspfvs, grpdly=0, truncate_grpdly=True, post_proc
 
     if post_proc:
         s = data.shape[-1]
-        pdata = data * np.exp( 2.j * np.pi * phase * np.arange(s)/
-                s).astype(data.dtype)
+        pdata = data * np.exp(2.j * np.pi * phase * np.arange(s) / s)
+        pdata = pdata.astype(data.dtype)
         return pdata
 
     else:
@@ -1694,6 +1699,7 @@ def rm_dig_filter(data, decim, dspfvs, grpdly=0, truncate_grpdly=True, post_proc
         pdata[..., :add] = pdata[..., :add] + pdata[..., :-(add + 1):-1]
         # remove points at end of spectra
         return pdata[..., :-skip]
+
 
 # JCAMP-DX functions
 
