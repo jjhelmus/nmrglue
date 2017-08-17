@@ -119,13 +119,29 @@ def add_axis_to_udic(udic, dic, udim, strip_fake):
     if pro_file == "proc1s":
         pro_file = "procs"
 
-    sw = dic[acq_file]["SW_h"]
-    udic[udim]["label"] = dic[acq_file]["NUC1"]
+    if acq_file in dic:
+        sw = dic[acq_file]["SW_h"]
+    elif pro_file in dic:
+        sw = dic[pro_file]["SW_p"]   
+        # procNs files store sw (in Hz) with the 'SW_p' key instead of 'SW_h'.
+        # this is a bug in TopSpin (TopSpin3.5pl7)
+
+    if acq_file in dic:
+        udic[udim]["label"] = dic[acq_file]["NUC1"]
+    elif pro_file in dic:
+        udic[udim]["label"] = dic[pro_file]["AXNUC"]
 
     try:
         obs = dic[pro_file]["SF"]
-        car = (dic[acq_file]["SFO1"]-obs) * 1e6
-
+        if acq_file in dic:
+            car = (dic[acq_file]["SFO1"] - obs) * 1e6
+        else:
+            # we should be able to use the 'OFFSET' parameter in procNs to 
+            # calculate 'car'. But this is slightly off (~ 5E-3 Hz)
+            # most likely because the procs file does not store the OFFSET 
+            # to a high precision. Hence the value in acquNs is given priority
+            car = dic[pro_file]["OFFSET"]*obs - sw/2
+ 
     except KeyError:
         warn('The chemical shift referencing was not corrected for "sr".')
         obs = dic[acq_file]["SFO1"]
@@ -133,7 +149,6 @@ def add_axis_to_udic(udic, dic, udim, strip_fake):
 
     if strip_fake:
         try:
-
             # Temporary parameters
             w = sw/float(dic[pro_file]["FTSIZE"])
             d = (w * dic[pro_file]["STSR"]) + (w * dic[pro_file]["STSI"]/2.0)
@@ -150,28 +165,50 @@ def add_axis_to_udic(udic, dic, udim, strip_fake):
     udic[udim]["car"] = car
     udic[udim]["obs"] = obs
 
-    if acq_file == "acqus":
-        if dic['acqus']['AQ_mod'] == 0:     # qf
-            udic[udim]['complex'] = False
+    if acq_file in dic:
+        if acq_file == "acqus":
+            if dic['acqus']['AQ_mod'] == 0:     # qf
+                udic[udim]['complex'] = False
+            else:
+                udic[udim]['complex'] = True
         else:
-            udic[udim]['complex'] = True
+            aq_mod = dic[acq_file]["FnMODE"]
+            if aq_mod == 0:
+                udic[udim]["encoding"] = "undefined"
+            elif aq_mod == 1:
+                udic[udim]["encoding"] = "magnitude"  # qf
+            elif aq_mod == 2:
+                udic[udim]["encoding"] = "magnitude"  # qsec
+            elif aq_mod == 3:
+                udic[udim]["encoding"] = "tppi"
+            elif aq_mod == 4:
+                udic[udim]["encoding"] = "states"
+            elif aq_mod == 5:
+                udic[udim]["encoding"] = "states-tppi"  # states-tppi
+            elif aq_mod == 6:
+                udic[udim]["encoding"] = "echo-antiecho"  # echo-antiecho
     else:
-        aq_mod = dic[acq_file]["FnMODE"]
-        if aq_mod == 0:
-            udic[udim]["encoding"] = "undefined"
-        elif aq_mod == 1:
-            udic[udim]["encoding"] = "magnitude"  # qf
-        elif aq_mod == 2:
-            udic[udim]["encoding"] = "magnitude"  # qsec
-        elif aq_mod == 3:
-            udic[udim]["encoding"] = "tppi"
-        elif aq_mod == 4:
-            udic[udim]["encoding"] = "states"
-        elif aq_mod == 5:
-            udic[udim]["encoding"] = "states-tppi"  # states-tppi
-        elif aq_mod == 6:
-            udic[udim]["encoding"] = "echo-antiecho"  # echo-antiecho
-
+        if pro_file == "procs":
+            # this seems to have the 'MC2' parameter always set to 0
+            # irrespective of what the actual data is
+            udic[udim]["complex"] = "undefined"
+        else:
+            # these are only used when params in acquNs are 'undefined'
+            # but in absence of acqus, this is the best that can be done
+            aq_mod = dic[pro_file]["MC2"]
+            if aq_mod == 0:
+                udic[udim]["encoding"] = "magnitude"  # qf
+            elif aq_mod == 1:
+                udic[udim]["encoding"] = "magnitude"  # qsec
+            elif aq_mod == 2:
+                udic[udim]["encoding"] = "tppi"
+            elif aq_mod == 3:
+                udic[udim]["encoding"] = "states"
+            elif aq_mod == 4:
+                udic[udim]["encoding"] = "states-tppi"  
+            elif aq_mod == 5:
+                udic[udim]["encoding"] = "echo-antiecho"  
+ 
     return udic
 
 
