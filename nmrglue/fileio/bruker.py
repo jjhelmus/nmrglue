@@ -122,7 +122,7 @@ def add_axis_to_udic(udic, dic, udim, strip_fake):
     if acq_file in dic:
         sw = dic[acq_file]["SW_h"]
     elif pro_file in dic:
-        sw = dic[pro_file]["SW_p"]   
+        sw = dic[pro_file]["SW_p"]  
         # procNs files store sw (in Hz) with the 'SW_p' key instead of 'SW_h'.
         # this is a bug in TopSpin (TopSpin3.5pl7)
 
@@ -136,9 +136,9 @@ def add_axis_to_udic(udic, dic, udim, strip_fake):
         if acq_file in dic:
             car = (dic[acq_file]["SFO1"] - obs) * 1e6
         else:
-            # we should be able to use the 'OFFSET' parameter in procNs to 
+            # we should be able to use the 'OFFSET' parameter in procNs to
             # calculate 'car'. But this is slightly off (~ 5E-3 Hz)
-            # most likely because the procs file does not store the OFFSET 
+            # most likely because the procs file does not store the OFFSET
             # to a high precision. Hence the value in acquNs is given priority
             car = dic[pro_file]["OFFSET"]*obs - sw/2
  
