@@ -708,10 +708,10 @@ def read_par(filename):
 
     """
     dic = {}
-    f = open(filename, 'r')
-    for line in f:
-        if len(line.split()) >= 2:
-            parse_par_line(line, dic)
+    with open(filename, 'r') as f:
+        for line in f:
+            if len(line.split()) >= 2:
+                parse_par_line(line, dic)
 
     # check that order and layout match, if they do remove from dictionary
     if dic['order'] != [int(i[1]) for i in dic['layout'][1]]:

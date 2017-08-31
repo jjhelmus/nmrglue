@@ -1101,10 +1101,9 @@ def read_pdata_binary(filename, shape=None, submatrix_shape=None, big=True):
 
     """
     # open the file and get the data
-    f = open(filename, 'rb')
-    data = get_data(f, big=big)
-    f.close()
-
+    with open(filename, 'rb') as f:
+        data = get_data(f, big=big)
+    
     # create dictionary
     dic = {"FILE_SIZE": os.stat(filename).st_size}
 
@@ -1192,8 +1191,8 @@ def read_binary(filename, shape=(1), cplex=True, big=True):
 
     """
     # open the file and get the data
-    f = open(filename, 'rb')
-    data = get_data(f, big=big)
+    with open(filename, 'rb') as f:
+        data = get_data(f, big=big)
 
     # complexify if needed
     if cplex:
@@ -1390,27 +1389,27 @@ class bruker_nd(fileiobase.data_nd):
         # create an empty array to store the selected slices
         out = np.empty(tuple(osize), dtype=self.dtype)
 
-        f = open(self.filename, 'rb')
+        with open(self.filename, 'rb') as f:
 
-        # read in the data trace by trace
-        for out_index, in_index in nd_iter:
+            # read in the data trace by trace
+            for out_index, in_index in nd_iter:
 
-            # determine the trace number from the index
-            ntrace = fileiobase.index2trace_flat(ffshape, in_index)
+                # determine the trace number from the index
+                ntrace = fileiobase.index2trace_flat(ffshape, in_index)
 
-            # seek to the correct place in the file
-            if self.cplex:
-                ts = ntrace * lfshape * 2 * 4
-                f.seek(ts)
-                trace = get_trace(f, lfshape * 2, self.big)
-                trace = complexify_data(trace)
-            else:
-                ts = ntrace * lfshape * 2
-                f.seek(ts)
-                trace = get_trace(f, lfshape, self.big)
+                # seek to the correct place in the file
+                if self.cplex:
+                    ts = ntrace * lfshape * 2 * 4
+                    f.seek(ts)
+                    trace = get_trace(f, lfshape * 2, self.big)
+                    trace = complexify_data(trace)
+                else:
+                    ts = ntrace * lfshape * 2
+                    f.seek(ts)
+                    trace = get_trace(f, lfshape, self.big)
 
-            # save to output
-            out[out_index] = trace[lslice]
+                # save to output
+                out[out_index] = trace[lslice]
 
         return out
 
@@ -1769,30 +1768,31 @@ def read_jcamp(filename):
 
     """
     dic = {"_coreheader": [], "_comments": []}  # create empty dictionary
-    f = open(filename, 'r')
+    
+    with open(filename, 'r') as f:
+        while True:     # loop until end of file is found
 
-    while True:     # loop until end of file is found
+            line = f.readline().rstrip()    # read a line
+            if line == '':      # end of file found
+                break
 
-        line = f.readline().rstrip()    # read a line
-        if line == '':      # end of file found
-            break
+            if line[:6] == "##END=":
+                # print("End of file")
+                break
+            elif line[:2] == "$$":
+                dic["_comments"].append(line)
+            elif line[:2] == "##" and line[2] != "$":
+                dic["_coreheader"].append(line)
+            elif line[:3] == "##$":
+                try:
+                    key, value = parse_jcamp_line(line, f)
+                    dic[key] = value
+                except:
+                    warn("Unable to correctly parse line:" + line)
+            else:
+                warn("Extraneous line:" + line)
 
-        if line[:6] == "##END=":
-            # print("End of file")
-            break
-        elif line[:2] == "$$":
-            dic["_comments"].append(line)
-        elif line[:2] == "##" and line[2] != "$":
-            dic["_coreheader"].append(line)
-        elif line[:3] == "##$":
-            try:
-                key, value = parse_jcamp_line(line, f)
-                dic[key] = value
-            except:
-                warn("Unable to correctly parse line:" + line)
-        else:
-            warn("Extraneous line:" + line)
-
+   
     return dic
 
 
