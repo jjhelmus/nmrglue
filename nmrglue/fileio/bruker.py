@@ -122,7 +122,7 @@ def add_axis_to_udic(udic, dic, udim, strip_fake):
     if acq_file in dic:
         sw = dic[acq_file]["SW_h"]
     elif pro_file in dic:
-        sw = dic[pro_file]["SW_p"]  
+        sw = dic[pro_file]["SW_p"]
         # procNs files store sw (in Hz) with the 'SW_p' key instead of 'SW_h'.
         # this is a bug in TopSpin (TopSpin3.5pl7)
 
@@ -141,7 +141,7 @@ def add_axis_to_udic(udic, dic, udim, strip_fake):
             # most likely because the procs file does not store the OFFSET
             # to a high precision. Hence the value in acquNs is given priority
             car = dic[pro_file]["OFFSET"]*obs - sw/2
- 
+
     except KeyError:
         warn('The chemical shift referencing was not corrected for "sr".')
         obs = dic[acq_file]["SFO1"]
@@ -205,10 +205,10 @@ def add_axis_to_udic(udic, dic, udim, strip_fake):
             elif aq_mod == 3:
                 udic[udim]["encoding"] = "states"
             elif aq_mod == 4:
-                udic[udim]["encoding"] = "states-tppi"  
+                udic[udim]["encoding"] = "states-tppi"
             elif aq_mod == 5:
-                udic[udim]["encoding"] = "echo-antiecho"  
- 
+                udic[udim]["encoding"] = "echo-antiecho"
+
     return udic
 
 
@@ -1103,7 +1103,7 @@ def read_pdata_binary(filename, shape=None, submatrix_shape=None, big=True):
     # open the file and get the data
     with open(filename, 'rb') as f:
         data = get_data(f, big=big)
-    
+
     # create dictionary
     dic = {"FILE_SIZE": os.stat(filename).st_size}
 
@@ -1768,7 +1768,7 @@ def read_jcamp(filename):
 
     """
     dic = {"_coreheader": [], "_comments": []}  # create empty dictionary
-    
+
     with open(filename, 'r') as f:
         while True:     # loop until end of file is found
 
@@ -1792,7 +1792,6 @@ def read_jcamp(filename):
             else:
                 warn("Extraneous line:" + line)
 
-   
     return dic
 
 
