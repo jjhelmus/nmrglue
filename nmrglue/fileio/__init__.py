@@ -1,5 +1,6 @@
 from . import bruker
 from . import convert
+from . import jcampdx
 from . import nmrml
 from . import pipe
 from . import rnmrtk
