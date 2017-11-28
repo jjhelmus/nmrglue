@@ -11,7 +11,7 @@ plotted with the box limits indicated by the dark dashed line.  To check peak
 assignments see :ref:`plot_2d_assignments`.
 
 The data used in this example is available for 
-`download. <http://nmrglue.googlecode.com/files/example_plot_2d.zip>`_
+`download. <https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/nmrglue/example_plot_2d.zip>`_
 
 [:download:`source code <../../../examples/plotting/plot_2d/plot_boxes.py>`]
 

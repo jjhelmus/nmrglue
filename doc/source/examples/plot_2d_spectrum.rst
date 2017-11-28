@@ -11,7 +11,7 @@ spectrum from a 2D NMRPipe file is created.  Slices are added in the 15N and
 is similar to this example but plotted on a point scale.
 
 The data used in this example is available for 
-`download. <http://nmrglue.googlecode.com/files/example_plot_2d.zip>`_
+`download. <https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/nmrglue/example_plot_2d.zip>`_
 
 [:download:`source code <../../../examples/plotting/plot_2d/plot_spectrum.py>`]
 
