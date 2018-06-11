@@ -808,11 +808,34 @@ def guess_shape(dic):
     except KeyError:
         td3 = int(td1)     # default value
 
+    # From the acquisition reference manual (section on parameter NBL):
+    #     ---
+    #     If TD is not a multiple of 256 (1024 bytes), successive FIDs will
+    #     still begin at 1024 byte memory boundaries. This is so for the FIDs
+    #     in the acquisition memory as well as on disk. The size of the raw
+    #     data file (ser) is therefore always a multiple of 1024 times NBL.
+    #     ---
+    # This seems to hold for 1D data sets as well. However, this paragraph
+    # assumes that each data point is 4 bytes, hence the "multiple of 256".
+    # For data in DTYPA=2 (float64), each point is 8 bytes, so while it always
+    # allocates the fids in 1024-byte blocks, for float64 data it pads the data
+    # (by points) out to multiples of 128, not 256. So we need to get the
+    # data type before we guess the shape of the last dimension.
+
+    # extract data type from dictionary
+    try:
+        dtypa = int(dic["acqus"]["DTYPA"])
+    except KeyError:
+        dtypa = 0   # default value, int32 data
+
     # last (direct) dimension is given by "TD" parameter in acqus file
-    # rounded up to nearest 256
+    # rounded up to nearest (1024/(bytes per point))
     # next-to-last dimension may be given by "TD" in acqu2s. In 3D+ data
     # this is often the sum of the indirect dimensions
-    shape = [0, 0, td2, int(np.ceil(td0 / 256.) * 256.)]
+    if dtypa == 2:
+        shape = [0, 0, td2, int(np.ceil(td0 / 128.) * 128.)]
+    else:
+        shape = [0, 0, td2, int(np.ceil(td0 / 256.) * 256.)]
 
     # additional dimension given by data size
     if shape[2] != 0 and shape[3] != 0:
