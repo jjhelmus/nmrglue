@@ -10,10 +10,11 @@ __developer_info__ = """
 Bruker file format information
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Bruker binary files (ser/fid) store data as an array of int32s whose endiness
-is determinded by the parameter BYTORDA (1 = big endian, 0 = little endian).
-Typically the direct dimension is digitally filtered. The exact method of
-removing this filter is unknown but an approximation is avaliable.
+Bruker binary files (ser/fid) store data as an array of numbers whose
+endianness is determined by the parameter BYTORDA (1 = big endian, 0 = little
+endian), and whose data type is determined by the parameter DTYPA (0 = int32,
+2 = float64). Typically the direct dimension is digitally filtered. The exact
+method of removing this filter is unknown but an approximation is available.
 
 Bruker JCAMP-DX files (acqus, etc) are text file which are described by the
 `JCAMP-DX standard <http://www.jcamp-dx.org/>`_.  Bruker parameters are
@@ -229,7 +230,7 @@ def create_dic(udic):
     """
     ndim = udic['ndim']
 
-    # determind the size in bytes
+    # determine the size in bytes
     if udic[ndim - 1]["complex"]:
         bytes = 8
     else:
@@ -286,8 +287,8 @@ def create_acqus_dic(adic, direct=False):
 
 # Global read/write function and related utilities
 
-def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
-         shape=None, cplex=None, big=None, read_pulseprogram=True,
+def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None, shape=None,
+         cplex=None, big=None, isfloat=None, read_pulseprogram=True,
          read_acqus=True, procs_files=None, read_procs=True):
     """
     Read Bruker files from a directory.
@@ -310,8 +311,11 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
         True is direct dimension is complex, False otherwise. None will guess
         quadrature from spectral parameters.
     big : bool or None, optional
-        Endiness of binary file. True of big-endian, False for little-endian,
-        None to determine endiness from acqus file(s).
+        Endianness of binary file. True for big-endian, False for
+        little-endian, None to determine endianness from acqus file(s).
+    isfloat : bool or None, optional
+        Data type of binary file. True for float64, False for int32. None to
+        determine data type from acqus file(s).
     read_pulseprogram : bool, optional
         True to read pulse program, False prevents reading.
     read_acqus : bool, optional
@@ -346,7 +350,7 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
         # create an empty dictionary
         dic = dict()
 
-    # determind parameter automatically
+    # determine parameter automatically
     if bin_file is None:
         if os.path.isfile(os.path.join(dir, "fid")):
             bin_file = "fid"
@@ -385,10 +389,10 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
         except:
             warn('Error reading the pulse program')
 
-    # determind file size and add to the dictionary
+    # determine file size and add to the dictionary
     dic["FILE_SIZE"] = os.stat(os.path.join(dir, bin_file)).st_size
 
-    # determind shape and complexity for direct dim if needed
+    # determine shape and complexity for direct dim if needed
     if shape is None or cplex is None:
         gshape, gcplex = guess_shape(dic)
         if gcplex is True:    # divide last dim by 2 if complex
@@ -400,7 +404,7 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
     if cplex is None:
         cplex = gcplex
 
-    # determind endianness (assume little-endian unless BYTORDA is 1)
+    # determine endianness (assume little-endian unless BYTORDA is 1)
     if big is None:
         big = False     # default value
         if "acqus" in dic and "BYTORDA" in dic["acqus"]:
@@ -409,15 +413,26 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
             else:
                 big = False
 
+    # determine data type (assume int32 unless DTYPA is 2)
+    if isfloat is None:
+        isfloat = False     # default value
+        if "acqus" in dic and "DTYPA" in dic["acqus"]:
+            if dic["acqus"]["DTYPA"] == 2:
+                isfloat = True
+            else:
+                isfloat = False
+
     # read the binary file
     f = os.path.join(dir, bin_file)
-    null, data = read_binary(f, shape=shape, cplex=cplex, big=big)
+    null, data = read_binary(f, shape=shape, cplex=cplex, big=big,
+                             isfloat=isfloat)
     return dic, data
 
 
 def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
-                shape=None, cplex=None, big=None, read_pulseprogram=True,
-                read_acqus=True, procs_files=None, read_procs=True):
+                shape=None, cplex=None, big=None, isfloat=None,
+                read_pulseprogram=True, read_acqus=True, procs_files=None,
+                read_procs=True):
     """
     Read Bruker files from a directory using minimal amounts of memory.
 
@@ -447,7 +462,7 @@ def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
         # create an empty dictionary
         dic = dict()
 
-    # determind parameter automatically
+    # determine parameter automatically
     if bin_file is None:
         if os.path.isfile(os.path.join(dir, "fid")):
             bin_file = "fid"
@@ -483,10 +498,10 @@ def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
     if read_pulseprogram:
         dic["pprog"] = read_pprog(os.path.join(dir, pprog_file))
 
-    # determind file size and add to the dictionary
+    # determine file size and add to the dictionary
     dic["FILE_SIZE"] = os.stat(os.path.join(dir, bin_file)).st_size
 
-    # determind shape and complexity for direct dim if needed
+    # determine shape and complexity for direct dim if needed
     if shape is None or cplex is None:
         gshape, gcplex = guess_shape(dic)
         if gcplex is True:    # divide last dim by 2 if complex
@@ -507,9 +522,19 @@ def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
             else:
                 big = False
 
+    # determine data type (assume int32 unless DTYPA is 2)
+    if isfloat is None:
+        isfloat = False     # default value
+        if "acqus" in dic and "DTYPA" in dic["acqus"]:
+            if dic["acqus"]["DTYPA"] == 2:
+                isfloat = True
+            else:
+                isfloat = False
+
     # read the binary file
     f = os.path.join(dir, bin_file)
-    null, data = read_binary_lowmem(f, shape=shape, cplex=cplex, big=big)
+    null, data = read_binary_lowmem(f, shape=shape, cplex=cplex, big=big,
+                                    isfloat=isfloat)
     return dic, data
 
 
@@ -578,7 +603,8 @@ def read_procs_file(dir='.', procs_files=None):
 
 
 def write(dir, dic, data, bin_file=None, acqus_files=None, pprog_file=None,
-          overwrite=False, big=None, write_prog=True, write_acqus=True):
+          overwrite=False, big=None, isfloat=None, write_prog=True,
+          write_acqus=True):
     """
     Write Bruker files to disk.
 
@@ -601,8 +627,11 @@ def write(dir, dic, data, bin_file=None, acqus_files=None, pprog_file=None,
         Set True to overwrite files, False will raise a Warning if files
         exist.
     big : bool or None, optional
-        Endiness of binary file. True of big-endian, False for little-endian,
-        None to determine endiness from Bruker dictionary.
+        Endianness of binary file. True for big-endian, False for
+        little-endian, None to determine endianness from Bruker dictionary.
+    isfloat : bool or None, optional
+        Data type of binary file. True for float64, False for int32. None to
+        determine data type from Bruker dictionary.
     write_pprog : bool, optional
         True to write the pulse program file, False prevents writing.
     write_acqus : bool, optional
@@ -614,7 +643,7 @@ def write(dir, dic, data, bin_file=None, acqus_files=None, pprog_file=None,
     read : Read Bruker files.
 
     """
-    # determind parameters automatically
+    # determine parameters automatically
     if bin_file is None:
         if data.ndim == 1:
             bin_file = "fid"
@@ -638,7 +667,7 @@ def write(dir, dic, data, bin_file=None, acqus_files=None, pprog_file=None,
         write_pprog(os.path.join(dir, pprog_file), dic["pprog"],
                     overwrite=overwrite)
 
-    # determind endianness (assume little-endian unless BYTORDA is 1)
+    # determine endianness (assume little-endian unless BYTORDA is 1)
     if big is None:
         big = False     # default value
         if "acqus" in dic and "BYTORDA" in dic["acqus"]:
@@ -647,15 +676,25 @@ def write(dir, dic, data, bin_file=None, acqus_files=None, pprog_file=None,
             else:
                 big = False
 
+    # determine data type (assume int32 unless DTYPA is 2)
+    if isfloat is None:
+        isfloat = False     # default value
+        if "acqus" in dic and "DTYPA" in dic["acqus"]:
+            if dic["acqus"]["DTYPA"] == 2:
+                isfloat = True
+            else:
+                isfloat = False
+
     # write out the binary data
     bin_full = os.path.join(dir, bin_file)
-    write_binary(bin_full, dic, data, big=big, overwrite=overwrite)
+    write_binary(bin_full, dic, data, big=big, isfloat=isfloat,
+                 overwrite=overwrite)
     return
 
 
 def write_lowmem(dir, dic, data, bin_file=None, acqus_files=None,
-                 pprog_file=None, overwrite=False, big=None, write_prog=True,
-                 write_acqus=True):
+                 pprog_file=None, overwrite=False, big=None, isfloat=None,
+                 write_prog=True, write_acqus=True):
     """
     Write Bruker files using minimal amounts of memory (trace by trace).
 
@@ -667,7 +706,7 @@ def write_lowmem(dir, dic, data, bin_file=None, acqus_files=None,
     read_lowmem : Read Bruker files using minimal amounts of memory.
 
     """
-    # determind parameters automatically
+    # determine parameters automatically
     if bin_file is None:
         if data.ndim == 1:
             bin_file = "fid"
@@ -691,7 +730,7 @@ def write_lowmem(dir, dic, data, bin_file=None, acqus_files=None,
         write_pprog(os.path.join(dir, pprog_file), dic["pprog"],
                     overwrite=overwrite)
 
-    # determind endianness (assume little-endian unless BYTORDA is 1)
+    # determine endianness (assume little-endian unless BYTORDA is 1)
     if big is None:
         big = False     # default value
         if "acqus" in dic and "BYTORDA" in dic["acqus"]:
@@ -700,9 +739,19 @@ def write_lowmem(dir, dic, data, bin_file=None, acqus_files=None,
             else:
                 big = False
 
+    # determine data type (assume int32 unless DTYPA is 2)
+    if isfloat is None:
+        isfloat = False     # default value
+        if "acqus" in dic and "DTYPA" in dic["acqus"]:
+            if dic["acqus"]["DTYPA"] == 2:
+                isfloat = True
+            else:
+                isfloat = False
+
     # write out the binary data
     bin_full = os.path.join(dir, bin_file)
-    write_binary_lowmem(bin_full, dic, data, big=big, overwrite=overwrite)
+    write_binary_lowmem(bin_full, dic, data, big=big, isfloat=isfloat,
+                        overwrite=overwrite)
     return
 
 
@@ -861,7 +910,8 @@ def guess_shape(dic):
 
 def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
                acqus_files=None, read_acqus=True, scale_data=True, shape=None,
-               submatrix_shape=None, all_components=False, big=None):
+               submatrix_shape=None, all_components=False, big=None,
+               isfloat=None):
     """
     Read processed Bruker files from a directory.
 
@@ -900,15 +950,18 @@ def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
         True to return a list of all components, False returns just the
         all real component (1r, 2rr, 3rrr, etc).
     big : bool or None, optional
-        Endiness of binary file. True of big-endian, False for little-endian,
-        None to determine endiness from procs file(s).
+        Endianness of binary file. True for big-endian, False for
+        little-endian, None to determine endianness from procs file(s).
+    isfloat : bool or None, optional
+        Data type of binary file. True for float64, False for int32. None to
+        determine data type from procs file(s).
 
     Returns
     -------
     dic : dict
         Dictionary of Bruker parameters.
     data : ndarray or list
-        Array of NMR data.  If all_compoents is True this is a list of array
+        Array of NMR data.  If all_components is True this is a list of array
         with each quadrature component.
 
     Notes
@@ -944,7 +997,7 @@ def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
             raise IOError("No Bruker binary file could be found in %s" % (dir))
 
     if read_procs:
-        # read the acqus_files and add to the dictionary
+        # read the procs_files and add to the dictionary
         dic = read_procs_file(dir, procs_files)
     else:
         # create an empty dictionary
@@ -963,7 +1016,7 @@ def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
             # Merge the two dicts.
             dic = _merge_dict(dic, acqus_dic)
 
-    # determind shape and complexity for direct dim if needed
+    # determine shape and complexity for direct dim if needed
     if submatrix_shape is None or shape is None:
         g_shape, g_submatrix_shape = guess_shape_and_submatrix_shape(dic)
         if shape is None:
@@ -977,18 +1030,27 @@ def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
     if shape is None:
         warn('Data shape not defined, returning 1D data')
 
-    # determind endianness (assume little-endian unless BYTORDA is 1)
+    # determine endianness (assume little-endian unless BYTORDA is 1)
     if big is None:
         big = False     # default value
-        if "procs" in dic and "BYTORDA" in dic["procs"]:
-            if dic["procs"]["BYTORDA"] == 1:
+        if "procs" in dic and "BYTORDP" in dic["procs"]:
+            if dic["procs"]["BYTORDP"] == 1:
                 big = True
             else:
                 big = False
 
+    # determine data type (assume int32 unless DTYPA is 2)
+    if isfloat is None:
+        isfloat = False     # default value
+        if "procs" in dic and "DTYPP" in dic["procs"]:
+            if dic["procs"]["DTYPP"] == 2:
+                isfloat = True
+            else:
+                isfloat = False
+
     # read the binary file
     data = [read_pdata_binary(os.path.join(dir, f),
-                              shape, submatrix_shape, big)[1]
+                              shape, submatrix_shape, big, isfloat)[1]
             for f in bin_files]
 
     # scale data if requested
@@ -1073,7 +1135,8 @@ def guess_shape_and_submatrix_shape(dic):
     return (si_3, si_2, si_1, si_0), (xdim_3, xdim_2, xdim_1, xdim_0)
 
 
-def read_pdata_binary(filename, shape=None, submatrix_shape=None, big=True):
+def read_pdata_binary(filename, shape=None, submatrix_shape=None, big=True,
+                      isfloat=False):
     """
     Read a processed Bruker binary file and return dic, data pair.
 
@@ -1091,6 +1154,8 @@ def read_pdata_binary(filename, shape=None, submatrix_shape=None, big=True):
     big : bool
         Endianness of binary file, True for big-endian, False for
         little-endian.
+    isfloat : bool
+        Data type of binary file. True for float64, False for int32.
 
     Returns
     -------
@@ -1102,7 +1167,7 @@ def read_pdata_binary(filename, shape=None, submatrix_shape=None, big=True):
     """
     # open the file and get the data
     with open(filename, 'rb') as f:
-        data = get_data(f, big=big)
+        data = get_data(f, big=big, isfloat=isfloat)
 
     # create dictionary
     dic = {"FILE_SIZE": os.stat(filename).st_size}
@@ -1159,7 +1224,7 @@ def reorder_submatrix(data, shape, submatrix_shape):
 
 # Bruker binary (fid/ser) reading and writing
 
-def read_binary(filename, shape=(1), cplex=True, big=True):
+def read_binary(filename, shape=(1), cplex=True, big=True, isfloat=False):
     """
     Read Bruker binary data from file and return dic,data pair.
 
@@ -1177,6 +1242,8 @@ def read_binary(filename, shape=(1), cplex=True, big=True):
     big : bool
         Endianness of binary file, True for big-endian, False for
         little-endian.
+    isfloat : bool
+        Data type of binary file. True for float64, False for int32.
 
     Returns
     -------
@@ -1192,7 +1259,7 @@ def read_binary(filename, shape=(1), cplex=True, big=True):
     """
     # open the file and get the data
     with open(filename, 'rb') as f:
-        data = get_data(f, big=big)
+        data = get_data(f, big=big, isfloat=isfloat)
 
     # complexify if needed
     if cplex:
@@ -1210,7 +1277,8 @@ def read_binary(filename, shape=(1), cplex=True, big=True):
         return dic, data
 
 
-def read_binary_lowmem(filename, shape=(1), cplex=True, big=True):
+def read_binary_lowmem(filename, shape=(1), cplex=True, big=True,
+                       isfloat=False):
     """
     Read Bruker binary data from file using minimal memory.
 
@@ -1231,11 +1299,12 @@ def read_binary_lowmem(filename, shape=(1), cplex=True, big=True):
     """
     # create dictionary
     dic = {"FILE_SIZE": os.stat(filename).st_size}
-    data = bruker_nd(filename, shape, cplex, big)
+    data = bruker_nd(filename, shape, cplex, big, isfloat=isfloat)
     return dic, data
 
 
-def write_binary(filename, dic, data, overwrite=False, big=True):
+def write_binary(filename, dic, data, overwrite=False, big=True,
+                 isfloat=False):
     """
     Write Bruker binary data to file.
 
@@ -1250,8 +1319,10 @@ def write_binary(filename, dic, data, overwrite=False, big=True):
     overwrite : bool
         True to overwrite files, False will raise a Warning if file exists.
     big : bool
-        Endiness to write binary data with True of big-endian, False for
+        Endianness to write binary data with True for big-endian, False for
         little-endian.
+    isfloat : bool
+        Data type of binary file. True for float64, False for int32.
 
     See Also
     --------
@@ -1266,14 +1337,15 @@ def write_binary(filename, dic, data, overwrite=False, big=True):
         data = np.array(data)
 
     if np.iscomplexobj(data):
-        put_data(f, uncomplexify_data(data), big)
+        put_data(f, uncomplexify_data(data, isfloat), big, isfloat)
     else:
-        put_data(f, data, big)
+        put_data(f, data, big, isfloat)
     f.close()
     return
 
 
-def write_binary_lowmem(filename, dic, data, overwrite=False, big=True):
+def write_binary_lowmem(filename, dic, data, overwrite=False, big=True,
+                        isfloat=False):
     """
     Write Bruker binary data to file using minimal memory (trace by trace).
 
@@ -1293,9 +1365,9 @@ def write_binary_lowmem(filename, dic, data, overwrite=False, big=True):
     for tup in np.ndindex(data.shape[:-1]):
         trace = data[tup]
         if cplex:
-            put_data(f, uncomplexify_data(trace), big)
+            put_data(f, uncomplexify_data(trace, isfloat), big, isfloat)
         else:
-            put_data(f, trace, big)
+            put_data(f, trace, big, isfloat)
     f.close()
     return
 
@@ -1323,13 +1395,16 @@ class bruker_nd(fileiobase.data_nd):
     cplex : bool
         Flag indicating if direct dimension is complex.
     big : bool
-        Endianess of data.  True for big-endian, False for little-endian.
+        Endianness of data.  True for big-endian, False for little-endian.
+    isfloat : bool
+        Data type of binary file. True for float64, False for int32.
     order : tuple
         Ordering of axis against file.
 
     """
 
-    def __init__(self, filename, fshape, cplex, big, order=None):
+    def __init__(self, filename, fshape, cplex, big, isfloat=False,
+                 order=None):
         """
         Create and set up object.
         """
@@ -1352,6 +1427,7 @@ class bruker_nd(fileiobase.data_nd):
         self.fshape = fshape
         self.cplex = cplex
         self.big = big
+        self.isfloat = isfloat
         self.order = order
 
         if self.cplex:
@@ -1401,12 +1477,12 @@ class bruker_nd(fileiobase.data_nd):
                 if self.cplex:
                     ts = ntrace * lfshape * 2 * 4
                     f.seek(ts)
-                    trace = get_trace(f, lfshape * 2, self.big)
+                    trace = get_trace(f, lfshape * 2, self.big, self.isfloat)
                     trace = complexify_data(trace)
                 else:
                     ts = ntrace * lfshape * 2
                     f.seek(ts)
-                    trace = get_trace(f, lfshape, self.big)
+                    trace = get_trace(f, lfshape, self.big, self.isfloat)
 
                 # save to output
                 out[out_index] = trace[lslice]
@@ -1416,37 +1492,57 @@ class bruker_nd(fileiobase.data_nd):
 # binary get/put functions
 
 
-def get_data(f, big):
+def get_data(f, big, isfloat):
     """
-    Get binary data from file object with given endiness.
+    Get binary data from file object with given endianness and data type.
     """
-    if big:
-        return np.frombuffer(f.read(), dtype='>i4')
+    if isfloat:
+        if big:
+            return np.frombuffer(f.read(), dtype='>f8')
+        else:
+            return np.frombuffer(f.read(), dtype='<f8')
     else:
-        return np.frombuffer(f.read(), dtype='<i4')
+        if big:
+            return np.frombuffer(f.read(), dtype='>i4')
+        else:
+            return np.frombuffer(f.read(), dtype='<i4')
 
 
-def put_data(f, data, big=True):
+def put_data(f, data, big=True, isfloat=False):
     """
-    Put data to file object with given endiness.
+    Put data to file object with given endianness and data type.
     """
-    if big:
-        f.write(data.astype('>i4').tostring())
+    if isfloat:
+        if big:
+            f.write(data.astype('>f8').tostring())
+        else:
+            f.write(data.astype('<f8').tostring())
     else:
-        f.write(data.astype('<i4').tostring())
+        if big:
+            f.write(data.astype('>i4').tostring())
+        else:
+            f.write(data.astype('<i4').tostring())
     return
 
 
-def get_trace(f, num_points, big):
+def get_trace(f, num_points, big, isfloat):
     """
-    Get trace of num_points from file with given endiness.
+    Get trace of num_points from file with given endianness and data type.
     """
-    if big:
-        bsize = num_points * np.dtype('>i4').itemsize
-        return np.frombuffer(f.read(bsize), dtype='>i4')
+    if isfloat:
+        if big:
+            bsize = num_points * np.dtype('>f8').itemsize
+            return np.frombuffer(f.read(bsize), dtype='>f8')
+        else:
+            bsize = num_points * np.dtype('<f8').itemsize
+            return np.frombuffer(f.read(bsize), dtype='<f8')
     else:
-        bsize = num_points * np.dtype('<i4').itemsize
-        return np.frombuffer(f.read(bsize), dtype='<i4')
+        if big:
+            bsize = num_points * np.dtype('>i4').itemsize
+            return np.frombuffer(f.read(bsize), dtype='>i4')
+        else:
+            bsize = num_points * np.dtype('<i4').itemsize
+            return np.frombuffer(f.read(bsize), dtype='<i4')
 
 
 # data manipulation functions
@@ -1459,13 +1555,17 @@ def complexify_data(data):
     return data[..., ::2] + data[..., 1::2] * 1.j
 
 
-def uncomplexify_data(data_in):
+def uncomplexify_data(data_in, isfloat):
     """
-    Uncomplexify data (pack real,imag) into a int32 array.
+    Uncomplexify data (pack real,imag) into a int32 or float64 array,
+    depending on isfloat.
     """
     size = list(data_in.shape)
     size[-1] = size[-1] * 2
-    data_out = np.empty(size, dtype="int32")
+    if isfloat:
+        data_out = np.empty(size, dtype="float64")
+    else:
+        data_out = np.empty(size, dtype="int32")
     data_out[..., ::2] = data_in.real
     data_out[..., 1::2] = data_in.imag
     return data_out
@@ -1700,7 +1800,7 @@ def rm_dig_filter(
     if grpdly > 0:  # use group delay value if provided (not 0 or -1)
         phase = grpdly
 
-    # determind the phase correction
+    # determine the phase correction
     else:
         if dspfvs >= 14:    # DSPFVS greater than 14 give no phase correction.
             phase = 0.
