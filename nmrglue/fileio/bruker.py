@@ -1432,14 +1432,23 @@ class bruker_nd(fileiobase.data_nd):
         Create and set up object.
         """
 
-        # check that size is correct
+        # check that size is correct. need isfloat to know whether each point
+        # is 4 bytes or 8 bytes
         pts = reduce(lambda x, y: x * y, fshape)
         if cplex:
-            if os.stat(filename).st_size != pts * 4 * 2:
-                raise ValueError("shape does not agree with file size")
+            if isfloat:
+                if os.stat(filename).st_size != pts * 8 * 2:
+                    raise ValueError("shape does not agree with file size")
+            else:
+                if os.stat(filename).st_size != pts * 4 * 2:
+                    raise ValueError("shape does not agree with file size")
         else:
-            if os.stat(filename).st_size != pts * 4:
-                raise ValueError("shape does not agree with file size")
+            if isfloat:
+                if os.stat(filename).st_size != pts * 8:
+                    raise ValueError("shape does not agree with file size")
+            else:
+                if os.stat(filename).st_size != pts * 4:
+                    raise ValueError("shape does not agree with file size")
 
         # check order
         if order is None:
