@@ -328,9 +328,12 @@ def read_binary(filename):
     for key in ['SW1', 'SW']:    # convert keys to floats
         if key in dic:
             dic[key] = float(dic[key])
-    for key in ['NP', 'NI']:    # convert keys to ints
+    for key in ['NP', 'NI', 'NELEM']:    # convert keys to ints
         if key in dic:
             dic[key] = int(dic[key])
+
+    if not 'NELEM' in dic.keys():
+        dic['NELEM'] = 1
 
     # DEBUGGING
     # return dic, f
@@ -359,10 +362,10 @@ def read_binary(filename):
 
     # reorder data according to dimensionality and domain
     if 'NI' in dic:  # 2D data
-        return dic, data.reshape(dic["NI"], dic["NP"])
+        return dic, data.reshape(dic['NI']*dic['NELEM'], dic['NP'])
 
     else:   # 1D data
-        return dic, data
+        return dic, data.reshape(dic['NELEM'], dic['NP'])
 
 BASE = 33
 FIRST = lambda f, x: ((x) & ~(~0 << f))
