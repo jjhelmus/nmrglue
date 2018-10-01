@@ -653,6 +653,7 @@ def write(dir, dic, data, bin_file=None, acqus_files=None, pprog_file=None,
     if acqus_files is None:
         acq = ["acqus", "acqu2s", "acqu3s", "acqu4s"]
         acqus_files = [k for k in acq if (k in dic)]
+        acqu_files = [k[:-1] for k in acqus_files]
 
     if pprog_file is None:
         pprog_file = "pulseprogram"
@@ -661,6 +662,8 @@ def write(dir, dic, data, bin_file=None, acqus_files=None, pprog_file=None,
     if write_acqus:
         for f in acqus_files:
             write_jcamp(dic[f], os.path.join(dir, f), overwrite=overwrite)
+        for f in acqu_files:
+            write_jcamp(dic[f+'s'], os.path.join(dir, f), overwrite=overwrite)
 
     # write out the pulse program
     if write_prog:
