@@ -840,7 +840,7 @@ def guess_shape(dic):
     # additional dimension given by data size
     if shape[2] != 0 and shape[3] != 0:
         shape[1] = fsize // (shape[3] * shape[2] * 4)
-        shape[0] = fsize // (shape[3] * shape[2] * 16 * 4)
+        shape[0] = fsize // (shape[3] * shape[2] * shape[1] * 4)
 
     # if there in no pulse program parameters in dictionary return currect
     # shape after removing zeros
