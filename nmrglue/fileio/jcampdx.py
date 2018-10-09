@@ -37,14 +37,14 @@ def _getkey(keystr):
             .replace("-", "").replace("_", "").replace("/", ""))
 
 
-def _readrawdic(filename):
+def _readrawdic(filename, read_err=None):
     '''
     Reads JCAMP-DX file to key-value dictionary, from which
     actual data is separated later.
     '''
 
     dic = {"_comments": []}  # create empty dictionary
-    filein = open(filename, 'r')
+    filein = open(filename, 'r', errors=read_err)
 
     currentkey = None
     currentvaluestrings = []
@@ -501,7 +501,7 @@ def _getdataarray(dic, show_all_data=False):
     return data
 
 
-def read(filename, show_all_data=False):
+def read(filename, show_all_data=False, read_err=None):
     """
     Read JCAMP-DX file
 
@@ -524,7 +524,7 @@ def read(filename, show_all_data=False):
     # first read everything (including data array) to "raw" dictionary,
     # in which data values are read as raw strings including whitespace
     # and newlines
-    dic = _readrawdic(filename)
+    dic = _readrawdic(filename, read_err)
 
     # find and parse NMR data array from raw dic
     data = _getdataarray(dic, show_all_data)
