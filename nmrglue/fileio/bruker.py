@@ -592,19 +592,34 @@ def read_procs_file(dir='.', procs_files=None):
         for f in ["procs", "proc2s", "proc3s", "proc4s"]:
             if os.path.isfile(os.path.join(dir, f)):
                 procs_files.append(f)
+        pdata_path = dir
+
+    if procs_files == []:
+        if os.path.isdir(os.path.join(dir, 'pdata')):
+            pdata_folders = [folder for folder in 
+                             os.walk(os.path.join(dir, 'pdata'))][1][0]
+            if '1' in pdata_folders:
+                pdata_path = os.path.join(dir, 'pdata', '1')
+            else:
+                pdata_path = os.path.join(dir, 'pdata', pdata_folders[0]) 
+                
+    for f in ["procs", "proc2s", "proc3s", "proc4s"]:
+            if os.path.isfile(os.path.join(pdata_path, f)):
+                procs_files.append(f)
 
     # create an empty dictionary
     dic = dict()
 
     # read the acqus_files and add to the dictionary
     for f in procs_files:
-        dic[f] = read_jcamp(os.path.join(dir, f))
+        dic[f] = read_jcamp(os.path.join(pdata_path, f))
     return dic
 
 
-def write(dir, dic, data, bin_file=None, acqus_files=None, pprog_file=None,
-          overwrite=False, big=None, isfloat=None, write_prog=True,
-          write_acqus=True):
+def write(dir, dic, data, bin_file=None, acqus_files=None, procs_files=None,
+          pprog_file=None, overwrite=False, big=None, isfloat=None, 
+          write_prog=True, write_acqus=True, write_procs=False, 
+          pdata_folder=False):
     """
     Write Bruker files to disk.
 
@@ -621,6 +636,9 @@ def write(dir, dic, data, bin_file=None, acqus_files=None, pprog_file=None,
     acqus_files : list, optional
         List of filename(s) of acqus parameter files in directory. None uses
         standard files.
+    procs_file : list, optional
+        List of filename(s) of procs parameter files (to write out). None uses a
+        list of standard files
     pprog_file : str, optional
         Filename of pulse program in directory. None uses standard files.
     overwrite : bool, optional
@@ -636,6 +654,13 @@ def write(dir, dic, data, bin_file=None, acqus_files=None, pprog_file=None,
         True to write the pulse program file, False prevents writing.
     write_acqus : bool, optional
         True to write the acqus files(s), False prevents writing.
+    write_procs : bool, optional
+        True to write the procs files(s), False prevents writing.
+    pdata_folder : int, optional
+        Makes a folder and a subfolder ('pdata/pdata_folder') inside the given
+        directory where pdata_folder is an integer. procN and procNs files are 
+        stored inside pdata_folder. pdata_folder=False (or =0) does not make the 
+        pdata folder and pdata_folder=True makes folder '1'.
 
     See Also
     --------
@@ -653,6 +678,12 @@ def write(dir, dic, data, bin_file=None, acqus_files=None, pprog_file=None,
     if acqus_files is None:
         acq = ["acqus", "acqu2s", "acqu3s", "acqu4s"]
         acqus_files = [k for k in acq if (k in dic)]
+        acqu_files = [k[:-1] for k in acqus_files]
+
+    if procs_files is None:
+        proc = ["procs", "proc2s", "proc3s", "proc4s"]
+        procs_files = [k for k in proc if (k in dic)]
+        proc_files = [k[:-1] for k in procs_files]
 
     if pprog_file is None:
         pprog_file = "pulseprogram"
@@ -661,6 +692,27 @@ def write(dir, dic, data, bin_file=None, acqus_files=None, pprog_file=None,
     if write_acqus:
         for f in acqus_files:
             write_jcamp(dic[f], os.path.join(dir, f), overwrite=overwrite)
+        for f in acqu_files:
+            write_jcamp(dic[f+'s'], os.path.join(dir, f), overwrite=overwrite)
+
+    # write out the procs files
+    if write_procs:
+        if pdata_folder is not False:
+            try:
+                procno = str(int(pdata_folder))
+                pdata_path = os.path.join(dir, 'pdata', procno)
+            except ValueError:
+                raise ValueError('pdata_folder should be an integer')
+            
+            if not os.path.isdir(pdata_path):
+                os.makedirs(pdata_path)
+        else:
+            pdata_path = dir
+    
+        for f in procs_files:
+            write_jcamp(dic[f], os.path.join(pdata_path, f))
+        for f in proc_files:
+            write_jcamp(dic[f+'s'], os.path.join(pdata_path, f))
 
     # write out the pulse program
     if write_prog:
