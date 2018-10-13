@@ -1259,7 +1259,7 @@ def read_pdata_binary(filename, shape=None, submatrix_shape=None, big=True,
             return dic, data
 
 
-def reorder_submatrix(data, shape, submatrix_shape):
+def reorder_submatrix(data, shape, submatrix_shape, to_bruker=False):
     """
     Reorder processed binary Bruker data.
 
@@ -1271,6 +1271,10 @@ def reorder_submatrix(data, shape, submatrix_shape):
         Shape of final data.
     submatrix_shape : tuple
         Shape of submatrix.
+    to_bruker : Bool
+        True to rearrange data according to the conventions in
+        specified in the Bruker Processing Manual using the 
+        submatrix specified by submatrix_shape
 
     Returns
     -------
@@ -1285,16 +1289,23 @@ def reorder_submatrix(data, shape, submatrix_shape):
     if len(submatrix_shape) == 1 or len(shape) == 1:
         return data
 
-    rdata = np.empty(shape, dtype=data.dtype)
     sub_per_dim = [int(i / j) for i, j in zip(shape, submatrix_shape)]
     nsubs = np.product(sub_per_dim)
-    data = data.reshape([nsubs] + list(submatrix_shape))
+    
+    if to_bruker:
+        rdata = np.empty([nsubs] + list(submatrix_shape))
+    else:
+        data = data.reshape([nsubs] + list(submatrix_shape))
+        rdata = np.empty(shape, dtype=data.dtype)
 
     for sub_num, sub_idx in enumerate(np.ndindex(tuple(sub_per_dim))):
         sub_slices = [slice(i * j, (i + 1) * j) for i, j in
                       zip(sub_idx, submatrix_shape)]
-        rdata[sub_slices] = data[sub_num]
-    return rdata
+        if to_bruker:
+            rdata[sub_num] = data[tuple(sub_slices)]
+        else:
+            rdata[tuple(sub_slices)] = data[sub_num]
+    return rdata.reshape(shape)
 
 
 # Bruker binary (fid/ser) reading and writing
