@@ -825,11 +825,14 @@ def write_pdata(dir, dic, data, shape=None, submatrix_shape=None, scale_data=Tru
     # guess data dimensionality
     ndim = len(shape)
 
-    if ndim > 1:
-        if submatrix_shape is None:
-            submatrix_shape = guess_shape_and_submatrix_shape(dic)[1]
+    # update PARMODE in dictionary
+    # This is required when writing back 1D slices from a 2D, 2D planes of 3D, etc
+    dic['procs']['PPARMOD'] = ndim - 1
 
-        data = reorder_submatrix(data, shape, submatrix_shape, to_bruker=True)
+    # reorder the submatrix according 
+    if submatrix_shape is None:
+        submatrix_shape = guess_shape_and_submatrix_shape(dic)[1]
+    data = reorder_submatrix(data, shape, submatrix_shape, to_bruker=True)
 
     # write out the procs files only for the desired dimensions
     if write_procs:
