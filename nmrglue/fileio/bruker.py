@@ -807,6 +807,61 @@ def write_lowmem(dir, dic, data, bin_file=None, acqus_files=None,
     return
 
 
+def write_pdata(dir, dic, data, shape=None, submatrix_shape=None,
+          bin_file=None, procs_files=None,  write_procs=False, pdata_folder=False,
+          overwrite=False, big=None, isfloat=None,):
+   
+    # see that data consists of only real elements
+    data = data.real
+
+    # see if the dimensionality is given
+    # else, set it to the dimensions of data
+    if shape == None:
+        shape = data.shape
+
+    # guess data dimensionality
+    ndim = len(shape)
+
+    if ndim > 1:
+        if submatrix_shape is None:
+            submatrix_shape = guess_shape_and_submatrix_shape(dic)[1]
+
+        data = reorder_submatrix(data, shape, submatrix_shape, to_bruker=True)
+
+    # write out the procs files only for the desired dimensions
+    if write_procs:
+        proc = ['procs'] + ['proc{}s'.format(i) for i in range(2, ndim+1)]
+
+        if procs_files == None:
+            procs_files = [f for f in proc if (f in dic)]
+        
+        if pdata_folder is not False:
+            try:
+                procno = str(int(pdata_folder))
+                pdata_path = os.path.join(dir, 'pdata', procno)
+            except ValueError:
+                raise ValueError('pdata_folder should be an integer')
+            
+            if not os.path.isdir(pdata_path):
+                os.makedirs(pdata_path)
+        else:
+            pdata_path = dir
+    
+        for f in procs_files:
+            write_jcamp(dic[f], os.path.join(pdata_path, f),
+                    overwrite=overwrite)
+            write_jcamp(dic[f], os.path.join(pdata_path, f[:-1]),
+                    overwrite=overwrite)
+
+    if bin_file == None:
+        bin_file = str(ndim) + 'r'*ndim
+
+    bin_full = os.path.join(pdata_path, bin_file)
+    write_binary(bin_full, dic, data, big=big, isfloat=isfloat,
+                 overwrite=overwrite)
+    return
+        
+
 def guess_shape(dic):
     """
     Determine data shape and complexity from Bruker dictionary.
