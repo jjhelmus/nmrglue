@@ -807,12 +807,15 @@ def write_lowmem(dir, dic, data, bin_file=None, acqus_files=None,
     return
 
 
-def write_pdata(dir, dic, data, shape=None, submatrix_shape=None,
+def write_pdata(dir, dic, data, shape=None, submatrix_shape=None, scale_data=True,
           bin_file=None, procs_files=None,  write_procs=False, pdata_folder=False,
           overwrite=False, big=None, isfloat=None,):
    
     # see that data consists of only real elements
     data = data.real
+
+    if scale_data:
+        data = scale_pdata(dic, data, inverse=True)
 
     # see if the dimensionality is given
     # else, set it to the dimensions of data
