@@ -1193,7 +1193,7 @@ def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
         return dic, data
 
 
-def scale_pdata(dic, data):
+def scale_pdata(dic, data, inverse=False):
     """
     Scale Bruker processed data using parameters from the procs file.
 
@@ -1214,7 +1214,10 @@ def scale_pdata(dic, data):
     except KeyError:
         warn('Unable to scale data, returning unscaled data')
         scale = 1
-    return data / scale
+    if inverse:
+        return data * scale
+    else:
+        return data / scale
 
 
 def guess_shape_and_submatrix_shape(dic):
