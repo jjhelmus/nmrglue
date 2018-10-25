@@ -807,9 +807,53 @@ def write_lowmem(dir, dic, data, bin_file=None, acqus_files=None,
     return
 
 
-def write_pdata(dir, dic, data, shape=None, submatrix_shape=None, scale_data=True,
-          bin_file=None, procs_files=None,  write_procs=False, pdata_folder=False,
-          overwrite=False, big=None, isfloat=None,):
+def write_pdata(dir, dic, data, shape=None, submatrix_shape=None, 
+        scale_data=True, bin_file=None, procs_files=None, 
+        write_procs=False, pdata_folder=False, overwrite=False, 
+        big=None, isfloat=None, restrict_access=True):
+    """
+    Write processed Bruker files to disk.
+
+    Parameters
+    ----------
+    dir : str
+        Directory to write files to.
+    dic : dict
+        Dictionary of Bruker parameters.
+    data : array_like
+        Array of NMR data
+    shape : tuple, optional
+        Shape of data, if file is to be written with a shape
+        different than data.shape
+    submatrix_shape : tuple, optional
+        Shape of the submatrix used to store data (using Bruker specifications)
+        If this is not given, the submatrix shape will be guessed from dic
+    scale_data : Bool
+        True to apply reverse scaling using the scaling guessed from dic
+    bin_file : str, optional
+        Filename of binary file in directory. None uses standard files.
+    procs_file : list, optional
+        List of filename(s) of procs parameter files (to write out). None uses a
+        list of standard files
+    write_procs : Bool
+        True to write out the procs files
+    pdata_folder : int, optional
+        Makes a folder and a subfolder ('pdata/pdata_folder') inside the given
+        directory where pdata_folder is an integer. All files (procs and data) are 
+        stored inside pdata_folder. pdata_folder=False (or =0) does not make the 
+        pdata folder and pdata_folder=True makes folder '1'.
+    overwrite : bool, optional
+        Set True to overwrite files, False will raise a Warning if files
+        exist.
+    big : bool or None, optional
+        Endianness of binary file. True for big-endian, False for
+        little-endian, None to determine endianness from Bruker dictionary.
+    isfloat : bool or None, optional
+        Data type of binary file. True for float64, False for int32. None to
+        determine data type from Bruker dictionary.
+    restrict_access : not implemented
+
+    """
    
     # see that data consists of only real elements
     data = data.real
