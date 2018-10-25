@@ -1199,7 +1199,7 @@ def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
         return dic, data
 
 
-def scale_pdata(dic, data, inverse=False):
+def scale_pdata(dic, data, reverse=False):
     """
     Scale Bruker processed data using parameters from the procs file.
 
@@ -1209,6 +1209,9 @@ def scale_pdata(dic, data, inverse=False):
         Dictionary of Bruker parameters.
     data : ndarray
         Array of NMR data.
+    reverse : Bool
+        True to reverse the scaling, i.e. multiply by the 
+        scaling factor rather than divide
 
     Returns
     -------
@@ -1220,7 +1223,7 @@ def scale_pdata(dic, data, inverse=False):
     except KeyError:
         warn('Unable to scale data, returning unscaled data')
         scale = 1
-    if inverse:
+    if reverse:
         return data * scale
     else:
         return data / scale
@@ -1323,7 +1326,7 @@ def read_pdata_binary(filename, shape=None, submatrix_shape=None, big=True,
             return dic, data
 
 
-def reorder_submatrix(data, shape, submatrix_shape, to_bruker=False):
+def reorder_submatrix(data, shape, submatrix_shape, reverse=False):
     """
     Reorder processed binary Bruker data.
 
@@ -1335,10 +1338,10 @@ def reorder_submatrix(data, shape, submatrix_shape, to_bruker=False):
         Shape of final data.
     submatrix_shape : tuple
         Shape of submatrix.
-    to_bruker : Bool
-        True to rearrange data according to the conventions in
-        specified in the Bruker Processing Manual using the 
-        submatrix specified by submatrix_shape
+    reverse : Bool
+        True to reverse the reordering of a submatrix.
+        This options is used to reorder a numpy matrix that is 
+        ordered correctly into the Bruker format using submatrix_shape  
 
     Returns
     -------
@@ -1356,7 +1359,7 @@ def reorder_submatrix(data, shape, submatrix_shape, to_bruker=False):
     sub_per_dim = [int(i / j) for i, j in zip(shape, submatrix_shape)]
     nsubs = np.product(sub_per_dim)
     
-    if to_bruker:
+    if reverse:
         rdata = np.empty([nsubs] + list(submatrix_shape))
     else:
         data = data.reshape([nsubs] + list(submatrix_shape))
@@ -1365,7 +1368,7 @@ def reorder_submatrix(data, shape, submatrix_shape, to_bruker=False):
     for sub_num, sub_idx in enumerate(np.ndindex(tuple(sub_per_dim))):
         sub_slices = [slice(i * j, (i + 1) * j) for i, j in
                       zip(sub_idx, submatrix_shape)]
-        if to_bruker:
+        if reverse:
             rdata[sub_num] = data[tuple(sub_slices)]
         else:
             rdata[tuple(sub_slices)] = data[sub_num]
