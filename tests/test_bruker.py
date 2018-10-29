@@ -37,6 +37,21 @@ def write_readback(dic, data):
     shutil.rmtree(td)
 
 
+def write_readback_pdata(dic, data, pdata_folder=False):
+    """ Write out and readback a Bruker processed dataset """
+    # write out and readback
+    td = tempfile.mkdtemp(dir=".")
+    ng.bruker.write_pdata(td, dic, data, write_procs=True, 
+            pdata_folder=pdata_folder)
+    if pdata_folder:
+        rdic, rdata = ng.bruker.read_pdata(os.path.join(td, 'pdata', str(pdata_folder)))
+    else:
+        rdic, rdata = ng.bruker.read_pdata(td)
+    assert_array_equal(data, rdata)
+    assert dic_similar(dic, rdic)
+    shutil.rmtree(td)
+
+
 def lowmem_write_readback(dic, data):
     """ Lowmemory write out and readback of a Bruker directory """
     # write out and readback
