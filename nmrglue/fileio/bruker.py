@@ -859,7 +859,7 @@ def write_pdata(dir, dic, data, shape=None, submatrix_shape=None,
     data = data.real
 
     if scale_data:
-        data = scale_pdata(dic, data, inverse=True)
+        data = scale_pdata(dic, data, reverse=True)
 
     # see if the dimensionality is given
     # else, set it to the dimensions of data
@@ -876,7 +876,7 @@ def write_pdata(dir, dic, data, shape=None, submatrix_shape=None,
     # reorder the submatrix according 
     if submatrix_shape is None:
         submatrix_shape = guess_shape_and_submatrix_shape(dic)[1]
-    data = reorder_submatrix(data, shape, submatrix_shape, to_bruker=True)
+    data = reorder_submatrix(data, shape, submatrix_shape, reverse=True)
 
     # write out the procs files only for the desired dimensions
     if write_procs:
