@@ -30,7 +30,7 @@ def write_readback(dic, data):
     """ Write out and readback a Bruker directory """
     # write out and readback
     td = tempfile.mkdtemp(dir=".")
-    ng.bruker.write(td, dic, data)
+    ng.bruker.write(td, dic, data, write_procs=True)
     rdic, rdata = ng.bruker.read(td)
     assert_array_equal(data, rdata)
     assert dic_similar(dic, rdic)
@@ -135,7 +135,8 @@ def test_3d():
 
 def test_3d_lowmem():
     """ low memory reading/writing of 3D bruker data"""
-    dic, data = ng.bruker.read_lowmem(os.path.join(DATA_DIR, "bruker_3d"))
+    dic, data = ng.bruker.read_lowmem(os.path.join(DATA_DIR, "bruker_3d"),
+            read_procs=False)
     assert dic['FILE_SIZE'] == 91226112
     assert data.shape == (116, 128, 768)
     assert np.abs(data[0, 0, 40].real - 18.0) <= 0.01
