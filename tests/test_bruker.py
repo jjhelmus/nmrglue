@@ -41,10 +41,11 @@ def write_readback_pdata(dic, data, pdata_folder=False):
     """ Write out and readback a Bruker processed dataset """
     # write out and readback
     td = tempfile.mkdtemp(dir=".")
-    ng.bruker.write_pdata(td, dic, data, write_procs=True, 
-            pdata_folder=pdata_folder)
+    ng.bruker.write_pdata(td, dic, data, write_procs=True,
+                          pdata_folder=pdata_folder)
     if pdata_folder:
-        rdic, rdata = ng.bruker.read_pdata(os.path.join(td, 'pdata', str(pdata_folder)))
+        rdic, rdata = ng.bruker.read_pdata(os.path.join(td,
+                                           'pdata', str(pdata_folder)))
     else:
         rdic, rdata = ng.bruker.read_pdata(td)
     assert_array_equal(data, rdata)
@@ -151,7 +152,7 @@ def test_3d():
 def test_3d_lowmem():
     """ low memory reading/writing of 3D bruker data"""
     dic, data = ng.bruker.read_lowmem(os.path.join(DATA_DIR, "bruker_3d"),
-            read_procs=False)
+                                      read_procs=False)
     assert dic['FILE_SIZE'] == 91226112
     assert data.shape == (116, 128, 768)
     assert np.abs(data[0, 0, 40].real - 18.0) <= 0.01
@@ -163,8 +164,8 @@ def test_3d_lowmem():
 
 def test_read_pdata_1d():
     """ read processed 1D data """
-    dic, data = ng.bruker.read_pdata(os.path.join(DATA_DIR, 'bruker_1d', 
-        'pdata', '1'))
+    dic, data = ng.bruker.read_pdata(os.path.join(DATA_DIR, 'bruker_1d',
+                                                  'pdata', '1'))
     assert dic['procs']['OFFSET'] == 13.03153
     assert dic['procs']['SF'] == 600.13
     assert dic['procs']['FT_mod'] == 6
@@ -173,12 +174,12 @@ def test_read_pdata_1d():
     assert data[1144] - 288069.375 <= 0.001
     assert data[1486] - 281011.875 <= 0.001
     assert data[1708] - 170066.875 <= 0.001
-    
+
 
 def test_read_pdata_2d():
     """ read processed 2d data """
-    dic, data = ng.bruker.read_pdata(os.path.join(DATA_DIR, 'bruker_2d', 
-        'pdata', '1'))
+    dic, data = ng.bruker.read_pdata(os.path.join(DATA_DIR, 'bruker_2d',
+                                                  'pdata', '1'))
     assert dic['procs']['OFFSET'] == 11.60683
     assert dic['procs']['SF'] == 800.13
     assert dic['proc2s']['OFFSET'] == 143.1681
@@ -192,17 +193,15 @@ def test_read_pdata_2d():
 
 def test_write_pdata_1d():
     """ writing of processed 1D bruker data """
-    dic, data = ng.bruker.read_pdata(os.path.join(DATA_DIR, 'bruker_1d', 
-        'pdata', '1'), read_acqus=False)
+    dic, data = ng.bruker.read_pdata(os.path.join(DATA_DIR, 'bruker_1d',
+                                                  'pdata', '1'), read_acqus=False)
     write_readback_pdata(dic=dic, data=data)
     write_readback_pdata(dic=dic, data=data, pdata_folder=90)
 
 
 def test_write_pdata_2d():
     """ writing of processed 2D bruker data """
-    dic, data = ng.bruker.read_pdata(os.path.join(DATA_DIR, 'bruker_2d', 
-        'pdata', '1'), read_acqus=False)
+    dic, data = ng.bruker.read_pdata(os.path.join(DATA_DIR, 'bruker_2d',
+                                                  'pdata', '1'), read_acqus=False)
     write_readback_pdata(dic=dic, data=data)
     write_readback_pdata(dic=dic, data=data, pdata_folder=90)
-
-
