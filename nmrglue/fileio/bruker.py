@@ -597,7 +597,7 @@ def read_procs_file(dir='.', procs_files=None):
     if procs_files == []:
         if os.path.isdir(os.path.join(dir, 'pdata')):
             pdata_folders = [folder for folder in 
-                             os.walk(os.path.join(dir, 'pdata'))][1][0]
+                             os.walk(os.path.join(dir, 'pdata'))][0][1]
             if '1' in pdata_folders:
                 pdata_path = os.path.join(dir, 'pdata', '1')
             else:
