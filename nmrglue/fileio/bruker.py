@@ -876,26 +876,27 @@ def write_pdata(dir, dic, data, shape=None, submatrix_shape=None,
     # reorder the submatrix according 
     if submatrix_shape is None:
         submatrix_shape = guess_shape_and_submatrix_shape(dic)[1]
+
     data = reorder_submatrix(data, shape, submatrix_shape, reverse=True)
+
+    # see if pdata_folder needs to make and set write path
+    if pdata_folder is not False:
+        try:
+            procno = str(int(pdata_folder))
+            pdata_path = os.path.join(dir, 'pdata', procno)
+        except ValueError:
+            raise ValueError('pdata_folder should be an integer')
+
+        if not os.path.isdir(pdata_path):
+            os.makedirs(pdata_path)
+    else:
+        pdata_path = dir
 
     # write out the procs files only for the desired dimensions
     if write_procs:
-        proc = ['procs'] + ['proc{}s'.format(i) for i in range(2, ndim+1)]
-
         if procs_files == None:
+            proc = ['procs'] + ['proc{}s'.format(i) for i in range(2, ndim+1)]
             procs_files = [f for f in proc if (f in dic)]
-        
-        if pdata_folder is not False:
-            try:
-                procno = str(int(pdata_folder))
-                pdata_path = os.path.join(dir, 'pdata', procno)
-            except ValueError:
-                raise ValueError('pdata_folder should be an integer')
-            
-            if not os.path.isdir(pdata_path):
-                os.makedirs(pdata_path)
-        else:
-            pdata_path = dir
     
         for f in procs_files:
             write_jcamp(dic[f], os.path.join(pdata_path, f),
