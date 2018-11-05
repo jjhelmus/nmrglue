@@ -1268,10 +1268,38 @@ def scale_pdata(dic, data, reverse=False):
     except KeyError:
         warn('Unable to scale data, returning unscaled data')
         scale = 1
-    if reverse:
-        return data * scale
-    else:
-        return data / scale
+ 
+    return data / scale
+
+
+def array_to_int(data):
+    """
+    Cast bruker (processed) data into int32 and normalise to have 
+    the absolute maximum intensity in the range [2**28, 2**29]
+ 
+    Parameters
+    ----------
+    data : ndarray
+        Array of NMR data (float64 or int32).
+    reverse : Bool
+        True to reverse the scaling, i.e. multiply by the 
+        scaling factor rather than divide
+
+    Returns
+    -------
+    intdata : array
+        Data scaled to have the maximum intensity between 2**28 and 
+        2**29 and converted to int32
+    """
+    
+    for _ in range(30):
+        if np.max(abs(data)) < 2**28:
+           data *= 2
+        else:
+            break
+    intdata = data.real.astype('int32') 
+
+    return intdata 
 
 
 def guess_shape_and_submatrix_shape(dic):
