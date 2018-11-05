@@ -808,9 +808,9 @@ def write_lowmem(dir, dic, data, bin_file=None, acqus_files=None,
 
 
 def write_pdata(dir, dic, data, shape=None, submatrix_shape=None, 
-        scale_data=True, bin_file=None, procs_files=None, 
-        write_procs=False, pdata_folder=False, overwrite=False, 
-        big=None, isfloat=None, restrict_access=True):
+        bin_file=None, procs_files=None, write_procs=False, 
+        pdata_folder=False, overwrite=False, big=None, isfloat=None, 
+        restrict_access=True):
     """
     Write processed Bruker files to disk.
 
@@ -828,8 +828,6 @@ def write_pdata(dir, dic, data, shape=None, submatrix_shape=None,
     submatrix_shape : tuple, optional
         Shape of the submatrix used to store data (using Bruker specifications)
         If this is not given, the submatrix shape will be guessed from dic
-    scale_data : Bool
-        True to apply reverse scaling using the scaling guessed from dic
     bin_file : str, optional
         Filename of binary file in directory. None uses standard files.
     procs_file : list, optional
@@ -858,8 +856,8 @@ def write_pdata(dir, dic, data, shape=None, submatrix_shape=None,
     # see that data consists of only real elements
     data = data.real
 
-    if scale_data:
-        data = scale_pdata(dic, data, reverse=True)
+    # scale and covert the data into int32 type
+    data = array_to_int(data)
 
     # see if the dimensionality is given
     # else, set it to the dimensions of data
@@ -1244,7 +1242,7 @@ def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
         return dic, data
 
 
-def scale_pdata(dic, data, reverse=False):
+def scale_pdata(dic, data): 
     """
     Scale Bruker processed data using parameters from the procs file.
 
