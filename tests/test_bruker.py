@@ -18,6 +18,8 @@ def dic_similar(dic1, dic2):
     """ Compared two Bruker parameter dictionaries"""
     if dic1.keys() != dic2.keys():
         print("Not same keys!")
+        print(dic1.keys())
+        print(dic2.keys())
     assert dic1.keys() == dic2.keys()
     for key in dic1.keys():
         if dic1[key] != dic2[key]:
@@ -44,10 +46,10 @@ def write_readback_pdata(dic, data, pdata_folder=False):
     ng.bruker.write_pdata(td, dic, data, write_procs=True,
                           pdata_folder=pdata_folder)
     if pdata_folder:
-        rdic, rdata = ng.bruker.read_pdata(os.path.join(td,
-                                           'pdata', str(pdata_folder)))
+        rdic, rdata = ng.bruker.read_pdata(os.path.join(td,'pdata', 
+                                           str(pdata_folder)), scale_data=False)
     else:
-        rdic, rdata = ng.bruker.read_pdata(td)
+        rdic, rdata = ng.bruker.read_pdata(td, scale_data=False)
     assert_array_equal(data, rdata)
     assert dic_similar(dic, rdic)
     shutil.rmtree(td)
@@ -58,7 +60,7 @@ def lowmem_write_readback(dic, data):
     # write out and readback
     td = tempfile.mkdtemp(dir=".")
     ng.bruker.write_lowmem(td, dic, data)
-    rdic, rdata = ng.bruker.read_lowmem(td)
+    rdic, rdata = ng.bruker.read_lowmem(td, read_procs=False)
     tup = tuple(range(data.ndim))
     assert_array_equal(data[tup], rdata[tup])
     assert dic_similar(dic, rdic)
@@ -127,7 +129,7 @@ def test_2d():
 
 def test_2d_lowmem():
     """ lowmemory reading/writing of 2D bruker data"""
-    dic, data = ng.bruker.read_lowmem(os.path.join(DATA_DIR, "bruker_2d"))
+    dic, data = ng.bruker.read_lowmem(os.path.join(DATA_DIR, "bruker_2d"), read_procs=False)
     assert dic['FILE_SIZE'] == 3686400
     assert data.shape == (600, 768)
     assert np.abs(data[0, 40].real - 28.0) <= 0.01
@@ -194,7 +196,7 @@ def test_read_pdata_2d():
 def test_write_pdata_1d():
     """ writing of processed 1D bruker data """
     dic, data = ng.bruker.read_pdata(os.path.join(DATA_DIR, 'bruker_1d',
-                                                  'pdata', '1'), read_acqus=False)
+                                     'pdata', '1'), read_acqus=False)
     write_readback_pdata(dic=dic, data=data)
     write_readback_pdata(dic=dic, data=data, pdata_folder=90)
 
@@ -202,6 +204,6 @@ def test_write_pdata_1d():
 def test_write_pdata_2d():
     """ writing of processed 2D bruker data """
     dic, data = ng.bruker.read_pdata(os.path.join(DATA_DIR, 'bruker_2d',
-                                                  'pdata', '1'), read_acqus=False)
+                                     'pdata', '1'), read_acqus=False)
     write_readback_pdata(dic=dic, data=data)
     write_readback_pdata(dic=dic, data=data, pdata_folder=90)
