@@ -46,7 +46,7 @@ def write_readback_pdata(dic, data, pdata_folder=False):
     ng.bruker.write_pdata(td, dic, data, write_procs=True,
                           pdata_folder=pdata_folder)
     if pdata_folder:
-        rdic, rdata = ng.bruker.read_pdata(os.path.join(td,'pdata', 
+        rdic, rdata = ng.bruker.read_pdata(os.path.join(td, 'pdata',
                                            str(pdata_folder)), scale_data=False)
     else:
         rdic, rdata = ng.bruker.read_pdata(td, scale_data=False)
@@ -129,7 +129,8 @@ def test_2d():
 
 def test_2d_lowmem():
     """ lowmemory reading/writing of 2D bruker data"""
-    dic, data = ng.bruker.read_lowmem(os.path.join(DATA_DIR, "bruker_2d"), read_procs=False)
+    dic, data = ng.bruker.read_lowmem(os.path.join(DATA_DIR, "bruker_2d"),
+                                      read_procs=False)
     assert dic['FILE_SIZE'] == 3686400
     assert data.shape == (600, 768)
     assert np.abs(data[0, 40].real - 28.0) <= 0.01

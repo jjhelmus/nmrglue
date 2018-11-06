@@ -596,13 +596,13 @@ def read_procs_file(dir='.', procs_files=None):
 
     if procs_files == []:
         if os.path.isdir(os.path.join(dir, 'pdata')):
-            pdata_folders = [folder for folder in 
+            pdata_folders = [folder for folder in
                              os.walk(os.path.join(dir, 'pdata'))][0][1]
             if '1' in pdata_folders:
                 pdata_path = os.path.join(dir, 'pdata', '1')
             else:
-                pdata_path = os.path.join(dir, 'pdata', pdata_folders[0]) 
-                
+                pdata_path = os.path.join(dir, 'pdata', pdata_folders[0])
+
     for f in ["procs", "proc2s", "proc3s", "proc4s"]:
             if os.path.isfile(os.path.join(pdata_path, f)):
                 procs_files.append(f)
@@ -617,8 +617,8 @@ def read_procs_file(dir='.', procs_files=None):
 
 
 def write(dir, dic, data, bin_file=None, acqus_files=None, procs_files=None,
-          pprog_file=None, overwrite=False, big=None, isfloat=None, 
-          write_prog=True, write_acqus=True, write_procs=False, 
+          pprog_file=None, overwrite=False, big=None, isfloat=None,
+          write_prog=True, write_acqus=True, write_procs=False,
           pdata_folder=False):
     """
     Write Bruker files to disk.
@@ -658,8 +658,8 @@ def write(dir, dic, data, bin_file=None, acqus_files=None, procs_files=None,
         True to write the procs files(s), False prevents writing.
     pdata_folder : int, optional
         Makes a folder and a subfolder ('pdata/pdata_folder') inside the given
-        directory where pdata_folder is an integer. procN and procNs files are 
-        stored inside pdata_folder. pdata_folder=False (or =0) does not make the 
+        directory where pdata_folder is an integer. procN and procNs files are
+        stored inside pdata_folder. pdata_folder=False (or =0) does not make the
         pdata folder and pdata_folder=True makes folder '1'.
 
     See Also
@@ -703,12 +703,12 @@ def write(dir, dic, data, bin_file=None, acqus_files=None, procs_files=None,
                 pdata_path = os.path.join(dir, 'pdata', procno)
             except ValueError:
                 raise ValueError('pdata_folder should be an integer')
-            
+
             if not os.path.isdir(pdata_path):
                 os.makedirs(pdata_path)
         else:
             pdata_path = dir
-    
+
         for f in procs_files:
             write_jcamp(dic[f], os.path.join(pdata_path, f))
         for f in proc_files:
@@ -807,10 +807,10 @@ def write_lowmem(dir, dic, data, bin_file=None, acqus_files=None,
     return
 
 
-def write_pdata(dir, dic, data, shape=None, submatrix_shape=None, 
-        bin_file=None, procs_files=None, write_procs=False, 
-        pdata_folder=False, overwrite=False, big=None, isfloat=None, 
-        restrict_access=True):
+def write_pdata(dir, dic, data, shape=None, submatrix_shape=None,
+                bin_file=None, procs_files=None, write_procs=False,
+                pdata_folder=False, overwrite=False, big=None, isfloat=None,
+                restrict_access=True):
     """
     Write processed Bruker files to disk.
 
@@ -837,8 +837,8 @@ def write_pdata(dir, dic, data, shape=None, submatrix_shape=None,
         True to write out the procs files
     pdata_folder : int, optional
         Makes a folder and a subfolder ('pdata/pdata_folder') inside the given
-        directory where pdata_folder is an integer. All files (procs and data) are 
-        stored inside pdata_folder. pdata_folder=False (or =0) does not make the 
+        directory where pdata_folder is an integer. All files (procs and data) are
+        stored inside pdata_folder. pdata_folder=False (or =0) does not make the
         pdata folder and pdata_folder=True makes folder '1'.
     overwrite : bool, optional
         Set True to overwrite files, False will raise a Warning if files
@@ -852,7 +852,7 @@ def write_pdata(dir, dic, data, shape=None, submatrix_shape=None,
     restrict_access : not implemented
 
     """
-   
+
     # see that data consists of only real elements
     data = data.real
 
@@ -861,7 +861,7 @@ def write_pdata(dir, dic, data, shape=None, submatrix_shape=None,
 
     # see if the dimensionality is given
     # else, set it to the dimensions of data
-    if shape == None:
+    if shape is None:
         shape = data.shape
 
     # guess data dimensionality
@@ -871,7 +871,7 @@ def write_pdata(dir, dic, data, shape=None, submatrix_shape=None,
     # This is required when writing back 1D slices from a 2D, 2D planes of 3D, etc
     dic['procs']['PPARMOD'] = ndim - 1
 
-    # reorder the submatrix according 
+    # reorder the submatrix according
     if submatrix_shape is None:
         submatrix_shape = guess_shape_and_submatrix_shape(dic)[1]
 
@@ -892,24 +892,24 @@ def write_pdata(dir, dic, data, shape=None, submatrix_shape=None,
 
     # write out the procs files only for the desired dimensions
     if write_procs:
-        if procs_files == None:
+        if procs_files is None:
             proc = ['procs'] + ['proc{}s'.format(i) for i in range(2, ndim+1)]
             procs_files = [f for f in proc if (f in dic)]
-    
+
         for f in procs_files:
             write_jcamp(dic[f], os.path.join(pdata_path, f),
-                    overwrite=overwrite)
+                        overwrite=overwrite)
             write_jcamp(dic[f], os.path.join(pdata_path, f[:-1]),
-                    overwrite=overwrite)
+                        overwrite=overwrite)
 
-    if bin_file == None:
+    if bin_file is None:
         bin_file = str(ndim) + 'r'*ndim
 
     bin_full = os.path.join(pdata_path, bin_file)
     write_binary(bin_full, dic, data, big=big, isfloat=isfloat,
                  overwrite=overwrite)
     return
-        
+
 
 def guess_shape(dic):
     """
@@ -1242,7 +1242,7 @@ def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
         return dic, data
 
 
-def scale_pdata(dic, data): 
+def scale_pdata(dic, data):
     """
     Scale Bruker processed data using parameters from the procs file.
 
@@ -1253,7 +1253,7 @@ def scale_pdata(dic, data):
     data : ndarray
         Array of NMR data.
     reverse : Bool
-        True to reverse the scaling, i.e. multiply by the 
+        True to reverse the scaling, i.e. multiply by the
         scaling factor rather than divide
 
     Returns
@@ -1266,38 +1266,37 @@ def scale_pdata(dic, data):
     except KeyError:
         warn('Unable to scale data, returning unscaled data')
         scale = 1
- 
+
     return data / scale
 
 
 def array_to_int(data):
     """
-    Cast bruker (processed) data into int32 and normalise to have 
+    Cast bruker (processed) data into int32 and normalise to have
     the absolute maximum intensity in the range [2**28, 2**29]
- 
+
     Parameters
     ----------
     data : ndarray
         Array of NMR data (float64 or int32).
     reverse : Bool
-        True to reverse the scaling, i.e. multiply by the 
+        True to reverse the scaling, i.e. multiply by the
         scaling factor rather than divide
 
     Returns
     -------
     intdata : array
-        Data scaled to have the maximum intensity between 2**28 and 
-        2**29 and converted to int32
+        Real valued data scaled to have the maximum intensity between
+        2**28 and 2**29, converted to type int32
     """
-    
+
     for _ in range(30):
         if np.max(abs(data)) < 2**28:
-           data *= 2
+            data *= 2
         else:
             break
-    intdata = data.real.astype('int32') 
-
-    return intdata 
+    intdata = data.real.astype('int32')
+    return intdata
 
 
 def guess_shape_and_submatrix_shape(dic):
@@ -1411,8 +1410,8 @@ def reorder_submatrix(data, shape, submatrix_shape, reverse=False):
         Shape of submatrix.
     reverse : Bool
         True to reverse the reordering of a submatrix.
-        This options is used to reorder a numpy matrix that is 
-        ordered correctly into the Bruker format using submatrix_shape  
+        This options is used to reorder a numpy matrix that is
+        ordered correctly into the Bruker format using submatrix_shape
 
     Returns
     -------
@@ -1429,7 +1428,7 @@ def reorder_submatrix(data, shape, submatrix_shape, reverse=False):
 
     sub_per_dim = [int(i / j) for i, j in zip(shape, submatrix_shape)]
     nsubs = np.product(sub_per_dim)
-    
+
     if reverse:
         rdata = np.empty([nsubs] + list(submatrix_shape))
     else:
