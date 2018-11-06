@@ -9,7 +9,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # set data paths
-DATA_DIR = '/home/kaustubh/Desktop/bruker-testing/yellow/2'
+DATA_DIR = os.path.join(up(up(up(os.path.abspath(__file__)))),
+                        'data', 'bruker_2d')
 
 # read in data processed using TOPSPIN
 # this is required only to get access to the dictionary
