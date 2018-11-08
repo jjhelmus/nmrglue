@@ -807,10 +807,10 @@ def write_lowmem(dir, dic, data, bin_file=None, acqus_files=None,
     return
 
 
-def write_pdata(dir, dic, data, shape=None, submatrix_shape=None,
-                bin_file=None, procs_files=None, write_procs=False,
-                pdata_folder=False, overwrite=False, big=None, isfloat=None,
-                restrict_access=True):
+def write_pdata(dir, dic, data, roll=False, shape=None, submatrix_shape=None, 
+                scale_data=False, bin_file=None, procs_files=None,
+                write_procs=False, pdata_folder=False, overwrite=False,
+                big=None, isfloat=None, restrict_access=True):
     """
     Write processed Bruker files to disk.
 
@@ -822,12 +822,21 @@ def write_pdata(dir, dic, data, shape=None, submatrix_shape=None,
         Dictionary of Bruker parameters.
     data : array_like
         Array of NMR data
+    roll : int
+        Number of points by which a circular shift needs to be applied to the data
+        True will apply a circular shift of 1 data point
     shape : tuple, optional
         Shape of data, if file is to be written with a shape
         different than data.shape
     submatrix_shape : tuple, optional
         Shape of the submatrix used to store data (using Bruker specifications)
         If this is not given, the submatrix shape will be guessed from dic
+    scale_data : Bool
+        Apply a reverse scaling using the scaling factor defined in procs file
+        By default, the array to be written will not be scaled using the value
+        in procs but will be e scaled so  that the max intensity in that array
+        will have a value between 2**28 and 2**29. scale_data is to be used when 
+        the array is itself a processed  bruker file that was read into nmrglue
     bin_file : str, optional
         Filename of binary file in directory. None uses standard files.
     procs_file : list, optional
@@ -854,10 +863,14 @@ def write_pdata(dir, dic, data, shape=None, submatrix_shape=None,
     """
 
     # see that data consists of only real elements
-    data = data.real
+    data = np.roll(data.real, int(roll))
 
-    # scale and covert the data into int32 type
-    data = array_to_int(data)
+    # either apply a reverse scaling to the data or scale processed data 
+    # so that the max value is between 2**28 and 2**29 and cast to integers
+    if scale_data:
+        data = scale_pdata(dic, data, reverse=True)
+    else:
+        data = array_to_int(data)
 
     # see if the dimensionality is given
     # else, set it to the dimensions of data
@@ -908,6 +921,7 @@ def write_pdata(dir, dic, data, shape=None, submatrix_shape=None,
     bin_full = os.path.join(pdata_path, bin_file)
     write_binary(bin_full, dic, data, big=big, isfloat=isfloat,
                  overwrite=overwrite)
+
     return
 
 
@@ -1242,7 +1256,7 @@ def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
         return dic, data
 
 
-def scale_pdata(dic, data):
+def scale_pdata(dic, data, reverse=True):
     """
     Scale Bruker processed data using parameters from the procs file.
 
@@ -1267,7 +1281,10 @@ def scale_pdata(dic, data):
         warn('Unable to scale data, returning unscaled data')
         scale = 1
 
-    return data / scale
+    if reverse == True:
+        return data * scale
+    else:
+        return data / scale
 
 
 def array_to_int(data):
