@@ -1,3 +1,7 @@
+"""
+Script to write processed data back into topspin format
+
+"""
 import os
 from os.path import dirname as up
 import nmrglue as ng
@@ -5,8 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # PATH TO DATA
-DATA_DIR = os.path.join(up(up(up(os.path.abspath(__file__)))),
-                        'data', 'bruker_1d')
+DATA_DIR = '/opt/topspin3.5pl7/examdata/exam1d_1H/1/'
 
 # TOPSPIN
 # read in data processed using tospin
@@ -30,16 +33,15 @@ pdic, (preal, pimag) = ng.bruker.read_pdata(os.path.join(DATA_DIR, 'pdata', '10'
 # NMRGLUE
 # read in raw FID and process using nmrglue
 ndic, ndata = ng.bruker.read(DATA_DIR)
-ndata = ng.proc_base.zf_size(ndata, size=8192)
+ndata = ng.proc_base.zf_size(ndata, size=32768)
 ndata = ng.proc_base.fft(ndata)
 ndata = ng.bruker.remove_digital_filter(ndic, ndata, post_proc=True)
-ndata = np.roll(ndata, 1)
 ndata = ng.proc_base.rev(ndata)
-ndata = ng.proc_base.ps(ndata, p0=101)
+ndata = ng.proc_autophase.autops(ndata, 'acme')
 
 # write out the real and imag data in topspin format in pdata folder 11
 for dataset, filename in zip([ndata.real, ndata.imag], ['1r', '1i']):
-    ng.bruker.write_pdata(DATA_DIR, dic, dataset, bin_file=filename,
+    ng.bruker.write_pdata(DATA_DIR, dic, dataset, bin_file=filename, roll=True,
                           pdata_folder=11, write_procs=True, overwrite=True)
 
 # read back in the nmrglue processed files for comparison
@@ -58,6 +60,5 @@ for axis, dataset, title in zip(ax.flat, dataset, titles):
     axis.plot(dataset, linewidth=0.7)
     axis.set_title(title)
     axis.set_yticklabels([])
-    # axis.set_xlim(1000, 5200)
 plt.tight_layout()
 plt.savefig('Comparison-1D.png')
