@@ -391,28 +391,24 @@ def find_yfactors(dic):
     Returns YFactors in tuple with order (R,I)
     '''
 
-    # determine data class:
-    is_ntuples = get_is_ntuples(dic)
+    # first check which column is R and I:
+    index_r = None
+    index_i = None
+    try:
+        symbols = dic["SYMBOL"][0].split(",")
+        symbols = [s.strip() for s in symbols]
+        index_r = symbols.index("R")
+        index_i = symbols.index("I")
+    except (KeyError, IndexError, ValueError):
+        return (None, None)
 
-    if is_ntuples:
-        # first check which column is R and I:
-        index_r = None
-        index_i = None
-        try:
-            symbols = dic["SYMBOL"][0].split(",")
-            symbols = [s.strip() for s in symbols]
-            index_r = symbols.index("R")
-            index_i = symbols.index("I")
-        except (KeyError, IndexError, ValueError):
-            return (None, None)
-
-        try:
-            factors = dic["FACTOR"][0].split(",")
-            factors = [s.strip() for s in factors]
-            factor_r = float(factors[index_r])
-            factor_i = float(factors[index_i])
-        except (KeyError, IndexError, ValueError):
-            return (None, None)
+    try:
+        factors = dic["FACTOR"][0].split(",")
+        factors = [s.strip() for s in factors]
+        factor_r = float(factors[index_r])
+        factor_i = float(factors[index_i])
+    except (KeyError, IndexError, ValueError):
+        return (None, None)
 
     return (factor_r, factor_i)
 
@@ -540,11 +536,14 @@ def read(filename):
 def _find_firstx_lastx(dic):
     '''
     Helper for guess_udic: seeks firstx and lastx for
-    sweep calculation
+    sweep calculation. Also returns True/False if the
+    data was in ppm.
     '''
 
     firstx = None
     lastx = None
+    unitx = None
+    isppm = False  # default to Hz
 
     # determine data class:
     is_ntuples = get_is_ntuples(dic)
@@ -571,6 +570,12 @@ def _find_firstx_lastx(dic):
                 lastx = float(lasts[index_x])
             except (KeyError, IndexError, ValueError):
                 warn("Cannot parse LAST (X) on NTUPLES")
+            try:
+                units = dic["UNITS"][0].split(",")
+                units = [s.strip() for s in units]
+                unitx = units[index_x]
+            except (KeyError, IndexError, ValueError):
+                warn("Cannot parse UNITS (X) on NTUPLES")
 
     # XYDATA (try always if not yet found)
     if firstx is None and lastx is None:
@@ -586,8 +591,17 @@ def _find_firstx_lastx(dic):
             warn('Cannot parse "LASTX"')
         except KeyError:
             warn('No "LASTX" in file')
+    if unitx is None:
+        try:
+            unitx = dic["XUNITS"][0]
+        except KeyError:
+            warn('No "XUNITS" in file')
 
-    return firstx, lastx
+    # flag ppm data
+    if unitx is not None:
+        isppm = unitx.upper() == "PPM"
+
+    return firstx, lastx, isppm
 
 
 def guess_udic(dic, data):
@@ -624,9 +638,10 @@ def guess_udic(dic, data):
             pass
 
     # "obs"
+    obs_freq = None
     try:
-        obs_value = float(dic[".OBSERVEFREQUENCY"][0])
-        udic[0]["obs"] = obs_value
+        obs_freq = float(dic[".OBSERVEFREQUENCY"][0])
+        udic[0]["obs"] = obs_freq
     except ValueError:
         warn('Cannot parse ".OBSERVE FREQUENCY"')
     except KeyError:
@@ -641,8 +656,17 @@ def guess_udic(dic, data):
         warn('No data, cannot set udic size')
 
     # "sw"
-    # by format specs, FIRSTX and LASTX should be always in Hz
-    firstx, lastx = _find_firstx_lastx(dic)
+    # get firstx, lastx and unit
+    firstx, lastx, isppm = _find_firstx_lastx(dic)
+
+    # ppm data: convert to Hz
+    if isppm:
+        if obs_freq:
+            firstx = firstx * obs_freq
+            lastx = lastx * obs_freq
+        else:
+            firstx, lastx = (None, None)
+            warn('Data is in ppm but have no frequency, cannot set udic sweep')
 
     if firstx is not None and lastx is not None:
         udic[0]["sw"] = abs(lastx - firstx)
