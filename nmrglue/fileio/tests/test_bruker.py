@@ -67,6 +67,6 @@ def test_write_pdata():
 
     rdic, rdata = ng.bruker.read_pdata(os.path.join(td, 'pdata', '10'))
 
-    assert np.all(data == rdata * 2**-dic['procs']['NC_proc'])
+    assert np.all(data == rdata)
     assert rdic['procs'].keys() == dic['procs'].keys()
     shutil.rmtree(td)
