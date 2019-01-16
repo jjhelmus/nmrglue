@@ -8,7 +8,7 @@ import shutil
 import tempfile
 
 # Test data.
-DATA_DIR = os.path.join(os.path.dirname(__file__), 'data', 'bruker')
+DATA_DIR = os.path.join(os.path.dirname(__file__), 'bruker_test_data')
 
 def test_read_pdata():
     """Reading processed bruker 1D data"""
