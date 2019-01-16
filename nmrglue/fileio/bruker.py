@@ -1256,7 +1256,7 @@ def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
         return dic, data
 
 
-def scale_pdata(dic, data, reverse=True):
+def scale_pdata(dic, data, reverse=False):
     """
     Scale Bruker processed data using parameters from the procs file.
 
