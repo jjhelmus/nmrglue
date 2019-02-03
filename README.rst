@@ -37,7 +37,7 @@ When used in conjunction with the matplotlib (or other) python plotting
 library nmrglue can be used to create publication quality figures of NMR
 spectrum or examine data interactively.
 
-nmrglue can be used to analysis NMR data, with routines to perform peak
+nmrglue can be used to analysize NMR data, with routines to perform peak
 picking, multidimensional lineshape fitting (peak fitting), and peak
 integration. New analysis methods can be rapidly developed and tested in
 Python or by integrating Fortran and C/C++ code.
