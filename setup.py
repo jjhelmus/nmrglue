@@ -47,5 +47,6 @@ setup(
     package_data={'nmrglue': [
         'fileio/tests/data/*.f*',
         'fileio/tests/data/*.dir/*',
+        'fileio/tests/bruker_test_data/*',
         'fileio/tests/data/test.tab']},
 )
