@@ -2,7 +2,7 @@
 
 # setup script for nmrglue
 
-from distutils.core import setup
+from setuptools import setup
 from codecs import open
 from os import path, walk
 
@@ -28,13 +28,15 @@ setup(
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Topic :: Scientific/Engineering',
         'Operating System :: MacOS :: MacOS X',
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX :: Linux'],
-    requires=['numpy', 'scipy'],
+    install_requires=['numpy', 'scipy'],
     packages=[
         'nmrglue',
         'nmrglue.analysis',
@@ -44,12 +46,5 @@ setup(
         'nmrglue.process',
         'nmrglue.process.nmrtxt',
         'nmrglue.util'],
-    package_data={'nmrglue': [
-        'fileio/tests/data/*.f*',
-        'fileio/tests/data/*.dir/*',
-        'fileio/tests/bruker_test_data/*',
-        'fileio/tests/bruker_test_data/1/*',
-        'fileio/tests/bruker_test_data/1/pdata/*',
-        'fileio/tests/bruker_test_data/1/pdata/1/*',
-        'fileio/tests/data/test.tab']},
+    include_package_data=True,
 )
