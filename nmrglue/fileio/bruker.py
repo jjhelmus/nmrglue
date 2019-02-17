@@ -596,13 +596,13 @@ def read_procs_file(dir='.', procs_files=None):
 
     if procs_files == []:
         if os.path.isdir(os.path.join(dir, 'pdata')):
-            pdata_folders = [folder for folder in 
-                             os.walk(os.path.join(dir, 'pdata'))][1][0]
+            pdata_folders = [folder for folder in
+                             os.walk(os.path.join(dir, 'pdata'))][0][1]
             if '1' in pdata_folders:
                 pdata_path = os.path.join(dir, 'pdata', '1')
             else:
-                pdata_path = os.path.join(dir, 'pdata', pdata_folders[0]) 
-                
+                pdata_path = os.path.join(dir, 'pdata', pdata_folders[0])
+
     for f in ["procs", "proc2s", "proc3s", "proc4s"]:
             if os.path.isfile(os.path.join(pdata_path, f)):
                 procs_files.append(f)
@@ -617,8 +617,8 @@ def read_procs_file(dir='.', procs_files=None):
 
 
 def write(dir, dic, data, bin_file=None, acqus_files=None, procs_files=None,
-          pprog_file=None, overwrite=False, big=None, isfloat=None, 
-          write_prog=True, write_acqus=True, write_procs=False, 
+          pprog_file=None, overwrite=False, big=None, isfloat=None,
+          write_prog=True, write_acqus=True, write_procs=False,
           pdata_folder=False):
     """
     Write Bruker files to disk.
@@ -658,8 +658,8 @@ def write(dir, dic, data, bin_file=None, acqus_files=None, procs_files=None,
         True to write the procs files(s), False prevents writing.
     pdata_folder : int, optional
         Makes a folder and a subfolder ('pdata/pdata_folder') inside the given
-        directory where pdata_folder is an integer. procN and procNs files are 
-        stored inside pdata_folder. pdata_folder=False (or =0) does not make the 
+        directory where pdata_folder is an integer. procN and procNs files are
+        stored inside pdata_folder. pdata_folder=False (or =0) does not make the
         pdata folder and pdata_folder=True makes folder '1'.
 
     See Also
@@ -703,12 +703,12 @@ def write(dir, dic, data, bin_file=None, acqus_files=None, procs_files=None,
                 pdata_path = os.path.join(dir, 'pdata', procno)
             except ValueError:
                 raise ValueError('pdata_folder should be an integer')
-            
+
             if not os.path.isdir(pdata_path):
                 os.makedirs(pdata_path)
         else:
             pdata_path = dir
-    
+
         for f in procs_files:
             write_jcamp(dic[f], os.path.join(pdata_path, f))
         for f in proc_files:
@@ -804,6 +804,124 @@ def write_lowmem(dir, dic, data, bin_file=None, acqus_files=None,
     bin_full = os.path.join(dir, bin_file)
     write_binary_lowmem(bin_full, dic, data, big=big, isfloat=isfloat,
                         overwrite=overwrite)
+    return
+
+
+def write_pdata(dir, dic, data, roll=False, shape=None, submatrix_shape=None, 
+                scale_data=False, bin_file=None, procs_files=None,
+                write_procs=False, pdata_folder=False, overwrite=False,
+                big=None, isfloat=None, restrict_access=True):
+    """
+    Write processed Bruker files to disk.
+
+    Parameters
+    ----------
+    dir : str
+        Directory to write files to.
+    dic : dict
+        Dictionary of Bruker parameters.
+    data : array_like
+        Array of NMR data
+    roll : int
+        Number of points by which a circular shift needs to be applied to the data
+        True will apply a circular shift of 1 data point
+    shape : tuple, optional
+        Shape of data, if file is to be written with a shape
+        different than data.shape
+    submatrix_shape : tuple, optional
+        Shape of the submatrix used to store data (using Bruker specifications)
+        If this is not given, the submatrix shape will be guessed from dic
+    scale_data : Bool
+        Apply a reverse scaling using the scaling factor defined in procs file
+        By default, the array to be written will not be scaled using the value
+        in procs but will be e scaled so  that the max intensity in that array
+        will have a value between 2**28 and 2**29. scale_data is to be used when 
+        the array is itself a processed  bruker file that was read into nmrglue
+    bin_file : str, optional
+        Filename of binary file in directory. None uses standard files.
+    procs_file : list, optional
+        List of filename(s) of procs parameter files (to write out). None uses a
+        list of standard files
+    write_procs : Bool
+        True to write out the procs files
+    pdata_folder : int, optional
+        Makes a folder and a subfolder ('pdata/pdata_folder') inside the given
+        directory where pdata_folder is an integer. All files (procs and data) are
+        stored inside pdata_folder. pdata_folder=False (or =0) does not make the
+        pdata folder and pdata_folder=True makes folder '1'.
+    overwrite : bool, optional
+        Set True to overwrite files, False will raise a Warning if files
+        exist.
+    big : bool or None, optional
+        Endianness of binary file. True for big-endian, False for
+        little-endian, None to determine endianness from Bruker dictionary.
+    isfloat : bool or None, optional
+        Data type of binary file. True for float64, False for int32. None to
+        determine data type from Bruker dictionary.
+    restrict_access : not implemented
+
+    """
+
+    # see that data consists of only real elements
+    data = np.roll(data.real, int(roll))
+
+    # either apply a reverse scaling to the data or scale processed data 
+    # so that the max value is between 2**28 and 2**29 and cast to integers
+    if scale_data:
+        data = scale_pdata(dic, data, reverse=True)
+    else:
+        data = array_to_int(data)
+
+    # see if the dimensionality is given
+    # else, set it to the dimensions of data
+    if shape is None:
+        shape = data.shape
+
+    # guess data dimensionality
+    ndim = len(shape)
+
+    # update PARMODE in dictionary
+    # This is required when writing back 1D slices from a 2D, 2D planes of 3D, etc
+    dic['procs']['PPARMOD'] = ndim - 1
+
+    # reorder the submatrix according
+    if submatrix_shape is None:
+        submatrix_shape = guess_shape_and_submatrix_shape(dic)[1]
+
+    data = reorder_submatrix(data, shape, submatrix_shape, reverse=True)
+
+    # see if pdata_folder needs to make and set write path
+    if pdata_folder is not False:
+        try:
+            procno = str(int(pdata_folder))
+            pdata_path = os.path.join(dir, 'pdata', procno)
+        except ValueError:
+            raise ValueError('pdata_folder should be an integer')
+
+        if not os.path.isdir(pdata_path):
+            os.makedirs(pdata_path)
+    else:
+        pdata_path = dir
+
+    # write out the procs files only for the desired dimensions
+    if write_procs:
+        if procs_files is None:
+            proc = ['procs'] + ['proc{}s'.format(i) for i in range(2, ndim+1)]
+            procs_files = [f for f in proc if (f in dic)]
+
+        for f in procs_files:
+            write_jcamp(dic[f], os.path.join(pdata_path, f),
+                        overwrite=overwrite)
+            write_jcamp(dic[f], os.path.join(pdata_path, f[:-1]),
+                        overwrite=overwrite)
+
+    if bin_file is None:
+        bin_file = str(ndim) + 'r'*ndim
+
+    bin_full = os.path.join(pdata_path, bin_file)
+    write_binary(bin_full, dic, data, big=big, isfloat=isfloat,
+                 overwrite=overwrite)
+
     return
 
 
@@ -1138,7 +1256,7 @@ def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
         return dic, data
 
 
-def scale_pdata(dic, data):
+def scale_pdata(dic, data, reverse=False):
     """
     Scale Bruker processed data using parameters from the procs file.
 
@@ -1148,6 +1266,9 @@ def scale_pdata(dic, data):
         Dictionary of Bruker parameters.
     data : ndarray
         Array of NMR data.
+    reverse : Bool
+        True to reverse the scaling, i.e. multiply by the
+        scaling factor rather than divide
 
     Returns
     -------
@@ -1159,7 +1280,40 @@ def scale_pdata(dic, data):
     except KeyError:
         warn('Unable to scale data, returning unscaled data')
         scale = 1
-    return data / scale
+
+    if reverse == True:
+        return data * scale
+    else:
+        return data / scale
+
+
+def array_to_int(data):
+    """
+    Cast bruker (processed) data into int32 and normalise to have
+    the absolute maximum intensity in the range [2**28, 2**29]
+
+    Parameters
+    ----------
+    data : ndarray
+        Array of NMR data (float64 or int32).
+    reverse : Bool
+        True to reverse the scaling, i.e. multiply by the
+        scaling factor rather than divide
+
+    Returns
+    -------
+    intdata : array
+        Real valued data scaled to have the maximum intensity between
+        2**28 and 2**29, converted to type int32
+    """
+
+    for _ in range(30):
+        if np.max(abs(data)) < 2**28:
+            data *= 2
+        else:
+            break
+    intdata = data.real.astype('int32')
+    return intdata
 
 
 def guess_shape_and_submatrix_shape(dic):
@@ -1259,7 +1413,7 @@ def read_pdata_binary(filename, shape=None, submatrix_shape=None, big=True,
             return dic, data
 
 
-def reorder_submatrix(data, shape, submatrix_shape):
+def reorder_submatrix(data, shape, submatrix_shape, reverse=False):
     """
     Reorder processed binary Bruker data.
 
@@ -1271,6 +1425,10 @@ def reorder_submatrix(data, shape, submatrix_shape):
         Shape of final data.
     submatrix_shape : tuple
         Shape of submatrix.
+    reverse : Bool
+        True to reverse the reordering of a submatrix.
+        This options is used to reorder a numpy matrix that is
+        ordered correctly into the Bruker format using submatrix_shape
 
     Returns
     -------
@@ -1285,16 +1443,23 @@ def reorder_submatrix(data, shape, submatrix_shape):
     if len(submatrix_shape) == 1 or len(shape) == 1:
         return data
 
-    rdata = np.empty(shape, dtype=data.dtype)
     sub_per_dim = [int(i / j) for i, j in zip(shape, submatrix_shape)]
     nsubs = np.product(sub_per_dim)
-    data = data.reshape([nsubs] + list(submatrix_shape))
+
+    if reverse:
+        rdata = np.empty([nsubs] + list(submatrix_shape))
+    else:
+        data = data.reshape([nsubs] + list(submatrix_shape))
+        rdata = np.empty(shape, dtype=data.dtype)
 
     for sub_num, sub_idx in enumerate(np.ndindex(tuple(sub_per_dim))):
         sub_slices = [slice(i * j, (i + 1) * j) for i, j in
                       zip(sub_idx, submatrix_shape)]
-        rdata[sub_slices] = data[sub_num]
-    return rdata
+        if reverse:
+            rdata[sub_num] = data[tuple(sub_slices)]
+        else:
+            rdata[tuple(sub_slices)] = data[sub_num]
+    return rdata.reshape(shape)
 
 
 # Bruker binary (fid/ser) reading and writing

@@ -1,3 +1,4 @@
 include *.txt
 include *.rst
 recursive-include nmrglue/fileio/tests/data *
+recursive-include nmrglue/fileio/tests/bruker_test_data *

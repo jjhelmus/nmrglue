@@ -1,0 +1,357 @@
+##TITLE= Parameter file, XWIN-NMR		Version 3.1
+##JCAMPDX= 5.0
+##DATATYPE= Parameter Values
+##ORIGIN= UXNMR, Bruker Analytische Messtechnik GmbH
+##OWNER= dli
+$$ Thu Aug 23 12:56:09 2007 EDT (UT-4h)  jaroniec@ccic600j.ccic.ohio-state.edu
+$$ /disk2/data/jaroniec/nmr/CR-082307/1/acqus
+##$AMP= (0..31)
+100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 100 
+100 100 100 100 100 100 100 100 100 100 100 100 100 100 
+##$AQSEQ= 0
+##$AQ_mod= 3
+##$AUNM= <au_zg>
+##$AUTOPOS= <>
+##$BF1= 600.13
+##$BF2= 150.902809
+##$BF3= 60.810645
+##$BF4= 600.13
+##$BF5= 600.13
+##$BF6= 600.13
+##$BF7= 600.13
+##$BF8= 600.13
+##$BYTORDA= 1
+##$CFDGTYP= 0
+##$CFRGTYP= 2
+##$CNST= (0..31)
+1 1 147 1 90 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 40 -40 30 -6 1 1 1 1 1 1 
+1 
+##$CPDPRG= <>
+##$CPDPRG1= <mlev>
+##$CPDPRG2= <garp>
+##$CPDPRG3= <waltz16>
+##$CPDPRG4= <mlev>
+##$CPDPRG5= <mlev>
+##$CPDPRG6= <mlev>
+##$CPDPRG7= <mlev>
+##$CPDPRG8= <mlev>
+##$CPDPRGB= <>
+##$CPDPRGT= <>
+##$D= (0..31)
+3e-06 1 0.00011 0 0.0002 0 0 0 0.0133 0 3e-06 0.03 2e-05 3e-06 0 0 0.0002 
+0.000175 0 7.5e-05 0 0 0.0003 0.007 0.0027 0 0 0 0 0 0 0 
+##$DATE= 1187888166
+##$DBL= (0..7)
+120 120 120 120 120 120 120 120 
+##$DBP= (0..7)
+150 150 150 150 150 150 150 150 
+##$DBP07= 0
+##$DBPNAM0= <>
+##$DBPNAM1= <>
+##$DBPNAM2= <>
+##$DBPNAM3= <>
+##$DBPNAM4= <>
+##$DBPNAM5= <>
+##$DBPNAM6= <>
+##$DBPNAM7= <>
+##$DBPOAL= (0..7)
+0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 
+##$DBPOFFS= (0..7)
+0 0 0 0 0 0 0 0 
+##$DE= 6
+##$DECBNUC= <off>
+##$DECIM= 16
+##$DECNUC= <off>
+##$DECSTAT= 4
+##$DIGMOD= 1
+##$DIGTYP= 10
+##$DL= (0..7)
+0 120 120 120 120 120 120 120 
+##$DP= (0..7)
+150 150 150 150 150 150 150 150 
+##$DP07= 0
+##$DPNAME0= <>
+##$DPNAME1= <>
+##$DPNAME2= <>
+##$DPNAME3= <>
+##$DPNAME4= <>
+##$DPNAME5= <>
+##$DPNAME6= <>
+##$DPNAME7= <>
+##$DPOAL= (0..7)
+0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 
+##$DPOFFS= (0..7)
+0 0 0 0 0 0 0 0 
+##$DQDMODE= 0
+##$DR= 18
+##$DS= 2
+##$DSLIST= <SSSSSSSSSSSSSSS>
+##$DSPFIRM= 0
+##$DSPFVS= 12
+##$DTYPA= 0
+##$EXP= <>
+##$F1LIST= <111111111111111>
+##$F2LIST= <222222222222222>
+##$F3LIST= <333333333333333>
+##$FCUCHAN= (0..9)
+0 2 1 3 0 0 0 0 0 0 
+##$FL1= 90
+##$FL2= 90
+##$FL3= 90
+##$FL4= 90
+##$FOV= 20
+##$FQ1LIST= <freqlist>
+##$FQ2LIST= <freqlist>
+##$FQ3LIST= <freqlist>
+##$FQ4LIST= <freqlist>
+##$FQ5LIST= <freqlist>
+##$FQ6LIST= <freqlist>
+##$FQ7LIST= <freqlist>
+##$FQ8LIST= <freqlist>
+##$FS= (0..7)
+83 83 83 83 83 83 83 83 
+##$FTLPGN= 0
+##$FW= 128000
+##$FnMODE= 0
+##$GP031= 0
+##$GPNAM0= <SINE.20>
+##$GPNAM1= <SINE.100>
+##$GPNAM10= <sine.100>
+##$GPNAM11= <sine.100>
+##$GPNAM12= <sine.100>
+##$GPNAM13= <sine.100>
+##$GPNAM14= <sine.100>
+##$GPNAM15= <sine.100>
+##$GPNAM16= <sine.100>
+##$GPNAM17= <sine.100>
+##$GPNAM18= <sine.100>
+##$GPNAM19= <sine.100>
+##$GPNAM2= <SINE.100>
+##$GPNAM20= <sine.100>
+##$GPNAM21= <sine.100>
+##$GPNAM22= <sine.100>
+##$GPNAM23= <sine.100>
+##$GPNAM24= <sine.100>
+##$GPNAM25= <sine.100>
+##$GPNAM26= <sine.100>
+##$GPNAM27= <sine.100>
+##$GPNAM28= <sine.100>
+##$GPNAM29= <sine.100>
+##$GPNAM3= <sine.32>
+##$GPNAM30= <sine.100>
+##$GPNAM31= <sine.100>
+##$GPNAM4= <sine.100>
+##$GPNAM5= <sine.100>
+##$GPNAM6= <sine.100>
+##$GPNAM7= <sine.100>
+##$GPNAM8= <sine.100>
+##$GPNAM9= <sine.100>
+##$GPX= (0..31)
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+##$GPY= (0..31)
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+##$GPZ= (0..31)
+50 20 20 30 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+##$GRDPROG= <grad_out>
+##$HDDUTY= 20
+##$HDRATE= 20
+##$HGAIN= (0..3)
+0 0 0 0 
+##$HL1= 512
+##$HL2= 35
+##$HL3= 16
+##$HL4= 17
+##$HOLDER= 0
+##$HPMOD= (0..7)
+0 0 0 0 0 0 0 0 
+##$HPPRGN= 0
+##$IN= (0..31)
+2.07125e-05 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.00011905 
+0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 
+0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 
+##$INP= (0..31)
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+##$INSTRUM= <spect>
+##$L= (0..31)
+0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 
+##$LFILTER= 200
+##$LGAIN= -5
+##$LOCKED= yes
+##$LOCKPOW= -29.3999996185303
+##$LOCNUC= <2H>
+##$LOCPHAS= 321.8
+##$LOCSHFT= no
+##$LTIME= 0.200000002980232
+##$MASR= 0
+##$MASRLST= <masrlst>
+##$NBL= 1
+##$NC= -2
+##$NS= 512
+##$NUC1= <1H>
+##$NUC2= <13C>
+##$NUC3= <15N>
+##$NUC4= <off>
+##$NUC5= <off>
+##$NUC6= <off>
+##$NUC7= <off>
+##$NUC8= <off>
+##$NUCLEI= 0
+##$NUCLEUS= <off>
+##$O1= 2820.61100006104
+##$O2= 6337.91797801564
+##$O3= 7266.87207750132
+##$O4= 0
+##$O5= -600130000
+##$O6= -600130000
+##$O7= -600130000
+##$O8= -600130000
+##$OBSCHAN= (0..9)
+0 0 0 0 0 0 0 0 0 0 
+##$OVERFLW= 0
+##$P= (0..31)
+8.45 8 7.85 13.1 25.2 0 1000 2000 0 53 0 2100 106 53 106 250 1000 720 
+180 0 300 42.4 85.2 0 0 7000 4.7 7.65 8.45 0 0 250 
+##$PAPS= 2
+##$PARMODE= 0
+##$PCPD= (0..9)
+0 0 80 200 0 0 0 0 0 0 
+##$PHCOR= (0..31)
+0 0 -1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+##$PHP= 1
+##$PH_ref= 140.8059
+##$PL= (0..31)
+120 3 120 120 38.2 14.6 45.96 120 120 55 100 15 120 120 120 120 13.65 
+120 3 120 120 120 120 120 120 120 120 120 120 120 120 120 
+##$POWMOD= 2
+##$PR= 1
+##$PRECHAN= (0..15)
+5 1 5 5 2 5 5 5 5 5 5 5 5 5 5 5 
+##$PRGAIN= 0
+##$PROBHD= <5 mm TXI (13C/15N) Z-grad Z8323/0115
+>
+##$PROSOL= no
+##$PULPROG= <oneone.cpj>
+##$PW= 0
+##$QNP= 1
+##$RD= 0
+##$RECCHAN= (0..15)
+-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 
+##$RECPH= 0
+##$RG= 16384
+##$RO= 20
+##$ROUTWD1= (0..23)
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 
+##$ROUTWD2= (0..23)
+0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 1 0 0 
+##$RPUUSED= (0..8)
+0 0 0 0 0 0 0 0 0 
+##$RSEL= (0..9)
+0 1 2 5 0 0 0 0 0 0 
+##$S= (0..7)
+83 4 83 83 83 83 83 83 
+##$SEOUT= 0
+##$SFO1= 600.132820611
+##$SFO2= 150.909146917978
+##$SFO3= 60.8179118720775
+##$SFO4= 600.13
+##$SFO5= 0
+##$SFO6= 0
+##$SFO7= 0
+##$SFO8= 0
+##$SOLVENT= <DMSO>
+##$SP= (0..31)
+1 45.2 0 11 11 0 0 0 0 0 0 0 0 0 0 0 150 150 150 150 150 150 150 150 150 
+150 150 150 150 150 150 150 
+##$SP07= 0
+##$SPNAM0= <sq.2k>
+##$SPNAM1= <halfgaus1.256>
+##$SPNAM10= <gauss>
+##$SPNAM11= <gauss>
+##$SPNAM12= <gauss>
+##$SPNAM13= <gauss>
+##$SPNAM14= <gauss>
+##$SPNAM15= <gauss>
+##$SPNAM16= <gauss>
+##$SPNAM17= <gauss>
+##$SPNAM18= <gauss>
+##$SPNAM19= <gauss>
+##$SPNAM2= <gauss>
+##$SPNAM20= <gauss>
+##$SPNAM21= <gauss>
+##$SPNAM22= <gauss>
+##$SPNAM23= <gauss>
+##$SPNAM24= <gauss>
+##$SPNAM25= <gauss>
+##$SPNAM26= <gauss>
+##$SPNAM27= <gauss>
+##$SPNAM28= <gauss>
+##$SPNAM29= <gauss>
+##$SPNAM3= <sinc_1>
+##$SPNAM30= <gauss>
+##$SPNAM31= <gauss>
+##$SPNAM4= <sinc_1>
+##$SPNAM5= <gauss>
+##$SPNAM6= <gauss>
+##$SPNAM7= <gauss>
+##$SPNAM8= <gauss>
+##$SPNAM9= <gauss>
+##$SPOAL= (0..31)
+0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 
+0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 
+##$SPOFFS= (0..31)
+20000 0 0 19000 19000 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+0 0 0 
+##$SW= 16.6629780217968
+##$SWIBOX= (0..15)
+0 1 4 4 0 5 0 0 0 0 0 0 0 0 0 0 
+##$SW_h= 10000
+##$TD= 1
+##$TD0= 1
+##$TE= 298
+##$TE2= 300
+##$TL= (0..7)
+0 1 120 120 120 120 120 120 
+##$TP= (0..7)
+150 150 150 150 150 150 150 150 
+##$TP07= 0
+##$TPNAME0= <>
+##$TPNAME1= <>
+##$TPNAME2= <>
+##$TPNAME3= <>
+##$TPNAME4= <>
+##$TPNAME5= <>
+##$TPNAME6= <>
+##$TPNAME7= <>
+##$TPOAL= (0..7)
+0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 
+##$TPOFFS= (0..7)
+0 0 0 0 0 0 0 0 
+##$TUNHIN= 0
+##$TUNHOUT= 0
+##$TUNXOUT= 0
+##$USERA1= <user>
+##$USERA2= <user>
+##$USERA3= <user>
+##$USERA4= <user>
+##$USERA5= <user>
+##$V9= 5
+##$VALIST= <valist>
+##$VCLIST= <CCCCCCCCCCCCCCC>
+##$VD= 0
+##$VDLIST= <DDDDDDDDDDDDDDD>
+##$VPLIST= <PPPPPPPPPPPPPPP>
+##$VTLIST= <TTTTTTTTTTTTTTT>
+##$WBST= 256
+##$WBSW= 16
+##$XGAIN= (0..3)
+0 0 0 0 
+##$XL= 0
+##$YL= 0
+##$YMAX_a= 0
+##$YMIN_a= 0
+##$ZGOPTNS= <>
+##$ZL1= 120
+##$ZL2= 120
+##$ZL3= 120
+##$ZL4= 120
+##END=
