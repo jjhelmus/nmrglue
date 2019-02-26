@@ -1792,10 +1792,23 @@ class pipe_3d(fileiobase.data_nd):
         # find the length of the third dimension
         f3 = "FDF" + str(int(dic["FDDIMORDER3"]))
         quadrature_factor = [2, 1][int(dic[f3 + 'QUADFLAG'])]
+        
+        #Checking whether "nmrPipe -fn EXT ..." has been applied to z-dim or not.
+        #If EXT has been applied, FDF*XN is not zero.
+        #If z-dim is in time-domain, data-size given by FDF*X1 and FDF*XN has to be doubled.
         if dic[f3 + 'FTFLAG']:
-            lenZ = int(dic[f3 + 'FTSIZE'] * quadrature_factor)
+
+            if int(dic[f3 + 'XN']) == 0:
+                lenZ = int(dic[f3 + 'FTSIZE'] * quadrature_factor)
+            else:
+                lenZ = int(dic[f3 + 'XN']) - int(dic[f3 + 'X1']) + 1
+
         else:
-            lenZ = int(dic[f3 + 'TDSIZE'] * quadrature_factor)
+            if int(dic[f3 + 'XN']) == 0:
+                lenZ = int(dic[f3 + 'TDSIZE'] * quadrature_factor)
+            else:
+                lenZ = 2*(int(dic[f3 + 'XN']) - int(dic[f3 + 'X1']) + 1)
+                
         fshape.insert(0, lenZ)   # insert as leading size of fshape
 
         # check that all files exist if fcheck is set
