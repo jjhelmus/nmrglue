@@ -151,6 +151,8 @@ def _detect_format(dataline):
     firstvalue_re = re.compile(
         "(\s)*([+-]?\d+\.?\d*|[+-]?\.\d+)([eE][+-]?\d+)?(\s)*")
 
+    xy_re = re.compile('^[0-9\.]+, [0-9\.]+$')
+
     index = firstvalue_re.match(dataline).end()
     if index is None:
         return -1
@@ -165,6 +167,10 @@ def _detect_format(dataline):
         return 1
     if firstchar in _SQZ_DIGITS:
         return 1
+
+    if re.search(xy_re, dataline):
+        return 2
+
     return 0
 
 
@@ -347,6 +353,17 @@ def _parse_pseudo(datalines):
     return data
 
 
+def _parse_xy_xy(datalines):
+    pts = []
+    for dataline in datalines:
+        if not dataline:
+            continue
+        x, y = dataline.split(', ')
+        pts.append([float(x), float(y)])
+
+    return pts
+
+
 def _parse_data(datastring):
     '''
     Creates numpy array from datalines
@@ -364,6 +381,8 @@ def _parse_data(datastring):
         data = _parse_pseudo(datalines)
     elif mode == 0:
         data = _parse_affn_pac(datalines)
+    elif mode == 2:
+        data = _parse_xy_xy(datalines)
     else:
         return None
     if data is None:
