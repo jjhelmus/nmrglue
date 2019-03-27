@@ -220,10 +220,10 @@ def manual_ps(data, notebook=False):
         interactive, = plt.plot(data.real, lw=1, color='black')
 
         axcolor = 'white'
-        axpc0 = plt.axes([0.25, 0.10, 0.65, 0.03], axisbg=axcolor)
-        axpc1 = plt.axes([0.25, 0.15, 0.65, 0.03], axisbg=axcolor)
-        axpiv = plt.axes([0.25, 0.20, 0.65, 0.03], axisbg=axcolor)
-        axpst = plt.axes([0.25, 0.25, 0.15, 0.04], axisbg=axcolor)
+        axpc0 = plt.axes([0.25, 0.10, 0.65, 0.03], facecolor=axcolor)
+        axpc1 = plt.axes([0.25, 0.15, 0.65, 0.03], facecolor=axcolor)
+        axpiv = plt.axes([0.25, 0.20, 0.65, 0.03], facecolor=axcolor)
+        axpst = plt.axes([0.25, 0.25, 0.15, 0.04], facecolor=axcolor)
 
         spc0 = Slider(axpc0, 'p0', -360, 360, valinit=0)
         spc1 = Slider(axpc1, 'p1', -360, 360, valinit=0)
