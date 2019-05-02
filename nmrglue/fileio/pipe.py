@@ -52,7 +52,7 @@ def read_table(filename):
     """
     # divide up into comment lines and data lines
     specials = ["VARS", "FORMAT", "NULLSTRING", "NULLVALUE", "REMARK", "DATA"]
-    f = open(filename, 'rb')
+    f = open(filename, 'r')
     cl = []
     dl = []
     for line in f:
@@ -80,7 +80,7 @@ def read_table(filename):
 
     # DEBUG
     # print(dtd['names'],dtd['formats'])
-    s = StringIO("".join(dl))
+    s = [l.encode('utf-8') for l in dl]
 
     rec = np.recfromtxt(s, dtype=dtd, comments='XXXXXXXXXXX')
     return cl, pformat, np.atleast_1d(rec)
@@ -119,20 +119,21 @@ def write_table(filename, pcomments, pformats, rec, overwrite=False):
     # write out the VARS line
     names = rec.dtype.names
     s = "VARS   " + " ".join(names) + "\n"
-    f.write(s)
+    f.write(s.encode('utf-8'))
 
     # write out the FORMAT line
     s = "FORMAT " + " ".join(pformats) + "\n"
-    f.write(s)
+    f.write(s.encode('utf-8'))
 
     # write out any comment lines
     for c in pcomments:
-        f.write(c)
+        f.write(c.encode('utf-8'))
 
     # write out each line of the records array
     s = " ".join(pformats) + "\n"
     for row in rec:
-        f.write(s % tuple(row))
+        drow = [i.decode('utf-8') if i.dtype.kind == 'S' else i for i in row]
+        f.write((s % tuple(drow)).encode('utf-8'))
     f.close()
     return
 
@@ -1791,10 +1792,23 @@ class pipe_3d(fileiobase.data_nd):
         # find the length of the third dimension
         f3 = "FDF" + str(int(dic["FDDIMORDER3"]))
         quadrature_factor = [2, 1][int(dic[f3 + 'QUADFLAG'])]
+        
+        #Checking whether "nmrPipe -fn EXT ..." has been applied to z-dim or not.
+        #If EXT has been applied, FDF*XN is not zero.
+        #If z-dim is in time-domain, data-size given by FDF*X1 and FDF*XN has to be doubled.
         if dic[f3 + 'FTFLAG']:
-            lenZ = int(dic[f3 + 'FTSIZE'] * quadrature_factor)
+
+            if int(dic[f3 + 'XN']) == 0:
+                lenZ = int(dic[f3 + 'FTSIZE'] * quadrature_factor)
+            else:
+                lenZ = int(dic[f3 + 'XN']) - int(dic[f3 + 'X1']) + 1
+
         else:
-            lenZ = int(dic[f3 + 'TDSIZE'] * quadrature_factor)
+            if int(dic[f3 + 'XN']) == 0:
+                lenZ = int(dic[f3 + 'TDSIZE'] * quadrature_factor)
+            else:
+                lenZ = 2*(int(dic[f3 + 'XN']) - int(dic[f3 + 'X1']) + 1)
+                
         fshape.insert(0, lenZ)   # insert as leading size of fshape
 
         # check that all files exist if fcheck is set

@@ -156,15 +156,19 @@ def read_text(filename):
     for key in ['SW1', 'SW']:    # convert keys to floats
         if key in dic:
             dic[key] = float(dic[key])
-    for key in ['NP', 'NI']:    # convert keys to ints
+    for key in ['NP', 'NI', 'NELEM']:    # convert keys to ints
         if key in dic:
             dic[key] = int(dic[key])
+
+    # set NELEM to 1 if its a single 1D/2D dataset
+    if 'NELEM' not in dic:
+        dic['NELEM'] = 1
 
     # DEBUGGING
     # return dic
 
     if "NI" in dic:     # 2D data
-        data = np.empty((dic['NI'], dic['NP']), dtype='complex64')
+        data = np.empty((dic['NI']*dic['NELEM'], dic['NP']), dtype='complex64')
 
         # loop over remaining lines, extracting data values
         for iline, line in enumerate(f):
@@ -176,7 +180,7 @@ def read_text(filename):
             data.imag[ni_idx, np_idx] = i_val
 
     else:   # 1D data
-        data = np.empty((dic['NP']), dtype='complex64')
+        data = np.empty((dic['NP']*dic['NELEM']), dtype='complex64')
 
         # loop over remaining lines, extracting data values
         for iline, line in enumerate(f):
@@ -185,6 +189,7 @@ def read_text(filename):
             r_val, i_val = [float(i) for i in line.split()]
             data.real[iline] = r_val
             data.imag[iline] = i_val
+        data = data.reshape(dic['NELEM'], -1)
 
     f.close()
     return dic, data
@@ -323,9 +328,12 @@ def read_binary(filename):
     for key in ['SW1', 'SW']:    # convert keys to floats
         if key in dic:
             dic[key] = float(dic[key])
-    for key in ['NP', 'NI']:    # convert keys to ints
+    for key in ['NP', 'NI', 'NELEM']:    # convert keys to ints
         if key in dic:
             dic[key] = int(dic[key])
+
+    if not 'NELEM' in dic.keys():
+        dic['NELEM'] = 1
 
     # DEBUGGING
     # return dic, f
@@ -354,10 +362,10 @@ def read_binary(filename):
 
     # reorder data according to dimensionality and domain
     if 'NI' in dic:  # 2D data
-        return dic, data.reshape(dic["NI"], dic["NP"])
+        return dic, data.reshape(dic['NI']*dic['NELEM'], dic['NP'])
 
     else:   # 1D data
-        return dic, data
+        return dic, data.reshape(dic['NELEM'], dic['NP'])
 
 BASE = 33
 FIRST = lambda f, x: ((x) & ~(~0 << f))

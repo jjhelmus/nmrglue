@@ -1871,15 +1871,15 @@ def read_procpar(filename):
     """
     Read a procpar file returning a dictionary of procpar parameters.
     """
-    f = open(filename, 'rb')
-    dic = dict()
-    length = os.stat(filename).st_size
+    with open(filename, 'rb') as f:
+        dic = dict()
+        length = os.stat(filename).st_size
 
-    # test to see if end of file
-    while f.tell() != length:
-        p = get_parameter(f)
-        dic[p["name"]] = p
-    return dic
+        # test to see if end of file
+        while f.tell() != length:
+            p = get_parameter(f)
+            dic[p["name"]] = p
+        return dic
 
 
 def get_parameter(f):
@@ -2078,20 +2078,20 @@ class fid_nd(fileiobase.data_nd):
         # create an empty array to store the selected slices
         out = np.empty(tuple(osize), dtype=self.dtype)
 
-        f = open(self.filename, 'rb')
+        with open(self.filename, 'rb') as f:
 
-        # read in the data trace by trace
-        for out_index, in_index in nd_iter:
+            # read in the data trace by trace
+            for out_index, in_index in nd_iter:
 
-            # determine the trace number from the index
-            ntrace = self.i2t(ffshape, in_index)
+                # determine the trace number from the index
+                ntrace = self.i2t(ffshape, in_index)
 
-            # seek to the correct place in the file
-            f.seek(ntrace * self.bbytes + 32)
+                # seek to the correct place in the file
+                f.seek(ntrace * self.bbytes + 32)
 
-            # retrive trace and save to output
-            trace = get_block(f, self.pts, self.nbh, self.fdtype, False)
-            trace = uninterleave_data(trace)
-            out[out_index] = trace[lslice]
+                # retrive trace and save to output
+                trace = get_block(f, self.pts, self.nbh, self.fdtype, False)
+                trace = uninterleave_data(trace)
+                out[out_index] = trace[lslice]
 
         return out

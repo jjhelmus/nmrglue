@@ -337,7 +337,7 @@ def guess_udic(dic, data):
         # Not sure what the difference is here
         # N.B. base_freq is some bogus value like 1.4e-13
         udic[i]["car"] = dic['ob_freq'] * 1e6
-        udic[i]["time"] = not bool(dic['fft_flag'])
-        udic[i]["freq"] = bool(dic['fft_flag'])
+        udic[i]["time"] = not bool(dic['fft_flag'][i])
+        udic[i]["freq"] = bool(dic['fft_flag'][i])
 
     return udic

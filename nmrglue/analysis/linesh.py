@@ -268,7 +268,7 @@ def fit_spectrum(spectrum, lineshapes, params, amps, bounds, ampbounds,
                     zip(ls_classes, rmin, rmax, g)] for g in cparams]
 
         # TODO make this better...
-        ecbounds = [[zip(*[ls.add_edge(b, (mn, mx)) for b in zip(*db)])
+        ecbounds = [[list(zip(*[ls.add_edge(b, (mn, mx)) for b in zip(*db)]))
                     for ls, mn, mx, db in zip(ls_classes, rmin, rmax, pb)]
                     for pb in cbounds]
 

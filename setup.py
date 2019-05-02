@@ -2,7 +2,7 @@
 
 # setup script for nmrglue
 
-from distutils.core import setup
+from setuptools import setup
 from codecs import open
 from os import path, walk
 
@@ -14,7 +14,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
 
 setup(
     name='nmrglue',
-    version='0.7-dev',  # change this in nmrglue/__init__.py also
+    version='0.8-dev',  # change this in nmrglue/__init__.py also
     description='A module for working with NMR data in Python',
     long_description=long_description,
     url='http://www.nmrglue.com',
@@ -28,13 +28,15 @@ setup(
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Topic :: Scientific/Engineering',
         'Operating System :: MacOS :: MacOS X',
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX :: Linux'],
-    requires=['numpy', 'scipy'],
+    install_requires=['numpy', 'scipy'],
     packages=[
         'nmrglue',
         'nmrglue.analysis',
@@ -44,6 +46,5 @@ setup(
         'nmrglue.process',
         'nmrglue.process.nmrtxt',
         'nmrglue.util'],
-    package_data={
-        'nmrglue': ['fileio/tests/data/*.f*', 'fileio/tests/data/*.dir/*']},
+    include_package_data=True,
 )

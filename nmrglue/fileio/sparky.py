@@ -378,28 +378,29 @@ def read_2D(filename):
     Read a 2D sparky file. See :py:func:`read` for documentation.
     """
     seek_pos = os.stat(filename).st_size
-    f = open(filename, 'rb')
+    with open(filename, 'rb') as f:
 
-    # read the file header
-    dic = fileheader2dic(get_fileheader(f))
+        # read the file header
+        dic = fileheader2dic(get_fileheader(f))
 
-    # check for file size mismatch
-    if seek_pos != dic["seek_pos"]:
-        warn('Bad file size in header %s vs %s' % (seek_pos, dic['seek_pos']))
+        # check for file size mismatch
+        if seek_pos != dic["seek_pos"]:
+            warn('Bad file size in header %s vs %s' %
+                 (seek_pos, dic['seek_pos']))
 
-    # read the axis headers...
-    for i in range(dic['naxis']):
-        dic["w" + str(i + 1)] = axisheader2dic(get_axisheader(f))
+        # read the axis headers...
+        for i in range(dic['naxis']):
+            dic["w" + str(i + 1)] = axisheader2dic(get_axisheader(f))
 
-    # read the data and untile
-    lenY = dic["w1"]["npoints"]
-    lenX = dic["w2"]["npoints"]
-    lentY = dic["w1"]["bsize"]
-    lentX = dic["w2"]["bsize"]
-    data = get_data(f)
-    data = untile_data2D(data, (lentY, lentX), (lenY, lenX))
+        # read the data and untile
+        lenY = dic["w1"]["npoints"]
+        lenX = dic["w2"]["npoints"]
+        lentY = dic["w1"]["bsize"]
+        lentX = dic["w2"]["bsize"]
+        data = get_data(f)
+        data = untile_data2D(data, (lentY, lentX), (lenY, lenX))
 
-    return dic, data
+        return dic, data
 
 
 def write_2D(filename, dic, data, overwrite=False):
@@ -436,30 +437,31 @@ def read_3D(filename):
     Read a 3D Sparky file. See :py:func:`read` for documentation.
     """
     seek_pos = os.stat(filename).st_size
-    f = open(filename, 'rb')
+    with open(filename, 'rb') as f:
 
-    # read the file header
-    dic = fileheader2dic(get_fileheader(f))
+        # read the file header
+        dic = fileheader2dic(get_fileheader(f))
 
-    # check for file size mismatch
-    if seek_pos != dic["seek_pos"]:
-        warn('Bad file size in header %s vs %s' % (seek_pos, dic['seek_pos']))
+        # check for file size mismatch
+        if seek_pos != dic["seek_pos"]:
+            warn('Bad file size in header %s vs %s' %
+                 (seek_pos, dic['seek_pos']))
 
-    # read the axis headers...
-    for i in range(dic['naxis']):
-        dic["w" + str(i + 1)] = axisheader2dic(get_axisheader(f))
+        # read the axis headers...
+        for i in range(dic['naxis']):
+            dic["w" + str(i + 1)] = axisheader2dic(get_axisheader(f))
 
-    # read the data and untile
-    lenZ = dic["w1"]["npoints"]
-    lenY = dic["w2"]["npoints"]
-    lenX = dic["w3"]["npoints"]
-    lentZ = dic["w1"]["bsize"]
-    lentY = dic["w2"]["bsize"]
-    lentX = dic["w3"]["bsize"]
-    data = get_data(f)
-    data = untile_data3D(data, (lentZ, lentY, lentX), (lenZ, lenY, lenX))
+        # read the data and untile
+        lenZ = dic["w1"]["npoints"]
+        lenY = dic["w2"]["npoints"]
+        lenX = dic["w3"]["npoints"]
+        lentZ = dic["w1"]["bsize"]
+        lentY = dic["w2"]["bsize"]
+        lentX = dic["w3"]["bsize"]
+        data = get_data(f)
+        data = untile_data3D(data, (lentZ, lentY, lentX), (lenZ, lenY, lenX))
 
-    return dic, data
+        return dic, data
 
 
 def write_3D(filename, dic, data, overwrite=False):

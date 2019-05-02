@@ -1,0 +1,23 @@
+REMARK ROI 2D Peak Detection System, File: ./test.ft2
+REMARK Detection Levels: -638583 and 638583
+REMARK Detection: X(+/-1) Y(+/-1)
+REMARK Interpolation: X(+/-1) Y(+/-1)
+REMARK Noise: 62976.7, Chi2-Threshold: 1.000000e-04, Local Adjustment: None
+REMARK Position Tolerances: X(2.0) Y(2.0)
+REMARK Sinc Detect ON, Height Adjustments: X(1.200) Y(1.800)
+REMARK Sinc Detect Linewidths: X(15.0Hz) Y(0.0Hz)
+REMARK Total Peaks: 25, Good Peaks: 25, Questionable Peaks: 0
+REMARK Clusters: 24, Max Cluster Size: 2
+REMARK Parent Spectral Axis Limits:
+
+DATA  X_AXIS HN           1  1997   13.738ppm    5.001ppm
+DATA  Y_AXIS 15N          1   256  132.082ppm  109.170ppm
+
+VARS   INDEX X_AXIS Y_AXIS DX DY X_PPM Y_PPM X_HZ Y_HZ XW YW XW_HZ YW_HZ X1 X3 Y1 Y3 HEIGHT DHEIGHT VOL PCHI2 TYPE ASS CLUSTID MEMCNT
+FORMAT %5d %9.3f %9.3f %6.3f %6.3f %8.3f %8.3f %9.3f %9.3f %7.3f %7.3f %8.3f %8.3f %4d %4d %4d %4d %+e %+e %+e %.5f %d %s %4d %4d
+
+   1  1330.696   178.647  0.199  0.055    7.917  116.120  6731.114 10004.442   4.706   2.469   17.514   19.116 1328 1334  178  180  2.327888e+06  5.063678e+04  2.398805e+07 0.00000 1   01N-HN    1    1
+   2  1113.521   181.345  0.418  0.079    8.868  115.878  7539.364  9983.562   4.756   2.357   17.701   18.249 1111 1116  181  182  1.515912e+06  5.155826e+04  1.248832e+07 0.00000 1   02N-HN    2    1
+   3  1306.379   192.809  0.313  0.053    8.024  114.848  6821.611  9894.815   5.490   2.649   20.434   20.508 1302 1309  192  195  2.144054e+06  4.917659e+04  3.713520e+07 0.00000 1   03N-HN    3    2
+   4  1080.727   194.335  0.625  0.136    9.012  114.710  7661.411  9882.997   4.982   2.293   18.540   17.748 1080 1081  194  194  7.892979e+05  5.070199e+04  1.445105e+06 0.00000 1   04N-HN    4    1
+   5  1163.911   195.067  0.164  0.035    8.648  114.645  7351.828  9877.337   4.681   2.185   17.423   16.915 1161 1166  194  196  1.853855e+06  4.829928e+04  1.693474e+07 0.00000 1   05N-HN    5    1
