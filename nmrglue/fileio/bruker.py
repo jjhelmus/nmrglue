@@ -121,7 +121,10 @@ def add_axis_to_udic(udic, dic, udim, strip_fake):
         pro_file = "procs"
 
     if acq_file in dic:
-        sw = dic[acq_file]["SW_h"]
+        if b_dim == 0:
+            sw = dic[acq_file]["SW_h"]
+        else:
+            sw = dic[acq_file]["SW"] * dic[acq_file]["SFO1"]
     elif pro_file in dic:
         sw = dic[pro_file]["SW_p"]
         # procNs files store sw (in Hz) with the 'SW_p' key instead of 'SW_h'.
