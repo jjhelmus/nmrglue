@@ -160,3 +160,20 @@ def run(cpython, script, pass_current_folder=True, use_shell=None, dry=None):
         process.stdin.close()
     
     return process
+
+    
+def verify_completion(process):
+    """
+    Verify that the output is correct
+    """
+
+    if process is not None:
+        errmsg = [line for line in iter(process.stdout.readline, '')]
+
+        if not errmsg:
+            MSG('Script executed to completion')
+        else:
+            MSG(''.join(errmsg))
+
+    else:
+        return
