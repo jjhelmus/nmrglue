@@ -64,12 +64,23 @@ def read_cfg(filename):
 
     """
     config = SafeConfigParser()
+    config.read(filename)
+
     try:
-        config.read(filename)
         cpyname = config.get('xcpy', 'cpython')
+    except:
+        cpyname = ""
+
+    try:
         scripts_location = config.get('xcpy', 'scripts_location')
     except:
-        cpyname, scripts_location = "", ""
+        scripts_location = ""
+
+    if cpyname:        
+        verify_python(cpyname)
+
+    if scripts_location:
+        exists(scripts_location, raise_error=True)
 
     return cpyname, scripts_location
 
@@ -125,12 +136,16 @@ def current_data():
     if executed when a data folder is open
 
     """
-    cd = CURDATA()
-    current_dir = os.path.join(cd[3], cd[0])
-    current_expno = cd[1]
-    current_procno = cd[2]
+    try:
+        cd = CURDATA()
+        current_dir = os.path.join(cd[3], cd[0])
+        current_expno = cd[1]
+        current_procno = cd[2]
+        return [current_dir, current_expno, current_procno]
 
-    return [current_dir, current_expno, current_procno]
+    except:
+        return []
+
 
 
 def run(cpython, script, pass_current_folder=True, use_shell=None, dry=None):
