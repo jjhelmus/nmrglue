@@ -93,6 +93,18 @@ def write_cfg(outfile, infile):
     try:
         cpyname, scripts_location = read_cfg(infile)
     except:
+        if exists(infile):
+            errmsg = '''
+                The following configuration was found in the file {}:
+
+                {}
+
+                These settings are likely incorrect.
+                you can enter the correct settings at the next dialog box.
+                Press 'Close' to continue.
+                '''.format(infile, show_config(infile, printing=False))
+            MSG(errmsg)
+
         cpyname, scripts_location = "", ""
 
     cpyname, scripts_location = INPUT_DIALOG(
@@ -197,8 +209,7 @@ def verify_completion(process):
 def verify_python(command):
     """
     Verify that the command to be saved in the config file points 
-    to a valid python executable
-    This is rudimentary! 
+    to a valid python executable. This is a rudimentary check! 
 
     """
     if not os.path.exists(command):
@@ -206,7 +217,32 @@ def verify_python(command):
 
     command = command.split(os.sep)[-1]
     if command.lower().find('python') != 0:
-        raise OSError('Could not understand the command {}. This does not seem to be a valid python binary'.format(command))
+        
+        errmsg = '''
+            {} does not seem to be a valid python binary. 
+            Please check the configuration file using 'xcpy -s'. 
+            This attempt will be aborted.
+            '''.format(command)
+
+        raise OSError(errmsg)
+
+
+def show_config(filename, printing=True):
+    """
+    Shows the configuration file if present
+
+    """
+    try:
+        with open(filename, 'r') as f:
+            config = f.read()
+            if printing:
+                MSG(config)
+    except:
+        if printing:
+            MSG(filename + ' not found')
+        config = None
+
+    return config
 
     
 def main():    
@@ -221,10 +257,10 @@ def main():
     # get arguments passed to xcpy 
     argv = sys.argv
     if len(argv) == 1:
-        argv.append('--info')
+        argv.append('--help')
 
     # return docstring
-    if argv[1] in ['-i', '--info']: 
+    if argv[1] in ['-h', '--help']: 
         if len(argv) > 2:
             MSG('Opening Documentation. All other options ignored. Press OK')
         MSG(__doc__)
@@ -239,6 +275,9 @@ def main():
         if len(argv) > 2:
             MSG('Opening Configuration Settings. All other options ignored. Press OK')
         write_cfg(config_file, config_file)
+
+    elif argv[1] in ['-c', '--config']:
+        show_config(config_file)
 
     else: 
         if '--use-shell' in argv:
