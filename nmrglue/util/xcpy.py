@@ -117,3 +117,17 @@ def exists(filename, raise_error=False):
         raise Exception('{} not found'.format(filename))
     else:
         return False
+
+
+def current_data():
+    """
+    Returns the current EXPNO and PROCNO open in Topspin,
+    if executed when a data folder is open
+
+    """
+    cd = CURDATA()
+    current_dir = os.path.join(cd[3], cd[0])
+    current_expno = cd[1]
+    current_procno = cd[2]
+
+    return [current_dir, current_expno, current_procno]
