@@ -90,9 +90,9 @@ def write_cfg(outfile, infile):
     Writes or overwrites a configuration file
 
     """
-    if infile is not None:
+    try:
         cpyname, scripts_location = read_cfg(infile)
-    else:
+    except:
         cpyname, scripts_location = "", ""
 
     cpyname, scripts_location = INPUT_DIALOG(
@@ -192,9 +192,24 @@ def verify_completion(process):
 
     else:
         return
-        
+
+
+def verify_python(command):
+    """
+    Verify that the command to be saved in the config file points 
+    to a valid python executable
+    This is rudimentary! 
+
+    """
+    if not os.path.exists(command):
+        raise OSError('The command {} cannot be executed as the file does not exist'.format(command))
+
+    command = command.split(os.sep)[-1]
+    if command.lower().find('python') != 0:
+        raise OSError('Could not understand the command {}. This does not seem to be a valid python binary'.format(command))
+
     
-if __name__ == "__main__":
+def main():    
     
     # check whether running in Topspin/Jython and get the location if yes
     if check_jython():
@@ -245,14 +260,19 @@ if __name__ == "__main__":
         cpyname, folder = read_cfg(config_file)
 
         # see if script is there and then run
-        if exists(cpyname) and exists(folder):
-            scriptname = os.path.join(folder, argv[1])
+        scriptname = os.path.join(folder, argv[1])
 
-            if exists(scriptname):
+        if exists(scriptname):
+            process = run(cpyname, scriptname, pass_current_folder, use_shell, dry)
+        else:
+            scriptname = scriptname + '.py'
+            if exists(scriptname, raise_error=True):
                 process = run(cpyname, scriptname, pass_current_folder, use_shell, dry)
-                verify_completion(process)
-            else:
-                scriptname = scriptname + '.py'
-                if exists(scriptname, raise_error=True):
-                    process = run(cpyname, scriptname, pass_current_folder, use_shell, dry)
-                    verify_completion(process)
+
+        verify_completion(process)
+
+
+
+if __name__ == "__main__":
+    main()
+
