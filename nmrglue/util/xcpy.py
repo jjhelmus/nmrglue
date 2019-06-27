@@ -3,7 +3,7 @@ xcpy - interfaces with external programs from within Bruker-TopSpin
 
 USAGE
 xcpy
-xcpy [OPTIONS] 
+xcpy [OPTIONS]
 xcpy [OPTIONS] [SCRIPTNAME]
 
 INSTALLATION
@@ -14,24 +14,26 @@ this documentation should pop up
 3. A configuration file needs to be written out so that xcpy
 knows the location of the CPython executable and a folder where
 the .py scripts are located. This can be done by 'xcpy -s'. This
-can be rewritten at any time point using the same command.  
+can be rewritten at any time point using the same command.
 
 
 DESCRIPTION
-xcpy supports running external scripts via Jython (subprocess module) 
-that ships with Topspin. Currently, it allows only external CPython 
-programs to run. By default, it passes the current folder, expno and procno 
+xcpy supports running external scripts via Jython (subprocess module)
+that ships with Topspin. Currently, it allows only external CPython
+programs to run. By default, it passes the current folder, expno and procno
 to the external CPython program (if available).
 
--h, --help: Brings up this docstring. Also brings it up when no other 
+
+OPTIONS
+-h, --help: Brings up this docstring. Also brings it up when no other
 \toption is given.
 
--s, --settings: Opens a dialog to write out a configuration file. The 
+-s, --settings: Opens a dialog to write out a configuration file. The
 \tlocation of the Cpython executable and the folder where all scripts
-\tare located can be given. Use full path names for this, i.e., use 
+\tare located can be given. Use full path names for this, i.e., use
 \t'/usr/bin/python3' for *nix instead of 'python3' or '~/folder/python3',
-\tand 'C:\python.exe' for Windows (note the .exe) extension. If the 
-\tconfiguration file already exists, the entries will be verified and 
+\tand 'C:\python.exe' for Windows (note the .exe) extension. If the
+\tconfiguration file already exists, the entries will be verified and
 \tthe dialog will be populated with them if these are found to be correct.
 \tElse, an error message with the configuration file will be returned and
 \tthe dialogs will be kept empty.
@@ -42,12 +44,12 @@ to the external CPython program (if available).
 -d, --dry-run: Prints out the command that will be executed by the subprocess
 \tmodule if this option is not given.
 
---no-args: Does not pass any arguments (current data folder, etc) to 
+--no-args: Does not pass any arguments (current data folder, etc) to
 \tthe external program
 
---use-shell: Uses shell to run the subprocess command. By default, this is 
-\tnot used for *nix and turned on for Windows. [Warning: this is a known 
-\tsecurity risk, but seems to be the only way I can get this to work on Windows.
+--use-shell: Uses shell to run the subprocess command. By default, this is
+\tnot used for *nix and turned on for Windows. [Warning: this is a known
+\tsecurity risk, but seems to be the only way this works on Windows.
 
 """
 import sys
@@ -64,15 +66,17 @@ def check_jython():
     """
     # some of the functions defined in the global namespace
     # by Topspin which are also used by xcpy
-    topspin_inbuilts = ['MSG', 'INPUT_DIALOG', 'CURDATA']
+    topspin_inbuilts = ["MSG", "INPUT_DIALOG", "CURDATA"]
 
     g = globals().keys()
     for function in topspin_inbuilts:
         if function in g:
             pass
         else:
-            raise Exception('This file is meant to be executed \
-                             using Jython from within Topspin')
+            raise Exception(
+                "This file is meant to be executed \
+                             using Jython from within Topspin"
+            )
     return True
 
 
@@ -86,14 +90,14 @@ def topspin_location():
     try:
         # topspin >= 3.6
         toppath = sys.getBaseProperties()["XWINNMRHOME"]
-    except:
+    except AttributeError:
         try:
             # topspin >= 3.1 and <= 3.5
             toppath = sys.registry["XWINNMRHOME"]
-        except:
+        except (AttributeError, KeyError):
             # topspin < 3.1
             toppath = sys.getEnviron()["XWINNMRHOME"]
-    
+
     # if all the above fail, there should be an exception raised and
     # the function should not return anything
     return toppath
@@ -108,16 +112,16 @@ def read_cfg(filename):
     config.read(filename)
 
     try:
-        cpyname = config.get('xcpy', 'cpython')
-    except:
+        cpyname = config.get("xcpy", "cpython")
+    except (NoSectionError, NoOptionerror, KeyError):
         cpyname = ""
 
     try:
-        scripts_location = config.get('xcpy', 'scripts_location')
-    except:
+        scripts_location = config.get("xcpy", "scripts_location")
+    except (NoSectionError, NoOptionerror, KeyError):
         scripts_location = ""
 
-    if cpyname:        
+    if cpyname:
         verify_python(cpyname)
 
     if scripts_location:
@@ -134,9 +138,9 @@ def write_cfg(outfile, infile=None):
     if infile is not None:
         try:
             cpyname, scripts_location = read_cfg(infile)
-        except:
+        except Exception:
             if exists(infile):
-                errmsg = '''
+                errmsg = """
                     The following configuration was found in the file {}:
 
                     {}
@@ -144,31 +148,34 @@ def write_cfg(outfile, infile=None):
                     These settings are likely incorrect.
                     you can enter the correct settings at the next dialog box.
                     Press 'Close' to continue.
-                    '''.format(infile, show_config(infile, printing=False))
+                    """.format(
+                    infile, show_config(infile, printing=False)
+                )
                 MSG(errmsg)
             cpyname, scripts_location = "", ""
     else:
         cpyname, scripts_location = "", ""
 
     cpyname, scripts_location = INPUT_DIALOG(
-            "XCPy Configuration", 
-            "Please Click on OK to write this configuration.", 
-            ["CPython Executable", "CPython Scripts Location"], 
-            [cpyname, scripts_location], 
-            ["",""], 
-            ["1", "1"])
+        "XCPy Configuration",
+        "Please Click on OK to write this configuration.",
+        ["CPython Executable", "CPython Scripts Location"],
+        [cpyname, scripts_location],
+        ["", ""],
+        ["1", "1"],
+    )
 
-    if not cpyname or not scripts_location: 
+    if not cpyname or not scripts_location:
         MSG("Invalid configartion specified. Config file not written")
     else:
         config = SafeConfigParser()
-        config.add_section('xcpy')
-        config.set('xcpy', 'cpython', cpyname)
-        config.set('xcpy', 'scripts_location', scripts_location)
+        config.add_section("xcpy")
+        config.set("xcpy", "cpython", cpyname)
+        config.set("xcpy", "scripts_location", scripts_location)
 
         with open(outfile, "w") as f:
             config.write(f)
-        MSG('Written Configuration file at: ' + outfile)
+        MSG("Written Configuration file at: " + outfile)
 
 
 def exists(filename, raise_error=False):
@@ -180,7 +187,7 @@ def exists(filename, raise_error=False):
     if os.path.exists(filename):
         return True
     elif raise_error:
-        raise Exception('{} not found'.format(filename))
+        raise Exception("{} not found".format(filename))
     else:
         return False
 
@@ -198,9 +205,8 @@ def current_data():
         current_procno = cd[2]
         return [current_dir, current_expno, current_procno]
 
-    except:
+    except Exception:
         return []
-
 
 
 def run(cpython, script, pass_current_folder=True, use_shell=None, dry=None):
@@ -208,13 +214,13 @@ def run(cpython, script, pass_current_folder=True, use_shell=None, dry=None):
     Runs a cpython script
 
     """
-    if pass_current_folder == True:
+    if pass_current_folder is True:
         cd = current_data()
     else:
         cd = []
 
     if use_shell is None:
-        if os.name == 'nt':
+        if os.name == "nt":
             use_shell = True
         else:
             use_shell = False
@@ -222,28 +228,28 @@ def run(cpython, script, pass_current_folder=True, use_shell=None, dry=None):
     args = [cpython, script] + cd
 
     if dry:
-        MSG('The following command will be executed: \n' + ' '.join(args))
+        MSG("The following command will be executed: \n" + " ".join(args))
         process = None
 
     else:
         process = Popen(args, stdin=PIPE, stderr=STDOUT, shell=use_shell)
         process.stdin.close()
-    
+
     return process
 
-    
+
 def verify_completion(process):
     """
     Verify that the output is correct
     """
 
     if process is not None:
-        errmsg = [line for line in iter(process.stdout.readline, '')]
+        errmsg = [line for line in iter(process.stdout.readline, "")]
 
         if not errmsg:
-            MSG('Script executed to completion')
+            MSG("Script executed to completion")
         else:
-            MSG(''.join(errmsg))
+            MSG("".join(errmsg))
 
     else:
         return
@@ -251,21 +257,23 @@ def verify_completion(process):
 
 def verify_python(command):
     """
-    Verify that the command to be saved in the config file points 
-    to a valid python executable. This is a rudimentary check! 
+    Verify that the command to be saved in the config file points
+    to a valid python executable. This is a rudimentary check!
 
     """
     if not os.path.exists(command):
-        raise OSError('The command {} cannot be executed as the file does not exist'.format(command))
+        raise OSError("The command {} does not seem to exist".format(command))
 
     command = command.split(os.sep)[-1]
-    if command.lower().find('python') != 0:
-        
-        errmsg = '''
-            {} does not seem to be a valid python binary. 
-            Please check the configuration file using 'xcpy -s'. 
+    if command.lower().find("python") != 0:
+
+        errmsg = """
+            {} does not seem to be a valid python binary.
+            Please check the configuration file using 'xcpy -s'.
             This attempt will be aborted.
-            '''.format(command)
+            """.format(
+            command
+        )
 
         raise OSError(errmsg)
 
@@ -276,64 +284,73 @@ def show_config(filename, printing=True):
 
     """
     try:
-        with open(filename, 'r') as f:
+        with open(filename, "r") as f:
             config = f.read()
             if printing:
                 MSG(config)
-    except:
+    except FileNotFoundError:
         if printing:
-            MSG(filename + ' not found')
+            MSG(filename + " not found")
         config = None
 
     return config
 
-    
-def main():    
-    
-    # check whether running in Topspin/Jython and get the location if yes
+
+def main():
+
     if check_jython():
         toppath = topspin_location()
 
-    # this is where the config file must be store
-    config_file = os.path.join(toppath, 'exp', 'stan', 'nmr', 'py', 'user', 'xcpy.cfg')
+    config_file = os.path.join(
+        toppath, "exp", "stan", "nmr", "py", "user", "xcpy.cfg"
+    )
 
-    # get arguments passed to xcpy 
+    # get arguments passed to xcpy
     argv = sys.argv
     if len(argv) == 1:
-        argv.append('--help')
+        argv.append("--help")
 
-    # return docstring
-    if argv[1] in ['-h', '--help']: 
+    # Case: return docstring
+    if argv[1] in ["-h", "--help"]:
         if len(argv) > 2:
-            MSG('Opening Documentation. All other options ignored. Press OK')
+            MSG("Opening Documentation. All other options ignored. Press OK")
         MSG(__doc__)
 
     # check if configuration exists
     elif not os.path.exists(config_file):
-        MSG("Configuration file does not exists. Will open an input dialog to write it")
+        MSG(
+            """
+            Configuration file does not exist.
+            An input box will be opened next to write it.
+            Alternately, it can be manually edited at {}.
+            Press 'Close' to continue.
+            """.format(
+                config_file
+            )
+        )
         write_cfg(config_file)
 
     # if configuration settings are to be changed
-    elif argv[1] in ['-s', '--settings']:
+    elif argv[1] in ["-s", "--settings"]:
         if len(argv) > 2:
-            MSG('Opening Configuration Settings. All other options ignored. Press OK')
+            MSG("Opening configuration settings. Ignored all other options")
         write_cfg(config_file, config_file)
 
-    elif argv[1] in ['-c', '--config']:
+    elif argv[1] in ["-c", "--config"]:
         show_config(config_file)
 
-    else: 
-        if '--use-shell' in argv:
+    else:
+        if "--use-shell" in argv:
             use_shell = True
         else:
             use_shell = False
 
-        if '--no-args' in argv:
+        if "--no-args" in argv:
             pass_current_folder = False
         else:
             pass_current_folder = True
 
-        if '--dry-run' in argv or '-d' in argv:
+        if "--dry-run" in argv or "-d" in argv:
             dry = True
         else:
             dry = False
@@ -345,15 +362,18 @@ def main():
         scriptname = os.path.join(folder, argv[1])
 
         if exists(scriptname):
-            process = run(cpyname, scriptname, pass_current_folder, use_shell, dry)
+            process = run(
+                cpyname, scriptname, pass_current_folder, use_shell, dry
+            )
         else:
-            scriptname = scriptname + '.py'
+            scriptname = scriptname + ".py"
             if exists(scriptname, raise_error=True):
-                process = run(cpyname, scriptname, pass_current_folder, use_shell, dry)
+                process = run(
+                    cpyname, scriptname, pass_current_folder, use_shell, dry
+                )
 
         verify_completion(process)
 
 
 if __name__ == "__main__":
     main()
-
