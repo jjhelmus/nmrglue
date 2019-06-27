@@ -131,3 +131,32 @@ def current_data():
     current_procno = cd[2]
 
     return [current_dir, current_expno, current_procno]
+
+
+def run(cpython, script, pass_current_folder=True, use_shell=None, dry=None):
+    """
+    Runs a cpython script
+
+    """
+    if pass_current_folder == True:
+        cd = current_data()
+    else:
+        cd = []
+
+    if use_shell is None:
+        if os.name == 'nt':
+            use_shell = True
+        else:
+            use_shell = False
+
+    args = [cpython, script] + cd
+
+    if dry:
+        MSG('The following command will be executed: \n' + ' '.join(args))
+        process = None
+
+    else:
+        process = Popen(args, stdin=PIPE, stderr=STDOUT, shell=use_shell)
+        process.stdin.close()
+    
+    return process
