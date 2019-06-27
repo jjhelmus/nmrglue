@@ -209,3 +209,35 @@ if __name__ == "__main__":
         if len(argv) > 2:
             MSG('Opening Configuration Settings. All other options ignored. Press OK')
         write_cfg(config_file, config_file)
+
+    else: 
+        if '--use-shell' in argv:
+            use_shell = True
+        else:
+            use_shell = False
+
+        if '--no-args' in argv:
+            pass_current_folder = False
+        else:
+            pass_current_folder = True
+
+        if '--dry-run' in argv:
+            dry = True
+        else:
+            dry = False
+
+        # read configuration
+        cpyname, folder = read_cfg(config_file)
+
+        # see if script is there and then run
+        if exists(cpyname) and exists(folder):
+            scriptname = os.path.join(folder, argv[1])
+
+            if exists(scriptname):
+                process = run(cpyname, scriptname, pass_current_folder, use_shell, dry)
+                verify_completion(process)
+            else:
+                scriptname = scriptname + '.py'
+                if exists(scriptname, raise_error=True):
+                    process = run(cpyname, scriptname, pass_current_folder, use_shell, dry)
+                    verify_completion(process)
