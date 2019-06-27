@@ -1,12 +1,53 @@
 """
 xcpy - interfaces with external programs from within Bruker-TopSpin
 
-SYNOPSIS
-    \t\txcpy
-    \t\txcpy [OPTIONS] 
-    \t\txcpy [OPTIONS] [SCRIPTNAME]
+USAGE
+xcpy
+xcpy [OPTIONS] 
+xcpy [OPTIONS] [SCRIPTNAME]
 
-Description
+INSTALLATION
+1. Copy (or symlink) this file to the following directory:
+<topspin_location>/exp/stan/nmr/py/user/
+2. If you now type 'xcpy' on the command line within Topspin,
+this documentation should pop up
+3. A configuration file needs to be written out so that xcpy
+knows the location of the CPython executable and a folder where
+the .py scripts are located. This can be done by 'xcpy -s'. This
+can be rewritten at any time point using the same command.  
+
+
+DESCRIPTION
+xcpy supports running external scripts via Jython (subprocess module) 
+that ships with Topspin. Currently, it allows only external CPython 
+programs to run. By default, it passes the current folder, expno and procno 
+to the external CPython program (if available).
+
+-h, --help: Brings up this docstring. Also brings it up when no other 
+\toption is given.
+
+-s, --settings: Opens a dialog to write out a configuration file. The 
+\tlocation of the Cpython executable and the folder where all scripts
+\tare located can be given. Use full path names for this, i.e., use 
+\t'/usr/bin/python3' for *nix instead of 'python3' or '~/folder/python3',
+\tand 'C:\python.exe' for Windows (note the .exe) extension. If the 
+\tconfiguration file already exists, the entries will be verified and 
+\tthe dialog will be populated with them if these are found to be correct.
+\tElse, an error message with the configuration file will be returned and
+\tthe dialogs will be kept empty.
+
+-c, --config: Prints contents of the configuration file, if it exists.
+\tIf no configuration file is found, it prints 'None'
+
+-d, --dry-run: Prints out the command that will be executed by the subprocess
+\tmodule if this option is not given.
+
+--no-args: Does not pass any arguments (current data folder, etc) to 
+\tthe external program
+
+--use-shell: Uses shell to run the subprocess command. By default, this is 
+\tnot used for *nix and turned on for Windows. [Warning: this is a known 
+\tsecurity risk, but seems to be the only way I can get this to work on Windows.
 
 """
 import sys
@@ -290,7 +331,7 @@ def main():
         else:
             pass_current_folder = True
 
-        if '--dry-run' in argv:
+        if '--dry-run' in argv or '-d' in argv:
             dry = True
         else:
             dry = False
@@ -309,7 +350,6 @@ def main():
                 process = run(cpyname, scriptname, pass_current_folder, use_shell, dry)
 
         verify_completion(process)
-
 
 
 if __name__ == "__main__":
