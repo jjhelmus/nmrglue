@@ -177,3 +177,35 @@ def verify_completion(process):
 
     else:
         return
+        
+    
+if __name__ == "__main__":
+    
+    # check whether running in Topspin/Jython and get the location if yes
+    if check_jython():
+        toppath = topspin_location()
+
+    # this is where the config file must be store
+    config_file = os.path.join(toppath, 'exp', 'stan', 'nmr', 'py', 'user', 'xcpy.cfg')
+
+    # get arguments passed to xcpy 
+    argv = sys.argv
+    if len(argv) == 1:
+        argv.append('--info')
+
+    # return docstring
+    if argv[1] in ['-i', '--info']: 
+        if len(argv) > 2:
+            MSG('Opening Documentation. All other options ignored. Press OK')
+        MSG(__doc__)
+
+    # check if configuration exists
+    elif not os.path.exists(config_file):
+        MSG("Configuration file does not exists. Will open an input dialog to write it")
+        write_cfg(config_file)
+
+    # if configuration settings are to be changed
+    elif argv[1] in ['-s', '--settings']:
+        if len(argv) > 2:
+            MSG('Opening Configuration Settings. All other options ignored. Press OK')
+        write_cfg(config_file, config_file)
