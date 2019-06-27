@@ -72,3 +72,36 @@ def read_cfg(filename):
         cpyname, scripts_location = "", ""
 
     return cpyname, scripts_location
+
+
+def write_cfg(outfile, infile):
+    """
+    Writes or overwrites a configuration file
+
+    """
+    if infile is not None:
+        cpyname, scripts_location = read_cfg(infile)
+    else:
+        cpyname, scripts_location = "", ""
+
+    cpyname, scripts_location = INPUT_DIALOG(
+            "XCPy Configuration", 
+            "Please Click on OK to write this configuration.", 
+            ["CPython Executable", "CPython Scripts Location"], 
+            [cpyname, scripts_location], 
+            ["",""], 
+            ["1", "1"])
+
+    if not cpyname or not scripts_location: 
+        MSG("Invalid configartion specified. Config file not written")
+    else:
+        config = SafeConfigParser()
+        config.add_section('xcpy')
+        config.set('xcpy', 'cpython', cpyname)
+        config.set('xcpy', 'scripts_location', scripts_location)
+
+        with open(outfile, "w") as f:
+            config.write(f)
+        MSG('Written Configuration file at: ' + outfile)
+
+
