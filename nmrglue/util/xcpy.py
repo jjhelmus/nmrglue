@@ -56,3 +56,19 @@ def topspin_location():
     # if all the above fail, there should be an exception raised and
     # the function should not return anything
     return toppath
+
+
+def read_cfg(filename):
+    """
+    Reads in the configuration file
+
+    """
+    config = SafeConfigParser()
+    try:
+        config.read(filename)
+        cpyname = config.get('xcpy', 'cpython')
+        scripts_location = config.get('xcpy', 'scripts_location')
+    except:
+        cpyname, scripts_location = "", ""
+
+    return cpyname, scripts_location
