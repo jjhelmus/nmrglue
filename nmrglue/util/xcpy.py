@@ -126,26 +126,28 @@ def read_cfg(filename):
     return cpyname, scripts_location
 
 
-def write_cfg(outfile, infile):
+def write_cfg(outfile, infile=None):
     """
     Writes or overwrites a configuration file
 
     """
-    try:
-        cpyname, scripts_location = read_cfg(infile)
-    except:
-        if exists(infile):
-            errmsg = '''
-                The following configuration was found in the file {}:
+    if infile is not None:
+        try:
+            cpyname, scripts_location = read_cfg(infile)
+        except:
+            if exists(infile):
+                errmsg = '''
+                    The following configuration was found in the file {}:
 
-                {}
+                    {}
 
-                These settings are likely incorrect.
-                you can enter the correct settings at the next dialog box.
-                Press 'Close' to continue.
-                '''.format(infile, show_config(infile, printing=False))
-            MSG(errmsg)
-
+                    These settings are likely incorrect.
+                    you can enter the correct settings at the next dialog box.
+                    Press 'Close' to continue.
+                    '''.format(infile, show_config(infile, printing=False))
+                MSG(errmsg)
+            cpyname, scripts_location = "", ""
+    else:
         cpyname, scripts_location = "", ""
 
     cpyname, scripts_location = INPUT_DIALOG(
