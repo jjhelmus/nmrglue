@@ -105,3 +105,15 @@ def write_cfg(outfile, infile):
         MSG('Written Configuration file at: ' + outfile)
 
 
+def exists(filename, raise_error=False):
+    """
+    Checks whether a file exists either returns False or
+    raises an exception
+
+    """
+    if os.path.exists(filename):
+        return True
+    elif raise_error:
+        raise Exception('{} not found'.format(filename))
+    else:
+        return False
