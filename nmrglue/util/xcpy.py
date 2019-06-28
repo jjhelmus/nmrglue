@@ -409,7 +409,7 @@ def main():
             scriptname = get_scriptname()
         else:
             # see if script is there and then run
-            scriptname = os.path.join(folder, argv[1])
+            scriptname = os.path.join(folder, argv[-1])
 
         if exists(scriptname):
             process = run(
