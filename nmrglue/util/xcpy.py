@@ -54,8 +54,25 @@ OPTIONS
 """
 import sys
 import os
-from ConfigParser import SafeConfigParser
 from subprocess import Popen, PIPE, STDOUT
+
+try:
+    from ConfigParser import SafeConfigParser
+except ModuleNotFoundError:
+    # this will only fail if Python 3 is used
+    # but that error willl be handled by the
+    # check_jython() function
+    pass
+
+
+def topspin_error():
+    errmsg = """
+    This file is meant to be executed
+    using Jython from within Topspin
+    Please see the doctring for more
+    details.
+    """
+    return errmsg
 
 
 def check_jython():
@@ -73,10 +90,7 @@ def check_jython():
         if function in g:
             pass
         else:
-            raise Exception(
-                "This file is meant to be executed \
-                             using Jython from within Topspin"
-            )
+            raise Exception(topspin_error())
     return True
 
 
@@ -268,8 +282,9 @@ def verify_python(command):
     if command.lower().find("python") != 0:
 
         errmsg = """
-            {} does not seem to be a valid python binary.
-            Please check the configuration file using 'xcpy -s'.
+            {} does not seem to be a valid python file.
+            Please check the configuration file using 'xcpy --config',
+            or change the congiguration file using 'xcpy --settings'
             This attempt will be aborted.
             """.format(
             command
