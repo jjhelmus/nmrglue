@@ -38,6 +38,8 @@ OPTIONS
 \tElse, an error message with the configuration file will be returned and
 \tthe dialogs will be kept empty.
 
+-n, --name: Opens a dialog box to give the path of a script to be run
+
 -c, --config: Prints contents of the configuration file, if it exists.
 \tIf no configuration file is found, it prints 'None'
 
@@ -48,8 +50,8 @@ OPTIONS
 \tthe external program
 
 --use-shell: Uses shell to run the subprocess command. By default, this is
-\tnot used for *nix and turned on for Windows. [Warning: this is a known
-\tsecurity risk, but seems to be the only way this works on Windows.
+\tnot used for *nix, but is used for Windows. [Warning: this is a known
+\tsecurity risk and users are advised to be careful with their input]
 
 """
 import sys
@@ -212,15 +214,39 @@ def current_data():
     if executed when a data folder is open
 
     """
-    try:
-        cd = CURDATA()
+    cd = CURDATA()
+
+    if cd is not None:
         current_dir = os.path.join(cd[3], cd[0])
         current_expno = cd[1]
         current_procno = cd[2]
         return [current_dir, current_expno, current_procno]
 
-    except Exception:
+    else:
+        MSG(
+            """No data folder seems to be open!
+            No arguments will be passed on. If this is intentional,
+            you should run the command with the --no-args option
+            which will get rid of this message"""
+        )
         return []
+
+
+def get_scriptname():
+    """
+    Opens up a dialog box to get the script name
+
+    """
+    scriptname = INPUT_DIALOG(
+        "Script",
+        "Type the full path and name of the script to be run",
+        ["CPython Script"],
+        [""],
+        [""],
+        ["1"],
+    )
+
+    return scriptname
 
 
 def run(cpython, script, pass_current_folder=True, use_shell=None, dry=None):
@@ -246,7 +272,9 @@ def run(cpython, script, pass_current_folder=True, use_shell=None, dry=None):
         process = None
 
     else:
-        process = Popen(args, stdin=PIPE, stderr=STDOUT, shell=use_shell)
+        process = Popen(
+            args, stdin=PIPE, stdout=PIPE, stderr=STDOUT, shell=use_shell
+        )
         process.stdin.close()
 
     return process
@@ -313,9 +341,12 @@ def show_config(filename, printing=True):
 
 def main():
 
+    # check if the program is running via topspin
+    # and get the path of topspin
     if check_jython():
         toppath = topspin_location()
 
+    # path and name of the configuration file is hard-coded
     config_file = os.path.join(
         toppath, "exp", "stan", "nmr", "py", "user", "xcpy.cfg"
     )
@@ -351,6 +382,7 @@ def main():
             MSG("Opening configuration settings. Ignored all other options")
         write_cfg(config_file, config_file)
 
+    # show configuration
     elif argv[1] in ["-c", "--config"]:
         show_config(config_file)
 
@@ -373,8 +405,11 @@ def main():
         # read configuration
         cpyname, folder = read_cfg(config_file)
 
-        # see if script is there and then run
-        scriptname = os.path.join(folder, argv[1])
+        if "-n" in argv or "--name" in argv:
+            scriptname = get_scriptname()
+        else:
+            # see if script is there and then run
+            scriptname = os.path.join(folder, argv[1])
 
         if exists(scriptname):
             process = run(
@@ -387,6 +422,7 @@ def main():
                     cpyname, scriptname, pass_current_folder, use_shell, dry
                 )
 
+        # handle errors and print messages from cpython
         verify_completion(process)
 
 
