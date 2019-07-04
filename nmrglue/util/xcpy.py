@@ -297,6 +297,10 @@ def show_config(filename, printing=True):
 
 
 def main():
+    """
+    The main function that gets called when xcpy is run
+
+    """
 
     if check_jython():
         toppath = topspin_location()
