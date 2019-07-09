@@ -119,7 +119,7 @@ def topspin_location():
     return toppath
 
 
-def read_cfg(filename):
+def read_cfg(filename, check_python=True):
     """
     Reads in the configuration file
 
@@ -134,14 +134,13 @@ def read_cfg(filename):
 
     try:
         scripts_location = config.get("xcpy", "scripts_location")
+        scripts_location = scripts_location.split(",")
     except (NoSectionError, NoOptionerror, KeyError):
-        scripts_location = ""
+        scripts_location = [""]
 
-    if cpyname:
-        verify_python(cpyname)
-
-    if scripts_location:
-        exists(scripts_location, raise_error=True)
+    if check_python:
+        if cpyname:
+            verify_python(cpyname)
 
     return cpyname, scripts_location
 
@@ -154,7 +153,7 @@ def write_cfg(outfile, infile=None):
     if infile is not None:
         try:
             cpyname, scripts_location = read_cfg(infile)
-        except Exception:
+        except OSError:
             if exists(infile):
                 errmsg = """
                     The following configuration was found in the file {}:
@@ -162,24 +161,28 @@ def write_cfg(outfile, infile=None):
                     {}
 
                     These settings are likely incorrect.
-                    you can enter the correct settings at the next dialog box.
+                    You can enter the correct settings at the next dialog box.
                     Press 'Close' to continue.
                     """.format(
                     infile, show_config(infile, printing=False)
                 )
                 MSG(errmsg)
-            cpyname, scripts_location = "", ""
+
+            cpyname, scripts_location = read_cfg(infile, check_python=False)
     else:
-        cpyname, scripts_location = "", ""
+        cpyname, scripts_location = "", [""]
 
     cpyname, scripts_location = INPUT_DIALOG(
-        "XCPy Configuration",
-        "Please Click on OK to write this configuration.",
-        ["CPython Executable", "CPython Scripts Location"],
-        [cpyname, scripts_location],
-        ["", ""],
-        ["1", "1"],
+        title="XCPy Configuration",
+        header="Please Click on OK to write this configuration.",
+        items=["CPython Executable", "CPython Scripts Location"],
+        values=[cpyname, "\n".join(scripts_location)],
+        comments=["", ""],
+        types=["1", "5"],
+        columns=50,
     )
+
+    scripts_location = scripts_location.replace("\n", ",")
 
     if not cpyname or not scripts_location:
         MSG("Invalid configartion specified. Config file not written")
@@ -272,9 +275,7 @@ def run(cpython, script, pass_current_folder=True, use_shell=None, dry=None):
         process = None
 
     else:
-        process = Popen(
-            args, stdin=PIPE, stdout=PIPE, stderr=STDOUT, shell=use_shell
-        )
+        process = Popen(args, stdin=PIPE, stdout=PIPE, stderr=STDOUT, shell=use_shell)
         process.stdin.close()
 
     return process
@@ -351,9 +352,7 @@ def main():
         toppath = topspin_location()
 
     # path and name of the configuration file is hard-coded
-    config_file = os.path.join(
-        toppath, "exp", "stan", "nmr", "py", "user", "xcpy.cfg"
-    )
+    config_file = os.path.join(toppath, "exp", "stan", "nmr", "py", "user", "xcpy.cfg")
 
     # get arguments passed to xcpy
     argv = sys.argv
@@ -407,23 +406,37 @@ def main():
             dry = False
 
         # read configuration
-        cpyname, folder = read_cfg(config_file)
+        cpyname, folders = read_cfg(config_file)
 
         if "-n" in argv or "--name" in argv:
             scriptname = get_scriptname()
         else:
             # see if script is there and then run
-            scriptname = os.path.join(folder, argv[-1])
+            executed = False
+            for folder in folders:
+                scriptname = os.path.join(folder, argv[-1])
 
-        if exists(scriptname):
-            process = run(
-                cpyname, scriptname, pass_current_folder, use_shell, dry
-            )
-        else:
-            scriptname = scriptname + ".py"
-            if exists(scriptname, raise_error=True):
-                process = run(
-                    cpyname, scriptname, pass_current_folder, use_shell, dry
+                if exists(scriptname):
+                    process = run(
+                        cpyname, scriptname, pass_current_folder, use_shell, dry
+                    )
+                    executed = True
+                    break
+
+                else:
+                    scriptname = scriptname + ".py"
+                    if exists(scriptname):
+                        process = run(
+                            cpyname, scriptname, pass_current_folder, use_shell, dry
+                        )
+                        executed = True
+                        break
+
+            if not executed:
+                raise Exception(
+                    "The file {} was not found in the following folders:\n\n{}".format(
+                        argv[-1] + ".py", "\n".join(folders)
+                    )
                 )
 
         # handle errors and print messages from cpython
