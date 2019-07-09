@@ -11,17 +11,18 @@ def main():
 
     try:
         name, curdir, curexpno, curprocno = sys.argv
-        message = f"""
-        Welcome to Python {python}.
-        The current directory is set to {curdir}
-        EXPNO {curexpno} is currently open at PROCNO {curprocno}
-        """
+        message = """
+        Welcome to Python {}.
+        The current directory is set to {}
+        EXPNO {} is currently open at PROCNO {}
+        """.format(python, curdir, curexpno, curprocno)
 
     except ValueError:
-        message = f"""
-        Welcome to Python {python}.
-        No directory is currently open.
-        """
+        message = """
+        Welcome to Python {}.
+        No directory is currently open, 
+        or none was passed on to this script.
+        """.format(python)
 
     print(message)
 
