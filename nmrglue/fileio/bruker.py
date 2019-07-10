@@ -2197,13 +2197,21 @@ def parse_jcamp_value(text):
     """
     Parse value text from Bruker JCAMP-DX file returning the value.
     """
-    if "<" in text:
+    if text == '':
+        return None
+    elif text.startswith('<') and text.endswith('>'):
         return text[1:-1]  # remove < and >
-    elif "." in text or "e" in text or 'inf' in text:
-        return float(text)
     else:
-        return int(text)
-
+        if "." in text or "e" in text or 'inf' in text:
+            try:
+                return float(text)
+            except ValueError:
+                return text
+        else:
+            try:
+                return int(text)
+            except ValueError:
+                return text
 
 def write_jcamp(dic, filename, overwrite=False):
     """
