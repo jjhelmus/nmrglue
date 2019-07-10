@@ -355,6 +355,8 @@ def main():
     config_file = os.path.join(toppath, "exp", "stan", "nmr", "py", "user", "xcpy.cfg")
 
     # get arguments passed to xcpy
+    # if no arguments are passed, tag on --help
+    # so that the docstring shows up in the next step
     argv = sys.argv
     if len(argv) == 1:
         argv.append("--help")
@@ -366,6 +368,7 @@ def main():
         MSG(__doc__)
 
     # check if configuration exists
+    # if it does not, alert the user and open up a dialog box to write it out
     elif not os.path.exists(config_file):
         MSG(
             """
@@ -379,43 +382,68 @@ def main():
         )
         write_cfg(config_file)
 
-    # if configuration settings are to be changed
+    # if configuration settings are to be changed,
+    # open up a dialog box to do so
     elif argv[1] in ["-s", "--settings"]:
         if len(argv) > 2:
             MSG("Opening configuration settings. Ignored all other options")
         write_cfg(config_file, config_file)
 
     # show configuration
+    # prints out the contents of the configuration file
     elif argv[1] in ["-c", "--config"]:
         show_config(config_file)
 
+    # if -h, -c, -s are not used, actual script run is required
     else:
+
+        # STEP 1: Check for flags that need to be set
+
+        # careful!, uses shell and only sanity check is
+        # that the script being run is called 'python'
+        # this is required for windows and by default off for *nix
         if "--use-shell" in argv:
             use_shell = True
         else:
             use_shell = False
 
+        # if no arguments are to be passed to the script
         if "--no-args" in argv:
             pass_current_folder = False
         else:
             pass_current_folder = True
 
+
+        # prints out the exact command that will be run using subprocess
+        # does not actually run anything
         if "--dry-run" in argv or "-d" in argv:
             dry = True
         else:
             dry = False
 
-        # read configuration
+        # STEP 2: READ in configuration file
         cpyname, folders = read_cfg(config_file)
 
+        # STEP 3: See what script needs to be run
+        # If a script at unknown location is to be used
         if "-n" in argv or "--name" in argv:
             scriptname = get_scriptname()
         else:
-            # see if script is there and then run
+            # see if script is in one of the folders that
+            # are given in the cfg file
             executed = False
+
+            # search priority is top to bottom in the given list
+            # if a file is found, it stops searching
             for folder in folders:
                 scriptname = os.path.join(folder, argv[-1])
 
+                # check for .py extension and append it if not given
+                if not scriptname.endswith('.py'):
+                    scriptname = scriptname + '.py'
+                
+                # run the script if it exists and then break from the for loop
+                # and set the executed status to true
                 if exists(scriptname):
                     process = run(
                         cpyname, scriptname, pass_current_folder, use_shell, dry
@@ -423,15 +451,7 @@ def main():
                     executed = True
                     break
 
-                else:
-                    scriptname = scriptname + ".py"
-                    if exists(scriptname):
-                        process = run(
-                            cpyname, scriptname, pass_current_folder, use_shell, dry
-                        )
-                        executed = True
-                        break
-
+            # executed should be false iff no script was found
             if not executed:
                 raise Exception(
                     "The file {} was not found in the following folders:\n\n{}".format(
