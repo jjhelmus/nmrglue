@@ -14,7 +14,7 @@ import scipy.optimize
 from .proc_base import ps
 
 
-def autops(data, fn, p0=0.0, p1=0.0):
+def autops(data, fn, p0=0.0, p1=0.0, **kwargs):
     """
     Automatic linear phase correction
 
@@ -29,12 +29,17 @@ def autops(data, fn, p0=0.0, p1=0.0):
         Initial zero order phase in degrees.
     p1 : float
         Initial first order phase in degrees.
+    kwargs : keyword arguments
+        gamma : constant for penalty term for 'acme' to penalize negative peaks. 
+        order : order of derivative used in 'acme'
 
     Returns
     -------
     ndata : ndarray
         Phased NMR data.
-
+    opt : tuple
+        optimized 0th and 1st order phases
+        
     """
     if not callable(fn):
         fn = {
@@ -43,24 +48,27 @@ def autops(data, fn, p0=0.0, p1=0.0):
         }[fn]
 
     opt = [p0, p1]
-    opt = scipy.optimize.fmin(fn, x0=opt, args=(data, ))
+    opt = scipy.optimize.fmin(fn, x0=opt, args=(data, kwargs))
 
     phasedspc = ps(data, p0=opt[0], p1=opt[1])
 
-    return phasedspc
+    return tuple(opt), phasedspc
+    
 
-
-def _ps_acme_score(ph, data):
+def _ps_acme_score(ph, data, kwargs):
     """
     Phase correction using ACME algorithm by Chen Li et al.
     Journal of Magnetic Resonance 158 (2002) 164-168
 
     Parameters
     ----------
-    pd : tuple
+    ph : tuple
         Current p0 and p1 values
     data : ndarray
-        Array of NMR data.
+        Array of NMR data
+    kwargs : dictionary
+        gamma : constant for penalty term for 'acme'
+        order : order of derivative used in 'acme'
 
     Returns
     -------
@@ -68,37 +76,29 @@ def _ps_acme_score(ph, data):
         Value of the objective function (phase score)
 
     """
-    stepsize = 1
-
     phc0, phc1 = ph
+    s = ps(data, p0=phc0, p1=phc1)
+    data = np.real(s)
 
-    s0 = ps(data, p0=phc0, p1=phc1)
-    data = np.real(s0)
-
-    # Calculation of first derivatives
-    ds1 = np.abs((data[1:]-data[:-1]) / (stepsize*2))
-    p1 = ds1 / np.sum(ds1)
+    # Calculation of derivatives
+    ds = np.diff(data,kwargs['order'])
+    dsn = np.abs(ds)
+    p1 = dsn / np.nansum(dsn)
 
     # Calculation of entropy
-    p1[p1 == 0] = 1
-
     h1 = -p1 * np.log(p1)
-    h1s = np.sum(h1)
+    h1s = np.nansum(h1)
 
     # Calculation of penalty
-    pfun = 0.0
-    as_ = data - np.abs(data)
-    sumas = np.sum(as_)
-
-    if sumas < 0:
-        pfun = pfun + np.sum((as_/2) ** 2)
-
-    p = 1000 * pfun
-
-    return h1s + p
+    fr = data
+    fr[fr >= 0] = 0
+    fr[fr < 0] = 1
+    pr = kwargs['gamma'] * np.nansum(fr * data**2)
+    
+    return h1s + pr
 
 
-def _ps_peak_minima_score(ph, data):
+def _ps_peak_minima_score(ph, data, kwargs):
     """
     Phase correction using simple minima-minimisation around highest peak
 
@@ -108,10 +108,11 @@ def _ps_peak_minima_score(ph, data):
 
     Parameters
     ----------
-    pd : tuple
+    ph : tuple
         Current p0 and p1 values
     data : ndarray
         Array of NMR data.
+    kwargs : to keep compatibility with autops
 
     Returns
     -------
