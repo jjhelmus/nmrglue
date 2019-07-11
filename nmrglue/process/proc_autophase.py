@@ -14,7 +14,7 @@ import scipy.optimize
 from .proc_base import ps
 
 
-def autops(data, fn, p0=0.0, p1=0.0):
+def autops(data, fn, p0=0.0, p1=0.0, return_phases=False, **kwargs):
     """
     Automatic linear phase correction
 
@@ -43,11 +43,14 @@ def autops(data, fn, p0=0.0, p1=0.0):
         }[fn]
 
     opt = [p0, p1]
-    opt = scipy.optimize.fmin(fn, x0=opt, args=(data, ))
+    opt = scipy.optimize.fmin(fn, x0=opt, args=(data,), **kwargs)
 
     phasedspc = ps(data, p0=opt[0], p1=opt[1])
 
-    return phasedspc
+    if return_phases:
+        return phasedspc, opt
+    else:
+        return phasedspc
 
 
 def _ps_acme_score(ph, data):
@@ -57,7 +60,7 @@ def _ps_acme_score(ph, data):
 
     Parameters
     ----------
-    pd : tuple
+    ph : tuple
         Current p0 and p1 values
     data : ndarray
         Array of NMR data.
