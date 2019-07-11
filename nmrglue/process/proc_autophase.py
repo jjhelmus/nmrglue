@@ -98,7 +98,7 @@ def _ps_acme_score(ph, data):
 
     p = 1000 * pfun
 
-    return h1s + p
+    return (h1s + p) / data.shape[-1] / np.max(data)
 
 
 def _ps_peak_minima_score(ph, data):
