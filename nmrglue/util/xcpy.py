@@ -174,12 +174,14 @@ def write_cfg(outfile, infile=None):
 
     cpyname, scripts_location = INPUT_DIALOG(
         title="XCPy Configuration",
-        header="Please Click on OK to write this configuration.",
+        header="Only one directory path per line. The order for the folders\n"
+               "given here is the order of priority in which they will be searched.\n"
+               "Click on OK to write this configuration.",
         items=["CPython Executable", "CPython Scripts Location"],
         values=[cpyname, "\n".join(scripts_location)],
         comments=["", ""],
         types=["1", "5"],
-        columns=50,
+        columns=40,
     )
 
     scripts_location = scripts_location.replace("\n", ",")
@@ -229,7 +231,7 @@ def current_data():
         MSG(
             """No data folder seems to be open!
             No arguments will be passed on. If this is intentional,
-            you should run the command with the --no-args option
+            you should run the command with the --no-args option,
             which will get rid of this message"""
         )
         return []
