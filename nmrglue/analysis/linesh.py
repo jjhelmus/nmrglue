@@ -129,7 +129,7 @@ def estimate_scales(spectrum, centers, box_width, scale_axis=0):
 
     """
     shape = spectrum.shape
-    bcenters = np.round(np.array(centers).astype('int'))
+    bcenters = np.round(np.array(centers)).astype('int')
     scales = []
     # loop over the box centers
     for bc in bcenters:
@@ -235,7 +235,7 @@ def fit_spectrum(spectrum, lineshapes, params, amps, bounds, ampbounds,
         ccenters = [centers[i] for i in cpeaks]
 
         # find the box edges
-        bcenters = np.round(np.array(ccenters).astype('int'))
+        bcenters = np.round(np.array(ccenters)).astype('int')
         bmin = bcenters - box_width
         bmax = bcenters + box_width + 1
 
