@@ -5,6 +5,8 @@ files.
 """
 
 from __future__ import print_function, division
+import locale
+import io
 
 __developer_info__ = """
 Bruker file format information
@@ -2091,7 +2093,7 @@ def rm_dig_filter(
 
 # JCAMP-DX functions
 
-def read_jcamp(filename):
+def read_jcamp(filename, encoding=locale.getpreferredencoding()):
     """
     Read a Bruker JCAMP-DX file into a dictionary.
 
@@ -2103,6 +2105,8 @@ def read_jcamp(filename):
     ----------
     filename : str
         Filename of Bruker JCAMP-DX file.
+    encoding : str
+        Encoding of Bruker JCAMP-DX file. Defaults to the system default locale
 
     Returns
     -------
@@ -2121,7 +2125,7 @@ def read_jcamp(filename):
     """
     dic = {"_coreheader": [], "_comments": []}  # create empty dictionary
 
-    with open(filename, 'r') as f:
+    with io.open(filename, 'r', encoding=encoding) as f:
         while True:     # loop until end of file is found
 
             line = f.readline().rstrip()    # read a line
