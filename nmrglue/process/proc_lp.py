@@ -833,8 +833,6 @@ def find_lpc_qr(D, d):
     """
     Find linear prediction filter using QR decomposition.
     """
-    L = D.shape[0]
-    m = D.shape[1]
     q, r = scipy.linalg.qr(D)
     q, r = np.mat(q), np.mat(r)
 
