@@ -57,7 +57,7 @@ def _ps_acme_score(ph, data):
 
     Parameters
     ----------
-    pd : tuple
+    ph : tuple
         Current p0 and p1 values
     data : ndarray
         Array of NMR data.
@@ -108,7 +108,7 @@ def _ps_peak_minima_score(ph, data):
 
     Parameters
     ----------
-    pd : tuple
+    ph : tuple
         Current p0 and p1 values
     data : ndarray
         Array of NMR data.
