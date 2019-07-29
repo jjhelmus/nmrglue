@@ -50,8 +50,8 @@ def lp(data, pred=1, slice=slice(None), order=8, mode="f", append="after",
     mode : {'f', 'b', 'fb' or 'bf'}
         Mode to generate LP filter. 'f' for forward,'b' for backward, fb for
         'forward-backward and 'bf' for backward-forward.
-    extend : {'before', 'after'}
-        Location to extend the data, either 'before' the current data, or
+    append : {'before', 'after'}
+        Location to append the data, either 'before' the current data, or
         'after' the existing data. This is independent of the `mode` parameter.
     bad_roots : {'incr', 'decr', None, 'auto'}
         Type of roots which to consider bad and to stabilize.  Option are those
@@ -182,8 +182,8 @@ def lp_1d(trace, pred=1, slice=slice(None), order=8, mode="f", append="after",
     mode : {'f', 'b', 'fb' or 'bf'}
         Mode to generate LP filter. 'f' for forward,'b' for backward, fb for
         'forward-backward and 'bf' for backward-forward.
-    extend : {'before', 'after'}
-        Location to extend the data, either 'before' the current data, or
+    append : {'before', 'after'}
+        Location to append the data, either 'before' the current data, or
         'after' the existing data. This is independent of the `mode` parameter.
     bad_roots : {'incr', 'decr', None, 'auto'}
         Type of roots which to consider bad and to stabilize.  Option are those
