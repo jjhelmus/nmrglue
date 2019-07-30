@@ -14,7 +14,7 @@ import scipy.optimize
 from .proc_base import ps
 
 
-def autops(data, fn, p0=0.0, p1=0.0):
+def autops(data, fn, p0=0.0, p1=0.0, return_phases=False, **kwargs):
     """
     Automatic linear phase correction
 
@@ -29,6 +29,20 @@ def autops(data, fn, p0=0.0, p1=0.0):
         Initial zero order phase in degrees.
     p1 : float
         Initial first order phase in degrees.
+    return_phases : Bool
+        returns a list of optimized values of phases [p0, p1] in addition
+        to the phased data
+    kwargs : additional key-word arguments to be passed to the solver
+        The are documented at the following link: 
+        https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin.html
+        Some of the more useful ones for this use case:
+        disp : Bool  
+            Turns on or off the printing of convergence messeges
+            By default, this is set to True.
+        ftol : float
+            Absolute error in fn between iterations that is acceptable for
+            convergence. The default is 1e-4.
+        
 
     Returns
     -------
@@ -43,11 +57,14 @@ def autops(data, fn, p0=0.0, p1=0.0):
         }[fn]
 
     opt = [p0, p1]
-    opt = scipy.optimize.fmin(fn, x0=opt, args=(data, ))
+    opt = scipy.optimize.fmin(fn, x0=opt, args=(data,), **kwargs)
 
     phasedspc = ps(data, p0=opt[0], p1=opt[1])
 
-    return phasedspc
+    if return_phases:
+        return phasedspc, opt
+    else:
+        return phasedspc
 
 
 def _ps_acme_score(ph, data):
@@ -95,7 +112,7 @@ def _ps_acme_score(ph, data):
 
     p = 1000 * pfun
 
-    return h1s + p
+    return (h1s + p) / data.shape[-1] / np.max(data)
 
 
 def _ps_peak_minima_score(ph, data):
