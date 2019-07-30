@@ -395,7 +395,7 @@ def extract_1d(data, location, axis):
     """
     s = [slice(v, v + 1) for v in location]
     s[axis] = slice(None, None)
-    return np.atleast_1d(np.squeeze(data[s]))
+    return np.atleast_1d(np.squeeze(data[tuple(s)]))
 
 
 # algorithm specific peak picking routines
