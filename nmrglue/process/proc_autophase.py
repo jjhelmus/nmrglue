@@ -29,6 +29,20 @@ def autops(data, fn, p0=0.0, p1=0.0, return_phases=False, **kwargs):
         Initial zero order phase in degrees.
     p1 : float
         Initial first order phase in degrees.
+    return_phases : Bool
+        returns a list of optimized values of phases [p0, p1] in addition
+        to the phased data
+    kwargs : additional key-word arguments to be passed to the solver
+        The are documented at the following link: 
+        https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin.html
+        Some of the more useful ones for this use case:
+        disp : Bool  
+            Turns on or off the printing of convergence messeges
+            By default, this is set to True.
+        ftol : float
+            Absolute error in fn between iterations that is acceptable for
+            convergence. The default is 1e-4.
+        
 
     Returns
     -------
