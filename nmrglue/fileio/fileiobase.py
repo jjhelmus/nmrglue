@@ -73,11 +73,11 @@ class unit_conversion():
         create and set up a unit_conversion object
         """
         # fundamental units
-        self._size = size
-        self._cplx = cplx
-        self._sw = sw
-        self._obs = obs
-        self._car = car
+        self._size = int(size)
+        self._cplx = bool(cplx)
+        self._sw = float(sw)
+        self._obs = float(obs)
+        self._car = float(car)
 
         # derived units (these are in ppm)
         self._delta = -self._sw / (self._size * self._obs)
