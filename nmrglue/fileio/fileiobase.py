@@ -73,11 +73,11 @@ class unit_conversion():
         create and set up a unit_conversion object
         """
         # fundamental units
-        self._size = size
-        self._cplx = cplx
-        self._sw = sw
-        self._obs = obs
-        self._car = car
+        self._size = int(size)
+        self._cplx = bool(cplx)
+        self._sw = float(sw)
+        self._obs = float(obs)
+        self._car = float(car)
 
         # derived units (these are in ppm)
         self._delta = -self._sw / (self._size * self._obs)
@@ -385,10 +385,10 @@ def uc_from_freqscale(scale, obs, unit='ppm'):
         # bin width (to convert from centers to edges).
         dx = abs(scale[1]-scale[0])
 
-        if unit is 'ppm':
+        if unit == 'ppm':
             sw = ((max + dx/2.0) - (min - dx/2.0)) * obs
             car = (min-dx/2.0 + (max-min)/2.0) * obs
-        elif unit is 'hz':
+        elif unit == 'hz':
             sw = ((max + dx/2.0) - (min - dx/2.0))
             car = (min-dx/2.0 + (max-min)/2.0)
         else:

@@ -38,3 +38,11 @@ def test_uc_from_freqscale():
     uc_from_khz = uc_from_freqscale(khz_scale, udic[0]['obs'], 'khz')
     new_khz_scale = uc_from_khz.hz_scale() * 1.0e3
     assert_array_equal(khz_scale, new_khz_scale)
+
+
+# regression test for https://github.com/jjhelmus/nmrglue/issues/113
+def test_uc_with_float_size():
+    uc = ng.fileiobase.unit_conversion(
+        size=64.0, cplx=False, sw=1.0, obs=1.0, car=1.0)
+    scale = uc.ppm_scale()
+    assert len(scale) == 64
