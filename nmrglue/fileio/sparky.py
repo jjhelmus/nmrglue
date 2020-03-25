@@ -18,7 +18,10 @@ import os
 import struct
 import datetime
 from warnings import warn
-from html.parser import HTMLParser
+try:
+    from html.parser import HTMLParser
+except ImportError:
+    from HTMLParser import HTMLParser
 
 import numpy as np
 
@@ -739,6 +742,37 @@ class SparkySaveParser(HTMLParser):
         else:
             dic = self._parse_info(data.split("\n"),)
             self.curdict[self.curtag].append(dic)
+
+
+def read_savefile(savefile, spectrum_file=None):
+
+    with open(savefile, "r") as f:
+        savefile = f.read().replace("<end ", r"</")
+
+    parser = SparkySaveParser()
+    parser.feed(savefile)
+    parser.close()
+
+    dic = {
+        "user": parser.user,
+        "spectrum": parser.spectrum,
+        "view": parser.view,
+        "ornament": parser.ornament,
+    }
+
+    try:
+        if spectrum_file is None:
+            d, data = read(dic["spectrum"]["pathname"])
+        else:
+            d, data = read(spectrum_file)
+
+    except:
+        warn("Cannot load spectrum")
+        d, data = {}, None
+
+    dic.update(d)
+
+    return dic, data
 
 
 # sparky_ low memory objects
