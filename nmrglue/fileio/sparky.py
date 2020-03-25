@@ -18,6 +18,7 @@ import os
 import struct
 import datetime
 from warnings import warn
+from html.parser import HTMLParser
 
 import numpy as np
 
@@ -529,6 +530,215 @@ def read_lowmem_3D(filename):
         warn('Bad file size in header %s vs %s' % (seek_pos, dic['seek_pos']))
 
     return dic, data
+
+
+class SparkySaveParser(HTMLParser):
+    """
+    Parser for Sparky .save file with the following:
+    Ellipsis indicate data
+    
+    <sparky save file>
+    <version ...>
+    
+    <user>
+    ...
+    <end user>
+    
+    <spectrum>
+    ...
+    
+        <view>
+        ...
+            <params>
+            ...
+            <end params>
+            <params>
+            ...
+            <end params>
+        <end view>
+
+        <view>
+        ...
+            <params>
+            ...
+            <end params>
+            <params>
+            ...
+            <end params>
+        <end view>
+        
+        <ornament>
+        ...
+        <end ornament>
+    <end spectrum>
+    
+    """
+
+    user = {}
+    spectrum = {}
+    view = {}
+    ornament = {}
+
+    viewnum = -1
+    curtag = None
+    curdict = None
+
+    def _parse_info(self, string, dtype=None):
+        """
+        Reads a list into a dictionary, with
+        the first item of the list as the key
+        and the remaining list as a value
+        
+        """
+
+        dic = {}
+        for s in string:
+            i = s.split()
+            try:
+                if dtype is None:
+                    key = i[0].replace(".", "_").replace("-", "_")
+                    value = i[1:]
+
+                if dtype == "user":
+                    key = i[0] + "_" + i[1]
+                    value = i[2:]
+
+                parsed_value = []
+                for v in value:
+                    try:
+                        parsed_value.append(float(v))
+                    except:
+                        parsed_value.append(v)
+
+                if len(value) == 1:
+                    dic[key] = parsed_value[0]
+
+                else:
+                    dic[key] = parsed_value
+
+            except IndexError:
+                pass
+
+        return dic
+
+    def _parse_peak(self, peak):
+        """
+        Parses a single peak into a dictionary, the input
+        being a list that corresponds to a single peak in
+        a sparky save file
+        
+        """
+
+        l = [i for i, word in enumerate(peak) if word in ["[", "]"]]
+        p = peak[:l[0]]
+        l = peak[l[0]+1:l[1]]
+
+        d = {}
+        for i in p:
+            j = i.split()
+
+            info = []
+            for k in j:
+                try:
+                    info.append(float(k))
+                except ValueError:
+                    info.append(k)
+
+            if len(info) == 2:
+                d[info[0]] = info[1]
+            else:
+                d[info[0]] = info[1:]
+
+        for i in l:
+            j = i.split()
+            if j[0] not in d.keys():
+                d[j[0]] = j[1:]
+        del d["type"]
+
+        for i, k in enumerate(d["xy"]):
+            k = k.split(",")
+            d["xy"][i] = [float(j) for j in k]
+
+        return d
+
+    def _parse_ornaments(self, data):
+        """
+        Parses an ornament string into a dictionary
+        The key for each peak item is given by the peak ID 
+
+        """
+
+        data = data.split("\n")
+        p = [i for i, word in enumerate(data) if word == "type peak"]
+        peaklist = [data[p[i]: p[i+1]] for i in range(len(p)-1)]
+
+        dic = {}
+        for peak in peaklist:
+            d = self._parse_peak(peak)
+            dic[int(d["id"])] = d
+
+        return dic
+
+
+    def handle_starttag(self, tag, attrs):
+
+        if tag in ["sparky", "version"]:
+            self.curdict = self.spectrum
+            self.spectrum[tag] = attrs[0][0]
+
+        elif tag == "user":
+            self.curdict = self.user
+
+        elif tag == "spectrum":
+            self.curdict = self.spectrum
+
+        elif tag == "view":
+            self.viewnum += 1
+            self.view[self.viewnum] = {}
+            self.curdict = self.view[self.viewnum]
+
+        elif tag == "ornament":
+            self.curdict = self.ornament
+        else:
+            self.curtag = tag
+
+
+    def handle_endtag(self, tag):
+        self.curtag = None
+
+
+    def handle_data(self, data):
+
+        if len(data.strip()) == 0:
+            pass
+
+        elif self.curtag not in self.curdict.keys():
+
+            if (self.curtag is None) and (self.curdict == self.spectrum):
+                dic = self._parse_info(data.split("\n"),)
+                for k, v in dic.items():
+                    self.curdict[k] = v
+
+            elif (self.curtag is None) and (self.curdict == self.user):
+                dic = self._parse_info(data.split("\n"), "user")
+                for k, v in dic.items():
+                    self.curdict[k] = v
+
+            elif (self.curtag is None) and (self.curdict == self.view[self.viewnum]):
+                dic = self._parse_info(data.split("\n"),)
+                for k, v in dic.items():
+                    self.curdict[k] = v
+
+            elif (self.curtag is None) and (self.curdict == self.ornament):
+                self.ornament = self._parse_ornaments(data)
+
+            else:
+                dic = self._parse_info(data.split("\n"),)
+                self.curdict[self.curtag] = [dic]
+
+        else:
+            dic = self._parse_info(data.split("\n"),)
+            self.curdict[self.curtag].append(dic)
 
 
 # sparky_ low memory objects
