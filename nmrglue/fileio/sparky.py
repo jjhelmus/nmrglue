@@ -537,19 +537,17 @@ def read_lowmem_3D(filename):
 
 class SparkySaveParser(HTMLParser):
     """
-    Parser for Sparky .save file with the following:
-    Ellipsis indicate data
+    A parser for Sparky .save files. The file structure is similar to
+    simple HTML files, except the use of <end tag> instead of </tag>. 
+    The following structure is assumed:
     
     <sparky save file>
     <version ...>
-    
     <user>
     ...
     <end user>
-    
     <spectrum>
     ...
-    
         <view>
         ...
             <params>
@@ -559,7 +557,6 @@ class SparkySaveParser(HTMLParser):
             ...
             <end params>
         <end view>
-
         <view>
         ...
             <params>
@@ -569,28 +566,31 @@ class SparkySaveParser(HTMLParser):
             ...
             <end params>
         <end view>
-        
         <ornament>
         ...
         <end ornament>
     <end spectrum>
+
+    TODO: some .save files do not have this exact structure
+    They need to be treated differently
     
     """
 
-    user = {}
-    spectrum = {}
-    view = {}
-    ornament = {}
-
+    # main dictionaries to parse data into
+    user, spectrum, view, ornament = {}, {}, {}, {}
+    
+    # tracker if there are multiple views
     viewnum = -1
-    curtag = None
-    curdict = None
+
+    curtag, curdict = None, None
 
     def _parse_info(self, string, dtype=None):
         """
-        Reads a list into a dictionary, with
-        the first item of the list as the key
-        and the remaining list as a value
+        Reads a list of strings into a dictionary, with the first item of 
+        the list as the key and the remaining list as the value. In addition,
+        it parses all values in the list to do the following: (i) convert the
+        values to float wherever possible and (ii) if the list has a single
+        item, upack and return that item alone as the value
         
         """
 
@@ -609,8 +609,11 @@ class SparkySaveParser(HTMLParser):
                 parsed_value = []
                 for v in value:
                     try:
-                        parsed_value.append(float(v))
-                    except:
+                        if key == "id":
+                            parsed_value.append(int(v))
+                        else:
+                            parsed_value.append(float(v))
+                    except ValueError:
                         parsed_value.append(v)
 
                 if len(value) == 1:
@@ -626,9 +629,19 @@ class SparkySaveParser(HTMLParser):
 
     def _parse_peak(self, peak):
         """
-        Parses a single peak into a dictionary, the input
-        being a list that corresponds to a single peak in
-        a sparky save file
+        Parses a single peak into a dictionary, the input being a list 
+        that corresponds to a single peak in a sparky save file. In addition,
+        it parses all values in the list to do the following: (i) convert the
+        values to float wherever possible and (ii) if the list has a single
+        item, upack and return that item alone as the value. Currently assumes 
+        the following structure for a single peak:
+        
+        type peak
+        ...
+        [
+        type label
+        ...
+        ]
         
         """
 
@@ -666,8 +679,17 @@ class SparkySaveParser(HTMLParser):
 
     def _parse_ornaments(self, data):
         """
-        Parses an ornament string into a dictionary
-        The key for each peak item is given by the peak ID 
+        Parses a string containing all ornaments into a dictionary. This
+        is for all the data inside the <ornament> tag. The key for each 
+        peak item is given by the peak ID, which should be unique for each 
+        peak. The following structure is assumed:
+
+        type peak # peak 1
+        ...
+        type peak # peak 2
+        ...
+        type peak # peak 3
+        ...
 
         """
 
@@ -702,7 +724,9 @@ class SparkySaveParser(HTMLParser):
 
         elif tag == "ornament":
             self.curdict = self.ornament
+
         else:
+            # params tag for each view
             self.curtag = tag
 
 
@@ -712,11 +736,13 @@ class SparkySaveParser(HTMLParser):
 
     def handle_data(self, data):
 
+        # ignore blank lines
         if len(data.strip()) == 0:
             pass
 
         elif self.curtag not in self.curdict.keys():
 
+            # all the files that are read in a split at the newline character
             if (self.curtag is None) and (self.curdict == self.spectrum):
                 dic = self._parse_info(data.split("\n"),)
                 for k, v in dic.items():
@@ -736,15 +762,42 @@ class SparkySaveParser(HTMLParser):
                 self.ornament = self._parse_ornaments(data)
 
             else:
+                # for a param tag inside a view
                 dic = self._parse_info(data.split("\n"),)
                 self.curdict[self.curtag] = [dic]
 
         else:
+            # this is only executed for multiple params tags in a view
             dic = self._parse_info(data.split("\n"),)
             self.curdict[self.curtag].append(dic)
 
 
 def read_savefile(savefile, spectrum_file=None):
+    """
+    Reads in a Sparky .save file and the corresponding spectrum (.ucsf)
+    file. In addition to the usual dictionary contents that come with
+    a .ucsf file, these additinal dictionary keys are created with the content
+    from .save file: "spectrum", "view", "user" and "ornament". The together
+    contain all edits and annotations. By default, it tries to read in 
+    the spectrum file given in the .save file (but this fails many times due
+    to relative paths in .save file)
+
+    Parameters
+    ----------
+    savefile : str
+        Filename of Sparky .save file.
+    spectrum_file : str
+        Filename of Sparky .ucsf file.
+        
+
+    Returns
+    -------
+    dic : dict
+        Dictionary of Sparky .ucsf and .save parameters.
+    data : ndarray
+        Array of NMR data.
+
+    """
 
     with open(savefile, "r") as f:
         savefile = f.read().replace("<end ", r"</")
