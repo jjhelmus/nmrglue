@@ -16,3 +16,9 @@ The raw data can be downloaded (BMRB Website)[http://www.bmrb.wisc.edu/ftp/pub/b
 You can process using Topspin/NMRglue/NMRPipe, and convert the processed data into .ucsf (Sparky) format.
 The .ucsf file can then be assigned/annotated using an example shown (here)[https://www.youtube.com/watch?v=gzcJA-fEko0&t=109s].
 The file should then be saved as a .save file in Sparky. The .save and .ucsf files are the inputs for plot_sparky.py
+This particular image was generated using the following command:
+
+python ./plot_sparky.py cam.save cam.ucsf bmrb_6209 8.55 7.0 123 116.4
+
+Some adjustments will be needed to the text and cross marker size with different limits
+
