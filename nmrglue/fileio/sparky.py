@@ -18,6 +18,10 @@ import os
 import struct
 import datetime
 from warnings import warn
+try:
+    from html.parser import HTMLParser
+except ImportError:
+    from HTMLParser import HTMLParser
 
 import numpy as np
 
@@ -527,6 +531,299 @@ def read_lowmem_3D(filename):
     # check for file size mismatch
     if seek_pos != dic["seek_pos"]:
         warn('Bad file size in header %s vs %s' % (seek_pos, dic['seek_pos']))
+
+    return dic, data
+
+
+class SparkySaveParser(HTMLParser):
+    """
+    A parser for Sparky .save files. The file structure is similar to
+    simple HTML files, except the use of <end tag> instead of </tag>. 
+    The following structure is assumed:
+    
+    <sparky save file>
+    <version ...>
+    <user>
+    ...
+    <end user>
+    <spectrum>
+    ...
+        <view>
+        ...
+            <params>
+            ...
+            <end params>
+            <params>
+            ...
+            <end params>
+        <end view>
+        <view>
+        ...
+            <params>
+            ...
+            <end params>
+            <params>
+            ...
+            <end params>
+        <end view>
+        <ornament>
+        ...
+        <end ornament>
+    <end spectrum>
+
+    TODO: some .save files do not have this exact structure
+    They need to be treated differently
+    
+    """
+
+    # main dictionaries to parse data into
+    user, spectrum, view, ornament = {}, {}, {}, {}
+    
+    # tracker if there are multiple views
+    viewnum = -1
+
+    curtag, curdict = None, None
+
+    def _parse_info(self, string, dtype=None):
+        """
+        Reads a list of strings into a dictionary, with the first item of 
+        the list as the key and the remaining list as the value. In addition,
+        it parses all values in the list to do the following: (i) convert the
+        values to float wherever possible and (ii) if the list has a single
+        item, upack and return that item alone as the value
+        
+        """
+
+        dic = {}
+        for s in string:
+            i = s.split()
+            try:
+                if dtype is None:
+                    key = i[0].replace(".", "_").replace("-", "_")
+                    value = i[1:]
+
+                if dtype == "user":
+                    key = i[0] + "_" + i[1]
+                    value = i[2:]
+
+                parsed_value = []
+                for v in value:
+                    try:
+                        if key == "id":
+                            parsed_value.append(int(v))
+                        else:
+                            parsed_value.append(float(v))
+                    except ValueError:
+                        parsed_value.append(v)
+
+                if len(value) == 1:
+                    dic[key] = parsed_value[0]
+
+                else:
+                    dic[key] = parsed_value
+
+            except IndexError:
+                pass
+
+        return dic
+
+    def _parse_peak(self, peak):
+        """
+        Parses a single peak into a dictionary, the input being a list 
+        that corresponds to a single peak in a sparky save file. In addition,
+        it parses all values in the list to do the following: (i) convert the
+        values to float wherever possible and (ii) if the list has a single
+        item, upack and return that item alone as the value. Currently assumes 
+        the following structure for a single peak:
+        
+        type peak
+        ...
+        [
+        type label
+        ...
+        ]
+        
+        """
+
+        l = [i for i, word in enumerate(peak) if word in ["[", "]"]]
+        p = peak[:l[0]]
+        l = peak[l[0]+1:l[1]]
+
+        d = {}
+        for i in p:
+            j = i.split()
+
+            info = []
+            for k in j:
+                try:
+                    info.append(float(k))
+                except ValueError:
+                    info.append(k)
+
+            if len(info) == 2:
+                d[info[0]] = info[1]
+            else:
+                d[info[0]] = info[1:]
+
+        for i in l:
+            j = i.split()
+            if j[0] not in d.keys():
+                d[j[0]] = j[1:]
+        del d["type"]
+
+        for i, k in enumerate(d["xy"]):
+            k = k.split(",")
+            d["xy"][i] = [float(j) for j in k]
+
+        return d
+
+    def _parse_ornaments(self, data):
+        """
+        Parses a string containing all ornaments into a dictionary. This
+        is for all the data inside the <ornament> tag. The key for each 
+        peak item is given by the peak ID, which should be unique for each 
+        peak. The following structure is assumed:
+
+        type peak # peak 1
+        ...
+        type peak # peak 2
+        ...
+        type peak # peak 3
+        ...
+
+        """
+
+        data = data.split("\n")
+        p = [i for i, word in enumerate(data) if word == "type peak"]
+        peaklist = [data[p[i]: p[i+1]] for i in range(len(p)-1)]
+
+        dic = {}
+        for peak in peaklist:
+            d = self._parse_peak(peak)
+            dic[int(d["id"])] = d
+
+        return dic
+
+
+    def handle_starttag(self, tag, attrs):
+
+        if tag in ["sparky", "version"]:
+            self.curdict = self.spectrum
+            self.spectrum[tag] = attrs[0][0]
+
+        elif tag == "user":
+            self.curdict = self.user
+
+        elif tag == "spectrum":
+            self.curdict = self.spectrum
+
+        elif tag == "view":
+            self.viewnum += 1
+            self.view[self.viewnum] = {}
+            self.curdict = self.view[self.viewnum]
+
+        elif tag == "ornament":
+            self.curdict = self.ornament
+
+        else:
+            # params tag for each view
+            self.curtag = tag
+
+
+    def handle_endtag(self, tag):
+        self.curtag = None
+
+
+    def handle_data(self, data):
+
+        # ignore blank lines
+        if len(data.strip()) == 0:
+            pass
+
+        elif self.curtag not in self.curdict.keys():
+
+            # all the files that are read in a split at the newline character
+            if (self.curtag is None) and (self.curdict == self.spectrum):
+                dic = self._parse_info(data.split("\n"),)
+                for k, v in dic.items():
+                    self.curdict[k] = v
+
+            elif (self.curtag is None) and (self.curdict == self.user):
+                dic = self._parse_info(data.split("\n"), "user")
+                for k, v in dic.items():
+                    self.curdict[k] = v
+
+            elif (self.curtag is None) and (self.curdict == self.view[self.viewnum]):
+                dic = self._parse_info(data.split("\n"),)
+                for k, v in dic.items():
+                    self.curdict[k] = v
+
+            elif (self.curtag is None) and (self.curdict == self.ornament):
+                self.ornament = self._parse_ornaments(data)
+
+            else:
+                # for a param tag inside a view
+                dic = self._parse_info(data.split("\n"),)
+                self.curdict[self.curtag] = [dic]
+
+        else:
+            # this is only executed for multiple params tags in a view
+            dic = self._parse_info(data.split("\n"),)
+            self.curdict[self.curtag].append(dic)
+
+
+def read_savefile(savefile, spectrum_file=None):
+    """
+    Reads in a Sparky .save file and the corresponding spectrum (.ucsf)
+    file. In addition to the usual dictionary contents that come with
+    a .ucsf file, these additinal dictionary keys are created with the content
+    from .save file: "spectrum", "view", "user" and "ornament". The together
+    contain all edits and annotations. By default, it tries to read in 
+    the spectrum file given in the .save file (but this fails many times due
+    to relative paths in .save file)
+
+    Parameters
+    ----------
+    savefile : str
+        Filename of Sparky .save file.
+    spectrum_file : str
+        Filename of Sparky .ucsf file.
+        
+
+    Returns
+    -------
+    dic : dict
+        Dictionary of Sparky .ucsf and .save parameters.
+    data : ndarray
+        Array of NMR data.
+
+    """
+
+    with open(savefile, "r") as f:
+        savefile = f.read().replace("<end ", r"</")
+
+    parser = SparkySaveParser()
+    parser.feed(savefile)
+    parser.close()
+
+    dic = {
+        "user": parser.user,
+        "spectrum": parser.spectrum,
+        "view": parser.view,
+        "ornament": parser.ornament,
+    }
+
+    try:
+        if spectrum_file is None:
+            d, data = read(dic["spectrum"]["pathname"])
+        else:
+            d, data = read(spectrum_file)
+
+    except:
+        warn("Cannot load spectrum")
+        d, data = {}, None
+
+    dic.update(d)
 
     return dic, data
 
