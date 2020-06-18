@@ -163,7 +163,7 @@ def _detect_format(dataline):
         return 1
     if firstchar in _DIF_DIGITS:
         return 1
-    if firstchar in _SQZ_DIGITS:
+    if firstchar in _DUP_DIGITS:
         return 1
     return 0
 
