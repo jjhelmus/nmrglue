@@ -43,6 +43,7 @@ def _readrawdic(filename):
     actual data is separated later.
     '''
 
+    diclist = []  # for separating multiple data sections (multiple ##END tags)
     dic = {"_comments": []}  # create empty dictionary
     filein = open(filename, 'r')
 
@@ -87,6 +88,8 @@ def _readrawdic(filename):
                 currentvaluestrings = []
 
             if actual[:5] == "##END":
+                diclist.append(dic)
+                dic = {"_comments": []}  # begin new dictionary
                 continue
 
             # try to split to key and value and check sanity
@@ -117,7 +120,49 @@ def _readrawdic(filename):
 
     filein.close()
 
-    return dic
+    # do not push last empty dic (len==1)
+    if len(dic) > 1:
+        diclist.append(dic)
+
+    # if have only one dic, return it as such
+    if len(diclist) == 1:
+        return diclist[0]
+
+    # in the case of multiple data sections, look for first one containing
+    # DATATYPE = NMRSPECTRUM (basically sections with multiple DATATYPES
+    # are invalid, but we may still give it a try)
+    correctdic = None
+    for dic in diclist:
+        try:
+            datatypelist = dic["DATATYPE"]
+            for datatype in datatypelist:
+                if datatype.strip().upper().replace(" ", "") == "NMRSPECTRUM":
+                    correctdic = dic
+                    break
+            if correctdic is not None:
+                break
+        except KeyError:
+            pass
+
+    # if not found, look for DATATYPE = NMRFID
+    if correctdic is None:
+        for dic in diclist:
+            try:
+                datatypelist = dic["DATATYPE"]
+                for datatype in datatypelist:
+                    if datatype.strip().upper().replace(" ", "") == "NMRFID":
+                        correctdic = dic
+                        break
+                if correctdic is not None:
+                    break
+            except KeyError:
+                pass
+
+    # if neither found, tag may be missing, just return first one
+    if correctdic is None:
+        correctdic = diclist[0]
+
+    return correctdic
 
 
 ###############################################################################
@@ -460,13 +505,19 @@ def _getdataarray(dic):
     if data is None:  # XYDATA
         try:
             valuelist = dic["XYDATA"]
-            if len(valuelist) == 1:
-                data, datatype = _parse_data(valuelist[0])
-            else:
+            if len(valuelist) > 1:
                 warn("Multiple XYDATA arrays in JCAMP-DX file, \
                      returning first one only")
+            parseret = _parse_data(valuelist[0])
+            if parseret is None:
+                return None
+            data, datatype = parseret
         except KeyError:
             warn("XYDATA not found ")
+
+    if data is None:
+        warn("no data found either in XYDATA or NTUPLES format")
+        return None
 
     # apply YFACTOR to data if available
     if is_ntuples:
