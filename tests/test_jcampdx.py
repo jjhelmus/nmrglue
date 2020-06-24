@@ -166,3 +166,31 @@ def test_jcampdx2():
         udic = ng.jcampdx.guess_udic(dic, data)
         assert np.abs(udic[0]["obs"]-case[4]) < epsilon
         assert np.abs(udic[0]["sw"]-case[5]) < epsilon
+
+
+def test_jcampdx_dicstructure():
+    '''JCAMP-DX read: ensure correct dic structure '''
+
+    casepath = os.path.join(DATA_DIR, "jcampdx", "dicstructure.jdx")
+    dic, data = ng.jcampdx.read(casepath)
+
+    # check data
+    assert len(data) == 8
+    assert data[-1] == 8.0
+
+    # check dic:
+    assert dic["DATATYPE"][0] == "NMR SPECTRUM"
+    assert dic[".OBSERVENUCLEUS"][0] == "^1H"
+    assert "_datatype_LINK" in dic
+    assert "_datatype_NMRPEAKTABLE" in dic
+    assert "_datatype_NMRSPECTRUM" not in dic
+    assert "_datatype_NA" in dic
+    assert len(dic["_datatype_LINK"]) == 2
+    assert len(dic["_datatype_NMRPEAKTABLE"]) == 1
+    assert len(dic["_datatype_NA"]) == 1
+    assert dic["_datatype_LINK"][0]["DUMMYENTRY"][0] == "1.0"
+    assert dic["_datatype_LINK"][1]["DUMMYENTRY"][0] == "2.0"
+    assert dic["_datatype_NMRPEAKTABLE"][0]["DUMMYENTRY"][0] == "3.0"
+    assert dic["_datatype_NA"][0]["DUMMYENTRY"][0] == "4.0"
+    assert dic["_datatype_NA"][0]["_comments"][0] == "comment line"
+    assert dic["_datatype_NA"][0]["_comments"][1] == "another comment"
