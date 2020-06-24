@@ -39,10 +39,12 @@ def _getkey(keystr):
 
 def _readrawdic(filename):
     '''
-    Reads JCAMP-DX file to key-value dictionary, from which
-    actual data is separated later.
+    Reads JCAMP-DX file to dictionary, from which actual
+    data is parsed later. Dictionary contains each data
+    section separated to lists of subdicts per DATATYPE.
     '''
 
+    diclist = []  # for separating multiple data sections (multiple ##END tags)
     dic = {"_comments": []}  # create empty dictionary
     filein = open(filename, 'r')
 
@@ -87,6 +89,8 @@ def _readrawdic(filename):
                 currentvaluestrings = []
 
             if actual[:5] == "##END":
+                diclist.append(dic)
+                dic = {"_comments": []}  # begin new dictionary
                 continue
 
             # try to split to key and value and check sanity
@@ -117,7 +121,51 @@ def _readrawdic(filename):
 
     filein.close()
 
-    return dic
+    # push last one
+    diclist.append(dic)
+
+    # clean whitespace from entries, and remove empty entries
+    cleandiclist = []
+    for dic in diclist:
+        for key, valuelist in dic.items():
+            dic[key] = [value.strip() for value in valuelist]
+        for key, valuelist in dic.items():
+            dic[key] = [value for value in valuelist if value]
+        dic = {key: valuelist for key, valuelist in dic.items() if valuelist}
+        if dic:
+            cleandiclist.append(dic)
+
+    returndic = {}
+    # check DATATYPE entry of each section,
+    # and build a dict of lists of dicts
+    for dic in cleandiclist:
+        try:
+            datatypelist = dic["DATATYPE"]
+            currdatatype = datatypelist[0].strip().upper().replace(" ", "")
+            if len(datatypelist) > 1:
+                # basically sections with multiple DATATYPES
+                # are invalid, but we may still give it a try:
+                for datatype in datatypelist:
+                    cleandatatype = datatype.strip().upper().replace(" ", "")
+                    if cleandatatype == "NMRSPECTRUM":
+                        currdatatype = cleandatatype
+                        break
+                    if cleandatatype == "NMRFID":
+                        currdatatype = cleandatatype
+                        break
+                # no SPECTRUM / FID found, just go with the first entry
+        except KeyError:
+            # no datatype in this section, use dummy
+            currdatatype = "NA"
+
+        # push to result dict
+        key = "_datatype_"+currdatatype
+        try:
+            returndic[key].append(dic)
+        except KeyError:
+            returndic[key] = [dic]
+
+    return returndic
 
 
 ###############################################################################
@@ -163,7 +211,7 @@ def _detect_format(dataline):
         return 1
     if firstchar in _DIF_DIGITS:
         return 1
-    if firstchar in _SQZ_DIGITS:
+    if firstchar in _DUP_DIGITS:
         return 1
     return 0
 
@@ -460,13 +508,18 @@ def _getdataarray(dic):
     if data is None:  # XYDATA
         try:
             valuelist = dic["XYDATA"]
-            if len(valuelist) == 1:
-                data, datatype = _parse_data(valuelist[0])
-            else:
+            if len(valuelist) > 1:
                 warn("Multiple XYDATA arrays in JCAMP-DX file, \
                      returning first one only")
+            parseret = _parse_data(valuelist[0])
+            if parseret is None:
+                return None
+            data, datatype = parseret
         except KeyError:
             warn("XYDATA not found ")
+
+    if data is None:
+        return None
 
     # apply YFACTOR to data if available
     if is_ntuples:
@@ -500,7 +553,10 @@ def read(filename):
     Returns
     -------
     dic : dict
-        Dictionary of parameters.
+        Dictionary of parameters. In the case of multiple data sections in
+        file, parameters of first NMR SPECTRUM or NMR FID are read to base
+        level and others are stored under _datatype_<DATATYPE> keys in the
+        dictionary.
     data : ndarray
         Array of NMR data, or a list NMR data arrays in order [real, imaginary]
     """
@@ -513,22 +569,74 @@ def read(filename):
     # and newlines
     dic = _readrawdic(filename)
 
-    # find and parse NMR data array from raw dic
-    data = _getdataarray(dic)
-
-    # remove data tables from dic
+    # select the relevant data section.
+    # first try to parse NMRSPECTRUM sections in order,
+    # and go with first that has proper data:
+    data = None
+    correctdic = None
     try:
-        del dic["XYDATA"]
+        subdiclist = dic["_datatype_NMRSPECTRUM"]
+        for subdic in subdiclist:
+            data = _getdataarray(subdic)
+            if data is not None:
+                correctdic = subdic
+                break
     except KeyError:
         pass
-    try:
-        del dic["DATATABLE"]
-    except KeyError:
-        pass
 
-    # clean dic values from leading and trailing whitespace
-    for key, valuelist in dic.items():
-        dic[key] = [value.strip() for value in valuelist]
+    if data is None:
+        # then try NMRFIDs:
+        try:
+            subdiclist = dic["_datatype_NMRFID"]
+            for subdic in subdiclist:
+                data = _getdataarray(subdic)
+                if data is not None:
+                    correctdic = subdic
+                    break
+        except KeyError:
+            pass
+
+    if data is None:
+        # finally try all non-typed data sections, since
+        # sometimes DATATYPE label may be missing
+        try:
+            subdiclist = dic["_datatype_NA"]
+            for subdic in subdiclist:
+                data = _getdataarray(subdic)
+                if data is not None:
+                    correctdic = subdic
+                    break
+        except KeyError:
+            pass
+
+    if data is None:
+        warn("no data found either in XYDATA or NTUPLES format")
+
+    if correctdic is not None:
+        # remove correct dic from subdic lists:
+        for key, subdiclist in dic.items():
+            for subdic in subdiclist:
+                if subdic is correctdic:
+                    subdiclist = [d for d in subdiclist if d is not correctdic]
+                    dic[key] = subdiclist
+
+        # clean correct dic:
+        # remove data tables
+        try:
+            del correctdic["XYDATA"]
+        except KeyError:
+            pass
+        try:
+            del correctdic["DATATABLE"]
+        except KeyError:
+            pass
+
+        # push correct dic entries to base level of main dic
+        for key, valuelist in correctdic.items():
+            dic[key] = valuelist
+
+    # clean main dic from possible empty entries
+    dic = {key: value for key, value in dic.items() if value}
 
     return dic, data
 
