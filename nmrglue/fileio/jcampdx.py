@@ -368,6 +368,10 @@ def _parse_data(datastring):
     '''
     Creates numpy array from datalines
     '''
+    probe_data = datastring[80:320]
+    if ',' in probe_data and not('.' in probe_data): # fix comma as decimal points
+        datastring = datastring.replace(',', '.')
+
     datalines = datastring.split("\n")
     headerline = datalines[0]
 
