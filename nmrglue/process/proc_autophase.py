@@ -64,7 +64,7 @@ def autops(data, fn, p0=0.0, p1=0.0, peak_width=100, return_phases=False, **kwar
                 'acme': _ps_acme_score,
             }[fn]
         except KeyError:
-            raise KeyError(f'Unable to find algorithm "{fn}". Use "acme", "peak_minima" or pass a custom function.')
+            raise KeyError('Unable to find algorithm "{}". Use "acme", "peak_minima" or pass a custom function.'.format(fn))
 
     opt = [p0, p1]
 
