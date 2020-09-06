@@ -14,7 +14,7 @@ import scipy.optimize
 from .proc_base import ps
 
 
-def autops(data, fn, p0=0.0, p1=0.0, return_phases=False, **kwargs):
+def autops(data, fn, p0=0.0, p1=0.0, peak_width=100, return_phases=False, **kwargs):
     """
     Automatic linear phase correction
 
@@ -29,6 +29,8 @@ def autops(data, fn, p0=0.0, p1=0.0, return_phases=False, **kwargs):
         Initial zero order phase in degrees.
     p1 : float
         Initial first order phase in degrees.
+    peak_width : int
+        Width of the ROI for peak_minima optimization (number of surrounding indexes)
     return_phases : Bool
         returns a list of optimized values of phases [p0, p1] in addition
         to the phased data
@@ -50,14 +52,23 @@ def autops(data, fn, p0=0.0, p1=0.0, return_phases=False, **kwargs):
         Phased NMR data.
 
     """
+    arguments = [data,]
+
     if not callable(fn):
-        fn = {
-            'peak_minima': _ps_peak_minima_score,
-            'acme': _ps_acme_score,
-        }[fn]
+        if fn == 'peak_minima':
+            arguments.append(peak_width)
+
+        try:
+            fn = {
+                'peak_minima': _ps_peak_minima_score,
+                'acme': _ps_acme_score,
+            }[fn]
+        except KeyError:
+            raise KeyError(f'Unable to find algorithm "{fn}". Use "acme", "peak_minima" or pass a custom function.')
 
     opt = [p0, p1]
-    opt = scipy.optimize.fmin(fn, x0=opt, args=(data,), **kwargs)
+
+    opt = scipy.optimize.fmin(fn, x0=opt, args=tuple(arguments), **kwargs)
 
     phasedspc = ps(data, p0=opt[0], p1=opt[1])
 
@@ -115,7 +126,7 @@ def _ps_acme_score(ph, data):
     return (h1s + p) / data.shape[-1] / np.max(data)
 
 
-def _ps_peak_minima_score(ph, data):
+def _ps_peak_minima_score(ph, data, peak_width):
     """
     Phase correction using simple minima-minimisation around highest peak
 
@@ -127,6 +138,8 @@ def _ps_peak_minima_score(ph, data):
     ----------
     ph : tuple
         Current p0 and p1 values
+    peak_width : int
+        Lookup width
     data : ndarray
         Array of NMR data.
 
@@ -143,8 +156,8 @@ def _ps_peak_minima_score(ph, data):
     data = np.real(s0)
 
     i = np.argmax(data)
-    mina = np.min(data[i-100:i])
-    minb = np.min(data[i:i+100])
+    mina = np.min(data[i-peak_width:i])
+    minb = np.min(data[i:i+peak_width])
 
     return np.abs(mina - minb)
 
