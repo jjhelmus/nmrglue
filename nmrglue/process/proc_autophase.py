@@ -14,7 +14,7 @@ import scipy.optimize
 from .proc_base import ps
 
 
-def autops(data, fn, p0=0.0, p1=0.0, peak_width=100, return_phases=False, **kwargs):
+def autops(data, fn, p0=0.0, p1=0.0, return_phases=False, peak_width=100, **kwargs):
     """
     Automatic linear phase correction
 
