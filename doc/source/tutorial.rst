@@ -550,6 +550,7 @@ Here is the code that has been used in colabs ...
 
     import scipy
     import numpy as np
+
     !wget -q https://github.com/jjhelmus/nmrglue/releases/download/v0.7/nmrglue-0.7.tar.gz # the latest release, I've used -q to silence the function
 
 note that for other releases the last line of code above needs to be amended.
