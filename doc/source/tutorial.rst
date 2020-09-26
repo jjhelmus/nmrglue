@@ -553,6 +553,7 @@ Here is the code that has been used in colabs ...
     import numpy as np
 
     !wget -q https://github.com/jjhelmus/nmrglue/releases/download/v0.7/nmrglue-0.7.tar.gz
+    
     # the latest release, I've used -q to silence the function
 
 
@@ -560,6 +561,7 @@ note that for other releases the last line of code above needs to be amended.
 
 
     !tar -xzf nmrglue-0.7.tar.gz
+    
     # unpack the data note the delay
 
     import os
@@ -568,7 +570,9 @@ note that for other releases the last line of code above needs to be amended.
 
 
     ## The code using %cd was found to work sometimes but not others.
+   
     ## Stack overflow led me to this answer https://stackoverflow.com/a/48305794/1945827
+    
     ## which I've tried to implement above.
 
 
@@ -585,6 +589,7 @@ Once the software has been installed the tutorial is downloaded.
 
 
     !wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/nmrglue/tutorial_files.tar
+
     # now the tutorial files
 
 
