@@ -20,6 +20,7 @@ using in this tutorial is
 `available <http://code.google.com/p/nmrglue/downloads/list>`_ is you wish to 
 follow along with the same files.
 
+The software can also be used in Google Colabs - see details below.
 
 Reading NMR files
 =================
@@ -540,4 +541,59 @@ might be useful to users of nmrglue:
 * `scipy <http://www.scipy.org/>`_ 
 * `matplotlib <http://matplotlib.sourceforge.net/>`_
 * `h5py <http://code.google.com/p/h5py/>`_
+
+
+Google Colabs and NMRglue
+=========================
+
+Here is the code that has been used in colabs ...
+
+    import scipy
+    import numpy as np
+    !wget -q https://github.com/jjhelmus/nmrglue/releases/download/v0.7/nmrglue-0.7.tar.gz # the latest release, I've used -q to silence the function
+
+note that for other releases the last line of code above needs to be amended.
+
+    !tar -xzf nmrglue-0.7.tar.gz # unpack the data note the delay
+    import os
+    os.chdir('nmrglue-0.7')
+
+    ## The code using %cd was found to work sometimes but not others.
+    ## Stack overflow led me to this answer https://stackoverflow.com/a/48305794/1945827
+    ## which I've tried to implement above.
+
+    #%cd ../content/nmrglue-0.7 # change directory to the unpacked directory
+
+note that there is a delay when using colabs which means that some of the steps may
+be unwittingly missed.
+
+    !python setup.py install # code from the installation guide
+
+This will begin the install, if it doesn't try repeating earlier steps.
+
+Once the software has been installed the tutorial is downloaded.
+
+    !wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/nmrglue/tutorial_files.tar # now the tutorial files
+
+which are unpacked
+
+    !tar -xvf tutorial_files.tar
+    # this unpacks
+    # test.fid
+    # test.ft2
+
+when the two files have been installed we are in a position to follow the tutorial.
+
+    import nmrglue as ng
+    dic,data = ng.pipe.read("test.fid")
+
+    print("The data has {0} dimensions and has shape {1} \nwhich are of type {2}."
+    .format(data.ndim, data.shape, data.dtype))
+    print("\nThe dictionary gives us the spectral width {0} \nand things like the name of the indirect dimension {1}".
+      format(dic["FDF2SW"],dic["FDF1LABEL"]))
+    print("\nThe dictionary has {} keys which describe the spectral data.".format(len(dic.keys())))
+
+
+the above should allow the user to continue with the tutorial.
+
 
