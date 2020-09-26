@@ -549,44 +549,62 @@ Google Colabs and NMRglue
 Here is the code that has been used in colabs ...
 
     import scipy
+
     import numpy as np
 
-    !wget -q https://github.com/jjhelmus/nmrglue/releases/download/v0.7/nmrglue-0.7.tar.gz # the latest release, I've used -q to silence the function
+    !wget -q https://github.com/jjhelmus/nmrglue/releases/download/v0.7/nmrglue-0.7.tar.gz
+    # the latest release, I've used -q to silence the function
+
 
 note that for other releases the last line of code above needs to be amended.
 
-    !tar -xzf nmrglue-0.7.tar.gz # unpack the data note the delay
+
+    !tar -xzf nmrglue-0.7.tar.gz
+    # unpack the data note the delay
+
     import os
+
     os.chdir('nmrglue-0.7')
+
 
     ## The code using %cd was found to work sometimes but not others.
     ## Stack overflow led me to this answer https://stackoverflow.com/a/48305794/1945827
     ## which I've tried to implement above.
 
-    #%cd ../content/nmrglue-0.7 # change directory to the unpacked directory
 
 note that there is a delay when using colabs which means that some of the steps may
 be unwittingly missed.
 
+
     !python setup.py install # code from the installation guide
+
 
 This will begin the install, if it doesn't try repeating earlier steps.
 
 Once the software has been installed the tutorial is downloaded.
 
-    !wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/nmrglue/tutorial_files.tar # now the tutorial files
+
+    !wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/nmrglue/tutorial_files.tar
+    # now the tutorial files
+
 
 which are unpacked
 
+
     !tar -xvf tutorial_files.tar
+
     # this unpacks
     # test.fid
     # test.ft2
 
+
 when the two files have been installed we are in a position to follow the tutorial.
 
+
     import nmrglue as ng
+
     dic,data = ng.pipe.read("test.fid")
+
 
     print("The data has {0} dimensions and has shape {1} \nwhich are of type {2}."
     .format(data.ndim, data.shape, data.dtype))
