@@ -549,62 +549,20 @@ Google Colabs and NMRglue
 Here is the code that has been used in colabs ...
 
     import scipy
-
     import numpy as np
+    !python -m pip install git+https://github.com/jjhelmus/nmrglue
 
-    !wget -q https://github.com/jjhelmus/nmrglue/releases/download/v0.7/nmrglue-0.7.tar.gz
-    
-    # the latest release, I've used -q to silence the function
-
-
-note that for other releases the last line of code above needs to be amended.
-
-
-    !tar -xzf nmrglue-0.7.tar.gz
-    
-    # unpack the data note the delay
-
-    import os
-
-    os.chdir('nmrglue-0.7')
-
-
-    ## The code using %cd was found to work sometimes but not others.
-   
-    ## Stack overflow led me to this answer https://stackoverflow.com/a/48305794/1945827
-    
-    ## which I've tried to implement above.
-
-
-note that there is a delay when using colabs which means that some of the steps may
-be unwittingly missed.
-
-
-    !python setup.py install # code from the installation guide
-
-
-This will begin the install, if it doesn't try repeating earlier steps.
-
-Once the software has been installed the tutorial is downloaded.
-
+Once the software has been installed, the tutorial is downloaded and
 
     !wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/nmrglue/tutorial_files.tar
 
-    # now the tutorial files
-
-
-which are unpacked
-
+unpacked
 
     !tar -xvf tutorial_files.tar
 
-    # this unpacks
-    # test.fid
-    # test.ft2
+putting us in a position to follow the tutorial.
 
-
-when the two files have been installed we are in a position to follow the tutorial.
-
+For example,
 
     import nmrglue as ng
 
@@ -618,6 +576,6 @@ when the two files have been installed we are in a position to follow the tutori
     print("\nThe dictionary has {} keys which describe the spectral data.".format(len(dic.keys())))
 
 
-the above should allow the user to continue with the tutorial.
+and so on.
 
 
