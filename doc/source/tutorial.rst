@@ -20,6 +20,7 @@ using in this tutorial is
 `available <http://code.google.com/p/nmrglue/downloads/list>`_ is you wish to 
 follow along with the same files.
 
+The software can also be used in Google Colabs - see details below.
 
 Reading NMR files
 =================
@@ -540,4 +541,41 @@ might be useful to users of nmrglue:
 * `scipy <http://www.scipy.org/>`_ 
 * `matplotlib <http://matplotlib.sourceforge.net/>`_
 * `h5py <http://code.google.com/p/h5py/>`_
+
+
+Google Colabs and NMRglue
+=========================
+
+Here is the code that has been used in colabs ...
+
+    import scipy
+    import numpy as np
+    !python -m pip install git+https://github.com/jjhelmus/nmrglue
+
+Once the software has been installed, the tutorial is downloaded and
+
+    !wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/nmrglue/tutorial_files.tar
+
+unpacked
+
+    !tar -xvf tutorial_files.tar
+
+putting us in a position to follow the tutorial.
+
+For example,
+
+    import nmrglue as ng
+
+    dic,data = ng.pipe.read("test.fid")
+
+
+    print("The data has {0} dimensions and has shape {1} \nwhich are of type {2}."
+    .format(data.ndim, data.shape, data.dtype))
+    print("\nThe dictionary gives us the spectral width {0} \nand things like the name of the indirect dimension {1}".
+      format(dic["FDF2SW"],dic["FDF1LABEL"]))
+    print("\nThe dictionary has {} keys which describe the spectral data.".format(len(dic.keys())))
+
+
+and so on.
+
 
