@@ -20,7 +20,7 @@ using in this tutorial is
 `available <http://code.google.com/p/nmrglue/downloads/list>`_ is you wish to 
 follow along with the same files.
 
-The software can also be used in Google Colabs - see details below.
+The software can also be used in Google Colabs - see details below_.
 
 Reading NMR files
 =================
@@ -542,11 +542,14 @@ might be useful to users of nmrglue:
 * `matplotlib <http://matplotlib.sourceforge.net/>`_
 * `h5py <http://code.google.com/p/h5py/>`_
 
+.. _below:
 
 Google Colabs and NMRglue
 =========================
 
 Here is the code that has been used in colabs ...
+
+::
 
     import scipy
     import numpy as np
@@ -554,15 +557,21 @@ Here is the code that has been used in colabs ...
 
 Once the software has been installed, the tutorial is downloaded and
 
+::
+
     !wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/nmrglue/tutorial_files.tar
 
 unpacked
+
+::
 
     !tar -xvf tutorial_files.tar
 
 putting us in a position to follow the tutorial.
 
 For example,
+
+::
 
     import nmrglue as ng
 
