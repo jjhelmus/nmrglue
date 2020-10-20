@@ -28,8 +28,8 @@ Developer Information
 ---------------------
 
 .. include:: ../../../nmrglue/fileio/sparky.py
-    :start-line: 4
-    :end-line: 8
+    :start-line: 7
+    :end-line: 13
 
 Developer Functions
 ^^^^^^^^^^^^^^^^^^^

@@ -41,8 +41,8 @@ Developer Infomation
 --------------------
 
 .. include:: ../../../nmrglue/fileio/bruker.py
-    :start-line: 6
-    :end-line: 24
+    :start-line: 11
+    :end-line: 29
 
 Developer Functions
 ^^^^^^^^^^^^^^^^^^^
