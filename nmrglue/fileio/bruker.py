@@ -11,7 +11,6 @@ import io
 __developer_info__ = """
 Bruker file format information
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 Bruker binary files (ser/fid) store data as an array of numbers whose
 endianness is determined by the parameter BYTORDA (1 = big endian, 0 = little
 endian), and whose data type is determined by the parameter DTYPA (0 = int32,
@@ -812,7 +811,7 @@ def write_lowmem(dir, dic, data, bin_file=None, acqus_files=None,
     return
 
 
-def write_pdata(dir, dic, data, roll=False, shape=None, submatrix_shape=None, 
+def write_pdata(dir, dic, data, roll=False, shape=None, submatrix_shape=None,
                 scale_data=False, bin_file=None, procs_files=None,
                 write_procs=False, pdata_folder=False, overwrite=False,
                 big=None, isfloat=None, restrict_access=True):
@@ -840,7 +839,7 @@ def write_pdata(dir, dic, data, roll=False, shape=None, submatrix_shape=None,
         Apply a reverse scaling using the scaling factor defined in procs file
         By default, the array to be written will not be scaled using the value
         in procs but will be e scaled so  that the max intensity in that array
-        will have a value between 2**28 and 2**29. scale_data is to be used when 
+        will have a value between 2**28 and 2**29. scale_data is to be used when
         the array is itself a processed  bruker file that was read into nmrglue
     bin_file : str, optional
         Filename of binary file in directory. None uses standard files.
@@ -870,7 +869,7 @@ def write_pdata(dir, dic, data, roll=False, shape=None, submatrix_shape=None,
     # see that data consists of only real elements
     data = np.roll(data.real, int(roll))
 
-    # either apply a reverse scaling to the data or scale processed data 
+    # either apply a reverse scaling to the data or scale processed data
     # so that the max value is between 2**28 and 2**29 and cast to integers
     if scale_data:
         data = scale_pdata(dic, data, reverse=True)

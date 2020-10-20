@@ -12,14 +12,14 @@ from . import fileiobase
 
 __developer_info__ = """
 JCAMP-DX file format information
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 The format reference publications are available at:
-<http://www.jcamp-dx.org/protocols.html>
+http://www.jcamp-dx.org/protocols.html
 
 Notes:
-- Writing NMR data in JCAMP-DX format is not currently supported
-- Multi-dimensional JCAMP-files are not currently supported
-  (see <http://www.jcamp-dx.org/ndnmr-index.html#2dnmr%20testfiles>)
+    * Writing NMR data in JCAMP-DX format is not currently supported.
+    * Multi-dimensional JCAMP-files are not currently supported.
+      See http://www.jcamp-dx.org/ndnmr-index.html#2dnmr%20testfiles
 
 """
 

@@ -36,8 +36,8 @@ Developer Infomation
 --------------------
 
 .. include:: ../../../nmrglue/fileio/varian.py
-    :start-line: 6
-    :end-line: 17
+    :start-line: 8
+    :end-line: 18
 
 Developer Functions
 ^^^^^^^^^^^^^^^^^^^

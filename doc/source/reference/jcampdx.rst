@@ -1,5 +1,5 @@
 nmrglue.jcampdx
-==============
+===============
 
 .. automodule:: nmrglue.fileio.jcampdx
 
@@ -19,7 +19,7 @@ User Functions
 
 
 Developer Information
---------------------
+---------------------
 
 .. include:: ../../../nmrglue/fileio/jcampdx.py
     :start-line: 13

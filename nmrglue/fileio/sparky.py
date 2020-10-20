@@ -9,7 +9,7 @@ Sparky file format information
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Information on the Sparky file format can be found online at:
-`http://www.cgl.ucsf.edu/home/sparky/manual/files.html`_
+http://www.cgl.ucsf.edu/home/sparky/manual/files.html
 and in the Sparky source file ucsffile.cc.
 
 """
@@ -538,9 +538,9 @@ def read_lowmem_3D(filename):
 class SparkySaveParser(HTMLParser):
     """
     A parser for Sparky .save files. The file structure is similar to
-    simple HTML files, except the use of <end tag> instead of </tag>. 
+    simple HTML files, except the use of <end tag> instead of </tag>.
     The following structure is assumed:
-    
+
     <sparky save file>
     <version ...>
     <user>
@@ -573,12 +573,12 @@ class SparkySaveParser(HTMLParser):
 
     TODO: some .save files do not have this exact structure
     They need to be treated differently
-    
+
     """
 
     # main dictionaries to parse data into
     user, spectrum, view, ornament = {}, {}, {}, {}
-    
+
     # tracker if there are multiple views
     viewnum = -1
 
@@ -586,12 +586,12 @@ class SparkySaveParser(HTMLParser):
 
     def _parse_info(self, string, dtype=None):
         """
-        Reads a list of strings into a dictionary, with the first item of 
+        Reads a list of strings into a dictionary, with the first item of
         the list as the key and the remaining list as the value. In addition,
         it parses all values in the list to do the following: (i) convert the
         values to float wherever possible and (ii) if the list has a single
         item, upack and return that item alone as the value
-        
+
         """
 
         dic = {}
@@ -629,20 +629,20 @@ class SparkySaveParser(HTMLParser):
 
     def _parse_peak(self, peak):
         """
-        Parses a single peak into a dictionary, the input being a list 
+        Parses a single peak into a dictionary, the input being a list
         that corresponds to a single peak in a sparky save file. In addition,
         it parses all values in the list to do the following: (i) convert the
         values to float wherever possible and (ii) if the list has a single
-        item, upack and return that item alone as the value. Currently assumes 
+        item, upack and return that item alone as the value. Currently assumes
         the following structure for a single peak:
-        
+
         type peak
         ...
         [
         type label
         ...
         ]
-        
+
         """
 
         l = [i for i, word in enumerate(peak) if word in ["[", "]"]]
@@ -680,8 +680,8 @@ class SparkySaveParser(HTMLParser):
     def _parse_ornaments(self, data):
         """
         Parses a string containing all ornaments into a dictionary. This
-        is for all the data inside the <ornament> tag. The key for each 
-        peak item is given by the peak ID, which should be unique for each 
+        is for all the data inside the <ornament> tag. The key for each
+        peak item is given by the peak ID, which should be unique for each
         peak. The following structure is assumed:
 
         type peak # peak 1
@@ -778,7 +778,7 @@ def read_savefile(savefile, spectrum_file=None):
     file. In addition to the usual dictionary contents that come with
     a .ucsf file, these additinal dictionary keys are created with the content
     from .save file: "spectrum", "view", "user" and "ornament". The together
-    contain all edits and annotations. By default, it tries to read in 
+    contain all edits and annotations. By default, it tries to read in
     the spectrum file given in the .save file (but this fails many times due
     to relative paths in .save file)
 
@@ -788,7 +788,7 @@ def read_savefile(savefile, spectrum_file=None):
         Filename of Sparky .save file.
     spectrum_file : str
         Filename of Sparky .ucsf file.
-        
+
 
     Returns
     -------
