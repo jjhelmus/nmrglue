@@ -35,16 +35,16 @@ def autops(data, fn, p0=0.0, p1=0.0, return_phases=False, peak_width=100, **kwar
         returns a list of optimized values of phases [p0, p1] in addition
         to the phased data
     kwargs : additional key-word arguments to be passed to the solver
-        The are documented at the following link: 
+        The are documented at the following link:
         https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin.html
         Some of the more useful ones for this use case:
-        disp : Bool  
+
+        * disp : Bool
             Turns on or off the printing of convergence messeges
             By default, this is set to True.
-        ftol : float
+        * ftol : float
             Absolute error in fn between iterations that is acceptable for
             convergence. The default is 1e-4.
-        
 
     Returns
     -------
@@ -197,11 +197,12 @@ def manual_ps(data, notebook=False):
     >>> # do manual phase correction and close window
     >>> phased_data = ng.proc_base.ps(data, p0=p0, p1=p1)
 
-    In  [1] # if you are using the Jupyter Notebook
-    In  [2] ng.process.proc_autophase.manual_ps(data)
-    Out [2] # do manual phase correction. p0 and p1 values will be updated
-            # continuously as you do so and are printed below the plot
-    In  [3] phased_data = ng.proc_base.ps(data, p0=p0, p1=p1)
+    If you are using a Jupyter Notebook::
+
+        In  [1] ng.process.proc_autophase.manual_ps(data)
+        Out [1] # do manual phase correction. p0 and p1 values will be updated
+                # continuously as you do so and are printed below the plot
+        In  [2] phased_data = ng.proc_base.ps(data, p0=p0, p1=p1)
 
     """
 

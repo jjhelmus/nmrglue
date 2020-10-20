@@ -760,7 +760,7 @@ def read_fid_lowmem(filename, shape=None, torder='flat', as_2d=False,
     --------
     read_fid : Read a Agilent/Varian binary file.
     read_lowmem : Read Agilent/Varian files from a directory using minimal
-    amounts of memory.
+        amounts of memory.
 
     """
     # open the file
