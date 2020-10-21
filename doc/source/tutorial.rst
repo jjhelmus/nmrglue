@@ -14,7 +14,7 @@ understanding of python is assumed which can be obtained by reading some
 of the `python documentation <http://docs.python.org/>`_.  The examples in 
 this tutorial can be run interactively from the python shell but the use of an
 enhanced python shell which provides non-blocking control of GUI threads, 
-for example  `ipython <http://ipython.scipy.org>`_, is 
+for example  `ipython <http://www.ipython.org>`_, is 
 recommended when trying the examples which use matplotlib.  The sample data
 using in this tutorial is 
 `available <http://code.google.com/p/nmrglue/downloads/list>`_ is you wish to 
@@ -256,7 +256,7 @@ The `numpy documentation <https://numpy.org/doc/>`_ has additional
 information on the 
 `array <https://numpy.org/doc/stable/reference/generated/numpy.array.html>`_ 
 object.  In addition by combining nmrglue with 
-`numpy <https://www.numpy.org/>`_ and/or `scipy <http://www.scipy.org/>`_
+`numpy <https://www.numpy.org/>`_ and/or `scipy <https://www.scipy.org/>`_
 more complex data manipulation and calculation can be performed.  Later we
 will show how these modules are used to create a full suite of processing 
 functions.
@@ -428,7 +428,7 @@ Processing data
 
 With NMR spectral data being stored as a numpy array a number of linear 
 algebra and signal processing functions can be applied to the data.  The 
-functions in the `numpy <https://numpy.org/>`_
+functions in the `numpy <https://www.numpy.org/>`_
 and `scipy <https://www.scipy.org/>`_ modules offer a number of processing
 functions users might find useful.  nmrglue provides a number of common
 NMR functions in the :ref:`proc_base` module, baseline related functions
@@ -494,33 +494,41 @@ the more popular libraries and has the ability to output to a number of
 hardcopy formats as well as offering a robust interactive environment.  When
 using matplotlib interactively use of `ipython`_
 or a similar shell is recommeneded although the standard python shell can be 
-used.  For example to create a simple plot of a 1D spectrum (if the ipython
-shell is used for this example use the ``-pylab`` switch) :
+used.
 
-    >>> import pylab
-    >>> dic,data = ng.pipe.read("test.ft")
-    >>> pylab.plot(data)
+    >>> import matplotlib.pyplot as plt
+    >>> dic, data = ng.pipe.read("test.ft")
+    >>> plt.plot(data)
     [<matplotlib.lines.Line2D object at 0x8754fd0>]
-    >>> pylab.savefig("plot_1d.png")
+    >>> plt.savefig("plot_1d.png")
 
 
-Here we have loaded the pylab module from matplotlib and used it to plot the
-1D frequency domain data of a model protein.  The resulting figure is saved
-as ``plot_1d.png``.
+Here we have loaded the pyplot module from matplotlib (aliased as plt), and 
+used it to plot the 1D frequency domain data of a model protein.  The resulting 
+figure is saved as ``plot_1d.png``.
 
 .. image:: plot_1d.png
     :scale: 50
 
+
+Alternately, the `object-oriented interface <https://matplotlib.org/tutorials/introductory/lifecycle.html>`_  from matploltib can be used. This is especially useful when make more complicated plots. The above example would look something like this:
+
+    >>> import matplotlib.pyplot as plt
+    >>> dic, data = ng.pipe.read("test.ft")
+    >>> fig, ax = plt.subplots()
+    >>> ax.plot(data)
+    >>> fig.savefig("plot_1d.png")
+
 A contour plot of 2D data can created in a similar manner:
 
-    >>> pylab.cla()
-    >>> dic,data = ng.pipe.read("test.ft2")
-    >>> cl = [30000*1.2**x for x in range(20)]
-    >>> pylab.contour(data,cl)
+    >>> dic, data = ng.pipe.read("test.ft2")
+    >>> cl = [30000 * 1.2 ** x for x in range(20)]
+    >>> fig, ax = plt.subplots()
+    >>> ax.contour(data, cl)
     <matplotlib.contour.ContourSet instance at 0x151e2f80>
-    >>> pylab.show()
+    >>> plt.show()
 
-The ``show()`` method raises an an interactive window for examining the plot:
+The ``plt.show()`` method raises an an interactive window for examining the plot:
 
 .. image:: screenshot.jpg
     :scale: 50
@@ -545,10 +553,10 @@ A number of :ref:`examples-index` using nmrglue to interact with
 NMR data are avilable. Finally documentation for the following packages
 might be useful to users of nmrglue:
 
-* `numpy <https://numpy.org/>`_ 
+* `numpy <https://www.numpy.org/>`_ 
 * `scipy <https://www.scipy.org/>`_ 
 * `matplotlib <https://matplotlib.org/>`_
-* `h5py <http://h5py.org/>`_
+* `h5py <https://h5py.org/>`_
 
 .. _below:
 
