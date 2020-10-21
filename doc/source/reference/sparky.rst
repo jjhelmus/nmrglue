@@ -16,6 +16,7 @@ User Functions
 
     read
     write
+    read_savefile
     read_lowmem
     write_lowmem
     make_uc

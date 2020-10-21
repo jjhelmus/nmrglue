@@ -19,6 +19,7 @@ These are functions which are targetted for users of nmrglue.
     read
     write
     read_pdata
+    write_pdata
     remove_digital_filter
     read_lowmem
     write_lowmem

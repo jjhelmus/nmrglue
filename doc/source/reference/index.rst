@@ -60,3 +60,4 @@ util modules
     :maxdepth: 1
     
     misc
+    xcpy
