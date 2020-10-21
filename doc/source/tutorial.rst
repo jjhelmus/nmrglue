@@ -26,7 +26,9 @@ Reading NMR files
 =================
 
 nmrglue can read and write to a number of common NMR file formats.  To see 
-how simple this can be let's read a 2D NMRPipe file.
+how simple this can be let's read a 2D NMRPipe file. (Note: If you need an example 
+dataset, use the one provided `here <https://github.com/jjhelmus/nmrglue/tree/master/tests/pipe_proc_tests>`_, and replace ``test.fid`` or ``test.ft`` with the names
+of the files ending in ``.fid`` or ``.dat``).
 
     >>> import nmrglue as ng
     >>> dic,data = ng.pipe.read("test.fid")
@@ -37,18 +39,24 @@ files and all of these modules have a ``read`` function which opens a file
 or directory containing NMR data, reads in any necessary information, and loads 
 the spectral data into memory.  The ``read`` function returns a 2-tuple 
 containing a python dictionary with file and spectral parameters and a 
-`numpy <http://numpy.scipy.org/>`_ array object containing the numeric 
+`numpy <https://www.numpy.org/>`_ array object containing the numeric 
 spectral data.  Currently the following file formats are supported by nmrglue
 with the associated module:
 
-======  ========================
-Module  File Format
-======  ========================
-bruker  Bruker
-pipe    NMRPipe
-sparky  Sparky
-varian  Varian/Agilent
-======  ========================
+=======  ======================== ==================
+Module   File Format              Reference 
+=======  ======================== ==================
+bruker   Bruker                   https://www.bruker.com/service/information-communication/user-manuals/nmr.html 
+pipe     NMRPipe                  https://www.ibbr.umd.edu/nmrpipe/index.html
+sparky   Sparky                   https://nmrfam.wisc.edu/nmrfam-sparky-distribution/
+varian   Varian/Agilent           
+rnmrtk   Rowland NMR Toolkit      https://rnmrtk.uchc.edu/rnmrtk/RNMRTK.html
+jcampdx  JCAMP-DX                 http://www.jcamp-dx.org/
+nmrml    NMR Markup Language      https://github.com/nmrML/nmrML
+simpson  Simpson                  https://inano.au.dk/about/research-centers/nmr/software/simpson/
+tecmag   Technology for Magnetic  https://www.tecmag.com/
+         Resonance
+=======  ======================== ==================
 
 Examining the data object in more detail:
 
@@ -244,11 +252,11 @@ Or a region:
     >>> data[9].imag
     array([ 1.,  1.,  1., ...,  1.,  1.,  1.], dtype=float32)
 
-The `numpy documentation <http://docs.scipy.org/doc/>`_ has additional 
+The `numpy documentation <https://numpy.org/doc/>`_ has additional 
 information on the 
-`array <http://docs.scipy.org/doc/numpy/reference/arrays.ndarray.html>`_ 
+`array <https://numpy.org/doc/stable/reference/generated/numpy.array.html>`_ 
 object.  In addition by combining nmrglue with 
-`numpy <http://numpy.scipy.org/>`_ and/or `scipy <http://www.scipy.org/>`_
+`numpy <https://www.numpy.org/>`_ and/or `scipy <http://www.scipy.org/>`_
 more complex data manipulation and calculation can be performed.  Later we
 will show how these modules are used to create a full suite of processing 
 functions.
@@ -420,8 +428,8 @@ Processing data
 
 With NMR spectral data being stored as a numpy array a number of linear 
 algebra and signal processing functions can be applied to the data.  The 
-functions in the `numpy <http://numpy.scipy.org/>`_
-and `scipy <http://www.scipy.org/>`_ modules offer a number of processing
+functions in the `numpy <https://numpy.org/>`_
+and `scipy <https://www.scipy.org/>`_ modules offer a number of processing
 functions users might find useful.  nmrglue provides a number of common
 NMR functions in the :ref:`proc_base` module, baseline related functions
 in :ref:`proc_bl`, and linear prediction functions in the :ref:`proc_lp`
@@ -521,7 +529,7 @@ The ``show()`` method raises an an interactive window for examining the plot:
 matplotlib can be used to create more complicated figures with annotations, ppm
 axes and more.  The :ref:`plotting_examples` and :ref:`interactive_examples`
 showcase some some of this functionality.  For additional information see the
-`matplotlib webpage <http://matplotlib.sourceforge.net/>`_
+`matplotlib webpage <https://www.matplotlib.org>`_
 
 
 Additional resources
@@ -537,10 +545,10 @@ A number of :ref:`examples-index` using nmrglue to interact with
 NMR data are avilable. Finally documentation for the following packages
 might be useful to users of nmrglue:
 
-* `numpy <http://numpy.scipy.org/>`_ 
-* `scipy <http://www.scipy.org/>`_ 
-* `matplotlib <http://matplotlib.sourceforge.net/>`_
-* `h5py <http://code.google.com/p/h5py/>`_
+* `numpy <https://numpy.org/>`_ 
+* `scipy <https://www.scipy.org/>`_ 
+* `matplotlib <https://matplotlib.org/>`_
+* `h5py <http://h5py.org/>`_
 
 .. _below:
 
