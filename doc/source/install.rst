@@ -14,7 +14,7 @@ Requirements
 ------------
 
 
-nmrglue dependes on the following open-source packages for scientific computing
+nmrglue depends on the following open-source packages for scientific computing
 in the Python ecosystem.
 
 +------------+------------+---------------------------------------+
@@ -22,7 +22,7 @@ in the Python ecosystem.
 +============+============+=======================================+
 | Python     | 2.7.9+     | Version 3 and above are recommended   |
 +------------+------------+---------------------------------------+
-| Numpy      | 1.21+      | Required for all basic data types     |
+| Numpy      | 1.16+      | Required for all basic data types     |
 +------------+------------+---------------------------------------+
 | Scipy      | 0.16+      | Required for processing functions     |
 +------------+------------+---------------------------------------+
@@ -30,7 +30,7 @@ in the Python ecosystem.
 |            |            | such as interactive phase correction  |                           
 +------------+------------+---------------------------------------+
 
-Additionally, an interactive environment such as `IPython <http://ipython.org/>`_, (available via several distributions such as `Jupyterlab <https://jupyterlab.readthedocs.io/en/stable/>`_, `Spider <https://www.spyder-ide.org/>`_, `Google Colaboratory <https://colab.research.google.com/>`_, etc.) is highly recommended. A easy way of obtaining and installing these packages is to use a Python distribution which provides these packages, such as `EPD <http://www.enthought.com/products/epd.php>`_ or `Conda <https://www.anaconda.com/>`_. Detailed information on `installing a Scipy stack <http://scipy.github.com/install.html>`_ is available. Note that although the nmrglue codebase remains compatible with Python 2.7+, Python 2, along with Numpy, Scipy and Matplotlib versions that are compatible with it, are `no longer actively maintained <https://www.python.org/doc/sunset-python-2/>`_. Hence, we recommend that Python 3 be used for all new code. 
+Additionally, an interactive environment such as `IPython <http://ipython.org/>`_, (available via several distributions such as `Jupyterlab <https://jupyterlab.readthedocs.io/en/stable/>`_, `Spyder <https://www.spyder-ide.org/>`_, `Google Colaboratory <https://colab.research.google.com/>`_, etc.) is highly recommended. An easy way of obtaining and installing these packages is to use a Python distribution which provides these packages, such as `Anaconda/Miniconda <https://www.anaconda.com/>`_. Detailed information on `installing a Scipy stack <https://scipy.org/install.html>`_ is available. Note that although the nmrglue codebase remains compatible with Python 2.7+, Python 2, along with Numpy, Scipy and Matplotlib versions that are compatible with it, are `no longer actively maintained <https://www.python.org/doc/sunset-python-2/>`_. Hence, we recommend that Python 3 be used for all new code. 
 
 
 Platform Independent Installation
@@ -59,7 +59,7 @@ distribution and run::
 Windows Installation
 --------------------
 
-Download the binary installer and run it.
+Installation of the Scipy stack via a distribution such as `Anaconda/Miniconda`_ is recommended. nmrglue can then be installed using pip, as described above. Alternately, you can download the binary installer and run it.
 
 Installing from source code
 ---------------------------

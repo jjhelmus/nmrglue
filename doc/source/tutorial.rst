@@ -69,7 +69,7 @@ Examining the data object in more detail:
 
 We can see that this is a two dimensional data set with 1500 complex points
 in the direct dimension and 332 points in the indirect dimension.  nmrglue 
-takes care of converting the raw data in the file into an array of appropiate 
+takes care of converting the raw data in the file into an array of appropriate 
 type, dimensionality, and quadrature.  For complex data the last axis, 
 typically the direct dimension, is converted to a complex data type.  The other
 axes are not converted.
@@ -104,9 +104,9 @@ of additional parameters.
 Some file formats describe well the spectral data, listing a large number of 
 parameters, other only a few.  In addition, different formats express 
 parameters in different units and under different names.  For users who are 
-familar with the specific file format or are working with only a single file
+familiar with the specific file format or are working with only a single file
 type, this is not a problem; the dictionary allows direct access to these
-parameters. If a more uniform listing of spectal parameters is desired, the
+parameters. If a more uniform listing of spectral parameters is desired, the
 ``guess_udic`` function can be used to create a 'universal' dictionary.
 
     >>> udic = ng.pipe.guess_udic(dic,data)
@@ -127,7 +127,7 @@ car         Carrier frequency in Hz.
 complex     True for complex data, False for magnitude data.
 encoding    How the data is encoded, 'states', 'tppi', etc.
 freq        True for frequency domain data, False for time domain.
-label       String descriping the axis name.
+label       String describing the axis name.
 obs         Observation frequency in MHz.
 size        Dimension size (R|I for last axis, R+I for others)
 sw          Spectral width in Hz.
@@ -302,7 +302,7 @@ But this check can be by-passed with the overwrite parameter:
 The unit_conversion object
 ==========================
 
-Eariler we used the array index values for slicing the numpy array.  For 
+Earlier we used the array index values for slicing the numpy array.  For 
 reference your data in more common NMR units nmrglue provides the 
 ``unit_coversion`` object.  Use the ``make_uc`` function to create a 
 ``unit_conversion`` object:
@@ -312,7 +312,7 @@ reference your data in more common NMR units nmrglue provides the
     >>> uc1 = ng.pipe.make_uc(dic,data,dim=1)
 
 We now have unit conversion objects for both axes in the 2D spectrum.  We can
-use these objects to determind the nearest point for a given unit:
+use these objects to determined the nearest point for a given unit:
 
     >>> uc0("100.0 ppm")
     1397
@@ -358,7 +358,7 @@ module.  For example to convert a 2D NMRPipe file to a Sparky file:
 
 Here we opened the NMRPipe file *test.ft2* , created a new ``converter`` object
 and loaded it with the NMRPipe data.  The ``converter`` is then used to generate
-the Sparky parameter dictionary and a data array appropiate for Sparky data 
+the Sparky parameter dictionary and a data array appropriate for Sparky data 
 which is written to *sparky_file.ucsf*.
 All type conversions, and sign manipulation of the data array is performed 
 internally by the ``converter`` object.  In addition new dictionaries are 
@@ -380,9 +380,9 @@ small portion must be examined for viewing or processing.  With this in mind
 nmrglue provides methods to read only a portions of NMR data from files when
 it is required.  This is accomplished by creating a new object which look
 very similar to numpy array but does not load data into memory.  
-Rather when a particular slice is requested the the object opens the 
+Rather when a particular slice is requested the object opens the 
 necessary file(s), reads in the data and returns to the user a numpy 
-array with the data.  In addition these objects have tranpose and swapaxes
+array with the data.  In addition these objects have transpose and swapaxes
 method and can be iterated over just as numpy arrays but without using 
 large amounts of memory.  The only limitation of these objects is that they 
 do not support assignment, so a slice must be taken before changing the value
@@ -434,7 +434,7 @@ functions users might find useful.  nmrglue provides a number of common
 NMR functions in the :ref:`proc_base` module, baseline related functions
 in :ref:`proc_bl`, and linear prediction functions in the :ref:`proc_lp`
 module.  For example we perform some simple processing on our 2D NMRPipe file 
-(output supressed):
+(output suppressed):
 
     >>> dic,data = ng.pipe.read("test.fid")
     >>> ng.proc_base.ft(data)
@@ -447,7 +447,7 @@ update the spectral parameter associated with the data.  Because these
 values are key when examining NMR data we want functions which take into 
 account these parameter while processing.  nmrglue provides the 
 :ref:`pipe_proc` module for processing NMRPipe data while updating the
-spectral properties simulatanously.  Additional modules for processing 
+spectral properties simultaneously.  Additional modules for processing 
 other file format are being developed.  Using ``pipe_proc`` is similar to
 using NMRPipe itself.  For example to process the sample 2D NMRPipe file:
 
@@ -481,7 +481,7 @@ such processing but development of these is planned.
 An example of processing a 3D NMRPipe file using a ``iter3D`` object can be 
 found in :ref:`process_pipe_3d`.
 
-Additonal examples showing how to use nmrglue to process NMR data can be
+Additional examples showing how to use nmrglue to process NMR data can be
 found in the :ref:`processing_examples`.
 
 
@@ -491,9 +491,9 @@ Using matplotlib to create figures
 A number of python plotting libraries exist which can be used in conjunction
 with nmrglue to produce publication quality figures.  matplotlib is one of
 the more popular libraries and has the ability to output to a number of 
-hardcopy formats as well as offering a robust interactive environment.  When
+hard copy formats as well as offering a robust interactive environment.  When
 using matplotlib interactively use of `ipython`_
-or a similar shell is recommeneded although the standard python shell can be 
+or a similar shell is recommended although the standard python shell can be 
 used.
 
     >>> import matplotlib.pyplot as plt
@@ -511,7 +511,7 @@ figure is saved as ``plot_1d.png``.
     :scale: 50
 
 
-Alternately, the `object-oriented interface <https://matplotlib.org/tutorials/introductory/lifecycle.html>`_  from matploltib can be used. This is especially useful when make more complicated plots. The above example would look something like this:
+Alternately, the `object-oriented interface <https://matplotlib.org/tutorials/introductory/lifecycle.html>`_  from matplotlib can be used. This is especially useful when make more complicated plots. The above example would look something like this:
 
     >>> import matplotlib.pyplot as plt
     >>> dic, data = ng.pipe.read("test.ft")
@@ -550,7 +550,7 @@ by using Python build in help system:
     >>> help(ng.pipe.read)
     
 A number of :ref:`examples-index` using nmrglue to interact with 
-NMR data are avilable. Finally documentation for the following packages
+NMR data are available. Finally documentation for the following packages
 might be useful to users of nmrglue:
 
 * `numpy <https://www.numpy.org/>`_ 
