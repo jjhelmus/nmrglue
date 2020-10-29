@@ -179,7 +179,7 @@ def ndintegrate(data, unit_conv, limits, unit='ppm', noise_limits=None):
     ppm_scales = [x.ppm_scale() for x in unit_conv]
     dx = np.prod(np.array([abs(x[1]-x[0]) for x in ppm_scales]))
 
-    slice_sum = (data[[slice(x[0], x[1])for x in np.flipud(inds)]]).sum()
+    slice_sum = (data[tuple([slice(x[0], x[1]) for x in np.flipud(inds)])]).sum()
 
     value = slice_sum * dx
 

@@ -1767,14 +1767,14 @@ def put_data(f, data, big=True, isfloat=False):
     """
     if isfloat:
         if big:
-            f.write(data.astype('>f8').tostring())
+            f.write(data.astype('>f8').tobytes())
         else:
-            f.write(data.astype('<f8').tostring())
+            f.write(data.astype('<f8').tobytes())
     else:
         if big:
-            f.write(data.astype('>i4').tostring())
+            f.write(data.astype('>i4').tobytes())
         else:
-            f.write(data.astype('<i4').tostring())
+            f.write(data.astype('<i4').tobytes())
     return
 
 
