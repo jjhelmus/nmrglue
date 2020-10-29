@@ -1388,7 +1388,7 @@ def put_trace(f, trace):
     """
     Write a trace to file f.
     """
-    f.write(trace.tostring())
+    f.write(trace.tobytes())
     return
 
 

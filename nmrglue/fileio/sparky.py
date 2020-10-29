@@ -1187,7 +1187,7 @@ def put_tile(f, tile):
         Tile of NMR data to be written.
 
     """
-    f.write(tile.astype('>f4').tostring())
+    f.write(tile.astype('>f4').tobytes())
     return
 
 
@@ -1206,7 +1206,7 @@ def put_data(f, data):
     this function
 
     """
-    f.write(data.astype('>f4').tostring())
+    f.write(data.astype('>f4').tobytes())
     return
 
 

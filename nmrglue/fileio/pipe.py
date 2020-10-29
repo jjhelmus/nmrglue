@@ -1028,7 +1028,7 @@ def put_fdata(fh, fdata):
     """
     if fdata.dtype != 'float32':
         raise TypeError('fdata.dtype is not float32')
-    fh.write(fdata.tostring())
+    fh.write(fdata.tobytes())
     return
 
 
@@ -1040,7 +1040,7 @@ def put_trace(fh, trace):
         trace = append_data(trace)
     if trace.dtype != 'float32':
         raise TypeError('trace.dtype is not float32')
-    fh.write(trace.tostring())
+    fh.write(trace.tobytes())
     return
 
 
@@ -1056,8 +1056,8 @@ def put_data(filename, fdata, data, overwrite=False):
 
     # write the file
     f = fileiobase.open_towrite(filename, overwrite=overwrite)
-    f.write(fdata.tostring())
-    f.write(data.tostring())
+    f.write(fdata.tobytes())
+    f.write(data.tobytes())
     f.close()
     return
 
@@ -1792,7 +1792,7 @@ class pipe_3d(fileiobase.data_nd):
         # find the length of the third dimension
         f3 = "FDF" + str(int(dic["FDDIMORDER3"]))
         quadrature_factor = [2, 1][int(dic[f3 + 'QUADFLAG'])]
-        
+
         #Checking whether "nmrPipe -fn EXT ..." has been applied to z-dim or not.
         #If EXT has been applied, FDF*XN is not zero.
         #If z-dim is in time-domain, data-size given by FDF*X1 and FDF*XN has to be doubled.
@@ -1808,7 +1808,7 @@ class pipe_3d(fileiobase.data_nd):
                 lenZ = int(dic[f3 + 'TDSIZE'] * quadrature_factor)
             else:
                 lenZ = 2*(int(dic[f3 + 'XN']) - int(dic[f3 + 'X1']) + 1)
-                
+
         fshape.insert(0, lenZ)   # insert as leading size of fshape
 
         # check that all files exist if fcheck is set

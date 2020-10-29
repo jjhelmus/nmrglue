@@ -413,7 +413,7 @@ def write_sec(filename, data, dtype='f4', overwrite=False):
         data = interleave_data(data)
 
     # write data and close file
-    f.write(data.astype(dtype).tostring())
+    f.write(data.astype(dtype).tobytes())
     f.close()
     return
 
@@ -509,7 +509,7 @@ def put_trace(f, trace):
         Raw trace of NMR data, may be complex64.
 
     """
-    f.write(trace.view('float32').tostring())
+    f.write(trace.view('float32').tobytes())
 
 
 def uninterleave_data(data):
