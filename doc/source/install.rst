@@ -20,7 +20,7 @@ in the Python ecosystem.
 +------------+------------+---------------------------------------+
 | Package    | Version    | Details                               |
 +============+============+=======================================+
-| Python     | 2.7.9+     | Version 3 and above are recommended   |
+| Python     | 3.6.0+     |                                       |
 +------------+------------+---------------------------------------+
 | Numpy      | 1.16+      | Required for all basic data types     |
 +------------+------------+---------------------------------------+
@@ -30,7 +30,7 @@ in the Python ecosystem.
 |            |            | such as interactive phase correction  |                           
 +------------+------------+---------------------------------------+
 
-Additionally, an interactive environment such as `IPython <http://ipython.org/>`_, (available via several distributions such as `Jupyterlab <https://jupyterlab.readthedocs.io/en/stable/>`_, `Spyder <https://www.spyder-ide.org/>`_, `Google Colaboratory <https://colab.research.google.com/>`_, etc.) is highly recommended. An easy way of obtaining and installing these packages is to use a Python distribution which provides these packages, such as `Anaconda/Miniconda <https://www.anaconda.com/>`_. Detailed information on `installing a Scipy stack <https://scipy.org/install.html>`_ is available. Note that although the nmrglue codebase remains compatible with Python 2.7+, Python 2, along with Numpy, Scipy and Matplotlib versions that are compatible with it, are `no longer actively maintained <https://www.python.org/doc/sunset-python-2/>`_. Hence, we recommend that Python 3 be used for all new code. 
+Additionally, an interactive environment such as `IPython <http://ipython.org/>`_, (available via several distributions such as `Jupyterlab <https://jupyterlab.readthedocs.io/en/stable/>`_, `Spyder <https://www.spyder-ide.org/>`_, `Google Colaboratory <https://colab.research.google.com/>`_, etc.) is highly recommended. An easy way of obtaining and installing these packages is to use a Python distribution which provides these packages, such as `Anaconda/Miniconda <https://www.anaconda.com/>`_. Detailed information on `installing a Scipy stack <https://scipy.org/install.html>`_ is available. The nmrglue codebase no longer supports Python 2, the last version to support Python 2.7 was 0.8.
 
 
 Platform Independent Installation
