@@ -67,3 +67,4 @@ examples/jbnmr_examples/s7-s9_s3e_processing/procpar
 .project
 .pydevproject
 *.prefs
+.idea
