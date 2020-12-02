@@ -597,7 +597,7 @@ def read_procs_file(dir='.', procs_files=None):
         Dictionary of Bruker parameters.
     """
 
-    if not procs_files:
+    if procs_files is None:
 
         # Reading standard procs files
         procs_files = []
@@ -1223,10 +1223,9 @@ def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
         else:
             raise IOError("No Bruker binary file could be found in %s" % (dir))
 
-    for f in bin_files[1:]:
+    for f in bin_files.copy():
         if not os.path.isfile(os.path.join(dir, f)):
-            bin_files = [bin_files[0]]
-            break
+            bin_files.remove(f)
 
     if read_procs:
         # read the procs_files and add to the dictionary
