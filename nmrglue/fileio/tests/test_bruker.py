@@ -14,7 +14,8 @@ def test_read_pdata():
     """Reading processed bruker 1D data"""
 
     # read processed data
-    dic, data = ng.bruker.read_pdata(os.path.join(DATA_DIR, '1', 'pdata', '1'))
+    specdir = os.path.join(DATA_DIR, '1', 'pdata', '1')
+    dic, data = ng.bruker.read_pdata(specdir)
 
     # check that the data is correct
     assert np.all(data == [-36275840.0, -34775104.0])
@@ -26,13 +27,22 @@ def test_read_pdata():
     assert len(dic['procs'].keys()) == 131
     assert len(dic['acqus'].keys()) == 298
 
+    # specifying proc(s) files
+    # (fired this error in 0.8 version:
+    # UnboundLocalError: local variable 'pdata_path' referenced before
+    # assignment)
+
+    proc = os.path.join(specdir, 'procs')
+    dic, data = ng.bruker.read_pdata(specdir, procs_files = [proc])
+    assert len(dic['procs'].keys()) == 131
+
 
 def test_reorder_submatrix():
     """reordering submatrix back and forth"""
 
     # make a dummy matrix
     data = np.arange(16, dtype='float64').reshape(4, 4)
-    
+
     # correctly reordered matrix
     rdata = np.array([[ 0,  1,  4,  5],
                       [ 2,  3,  6,  7],
@@ -40,22 +50,22 @@ def test_reorder_submatrix():
                       [10, 11, 14, 15]], dtype='float64')
 
     # reorder from the submatrix form
-    r1data = ng.bruker.reorder_submatrix(data, shape=(4, 4), 
+    r1data = ng.bruker.reorder_submatrix(data, shape=(4, 4),
                                          submatrix_shape=(2, 2), reverse=False)
 
     # reorder to the submatrix form
-    r2data = ng.bruker.reorder_submatrix(r1data, shape=(4, 4), 
+    r2data = ng.bruker.reorder_submatrix(r1data, shape=(4, 4),
                                          submatrix_shape=(2, 2), reverse=True)
     # checks
     assert np.all(rdata == r1data)
     assert np.all(data == r2data)
-    
+
 
 def test_write_pdata():
     """ Writing a processed Bruker dataset """
 
     dic, data = ng.bruker.read_pdata(os.path.join(DATA_DIR, '1', 'pdata', '1'))
-    
+
     # write to a temperory file
     td = tempfile.mkdtemp('.')
     ng.bruker.write_pdata(td, dic, data, write_procs=True, pdata_folder=10)

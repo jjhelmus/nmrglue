@@ -552,7 +552,7 @@ def read_acqus_file(dir='.', acqus_files=None):
         Directory to read from.
     acqus_files : list, optional
         List of filename(s) of acqus parameter files in directory. None uses
-        standard files.
+        standard files. If filename(s) contains a full absolute path, dir is not used.
 
     Returns
     -------
@@ -562,15 +562,20 @@ def read_acqus_file(dir='.', acqus_files=None):
     if acqus_files is None:
         acqus_files = []
         for f in ["acqus", "acqu2s", "acqu3s", "acqu4s"]:
-            if os.path.isfile(os.path.join(dir, f)):
-                acqus_files.append(f)
+            fp = os.path.join(dir, f)
+            if os.path.isfile(fp):
+                acqus_files.append(fp)
 
     # create an empty dictionary
     dic = dict()
 
     # read the acqus_files and add to the dictionary
     for f in acqus_files:
-        dic[f] = read_jcamp(os.path.join(dir, f))
+        if not os.path.isfile(f):
+            f = os.path.join(dir, f)
+        acqu = os.path.basename(f)
+        dic[acqu] = read_jcamp(f)
+
     return dic
 
 
@@ -584,39 +589,64 @@ def read_procs_file(dir='.', procs_files=None):
         Directory to read from.
     procs_files : list, optional
         List of filename(s) of procs parameter files in directory. None uses
-        standard files.
+        standard files. If filename(s) contains a full absolute path, dir is not used.
 
     Returns
     -------
     dic : dict
         Dictionary of Bruker parameters.
     """
+
     if procs_files is None:
+
+        # Reading standard procs files
         procs_files = []
-        for f in ["procs", "proc2s", "proc3s", "proc4s"]:
-            if os.path.isfile(os.path.join(dir, f)):
-                procs_files.append(f)
+
         pdata_path = dir
+        for f in ["procs", "proc2s", "proc3s", "proc4s"]:
+            pf = os.path.join(pdata_path, f)
+            if os.path.isfile(pf):
+                procs_files.append(pf)
 
-    if procs_files == []:
-        if os.path.isdir(os.path.join(dir, 'pdata')):
-            pdata_folders = [folder for folder in
-                             os.walk(os.path.join(dir, 'pdata'))][0][1]
-            if '1' in pdata_folders:
-                pdata_path = os.path.join(dir, 'pdata', '1')
+        if not procs_files:
+            # procs not found in the given dir, try look adding pdata to the dir path
+
+            if os.path.isdir(os.path.join(dir, 'pdata')):
+                pdata_folders = [folder for folder in
+                                 os.walk(os.path.join(dir, 'pdata'))][0][1]
+                if '1' in pdata_folders:
+                    pdata_path = os.path.join(dir, 'pdata', '1')
+                else:
+                    pdata_path = os.path.join(dir, 'pdata', pdata_folders[0])
+
+            for f in procs_files:
+                pf = os.path.join(pdata_path, f)
+                if os.path.isfile(pf):
+                    procs_files.append(pf)
+
+    else:
+        # proc paths were explicitely given
+        # just check if they exists
+
+        for i, f in enumerate(procs_files):
+            pdata_path, f = os.path.split(f)
+            if not pdata_path:
+                pdata_path = dir
+
+            pf = os.path.join(pdata_path, f)
+            if not os.path.isfile(pf):
+                mesg = "The file `%s` could not be found "
+                warn(mesg % pf)
             else:
-                pdata_path = os.path.join(dir, 'pdata', pdata_folders[0])
-
-    for f in ["procs", "proc2s", "proc3s", "proc4s"]:
-            if os.path.isfile(os.path.join(pdata_path, f)):
-                procs_files.append(f)
+                procs_files[i] = pf
 
     # create an empty dictionary
     dic = dict()
 
     # read the acqus_files and add to the dictionary
     for f in procs_files:
-        dic[f] = read_jcamp(os.path.join(pdata_path, f))
+        pdata_path = os.path.basename(f)
+        dic[pdata_path] = read_jcamp(f)
     return dic
 
 
@@ -1192,6 +1222,10 @@ def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
                 bin_files = ['3rrr']
         else:
             raise IOError("No Bruker binary file could be found in %s" % (dir))
+
+    for f in bin_files.copy():
+        if not os.path.isfile(os.path.join(dir, f)):
+            bin_files.remove(f)
 
     if read_procs:
         # read the procs_files and add to the dictionary
