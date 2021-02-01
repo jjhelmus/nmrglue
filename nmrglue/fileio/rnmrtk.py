@@ -599,7 +599,7 @@ class rnmrtk_nd(fileiobase.data_nd):
         slices is a well formatted tuple of slices
 
         """
-        # seperate the last slice from the leading slices
+        # separate the last slice from the leading slices
         lslice = slices[-1]
         fslice = slices[:-1]
 

@@ -2063,7 +2063,7 @@ class fid_nd(fileiobase.data_nd):
 
         slices is a well formatted tuple of slices
         """
-        # seperate the last slice from the first slices
+        # separate the last slice from the first slices
         lslice = slices[-1]
         fslice = slices[:-1]
 

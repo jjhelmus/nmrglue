@@ -3,6 +3,7 @@ Misc. functions
 """
 
 from __future__ import print_function
+import warnings
 
 import numpy as np
 
@@ -211,3 +212,22 @@ def islistsimilar(l1, l2, verb=False, dtol=DTOL):
             r = False
 
     return r
+
+def deprecated(message):
+    """
+    Deprecation decorator
+
+    Parameters
+    ----------
+    message : str,
+        the deprecation message
+    """
+
+    def deprecation_decorator(func):
+        def wrapper(*args, **kwargs):
+            warnings.warn("The function `{} is deprecated : {}".format(func.__name__, message), DeprecationWarning)
+            return func(*args, **kwargs)
+
+        return wrapper
+
+    return deprecation_decorator

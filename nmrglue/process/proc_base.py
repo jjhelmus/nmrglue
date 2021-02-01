@@ -11,6 +11,8 @@ import numpy as np
 import scipy.signal
 import scipy.linalg
 
+from ..util.misc import deprecated
+
 pi = np.pi
 
 
@@ -1570,7 +1572,7 @@ def unpack_complex(data):
 
 def c2ri(data):
     """
-    Seperate interleaved real, imaginary data into complex array.
+    separate interleaved real, imaginary data into complex array.
 
     Assumes data is real only, ignores imaginary portion of data.
 
@@ -1585,10 +1587,17 @@ def c2ri(data):
     n.imag = data.real[..., 1::2]
     return n
 
-
+@deprecated('This function is deprecated and will be removed in future release. Use `separate_interleaved` instead!.')
 def seperate_interleaved(data):
     """
-    Seperate interleaved real, imaginary data into complex array.
+    separate interleaved real, imaginary data into complex array.
+    """
+    return c2ri(data)
+
+
+def separate_interleaved(data):
+    """
+    separate interleaved real, imaginary data into complex array.
     """
     return c2ri(data)
 
@@ -1602,7 +1611,7 @@ def pack_complex(data):
 
 def decode_States(data):
     """
-    Decode data collected using States (seperates interleaved data).
+    Decode data collected using States (separates interleaved data).
     """
     return c2ri(data)
 
@@ -1780,7 +1789,7 @@ def neg_alt(data):
 
 def abs(data):
     """
-    Replace data with absolute value of data (abs of real, imag seperately)
+    Replace data with absolute value of data (abs of real, imag separately)
     """
     data.real = np.abs(data.real)
     data.imag = np.abs(data.imag)
@@ -1789,7 +1798,7 @@ def abs(data):
 
 def sign(data):
     """
-    Replace data with sign (-1 or 1) of data (seperately on each channel)
+    Replace data with sign (-1 or 1) of data (separately on each channel)
     """
     data.real = np.sign(data.real)
     data.imag = np.sign(data.imag)
@@ -1871,7 +1880,7 @@ def conv(data, kern=[1.], m="wrap", c=0.0):
     """
     Convolute data with kernel.
 
-    Real and imaginary components of data are convolved seperately.
+    Real and imaginary components of data are convolved separately.
 
     Parameters
     ----------
@@ -1903,7 +1912,7 @@ def corr(data, kern=[1.], m="wrap", c=0.0):
     """
     Correlate data with a kernel (weights).
 
-    Real and imaginary components of data are correlated seperately.
+    Real and imaginary components of data are correlated separately.
 
     Parameters
     ----------
@@ -1937,7 +1946,7 @@ def filter_median(data, s=(1, 1), m="wrap", c=0.0):
     """
     Apply a median filter.
 
-    Real and imaginary components are filtered seperately.
+    Real and imaginary components are filtered separately.
 
     Parameters
     ----------
@@ -1965,7 +1974,7 @@ def filter_min(data, s=(1, 1), m="wrap", c=0.0):
     """
     Apply a minimum filter.
 
-    Real and imaginary components are filtered seperately.
+    Real and imaginary components are filtered separately.
 
     Parameters
     ----------
@@ -1993,7 +2002,7 @@ def filter_max(data, s=(1, 1), m="wrap", c=0.0):
     """
     Apply a maximum filter.
 
-    Real and imaginary components are filtered seperately.
+    Real and imaginary components are filtered separately.
 
     Parameters
     ----------
@@ -2021,7 +2030,7 @@ def filter_percentile(data, percentile, s=(1, 1), m="wrap", c=0.0):
     """
     Apply a percentile filter.
 
-    Real and imaginary components are filtered seperately.
+    Real and imaginary components are filtered separately.
 
     Parameters
     ----------
@@ -2053,7 +2062,7 @@ def filter_rank(data, rank, s=(1, 1), m="wrap", c=0.0):
     """
     Apply a rank filter.
 
-    Real and imaginary components are filtered seperately.
+    Real and imaginary components are filtered separately.
 
     Parameters
     ----------
@@ -2088,7 +2097,7 @@ def filter_amin(data, s=(1, 1), m="wrap", c=0.0):
     """
     Apply an absolute minimum filter.
 
-    Real and imaginary components are filtered seperately.
+    Real and imaginary components are filtered separately.
 
     Parameters
     ----------
@@ -2119,7 +2128,7 @@ def filter_amax(data, s=(1, 1), m="wrap", c=0.0):
     """
     Apply an absolute maximum filter.
 
-    Real and imaginary components are filtered seperately.
+    Real and imaginary components are filtered separately.
 
     Parameters
     ----------
@@ -2150,7 +2159,7 @@ def filter_range(data, s=(1, 1), m="wrap", c=0.0):
     """
     Apply a range filter.
 
-    Real and imaginary components are filtered seperately.
+    Real and imaginary components are filtered separately.
 
     Parameters
     ----------
@@ -2181,7 +2190,7 @@ def filter_avg(data, s=(1, 1), m="wrap", c=0.0):
     """
     Apply an average filter.
 
-    Real and imaginary components are filtered seperately.
+    Real and imaginary components are filtered separately.
 
     Parameters
     ----------
@@ -2212,7 +2221,7 @@ def filter_dev(data, s=(1, 1), m="wrap", c=0.0):
     """
     Apply a standard deviation filter.
 
-    Real and imaginary components are filtered seperately.
+    Real and imaginary components are filtered separately.
 
     Parameters
     ----------
@@ -2243,7 +2252,7 @@ def filter_sum(data, s=(1, 1), m="wrap", c=0.0):
     """
     Apply a summation filter.
 
-    Real and imaginary components are filtered seperately.
+    Real and imaginary components are filtered separately.
 
     Parameters
     ----------
@@ -2274,7 +2283,7 @@ def filter_generic(data, filter, s=(1, 1), m="wrap", c=0.0):
     """
     Apply a generic filter.
 
-    Real and imaginary components are filtered seperately.
+    Real and imaginary components are filtered separately.
 
     Parameters
     ----------

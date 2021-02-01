@@ -2438,7 +2438,7 @@ def shuf(dic, data, mode=None):
     string  Description
     ======= ===================================
     'ri2c'  Interleave real and imaginary data.
-    'c2ri'  Seperate real and imaginary data.
+    'c2ri'  separate real and imaginary data.
     'ri2rr' Append real and imaginary data.
     'rr2ri' Unappend real and imaginary data.
     'exlr'  Exchange left and right halfs.
@@ -2461,7 +2461,7 @@ def shuf(dic, data, mode=None):
         dic["FDSIZE"] = data.shape[-1]
         dic["FDREALSIZE"] = data.shape[-1]
     elif mode == "c2ri":
-        # seperate real and imaginary
+        # separate real and imaginary
         data = np.array(p.c2ri(data), dtype="complex64")
         # update the dictionary
         dic["FDQUADFLAG"] = 0.0
