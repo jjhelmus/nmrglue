@@ -30,7 +30,7 @@ fits = {}
 # loop over the peak trajectories
 for peak in trajs.dtype.names:
 
-    print "Fitting Peak:", peak
+    print("Fitting Peak:", peak)
 
     # get the trajectory to fit
     traj = trajs[peak]
@@ -39,7 +39,7 @@ for peak in trajs.dtype.names:
     results = scipy.optimize.leastsq(residuals, p0, args=(traj, t1))
     fits[peak] = results
 
-# pickle the fits 
+# pickle the fits
 f = open("fits.pickle", 'w')
 pickle.dump(fits, f)
 f.close()
@@ -48,6 +48,6 @@ f.close()
 f = open("fits.txt", 'w')
 f.write("#Peak\tA\t\tR2\t\tier\n")
 for k, v in fits.iteritems():
-    f.write(k + "\t" + str(v[0][0]) + "\t" + str(v[0][1]) + "\t" + str(v[1]) + 
+    f.write(k + "\t" + str(v[0][0]) + "\t" + str(v[0][1]) + "\t" + str(v[1]) +
             "\n")
 f.close()
