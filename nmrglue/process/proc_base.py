@@ -1587,12 +1587,10 @@ def c2ri(data):
     n.imag = data.real[..., 1::2]
     return n
 
+
 @deprecated('This function is deprecated and will be removed in future release. Use `separate_interleaved` instead!.')
 def seperate_interleaved(data):
-    """
-    separate interleaved real, imaginary data into complex array.
-    """
-    return c2ri(data)
+    return separate_interleaved(data)
 
 
 def separate_interleaved(data):
