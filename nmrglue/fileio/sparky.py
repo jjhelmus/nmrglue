@@ -9,7 +9,7 @@ Sparky file format information
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Information on the Sparky file format can be found online at:
-`http://www.cgl.ucsf.edu/home/sparky/manual/files.html`_
+http://www.cgl.ucsf.edu/home/sparky/manual/files.html
 and in the Sparky source file ucsffile.cc.
 
 """
@@ -18,6 +18,10 @@ import os
 import struct
 import datetime
 from warnings import warn
+try:
+    from html.parser import HTMLParser
+except ImportError:
+    from HTMLParser import HTMLParser
 
 import numpy as np
 
@@ -265,7 +269,7 @@ def read(filename):
     # open the file
     f = open(filename, 'rb')
 
-    # determind the dimentionality
+    # determine the dimentionality
     n = fileheader2dic(get_fileheader(f))["naxis"]
     f.close()
 
@@ -273,8 +277,10 @@ def read(filename):
         return read_2D(filename)
     if n == 3:
         return read_3D(filename)
+    if n == 4:
+        return read_4D(filename)
 
-    raise ValueError("unknown dimentionality: %s" % n)
+    #raise ValueError("unknown dimentionality here: %s" % n)
 
 
 def read_lowmem(filename):
@@ -310,8 +316,8 @@ def read_lowmem(filename):
         return read_lowmem_2D(filename)
     if n == 3:
         return read_lowmem_3D(filename)
-
-    raise ValueError("unknown dimentionality: %s" % n)
+    
+    raise ValueError("unknown dimentionality read lowmem: %s" % n)
 
 
 def write(filename, dic, data, overwrite=False):
@@ -343,7 +349,7 @@ def write(filename, dic, data, overwrite=False):
     if n == 3:
         return write_3D(filename, dic, data, overwrite=overwrite)
 
-    raise ValueError("unknown dimentionality: %s" % n)
+    raise ValueError("unknown dimentionality write: %s" % n)
 
 
 def write_lowmem(filename, dic, data, overwrite=False):
@@ -378,29 +384,28 @@ def read_2D(filename):
     Read a 2D sparky file. See :py:func:`read` for documentation.
     """
     seek_pos = os.stat(filename).st_size
-    with open(filename, 'rb') as f:
+    f = open(filename, 'rb')
 
-        # read the file header
-        dic = fileheader2dic(get_fileheader(f))
+    # read the file header
+    dic = fileheader2dic(get_fileheader(f))
 
-        # check for file size mismatch
-        if seek_pos != dic["seek_pos"]:
-            warn('Bad file size in header %s vs %s' %
-                 (seek_pos, dic['seek_pos']))
+    # check for file size mismatch
+    if seek_pos != dic["seek_pos"]:
+        warn('Bad file size in header %s vs %s' % (seek_pos, dic['seek_pos']))
 
-        # read the axis headers...
-        for i in range(dic['naxis']):
-            dic["w" + str(i + 1)] = axisheader2dic(get_axisheader(f))
+    # read the axis headers...
+    for i in range(dic['naxis']):
+        dic["w" + str(i + 1)] = axisheader2dic(get_axisheader(f))
 
-        # read the data and untile
-        lenY = dic["w1"]["npoints"]
-        lenX = dic["w2"]["npoints"]
-        lentY = dic["w1"]["bsize"]
-        lentX = dic["w2"]["bsize"]
-        data = get_data(f)
-        data = untile_data2D(data, (lentY, lentX), (lenY, lenX))
+    # read the data and untile
+    lenY = dic["w1"]["npoints"]
+    lenX = dic["w2"]["npoints"]
+    lentY = dic["w1"]["bsize"]
+    lentX = dic["w2"]["bsize"]
+    data = get_data(f)
+    data = untile_data2D(data, (lentY, lentX), (lenY, lenX))
 
-        return dic, data
+    return dic, data
 
 
 def write_2D(filename, dic, data, overwrite=False):
@@ -437,31 +442,65 @@ def read_3D(filename):
     Read a 3D Sparky file. See :py:func:`read` for documentation.
     """
     seek_pos = os.stat(filename).st_size
-    with open(filename, 'rb') as f:
+    f = open(filename, 'rb')
 
-        # read the file header
-        dic = fileheader2dic(get_fileheader(f))
+    # read the file header
+    dic = fileheader2dic(get_fileheader(f))
 
-        # check for file size mismatch
-        if seek_pos != dic["seek_pos"]:
-            warn('Bad file size in header %s vs %s' %
-                 (seek_pos, dic['seek_pos']))
+    # check for file size mismatch
+    if seek_pos != dic["seek_pos"]:
+        warn('Bad file size in header %s vs %s' % (seek_pos, dic['seek_pos']))
 
-        # read the axis headers...
-        for i in range(dic['naxis']):
-            dic["w" + str(i + 1)] = axisheader2dic(get_axisheader(f))
+    # read the axis headers...
+    for i in range(dic['naxis']):
+        dic["w" + str(i + 1)] = axisheader2dic(get_axisheader(f))
 
-        # read the data and untile
-        lenZ = dic["w1"]["npoints"]
-        lenY = dic["w2"]["npoints"]
-        lenX = dic["w3"]["npoints"]
-        lentZ = dic["w1"]["bsize"]
-        lentY = dic["w2"]["bsize"]
-        lentX = dic["w3"]["bsize"]
-        data = get_data(f)
-        data = untile_data3D(data, (lentZ, lentY, lentX), (lenZ, lenY, lenX))
+    # read the data and untile
+    lenZ = dic["w1"]["npoints"]
+    lenY = dic["w2"]["npoints"]
+    lenX = dic["w3"]["npoints"]
+    lentZ = dic["w1"]["bsize"]
+    lentY = dic["w2"]["bsize"]
+    lentX = dic["w3"]["bsize"]
+    data = get_data(f)
+    data = untile_data3D(data, (lentZ, lentY, lentX), (lenZ, lenY, lenX))
 
-        return dic, data
+    return dic, data
+
+def read_4D(filename):
+    """
+    Read a 4D Sparky file. See :py:func:`read` for documentation.
+    """
+    seek_pos = os.stat(filename).st_size
+    f = open(filename, 'rb')
+
+    # read the file header
+    dic = fileheader2dic(get_fileheader(f))
+
+    # check for file size mismatch
+    if seek_pos != dic["seek_pos"]:
+        warn('Bad file size in header %s vs %s' % (seek_pos, dic['seek_pos']))
+
+    # read the axis headers...
+    for i in range(dic['naxis']):
+        dic["w" + str(i + 1)] = axisheader2dic(get_axisheader(f))
+
+    # read the data and untile
+    lenA = dic["w1"]["npoints"]
+    lenZ = dic["w2"]["npoints"]
+    lenY = dic["w3"]["npoints"] 
+    lenX = dic["w4"]["npoints"]
+    lentA = dic["w1"]["bsize"]
+    lentZ = dic["w2"]["bsize"]
+    lentY = dic["w3"]["bsize"]
+    lentX = dic["w4"]["bsize"]
+    data = get_data(f)
+
+    data = untile_data4D(data, (lentA, lentZ, lentY, lentX), (lenA, lenZ, lenY, lenX))
+
+    ### print("read4D done")
+
+    return dic, data
 
 
 def write_3D(filename, dic, data, overwrite=False):
@@ -527,6 +566,298 @@ def read_lowmem_3D(filename):
     # check for file size mismatch
     if seek_pos != dic["seek_pos"]:
         warn('Bad file size in header %s vs %s' % (seek_pos, dic['seek_pos']))
+
+    return dic, data
+
+class SparkySaveParser(HTMLParser):
+    """
+    A parser for Sparky .save files. The file structure is similar to
+    simple HTML files, except the use of <end tag> instead of </tag>.
+    The following structure is assumed:
+
+    <sparky save file>
+    <version ...>
+    <user>
+    ...
+    <end user>
+    <spectrum>
+    ...
+        <view>
+        ...
+            <params>
+            ...
+            <end params>
+            <params>
+            ...
+            <end params>
+        <end view>
+        <view>
+        ...
+            <params>
+            ...
+            <end params>
+            <params>
+            ...
+            <end params>
+        <end view>
+        <ornament>
+        ...
+        <end ornament>
+    <end spectrum>
+
+    TODO: some .save files do not have this exact structure
+    They need to be treated differently
+
+    """
+
+    # main dictionaries to parse data into
+    user, spectrum, view, ornament = {}, {}, {}, {}
+
+    # tracker if there are multiple views
+    viewnum = -1
+
+    curtag, curdict = None, None
+
+    def _parse_info(self, string, dtype=None):
+        """
+        Reads a list of strings into a dictionary, with the first item of
+        the list as the key and the remaining list as the value. In addition,
+        it parses all values in the list to do the following: (i) convert the
+        values to float wherever possible and (ii) if the list has a single
+        item, upack and return that item alone as the value
+
+        """
+
+        dic = {}
+        for s in string:
+            i = s.split()
+            try:
+                if dtype is None:
+                    key = i[0].replace(".", "_").replace("-", "_")
+                    value = i[1:]
+
+                if dtype == "user":
+                    key = i[0] + "_" + i[1]
+                    value = i[2:]
+
+                parsed_value = []
+                for v in value:
+                    try:
+                        if key == "id":
+                            parsed_value.append(int(v))
+                        else:
+                            parsed_value.append(float(v))
+                    except ValueError:
+                        parsed_value.append(v)
+
+                if len(value) == 1:
+                    dic[key] = parsed_value[0]
+
+                else:
+                    dic[key] = parsed_value
+
+            except IndexError:
+                pass
+
+        return dic
+
+    def _parse_peak(self, peak):
+        """
+        Parses a single peak into a dictionary, the input being a list
+        that corresponds to a single peak in a sparky save file. In addition,
+        it parses all values in the list to do the following: (i) convert the
+        values to float wherever possible and (ii) if the list has a single
+        item, upack and return that item alone as the value. Currently assumes
+        the following structure for a single peak:
+
+        type peak
+        ...
+        [
+        type label
+        ...
+        ]
+
+        """
+
+        l = [i for i, word in enumerate(peak) if word in ["[", "]"]]
+        p = peak[:l[0]]
+        l = peak[l[0]+1:l[1]]
+
+        d = {}
+        for i in p:
+            j = i.split()
+
+            info = []
+            for k in j:
+                try:
+                    info.append(float(k))
+                except ValueError:
+                    info.append(k)
+
+            if len(info) == 2:
+                d[info[0]] = info[1]
+            else:
+                d[info[0]] = info[1:]
+
+        for i in l:
+            j = i.split()
+            if j[0] not in d.keys():
+                d[j[0]] = j[1:]
+        del d["type"]
+
+        for i, k in enumerate(d["xy"]):
+            k = k.split(",")
+            d["xy"][i] = [float(j) for j in k]
+
+        return d
+
+    def _parse_ornaments(self, data):
+        """
+        Parses a string containing all ornaments into a dictionary. This
+        is for all the data inside the <ornament> tag. The key for each
+        peak item is given by the peak ID, which should be unique for each
+        peak. The following structure is assumed:
+
+        type peak # peak 1
+        ...
+        type peak # peak 2
+        ...
+        type peak # peak 3
+        ...
+
+        """
+
+        data = data.split("\n")
+        p = [i for i, word in enumerate(data) if word == "type peak"]
+        peaklist = [data[p[i]: p[i+1]] for i in range(len(p)-1)]
+
+        dic = {}
+        for peak in peaklist:
+            d = self._parse_peak(peak)
+            dic[int(d["id"])] = d
+
+        return dic
+
+
+    def handle_starttag(self, tag, attrs):
+
+        if tag in ["sparky", "version"]:
+            self.curdict = self.spectrum
+            self.spectrum[tag] = attrs[0][0]
+
+        elif tag == "user":
+            self.curdict = self.user
+
+        elif tag == "spectrum":
+            self.curdict = self.spectrum
+
+        elif tag == "view":
+            self.viewnum += 1
+            self.view[self.viewnum] = {}
+            self.curdict = self.view[self.viewnum]
+
+        elif tag == "ornament":
+            self.curdict = self.ornament
+
+        else:
+            # params tag for each view
+            self.curtag = tag
+
+
+    def handle_endtag(self, tag):
+        self.curtag = None
+
+
+    def handle_data(self, data):
+
+        # ignore blank lines
+        if len(data.strip()) == 0:
+            pass
+
+        elif self.curtag not in self.curdict.keys():
+
+            # all the files that are read in a split at the newline character
+            if (self.curtag is None) and (self.curdict == self.spectrum):
+                dic = self._parse_info(data.split("\n"),)
+                for k, v in dic.items():
+                    self.curdict[k] = v
+
+            elif (self.curtag is None) and (self.curdict == self.user):
+                dic = self._parse_info(data.split("\n"), "user")
+                for k, v in dic.items():
+                    self.curdict[k] = v
+
+            elif (self.curtag is None) and (self.curdict == self.view[self.viewnum]):
+                dic = self._parse_info(data.split("\n"),)
+                for k, v in dic.items():
+                    self.curdict[k] = v
+
+            elif (self.curtag is None) and (self.curdict == self.ornament):
+                self.ornament = self._parse_ornaments(data)
+
+            else:
+                # for a param tag inside a view
+                dic = self._parse_info(data.split("\n"),)
+                self.curdict[self.curtag] = [dic]
+
+        else:
+            # this is only executed for multiple params tags in a view
+            dic = self._parse_info(data.split("\n"),)
+            self.curdict[self.curtag].append(dic)
+
+
+def read_savefile(savefile, spectrum_file=None):
+    """
+    Reads in a Sparky .save file and the corresponding spectrum (.ucsf)
+    file. In addition to the usual dictionary contents that come with
+    a .ucsf file, these additinal dictionary keys are created with the content
+    from .save file: "spectrum", "view", "user" and "ornament". The together
+    contain all edits and annotations. By default, it tries to read in
+    the spectrum file given in the .save file (but this fails many times due
+    to relative paths in .save file)
+
+    Parameters
+    ----------
+    savefile : str
+        Filename of Sparky .save file.
+    spectrum_file : str
+        Filename of Sparky .ucsf file.
+
+
+    Returns
+    -------
+    dic : dict
+        Dictionary of Sparky .ucsf and .save parameters.
+    data : ndarray
+        Array of NMR data.
+
+    """
+
+    with open(savefile, "r") as f:
+        savefile = f.read().replace("<end ", r"</")
+
+    parser = SparkySaveParser()
+    parser.feed(savefile)
+    parser.close()
+
+    dic = {
+        "user": parser.user,
+        "spectrum": parser.spectrum,
+        "view": parser.view,
+        "ornament": parser.ornament,
+    }
+
+    try:
+        if spectrum_file is None:
+            d, data = read(dic["spectrum"]["pathname"])
+        else:
+            d, data = read(spectrum_file)
+
+    except:
+        warn("Cannot load spectrum")
+        d, data = {}, None
+
+    dic.update(d)
 
     return dic, data
 
@@ -1208,6 +1539,68 @@ def untile_data3D(data, tile_size, data_size):
 
     return out[:lenZ, :lenY, :lenX]
 
+
+def untile_data4D(data, tile_size, data_size):
+    """
+    Rearrange 4D tiled/Sparky formatted data into standard format.
+
+    Parameters
+    ----------
+    data : 1D ndarray
+        Tiled/Sparky formatted 2D NMR data.
+    (lentA, lentZ, lentY, lentX) : tuple of ints
+        Size of tile
+    (lenA, lenZ, lenY, lenX) : tuple of ints
+        Size of NMR data.
+
+    Returns
+    -------
+    sdata : 4D ndarray
+        NMR data, untiled/standard format.
+
+    """
+    lentA, lentZ, lentY, lentX = tile_size
+    lenA, lenZ, lenY, lenX = data_size
+
+    # determind the number of tiles in data
+    ttX = int(np.ceil(lenX / float(lentX)))  # total tiles in X dim
+    ttY = int(np.ceil(lenY / float(lentY)))  # total tiles in Y dim
+    ttZ = int(np.ceil(lenZ / float(lentZ)))  # total tiles in Z dim
+    ttA = int(np.ceil(lenA / float(lentA)))  # total tiles in A dim
+    tt = ttX * ttY * ttZ * ttA
+
+    # calc some basic parameter
+    tsize = lentX * lentY * lentZ *lentA # number of points in one tile
+    t_tup = (lentA, lentZ, lentY, lentX)  # tile size tuple
+
+    # create an empty array to store file data
+    out = np.empty((ttA * lentA, ttZ * lentZ, ttY * lentY, ttX * lentX), dtype="float32")
+    for iA in range(int(ttA)):
+        for iZ in range(int(ttZ)):
+            for iY in range(int(ttY)):
+                for iX in range(int(ttX)):
+
+                    minX = iX * lentX
+                    maxX = (iX + 1) * lentX
+
+                    minY = iY * lentY
+                    maxY = (iY + 1) * lentY
+
+                    minZ = iZ * lentZ
+                    maxZ = (iZ + 1) * lentZ
+
+                    minA = iA * lentA
+                    maxA = (iA + 1) * lentA
+
+                    ntile = iA * ttZ * ttY * ttX + iZ * ttX * ttY + iY * ttX + iX
+                    minT = ntile * tsize
+                    maxT = (ntile + 1) * tsize
+
+                    out[minA:maxA, minZ:maxZ, minY:maxY, minX:maxX] =  \
+                        data[minT:maxT].reshape(t_tup)
+    print("Untitle done")
+
+    return out[:lenA, :lenZ, :lenY, :lenX]
 
 # fileheader functions
 def get_fileheader(f):
