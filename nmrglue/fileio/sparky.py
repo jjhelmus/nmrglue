@@ -269,7 +269,7 @@ def read(filename):
     # open the file
     f = open(filename, 'rb')
 
-    # determine the dimentionality
+    # determine the dimensionality
     n = fileheader2dic(get_fileheader(f))["naxis"]
     f.close()
 
@@ -280,7 +280,7 @@ def read(filename):
     if n == 4:
         return read_4D(filename)
 
-    #raise ValueError("unknown dimentionality here: %s" % n)
+    #raise ValueError("unknown dimensionality: %s" % n)
 
 
 def read_lowmem(filename):
@@ -317,7 +317,7 @@ def read_lowmem(filename):
     if n == 3:
         return read_lowmem_3D(filename)
     
-    raise ValueError("unknown dimentionality read lowmem: %s" % n)
+    raise ValueError("unknown dimensionality: %s" % n)
 
 
 def write(filename, dic, data, overwrite=False):
@@ -349,7 +349,7 @@ def write(filename, dic, data, overwrite=False):
     if n == 3:
         return write_3D(filename, dic, data, overwrite=overwrite)
 
-    raise ValueError("unknown dimentionality write: %s" % n)
+    raise ValueError("unknown dimensionality: %s" % n)
 
 
 def write_lowmem(filename, dic, data, overwrite=False):
