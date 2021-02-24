@@ -40,14 +40,16 @@ for peak in trajs.dtype.names:
     fits[peak] = results
 
 # pickle the fits
-f = open("fits.pickle", 'w')
+f = open("fits.pickle", 'wb')
 pickle.dump(fits, f)
 f.close()
 
 # output the fits nicely to file
 f = open("fits.txt", 'w')
 f.write("#Peak\tA\t\tR2\t\tier\n")
-for k, v in fits.iteritems():
-    f.write(k + "\t" + str(v[0][0]) + "\t" + str(v[0][1]) + "\t" + str(v[1]) +
-            "\n")
+for k, v in fits.items():
+    A = v[0][0]
+    R2 = v[0][1]
+    ier = v[1]
+    f.write(f"{k}\t{A:.3f}\t{R2:.3f}\t{ier:.3f}\n")
 f.close()

@@ -5,8 +5,8 @@ import nmrglue as ng
 import numpy as np
 
 # read in the integration limits and list of spectra
-peak_list = np.recfromtxt("boxes.in")
-spectra_list = np.recfromtxt("spectra.in")
+peak_list = np.recfromtxt("boxes.in", encoding="UTF-8")
+spectra_list = np.recfromtxt("spectra.in", encoding="UTF-8")
 
 # prepare the trajs records array
 num_spec = spectra_list.size

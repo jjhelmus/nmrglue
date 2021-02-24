@@ -19,16 +19,16 @@ def fit_func(p, x):
     return A * np.exp(-1.0 * np.array(x) * R2 / 1.0e6)
 
 # read in the trajectories, fitting results, and times
-fits = pickle.load(open("fits.pickle"))
+fits = pickle.load(open("fits.pickle", "rb"))
 trajs = np.load("traj.npy")
 times = np.recfromtxt("time.dat")
 
 sim_times = np.linspace(times[0], times[-1], 2000)
 
 # loop over the peaks
-for peak, params in fits.iteritems():
+for peak, params in fits.items():
 
-    print "Plotting:", peak
+    print("Plotting:", peak)
     exp_traj = trajs[peak]
     sim_traj = fit_func(params[0], sim_times)
 
@@ -41,3 +41,4 @@ for peak, params in fits.iteritems():
 
     # save the figure
     fig.savefig(peak + "_plot.png")
+    plt.close()
