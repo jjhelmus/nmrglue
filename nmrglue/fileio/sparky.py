@@ -506,31 +506,32 @@ def read_4D(filename):
     Read a 4D Sparky file. See :py:func:`read` for documentation.
     """
     seek_pos = os.stat(filename).st_size
-    f = open(filename, 'rb')
+    
+    with open(filename, 'rb') as f:
+        
+        # read the file header
+        dic = fileheader2dic(get_fileheader(f))
 
-    # read the file header
-    dic = fileheader2dic(get_fileheader(f))
+        # check for file size mismatch
+        if seek_pos != dic["seek_pos"]:
+            warn('Bad file size in header %s vs %s' % (seek_pos, dic['seek_pos']))
 
-    # check for file size mismatch
-    if seek_pos != dic["seek_pos"]:
-        warn('Bad file size in header %s vs %s' % (seek_pos, dic['seek_pos']))
+        # read the axis headers...
+        for i in range(dic['naxis']):
+            dic["w" + str(i + 1)] = axisheader2dic(get_axisheader(f))
 
-    # read the axis headers...
-    for i in range(dic['naxis']):
-        dic["w" + str(i + 1)] = axisheader2dic(get_axisheader(f))
+        # read the data and untile
+        lenA = dic["w1"]["npoints"]
+        lenZ = dic["w2"]["npoints"]
+        lenY = dic["w3"]["npoints"] 
+        lenX = dic["w4"]["npoints"]
+        lentA = dic["w1"]["bsize"]
+        lentZ = dic["w2"]["bsize"]
+        lentY = dic["w3"]["bsize"]
+        lentX = dic["w4"]["bsize"]
+        data = get_data(f)
 
-    # read the data and untile
-    lenA = dic["w1"]["npoints"]
-    lenZ = dic["w2"]["npoints"]
-    lenY = dic["w3"]["npoints"] 
-    lenX = dic["w4"]["npoints"]
-    lentA = dic["w1"]["bsize"]
-    lentZ = dic["w2"]["bsize"]
-    lentY = dic["w3"]["bsize"]
-    lentX = dic["w4"]["bsize"]
-    data = get_data(f)
-
-    data = untile_data4D(data, (lentA, lentZ, lentY, lentX), (lenA, lenZ, lenY, lenX))
+        data = untile_data4D(data, (lentA, lentZ, lentY, lentX), (lenA, lenZ, lenY, lenX))
 
     return dic, data
 
