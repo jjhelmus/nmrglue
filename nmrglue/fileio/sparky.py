@@ -533,7 +533,7 @@ def read_4D(filename):
 
         data = untile_data4D(data, (lentA, lentZ, lentY, lentX), (lenA, lenZ, lenY, lenX))
 
-    return dic, data
+        return dic, data
 
 # TODO: read_lowmem_4D ?
 
