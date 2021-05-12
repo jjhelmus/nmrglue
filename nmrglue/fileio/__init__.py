@@ -11,3 +11,4 @@ from . import varian
 # replicate varian namespace in agilent
 from . import varian as agilent
 from . import table
+from . import spinsolve
