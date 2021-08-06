@@ -4,8 +4,8 @@ parameter (acqu.par/proc.par) files.
 """
 
 from warnings import warn
-from pathlib import Path
 
+import os
 import numpy as np
 
 from . import fileiobase
@@ -71,7 +71,7 @@ def read(dir='.', specfile=None, acqupar="acqu.par", procpar="proc.par"):
 
     Parameters
     ----------
-    dir : str, Path
+    dir : str
         Directory to read from
     specfile : str, optional
         Filename to import spectral data from. None uses standard filename from: 
@@ -94,7 +94,10 @@ def read(dir='.', specfile=None, acqupar="acqu.par", procpar="proc.par"):
 
     """
 
-    dir = Path(dir)
+    if os.path.isdir(dir) is not True:
+        raise IOError("directory %s does not exist" % (dir))
+
+
     if not dir.is_dir():
         raise IOError(f"Directory {dir} does not exist or is not a directory!")
 
@@ -134,7 +137,7 @@ def read(dir='.', specfile=None, acqupar="acqu.par", procpar="proc.par"):
     if specfile:
         inputfile = dir / specfile
         if not inputfile.is_file():
-            raise FileNotFoundError(f"File {inputfile} does not exist")
+            raise IOError(f"File {inputfile} does not exist")
     else:
         for priority in priority_list:
             inputfile = dir / priority
