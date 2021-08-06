@@ -150,7 +150,7 @@ def read(dir='.', specfile=None, acqupar="acqu.par", procpar="proc.par"):
         data = raw_data[0][:] + 1j * raw_data[1][:]
 
     # Reading .1d files
-    elif inputfile.split('.')[-1] == ".1d":
+    elif inputfile.split('.')[-1] == "1d":
         with open(inputfile, "rb") as f:
             raw_data = f.read()
 
