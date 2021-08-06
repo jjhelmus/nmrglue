@@ -97,10 +97,6 @@ def read(dir='.', specfile=None, acqupar="acqu.par", procpar="proc.par"):
     if os.path.isdir(dir) is not True:
         raise IOError("directory %s does not exist" % (dir))
 
-
-    if not dir.is_dir():
-        raise IOError(f"Directory {dir} does not exist or is not a directory!")
-
     # Create empty dic
     dic = {
         "spectrum": {},
@@ -110,9 +106,9 @@ def read(dir='.', specfile=None, acqupar="acqu.par", procpar="proc.par"):
     }
 
     # Read in acqu.par and write to dic
-    acqupar = dir / acqupar
-    if acqupar.is_file():
-        with acqupar.open() as f:
+    acqupar = os.path.join(dir, acqupar)
+    if os.path.isfile(acqupar):
+        with open(acqupar, "r") as f:
             info = f.readlines()
         for line in info:
             par_name, par_value = parse_spinsolve_acqu_line(line)
@@ -121,9 +117,9 @@ def read(dir='.', specfile=None, acqupar="acqu.par", procpar="proc.par"):
                 dic["acqu"][par_name] = par_value
 
     # Read in proc.par and write to dic
-    procpar = dir / procpar
-    if procpar.is_file():
-        with acqupar.open() as f:
+    procpar = os.path.join(dir, procpar)
+    if os.path.isfile(procpar):
+        with open(procpar, "r") as f:
             info = f.readlines()
         for line in info:
             line = line.replace("\n", "")
@@ -135,27 +131,27 @@ def read(dir='.', specfile=None, acqupar="acqu.par", procpar="proc.par"):
     priority_list = ["nmr_fid.dx", "data.1d", "fid.1d", "spectrum.1d", "spectrum_processed.1d"]
     inputfile = None
     if specfile:
-        inputfile = dir / specfile
-        if not inputfile.is_file():
-            raise IOError(f"File {inputfile} does not exist")
+        inputfile = os.path.join(dir, specfile)
+        if not os.path.isfile(inputfile):
+            raise IOError("File %s does not exist" % (inputfile))
     else:
         for priority in priority_list:
-            inputfile = dir / priority
-            if inputfile.is_file():
+            inputfile = os.path.join(dir, priority)
+            if not os.path.isfile(inputfile):
                 break
     if inputfile is None:
-        raise IOError(f"Directory {dir} does not contain spectral data")
+        raise IOError("directory %s does not contain spectral data" % (dir))
 
     # Detect which file we are dealing with from the extension and read in the spectral data
 
     # Reading .dx file using existing nmrglue.fileio.jcampdx module
-    if inputfile.suffix == ".dx":
-        dic["dx"], raw_data = jcampdx.read(str(inputfile.absolute()))
+    if inputfile.split('.')[-1] == "dx":
+        dic["dx"], raw_data = jcampdx.read(inputfile)
         data = raw_data[0][:] + 1j * raw_data[1][:]
 
     # Reading .1d files
-    elif inputfile.suffix == ".1d":
-        with inputfile.open("rb") as f:
+    elif inputfile.split('.')[-1] == ".1d":
+        with open(inputfile, "rb") as f:
             raw_data = f.read()
 
         # Write out parameters from the first 32 bytes into dic["spectrum"]
@@ -176,7 +172,7 @@ def read(dir='.', specfile=None, acqupar="acqu.par", procpar="proc.par"):
         data = data[split:: 2] + 1j * data[split + 1:: 2]
 
     else:
-        raise IOError(f"File {inputfile} cannot be interpreted, use .dx or .1d instead")
+        raise IOError("File %s cannot be interpreted, use .dx or .1d instead" % (inputfile))
 
     return dic, data
 
