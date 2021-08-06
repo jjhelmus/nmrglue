@@ -19,6 +19,7 @@ fileio modules
     pipe
     rnmrtk
     simpson
+    spinsolve
     sparky
     table
     tecmag
