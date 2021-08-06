@@ -137,7 +137,7 @@ def read(dir='.', specfile=None, acqupar="acqu.par", procpar="proc.par"):
     else:
         for priority in priority_list:
             inputfile = os.path.join(dir, priority)
-            if not os.path.isfile(inputfile):
+            if os.path.isfile(inputfile):
                 break
     if inputfile is None:
         raise IOError("directory %s does not contain spectral data" % (dir))
