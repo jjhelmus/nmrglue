@@ -179,7 +179,9 @@ def read(dir='.', specfile=None, acqupar="acqu.par", procpar="proc.par"):
 
 
 def get_udic_from_acqu_dict(param: dict):
-    """ Returns an udic from the parameters in acqu dictionary provided """
+    """
+    Returns an udic from the parameters in acqu dictionary provided.
+    """
     return_dict = dict()
 
     # Spectral Width (sw, in Hz)
@@ -198,7 +200,9 @@ def get_udic_from_acqu_dict(param: dict):
 
 
 def get_udic_from_jcamp_dict(param):
-    """ Returns an udic from the parameters in the JCAMP-DX dict provided """
+    """
+    Returns an udic from the parameters in the JCAMP-DX dict provided.
+    """
     return_dict = dict()
 
     # Observation Frequency (obs, in MHz)
