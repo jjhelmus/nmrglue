@@ -177,6 +177,30 @@ def read(dir='.', specfile=None, acqupar="acqu.par", procpar="proc.par"):
     return dic, data
 
 
+def make_uc(dic, data):
+    """
+    Create a unit conversion object (only 1D).
+
+    Essentially identical to fileiobase.uc_from_udic() but uses data.size for size
+    so that it still works after zero filling
+
+    Parameters
+    ----------
+    dic : dict
+        Dictionary of Spinsolve parameters.
+    data : ndarray
+        Array of NMR data.
+
+    Returns
+    -------
+    uc : unit conversion object
+        Unit conversion object for given dimension.
+
+    """
+    udic = guess_udic(dic, data)
+    return fileiobase.unit_conversion(data.size, udic[0]['complex'], udic[0]['sw'], udic[0]['obs'], udic[0]['car'])
+
+
 def get_udic_from_acqu_dict(param: dict):
     """
     Returns an udic from the parameters in acqu dictionary provided.
