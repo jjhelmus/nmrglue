@@ -333,10 +333,10 @@ def guess_udic(dic, data):
         udic[i]["size"] = dic['actual_npts'][i]
         udic[i]["sw"] = dic['sw'][i]
         udic[i]["complex"] = True
-        udic[i]["obs"] = dic['ob_freq'] * 1e6
+        udic[i]["obs"] = dic['ob_freq'][i] * 1e6
         # Not sure what the difference is here
         # N.B. base_freq is some bogus value like 1.4e-13
-        udic[i]["car"] = dic['ob_freq'] * 1e6
+        udic[i]["car"] = dic['ob_freq'][i] * 1e6
         udic[i]["time"] = not bool(dic['fft_flag'][i])
         udic[i]["freq"] = bool(dic['fft_flag'][i])
 

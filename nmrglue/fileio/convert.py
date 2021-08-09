@@ -5,6 +5,7 @@ Functions to convert between NMR file formats
 import datetime
 from warnings import warn
 
+import csdmpy as cp
 import numpy as np
 
 from . import pipe
@@ -438,6 +439,39 @@ class converter(object):
         self._odtype = "complex128"
 
         return dic, self.__returndata()
+
+    def to_csdm(self):
+        """
+        Return a csdm object containing data.
+
+        Returns
+        -------
+        data : csdm object
+            CSDM object containing parameters and data
+
+        """
+        # self._oproc = {}
+        # self._odtype = str(self._data.dtype)
+
+        # create a list of dimension objects
+        dimensions = [
+            cp.LinearDimension(
+                count=value["size"],
+                increment=f'{1 / value["sw"]} s',
+                reciprocal={
+                    "coordinates_offset": f'{value["car"]} Hz',
+                    "origin_offset": f'{value["obs"]} MHz',
+                },
+                label=value["label"],
+            )
+            for key, value in list(self._udic.items())
+            if type(key) == int and value["size"] != 1
+        ]
+
+        return cp.CSDM(
+            dimensions=dimensions[::-1],
+            dependent_variables=[cp.as_dependent_variable(self._data.copy())],
+        )
 
 
 class udata_nd(fileiobase.data_nd):
