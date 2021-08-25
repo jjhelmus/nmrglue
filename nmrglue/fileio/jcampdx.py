@@ -355,16 +355,21 @@ def _parse_pseudo(datalines):
 
 def _parse_xy_xy(datalines):
     pts = []
+    len_group_data = 0
     for dataline in datalines:
         if not dataline:
             continue
         xy_re = re.compile('[^ ][0-9\.]+, [0-9\.]+')
         group_data = re.findall(xy_re, dataline)
+        len_group_data = len(group_data)
         for data in group_data:
             x, y = data.split(', ')
             pts.append([float(x), float(y)])
 
-    return [pts]
+    if len_group_data > 1:
+      return [pts]
+    else:
+      return pts
 
 
 def _parse_data(datastring):
