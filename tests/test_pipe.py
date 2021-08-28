@@ -1,10 +1,12 @@
 """ Tests for the fileio.pipe submodule """
 
 from __future__ import print_function
+from nmrglue.fileio.pipe import fdata2dic
 
 import tempfile
 import os
 import glob
+import io
 
 import numpy as np
 from numpy.testing import assert_array_equal
@@ -13,7 +15,6 @@ import nmrglue as ng
 from setup import DATA_DIR
 
 # subroutines
-
 
 def write_readback(dic, data):
     """ Write out a NMRPipe file and read back in. """
@@ -87,6 +88,78 @@ def check_ppm_limits(dic, data, dim, limits):
 
 
 # tests
+def test_get_fdata_bytes():
+    data_path = os.path.join(DATA_DIR, "nmrpipe_1d", "test.fid") 
+    with open(data_path, "rb") as binary_stream:
+        bytes_stream = binary_stream.read()
+        bdata = ng.fileio.pipe.get_fdata_bytes(bytes_stream)
+    data = ng.fileio.pipe.get_fdata(data_path)
+    assert_array_equal(data, bdata)
+
+
+def test_get_data_bytes():
+    data_path = os.path.join(DATA_DIR, "nmrpipe_1d", "test.fid") 
+    with open(data_path, "rb") as binary_stream:
+        bytes_stream = binary_stream.read()
+        bdata = ng.fileio.pipe.get_data_bytes(bytes_stream)
+    data = ng.fileio.pipe.get_data(data_path)
+    assert_array_equal(data, bdata)
+
+
+def test_fdata2dic():
+    data_path = os.path.join(DATA_DIR, "nmrpipe_1d", "test.fid") 
+    with open(data_path, "rb") as binary_stream:
+        bytes_stream = binary_stream.read()
+        bfdata = ng.fileio.pipe.get_fdata_bytes(bytes_stream)
+    fdata = ng.fileio.pipe.get_fdata(data_path)
+    dic = fdata2dic(fdata)
+    bdic = fdata2dic(bfdata)
+    assert dic == bdic
+
+
+def test_fdata_data_bytes():
+    data_path = os.path.join(DATA_DIR, "nmrpipe_1d", "test.fid") 
+    with open(data_path, "rb") as binary_stream:
+        bytes_stream = binary_stream.read()
+        bdic_data, bdata = ng.fileio.pipe.get_fdata_data_bytes(bytes_stream)
+    dic_data, data = ng.fileio.pipe.get_fdata_data(data_path)
+    assert_array_equal(dic_data, bdic_data)
+    assert_array_equal(data, bdata)
+
+
+def test_read_bytes_1d_time():
+    """ reading NMRPipe data from io.BytesIO binary stream """
+    data_path = os.path.join(DATA_DIR, "nmrpipe_1d", "test.fid")
+    dic, data = ng.pipe.read(data_path)
+    with open(data_path, "rb") as binary_stream:
+        data_bytes = binary_stream.read()
+        bdic, bdata = ng.pipe.read_bytes(data_bytes)
+    assert dic == bdic
+    assert_array_equal(data, bdata)
+
+
+def test_read_bytes_1d_freq():
+    """ reading NMRPipe data from io.BytesIO binary stream """
+    data_path = os.path.join(DATA_DIR, "nmrpipe_1d", "test.ft")
+    dic, data = ng.pipe.read(data_path)
+    with open(data_path, "rb") as binary_stream:
+        data_bytes = binary_stream.read()
+        bdic, bdata = ng.pipe.read_bytes(data_bytes)
+    assert dic == bdic
+    assert_array_equal(data, bdata)
+
+
+def test_read_bytes_2d_freq():
+    """ reading NMRPipe data from io.BytesIO binary stream """
+    data_path = os.path.join(DATA_DIR, "nmrpipe_2d", "test.ft2")
+    dic, data = ng.pipe.read(data_path)
+    with open(data_path, "rb") as binary_stream:
+        data_bytes = binary_stream.read()
+        bdic, bdata = ng.pipe.read_bytes(data_bytes)
+    assert dic == bdic
+    assert_array_equal(data, bdata)
+
+
 def test_1d_time():
     """reading/writing of 1D NMRPipe time domain file"""
     dic, data = ng.pipe.read(
