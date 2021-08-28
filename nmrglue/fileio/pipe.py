@@ -11,7 +11,7 @@ import io
 import struct
 import datetime
 import os
-from typing import Tuple
+from typing import Tuple, Union
 
 try:
     from StringIO import StringIO
@@ -483,7 +483,7 @@ def dic2datetime(dic):
 ################
 
 
-def read(filename):
+def read(filename: Union[str, bytes, io.BytesIO]) -> Tuple[dict, np.array]:
     """
     Read a NMRPipe file.
 
@@ -498,8 +498,9 @@ def read(filename):
 
     Parameters
     ----------
-    filename : str
-        Filename or filemask of NMRPipe file(s) to read.
+    filename : str | bytes | io.BytesIO
+        Filename or filemask of NMRPipe file(s) to read. Binary io.BytesIO stream 
+        (e.g. from open(filename, "rb")) or bytes buffer can also be provided
 
     Returns
     --------
@@ -514,7 +515,12 @@ def read(filename):
     write : Write a NMRPipe data to file(s).
 
     """
-    if filename.count("%") == 1:
+    if (type(filename) is bytes):
+        filemask = None
+    elif hasattr(filename, "read"):
+        filename = filename.read()
+        filemask = None
+    elif filename.count("%") == 1:
         filemask = filename
         filename = filename % 1
     elif filename.count("%") == 2:
@@ -589,54 +595,6 @@ def read_lowmem(filename):
 
     raise ValueError('unknown dimentionality: %s' % order)
 
-def read_bytes(data_bytes: bytes):
-    """
-    Read a NMRPipe file.
-
-    For standard multi-file 3D/4D NMRPipe data sets, filename should be a
-    filemask (for example "/ft/test%03d.ft3") with a "%" formatter.  If only
-    one file of a 3D/4D data set is provided only that 2D slice of the data is
-    read (for example "/ft/test001.ft3" results in a 2D data set being read).
-
-    NMRPipe data streams stored as files (one file 3D/4D data sets made using
-    xyz2pipe) can be read by providing the file name of the stream.  The entire
-    data set is read into memory.
-
-    Parameters
-    ----------
-    filename : str
-        Filename or filemask of NMRPipe file(s) to read.
-
-    Returns
-    --------
-    dic : dict
-        Dictionary of NMRPipe parameters.
-    data : ndarray
-        Array of NMR data.
-
-    See Also
-    --------
-    read_lowmem : NMRPipe file reading with minimal memory usage.
-    write : Write a NMRPipe data to file(s).
-
-    """
-    fdata = get_fdata_bytes(data_bytes)
-    dic = fdata2dic(fdata)
-    order = dic["FDDIMCOUNT"]
-
-    if order == 1:
-        return read_1D_bytes(data_bytes)
-    if order == 2:
-        return read_2D_bytes(data_bytes)
-    if dic["FDPIPEFLAG"] != 0:  # open streams
-        return read_stream(data_bytes)
-    #if filemask is None:     # if no filemask open as 2D
-    #    return read_2D(data_bytes)
-    if order == 3:
-        return read_3D(data_bytes)
-    if order == 4:
-        return read_4D(data_bytes)
-    raise ValueError('unknown dimensionality: %s' % order)
 
 # dimension specific reading
 def read_1D(filename):
@@ -657,23 +615,6 @@ def read_1D(filename):
     return (dic, data)
 
 
-def read_1D_bytes(bytes):
-    """
-    Read a 1D NMRPipe file.
-
-    See :py:func:`read` for documentation.
-
-    """
-    fdata, data = get_fdata_data_bytes(bytes)   # get the fdata and data arrays
-    dic = fdata2dic(fdata)  # convert the fdata block to a python dictionary
-    data = reshape_data(data, find_shape(dic))    # reshape data
-
-    # unappend imaginary data if needed
-    if dic["FDF2QUADFLAG"] != 1:
-        data = unappend_data(data)
-
-    return (dic, data)
-
 def read_2D(filename):
     """
     Read a 2D NMRPipe file or NMRPipe data stream.
@@ -682,26 +623,6 @@ def read_2D(filename):
 
     """
     fdata, data = get_fdata_data(filename)   # get the fdata and data arrays
-    dic = fdata2dic(fdata)  # convert the fdata block to a python dictionary
-    data = reshape_data(data, find_shape(dic))    # reshape data
-
-    # unappend imaginary data if needed
-    if dic["FDTRANSPOSED"] == 1 and dic["FDF1QUADFLAG"] != 1:
-        data = unappend_data(data)
-    elif dic["FDTRANSPOSED"] == 0 and dic["FDF2QUADFLAG"] != 1:
-        data = unappend_data(data)
-
-    return (dic, data)
-
-
-def read_2D_bytes(data_bytes):
-    """
-    Read a 2D NMRPipe file or NMRPipe data stream.
-
-    See :py:func:`read` for documentation.
-
-    """
-    fdata, data = get_fdata_data_bytes(data_bytes)   # get the fdata and data arrays
     dic = fdata2dic(fdata)  # convert the fdata block to a python dictionary
     data = reshape_data(data, find_shape(dic))    # reshape data
 
@@ -1678,43 +1599,50 @@ def dic2fdata(dic):
 #################################
 
 
-def get_fdata(filename):
+def get_fdata(filename: Union[str, bytes]):
     """
     Get an array of length 512-bytes holding NMRPipe header.
     """
-    fdata = np.fromfile(filename, 'float32', 512)
-    if fdata[2] - 2.345 > 1e-6:    # fdata[2] should be 2.345
-        fdata = fdata.byteswap()
-    return fdata
+    if type(filename) is bytes:
+        return get_fdata_bytes(filename)
+    else:
+        fdata = np.fromfile(filename, 'float32', 512)
+        if fdata[2] - 2.345 > 1e-6:    # fdata[2] should be 2.345
+            fdata = fdata.byteswap()
+        return fdata
 
 
-def get_data(filename):
+def get_data(filename: Union[str, bytes]):
     """
     Get array of data
     """
-    data = np.fromfile(filename, 'float32')
-    if data[2] - 2.345 > 1e-6:  # check for byteswap
-        data = data.byteswap()
-    return data[512:]
+    if type(filename) is bytes:
+        return get_data_bytes(filename)
+    else:
+        data = np.fromfile(filename, 'float32')
+        if data[2] - 2.345 > 1e-6:  # check for byteswap
+            data = data.byteswap()
+        return data[512:]
 
 
-def get_fdata_data(filename):
+def get_fdata_data(filename: Union[str, bytes]):
     """
     Get fdata and data array, return (fdata, data)
     """
-    data = np.fromfile(filename, 'float32')
-    if data[2] - 2.345 > 1e-6:  # check for byteswap
-        data = data.byteswap()
-    return data[:512], data[512:]
+    if type(filename) is bytes:
+        return get_fdata_data_bytes(filename)
+    else:
+        data = np.fromfile(filename, 'float32')
+        if data[2] - 2.345 > 1e-6:  # check for byteswap
+            data = data.byteswap()
+        return data[:512], data[512:]
 
 
 def get_fdata_bytes(data: bytes) -> np.array:
     """
     Get an array of length 512-bytes holding NMRPipe header.
     """
-    data  = struct.unpack("f" * (len(data) // 4), data)
-    data = np.asarray(data, dtype="float32")
-    fdata = data[:512]
+    fdata = np.frombuffer(data, dtype=np.float32, count=512)
     if fdata[2] - 2.345 > 1e-6:    # fdata[2] should be 2.345
         fdata = fdata.byteswap()
     return fdata
@@ -1724,8 +1652,7 @@ def get_data_bytes(data: bytes) -> np.array:
     """
     Get array of data from binary stream
     """
-    data  = struct.unpack("f" * (len(data) // 4), data)
-    data = np.asarray(data, dtype="float32")
+    data = np.frombuffer(data, dtype=np.float32)
     if data[2] - 2.345 > 1e-6:  # check for byteswap
         data = data.byteswap()
     return data[512:]
@@ -1735,8 +1662,7 @@ def get_fdata_data_bytes(data: bytes) -> Tuple[np.array, np.array]:
     """
     Get fdata and data array from binary stream, return (fdata, data)
     """
-    data  = struct.unpack("f" * (len(data) // 4), data)
-    data = np.asarray(data, dtype="float32")
+    data = np.frombuffer(data, dtype=np.float32)
     if data[2] - 2.345 > 1e-6:  # check for byteswap
         data = data.byteswap()
     return data[:512], data[512:]

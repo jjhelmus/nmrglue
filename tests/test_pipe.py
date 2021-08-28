@@ -86,6 +86,19 @@ def check_ppm_limits(dic, data, dim, limits):
     print(climits)
     assert limits == climits
 
+def read_with_bytes_or_buffer(filename):
+    """ Check reading pipe files from filename, io.BytesIO or bytes buffer """
+    dic, data = ng.pipe.read(filename)
+    # read bytes
+    with open(filename, "rb") as binary_stream:
+        data_bytes = binary_stream.read()
+        bdic, bdata = ng.pipe.read(data_bytes)
+    # read from io.BytesIO
+    with open(filename, "rb") as binary_stream:
+        bdic2, bdata2 = ng.pipe.read(binary_stream)
+    assert dic == bdic == bdic2
+    assert_array_equal(data, bdata)
+    assert_array_equal(data, bdata2)
 
 # tests
 def test_get_fdata_bytes():
@@ -106,7 +119,7 @@ def test_get_data_bytes():
     assert_array_equal(data, bdata)
 
 
-def test_fdata2dic():
+def test_fdata2dic_bytes():
     data_path = os.path.join(DATA_DIR, "nmrpipe_1d", "test.fid") 
     with open(data_path, "rb") as binary_stream:
         bytes_stream = binary_stream.read()
@@ -128,36 +141,39 @@ def test_fdata_data_bytes():
 
 
 def test_read_bytes_1d_time():
-    """ reading NMRPipe data from io.BytesIO binary stream """
+    """ reading NMRPipe data from io.BytesIO binary stream or bytes buffer"""
     data_path = os.path.join(DATA_DIR, "nmrpipe_1d", "test.fid")
-    dic, data = ng.pipe.read(data_path)
-    with open(data_path, "rb") as binary_stream:
-        data_bytes = binary_stream.read()
-        bdic, bdata = ng.pipe.read_bytes(data_bytes)
-    assert dic == bdic
-    assert_array_equal(data, bdata)
+    read_with_bytes_or_buffer(data_path)
 
 
 def test_read_bytes_1d_freq():
-    """ reading NMRPipe data from io.BytesIO binary stream """
+    """ reading NMRPipe data from io.BytesIO binary stream or bytes buffer"""
     data_path = os.path.join(DATA_DIR, "nmrpipe_1d", "test.ft")
-    dic, data = ng.pipe.read(data_path)
-    with open(data_path, "rb") as binary_stream:
-        data_bytes = binary_stream.read()
-        bdic, bdata = ng.pipe.read_bytes(data_bytes)
-    assert dic == bdic
-    assert_array_equal(data, bdata)
+    read_with_bytes_or_buffer(data_path)
+
+
+def test_read_bytes_2d_time():
+    """ reading NMRPipe data from io.BytesIO binary stream """
+    data_path = os.path.join(DATA_DIR, "nmrpipe_2d", "test.fid")
+    read_with_bytes_or_buffer(data_path)
 
 
 def test_read_bytes_2d_freq():
     """ reading NMRPipe data from io.BytesIO binary stream """
     data_path = os.path.join(DATA_DIR, "nmrpipe_2d", "test.ft2")
-    dic, data = ng.pipe.read(data_path)
-    with open(data_path, "rb") as binary_stream:
-        data_bytes = binary_stream.read()
-        bdic, bdata = ng.pipe.read_bytes(data_bytes)
-    assert dic == bdic
-    assert_array_equal(data, bdata)
+    read_with_bytes_or_buffer(data_path)
+
+
+def test_read_bytes_3d_time():
+    """ reading NMRPipe data from io.BytesIO binary stream """
+    data_path = os.path.join(DATA_DIR, "nmrpipe_3d", "full3D.fid")
+    read_with_bytes_or_buffer(data_path)
+
+
+def test_read_bytes_3d_freq():
+    """ reading NMRPipe data from io.BytesIO binary stream """
+    data_path = os.path.join(DATA_DIR, "nmrpipe_3d", "full3D.ft3")
+    read_with_bytes_or_buffer(data_path)
 
 
 def test_1d_time():
