@@ -488,19 +488,22 @@ def read(filename: Union[str, bytes, io.BytesIO]) -> Tuple[dict, np.array]:
     Read a NMRPipe file.
 
     For standard multi-file 3D/4D NMRPipe data sets, filename should be a
-    filemask (for example "/ft/test%03d.ft3") with a "%" formatter.  If only
+    filemask (for example "/ft/test%03d.ft3") with a "%" formatter. If only
     one file of a 3D/4D data set is provided only that 2D slice of the data is
     read (for example "/ft/test001.ft3" results in a 2D data set being read).
 
     NMRPipe data streams stored as files (one file 3D/4D data sets made using
-    xyz2pipe) can be read by providing the file name of the stream.  The entire
+    xyz2pipe) can be read by providing the file name of the stream. The entire
     data set is read into memory.
+
+    An in memory binary stream (io.BytesIO) or bytes buffer containing an NMRPipe
+    dataset can also be read.
 
     Parameters
     ----------
     filename : str | bytes | io.BytesIO
         Filename or filemask of NMRPipe file(s) to read. Binary io.BytesIO stream 
-        (e.g. from open(filename, "rb")) or bytes buffer can also be provided
+        (e.g. open(filename, "rb")) or bytes buffer can also be provided
 
     Returns
     --------
