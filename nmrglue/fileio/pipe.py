@@ -1542,8 +1542,7 @@ def fdata2dic(fdata):
 
     def _unpack_str(fmt, d):
         return struct.unpack(fmt, d)[0].decode().strip('\x00')
-        #return struct.unpack(fmt, d)[0].decode('utf-8', 'replace')
-        #return struct.unpack(fmt, d)[0]
+
 
     # Populate the dictionary with FDATA which contains strings
     dic["FDF2LABEL"] = _unpack_str('8s', fdata[16:18])
