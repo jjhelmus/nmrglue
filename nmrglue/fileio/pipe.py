@@ -1607,12 +1607,13 @@ def get_fdata(filename: Union[str, bytes]):
     Get an array of length 512-bytes holding NMRPipe header.
     """
     if type(filename) is bytes:
-        return get_fdata_bytes(filename)
+        fdata = np.frombuffer(filename, dtype=np.float32, count=512)
     else:
         fdata = np.fromfile(filename, 'float32', 512)
-        if fdata[2] - 2.345 > 1e-6:    # fdata[2] should be 2.345
-            fdata = fdata.byteswap()
-        return fdata
+
+    if fdata[2] - 2.345 > 1e-6:    # fdata[2] should be 2.345
+        fdata = fdata.byteswap()
+    return fdata
 
 
 def get_data(filename: Union[str, bytes]):
@@ -1620,12 +1621,13 @@ def get_data(filename: Union[str, bytes]):
     Get array of data
     """
     if type(filename) is bytes:
-        return get_data_bytes(filename)
+        data = np.frombuffer(filename, dtype=np.float32)
     else:
         data = np.fromfile(filename, 'float32')
-        if data[2] - 2.345 > 1e-6:  # check for byteswap
-            data = data.byteswap()
-        return data[512:]
+    
+    if data[2] - 2.345 > 1e-6:  # check for byteswap
+        data = data.byteswap()
+    return data[512:]
 
 
 def get_fdata_data(filename: Union[str, bytes]):
@@ -1633,39 +1635,10 @@ def get_fdata_data(filename: Union[str, bytes]):
     Get fdata and data array, return (fdata, data)
     """
     if type(filename) is bytes:
-        return get_fdata_data_bytes(filename)
+        data = np.frombuffer(filename, dtype=np.float32)
     else:
         data = np.fromfile(filename, 'float32')
-        if data[2] - 2.345 > 1e-6:  # check for byteswap
-            data = data.byteswap()
-        return data[:512], data[512:]
 
-
-def get_fdata_bytes(data: bytes) -> np.array:
-    """
-    Get an array of length 512-bytes holding NMRPipe header.
-    """
-    fdata = np.frombuffer(data, dtype=np.float32, count=512)
-    if fdata[2] - 2.345 > 1e-6:    # fdata[2] should be 2.345
-        fdata = fdata.byteswap()
-    return fdata
-
-
-def get_data_bytes(data: bytes) -> np.array:
-    """
-    Get array of data from binary stream
-    """
-    data = np.frombuffer(data, dtype=np.float32)
-    if data[2] - 2.345 > 1e-6:  # check for byteswap
-        data = data.byteswap()
-    return data[512:]
-
-
-def get_fdata_data_bytes(data: bytes) -> Tuple[np.array, np.array]:
-    """
-    Get fdata and data array from binary stream, return (fdata, data)
-    """
-    data = np.frombuffer(data, dtype=np.float32)
     if data[2] - 2.345 > 1e-6:  # check for byteswap
         data = data.byteswap()
     return data[:512], data[512:]

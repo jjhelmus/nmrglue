@@ -105,7 +105,7 @@ def test_get_fdata_bytes():
     data_path = os.path.join(DATA_DIR, "nmrpipe_1d", "test.fid") 
     with open(data_path, "rb") as binary_stream:
         bytes_stream = binary_stream.read()
-        bdata = ng.fileio.pipe.get_fdata_bytes(bytes_stream)
+        bdata = ng.fileio.pipe.get_fdata(bytes_stream)
     data = ng.fileio.pipe.get_fdata(data_path)
     assert_array_equal(data, bdata)
 
@@ -114,7 +114,7 @@ def test_get_data_bytes():
     data_path = os.path.join(DATA_DIR, "nmrpipe_1d", "test.fid") 
     with open(data_path, "rb") as binary_stream:
         bytes_stream = binary_stream.read()
-        bdata = ng.fileio.pipe.get_data_bytes(bytes_stream)
+        bdata = ng.fileio.pipe.get_data(bytes_stream)
     data = ng.fileio.pipe.get_data(data_path)
     assert_array_equal(data, bdata)
 
@@ -123,7 +123,7 @@ def test_fdata2dic_bytes():
     data_path = os.path.join(DATA_DIR, "nmrpipe_1d", "test.fid") 
     with open(data_path, "rb") as binary_stream:
         bytes_stream = binary_stream.read()
-        bfdata = ng.fileio.pipe.get_fdata_bytes(bytes_stream)
+        bfdata = ng.fileio.pipe.get_fdata(bytes_stream)
     fdata = ng.fileio.pipe.get_fdata(data_path)
     dic = fdata2dic(fdata)
     bdic = fdata2dic(bfdata)
@@ -134,7 +134,7 @@ def test_fdata_data_bytes():
     data_path = os.path.join(DATA_DIR, "nmrpipe_1d", "test.fid") 
     with open(data_path, "rb") as binary_stream:
         bytes_stream = binary_stream.read()
-        bdic_data, bdata = ng.fileio.pipe.get_fdata_data_bytes(bytes_stream)
+        bdic_data, bdata = ng.fileio.pipe.get_fdata_data(bytes_stream)
     dic_data, data = ng.fileio.pipe.get_fdata_data(data_path)
     assert_array_equal(dic_data, bdic_data)
     assert_array_equal(data, bdata)
