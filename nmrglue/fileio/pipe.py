@@ -1543,7 +1543,6 @@ def fdata2dic(fdata):
     def _unpack_str(fmt, d):
         return struct.unpack(fmt, d)[0].decode().strip('\x00')
 
-
     # Populate the dictionary with FDATA which contains strings
     dic["FDF2LABEL"] = _unpack_str('8s', fdata[16:18])
     dic["FDF1LABEL"] = _unpack_str('8s', fdata[18:20])
@@ -1601,7 +1600,7 @@ def dic2fdata(dic):
 #################################
 
 
-def get_fdata(filename: Union[str, bytes]):
+def get_fdata(filename: Union[str, bytes]) -> np.array:
     """
     Get an array of length 512-bytes holding NMRPipe header.
     """
@@ -1615,7 +1614,7 @@ def get_fdata(filename: Union[str, bytes]):
     return fdata
 
 
-def get_data(filename: Union[str, bytes]):
+def get_data(filename: Union[str, bytes]) -> np.array:
     """
     Get array of data
     """
@@ -1629,7 +1628,7 @@ def get_data(filename: Union[str, bytes]):
     return data[512:]
 
 
-def get_fdata_data(filename: Union[str, bytes]):
+def get_fdata_data(filename: Union[str, bytes]) -> Tuple[np.array, np.array]:
     """
     Get fdata and data array, return (fdata, data)
     """
