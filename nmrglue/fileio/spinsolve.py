@@ -1,5 +1,5 @@
 """
-Functions for reading Magritek Spinsolve binary (dx/1d) files and 
+Functions for reading Magritek Spinsolve binary (dx/1d) files and
 parameter (acqu.par/proc.par) files.
 """
 
@@ -38,7 +38,7 @@ be read by NMRglue
 """
 
 
-def parse_spinsolve_acqu_line(line):
+def parse_spinsolve_par_line(line):
     """
     Parse lines in acqu.par and return a tuple (paramter name, parameter value)
     """
@@ -61,12 +61,12 @@ def parse_spinsolve_acqu_line(line):
 def read(dir='.', specfile=None, acqupar="acqu.par", procpar="proc.par"):
     """
     Reads spinsolve files from a directory
-    When no spectrum filename is given (specfile), the following list is tried, in 
+    When no spectrum filename is given (specfile), the following list is tried, in
     that specific order
     ["nmr_fid.dx", "data.1d", "fid.1d", "spectrum.1d", "spectrum_processed.1d"]
     To use the resolution enhanced spectrum use the './Enhanced' folder as input.
-    Note that spectrum.1d and spectrum_processed.1d contain only data in the 
-    frequency domain, so no Fourier transformation is needed. Also, use 
+    Note that spectrum.1d and spectrum_processed.1d contain only data in the
+    frequency domain, so no Fourier transformation is needed. Also, use
     dic["spectrum"]["xaxis"] to plot the x-axis
 
     Parameters
@@ -74,7 +74,7 @@ def read(dir='.', specfile=None, acqupar="acqu.par", procpar="proc.par"):
     dir : str
         Directory to read from
     specfile : str, optional
-        Filename to import spectral data from. None uses standard filename from: 
+        Filename to import spectral data from. None uses standard filename from:
         ["nmr_fid.dx", "data.1d", "fid.1d", "spectrum.1d", "spectrum_processed.1d"]
     acqupar : str, optional
         Filename for acquisition parameters. None uses standard name.
@@ -111,7 +111,7 @@ def read(dir='.', specfile=None, acqupar="acqu.par", procpar="proc.par"):
         with open(acqupar, "r") as f:
             info = f.readlines()
         for line in info:
-            par_name, par_value = parse_spinsolve_acqu_line(line)
+            par_name, par_value = parse_spinsolve_par_line(line)
 
             if par_name is not None:
                 dic["acqu"][par_name] = par_value
@@ -126,7 +126,7 @@ def read(dir='.', specfile=None, acqupar="acqu.par", procpar="proc.par"):
             k, v = line.split("=")
             dic["proc"][k.strip()] = v.strip()
 
-    # Define which spectrumfile to take, using 'specfile' when defined, otherwise 
+    # Define which spectrumfile to take, using 'specfile' when defined, otherwise
     # the files in 'priority_list' are tried, in that particular order
     priority_list = ["nmr_fid.dx", "data.1d", "fid.1d", "spectrum.1d", "spectrum_processed.1d"]
     inputfile = None
@@ -272,7 +272,7 @@ def guess_udic(dic, data):
         Dictionary of JCAMP-DX, acqu, proc and spectrum parameters.
     data : ndarray
         Array of NMR data.
-    
+
     Returns
     -------
     udic : dict

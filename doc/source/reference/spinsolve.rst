@@ -37,7 +37,7 @@ fine control over Spinsolve files may be interested in these functions.
 .. autosummary::
     :toctree: generated/
 
-    parse_spinsolve_acqu_line
+    parse_spinsolve_par_line
     get_udic_from_acqu_dict
     get_udic_from_jcamp_dict
 
