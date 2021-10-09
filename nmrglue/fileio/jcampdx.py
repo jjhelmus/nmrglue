@@ -197,7 +197,7 @@ def _detect_format(dataline):
     # regexp to find & skip the first value of line, that never begins
     # with a pseudodigit in any format
     firstvalue_re = re.compile(
-        "(\s)*([+-]?\d+\.?\d*|[+-]?\.\d+)([eE][+-]?\d+)?(\s)*")
+        r"(\s)*([+-]?\d+\.?\d*|[+-]?\.\d+)([eE][+-]?\d+)?(\s)*")
 
     index = firstvalue_re.match(dataline).end()
     if index is None:
@@ -226,7 +226,7 @@ def _parse_affn_pac(datalines):
     # -if decimal separator is present, number can be given without leading
     #  zero (.1234) or decimals (123.)
     # -exponent (E/e) may be present
-    value_re = re.compile("(\s|,)*([+-]?\d+\.?\d*|[+-]?\.\d+)([eE][+-]?\d+)?")
+    value_re = re.compile(r"(\s|,)*([+-]?\d+\.?\d*|[+-]?\.\d+)([eE][+-]?\d+)?")
 
     data = []
     for dataline in datalines:
@@ -297,7 +297,7 @@ def _parse_pseudo(datalines):
 
     # regexp to find the first value of line, that never begins
     # with a pseudodigit (exponents are not allowed here)
-    firstvalue_re = re.compile("(\s)*([+-]?\d+\.?\d*|[+-]?\.\d+)")
+    firstvalue_re = re.compile(r"(\s)*([+-]?\d+\.?\d*|[+-]?\.\d+)")
 
     data = []
     currentmode = 0

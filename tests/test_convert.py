@@ -1145,6 +1145,146 @@ def test_pipe_1d():
     os.remove(tf)
 
 
+def test_csdm_1d():
+    """Test 1D bruker and agilent -> CSDM"""
+    # 1D bruker
+    bdic1, bdata1 = ng.bruker.read(os.path.join(DATA_DIR, "bruker_1d"))
+    ubdic1 = ng.bruker.guess_udic(bdic1, bdata1)
+    bC1 = ng.convert.converter()
+    bC1.from_bruker(bdic1, bdata1, ubdic1)
+    csdm_data = bC1.to_csdm()
+    assert len(csdm_data.dimensions) == 1
+    assert len(csdm_data.dependent_variables) == 1
+    assert csdm_data.dimensions[0].count == ubdic1[0]["size"]
+    assert csdm_data.dimensions[0].increment.value == 1 / ubdic1[0]["sw"]
+    assert (
+        csdm_data.dimensions[0].reciprocal.coordinates_offset.value == ubdic1[0]["car"]
+    )
+    assert csdm_data.dimensions[0].reciprocal.origin_offset.value == ubdic1[0]["obs"]
+    assert csdm_data.dimensions[0].label == ubdic1[0]["label"]
+    assert_array_equal(csdm_data.dependent_variables[0].components[0], bdata1)
+
+    # 1D agilent
+    adic1, adata1 = ng.agilent.read(os.path.join(DATA_DIR, "agilent_1d"))
+    uadic1 = ng.agilent.guess_udic(adic1, adata1)
+    aC1 = ng.convert.converter()
+    aC1.from_varian(adic1, adata1, uadic1)
+    csdm_data = aC1.to_csdm()
+    assert len(csdm_data.dimensions) == 1
+    assert len(csdm_data.dependent_variables) == 1
+    assert csdm_data.dimensions[0].count == uadic1[0]["size"]
+    assert csdm_data.dimensions[0].increment.value == 1 / uadic1[0]["sw"]
+    assert (
+        csdm_data.dimensions[0].reciprocal.coordinates_offset.value == uadic1[0]["car"]
+    )
+    assert csdm_data.dimensions[0].reciprocal.origin_offset.value == uadic1[0]["obs"]
+    assert csdm_data.dimensions[0].label == uadic1[0]["label"]
+    assert_array_equal(csdm_data.dependent_variables[0].components[0], adata1)
+
+
+def test_csdm_2d():
+    """Test 2D bruker and agilent -> CSDM"""
+    # 2D bruker
+    bdic2, bdata2 = ng.bruker.read(os.path.join(DATA_DIR, "bruker_2d"))
+    ubdic2 = ng.bruker.guess_udic(bdic2, bdata2)
+    bC2 = ng.convert.converter()
+    bC2.from_bruker(bdic2, bdata2, ubdic2)
+    csdm_data = bC2.to_csdm()
+    assert len(csdm_data.dimensions) == 2
+    assert len(csdm_data.dependent_variables) == 1
+    for i in range(2):
+        j = 1 - i
+        assert csdm_data.dimensions[j].count == ubdic2[i]["size"]
+        assert csdm_data.dimensions[j].increment.value == 1 / ubdic2[i]["sw"]
+        assert (
+            csdm_data.dimensions[j].reciprocal.coordinates_offset.value
+            == ubdic2[i]["car"]
+        )
+        assert (
+            csdm_data.dimensions[j].reciprocal.origin_offset.value == ubdic2[i]["obs"]
+        )
+        assert csdm_data.dimensions[j].label == ubdic2[i]["label"]
+    assert_array_equal(csdm_data.dependent_variables[0].components[0], bdata2)
+
+    # 2D agilent
+    adic2, adata2 = ng.varian.read(os.path.join(DATA_DIR, "agilent_2d"))
+    uadic2 = ng.varian.guess_udic(adic2, adata2)
+    aC2 = ng.convert.converter()
+    aC2.from_varian(adic2, adata2, uadic2)
+    csdm_data = aC2.to_csdm()
+    assert len(csdm_data.dimensions) == 2
+    assert len(csdm_data.dependent_variables) == 1
+    for i in range(2):
+        j = 1 - i
+        assert csdm_data.dimensions[j].count == uadic2[i]["size"]
+        assert csdm_data.dimensions[j].increment.value == 1 / uadic2[i]["sw"]
+        assert (
+            csdm_data.dimensions[j].reciprocal.coordinates_offset.value
+            == uadic2[i]["car"]
+        )
+        assert (
+            csdm_data.dimensions[j].reciprocal.origin_offset.value == uadic2[i]["obs"]
+        )
+        assert csdm_data.dimensions[j].label == uadic2[i]["label"]
+    assert_array_equal(csdm_data.dependent_variables[0].components[0], adata2)
+
+
+def test_csdm_3d():
+    """Test 3D bruker and agilent -> CSDM"""
+    # 3D bruker
+    bdic3, bdata3 = ng.bruker.read(os.path.join(DATA_DIR, "bruker_3d"))
+    ubdic3 = ng.bruker.guess_udic(bdic3, bdata3)
+    bC3 = ng.convert.converter()
+    bC3.from_bruker(bdic3, bdata3, ubdic3)
+    csdm_data = bC3.to_csdm()
+    assert len(csdm_data.dimensions) == 3
+    assert len(csdm_data.dependent_variables) == 1
+    for j in range(3):
+        i = 2 - j
+        assert csdm_data.dimensions[j].count == ubdic3[i]["size"]
+        assert csdm_data.dimensions[j].increment.value == 1 / ubdic3[i]["sw"]
+        assert (
+            csdm_data.dimensions[j].reciprocal.coordinates_offset.value
+            == ubdic3[i]["car"]
+        )
+        assert (
+            csdm_data.dimensions[j].reciprocal.origin_offset.value == ubdic3[i]["obs"]
+        )
+        assert csdm_data.dimensions[j].label == ubdic3[i]["label"]
+    assert_array_equal(csdm_data.dependent_variables[0].components[0], bdata3)
+
+    # 3D agilent
+    adic3, adata3 = ng.varian.read(os.path.join(DATA_DIR, "agilent_3d"))
+    uadic3 = ng.varian.guess_udic(adic3, adata3)
+    aC3 = ng.convert.converter()
+    aC3.from_varian(adic3, adata3)
+    csdm_data = aC3.to_csdm()
+    assert len(csdm_data.dimensions) == 3
+    assert len(csdm_data.dependent_variables) == 1
+    for j in range(3):
+        i = 2 - j
+        print(uadic3)
+        print(adata3)
+        # print(csdm_data.dimensions[0].increment.value)
+        # print(1 / uadic3[0]["sw"])
+        # print(csdm_datacl.dimensions[1].increment.value)
+        # print(1 / uadic3[1]["sw"])
+        # print(csdm_data.dimensions[2].increment.value)
+        # print(1 / uadic3[2]["sw"])
+        print(csdm_data)
+        assert csdm_data.dimensions[j].count == uadic3[i]["size"]
+        assert csdm_data.dimensions[j].increment.value == 1 / uadic3[i]["sw"]
+        assert (
+            csdm_data.dimensions[j].reciprocal.coordinates_offset.value
+            == uadic3[i]["car"]
+        )
+        assert (
+            csdm_data.dimensions[j].reciprocal.origin_offset.value == uadic3[i]["obs"]
+        )
+        assert csdm_data.dimensions[j].label == uadic3[i]["label"]
+    assert_array_equal(csdm_data.dependent_variables[0].components[0], adata3)
+
+
 # lowmemory tests ###
 def test_sparky_2d_lowmem():
     """ 2D freq sparky, pipe <-> sparky, pipe low memory"""
