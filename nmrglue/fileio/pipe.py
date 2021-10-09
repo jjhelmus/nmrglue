@@ -11,7 +11,6 @@ import io
 import struct
 import datetime
 import os
-from typing import Tuple, Union
 
 try:
     from StringIO import StringIO
