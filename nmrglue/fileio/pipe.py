@@ -483,7 +483,7 @@ def dic2datetime(dic):
 ################
 
 
-def read(filename: Union[str, bytes, io.BytesIO]) -> Tuple[dict, np.array]:
+def read(filename):
     """
     Read a NMRPipe file.
 
@@ -1600,7 +1600,7 @@ def dic2fdata(dic):
 #################################
 
 
-def get_fdata(filename: Union[str, bytes]) -> np.array:
+def get_fdata(filename):
     """
     Get an array of length 512-bytes holding NMRPipe header.
     """
@@ -1614,7 +1614,7 @@ def get_fdata(filename: Union[str, bytes]) -> np.array:
     return fdata
 
 
-def get_data(filename: Union[str, bytes]) -> np.array:
+def get_data(filename):
     """
     Get array of data
     """
@@ -1628,7 +1628,7 @@ def get_data(filename: Union[str, bytes]) -> np.array:
     return data[512:]
 
 
-def get_fdata_data(filename: Union[str, bytes]) -> Tuple[np.array, np.array]:
+def get_fdata_data(filename):
     """
     Get fdata and data array, return (fdata, data)
     """

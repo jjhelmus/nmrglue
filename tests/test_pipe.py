@@ -86,6 +86,7 @@ def check_ppm_limits(dic, data, dim, limits):
     print(climits)
     assert limits == climits
 
+
 def read_with_bytes_or_buffer(filename):
     """ Check reading pipe files from filename, io.BytesIO or bytes buffer """
     dic, data = ng.pipe.read(filename)
