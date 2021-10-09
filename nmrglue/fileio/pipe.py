@@ -7,7 +7,6 @@ from __future__ import print_function, division
 __developer_info__ = """
 NMRPipe file structure is described in the NMRPipe man pages and fdatap.h
 """
-import io
 import struct
 import datetime
 import os
