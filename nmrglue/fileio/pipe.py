@@ -521,14 +521,16 @@ def read(filename):
     elif hasattr(filename, "read"):
         filename = filename.read()
         filemask = None
-    elif filename.count("%") == 1:
-        filemask = filename
-        filename = filename % 1
-    elif filename.count("%") == 2:
-        filemask = filename
-        filename = filename % (1, 1)
     else:
-        filemask = None
+        filename = str(filename)
+        if filename.count("%") == 1:
+            filemask = filename
+            filename = filename % 1
+        elif filename.count("%") == 2:
+            filemask = filename
+            filename = filename % (1, 1)
+        else:
+            filemask = None
 
     fdata = get_fdata(filename)
     dic = fdata2dic(fdata)
