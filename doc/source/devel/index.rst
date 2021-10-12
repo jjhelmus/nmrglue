@@ -119,7 +119,7 @@ The directory layout of the nmrglue project is as follows.
   many real world NMR problems.
 
 
-Two additional directories can be created to aid in developements.  These are
+Two additional directories can be created to aid in developments.  These are
 not required but will be ignored by git using the default ``.gitignore`` file 
 
 * ``data`` : Suggested location to hold the :ref:`test data <test_data>`.
@@ -140,20 +140,20 @@ preparing patches.
   `pylint <http://www.logilab.org/857>`_ to check your Python code against 
   these conventions.
 
-* Documentation : All public functions and classes should have docstring which
+* Documentation : All public functions and classes should have a docstring which
   follows the `NumPy/SciPy documentation standard 
   <https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt>`_.  
-  Prive functions and classes may have shorter dostrings.  The nmrglue 
+  Private functions and classes may have shorter dostrings.  The nmrglue 
   documentation is build using `Sphinx <http://sphinx.pocoo.org/>`__.  Sphinx 
   translates `reST <http://docutils.sourceforge.net/rst.html>`_ formatted 
-  documents (including docstring) into html.  When adding new function,
-  classes or parameter to nmrglue please update the docstring and make any
+  documents (including docstring) into html.  When adding new functions,
+  classes or parameters to nmrglue please update the docstring and make any
   necessary changes to the Sphinx files in the doc directory.
   
 * :ref:`testing` : Tests are available for verifying the functionality of
   nmrglue, please include a tests when adding new functionality to the package.
 
-* Examples : Numerous example showing real world use of nmrglue are provided in
+* Examples : Numerous examples showing real world use of nmrglue are provided in
   the ``examples`` directory.  Contributions of additional example are welcome
   and appreciated.  
 
@@ -195,20 +195,20 @@ After ensuring that all required packages are installed and ``setup.py``
 correctly points to the location of the test data directory, the unit tests can
 be run using the following::
 
-    nosetest
+    nosetests
 
 Unit tests for a specific module can be run using::
 
-    nosetest tests/test_pipe.py
+    nosetests tests/test_pipe.py
 
-Additional information on the `usage of the nosetest command
+Additional information on the `usage of the nosetests command
 <https://nose.readthedocs.org/en/latest/usage.html>`_ is available.
 
 
 Reporting Bugs
 --------------
 
-The preferred location for submitting feature requests and bugs reported 
+The preferred location for submitting feature requests and reporting bugs
 is the `github issue tracker <https://github.com/jjhelmus/nmrglue/issues>`_.
 Reports are also welcomed on the 
 `nmrglue mailing list <http://groups.google.com/group/nmrglue-discuss>`_ or by

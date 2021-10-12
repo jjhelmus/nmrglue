@@ -7,10 +7,10 @@ from __future__ import print_function, division
 __developer_info__ = """
 NMRPipe file structure is described in the NMRPipe man pages and fdatap.h
 """
-
 import struct
 import datetime
 import os
+
 try:
     from StringIO import StringIO
 except ImportError:
@@ -486,18 +486,22 @@ def read(filename):
     Read a NMRPipe file.
 
     For standard multi-file 3D/4D NMRPipe data sets, filename should be a
-    filemask (for example "/ft/test%03d.ft3") with a "%" formatter.  If only
+    filemask (for example "/ft/test%03d.ft3") with a "%" formatter. If only
     one file of a 3D/4D data set is provided only that 2D slice of the data is
     read (for example "/ft/test001.ft3" results in a 2D data set being read).
 
     NMRPipe data streams stored as files (one file 3D/4D data sets made using
-    xyz2pipe) can be read by providing the file name of the stream.  The entire
+    xyz2pipe) can be read by providing the file name of the stream. The entire
     data set is read into memory.
+
+    An in memory binary stream (io.BytesIO) or bytes buffer containing an NMRPipe
+    dataset can also be read.
 
     Parameters
     ----------
-    filename : str
-        Filename or filemask of NMRPipe file(s) to read.
+    filename : str | bytes | io.BytesIO
+        Filename or filemask of NMRPipe file(s) to read. Binary io.BytesIO stream 
+        (e.g. open(filename, "rb")) or bytes buffer can also be provided
 
     Returns
     --------
@@ -512,7 +516,12 @@ def read(filename):
     write : Write a NMRPipe data to file(s).
 
     """
-    if filename.count("%") == 1:
+    if (type(filename) is bytes):
+        filemask = None
+    elif hasattr(filename, "read"):
+        filename = filename.read()
+        filemask = None
+    elif filename.count("%") == 1:
         filemask = filename
         filename = filename % 1
     elif filename.count("%") == 2:
@@ -1593,7 +1602,11 @@ def get_fdata(filename):
     """
     Get an array of length 512-bytes holding NMRPipe header.
     """
-    fdata = np.fromfile(filename, 'float32', 512)
+    if type(filename) is bytes:
+        fdata = np.frombuffer(filename, dtype=np.float32, count=512)
+    else:
+        fdata = np.fromfile(filename, 'float32', 512)
+
     if fdata[2] - 2.345 > 1e-6:    # fdata[2] should be 2.345
         fdata = fdata.byteswap()
     return fdata
@@ -1603,7 +1616,11 @@ def get_data(filename):
     """
     Get array of data
     """
-    data = np.fromfile(filename, 'float32')
+    if type(filename) is bytes:
+        data = np.frombuffer(filename, dtype=np.float32)
+    else:
+        data = np.fromfile(filename, 'float32')
+    
     if data[2] - 2.345 > 1e-6:  # check for byteswap
         data = data.byteswap()
     return data[512:]
@@ -1613,10 +1630,15 @@ def get_fdata_data(filename):
     """
     Get fdata and data array, return (fdata, data)
     """
-    data = np.fromfile(filename, 'float32')
+    if type(filename) is bytes:
+        data = np.frombuffer(filename, dtype=np.float32)
+    else:
+        data = np.fromfile(filename, 'float32')
+
     if data[2] - 2.345 > 1e-6:  # check for byteswap
         data = data.byteswap()
     return data[:512], data[512:]
+
 
 ##############################################
 # low memory numpy.ndarray emulating objects #
