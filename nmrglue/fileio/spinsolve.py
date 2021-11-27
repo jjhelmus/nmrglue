@@ -50,13 +50,17 @@ def parse_spinsolve_par_line(line):
     value = value.strip()
 
     # Detect value type
-    if value[0] == value[-1] == '"':  # String
+    if value[0] == value[-1] == '"':  # When flanked with " always go for string
         return name, str(value[1:-1])  # Drop quote marks
-    if "." in value:  # Float
-        return name, float(value)
     else:
-        return name, int(value)
-
+        try:
+            return name, int(value) # ValueError when value == str(1.1), but not when value == str(1)
+        except ValueError:
+            try:
+                return name, float(value)
+            except ValueError:
+                return name, str(value)
+                
 
 def read(dir='.', specfile=None, acqupar="acqu.par", procpar="proc.par"):
     """
