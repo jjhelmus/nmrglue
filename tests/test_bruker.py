@@ -5,6 +5,7 @@ from __future__ import print_function
 import tempfile
 import os
 import shutil
+from pathlib import Path
 
 import numpy as np
 from numpy.testing import assert_array_equal
@@ -106,8 +107,10 @@ def test_pprog():
 def test_1d():
     """ reading/writing of 1D bruker data"""
     dic, data = ng.bruker.read(os.path.join(DATA_DIR, "bruker_1d"))
-    assert dic['FILE_SIZE'] == 16384
+    pdic, pdata = ng.bruker.read(Path(DATA_DIR) / "bruker_1d")
+    assert dic['FILE_SIZE'] == pdic["FILE_SIZE"]== 16384
     assert data.shape == (2048, )
+    assert_array_equal(data,pdata)
     assert np.abs(data[20].real - -282.0) <= 0.01
     assert np.abs(data[20].imag - 14.0) <= 0.01
     assert np.abs(data[91].real - -840842.0) <= 0.01

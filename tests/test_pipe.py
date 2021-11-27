@@ -6,7 +6,7 @@ from nmrglue.fileio.pipe import fdata2dic
 import tempfile
 import os
 import glob
-import io
+from pathlib import Path
 
 import numpy as np
 from numpy.testing import assert_array_equal
@@ -102,6 +102,24 @@ def read_with_bytes_or_buffer(filename):
     assert_array_equal(data, bdata2)
 
 # tests
+def test_read_pathlib_path():
+    data_path_str = os.path.join(DATA_DIR, "nmrpipe_1d", "test.fid")
+    data_path = Path(DATA_DIR) / "nmrpipe_1d" / "test.fid"
+    dic, data = ng.pipe.read(data_path_str)
+    pdic, pdata = ng.pipe.read(data_path)
+    assert_array_equal(data, pdata)
+    assert dic == pdic
+
+
+def test_read_pathlib_path_template():
+    data_path_template = Path(DATA_DIR) / "nmrpipe_3d" / "data" / "test%03d.fid"
+    data_path_template_str = os.path.join(DATA_DIR, "nmrpipe_3d", "data", "test%03d.fid")
+    dic, data = ng.pipe.read(data_path_template)
+    pdic, pdata = ng.pipe.read(data_path_template_str)
+    assert_array_equal(data, pdata)
+    assert dic == pdic
+
+
 def test_get_fdata_bytes():
     data_path = os.path.join(DATA_DIR, "nmrpipe_1d", "test.fid") 
     with open(data_path, "rb") as binary_stream:
