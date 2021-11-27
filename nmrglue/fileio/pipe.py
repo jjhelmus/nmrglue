@@ -499,7 +499,7 @@ def read(filename):
 
     Parameters
     ----------
-    filename : str | bytes | io.BytesIO
+    filename : str | pathlib.Path | bytes | io.BytesIO
         Filename or filemask of NMRPipe file(s) to read. Binary io.BytesIO stream 
         (e.g. open(filename, "rb")) or bytes buffer can also be provided
 
@@ -520,6 +520,8 @@ def read(filename):
         filemask = None
     elif hasattr(filename, "read"):
         filename = filename.read()
+        filemask = None
+    elif hasattr(filename, "read_bytes") and (filename.name.count("%") == 0):
         filemask = None
     else:
         filename = str(filename)

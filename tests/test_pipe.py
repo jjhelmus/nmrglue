@@ -111,6 +111,15 @@ def test_read_pathlib_path():
     assert dic == pdic
 
 
+def test_read_pathlib_path_template():
+    data_path_template = Path(DATA_DIR) / "nmrpipe_3d" / "data" / "test%03d.fid"
+    data_path_template_str = os.path.join(DATA_DIR, "nmrpipe_3d", "data", "test%03d.fid")
+    dic, data = ng.pipe.read(data_path_template)
+    pdic, pdata = ng.pipe.read(data_path_template_str)
+    assert_array_equal(data, pdata)
+    assert dic == pdic
+
+
 def test_get_fdata_bytes():
     data_path = os.path.join(DATA_DIR, "nmrpipe_1d", "test.fid") 
     with open(data_path, "rb") as binary_stream:
