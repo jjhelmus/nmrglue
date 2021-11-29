@@ -1,0 +1,22 @@
+peak picking examples
+=====================
+
+
+This folder contains scripts to read in and pick peaks on 1d, 2d and 3d datasets.
+The datasets used for these scripts are already available in different example folders
+in nmrglue.
+
+1. 1D dataset: examples/integration/integrate_1d/1d_data.ft
+2. 2D dataset:
+3. 3D dataset:
+
+Instrunctions
+-------------
+
+1. Run the scripts `1d_picking.py`, `2d_picking.py`, and `3d_picking.py`.
+2. These will pop up plots generated in matplotlib with peak annotations.
+    
+
+
+
+
