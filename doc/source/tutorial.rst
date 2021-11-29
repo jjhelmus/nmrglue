@@ -455,6 +455,7 @@ using NMRPipe itself.  For example to process the sample 2D NMRPipe file:
     >>> dic,data = ng.pipe.read("test.fid")
     >>> dic,data = ng.pipe_proc.sp(dic,data,off=0.35,end=0.98,pow=1,c=1.0)
     >>> dic,data = ng.pipe_proc.zf(dic,data,auto=True)
+    >>> dic,data = ng.pipe_proc.ft(dic,data,auto=True)
     >>> dic,data = ng.pipe_proc.ps(dic,data,p0=-29.0,p1=0.0)
     >>> dic,data = ng.pipe_proc.di(dic,data)
     >>> dic,data = ng.pipe_proc.tp(dic,data)
