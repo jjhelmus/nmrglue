@@ -681,37 +681,58 @@ class SparkySaveParser(HTMLParser):
 
         """
 
-        l = [i for i, word in enumerate(peak) if word in ["[", "]"]]
-        p = peak[:l[0]]
-        l = peak[l[0]+1:l[1]]
+        # debug
+        # print(peak)
 
-        d = {}
-        for i in p:
-            j = i.split()
+        label_pos = [i for i, word in enumerate(peak) if word in "[]"]
+        if label_pos:
+            peak_info = peak[:label_pos[0]]
+            label_info = peak[label_pos[0] + 1 : label_pos[1]]
+        else:
+            peak_info = peak
+
+        peak_data = {}
+
+        # parse and add data under "peak"
+        for item in peak_info:
+            it = item.split()
+
+            key, *vals = it
+
+            vals = [float(i) for i in vals]
 
             info = []
-            for k in j:
+            for val in it:
                 try:
-                    info.append(float(k))
+                    info.append(float(val))
                 except ValueError:
-                    info.append(k)
+                    info.append(val)
 
             if len(info) == 2:
-                d[info[0]] = info[1]
+                peak_data[info[0]] = info[1]
             else:
-                d[info[0]] = info[1:]
+                peak_data[info[0]] = info[1:]
 
-        for i in l:
-            j = i.split()
-            if j[0] not in d.keys():
-                d[j[0]] = j[1:]
-        del d["type"]
+        # parse and add data under "label"
+        for item in label_info:
+            j = item.split()
+            if j[0] not in peak_data.keys():
+                peak_data[j[0]] = j[1:]
 
-        for i, k in enumerate(d["xy"]):
-            k = k.split(",")
-            d["xy"][i] = [float(j) for j in k]
+        # ignore the "type" item
+        del peak_data["type"]
 
-        return d
+        # debug
+        # print(d)
+
+        try:
+            for i, k in enumerate(peak_data["xy"]):
+                k = k.split(",")
+                peak_data["xy"][i] = [float(j) for j in k]
+        except KeyError:
+            peak_data["xy"] = []
+
+        return peak_data
 
     def _parse_ornaments(self, data):
         """
