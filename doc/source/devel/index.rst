@@ -14,39 +14,37 @@ Requirements
 To create an environment for developing nmrglue the following must be installed
 and available.
 
-* `Numpy <http://numpy.scipy.org>`_
+* `Numpy <https://numpy.org/>`_
 
-* `SciPy <http://scipy.org>`_
+* `SciPy <https://scipy.org/>`_
 
 * `nose <https://nose.readthedocs.org/en/latest/>`_
 
-* `Sphinx <http://sphinx-doc.org/>`_
+* `Sphinx <https://www.sphinx-doc.org/>`_
 
-* `git <http://git-scm.com>`_
+* `git <https://git-scm.com>`_
 
 In addition the following Python packages are highly recommended. 
 
-* `matplotlib <http://matplotlib.org/>`_
+* `matplotlib <https://matplotlib.org/>`_
 
-* `IPython <http://ipython.org/>`_
+* `IPython <https://ipython.org/>`_
 
 A easy way of obtaining and installing these packages is to use a Python 
-distribution which provides these packages, such as 
-`EPD <http://www.enthought.com/products/epd.php>`_.  Detailed information on
-`installing a Scipy stack <http://scipy.github.com/install.html>`_ is 
-available.
+distribution which provides these packages, such as `Anaconda/Miniconda <https://docs.conda.io/en/latest/miniconda.html>`_.
+Detailed information on `installing a Scipy stack <https://scipy.org/install/>`_ is available.
 
 Finally, other NMR software packages must be installed to process and convert 
 the test and example data.  These are not required for using nmrglue, but are
 needed to verify its functionality and to run some of the examples.
 
-* `NMRPipe <http://spin.niddk.nih.gov/NMRPipe/>`_
+* `NMRPipe <https://www.ibbr.umd.edu/nmrpipe/>`_
 
-* `Sparky <http://www.cgl.ucsf.edu/home/sparky/>`_
+* `Sparky <http://www.cgl.ucsf.edu/home/sparky/>`_ or `NMRFAM-Sparky <https://nmrfam.wisc.edu/nmrfam-sparky-distribution/>` or `Poky <https://sites.google.com/view/pokynmr>`
 
-* `The Rowland NMR Toolkit <http://rnmrtk.uchc.edu/rnmrtk/RNMRTK.html>`_
+* `The Rowland NMR Toolkit <https://rnmrtk.uchc.edu/rnmrtk/RNMRTK.html>`_
 
-* `SIMPSON <http://bionmr.chem.au.dk/bionmr/software/simpson.php>`_
+* `SIMPSON <https://inano.au.dk/about/research-centers-and-projects/nmr/software-and-tools/downloads/>`_
 
 .. _source_code:
 
@@ -93,7 +91,7 @@ location of the test data directory.
 
 Additional data required for the nmrglue examples can be downloaded as a 
 `single archive 
-<http://nmrglue.googlecode.com/files/all_none_test_example_data.zip>`_.  
+<https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/nmrglue/all_none_test_example_data.zip>`_.  
 Unpack this archive in the ``examples`` directory.  Run the
 ``make_links.sh`` shell script to make symbolic links to the test data which
 reused in a number of example.  On operating systems which do not support
@@ -137,7 +135,7 @@ preparing patches.
 * Coding Style : The nmrglue source code trys to follow the 
   `PEP8 <http://www.python.org/dev/peps/pep-0008/>`_ style guide.  Consider 
   using a tool, such as `pep8 <http://pypi.python.org/pypi/pep8>`__ or 
-  `pylint <http://www.logilab.org/857>`_ to check your Python code against 
+  `pylint <https://pylint.org/>`_ to check your Python code against 
   these conventions.
 
 * Documentation : All public functions and classes should have a docstring which

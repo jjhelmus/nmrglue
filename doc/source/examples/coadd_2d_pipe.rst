@@ -8,7 +8,7 @@ All files matching the ``test*.fid`` pattern will be coadded into a file
 named ``coadded.fid``.  
 
 The data used in this example is available for 
-`download. <http://nmrglue.googlecode.com/files/example_coadd_2d_pipe.zip>`_
+`download. <https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/nmrglue/example_coadd_2d_pipe.zip>`_
 
 [:download:`source code <../../../examples/coadd/coadd_2d_pipe/coadd_2d.py>`]
 
