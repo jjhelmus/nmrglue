@@ -680,38 +680,51 @@ class SparkySaveParser(HTMLParser):
         ]
 
         """
+        label_pos = [i for i, word in enumerate(peak) if word in "[]"]
 
-        l = [i for i, word in enumerate(peak) if word in ["[", "]"]]
-        p = peak[:l[0]]
-        l = peak[l[0]+1:l[1]]
+        # see if label exists and split things up
+        # according to label position
+        if label_pos:
+            peak_info = peak[:label_pos[0]]
+            label_info = peak[label_pos[0] + 1 : label_pos[1]]
+        else:
+            peak_info = peak
+            label_info = []
 
-        d = {}
-        for i in p:
-            j = i.split()
+        # peak_data dict stores all relevant information for a peak,
+        # including all information about the label, label location, etc
+        peak_data = {}
 
-            info = []
-            for k in j:
+        # parse and add data under "peak"
+        for item in peak_info:
+            it = item.split()
+
+            key, *vals = it
+            for i, v in enumerate(vals):
                 try:
-                    info.append(float(k))
+                    vals[i] = float(v)
                 except ValueError:
-                    info.append(k)
+                    vals[i] = str(v)
 
-            if len(info) == 2:
-                d[info[0]] = info[1]
-            else:
-                d[info[0]] = info[1:]
+            if len(vals) == 1:
+                vals = vals[0]
 
-        for i in l:
-            j = i.split()
-            if j[0] not in d.keys():
-                d[j[0]] = j[1:]
-        del d["type"]
+            peak_data[key] = vals
 
-        for i, k in enumerate(d["xy"]):
-            k = k.split(",")
-            d["xy"][i] = [float(j) for j in k]
+        # parse and add data under "label"
+        for item in label_info:
+            key, *vals = item.split()
+            if key not in peak_data.keys():
+                peak_data[key] = vals
 
-        return d
+        try:
+            for i, position in enumerate(peak_data["xy"]):
+                position = position.split(",")
+                peak_data["xy"][i] = [float(pos) for pos in position]
+        except KeyError:
+            pass
+
+        return peak_data
 
     def _parse_ornaments(self, data):
         """
@@ -808,7 +821,7 @@ class SparkySaveParser(HTMLParser):
             self.curdict[self.curtag].append(dic)
 
 
-def read_savefile(savefile, spectrum_file=None):
+def read_savefile(filename, spectrum_file=None):
     """
     Reads in a Sparky .save file and the corresponding spectrum (.ucsf)
     file. In addition to the usual dictionary contents that come with
@@ -835,7 +848,7 @@ def read_savefile(savefile, spectrum_file=None):
 
     """
 
-    with open(savefile, "r") as f:
+    with open(filename, "r") as f:
         savefile = f.read().replace("<end ", r"</")
 
     parser = SparkySaveParser()
@@ -849,14 +862,20 @@ def read_savefile(savefile, spectrum_file=None):
         "ornament": parser.ornament,
     }
 
-    try:
-        if spectrum_file is None:
-            d, data = read(dic["spectrum"]["pathname"])
-        else:
-            d, data = read(spectrum_file)
 
-    except:
-        warn("Cannot load spectrum")
+    if spectrum_file is None:
+        try:
+            spectrum_file = dic["spectrum"]["abspathname"]
+        except KeyError:
+            spectrum_file = os.path.join(os.path.dirname(filename), dic["spectrum"]["pathname"])
+            
+    try:
+        d, data = read(spectrum_file)
+    except FileNotFoundError:
+        warn("Cannot find this file: {}".format(spectrum_file))
+        d, data = {}, None
+    except UnicodeDecodeError:
+        warn("Could not correctly parse the spectrum file {}".format(spectrum_file))
         d, data = {}, None
 
     dic.update(d)
