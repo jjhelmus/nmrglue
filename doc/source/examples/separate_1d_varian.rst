@@ -11,7 +11,7 @@ NMRPipe. The name and values of the interleaved parameter is determined from
 the ``procpar`` file in the ``arrayed_data.dir`` directory.
 
 The data used in this example is available for 
-`download. <http://nmrglue.googlecode.com/files/example_separate_1d_varian.zip>`_
+`download. <https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/nmrglue/example_separate_1d_varian.zip>`_
 
 [:download:`source code <../../../examples/separate/separate_1d_varian/separate.py>`]
 

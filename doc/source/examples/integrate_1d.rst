@@ -9,7 +9,7 @@ summation integral of each peak using the spectra contained in ``1d_data.ft``.  
 the integration limits and values overlayed on the spectra to ``plot.png``.
 
 The data used in this example is available for 
-`download. <http://nmrglue.googlecode.com/files/example_integrate_1d.zip>`_
+`download. <https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/nmrglue/example_integrate_1d.zip>`_
 
 [:download:`source code <../../../examples/integration/integrate_1d/integrate_1d.py>`]
 

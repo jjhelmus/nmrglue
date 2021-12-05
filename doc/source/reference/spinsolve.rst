@@ -1,5 +1,5 @@
 nmrglue.spinsolve
-==============
+=================
 
 .. automodule:: nmrglue.fileio.spinsolve
 
@@ -22,7 +22,7 @@ These are functions which are targeted for users of nmrglue.
 
 
 Developer Information
---------------------
+---------------------
 
 .. include:: ../../../nmrglue/fileio/spinsolve.py
     :start-line: 14

@@ -1,8 +1,8 @@
 .. include:: ../../../examples/jbnmr_examples/s11_strip_plots/README.rst
 
 The data used in this example is available for download
-`part1, <http://nmrglue.googlecode.com/files/jbnmr_s11_strip_plots_part1.zip>`_
-`part2. <http://nmrglue.googlecode.com/files/jbnmr_s11_strip_plots_part2.zip>`_
+`part1, <https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/nmrglue/jbnmr_s11_strip_plots_part1.zip>`_ [172.34 MB]
+`part2. <https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/nmrglue/jbnmr_s11_strip_plots_part2.zip>`_ [147.52 MB]
 
 Listing S11
 

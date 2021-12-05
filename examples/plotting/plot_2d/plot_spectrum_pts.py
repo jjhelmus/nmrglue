@@ -32,9 +32,9 @@ ax.text(2010, 1290, "T11", size=8, color='k')
 
 # plot slices in each direction
 xslice = data[1187, :]
-ax.plot(xrange(data.shape[1]), xslice / 3.e3 + 1187)
+ax.plot(range(data.shape[1]), xslice / 3.e3 + 1187)
 yslice = data[:, 1976]
-ax.plot(-yslice / 3.e3 + 1976, xrange(data.shape[0]))
+ax.plot(-yslice / 3.e3 + 1976, range(data.shape[0]))
 
 # decorate the axes
 ax.set_ylabel("15N (points)")

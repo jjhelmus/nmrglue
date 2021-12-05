@@ -8,7 +8,7 @@ optimize module to fit T1 relaxation trajectories.  Three scripts are used in
 the process.
 
 The data used in this example is available for 
-`download. <http://nmrglue.googlecode.com/files/example_fitting_t1_data.zip>`_
+`download. <https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/nmrglue/example_fitting_t1_data.zip>`_
 
 First the ``extract_trajs.py`` script reads in box limits from ``boxes.in`` and
 a list of spectra from ``spectra.in``.  The script integrates each peak in each

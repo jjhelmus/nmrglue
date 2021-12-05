@@ -11,7 +11,7 @@ The data shape, array size and additional files to copy to the new directories
 must be determined by the user.
 
 The data used in this example is available for 
-`download. <http://nmrglue.googlecode.com/files/example_separate_2d_bruker.zip>`_
+`download. <https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/nmrglue/example_separate_2d_bruker.zip>`_
 
 [:download:`source code <../../../examples/separate/separate_2d_bruker/separate.py>`]
 

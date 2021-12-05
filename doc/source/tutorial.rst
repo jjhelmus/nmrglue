@@ -43,21 +43,21 @@ containing a python dictionary with file and spectral parameters and a
 spectral data.  Currently the following file formats are supported by nmrglue
 with the associated module:
 
-=======    ======================== ==================
-Module     File Format              Reference
-=======    ======================== ==================
+=========  ======================== ==================
+Module       File Format              Reference
+=========  ======================== ==================
 bruker     Bruker                   https://www.bruker.com/service/information-communication/user-manuals/nmr.html
 pipe       NMRPipe                  https://www.ibbr.umd.edu/nmrpipe/index.html
-sparky     Sparky                   https://nmrfam.wisc.edu/nmrfam-sparky-distribution/
+sparky     Sparky/Poky              https://nmrfam.wisc.edu/nmrfam-sparky-distribution/
 varian     Varian/Agilent
 rnmrtk     Rowland NMR Toolkit      https://rnmrtk.uchc.edu/rnmrtk/RNMRTK.html
 jcampdx    JCAMP-DX                 http://www.jcamp-dx.org/
 nmrml      NMR Markup Language      https://github.com/nmrML/nmrML
-simpson    Simpson                  https://inano.au.dk/about/research-centers/nmr/software/simpson/
-spinsolve  Magritek or JCAMP-DX
+simpson    Simpson                  https://inano.au.dk/about/research-centers-and-projects/nmr/software-and-tools/downloads/
+spinsolve  Magritek or JCAMP-DX     https://magritek.com/products/spinsolve/
 tecmag     Technology for Magnetic  https://www.tecmag.com/
            Resonance
-=======    ======================== ==================
+=========  ======================== ==================
 
 Examining the data object in more detail:
 
@@ -455,6 +455,7 @@ using NMRPipe itself.  For example to process the sample 2D NMRPipe file:
     >>> dic,data = ng.pipe.read("test.fid")
     >>> dic,data = ng.pipe_proc.sp(dic,data,off=0.35,end=0.98,pow=1,c=1.0)
     >>> dic,data = ng.pipe_proc.zf(dic,data,auto=True)
+    >>> dic,data = ng.pipe_proc.ft(dic,data,auto=True)
     >>> dic,data = ng.pipe_proc.ps(dic,data,p0=-29.0,p1=0.0)
     >>> dic,data = ng.pipe_proc.di(dic,data)
     >>> dic,data = ng.pipe_proc.tp(dic,data)
