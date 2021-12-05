@@ -56,6 +56,16 @@ Fitting Examples
 
 .. _integration_examples:
 
+
+Peak picking Examples
+---------------------
+
+.. toctree::
+
+   peakpick.rst
+
+.. _peak_picking_examples:
+
 Integration Examples
 --------------------
 
