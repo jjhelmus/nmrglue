@@ -530,7 +530,7 @@ def jmod(dic, data, off=0.0, j=0.0, lb=0.0, sin=False, cos=False, c=1.0,
     j : float
         J-modulation in Hz.
     lb :
-        Expoentntial line broadening in Hz.
+        Exponential line broadening in Hz.
     sin : bool
         True for sine modulation, off parameter is ignored.
     cos : bool

@@ -297,7 +297,7 @@ def read_lowmem(filename, par_file=None):
         par_file = filename[:-4] + ".par"
     dic = read_par(par_file)
 
-    # determine shape, complexity and endiness from dictionary
+    # determine shape, complexity and endianness from dictionary
     fshape = list(dic["layout"][0])
     cplex = {'R': False, 'C': True}[dic['nptype'][-1]]
     if cplex:
@@ -812,7 +812,7 @@ def parse_par_line(line, dic):
     elif c == "QUAD":
         dic['quad'] = [str(s).lower() for s in pl]
 
-    # format assumes IEEE-Float type, only checks endiness
+    # format assumes IEEE-Float type, only checks endianness
     elif c == 'FORMAT':
         if pl[0].upper() == "LITTLE-ENDIAN":
             dic['format'] = '<f4'

@@ -56,7 +56,7 @@ def lp(data, pred=1, slice=slice(None), order=8, mode="f", append="after",
     bad_roots : {'incr', 'decr', None, 'auto'}
         Type of roots which to consider bad and to stabilize.  Option are those
         with increasing signals 'incr' or decreasing signals 'decr'.  None will
-        perform no root stabiliting.  The default ('auto') will set the
+        perform no root stabilizing.  The default ('auto') will set the
         parameter based on the `mode` parameter.  'f' or 'fb' `mode` will
         results in a 'incr' `bad_roots` parameter, 'b' or 'bf` in 'decr'
     fix_mode : {'on', 'reflect'}
@@ -188,7 +188,7 @@ def lp_1d(trace, pred=1, slice=slice(None), order=8, mode="f", append="after",
     bad_roots : {'incr', 'decr', None, 'auto'}
         Type of roots which to consider bad and to stabilize.  Option are those
         with increasing signals 'incr' or decreasing signals 'decr'.  None will
-        perform no root stabiliting.  The default ('auto') will set the
+        perform no root stabilizing.  The default ('auto') will set the
         parameter based on the `mode` parameter.  'f' or 'fb' `mode` will
         results in a 'incr' `bad_roots` parameter, 'b' or 'bf` in 'decr'
     fix_mode : {'on', 'reflect'}
@@ -867,7 +867,7 @@ def find_lpc_tls(D, d):
     """
     m = D.shape[1]  # the order of the prediction
     E = np.append(D, d, axis=1)     # form the augmented data matrix
-    U, s, Vh = scipy.linalg.svd(E)  # SVD decompositon of augmented matrix
+    U, s, Vh = scipy.linalg.svd(E)  # SVD decomposition of augmented matrix
     V = np.conj(Vh.T)               # Hermetian transpose
     return (-1. / V[m, m] * V[:m, m]).reshape((m, 1))
 

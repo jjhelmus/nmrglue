@@ -259,7 +259,7 @@ class CanvasFrame(wx.Frame):
     drawn and the parameter panel where apodization parameter can be set.
     """
     def __init__(self):
-        """ Initializate the frame """
+        """ Initialize the frame """
         wx.Frame.__init__(self, None, -1, 'Apodization Viewer')
 
         self.SetBackgroundColour(wx.NamedColor("WHITE"))

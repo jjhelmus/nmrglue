@@ -825,7 +825,7 @@ def read_savefile(filename, spectrum_file=None):
     """
     Reads in a Sparky .save file and the corresponding spectrum (.ucsf)
     file. In addition to the usual dictionary contents that come with
-    a .ucsf file, these additinal dictionary keys are created with the content
+    a .ucsf file, these additional dictionary keys are created with the content
     from .save file: "spectrum", "view", "user" and "ornament". The together
     contain all edits and annotations. By default, it tries to read in
     the spectrum file given in the .save file (but this fails many times due

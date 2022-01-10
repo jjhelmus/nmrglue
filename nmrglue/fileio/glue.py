@@ -5,13 +5,13 @@ stores spectral data in the Hierarchical Data Format (HDF5).
 glue files are HDF5 files with the spectral data stored in a dataset names
 'spectrum' and any parameters stored in the dataset attributes.  At minimum
 the parameter dictionary must contain a ndim key with the dimensionality of
-the data and a dictionry for each axis numbered (0,1,2...) with the following
+the data and a dictionary for each axis numbered (0,1,2...) with the following
 keys:
 
 ========    =====================================================
 Key         Description
 ========    =====================================================
-car         Carrier freqiency in Hz
+car         Carrier frequency in Hz
 complex     True for complex data, False for magnitude
 encoding    type of encoding, 'states', 'tppi', 'direct', etc
 freq        True for frequency domain data, False otherwise

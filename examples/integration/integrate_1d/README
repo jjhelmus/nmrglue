@@ -10,5 +10,5 @@ in a 1D NMR spectrum
 Instructions
 ------------
 
-1. Run integrate_1d.py to intergrate the spectrum in 1d_data.ft given limits in
+1. Run integrate_1d.py to integrate the spectrum in 1d_data.ft given limits in
 `limits.in`, storing the results in `area.out`

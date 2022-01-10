@@ -297,7 +297,7 @@ class ndwindow_inside(object):
     instance iterators over tuples of slices which slice an the array into
     uniform size wsize windows/sub-arrays.  At each iteration, the index of
     the top left of the sub-array is incremented by one along the last
-    dimension utill the resulting windows would extend past the array border.
+    dimension until the resulting windows would extend past the array border.
     All sub-arrays are equal sized (wsize).
 
     Parameters

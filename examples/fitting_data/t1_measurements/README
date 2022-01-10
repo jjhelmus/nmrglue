@@ -1,5 +1,5 @@
-ftiing_t1_data example
-======================
+fitting_t1_data example
+=======================
 
 Introduction
 ------------
@@ -15,8 +15,8 @@ Instructions
 steps requires that NMRPipe be installed.
 
 2. Run extract_trajs.py, which read box limits from boxes.in, a list of
-spectra from spectra.in and intergrates each peak in each spectrum.  The
-normalized trajecories are stored in the `traj.npy` file.
+spectra from spectra.in and integrates each peak in each spectrum.  The
+normalized trajectories are stored in the `traj.npy` file.
 
 3. Run fit_exp_leastsq.py to fit the trajectories in the `traj.npy` file.  The
 best fit parameter are stored to the `fits.pickle` file and the human readable

@@ -1243,7 +1243,7 @@ def get_trace(f, pts, dt):
     """
     Read trace of pts points of dtype dt from Agilent/Varian binary file
 
-    Endiness should be handled by dt.
+    Endianness should be handled by dt.
     """
     bsize = pts * dt.itemsize  # number of bytes in trace
     return np.frombuffer(f.read(bsize), dt)
@@ -1253,7 +1253,7 @@ def get_fileheader(f):
     """
     Unpack file header parameters into a list.
 
-    Reads the 32-byte file header from file and unpacks into a list.  Endiness
+    Reads the 32-byte file header from file and unpacks into a list.  Endianness
     is corrected as needed.
 
     Returned list contents:
@@ -1281,7 +1281,7 @@ def get_blockheader(f):
     """
     Unpack block header parameters into a list.
 
-    Reads the 28-byte block header from f and unpacks into a list.  Endiness
+    Reads the 28-byte block header from f and unpacks into a list.  Endianness
     is corrected as needed.
 
     Returned list contents:
@@ -1319,7 +1319,7 @@ def get_hyperheader(file):
     """
     Unpack hypercomplex header parameters to a list.
 
-    Reads the 28-bytes block header from file and unpacks into a list. Endiness
+    Reads the 28-bytes block header from file and unpacks into a list. Endianness
     is corrected as needed.
 
     Returned list contents:

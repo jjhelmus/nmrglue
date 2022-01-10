@@ -408,7 +408,7 @@ def open_towrite(filename, overwrite=False, mode='wb'):
     Open filename for writing and return file object
 
     Function checks if file exists (and raises IOError if overwrite=False) and
-    creates necessary directiories as needed.
+    creates necessary directories as needed.
     """
     # check if file exists and overwrite if False
     if os.path.exists(filename) and (overwrite is False):
