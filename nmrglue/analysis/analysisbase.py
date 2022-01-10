@@ -46,7 +46,7 @@ def neighbors(pt, shape, structure):
 
 def valid_pt(pt, shape):
     """
-    Determind if a point (indices) is valid for a given shaped
+    Determine if a point (indices) is valid for a given shaped
     """
     for i, j in zip(pt, shape):
         if i < 0:   # index is not negative
@@ -124,7 +124,7 @@ def slice2limits(slices):
 
     See Also
     --------
-    limits2slice : Find a list of slices given minumum and maximum limits.
+    limits2slice : Find a list of slices given minimum and maximum limits.
     """
     mins = [s.start for s in slices]
     maxs = [s.stop - 1 for s in slices]
@@ -249,7 +249,7 @@ class ndwindow(object):
 
 class ndwindow_index(object):
     """
-    An N-dimensional interator object which returns the index of the window
+    An N-dimensional iterator object which returns the index of the window
     center and a :py:class:`ndwindow` slice array.  See :py:class:`ndwindow`
     for additional documentation.
 
@@ -291,7 +291,7 @@ class ndwindow_index(object):
 
 class ndwindow_inside(object):
     """
-    An N-dimentional iterator to slice arrays into uniform size windows.
+    An N-dimensional iterator to slice arrays into uniform size windows.
 
     Given the shape of an array and a window size, an 'ndwindow_inside'
     instance iterators over tuples of slices which slice an the array into
@@ -354,7 +354,7 @@ class ndwindow_inside(object):
 
 class ndwindow_inside_index(object):
     """
-    An N-dimensional interator object which returns the index of the window
+    An N-dimensional iterator object which returns the index of the window
     top-left and a :py:class:`ndwindow_inside` slice array.
 
     Similar to :py:class:`ndwindow_index` but reports top left index of

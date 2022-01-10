@@ -24,8 +24,8 @@ User Functions
     read_raw_bin_2d
     read_binary
 
-Developer Infomation
---------------------
+Developer Information
+---------------------
 
 Developer Functions
 ^^^^^^^^^^^^^^^^^^^

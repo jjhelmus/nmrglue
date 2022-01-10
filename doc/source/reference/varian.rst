@@ -32,8 +32,8 @@ User Functions
     create_dic
 
 
-Developer Infomation
---------------------
+Developer Information
+---------------------
 
 .. include:: ../../../nmrglue/fileio/varian.py
     :start-line: 8

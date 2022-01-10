@@ -156,7 +156,7 @@ def sim_voigt_fwhm(x, x0, fwhm_g, fwhm_l):
     Parameters
     ----------
     x : ndarray
-        Array of values at which to evalutate distribution.
+        Array of values at which to evaluate distribution.
     x0 : float
         Center of the distribution.
     fwhm_g : float
@@ -196,7 +196,7 @@ def sim_voigt_sigmagamma(x, x0, sigma, gamma):
     Parameters
     ----------
     x : ndarray
-        Array of values at which to evalutate distribution.
+        Array of values at which to evaluate distribution.
     x0 : float
         Center of the distribution
     sigma : float
@@ -223,7 +223,7 @@ def sim_pvoigt_fwhm(x, x0, fwhm, eta):
     Simulate a Pseudo Voigt lineshape with unit height at the center.
 
     Simulates discrete points of the continuous Pseudo Voigt profile with unit
-    heigh at the center.  Full-width at half-maximum (FWHM) of the Gaussian and
+    height at the center.  Full-width at half-maximum (FWHM) of the Gaussian and
     Lorentzian distribution are used as the scale parameter as well as eta, the
     mixing factor.
 
@@ -239,7 +239,7 @@ def sim_pvoigt_fwhm(x, x0, fwhm, eta):
     Parameters
     ----------
     x : ndarray
-        Array of values at which to evalutate distribution.
+        Array of values at which to evaluate distribution.
     x0 : float
         Center of the distribution.
     fwhm : float
@@ -262,11 +262,11 @@ def sim_pvoigt_fwhm(x, x0, fwhm, eta):
 # 1D Lineshape classes #
 ########################
 # A lineshape class defines methods used to fit and simulate one dimensional
-# lineshapes, which can be used to build multidimensinal lineshapes.  These
+# lineshapes, which can be used to build multidimensional lineshapes.  These
 # classes should have the following 6 methods:
 
 # sim(self, M, p)   - Using parameters in p simulate a lineshape of length M.
-# nparams(self, M)  - Determind the number of parameters needed for a length M
+# nparams(self, M)  - Determine the number of parameters needed for a length M
 #                     lineshape.
 # guessp(self, sig) - Estimate parameters of signal sig, these should be
 #                     parameter which might be used for initial least-squares
@@ -310,7 +310,7 @@ class gauss_sigma(location_scale):
     scale parameter. See :py:func:`sim_gauss_sigma` for functional form and
     parameters.
     """
-    name = "guassian"
+    name = "gaussian"
 
     def sim(self, M, p):
         x = np.arange(M)
@@ -331,7 +331,7 @@ class gauss_fwhm(location_scale):
     scale parameter. See :py:func:`sim_gauss_fwhm` for functional form and
     parameters.
     """
-    name = "guassian"
+    name = "gaussian"
 
     def sim(self, M, p):
         x = np.arange(M)
@@ -512,7 +512,7 @@ class scale():
     def remove_edge(self, p, limits):
         return p
 
-# lineshape convience
+# lineshape convenience
 gauss = gauss_fwhm
 lorentz = lorentz_fwhm
 voigt = voigt_fwhm

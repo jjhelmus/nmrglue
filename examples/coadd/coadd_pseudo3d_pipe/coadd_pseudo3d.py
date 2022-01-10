@@ -16,7 +16,7 @@ flist.sort()
 # loop over the files
 for base_fname in flist:
     
-    # initilize the new data
+    # initialize the new data
     dic, data = ng.pipe.read(base_fname)
     coadd_data = np.zeros_like(data)
     coadd_dic = dict(dic)

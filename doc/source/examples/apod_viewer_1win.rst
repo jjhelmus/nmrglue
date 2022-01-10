@@ -12,7 +12,7 @@ In this application users can examine graphically the apodization windows
 produced by the various window functions supported by NMRPipe.  In this example
 the canvas in which the apodization windows are drawn and the location to input
 the apodization parameter are contained in the same window.  The
-:ref:`apod_viewer_2win` example has the canvas and input area in seperate
+:ref:`apod_viewer_2win` example has the canvas and input area in separate
 windows.   
 
 [:download:`source code <../../../examples/sample_applications/apod_viewer_1win.py>`]

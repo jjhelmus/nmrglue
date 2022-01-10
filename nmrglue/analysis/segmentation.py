@@ -39,7 +39,7 @@ def find_all_connected(data, thres, find_segs=False, diag=False):
     Returns
     -------
     locations : list
-        List of indicies of local maximum in each segment.
+        List of indices of local maximum in each segment.
     seg_slices : list, optional
         List of slices which extract a given segment from the data. Only
         returned when fig_segs is True.
@@ -96,7 +96,7 @@ def find_all_nconnected(data, thres, find_segs=False, diag=False):
     Returns
     -------
     locations : list
-        List of indicies of local maximum in each segment.
+        List of indices of local maximum in each segment.
     seg_slices : list, optional
         List of slices which extract a given segment from the data. Only
         returned when fig_segs is True.
@@ -129,7 +129,7 @@ def find_all_nconnected(data, thres, find_segs=False, diag=False):
 # intensity.  This can be though of as all points accessible by a water drop
 # following downward slopes from the initial node.
 
-# Upward segmentation uses the same priciple except nodes must be below
+# Upward segmentation uses the same principle except nodes must be below
 # the threshold an upward path must exist.
 
 
@@ -161,7 +161,7 @@ def mark_dseg(mdata, map, pt, mark, structure):
     while Q:
         pt = Q.pop(0)
         v = mdata.data[pt]
-        # Check all neightbors
+        # Check all neighbors
         for new_pt in neighbors(pt, mdata.shape, structure):
             if mdata.mask[new_pt] == False and mdata[new_pt] < v:
                 Q.append(new_pt)
@@ -223,7 +223,7 @@ def find_all_downward(data, thres, find_segs=False, diag=False):
     Returns
     -------
     locations : list
-        List of indicies of local maximum in each segment.
+        List of indices of local maximum in each segment.
     seg_slices : list, optional
         List of slices which extract a given segment from the data. Only
         returned when fig_segs is True.
@@ -279,7 +279,7 @@ def mark_useg(mdata, map, pt, mark, structure):
     while Q:
         pt = Q.pop(0)
         v = mdata.data[pt]
-        # Check all neightbors
+        # Check all neighbors
         for new_pt in neighbors(pt, mdata.shape, structure):
             if mdata.mask[new_pt] == False and mdata[new_pt] > v:
                 Q.append(new_pt)
@@ -343,7 +343,7 @@ def find_all_upward(data, thres, find_segs=False, diag=False):
     Returns
     -------
     locations : list
-        List of indicies of local maximum in each segment.
+        List of indices of local maximum in each segment.
     seg_slices : list, optional
         List of slices which extract a given segment from the data. Only
         returned when fig_segs is True.
@@ -393,7 +393,7 @@ def find_downward(data, pt, thres, diag=False):
     Returns
     -------
     nodes : list
-        Indicies of downward-connected nodes.
+        Indices of downward-connected nodes.
 
     """
     # build structure array for defining feature connections
@@ -416,7 +416,7 @@ def find_downward(data, pt, thres, diag=False):
     while Q:    # loop until Q is empty
         pt = Q.pop(0)   # remove first element of queue
         v = data[pt]    # value at current node
-        for new_pt in neighbors(pt, shape, structure):  # check all neightbors
+        for new_pt in neighbors(pt, shape, structure):  # check all neighbors
             if thres < data[new_pt] < v and new_pt not in segment:
                 Q.append(new_pt)
                 segment.append(new_pt)
@@ -441,7 +441,7 @@ def find_connected(data, pt, thres, diag=False):
     Returns
     -------
     nodes : list
-        Indicies of connected nodes.
+        Indices of connected nodes.
 
     """
     # build structure array for defining feature connections
@@ -463,7 +463,7 @@ def find_connected(data, pt, thres, diag=False):
 
     while Q:    # loop until Q is empty
         pt = Q.pop(0)   # remove first element of queue
-        for new_pt in neighbors(pt, shape, structure):  # check all neightbors
+        for new_pt in neighbors(pt, shape, structure):  # check all neighbors
             if data[new_pt] > thres and new_pt not in segment:
                 Q.append(new_pt)
                 segment.append(new_pt)
@@ -488,7 +488,7 @@ def find_nconnected(data, pt, thres, diag=False):
     Returns
     -------
     nodes : list
-        Indicies of connected nodes.
+        Indices of connected nodes.
 
     """
     # build structure array for defining feature connections
@@ -510,7 +510,7 @@ def find_nconnected(data, pt, thres, diag=False):
 
     while Q:    # loop until Q is empty
         pt = Q.pop(0)   # remove first element of queue
-        for new_pt in neighbors(pt, shape, structure):  # check all neightbors
+        for new_pt in neighbors(pt, shape, structure):  # check all neighbors
             if data[new_pt] < thres and new_pt not in segment:
                 Q.append(new_pt)
                 segment.append(new_pt)
@@ -535,7 +535,7 @@ def find_upward(data, pt, thres, diag=False):
     Returns
     -------
     nodes : list
-        Indicies of upward-connected nodes.
+        Indices of upward-connected nodes.
 
     """
     # build structure array for defining feature connections
@@ -558,7 +558,7 @@ def find_upward(data, pt, thres, diag=False):
     while Q:    # loop until Q is empty
         pt = Q.pop(0)   # remove first element of queue
         v = data[pt]    # value at current node
-        for new_pt in neighbors(pt, shape, structure):  # check all neightbors
+        for new_pt in neighbors(pt, shape, structure):  # check all neighbors
             if thres > data[new_pt] > v and new_pt not in segment:
                 Q.append(new_pt)
                 segment.append(new_pt)

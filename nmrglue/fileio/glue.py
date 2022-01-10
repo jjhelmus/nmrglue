@@ -4,7 +4,7 @@ stores spectral data in the Hierarchical Data Format (HDF5).
 
 glue files are HDF5 files with the spectral data stored in a dataset names
 'spectrum' and any parameters stored in the dataset attributes.  At minimum
-the parameter dictionary must contain a ndim key with the dimentionality of
+the parameter dictionary must contain a ndim key with the dimensionality of
 the data and a dictionry for each axis numbered (0,1,2...) with the following
 keys:
 
@@ -35,7 +35,7 @@ def make_uc(dic, data, dim=-1):
     make a unit conversion object
     """
     if dim == -1:
-        dim = data.ndim - 1  # last dimention
+        dim = data.ndim - 1  # last dimension
 
     size = dic[dim]["size"]
     cplex = dic[dim]["complex"]
@@ -79,7 +79,7 @@ def read(filename, dataset="spectrum"):
 
 def read_lowmem(filename, dataset="spectrum"):
     """
-    Read a glue file using mimimal memory usage
+    Read a glue file using minimal memory usage
     """
     f = h5py.File(filename, 'r')
     dic = get_dic(f, dataset)
@@ -206,7 +206,7 @@ class glue_2d(fileiobase.data_nd):
         """
         Return ndarray of selected values
 
-        (sY,sX) is a well formated tuple of slices
+        (sY,sX) is a well formatted tuple of slices
         """
         sY, sY = slices
         return self.Dataset[sY, sX]
@@ -250,7 +250,7 @@ class glue_3d(fileiobase.data_nd):
         """
         Return ndarray of selected values
 
-        (sZ, sY, sX) is a well formated tuple of slices
+        (sZ, sY, sX) is a well formatted tuple of slices
         """
         sZ, sY, sX = slices
         return self.Dataset[sZ, sY, sX]

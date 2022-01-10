@@ -15,7 +15,7 @@ udic[0]['obs']      = 600.133
 udic[0]['car']      = 4.773 * 600.133
 udic[0]['label']    = '1H'
 
-# create the converter object and initilize with Bruker data
+# create the converter object and initialize with Bruker data
 C = ng.convert.converter()
 C.from_bruker(dic, data, udic)
 

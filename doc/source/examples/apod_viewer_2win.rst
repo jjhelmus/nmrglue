@@ -11,7 +11,7 @@ additional python modules like
 In this application users can examine graphically the apodization windows 
 produced by the various window functions supported by NMRPipe.  In this example
 the canvas in which the apodization windows are drawn and the location to input
-the apodization parameter are contained in two seperate same window.  The
+the apodization parameter are contained in two separate same window.  The
 :ref:`apod_viewer_1win` example has the canvas and input area in a single 
 window.   
 

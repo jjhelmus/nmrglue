@@ -40,7 +40,7 @@ def autops(data, fn, p0=0.0, p1=0.0, return_phases=False, peak_width=100, **kwar
         Some of the more useful ones for this use case:
 
         * disp : Bool
-            Turns on or off the printing of convergence messeges
+            Turns on or off the printing of convergence messages
             By default, this is set to True.
         * ftol : float
             Absolute error in fn between iterations that is acceptable for

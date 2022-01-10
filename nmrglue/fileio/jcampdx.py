@@ -96,7 +96,7 @@ def _readrawdic(filename):
             # try to split to key and value and check sanity
             keysplit = actual.split("=", 1)
             if len(keysplit) < 2:
-                warn("Bad JCAMP-DX line, cant split key and value correctly:" +
+                warn("Bad JCAMP-DX line, can't split key and value correctly:" +
                      line)
                 continue
             keystr = keysplit[0][2:]  # remove "##" already here

@@ -119,11 +119,11 @@ class ParameterPanel(wx.Panel):
         self.size_2.SetValue(str(points))
 
     def ApodChoose(self, event):
-        """ Set the choosen apodization type """
+        """ Set the chosen apodization type """
         self.InitApod(apod_list[self.qName2.GetCurrentSelection()])
 
     def InitApod(self, qName):
-        """ Set the default parameter for a choosen apodization window """
+        """ Set the default parameter for a chosen apodization window """
         
         if qName == "SP":
             self.q1_1.Enable(True)

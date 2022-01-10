@@ -17,7 +17,7 @@ def test_uc_from_freqscale():
     """
     from nmrglue.fileio.fileiobase import uc_from_freqscale
 
-    # read fequency test data
+    # read frequency test data
     dic, data = ng.pipe.read(NMRPIPE_1D_FREQ)
 
     # make udic and uc using uc_from_udic

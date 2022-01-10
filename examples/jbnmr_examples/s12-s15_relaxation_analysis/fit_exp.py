@@ -28,7 +28,7 @@ for filename in glob.glob('*.dat'):
     peak = filename[:3]
     print "Fitting Peak:", peak
 
-    # fit the trajectory using contrainted least squares optimization
+    # fit the trajectory using constrained least squares optimization
     trajectory = np.loadtxt(filename)
     x, ier = leastsqbound(residuals, x0, bounds=bounds, 
                             args=(trajectory, relaxation_times))

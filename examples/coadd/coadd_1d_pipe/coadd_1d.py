@@ -8,7 +8,7 @@ import glob
 flist = glob.glob("test*.fid")
 flist.sort()
 
-# initilize the new data
+# initialize the new data
 dic, data = ng.pipe.read(flist[0])
 coadd_data = np.zeros_like(data)
 coadd_dic = dict(dic)

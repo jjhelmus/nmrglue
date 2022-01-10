@@ -37,7 +37,7 @@ udic[0]['car']      = 56.0 * 125.676
 udic[0]['label']    = 'CA'
 
 
-# create the converter object and initilize with Agilent data
+# create the converter object and initialize with Agilent data
 C = ng.convert.converter()
 C.from_varian(dic, data, udic)
 

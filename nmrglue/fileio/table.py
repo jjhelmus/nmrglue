@@ -171,10 +171,10 @@ def write(filename, comments, rec, overwrite=False):
     for c in comments:
         f.write(c)
 
-    # Determind the list of column names
+    # Determine the list of column names
     names = rec.dtype.names
 
-    # Determind the list of column formats
+    # Determine the list of column formats
     sizes = [rec.dtype[n].itemsize for n in names]
     kinds = [rec.dtype[n].kind for n in names]
     formats = [k + str(s) for s, k in zip(sizes, kinds)]

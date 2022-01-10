@@ -27,8 +27,8 @@ User Functions
     create_dic
 
 
-Developer Infomation
---------------------
+Developer Information
+---------------------
 
 Developer Functions
 ^^^^^^^^^^^^^^^^^^^

@@ -1,8 +1,8 @@
 .. _development-guide:
 
-==================
-Developement Guide
-==================
+=================
+Development Guide
+=================
 
 This guide provides instructions for setting up an environment for developing
 nmrglue and an overview of the project layout and contribution process.
@@ -96,7 +96,7 @@ Unpack this archive in the ``examples`` directory.  Run the
 ``make_links.sh`` shell script to make symbolic links to the test data which
 reused in a number of example.  On operating systems which do not support
 symbolic links (Windows), the data in the test data directory will need to be 
-copied by hand into the appropiate locations.  
+copied by hand into the appropriate locations.  
 
 
 Project Layout
@@ -132,7 +132,7 @@ Suggestions
 When working with the nmrglue source code please consider the following when
 preparing patches.  
 
-* Coding Style : The nmrglue source code trys to follow the 
+* Coding Style : The nmrglue source code tries to follow the 
   `PEP8 <http://www.python.org/dev/peps/pep-0008/>`_ style guide.  Consider 
   using a tool, such as `pep8 <http://pypi.python.org/pypi/pep8>`__ or 
   `pylint <https://pylint.org/>`_ to check your Python code against 
@@ -181,7 +181,7 @@ In addition, the location of the the test data sets must be specified in the
 In order to run all nmrglue unit tests, the tests data sets must be 
 downloaded, unpacked, and the all conversions scripts contained in the
 archive must be run.  Many of these scripts require additional NMR software 
-(NMRPipe, etc), see the ``README`` file in the test data achive for additional 
+(NMRPipe, etc), see the ``README`` file in the test data archive for additional 
 details.  A subset of the full test suite can be run without installing any 
 additional software.
 

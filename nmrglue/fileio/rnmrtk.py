@@ -1,5 +1,5 @@
 """
-Fuctions for reading and writing Rowland NMR Toolkit (RNMRTK) files
+Functions for reading and writing Rowland NMR Toolkit (RNMRTK) files
 """
 
 from __future__ import division
@@ -31,7 +31,7 @@ def make_uc(dic, data, dim=-1):
     data : ndarray
         Array of NMR data.
     dim : int, optional
-        Demension number to create unit conversion object for. Default is for
+        Dimension number to create unit conversion object for. Default is for
         the last dimension.
 
     Returns
@@ -599,7 +599,7 @@ class rnmrtk_nd(fileiobase.data_nd):
         slices is a well formatted tuple of slices
 
         """
-        # seperate the last slice from the leading slices
+        # separate the last slice from the leading slices
         lslice = slices[-1]
         fslice = slices[:-1]
 
@@ -798,7 +798,7 @@ def parse_par_line(line, dic):
         dom = [s[0] for s in pl]        # dom as it appears in the file
         dic['ndim'] = ndim = len(pl)
         dic['order'] = order = [int(s[1]) for s in pl]  # dimension order
-        # dom in accending order (to match other parameter)
+        # dom in ascending order (to match other parameter)
         dic['dom'] = [dom[order.index(i)] for i in range(1, ndim + 1)]
 
     elif c == 'N':

@@ -17,7 +17,7 @@ u[1]['obs']      = 125.681              ; u[0]['obs']      = 125.681
 u[1]['car']      = 101.274 * 125.681    ; u[0]['car']      = 101.274 * 125.681
 u[1]['label']    = 'C13x'               ; u[0]['label']    = 'C13y'           
 
-# create the converter object and initilize with Agilent data
+# create the converter object and initialize with Agilent data
 C = ng.convert.converter()
 C.from_varian(dic, data, u)
 

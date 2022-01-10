@@ -17,7 +17,7 @@ u[1]['obs']      = 800.134          ;  u[0]['obs']      = 201.204
 u[1]['car']      = 4.773 * 800.134  ;  u[0]['car']      = 58.742 * 201.204
 u[1]['label']    = '1H'             ;  u[0]['label']    = '13C'            
 
-# create the converter object and initilize with Bruker data
+# create the converter object and initialize with Bruker data
 C = ng.convert.converter()
 C.from_bruker(dic, data, u)
 

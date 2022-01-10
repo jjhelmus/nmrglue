@@ -5,7 +5,7 @@
 # By: Jonathan Helmus (helmus.3@osu.edu)
 
 # data must be converted to nmrpipe data with twice the number of points
-# in the indirect dimention using var2pipe and the A/B S3E block the intermost
+# in the indirect dimension using var2pipe and the A/B S3E block the intermost
 # array
 
 # var2pipe sign alternates the Y vectors for States so we have:

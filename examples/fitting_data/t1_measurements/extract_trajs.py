@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Scipt to extract trajectories from a series a 2D spectrum.
+# Script to extract trajectories from a series a 2D spectrum.
 
 import nmrglue as ng
 import numpy as np

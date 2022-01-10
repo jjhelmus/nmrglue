@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Example scipt to show integration of a 1D spectrum
+# Example script to show integration of a 1D spectrum
 
 import nmrglue as ng
 import numpy as np
@@ -12,7 +12,7 @@ length = data.shape[0]
 # read in the integration limits
 peak_list = np.recfromtxt("limits.in")
 
-# determind the ppm scale
+# determine the ppm scale
 uc = ng.pipe.make_uc(dic, data)
 ppm_scale = uc.ppm_scale()
 
