@@ -136,7 +136,7 @@ def read_text(filename):
     """Read a SIMPSON text file. See :py:func:`read`."""
     f = open(filename, 'r')  # open the file
 
-    dic = {}                # initalize dictionary of parameters
+    dic = {}                # initialize dictionary of parameters
 
     # parse the header of the file, storing parameters in dictionary, stop
     # when we hit the data line
@@ -242,7 +242,7 @@ def read_xyreim(filename):
     units = np.recarray((NI, NP), dtype=[('ni_unit', 'f8'), ('np_unit', 'f8')])
 
     for l_idx, line in enumerate(f):
-        ni_idx, np_idx = divmod(l_idx, NP + 1)  # determine indicies
+        ni_idx, np_idx = divmod(l_idx, NP + 1)  # determine indices
         if np_idx == NP:    # skip blank line between blocks
             continue
         # unpack the line and store
@@ -308,7 +308,7 @@ def read_binary(filename):
     """Read a binary SIMPSON file. See :py:func:`read`."""
     f = open(filename, 'r')  # open the file
 
-    dic = {}                # initalize dictionary of parameters
+    dic = {}                # initialize dictionary of parameters
 
     # parse the header of the file, storing parameters in dictionary, stop
     # when we hit the data line

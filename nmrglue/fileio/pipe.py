@@ -163,12 +163,12 @@ def make_uc(dic, data, dim=-1):
 
     """
     if dim == -1:
-        dim = data.ndim - 1     # last dimention
+        dim = data.ndim - 1     # last dimension
 
     fn = "FDF" + str(int(dic["FDDIMORDER"][data.ndim - 1 - dim]))
     size = float(data.shape[dim])
 
-    # check for quadrature in indirect dimentions
+    # check for quadrature in indirect dimensions
     if (dic[fn + "QUADFLAG"] != 1) and (dim != data.ndim - 1):
         size = size / 2.
         cplx = True
@@ -235,7 +235,7 @@ def guess_udic(dic, data):
     for i in range(data.ndim):
         udic[i]["size"] = data.shape[i]     # size from data shape
 
-        # determind NMRPipe axis name
+        # determine NMRPipe axis name
         fn = "FDF" + str(int(dic["FDDIMORDER"][data.ndim - 1 - i]))
 
         # directly corresponding
@@ -274,7 +274,7 @@ def guess_udic(dic, data):
 
 def create_dic(udic, datetimeobj=datetime.datetime.now()):
     """
-    Crate a NMRPipe parameter dictionary from universal dictionary
+    Create a NMRPipe parameter dictionary from universal dictionary
 
     This function does not update the dictionary keys that are unknown such as
     MIN/MAX, apodization and processing parameters, and sizes in none-current
@@ -329,7 +329,7 @@ def add_axis_to_dic(dic, adic, n):
     """
     Add an axis dictionary (adic) to a NMRPipe dictionary (dic) as axis n.
     """
-    # determind F1,F2,F3,...
+    # determine F1,F2,F3,...
     fn = ["FDF2", "FDF1", "FDF3", "FDF4"][n]
 
     # parameter directly in dictionary
@@ -430,7 +430,7 @@ def create_empty_dic():
     dic["FDSPECNUM"] = 1.
     dic["FDFILECOUNT"] = 1.
     dic["FD2DVIRGIN"] = 1.
-    # dimention ordering
+    # dimension ordering
 
     dic["FDDIMORDER1"] = 2.0
     dic["FDDIMORDER2"] = 1.0
@@ -598,7 +598,7 @@ def read_lowmem(filename):
     if order == 4:
         return read_lowmem_4D(filemask)
 
-    raise ValueError('unknown dimentionality: %s' % order)
+    raise ValueError('unknown dimensionality: %s' % order)
 
 
 # dimension specific reading
@@ -1182,7 +1182,7 @@ def write_slice_3D(filemask, dic, data, shape, slices):
 # - Untranspose if dic["TRANSPOSED"] == 1 (call pipe_proc.tp)
 # - transpose (1,2,0)
 # - ORDER 1,2,3 = 3,1,2 and array
-# - update "FDSLICECOUNT" and "FDSIZE" taking into accound complex packing
+# - update "FDSLICECOUNT" and "FDSIZE" taking into account complex packing
 # - also update "FDSPECNUM"
 # - call write_slice3D
 # - store shape as self.max_iter
@@ -1225,7 +1225,7 @@ def transpose_3D(dic, data, axes=(2, 1, 0)):
     # transpose the dictionary
     s3 = "FDDIMORDER" + str(int(3 - a1))    # 3rd axis is 0th axis in data_nd
     s2 = "FDDIMORDER" + str(int(3 - a2))    # 2nd axis is 1st axis in data_nd
-    s1 = "FDDIMORDER" + str(int(3 - a3))    # 1st axis is 3nd axis in data_nd
+    s1 = "FDDIMORDER" + str(int(3 - a3))    # 1st axis is 3rd axis in data_nd
 
     rdic["FDDIMORDER1"] = dic[s1]
     rdic["FDDIMORDER2"] = dic[s2]
@@ -1512,7 +1512,7 @@ def unappend_data(data):
 
 def append_data(data):
     """
-    Return data with last axis (-1) appeneded.
+    Return data with last axis (-1) appended.
 
     Data should be complex
 
@@ -1746,7 +1746,7 @@ class pipe_2d(fileiobase.data_nd):
         """
         Return ndarray of selected values.
 
-        (sY, sX) is a well formated tuple of slices
+        (sY, sX) is a well formatted tuple of slices
         """
         sY, sX = slices
         f = open(self.filename, 'rb')  # open the file for reading
@@ -1870,7 +1870,7 @@ class pipe_3d(fileiobase.data_nd):
         """
         Return ndarray of selected values
 
-        (sZ, sY, sX) is a well formated tuple of slices
+        (sZ, sY, sX) is a well formatted tuple of slices
         """
         sZ, sY, sX = slices
         # determine which objects should be selected
@@ -1954,7 +1954,7 @@ class pipestream_3d(fileiobase.data_nd):
         """
         Return ndarray of selected values
 
-        (sZ, sY, sX) is a well formated tuple of slices
+        (sZ, sY, sX) is a well formatted tuple of slices
         """
         sZ, sY, sX = slices
         f = open(self.filename, 'rb')  # open the file for reading
@@ -2088,7 +2088,7 @@ class pipe_4d(fileiobase.data_nd):
         """
         Return ndarray of selected values
 
-        (sZ, sY, sX) is a well formated tuple of slices
+        (sZ, sY, sX) is a well formatted tuple of slices
 
         """
         sA, sZ, sY, sX = slices
@@ -2121,7 +2121,7 @@ class pipe_4d(fileiobase.data_nd):
 class pipestream_4d(fileiobase.data_nd):
     """
     Emulate a ndarray objects without loading data into memory for low memory
-    reading of 4D NMRPipe data steams (one file 4D data sets).
+    reading of 4D NMRPipe data streams (one file 4D data sets).
 
     * slicing operations return ndarray objects.
     * can iterate over with expected results.
@@ -2181,7 +2181,7 @@ class pipestream_4d(fileiobase.data_nd):
         """
         Return ndarray of selected values
 
-        (sA, sZ, sY, sX) is a well formated tuple of slices
+        (sA, sZ, sY, sX) is a well formatted tuple of slices
 
         """
         sA, sZ, sY, sX = slices

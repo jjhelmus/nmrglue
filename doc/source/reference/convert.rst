@@ -11,7 +11,7 @@ User Information
 User Classes
 ^^^^^^^^^^^^
 
-This class is targetted for users of nmrglue.
+This class is targeted for users of nmrglue.
 
 .. autoclass:: converter
     :members:

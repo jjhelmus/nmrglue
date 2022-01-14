@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 """ Create files for tm unit test """
 
-# ignore RuntimeWarnings created by division by zero when appling apodization
+# ignore RuntimeWarnings created by division by zero when applying apodization
 import warnings
 warnings.simplefilter('ignore', RuntimeWarning)
 

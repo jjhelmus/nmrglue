@@ -23,7 +23,7 @@ NotImplemented exception:
     * ann      Fourier Analysis by Neural Net
     * ebs      EBS Reconstruction
     * mem      Maximum Entropy
-    * ml       Maximum likelyhood frequency
+    * ml       Maximum likelihood frequency
     * poly     Polynomail baseline correction
     * xyz2zyx  3D matrix transpose
     * ztp      3D matrix transpose
@@ -84,12 +84,12 @@ def make_uc(dic, data, dim=-1):
 
     """
     if dim == -1:
-        dim = data.ndim - 1  # last dimention
+        dim = data.ndim - 1  # last dimension
 
     fn = "FDF" + str(int(dic["FDDIMORDER"][data.ndim - 1 - dim]))
     size = float(data.shape[dim])
 
-    # check for quadrature in indirect dimentions
+    # check for quadrature in indirect dimensions
     if (dic[fn + "QUADFLAG"] != 1) and (dim != data.ndim - 1):
         size = size / 2.
         cplx = True
@@ -530,7 +530,7 @@ def jmod(dic, data, off=0.0, j=0.0, lb=0.0, sin=False, cos=False, c=1.0,
     j : float
         J-modulation in Hz.
     lb :
-        Expoentntial line broadening in Hz.
+        Exponential line broadening in Hz.
     sin : bool
         True for sine modulation, off parameter is ignored.
     cos : bool
@@ -1031,7 +1031,7 @@ def fsh(dic, data, dir, pts, sw=True):
 
     Notes
     -----
-    This function does not perfrom a Hilbert transfrom when data is complex,
+    This function does not perform a Hilbert transform when data is complex,
     NMRPipe's FSH function appear to.  As such the results of the
     imaginary channel differs from NMRPipe. In addition MAX/MIN value are
     slightly different than those in NMRPipe.
@@ -1085,7 +1085,7 @@ def ft(dic, data, auto=False, real=False, inv=False, alt=False, neg=False,
     data : ndarray
         Array of NMR data.
     auto : bool
-        True will choose mode automatically, not recomended.
+        True will choose mode automatically, not recommended.
     real : bool
         True to transform real-only data.
     inv : bool
@@ -1432,7 +1432,7 @@ def ps(dic, data, p0=0.0, p1=0.0, inv=False, hdr=False, noup=False, ht=False,
     hdr : bool
         True to use phasing parameters from dic.
     noup : bool
-        True to not update phasing paramters in returned ndic.
+        True to not update phasing parameters in returned ndic.
     ht : bool
         True to perform a Hilbert transform to reconstruction imaginaries
         before phasing.
@@ -1494,9 +1494,9 @@ def tp(dic, data, hyper=False, nohyper=False, auto=False, nohdr=False):
     data : ndarray
         Array of NMR data.
     hyper : bool
-        True to perfrom hypercomplex transpose.
+        True to perform hypercomplex transpose.
     nohyper : bool
-        True to supress hypercomplex transpose.
+        True to suppress hypercomplex transpose.
     auto : bool
         True to choose transpose mode automatically.
     nohdr : bool
@@ -1531,7 +1531,7 @@ def tp(dic, data, hyper=False, nohyper=False, auto=False, nohdr=False):
             # unpack complex as needed
             data = np.array(p.c2ri(data), dtype="complex64")
 
-    # update the dimentionality and order
+    # update the dimensionality and order
     dic["FDSLICECOUNT"] = data.shape[0]
     if (data.dtype == 'float32') and (nohyper is True):
         # when nohyper is True and the new last dimension was complex
@@ -1793,7 +1793,7 @@ def sol(dic, data, mode="low", fl=16, fs=1, head=0):
     data : ndarray
         Array of NMR data.
     mode : {'low'}
-        Filter mode.  Currenlty only 'low' is implemented.
+        Filter mode.  Currently only 'low' is implemented.
     fl : int
         Length of filter in points.
     fs : {1, 2, 3}
@@ -2251,7 +2251,7 @@ def mir(dic, data, mode="left", invl=False, invr=False, sw=True):
 def mult(dic, data, r=1.0, i=1.0, c=1.0, inv=False, hdr=False, x1=1.0,
          xn='default'):
     """
-    Multiple by a constant.
+    Multiply by a constant.
 
     Parameters
     ----------
@@ -2438,11 +2438,11 @@ def shuf(dic, data, mode=None):
     string  Description
     ======= ===================================
     'ri2c'  Interleave real and imaginary data.
-    'c2ri'  Seperate real and imaginary data.
+    'c2ri'  Separate real and imaginary data.
     'ri2rr' Append real and imaginary data.
     'rr2ri' Unappend real and imaginary data.
-    'exlr'  Exchange left and right halfs.
-    'rolr'  Rotate left and right halfs.
+    'exlr'  Exchange left and right halves.
+    'rolr'  Rotate left and right halves.
     'swap'  Swap real and imaginary data.
     'bswap' Byte-swap data.
     'inv'   Do nothing.
@@ -2461,7 +2461,7 @@ def shuf(dic, data, mode=None):
         dic["FDSIZE"] = data.shape[-1]
         dic["FDREALSIZE"] = data.shape[-1]
     elif mode == "c2ri":
-        # seperate real and imaginary
+        # separate real and imaginary
         data = np.array(p.c2ri(data), dtype="complex64")
         # update the dictionary
         dic["FDQUADFLAG"] = 0.0
@@ -2549,7 +2549,7 @@ def sign(dic, data, ri=False, r=False, i=False, left=False, right=False,
 
     Notes
     -----
-    All sign manupulation modes set True are applied in the order they appear
+    All sign manipulation modes set True are applied in the order they appear
     in the function parameter list.
 
     """
@@ -2692,7 +2692,7 @@ def img(dic, data, filter, dx=1.0, dy=1.0, kern=[1], conv=False, thres=None):
     ======  ==================
     median  Median
     min     Minimum
-    max     Maximim
+    max     Maximum
     amin    Absolute Minimum
     amax    Absolute Maximum
     range   Range
@@ -2707,7 +2707,7 @@ def img(dic, data, filter, dx=1.0, dy=1.0, kern=[1], conv=False, thres=None):
             thres = 0.0  # default value of 0.0
         data = p.thres(data, thres)
 
-    if conv:    # convolution with kernal
+    if conv:    # convolution with kernel
         data = p.conv(data, kern, m="wrap")
         dic = update_minmax(dic, data)
         return dic, data
@@ -2921,7 +2921,7 @@ def smo(dic, data, n=1, center=False):
 
     """
     a = p.smo(data, n=n)
-    # NMRPipe doesn't truely smooth the left edge of the vector
+    # NMRPipe doesn't truly smooth the left edge of the vector
     for i in range(n):
         a[..., i] = data[..., 0:(n + i)].sum(axis=-1) / (n + 1 + i)
     if center:
@@ -3148,11 +3148,11 @@ def lp2d(dic, data, xOrd=8, yOrd=8, xSize="default", ySize="default",
     -----
     This function applies the LP2D procedure as described in:
     G. Zhu and A. Bax, Journal of Magnetic Resonance, 1992, 98, 192-199.
-    to the data matrix. The parameters and algorith used in NMRPipe's LP2D
+    to the data matrix. The parameters and algorithm used in NMRPipe's LP2D
     function are not well documented and are not replicated here.
 
     """
-    # determind how many points to predict in each dimension
+    # determine how many points to predict in each dimension
     if xSize == "default":
         xpred = data.shape[1]
     else:
@@ -3234,7 +3234,7 @@ def mac(dic, data, macro=None, noRd=False, noWr=False, all=False, **kwargs):
     is to act as a dispatch mechanism to other Python code so that the
     look and feel of nmrPipe is maintained.  The -var and -str parameters
     are not used, as they can be passed directly to the macro as keyword
-    arguements.
+    arguments.
     """
     if macro is None:
         return dic, data

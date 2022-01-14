@@ -625,7 +625,7 @@ def read_procs_file(dir='.', procs_files=None):
                     procs_files.append(pf)
 
     else:
-        # proc paths were explicitely given
+        # proc paths were explicitly given
         # just check if they exists
 
         for i, f in enumerate(procs_files):
@@ -982,7 +982,7 @@ def guess_shape(dic):
     elif aq_mod == 1 or aq_mod == 3:
         cplex = True
     else:
-        raise ValueError("Unknown Aquisition Mode")
+        raise ValueError("Unknown Acquisition Mode")
 
     # file size
     try:
@@ -1046,7 +1046,7 @@ def guess_shape(dic):
         shape[1] = fsize // (shape[3] * shape[2] * 4)
         shape[0] = fsize // (shape[3] * shape[2] * shape[1] * 4)
 
-    # if there in no pulse program parameters in dictionary return currect
+    # if there in no pulse program parameters in dictionary return current
     # shape after removing zeros
     if "pprog" not in dic or "loop" not in dic["pprog"]:
         return tuple([int(i) for i in shape if i > 1]), cplex
@@ -1358,7 +1358,7 @@ def guess_shape_and_submatrix_shape(dic):
     """
     Guess the data shape and the shape of the processed data submatrix.
     """
-    if 'procs' not in dic:  # unknow dimensionality and shapes
+    if 'procs' not in dic:  # unknown dimensionality and shapes
         return None, None
 
     procs = dic['procs']
@@ -1610,7 +1610,7 @@ def write_binary(filename, dic, data, overwrite=False, big=True,
     # open the file for writing
     f = fileiobase.open_towrite(filename, overwrite=overwrite)
 
-    # convert objec to an array if it is not already one...
+    # convert object to an array if it is not already one...
     if not isinstance(data, np.ndarray):
         data = np.array(data)
 
@@ -1737,7 +1737,7 @@ class bruker_nd(fileiobase.data_nd):
 
         slices is a well formatted tuple of slices
         """
-        # seperate the last slice from the first slices
+        # separate the last slice from the first slices
         lslice = slices[-1]
         fslice = slices[:-1]
 
@@ -1745,7 +1745,7 @@ class bruker_nd(fileiobase.data_nd):
         lfshape = self.fshape[-1]
         ffshape = self.fshape[:-1]
 
-        # find the output size and make a in/out nd interator
+        # find the output size and make a in/out nd iterator
         osize, nd_iter = fileiobase.size_and_ndtofrom_iter(ffshape, fslice)
         osize.append(len(range(lfshape)[lslice]))
 
@@ -1977,7 +1977,7 @@ def remove_digital_filter(dic, data, truncate=True, post_proc=False):
         This typically produces a better looking spectrum but may remove
         useful data.  False uses a non-truncated phase.
     post_proc : bool, optional
-        True if the digitial filter is to be removed post processing, i.e after
+        True if the digital filter is to be removed post processing, i.e after
         fourier transformation. The corrected FID will not be returned, only a
         corrected spectrum in the frequency dimension will be returned
 
@@ -2032,7 +2032,7 @@ def rm_dig_filter(
         This typically produces a better looking spectrum but may remove useful
         data.  False uses a non-truncated grpdly value.
     post_proc : bool, optional
-        True if the digitial filter is to be removed post processing, i.e after
+        True if the digital filter is to be removed post processing, i.e after
         fourier transformation. The corrected time domain data will not be
         returned, only the corrected spectrum in the frequency dimension will
         be returned
@@ -2061,7 +2061,7 @@ def rm_dig_filter(
     # 1. FFT the data
     # 2. Apply a negative first order phase to the data.  The phase is
     #    determined by the GRPDLY parameter or found in the DSPFVS/DECIM
-    #    loopup table.
+    #    lookup table.
     # 3. Inverse FFT
     # (these first three steps are a frequency shift with a FFT first, fsh2)
     # 4. Round the applied first order phase up by two integers. For example
@@ -2208,7 +2208,7 @@ def parse_jcamp_line(line, f):
         value = []
         rline = line[line.index(")") + 1:]
 
-        # extract value from remainer of line
+        # extract value from remainder of line
         for t in rline.split():
             value.append(parse_jcamp_value(t))
 
@@ -2419,7 +2419,7 @@ def read_pprog(filename):
     # open the file
     f = open(filename, 'r')
 
-    # initilize lists and dictionaries
+    # initialize lists and dictionaries
     var = dict()
     loop = []
     incr = [[]]
@@ -2427,7 +2427,7 @@ def read_pprog(filename):
     ph_extra = [[]]
 
     # loop over lines in pulseprogram looking for loops, increment,
-    # assigments and phase commands
+    # assignments and phase commands
     for line in f:
 
         # split line into comment and text and strip leading/trailing spaces
@@ -2450,7 +2450,7 @@ def read_pprog(filename):
             # print(line,"--Blank, Comment or Include")
             continue
 
-        # see if we have quotes and have an assigment
+        # see if we have quotes and have an assignment
         # syntax "foo=bar"
         # add foo:bar to var dictionary
         if "\"" in text:

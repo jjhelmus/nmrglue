@@ -408,7 +408,7 @@ def open_towrite(filename, overwrite=False, mode='wb'):
     Open filename for writing and return file object
 
     Function checks if file exists (and raises IOError if overwrite=False) and
-    creates necessary directiories as needed.
+    creates necessary directories as needed.
     """
     # check if file exists and overwrite if False
     if os.path.exists(filename) and (overwrite is False):
@@ -494,7 +494,7 @@ def index2trace_opp(shape, index):
     # deal with the phase component
     phases = [v % 2 for v in index]
     nphase = index2trace_flat([2] * n, phases[::-1])
-    # deal with the remainer
+    # deal with the remainder
     pindex = [v // 2 for v in index]
     pshape = [i // 2 for i in shape]
     nbase = index2trace_flat(pshape, pindex)
@@ -524,7 +524,7 @@ def index2trace_reg(shape, index):
     # deal with the phase component
     phases = [v % 2 for v in index]
     nphase = index2trace_flat([2] * n, phases)
-    # deal with the remainer
+    # deal with the remainder
     pindex = [v // 2 for v in index]
     pshape = [i // 2 for i in shape]
     nbase = index2trace_flat(pshape, pindex)
@@ -656,7 +656,7 @@ class data_nd(object):
                 else:
                     rlist[i] = slice(v, v + 1, 1)
 
-        # pad the list with additional dimentions
+        # pad the list with additional dimensions
         for i in range(len(rlist), self.ndim):
             rlist.append(slice(None))
 

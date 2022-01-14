@@ -10,7 +10,7 @@ in a 2D NMR spectrum
 Instructions
 ------------
 
-1. Run integrate_2d.py to intergrate the spectrum in nmrpipe_2d/test.ft2 given
+1. Run integrate_2d.py to integrate the spectrum in nmrpipe_2d/test.ft2 given
 limits in `limits.in`, storing the results in `volumes.out`
 
 Notes

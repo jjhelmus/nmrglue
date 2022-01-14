@@ -156,7 +156,7 @@ def fit_spectrum(spectrum, lineshapes, params, amps, bounds, ampbounds,
     ----------
 
     spectrum : array_like
-        NMR data. ndarray or emulated type, must be slicable.
+        NMR data. ndarray or emulated type, must be sliceable.
     lineshape :list
         List of lineshapes by label (str) or a lineshape class. See
         :py:func:`fit_NDregion` for details.
@@ -187,7 +187,7 @@ def fit_spectrum(spectrum, lineshapes, params, amps, bounds, ampbounds,
         True to estimate errors for each lineshape parameter and amplitude.
     verb : bool, optional
         True to print a summary of each region fit, False (the default)
-        supresses all printing.
+        suppresses all printing.
     **kw : optional
         Additional keywords passed to the scipy.optimize.leastsq function.
 
@@ -203,7 +203,7 @@ def fit_spectrum(spectrum, lineshapes, params, amps, bounds, ampbounds,
     amp_err : list, only returned when error_flag is True
         Estimated peak amplitude errors.
     iers : list
-        List of interger flag from scipy.optimize.leastsq indicating if the
+        List of integer flag from scipy.optimize.leastsq indicating if the
         solution was found for a given peak.  1,2,3,4 indicates that a
         solution was found. Other indicate an error.
 
@@ -323,7 +323,7 @@ def fit_NDregion(region, lineshapes, params, amps, bounds=None,
         Notes for details.
     params : list
         P-length list (P is the number of peaks in region) of N-length lists
-        of tuples where each each tuple is the optimiztion starting parameters
+        of tuples where each each tuple is the optimization starting parameters
         for a given peak and dimension lineshape.
     amps : list
         P-length list of amplitudes.
@@ -360,7 +360,7 @@ def fit_NDregion(region, lineshapes, params, amps, bounds=None,
     amp_err : list, only returned when error_flag is True
         Estimated peak amplitude errors.
     iers : list
-        List of interger flag from scipy.optimize.leastsq indicating if the
+        List of integer flag from scipy.optimize.leastsq indicating if the
         solution was found for a given peak.  1,2,3,4 indicates that a
         solution was found. Other indicate an error.
 
@@ -413,7 +413,7 @@ def fit_NDregion(region, lineshapes, params, amps, bounds=None,
         else:
             ls_classes.append(l)
 
-    # determind the number of parameter in each dimension
+    # determine the number of parameter in each dimension
     dim_nparam = [c.nparam(l) for l, c in zip(shape, ls_classes)]
 
     # parse params
@@ -598,7 +598,7 @@ def sim_NDregion(shape, lineshapes, params, amps):
         else:
             ls_classes.append(l)
 
-    # determind the number of parameters in each dimension.
+    # determine the number of parameters in each dimension.
     dim_nparam = [c.nparam(l) for l, c in zip(shape, ls_classes)]
 
     # parse the params parameter
@@ -664,7 +664,7 @@ def split_list(l, N):
 
 def calc_errors(region, ls_classes, p, cov, n_peaks, wmask):
     """
-    Calcuate the parameter errors from the standard errors of the estimate.
+    Calculate the parameter errors from the standard errors of the estimate.
 
     Parameters
     ----------
@@ -737,7 +737,7 @@ def s_single_NDregion(p, shape, ls_classes):
     """
     Simulate an N-dimensional region with a single peak.
 
-    This function is called repeatly by s_NDregion to build up a full
+    This function is called repeatedly by s_NDregion to build up a full
     simulated region.
 
     Parameters
@@ -779,7 +779,7 @@ def f_NDregion(region, ls_classes, p0, p_bounds, n_peaks, wmask, **kw):
     """
     Fit an N-dimensional regions containing one or more peaks.
 
-    Region is fit using a contrained Levenberg-Marquard optmization algorithm.
+    Region is fit using a constrained Levenberg-Marquard optimization algorithm.
     See :py:func:`fit_NDregion` for additional documentation.
 
     Parameters

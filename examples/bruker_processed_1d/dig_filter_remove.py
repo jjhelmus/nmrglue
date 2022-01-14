@@ -24,7 +24,7 @@ bruker_frq = ng.bruker.read_pdata(procdata_dir)[1][::-1]
 pipe_precorr_frq = ng.pipe.read('pre.ft')[1][::-1]
 pipe_precorr_frq = ng.proc_autophase.autops(pipe_precorr_frq, 'peak_minima')
 
-#---data processed using NMRPipe (post-procesing)
+#---data processed using NMRPipe (post-processing)
 pipe_postcorr_frq = ng.pipe.read('post.ft')[1][::-1]
 pipe_postcorr_frq = ng.proc_autophase.autops(pipe_postcorr_frq, 'acme') 
 

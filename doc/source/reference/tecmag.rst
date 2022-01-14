@@ -18,8 +18,8 @@ User Functions
     guess_udic
 
 
-Developer Infomation
---------------------
+Developer Information
+---------------------
 
 .. include:: ../../../nmrglue/fileio/tecmag.py
     :start-line: 4

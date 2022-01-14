@@ -29,7 +29,7 @@ def pick(data, pthres, nthres=None, msep=None, algorithm='connected',
         Minimum peak height for negative peaks (typically a negative value).
         None to not detect negative peaks.
     msep : tuple of ints, optional
-        N-tuple of minimum peak seperations along each axis. Must be provided
+        N-tuple of minimum peak separations along each axis. Must be provided
         if algorithm is 'thresh' or 'thresh-fast'.
     algorithm : {'thres', thresh-fast', 'downward', 'connected'}, optional
         Peak picking algorithm to use.  Default is 'connected'.
@@ -255,7 +255,7 @@ def clusters(data, locations, pthres, nthres, d_struc=None, l_struc=None,
     locations : list
         List of peak locations.
     pthres : float
-        Postive peak threshold. None for no postive peaks.
+        Positive peak threshold. None for no positive peaks.
     nthres : float
         Negative peak threshold. None for no negative peaks.
     d_struc : ndarray, optional
@@ -276,7 +276,7 @@ def clusters(data, locations, pthres, nthres, d_struc=None, l_struc=None,
     # make a binary array of regions above/below the noise thresholds
     if pthres is None:  # negative peaks only
         input = data < nthres
-    elif nthres is None:  # postive peaks only
+    elif nthres is None:  # positive peaks only
         input = data > pthres
     else:               # both positive and negative
         input = np.bitwise_or(data < nthres, data > pthres)
@@ -416,7 +416,7 @@ def find_all_thres(data, thres, msep, find_segs=False):
     thres : float
         Threshold value for minimum peak height
     msep : tuple
-        Tuple of minimum peak seperations along each axis.
+        Tuple of minimum peak separations along each axis.
     find_segs : bool, optional
         True  to find segments and return a list of slices which select that
         segment.  False performs no segmentation discovery.
@@ -431,7 +431,7 @@ def find_all_thres(data, thres, msep, find_segs=False):
 
     """
     locations = []  # create an empty list of peak locations
-    wsize = tuple([2 * i + 1 for i in msep])  # window size is 2*seperation+1
+    wsize = tuple([2 * i + 1 for i in msep])  # window size is 2*separation+1
 
     # loop over the windows
     for idx, s in ndwindow_index(data.shape, wsize):
@@ -455,7 +455,7 @@ def find_all_nthres(data, thres, msep, find_segs=False):
 
     """
     locations = []  # create an empty list of peak locations
-    wsize = tuple([2 * i + 1 for i in msep])  # window size is 2*seperation+1
+    wsize = tuple([2 * i + 1 for i in msep])  # window size is 2*separation+1
 
     # loop over the windows
     for idx, s in ndwindow_index(data.shape, wsize):
@@ -473,7 +473,7 @@ def find_all_thres_fast(data, thres, msep, find_segs=False):
     """
     Fast version of find_all_thres. See :py:func:`find_all_thres`.
     """
-    wsize = tuple([2 * i + 1 for i in msep])  # window size is 2*seperation+1
+    wsize = tuple([2 * i + 1 for i in msep])  # window size is 2*separation+1
 
     # find local maxima mask
     mx = ndimage.maximum_filter(data, size=wsize, mode='constant') == data
@@ -496,7 +496,7 @@ def find_all_nthres_fast(data, thres, msep, find_segs=False):
     """
     Fast version of find_all_nthres_fast. See :py:func:`find_all_thres`.
     """
-    wsize = tuple([2 * i + 1 for i in msep])  # window size is 2*seperation+1
+    wsize = tuple([2 * i + 1 for i in msep])  # window size is 2*separation+1
 
     # find local maxima mask
     mn = ndimage.minimum_filter(data, size=wsize, mode='constant') == data

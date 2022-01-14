@@ -50,7 +50,7 @@ def make_uc(dic, data, dim=-1):
 
     """
     if dim == -1:
-        dim = data.ndim - 1  # last dimention
+        dim = data.ndim - 1  # last dimension
 
     wdic = dic["w" + str(int(1 + dim))]
 
@@ -127,7 +127,7 @@ def create_dic(udic, datetimeobj=datetime.datetime.now(), user='user'):
     """
     dic = dict()
 
-    # determind shape of array
+    # determine shape of array
     shape = [udic[k]["size"] for k in range(udic["ndim"])]
 
     # populate the dictionary
@@ -232,7 +232,7 @@ def calc_tshape(shape, kbyte_max=128):
         Shape of tile.
 
     """
-    # Algorithm divides each dimention by 2 until under kbyte_max tile size.
+    # Algorithm divides each dimension by 2 until under kbyte_max tile size.
     s = np.array(shape, dtype="int")
     i = 0
     while (s.prod() * 4. / 1024. > kbyte_max):
@@ -269,7 +269,7 @@ def read(filename):
     # open the file
     f = open(filename, 'rb')
 
-    # determind the dimentionality
+    # determine the dimensionality
     n = fileheader2dic(get_fileheader(f))["naxis"]
     f.close()
 
@@ -280,7 +280,7 @@ def read(filename):
     if n == 4:
         return read_4D(filename)
 
-    raise ValueError("unknown dimentionality: %s" % n)
+    raise ValueError("unknown dimensionality: %s" % n)
 
 
 def read_lowmem(filename):
@@ -302,13 +302,13 @@ def read_lowmem(filename):
     See Also
     --------
     read : Read a Sparky file.
-    write_lowmem : Write a Sparky file using mimimal memory.
+    write_lowmem : Write a Sparky file using minimal memory.
 
     """
     # open the file
     f = open(filename, 'rb')
 
-    # determind the dimentionality
+    # determine the dimensionality
     n = fileheader2dic(get_fileheader(f))["naxis"]
     f.close()
 
@@ -317,7 +317,7 @@ def read_lowmem(filename):
     if n == 3:
         return read_lowmem_3D(filename)
 
-    raise ValueError("unknown dimentionality: %s" % n)
+    raise ValueError("unknown dimensionality: %s" % n)
 
 
 def write(filename, dic, data, overwrite=False):
@@ -349,7 +349,7 @@ def write(filename, dic, data, overwrite=False):
     if n == 3:
         return write_3D(filename, dic, data, overwrite=overwrite)
 
-    raise ValueError("unknown dimentionality: %s" % n)
+    raise ValueError("unknown dimensionality: %s" % n)
 
 
 def write_lowmem(filename, dic, data, overwrite=False):
@@ -371,7 +371,7 @@ def write_lowmem(filename, dic, data, overwrite=False):
     See Also
     --------
     write : Write a Sparky file.
-    read_lowmem : Read a Sparky file using mimimal amounts of memory.
+    read_lowmem : Read a Sparky file using minimal amounts of memory.
 
     """
     # write also writes tile by tile...
@@ -825,7 +825,7 @@ def read_savefile(filename, spectrum_file=None):
     """
     Reads in a Sparky .save file and the corresponding spectrum (.ucsf)
     file. In addition to the usual dictionary contents that come with
-    a .ucsf file, these additinal dictionary keys are created with the content
+    a .ucsf file, these additional dictionary keys are created with the content
     from .save file: "spectrum", "view", "user" and "ornament". The together
     contain all edits and annotations. By default, it tries to read in
     the spectrum file given in the .save file (but this fails many times due
@@ -900,7 +900,7 @@ class sparky_2d(fileiobase.data_nd):
     filename : str
         Filename of 2D Sparky file.
     order : tuple, optional
-        Order of axes against file.  None is equivelent to (0, 1).
+        Order of axes against file.  None is equivalent to (0, 1).
 
     """
 
@@ -985,7 +985,7 @@ class sparky_2d(fileiobase.data_nd):
                 minY = iY * self.lentY
                 maxY = (iY + 1) * self.lentY
 
-                # determind what elements are needed from this tile
+                # determine what elements are needed from this tile
                 XinX = [i for i in gX if maxX > i >= minX]  # values in gX
                 XinT = [i - minX for i in XinX]  # tile index values
                 XinO = [gX.index(i) for i in XinX]  # output indexes
@@ -1133,7 +1133,7 @@ class sparky_3d(fileiobase.data_nd):
                     minZ = iZ * self.lentZ
                     maxZ = (iZ + 1) * self.lentZ
 
-                    # determind what elements are needed from this tile
+                    # determine what elements are needed from this tile
                     XinX = [i for i in gX if maxX > i >= minX]  # values in gX
                     XinT = [i - minX for i in XinX]  # tile index values
                     XinO = [gX.index(i) for i in XinX]  # output indexes
@@ -1199,7 +1199,7 @@ def get_tilen(f, n_tile, tw_tuple):
     position is later needed.
 
     """
-    # determind the size of the tile in bytes
+    # determine the size of the tile in bytes
     tsize = 4
     for i in tw_tuple:
         tsize = tsize * i
@@ -1230,7 +1230,7 @@ def untile_data4D(data, tile_size, data_size):
     lentA, lentZ, lentY, lentX = tile_size
     lenA, lenZ, lenY, lenX = data_size
 
-    # determind the number of tiles in data
+    # determine the number of tiles in data
     ttX = int(np.ceil(lenX / float(lentX)))  # total tiles in X dim
     ttY = int(np.ceil(lenY / float(lentY)))  # total tiles in Y dim
     ttZ = int(np.ceil(lenZ / float(lentZ)))  # total tiles in Z dim
@@ -1357,7 +1357,7 @@ def find_tilen_2d(data, ntile, tile_size):
     Xt = ntile % ttX
     Yt = int(np.floor(ntile / ttX))
 
-    # dimention limits
+    # dimension limits
     Xmin = int(Xt * lentX)
     Xmax = int((Xt + 1) * lentX)
 
@@ -1394,7 +1394,7 @@ def tile_data2d(data, tile_size):
 
     """
     lentY, lentX = tile_size
-    # determind the number of tiles in data
+    # determine the number of tiles in data
     ttX = int(np.ceil(data.shape[1] / float(lentX)))  # total tiles in X dim
     ttY = int(np.ceil(data.shape[0] / float(lentY)))  # total tiles in Y dim
     tt = ttX * ttY  # total number of tiles
@@ -1433,7 +1433,7 @@ def untile_data2D(data, tile_size, data_size):
     """
     lentY, lentX = tile_size
     lenY, lenX = data_size
-    # determind the number of tiles in data
+    # determine the number of tiles in data
     ttX = int(np.ceil(lenX / float(lentX)))  # total tiles in X dim
     ttY = int(np.ceil(lenY / float(lentY)))  # total tiles in Y dim
     tt = ttX * ttY
@@ -1504,7 +1504,7 @@ def find_tilen_3d(data, ntile, tile_size):
     Yt = int(np.floor(ntile / ttX)) % ttY
     Zt = int(np.floor(ntile / (ttX * ttY)))
 
-    # dimention limits
+    # dimension limits
     Xmin = int(Xt * lentX)
     Xmax = int((Xt + 1) * lentX)
 
@@ -1544,7 +1544,7 @@ def tile_data3d(data, tile_size):
 
     """
     lentZ, lentY, lentX = tile_size
-    # determind the number of tiles in data
+    # determine the number of tiles in data
     ttX = int(np.ceil(data.shape[2] / float(lentX)))  # total tiles in X dim
     ttY = int(np.ceil(data.shape[1] / float(lentY)))  # total tiles in Y dim
     ttZ = int(np.ceil(data.shape[0] / float(lentZ)))  # total tiles in Z dim
@@ -1585,7 +1585,7 @@ def untile_data3D(data, tile_size, data_size):
     lentZ, lentY, lentX = tile_size
     lenZ, lenY, lenX = data_size
 
-    # determind the number of tiles in data
+    # determine the number of tiles in data
     ttX = int(np.ceil(lenX / float(lentX)))  # total tiles in X dim
     ttY = int(np.ceil(lenY / float(lentY)))  # total tiles in Y dim
     ttZ = int(np.ceil(lenZ / float(lentZ)))  # total tiles in Z dim
@@ -1629,7 +1629,7 @@ def get_fileheader(f):
     Reads the 180 byte file header of a Sparky file
 
     """
-    # file header as descriped in ucsffile.cc of sparky source
+    # file header as described in ucsffile.cc of sparky source
     # header is packed as follows:
     # ident(10s),naxis(c),ncomponents(c),encoding(c),version(c)
     # owner(9s),date(26s),comment(80s),pad(3x),seek_pos(l),scratch(40s),

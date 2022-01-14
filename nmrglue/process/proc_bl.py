@@ -29,7 +29,7 @@ def base(data, nl, nw=0):
     Returns
     -------
     ndata : ndarray
-        NMR data with first order baseline correction appied.  For 2D data
+        NMR data with first order baseline correction applied.  For 2D data
         baseline correction is applied for each trace along the last
         dimension.
 
@@ -144,7 +144,7 @@ def med(data, mw=24, sf=16, sigma=5.0):
     """
     Median baseline correction.
 
-    Algorith described in: Friedrichs, M.S. JBNMR 1995 5 147-153.
+    Algorithm described in: Friedrichs, M.S. JBNMR 1995 5 147-153.
 
     Parameters
     ----------
@@ -316,7 +316,7 @@ def sol_general(data, filter, w=16, mode='same'):
         which specific the filter, e.g. sol_boxcar.
     w : int, optional
         Filter length.  Not used here but is used in solent filter functions
-        which specificy the filter, e.g. sol_boxcar.
+        which specify the filter, e.g. sol_boxcar.
     mode : {'valid', 'same', 'full'}, optional
         Convolution mode, 'same' should be used.
 
@@ -395,7 +395,7 @@ def poly_fd(data):
     #
     # applies a polynomial baseline correction of the order specified by
     # argument -ord via an automated base-line detection method when used
-    # with argument -auto.  The defauly is a forth-order polynomial. The
+    # with argument -auto.  The default is a forth-order polynomial. The
     # automated base-line mode works as follows: a copy of a given vector is
     # divided into a series of adjacent sections, typically eight points wide.
     # The average value of each section is subtracted from all points in that
@@ -420,5 +420,5 @@ def poly_fd(data):
     # 6. Classification threshold set to 1.5*std
     # 7. Qualify each block in centered vector as baseline only
     #    (its std < thres) or not (std > thres)
-    # 8. Fit baseline only points to polynomial and substract off
+    # 8. Fit baseline only points to polynomial and subtract off
     raise NotImplementedError

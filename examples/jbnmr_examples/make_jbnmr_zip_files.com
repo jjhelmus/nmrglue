@@ -32,7 +32,7 @@ s4_2d_plotting/test.ft2
 mv jbnmr_s4_2d_plotting.zip ./zip_files/.
 
 
-# Listing S5 seperate interleaved
+# Listing S5 separate interleaved
 zip jbnmr_s5_seperate_interleaved.zip               \
 s5_seperate_interleaved/seperate.py                 \
 s5_seperate_interleaved/README.rst                  \
@@ -44,7 +44,7 @@ s5_seperate_interleaved/arrayed_data.fid/fid
 
 mv jbnmr_s5_seperate_interleaved.zip ./zip_files/.
 
-# Listing S6 seperate inner_phase
+# Listing S6 separate inner_phase
 zip jbnmr_s6_seperate_inner_phase.zip               \
 s6_seperate_inner_phase/seperate.py                 \
 s6_seperate_inner_phase/README.rst                  \

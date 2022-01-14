@@ -19,7 +19,7 @@ def read(filename, data_dtype=None):
         Name of nmrML file to read.
     data_dtype : str, optional
         NumPy data type of the data. None, the default, will determine this
-        data type from the infomation in the file. Occasionally this
+        data type from the information in the file. Occasionally this
         information is incorrect and this argument can be used to explicitly
         supply this information.
 

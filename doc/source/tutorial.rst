@@ -313,7 +313,7 @@ reference your data in more common NMR units nmrglue provides the
     >>> uc1 = ng.pipe.make_uc(dic,data,dim=1)
 
 We now have unit conversion objects for both axes in the 2D spectrum.  We can
-use these objects to determined the nearest point for a given unit:
+use these objects to determine the nearest point for a given unit:
 
     >>> uc0("100.0 ppm")
     1397

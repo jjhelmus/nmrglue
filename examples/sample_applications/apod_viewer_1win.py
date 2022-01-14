@@ -119,11 +119,11 @@ class ParameterPanel(wx.Panel):
         self.size_2.SetValue(str(points))
 
     def ApodChoose(self, event):
-        """ Set the choosen apodization type """
+        """ Set the chosen apodization type """
         self.InitApod(apod_list[self.qName2.GetCurrentSelection()])
 
     def InitApod(self, qName):
-        """ Set the default parameter for a choosen apodization window """
+        """ Set the default parameter for a chosen apodization window """
         
         if qName == "SP":
             self.q1_1.Enable(True)
@@ -259,7 +259,7 @@ class CanvasFrame(wx.Frame):
     drawn and the parameter panel where apodization parameter can be set.
     """
     def __init__(self):
-        """ Initializate the frame """
+        """ Initialize the frame """
         wx.Frame.__init__(self, None, -1, 'Apodization Viewer')
 
         self.SetBackgroundColour(wx.NamedColor("WHITE"))

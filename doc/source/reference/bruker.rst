@@ -11,7 +11,7 @@ User Information
 User Functions
 ^^^^^^^^^^^^^^
 
-These are functions which are targetted for users of nmrglue.
+These are functions which are targeted for users of nmrglue.
 
 .. autosummary::
     :toctree: generated/
@@ -38,8 +38,8 @@ These are functions which are targetted for users of nmrglue.
 
 
 
-Developer Infomation
---------------------
+Developer Information
+---------------------
 
 .. include:: ../../../nmrglue/fileio/bruker.py
     :start-line: 11

@@ -11,7 +11,7 @@ this example a three 3D solid state NMR spectra are visualized as strip plots.
 Instructions
 ------------
 
-Process each of the three 3D spectra by decending into the appopiate directory
+Process each of the three 3D spectra by descending into the appopiate directory
 and executing the `fid.com` followed by the `xy.com` NMRPipe scripts.
 
 

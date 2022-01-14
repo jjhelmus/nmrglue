@@ -6,7 +6,7 @@ from __future__ import print_function
 
 import numpy as np
 
-# default tolerences
+# default tolerances
 RTOL = 1.001e-01
 ATOL = 1.001e-01
 DTOL = 5.001e-01

@@ -221,7 +221,7 @@ def read(dir=".", fid_file="fid", procpar_file="procpar", read_blockhead=False,
         which is typically fine for most NMR experiments. See below for
         additional details.
     as_2d : bool, optional
-        True to return data as a 2D array ignorning the shape and torder
+        True to return data as a 2D array ignoring the shape and torder
         parameters.
 
     Returns
@@ -256,7 +256,7 @@ def read(dir=".", fid_file="fid", procpar_file="procpar", read_blockhead=False,
 
     See Also
     --------
-    read_lowmem : Read Agilent/Varian files using mimimal amounts of memory.
+    read_lowmem : Read Agilent/Varian files using minimal amounts of memory.
     write : Write Agilent/Varian files.
 
     """
@@ -319,7 +319,7 @@ def read_lowmem(dir=".", fid_file="fid", procpar_file="procpar",
     See Also
     --------
     read : Read Agilent/Varian files.
-    write_lowmem : Write Agilent/Varian files using mimimal memory
+    write_lowmem : Write Agilent/Varian files using minimal memory
 
     """
     if os.path.isdir(dir) is False:
@@ -375,7 +375,7 @@ def write(dir, dic, data, fid_file="fid", procpar_file="procpar",
 
     See Also
     --------
-    write_lowmem : Write Agilent/Varian files using mimimal memory
+    write_lowmem : Write Agilent/Varian files using minimal memory
     read : Read Agilent/Varian files.
 
     """
@@ -395,7 +395,7 @@ def write(dir, dic, data, fid_file="fid", procpar_file="procpar",
 def write_lowmem(dir, dic, data, fid_file="fid", procpar_file="procpar",
                  torder=None, repack=False, overwrite=False):
     """
-    Write Agilent/Varian files to a directory using mimimal amounts of memory.
+    Write Agilent/Varian files to a directory using minimal amounts of memory.
 
     Parameters
     ----------
@@ -619,7 +619,7 @@ def order_data(data, torder):
     if torder == 'flat' or torder == 'f':
         return data.reshape(nshape)
 
-    # make an emprt array to hold the 2D disk formated data matrix
+    # make an emprt array to hold the 2D disk formatted data matrix
     ndata = np.empty(nshape, dtype=data.dtype)
 
     # index2tuple converter
@@ -735,7 +735,7 @@ def read_fid(filename, shape=None, torder='flat', as_2d=False,
 def read_fid_lowmem(filename, shape=None, torder='flat', as_2d=False,
                     read_blockhead=False):
     """
-    Read a Agilent/Varian binary (fid) file using mimimal amounts of memory.
+    Read a Agilent/Varian binary (fid) file using minimal amounts of memory.
 
     Parameters
     ----------
@@ -894,7 +894,7 @@ def write_fid(filename, dic, data, torder='flat', repack=False, correct=True,
 
     See Also
     --------
-    write_fid_lowmem : Write a Agilent/Varian binary file using mimimal
+    write_fid_lowmem : Write a Agilent/Varian binary file using minimal
         amounts of memory
     write : Write Agilent/Varian files to a directory.
 
@@ -928,7 +928,7 @@ def write_fid(filename, dic, data, torder='flat', repack=False, correct=True,
     # write the fileheader to file
     put_fileheader(f, dic2fileheader(dic))
 
-    # determind data type
+    # determine data type
     dt = find_dtype(dic)
 
     if "blockheader" in dic and len(dic["blockheader"]) == data.shape[0]:
@@ -955,7 +955,7 @@ def write_fid(filename, dic, data, torder='flat', repack=False, correct=True,
 def write_fid_lowmem(filename, dic, data, torder='f', repack=False,
                      overwrite=False):
     """
-    Write a Agilent/Varian binary (fid) file using mimimal amounts of memory.
+    Write a Agilent/Varian binary (fid) file using minimal amounts of memory.
 
     File is written trace by trace with each trace read from data before
     writing to reduce memory usage.
@@ -1013,7 +1013,7 @@ def write_fid_lowmem(filename, dic, data, torder='f', repack=False,
     # write the fileheader to file
     put_fileheader(f, dic2fileheader(dic))
 
-    # determind data type
+    # determine data type
     dt = find_dtype(dic)
 
     if "blockheader" in dic and len(dic["blockheader"]) == dic["nblocks"]:
@@ -1243,7 +1243,7 @@ def get_trace(f, pts, dt):
     """
     Read trace of pts points of dtype dt from Agilent/Varian binary file
 
-    Endiness should be handled by dt.
+    Endianness should be handled by dt.
     """
     bsize = pts * dt.itemsize  # number of bytes in trace
     return np.frombuffer(f.read(bsize), dt)
@@ -1253,7 +1253,7 @@ def get_fileheader(f):
     """
     Unpack file header parameters into a list.
 
-    Reads the 32-byte file header from file and unpacks into a list.  Endiness
+    Reads the 32-byte file header from file and unpacks into a list.  Endianness
     is corrected as needed.
 
     Returned list contents:
@@ -1281,7 +1281,7 @@ def get_blockheader(f):
     """
     Unpack block header parameters into a list.
 
-    Reads the 28-byte block header from f and unpacks into a list.  Endiness
+    Reads the 28-byte block header from f and unpacks into a list.  Endianness
     is corrected as needed.
 
     Returned list contents:
@@ -1319,7 +1319,7 @@ def get_hyperheader(file):
     """
     Unpack hypercomplex header parameters to a list.
 
-    Reads the 28-bytes block header from file and unpacks into a list. Endiness
+    Reads the 28-bytes block header from file and unpacks into a list. Endianness
     is corrected as needed.
 
     Returned list contents:
@@ -1834,7 +1834,7 @@ def uninterleave_data(data):
     ==========  ============
 
     """
-    # determind the output dtype
+    # determine the output dtype
     rdt = data.dtype.name
 
     if rdt == 'int16' or rdt == "float32":
@@ -2063,7 +2063,7 @@ class fid_nd(fileiobase.data_nd):
 
         slices is a well formatted tuple of slices
         """
-        # seperate the last slice from the first slices
+        # separate the last slice from the first slices
         lslice = slices[-1]
         fslice = slices[:-1]
 
@@ -2071,7 +2071,7 @@ class fid_nd(fileiobase.data_nd):
         lfshape = self.fshape[-1]
         ffshape = self.fshape[:-1]
 
-        # find the output size and make a in/out nd interator
+        # find the output size and make a in/out nd iterator
         osize, nd_iter = fileiobase.size_and_ndtofrom_iter(ffshape, fslice)
         osize.append(len(range(lfshape)[lslice]))
 
@@ -2089,7 +2089,7 @@ class fid_nd(fileiobase.data_nd):
                 # seek to the correct place in the file
                 f.seek(ntrace * self.bbytes + 32)
 
-                # retrive trace and save to output
+                # retrieve trace and save to output
                 trace = get_block(f, self.pts, self.nbh, self.fdtype, False)
                 trace = uninterleave_data(trace)
                 out[out_index] = trace[lslice]

@@ -56,7 +56,7 @@ def lp(data, pred=1, slice=slice(None), order=8, mode="f", append="after",
     bad_roots : {'incr', 'decr', None, 'auto'}
         Type of roots which to consider bad and to stabilize.  Option are those
         with increasing signals 'incr' or decreasing signals 'decr'.  None will
-        perform no root stabiliting.  The default ('auto') will set the
+        perform no root stabilizing.  The default ('auto') will set the
         parameter based on the `mode` parameter.  'f' or 'fb' `mode` will
         results in a 'incr' `bad_roots` parameter, 'b' or 'bf` in 'decr'
     fix_mode : {'on', 'reflect'}
@@ -188,7 +188,7 @@ def lp_1d(trace, pred=1, slice=slice(None), order=8, mode="f", append="after",
     bad_roots : {'incr', 'decr', None, 'auto'}
         Type of roots which to consider bad and to stabilize.  Option are those
         with increasing signals 'incr' or decreasing signals 'decr'.  None will
-        perform no root stabiliting.  The default ('auto') will set the
+        perform no root stabilizing.  The default ('auto') will set the
         parameter based on the `mode` parameter.  'f' or 'fb' `mode` will
         results in a 'incr' `bad_roots` parameter, 'b' or 'bf` in 'decr'
     fix_mode : {'on', 'reflect'}
@@ -266,10 +266,10 @@ def lp_1d(trace, pred=1, slice=slice(None), order=8, mode="f", append="after",
     else:
         # form the LP equation matrix and vector
         D, d = make_Dd(x, order, mode)
-        a = find_lpc(D, d, method)  # determind the LP prediction filter
+        a = find_lpc(D, d, method)  # determine the LP prediction filter
 
-    # stablize roots if needed
-    if bad_roots is not None:           # stablize roots if needed
+    # stabilize roots if needed
+    if bad_roots is not None:           # stabilize roots if needed
         poles = find_roots(a, mode)  # find roots (poles)
         poles = fix_roots(poles, bad_roots, fix_mode)  # fix roots
         # reverse filter when calculated filter is in wrong direction
@@ -314,7 +314,7 @@ def lp2d(data, pred, P, M, mirror='0', fix_points=True, method='svd'):
     Backward linear prediction using this method is not possible as the
     method depends on being able to mirror the data before the first collected
     point. In backwards mode this would correspond to being able to correctly
-    determind points after the last point which cannot be determinded using the
+    determine points after the last point which cannot be determined using the
     mirror method. A backward prediction matrix can be calculated but would
     not prove useful.
 
@@ -340,7 +340,7 @@ def lp2d(data, pred, P, M, mirror='0', fix_points=True, method='svd'):
         data point. False leaved predicted points  unaltered.
     method : {'svd', 'qr', 'cholesky', 'tls'}
         Method used to calculate the LP prediction matrix.  See :py:func:`lp`
-        for a description of theses methods.
+        for a description of these methods.
 
     Returns
     -------
@@ -411,7 +411,7 @@ def extrapolate_2d(x, C, pred, fix_points, mirror):
                                              (new[i + P - 1, j + M]))
 
         # fill the column with the mirrored column so it can be read in the
-        # next interation of the loop
+        # next iteration of the loop
         new[:, j + M] = make_mirror(new[plane:, j + M], mirror)
 
     return new[plane:]
@@ -462,9 +462,9 @@ def make_lp2d_Dd(x, P, M, mode='f'):
     return D, d
 
 
-#############################################
-# Cadzow/Minumum variance signal enhacement #
-#############################################
+##############################################
+# Cadzow/Minimum variance signal enhancement #
+##############################################
 
 
 def cadzow(data, M, K, niter, min_var=False):
@@ -472,10 +472,10 @@ def cadzow(data, M, K, niter, min_var=False):
     Perform a (row wise) Cadzow-like signal enhancement on 1D or 2D data.
 
     Performs a Cadzow-like signal enhancement with optional adjustment
-    of singular values using the minimum variance method as desribed in:
+    of singular values using the minimum variance method as described in:
     Chen, VanHuffel, Decanniere, VanHecke, JMR, 1994, 109A, 46-55.
 
-    For 2D data performs independant enhancement on each row of data array.
+    For 2D data performs independent enhancement on each row of data array.
 
     Parameters
     ----------
@@ -634,14 +634,14 @@ def lp_model(trace, slice=slice(None), order=8, mode="f", mirror=None,
     if mode == "b":
         poles = [1. / pole for pole in poles]
 
-    # determind the damping factor and frequencies from the roots
+    # determine the damping factor and frequencies from the roots
     damp = [root2damp(pole) for pole in poles]
     freq = [root2freq(pole) for pole in poles]
 
     if full is False:
         return damp, freq
 
-    # perform Least Squares fitting to determind amplitudes and phases.
+    # perform Least Squares fitting to determine amplitudes and phases.
 
     # We need to find a least squares solutions to:
     # z_0*b_0^0+z_1*b_1^0+.... = x_0
@@ -660,7 +660,7 @@ def lp_model(trace, slice=slice(None), order=8, mode="f", mirror=None,
     B = np.row_stack([poles ** (i) for i in range(len(x))])
     z, resid, rank, s = np.linalg.lstsq(B, np.array(x))
 
-    # Now the z_n = amp_n*exp(phase_n*i), use this to determind the amplitudes
+    # Now the z_n = amp_n*exp(phase_n*i), use this to determine the amplitudes
     # and phases
     amp = [cof2amp(cof) for cof in z]
     phase = [cof2phase(cof) for cof in z]
@@ -707,7 +707,7 @@ def cof2phase(z):
 
 
 ##############################
-# data preperation functions #
+# data preparation functions #
 ##############################
 
 
@@ -867,14 +867,14 @@ def find_lpc_tls(D, d):
     """
     m = D.shape[1]  # the order of the prediction
     E = np.append(D, d, axis=1)     # form the augmented data matrix
-    U, s, Vh = scipy.linalg.svd(E)  # SVD decompositon of augmented matrix
+    U, s, Vh = scipy.linalg.svd(E)  # SVD decomposition of augmented matrix
     V = np.conj(Vh.T)               # Hermetian transpose
     return (-1. / V[m, m] * V[:m, m]).reshape((m, 1))
 
 
 def find_lpc_fb(x, order, bad_roots, fix_mode, method):
     """
-    Determind LP coefficient using forward-backward linear prediction.
+    Determine LP coefficient using forward-backward linear prediction.
 
     Averages LP coefficients generated from solving the forward and backward
     linear prediction equations after reversing the roots of characteristic
@@ -915,7 +915,7 @@ def find_lpc_fb(x, order, bad_roots, fix_mode, method):
 
 def find_lpc_bf(x, order, bad_roots, fix_mode, method):
     """
-    Determind LP coefficient using backward-forward linear prediction.
+    Determine LP coefficient using backward-forward linear prediction.
 
     Averages LP coefficients generated from solving the forward and backward
     linear prediction equations after reversing the roots of characteristic
@@ -963,7 +963,7 @@ def find_lproots_hsvd(x, M, K, mode, zmethod='sm'):
     """
     Find LP roots (poles) using the HSVD method
 
-    Perform a HSVD linear prediction to determind signal roots (poles) as
+    Perform a HSVD linear prediction to determine signal roots (poles) as
     described in:
     Barkhuijsen, DeBeer, and Van Ormondt, JMR, 1987, 73, 553
 
@@ -1019,7 +1019,7 @@ def find_lproots_hsvd(x, M, K, mode, zmethod='sm'):
 
     # SVD of data matrix and truncation of U to form Uk
     U, s, Vh = scipy.linalg.svd(X)
-    Uk = np.mat(U[:, :K])   # trucated U matrix of rank K
+    Uk = np.mat(U[:, :K])   # truncated U matrix of rank K
     Ub = Uk[:-1]            # Uk with bottom row removed
     Ut = Uk[1:]             # Uk with top row removed
 

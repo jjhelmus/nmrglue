@@ -40,7 +40,7 @@ be read by NMRglue
 
 def parse_spinsolve_par_line(line):
     """
-    Parse lines in acqu.par and return a tuple (paramter name, parameter value)
+    Parse lines in acqu.par and return a tuple (parameter name, parameter value)
     """
     line = line.strip()  # Drop newline
     name, value = line.split("=", maxsplit=1)  # Split at equal sign (and ignore further equals in attribute values)

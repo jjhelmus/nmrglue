@@ -459,7 +459,7 @@ def fsh(data, pts):
 
 def fsh2(data, pts):
     """
-    Frequency Shift by Fourier transform. Postive signed phase correction.
+    Frequency Shift by Fourier transform. Positive signed phase correction.
 
     Parameters
     ----------
@@ -591,7 +591,7 @@ def fft(data):
     performed by the NMRPipe processing package and the functions
     :py:func:`fft_positive` and :py:func:`ifft_positive`.
 
-    All of the Fourier transforms perfromed by nmrglue return results in 'NMR
+    All of the Fourier transforms performed by nmrglue return results in 'NMR
     order', in which the two half of the spectrum have been swapped and
     reversed.
 
@@ -816,7 +816,7 @@ def ha(data):
     Notes
     -----
     This function is very slow.  Implement a Fast Walsh-Hadamard Transform
-    with sequency/Walsh ordering (FWHT_w) will result in much faster tranforms.
+    with sequency/Walsh ordering (FWHT_w) will result in much faster transforms.
 
     http://en.wikipedia.org/wiki/Walsh_matrix
     http://en.wikipedia.org/wiki/Fast_Hadamard_transform
@@ -824,7 +824,7 @@ def ha(data):
     """
     # implementation is a proof of concept and EXTEMEMLY SLOW
 
-    # determind the order and final size of input vectors
+    # determine the order and final size of input vectors
     ord = int(np.ceil(np.log2(data.shape[-1])))  # Walsh/Hadamard order
     max = 2 ** ord
 
@@ -832,7 +832,7 @@ def ha(data):
     pad = max - data.shape[-1]
     zdata = zf(data, pad)
 
-    # Multiple each vector by the hadamard matrix
+    # Multiply each vector by the hadamard matrix
     nat = np.zeros(zdata.shape, dtype=zdata.dtype)
     H = scipy.linalg.hadamard(max)
     nat = np.dot(zdata, H)
@@ -1570,12 +1570,12 @@ def unpack_complex(data):
 
 def c2ri(data):
     """
-    Seperate interleaved real, imaginary data into complex array.
+    Separate interleaved real, imaginary data into complex array.
 
     Assumes data is real only, ignores imaginary portion of data.
 
     """
-    # make a 1,1 array to determind dtype
+    # make a 1,1 array to determined dtype
     temp = np.array(data.flat[0] + data.flat[1] * 1j)
     s = list(data.shape)
     s[-1] = int(s[-1] / 2)
@@ -1588,7 +1588,7 @@ def c2ri(data):
 
 def seperate_interleaved(data):
     """
-    Seperate interleaved real, imaginary data into complex array.
+    Separate interleaved real, imaginary data into complex array.
     """
     return c2ri(data)
 
@@ -1602,7 +1602,7 @@ def pack_complex(data):
 
 def decode_States(data):
     """
-    Decode data collected using States (seperates interleaved data).
+    Decode data collected using States (separates interleaved data).
     """
     return c2ri(data)
 
@@ -1627,7 +1627,7 @@ def rr2ri(data):
     """
     Unappend real and imaginary data returning a complex array.
     """
-    # make a 1,1 array to determind dtype
+    # make a 1,1 array to determined dtype
     temp = np.array(data.flat[0] + data.flat[1] * 1.j)
     s = list(data.shape)
     half = int(s[-1] / 2.0)
@@ -1780,7 +1780,7 @@ def neg_alt(data):
 
 def abs(data):
     """
-    Replace data with absolute value of data (abs of real, imag seperately)
+    Replace data with absolute value of data (abs of real, imag separately)
     """
     data.real = np.abs(data.real)
     data.imag = np.abs(data.imag)
@@ -1789,7 +1789,7 @@ def abs(data):
 
 def sign(data):
     """
-    Replace data with sign (-1 or 1) of data (seperately on each channel)
+    Replace data with sign (-1 or 1) of data (separately on each channel)
     """
     data.real = np.sign(data.real)
     data.imag = np.sign(data.imag)
@@ -1822,7 +1822,7 @@ def coadd(data, clist, axis=-1):
     # there is probably a efficient way to do this with tile and inner
     # or scipy.ndimage.generic_filter
 
-    # algorith creates a empty array, then fills it element wise
+    # algorithm creates a empty array, then fills it element wise
     # with each factor from clist times the blocks selected
 
     s = list(data.shape)    # data shape
@@ -1871,7 +1871,7 @@ def conv(data, kern=[1.], m="wrap", c=0.0):
     """
     Convolute data with kernel.
 
-    Real and imaginary components of data are convolved seperately.
+    Real and imaginary components of data are convolved separately.
 
     Parameters
     ----------
@@ -1903,7 +1903,7 @@ def corr(data, kern=[1.], m="wrap", c=0.0):
     """
     Correlate data with a kernel (weights).
 
-    Real and imaginary components of data are correlated seperately.
+    Real and imaginary components of data are correlated separately.
 
     Parameters
     ----------
@@ -1937,7 +1937,7 @@ def filter_median(data, s=(1, 1), m="wrap", c=0.0):
     """
     Apply a median filter.
 
-    Real and imaginary components are filtered seperately.
+    Real and imaginary components are filtered separately.
 
     Parameters
     ----------
@@ -1965,7 +1965,7 @@ def filter_min(data, s=(1, 1), m="wrap", c=0.0):
     """
     Apply a minimum filter.
 
-    Real and imaginary components are filtered seperately.
+    Real and imaginary components are filtered separately.
 
     Parameters
     ----------
@@ -1993,7 +1993,7 @@ def filter_max(data, s=(1, 1), m="wrap", c=0.0):
     """
     Apply a maximum filter.
 
-    Real and imaginary components are filtered seperately.
+    Real and imaginary components are filtered separately.
 
     Parameters
     ----------
@@ -2021,7 +2021,7 @@ def filter_percentile(data, percentile, s=(1, 1), m="wrap", c=0.0):
     """
     Apply a percentile filter.
 
-    Real and imaginary components are filtered seperately.
+    Real and imaginary components are filtered separately.
 
     Parameters
     ----------
@@ -2053,7 +2053,7 @@ def filter_rank(data, rank, s=(1, 1), m="wrap", c=0.0):
     """
     Apply a rank filter.
 
-    Real and imaginary components are filtered seperately.
+    Real and imaginary components are filtered separately.
 
     Parameters
     ----------
@@ -2088,7 +2088,7 @@ def filter_amin(data, s=(1, 1), m="wrap", c=0.0):
     """
     Apply an absolute minimum filter.
 
-    Real and imaginary components are filtered seperately.
+    Real and imaginary components are filtered separately.
 
     Parameters
     ----------
@@ -2119,7 +2119,7 @@ def filter_amax(data, s=(1, 1), m="wrap", c=0.0):
     """
     Apply an absolute maximum filter.
 
-    Real and imaginary components are filtered seperately.
+    Real and imaginary components are filtered separately.
 
     Parameters
     ----------
@@ -2150,7 +2150,7 @@ def filter_range(data, s=(1, 1), m="wrap", c=0.0):
     """
     Apply a range filter.
 
-    Real and imaginary components are filtered seperately.
+    Real and imaginary components are filtered separately.
 
     Parameters
     ----------
@@ -2181,7 +2181,7 @@ def filter_avg(data, s=(1, 1), m="wrap", c=0.0):
     """
     Apply an average filter.
 
-    Real and imaginary components are filtered seperately.
+    Real and imaginary components are filtered separately.
 
     Parameters
     ----------
@@ -2212,7 +2212,7 @@ def filter_dev(data, s=(1, 1), m="wrap", c=0.0):
     """
     Apply a standard deviation filter.
 
-    Real and imaginary components are filtered seperately.
+    Real and imaginary components are filtered separately.
 
     Parameters
     ----------
@@ -2243,7 +2243,7 @@ def filter_sum(data, s=(1, 1), m="wrap", c=0.0):
     """
     Apply a summation filter.
 
-    Real and imaginary components are filtered seperately.
+    Real and imaginary components are filtered separately.
 
     Parameters
     ----------
@@ -2274,7 +2274,7 @@ def filter_generic(data, filter, s=(1, 1), m="wrap", c=0.0):
     """
     Apply a generic filter.
 
-    Real and imaginary components are filtered seperately.
+    Real and imaginary components are filtered separately.
 
     Parameters
     ----------

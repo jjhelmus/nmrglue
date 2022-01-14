@@ -18,8 +18,8 @@ User Functions
 
     read
 
-Developer Infomation
---------------------
+Developer Information
+---------------------
 
 Developer Functions
 ^^^^^^^^^^^^^^^^^^^

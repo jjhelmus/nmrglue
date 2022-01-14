@@ -10,8 +10,8 @@ from scipy.optimize import _minpack, leastsq
 
 def _internal2external_grad(xi, bounds):
     """
-    Calculate the internal (unconstrained) to external (constained)
-    parameter gradiants.
+    Calculate the internal (unconstrained) to external (constrained)
+    parameter gradients.
     """
     grad = empty_like(xi)
     for i, (v, bound) in enumerate(zip(xi, bounds)):
@@ -44,7 +44,7 @@ def _internal2external_func(bounds):
 
 def _internal2external_lambda(bound):
     """
-    Make a lambda function which converts a single internal (uncontrained)
+    Make a lambda function which converts a single internal (unconstrained)
     parameter to a external (constrained) parameter.
     """
     lower, upper = bound
@@ -198,9 +198,9 @@ def leastsqbound(func, x0, args=(), bounds=None, Dfun=None, full_output=0,
            min   sum((ydata - f(xdata, params))**2, axis=0)
          params
 
-    Contraints on the parameters are enforced using an internal parameter list
-    with appropiate transformations such that these internal parameters can be
-    optimized without constraints. The transfomation between a given internal
+    Constraints on the parameters are enforced using an internal parameter list
+    with appropriate transformations such that these internal parameters can be
+    optimized without constraints. The transformation between a given internal
     parameter, p_i, and a external parameter, p_e, are as follows:
 
     With ``min`` and ``max`` bounds defined ::
@@ -218,7 +218,7 @@ def leastsqbound(func, x0, args=(), bounds=None, Dfun=None, full_output=0,
         p_i = sqrt((p_e - min + 1.)**2 - 1.)
         p_e = min - 1. + sqrt(p_i**2 + 1.)
 
-    These transfomations are used in the MINUIT package, and described in
+    These transformations are used in the MINUIT package, and described in
     detail in the section 1.3.1 of the MINUIT User's Guide.
 
     To Do

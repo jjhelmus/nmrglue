@@ -208,7 +208,7 @@ def test_zf():
 
 def test_add():
     """ ADD function """
-    return _standard_test('add', 4)     # Note that test 5 fails intensionally
+    return _standard_test('add', 4)     # Note that test 5 fails intentionally
 
 
 def test_dx():
@@ -238,7 +238,7 @@ def test_mir():
 
 def test_mult():
     """ MULT function """
-    return _standard_test('mult', 3)    # Note that test 4 fails intensionally
+    return _standard_test('mult', 3)    # Note that test 4 fails intentionally
 
 
 def test_rev():
@@ -359,7 +359,7 @@ def test_known_fail():
                   'shuf8.glue', 'shuf9.glue', 'shuf10.glue']
     pipe_script = 'known_fail.com'
     glue_script = 'known_fail.py'
-    # also 'shuf11', 'shuf12' and dev1' test all fail intensionally.
+    # also 'shuf11', 'shuf12' and dev1' test all fail intentionally.
     return _perform_test(glue_script, pipe_script, glue_files, pipe_files)
 """
 

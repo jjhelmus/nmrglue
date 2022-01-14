@@ -6,7 +6,7 @@ Introduction
 
 This example is taken from Listing S12 - S15 in the 2013 JBNMR nmrglue paper.
 In this example a series of 3D NMRPipe files containing relaxation trajectories
-for a solid state NMR experment and analyzed.  
+for a solid state NMR experiment and analyzed.  
 
 
 

@@ -8,7 +8,7 @@ dic,data = ng.pipe.read("nmrpipe_2d/test.ft2")
 # Set the spectral parameters 
 udic = ng.pipe.guess_udic(dic, data)
 
-# create the converter object and initilize with NMRPipe data
+# create the converter object and initialize with NMRPipe data
 C = ng.convert.converter()
 C.from_pipe(dic, data, udic)
 

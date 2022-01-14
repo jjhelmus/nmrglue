@@ -62,7 +62,7 @@ try:
     from ConfigParser import SafeConfigParser
 except ModuleNotFoundError:
     # this will only fail if Python 3 is used
-    # but that error willl be handled by the
+    # but that error will be handled by the
     # check_jython() function
     pass
 
@@ -315,7 +315,7 @@ def verify_python(command):
         errmsg = """
             {} does not seem to be a valid python file.
             Please check the configuration file using 'xcpy --config',
-            or change the congiguration file using 'xcpy --settings'
+            or change the configuration file using 'xcpy --settings'
             This attempt will be aborted.
             """.format(
             command
