@@ -573,6 +573,7 @@ def read(filename, show_all_data=False, read_err=None):
 
     # remove data tables from dic
     try:
+        dic['XYDATA_OLD'] = dic["XYDATA"]
         del dic["XYDATA"]
     except KeyError:
         pass
