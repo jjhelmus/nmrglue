@@ -4,7 +4,12 @@ import warnings
 
 from numpy import array, take, eye, triu, transpose, dot
 from numpy import empty_like, sqrt, cos, sin, arcsin
-from scipy.optimize.minpack import _check_func
+
+try:
+    from scipy.optimize.minpack import _check_func
+except ImportError:
+    from scipy.optimize._minpack_py import _check_func
+    
 from scipy.optimize import _minpack, leastsq
 
 
