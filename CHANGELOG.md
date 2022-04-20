@@ -1,6 +1,37 @@
 0.9 (Unreleased)
 ================
 
+FileIO
+------
+* Fix a bug fix passing specific procs_file in read_fid or read_pdata (#134, #141)
+* Add support for reading 4D UCSF (sparky) files (#142)
+* Update NMRPipe metadata keys (#144)
+* Support for reading Spinsolve files (#147, #151, #155, #161)
+* The converter objects can output csdm-formatted data (#152)
+* nmrglue.pipe.read can read from io.Bytes objects (#153)
+* nmrglue.pipe can read from Path objects (#159)
+* Fix a bug in reading sparky .save files (#164)
+
+
+Documentation
+-------------
+* Update examples with python 3 syntax (#137, #138)
+* Document support for reading spinsolve files (#151)
+* Spelling fixes in documentation (#153, #165)
+* Example of using the peakpick.pick function (#163)
+* Various other small fixes to the documentation (#162)
+
+
+Analysis
+--------
+* Update leastsqbound to support scipy 1.8 (#167)
+
+
+Misc
+----
+* CI framework using GitHub Actions (#132)
+* Fix various test warnings (#133)
+* Drop Python 2.7 support (#131)
 
 0.8 (2020-10-29)
 ================
