@@ -521,7 +521,7 @@ Alternately, the `object-oriented interface <https://matplotlib.org/tutorials/in
     >>> ax.plot(data)
     >>> fig.savefig("plot_1d.png")
 
-A contour plot of 2D data can created in a similar manner:
+A contour plot of 2D data can be created in a similar manner:
 
     >>> dic, data = ng.pipe.read("test.ft2")
     >>> cl = [30000 * 1.2 ** x for x in range(20)]
