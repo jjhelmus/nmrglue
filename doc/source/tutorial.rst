@@ -547,7 +547,7 @@ Additional resources
 
 Detailed information about each module in nmrglue as well as the functions 
 provided by that module can be found in the nmrglue :ref:`reference_guide` or
-by using Python build in help system:
+by using the Python built-in help system:
 
     >>> help(ng.pipe.read)
     
