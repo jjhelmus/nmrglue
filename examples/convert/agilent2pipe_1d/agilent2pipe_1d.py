@@ -21,4 +21,3 @@ C.from_varian(dic, data, udic)
 
 # create NMRPipe data and then write it out
 ng.pipe.write("1d_pipe.fid", *C.to_pipe(), overwrite=True)
-

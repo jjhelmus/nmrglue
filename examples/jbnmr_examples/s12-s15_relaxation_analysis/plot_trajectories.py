@@ -14,11 +14,11 @@ simulated_relaxation_times = np.linspace(0,4000000,2000)
 for peak, A, R2, ier in fitting_results:
 
     print "Plotting:", peak
-    
+
     # load the experimental and simulated relaxation trajectories
     experimental_trajectory = np.loadtxt(peak + '.dat')
     simulated_trajectory = fit_func((A, R2), simulated_relaxation_times)
-    
+
     # create the figure
     fig = plt.figure()
     ax = fig.add_subplot(111)

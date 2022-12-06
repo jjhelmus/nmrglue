@@ -499,7 +499,7 @@ def read(filename):
     Parameters
     ----------
     filename : str | pathlib.Path | bytes | io.BytesIO
-        Filename or filemask of NMRPipe file(s) to read. Binary io.BytesIO stream 
+        Filename or filemask of NMRPipe file(s) to read. Binary io.BytesIO stream
         (e.g. open(filename, "rb")) or bytes buffer can also be provided
 
     Returns
@@ -1623,7 +1623,7 @@ def get_data(filename):
         data = np.frombuffer(filename, dtype=np.float32)
     else:
         data = np.fromfile(filename, 'float32')
-    
+
     if data[2] - 2.345 > 1e-6:  # check for byteswap
         data = data.byteswap()
     return data[512:]

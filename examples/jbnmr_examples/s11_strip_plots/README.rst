@@ -4,7 +4,7 @@
 Introduction
 ------------
 
-This example is taken from Listing S11 from the 2013 JBNMR nmrglue paper.  In 
+This example is taken from Listing S11 from the 2013 JBNMR nmrglue paper.  In
 this example a three 3D solid state NMR spectra are visualized as strip plots.
 
 

@@ -37,4 +37,3 @@ ax.set_xlabel("$^{13}$C (ppm)")
 ax.set_ylabel("$^{15}$N (ppm)")
 
 plt.show()
-

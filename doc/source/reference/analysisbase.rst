@@ -11,9 +11,9 @@ Developer Functions
 These functions are typically not used directly by users.  They are called by
 high level functions.
 
-.. autosummary:: 
+.. autosummary::
     :toctree: generated/
-    
+
     neighbors
     valid_pt
     find_limits

@@ -1,15 +1,15 @@
 nmrglue.misc.xcpy
 =================
 
-This module is intended for use with the Bruker Topspin software. 
-It runs external scripts via Jython (subprocess module) that ships with Topspin. 
+This module is intended for use with the Bruker Topspin software.
+It runs external scripts via Jython (subprocess module) that ships with Topspin.
 Currently, it allows only external CPython programs to run. By default, it passes
 the current folder, expno and procno to the external CPython program (if available).
-For an example of how this should look like in practice, see 
+For an example of how this should look like in practice, see
 `PR #103 <https://github.com/jjhelmus/nmrglue/pull/103>`_.
 
-A test script `xcpy_test.py` is provided in the same folder. This can be used to test 
-the setup. After copying over xcpy.py and xcpy.test to the prescribed locations (see below), 
+A test script `xcpy_test.py` is provided in the same folder. This can be used to test
+the setup. After copying over xcpy.py and xcpy.test to the prescribed locations (see below),
 the output should look something like this:
 
 .. image:: https://user-images.githubusercontent.com/7735086/60869506-baff0480-a24c-11e9-92d2-63d0e7fec558.gif
@@ -17,7 +17,7 @@ the output should look something like this:
 
 Usage
 -----
-.. code-block:: 
+.. code-block::
 
   xcpy
   xcpy [OPTIONS]
@@ -70,4 +70,3 @@ the external program
 not used for \*nix, but is used for Windows. (*Warning*: this is a known
 security risk and users are advised to be careful with their input while using this
 option)
-

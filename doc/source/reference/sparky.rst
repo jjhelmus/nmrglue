@@ -22,7 +22,7 @@ User Functions
     make_uc
     guess_udic
     create_dic
-    datetime2dic 
+    datetime2dic
     dic2datetime
 
 Developer Information
@@ -35,7 +35,7 @@ Developer Information
 Developer Functions
 ^^^^^^^^^^^^^^^^^^^
 
-These functions are typically not used directly by users.  Developers who 
+These functions are typically not used directly by users.  Developers who
 want fine control over Sparky files may be interested in these functions.
 
 .. autosummary::
@@ -61,13 +61,13 @@ want fine control over Sparky files may be interested in these functions.
     find_tilen_3d
     tile_data3d
     untile_data3D
-    get_fileheader 
-    put_fileheader 
+    get_fileheader
+    put_fileheader
     fileheader2dic
     dic2fileheader
     get_axisheader
     put_axisheader
-    axisheader2dic 
+    axisheader2dic
     dic2axisheader
 
 Developer Classes
@@ -75,6 +75,6 @@ Developer Classes
 
 .. autosummary::
     :toctree: generated/
-    
+
     sparky_2d
     sparky_3d

@@ -26,7 +26,7 @@ pipe_precorr_frq = ng.proc_autophase.autops(pipe_precorr_frq, 'peak_minima')
 
 #---data processed using NMRPipe (post-processing)
 pipe_postcorr_frq = ng.pipe.read('post.ft')[1][::-1]
-pipe_postcorr_frq = ng.proc_autophase.autops(pipe_postcorr_frq, 'acme') 
+pipe_postcorr_frq = ng.proc_autophase.autops(pipe_postcorr_frq, 'acme')
 
 # note:
 # 'acme' gave a better phase correction for the post-processing case
@@ -58,4 +58,3 @@ for axis in ax:
 
 plt.tight_layout()
 plt.savefig('dig_filter_remove.png')
-

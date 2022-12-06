@@ -20,8 +20,8 @@ b. Redistributions in binary form must reproduce the above copyright
    distribution.
 
 
-c. Neither the name of the author nor the names of contributors may 
-   be used to endorse or promote products derived from this software 
+c. Neither the name of the author nor the names of contributors may
+   be used to endorse or promote products derived from this software
    without specific prior written permission.
 
 

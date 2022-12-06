@@ -15,7 +15,7 @@ cl = 30000 * 1.20 ** np.arange(20)
 peak_list = np.recfromtxt("boxes.in", names=True)
 spectra_list = np.recfromtxt("spectra.in")
 
-# loop over the spectra 
+# loop over the spectra
 for spec_number, spectra in enumerate(spectra_list):
 
     # read in the spectral data

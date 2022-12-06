@@ -24,7 +24,7 @@ User Functions
     read_fid
     write_fid
     read_fid_lowmem
-    write_fid_lowmem 
+    write_fid_lowmem
     read_fid_ntraces
     read_procpar
     write_procpar
@@ -43,7 +43,7 @@ Developer Functions
 ^^^^^^^^^^^^^^^^^^^
 
 These functions are typically not used directly by users.  Developers who
-want fine control over Agilent/Varian files will be interested in these 
+want fine control over Agilent/Varian files will be interested in these
 functions.
 
 .. autosummary::
@@ -83,7 +83,7 @@ functions.
     find_shape
     find_cdtype
     find_dtype
-    uninterleave_data 
+    uninterleave_data
     interleave_data
     get_parameter
 
@@ -91,7 +91,7 @@ functions.
 Developer Classes
 ^^^^^^^^^^^^^^^^^
 
-.. autosummary:: 
+.. autosummary::
     :toctree: generated/
 
-    fid_nd 
+    fid_nd

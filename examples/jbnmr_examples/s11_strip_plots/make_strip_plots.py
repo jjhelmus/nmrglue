@@ -46,7 +46,7 @@ uc_s3_a1 = ng.pipe.make_uc(dic_3, data_3, 1)  # N
 uc_s3_a2 = ng.pipe.make_uc(dic_3, data_3, 2)  # CX
 
 # read in assignments
-table_filename = 'ass.tab' 
+table_filename = 'ass.tab'
 table = ng.pipe.read_table(table_filename)[2]
 assignments = table['ASS'][1:]
 
@@ -85,10 +85,10 @@ for i in xrange(7):
     strip_ppm_x = uc_s1_a0.ppm_scale()[min_s1_a0:max_s1_a0+1]
     strip_ppm_y = uc_s1_a2.ppm_scale()[min_s1_a2:max_s1_a2+1]
     strip_x, strip_y = np.meshgrid(strip_ppm_x, strip_ppm_y)
-    
+
     # add contour plot of strip to figure
     ax1 = fig.add_subplot(1, 21, 3 * i + 1)
-    ax1.contour(strip_x, strip_y, strip_s1.transpose(), cl_s1, 
+    ax1.contour(strip_x, strip_y, strip_s1.transpose(), cl_s1,
                     colors=colors_s1, linewidths=0.5)
     ax1.invert_yaxis()  # flip axes since ppm indexed
     ax1.invert_xaxis()
@@ -99,9 +99,9 @@ for i in xrange(7):
     ax1.set_xlabel('%.1f'%(x_center_s1[i]), size=6)
     ax1.text(0.1, 0.975, '%.1f'%(z_plane_s1[i]), size=6,
                                         transform=ax1.transAxes)
-    
+
     # label and put ticks on first strip plot
-    if i == 0:  
+    if i == 0:
         ax1.set_ylabel("13C (ppm)")
         ax1.tick_params(axis='y', labelleft=True, left=True, direction='out')
 
@@ -109,31 +109,31 @@ for i in xrange(7):
     # find limits in units of points
     idx_s2_a0 = uc_s2_a0(z_plane_s2[i], "ppm")
     min_s2_a1 = uc_s2_a1(x_center_s2[i] + x_width, "ppm")
-    max_s2_a1 = uc_s2_a1(x_center_s2[i] - x_width, "ppm") 
+    max_s2_a1 = uc_s2_a1(x_center_s2[i] - x_width, "ppm")
     min_s2_a2 = uc_s2_a2(y_min, "ppm")
     max_s2_a2 = uc_s2_a2(y_max, "ppm")
 
     if min_s2_a2 > max_s2_a2:
         min_s2_a2, max_s2_a2 = max_s2_a2, min_s2_a2
 
-    # extract strip 
-    strip_s2 = data_2[idx_s2_a0, min_s2_a1:max_s2_a1+1, min_s2_a2:max_s2_a2+1] 
+    # extract strip
+    strip_s2 = data_2[idx_s2_a0, min_s2_a1:max_s2_a1+1, min_s2_a2:max_s2_a2+1]
 
     # add contour plot of strip to figure
     ax2 = fig.add_subplot(1, 21, 3 * i + 2)
     ax2.contour(strip_s2.transpose(), cl_s2, colors=colors_s2, linewidths=0.5)
-    
+
     # turn off ticks and labels, add labels and assignment
     ax2.tick_params(axis='both', labelbottom=False, bottom=False, top=False,
                     labelleft=False, left=False, right=False)
     ax2.set_xlabel('%.1f'%(x_center_s2[i]), size=6)
-    ax2.text(0.2, 0.975, '%.1f'%(z_plane_s2[i]), size=6, 
+    ax2.text(0.2, 0.975, '%.1f'%(z_plane_s2[i]), size=6,
                                         transform=ax2.transAxes)
     ax2.set_title(assignments[i])
 
     ### spectral 3, NCOCX
     # find limits in units of points
-    idx_s3_a0 = uc_s3_a0(z_plane_s3[i], "ppm") 
+    idx_s3_a0 = uc_s3_a0(z_plane_s3[i], "ppm")
     min_s3_a1 = uc_s3_a1(x_center_s3[i] + x_width, "ppm")
     max_s3_a1 = uc_s3_a1(x_center_s3[i] - x_width, "ppm")
     min_s3_a2 = uc_s3_a2(y_min, "ppm")
@@ -141,19 +141,19 @@ for i in xrange(7):
 
     if min_s3_a2 > max_s3_a2:
         min_s3_a2, max_s3_a2 = max_s3_a2, min_s3_a2
-    
+
     # extract strip
-    strip_s3 = data_3[idx_s3_a0, min_s3_a1:max_s3_a1+1, min_s3_a2:max_s3_a2+1] 
+    strip_s3 = data_3[idx_s3_a0, min_s3_a1:max_s3_a1+1, min_s3_a2:max_s3_a2+1]
 
     # add contour plot of strip to figure
     ax3 = fig.add_subplot(1, 21, 3 * i + 3)
     ax3.contour(strip_s3.transpose(), cl_s3, colors=colors_s3, linewidths=0.5)
-    
+
     # turn off ticks and labels, add labels
     ax3.tick_params(axis='both', labelbottom=False, bottom=False, top=False,
                     labelleft=False, left=False, right=False)
     ax3.set_xlabel('%.1f'%(x_center_s3[i]), size=6)
-    ax3.text(0.1, 0.975, '%.1f'%(z_plane_s3[i]), size=6, 
+    ax3.text(0.1, 0.975, '%.1f'%(z_plane_s3[i]), size=6,
                                         transform=ax3.transAxes)
 
 # add X axis label, save figure

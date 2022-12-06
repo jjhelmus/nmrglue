@@ -10,10 +10,9 @@ Functions
 
 .. autosummary::
     :toctree: generated/
-    
+
     pair_similar
     isdatasimilar
     isdicsimilar
     islistsimilar
     isitemsimilar
-

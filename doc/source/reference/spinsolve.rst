@@ -40,4 +40,3 @@ fine control over Spinsolve files may be interested in these functions.
     parse_spinsolve_par_line
     get_udic_from_acqu_dict
     get_udic_from_jcamp_dict
-

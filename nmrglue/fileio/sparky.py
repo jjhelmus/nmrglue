@@ -505,9 +505,9 @@ def read_4D(filename):
     Read a 4D Sparky file. See :py:func:`read` for documentation.
     """
     seek_pos = os.stat(filename).st_size
-    
+
     with open(filename, 'rb') as f:
-        
+
         # read the file header
         dic = fileheader2dic(get_fileheader(f))
 
@@ -523,7 +523,7 @@ def read_4D(filename):
         # read the data and untile
         lenA = dic["w1"]["npoints"]
         lenZ = dic["w2"]["npoints"]
-        lenY = dic["w3"]["npoints"] 
+        lenY = dic["w3"]["npoints"]
         lenX = dic["w4"]["npoints"]
         lentA = dic["w1"]["bsize"]
         lentZ = dic["w2"]["bsize"]
@@ -870,7 +870,7 @@ def read_savefile(filename, spectrum_file=None):
             spectrum_file = dic["spectrum"]["abspathname"]
         except KeyError:
             spectrum_file = os.path.join(os.path.dirname(filename), dic["spectrum"]["pathname"])
-            
+
     try:
         d, data = read(spectrum_file)
     except FileNotFoundError:

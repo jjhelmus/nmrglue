@@ -36,13 +36,13 @@ class ParameterFrame(wx.Frame):
         self.qName1 = wx.StaticText(self, -1, "Type:")
         self.qName2 = wx.Choice(self, -1, choices=apod_list)
         self.Bind(wx.EVT_CHOICE, self.ApodChoose, self.qName2)
-        
+
         self.q1_1 = wx.StaticText(self, -1, "q1:")
         self.q1_2 = wx.TextCtrl(self, -1, "0.0")
 
         self.q2_1 = wx.StaticText(self, -1, "q2:")
         self.q2_2 = wx.TextCtrl(self, -1, "1.0")
-        
+
         self.q3_1 = wx.StaticText(self, -1, "q3:")
         self.q3_2 = wx.TextCtrl(self, -1, "1.0")
 
@@ -84,17 +84,17 @@ class ParameterFrame(wx.Frame):
         apod_grid.AddMany([self.qName1, self.qName2,
                    self.q1_1, self.q1_2,
                    self.q2_1, self.q2_2,
-                   self.q3_1, self.q3_2, 
+                   self.q3_1, self.q3_2,
                    self.c1, self.c2,
                    self.start_1, self.start_2,
                    self.size_1, self.size_2,
                    self.inv, self.use_size])
-        
+
         data_grid = wx.GridSizer(2, 2)
         data_grid.AddMany([self.points_1, self.points_2,
                 self.sw_1, self.sw_2])
 
-        apod_box = wx.StaticBoxSizer(wx.StaticBox(self, -1, 
+        apod_box = wx.StaticBoxSizer(wx.StaticBox(self, -1,
                                         "Apodization Parameters"))
         apod_box.Add(apod_grid)
 
@@ -128,7 +128,7 @@ class ParameterFrame(wx.Frame):
 
     def InitApod(self, qName):
         """ Set the default parameter for a chosen apodization window """
-        
+
         if qName == "SP":
             self.q1_1.Enable(True)
             self.q1_1.SetLabel("off")
@@ -243,22 +243,22 @@ class ParameterFrame(wx.Frame):
         c = float(self.c2.GetValue())
         start = float(self.start_2.GetValue())
         size = float(self.size_2.GetValue())
-        
+
         inv = self.inv.GetValue()
         use_size = self.use_size.GetValue()
 
         points = float(self.points_2.GetValue())
         sw = float(self.sw_2.GetValue())
 
-        self.parent.ApplyApod(qName, q1, q2, q3, c, start, size, inv, 
+        self.parent.ApplyApod(qName, q1, q2, q3, c, start, size, inv,
                                 use_size, points, sw)
-        
+
     def OnClear(self, event):
         """ Clear all apodization windows previously drawn """
         self.parent.ClearFigure()
 
 class CanvasFrame(wx.Frame):
-    """ 
+    """
     WX frame containing a matplotlib canvas where the apodization windows are
     drawn. Launches the parameter frame where apodization parameter can be set.
     """
@@ -273,7 +273,7 @@ class CanvasFrame(wx.Frame):
         self.canvas = FigureCanvas(self, -1, self.figure)
         self.toolbar = NavigationToolbar2Wx(self.canvas)
         self.toolbar.Realize()
-       
+
         # open parameter window
         win = ParameterFrame(self, -1)
         win.Show(True)
@@ -294,10 +294,10 @@ class CanvasFrame(wx.Frame):
         self.axes.cla()
         self.OnPaint(-1)
 
-    def ApplyApod(self, qName, q1, q2, q3, c, start, size, inv, use_size, 
+    def ApplyApod(self, qName, q1, q2, q3, c, start, size, inv, use_size,
                     points, sw):
         """ Apply the selected apodization, draw the windows on the canvas """
-        
+
         # create the dictionary
         dic = ng.fileiobase.create_blank_udic(1)
         dic[0]["sw"] = sw

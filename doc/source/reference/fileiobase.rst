@@ -21,7 +21,7 @@ high level functions.
     uc_from_udic
     uc_from_freqscale
     open_towrite
-    ndfrom_iter 
+    ndfrom_iter
     ndto_iter
     ndtofrom_iter
     size_and_ndtofrom_iter
@@ -35,7 +35,7 @@ high level functions.
 Developer Classes
 ^^^^^^^^^^^^^^^^^
 
-These classes are typically not used directly by users.  Developers may be 
+These classes are typically not used directly by users.  Developers may be
 interested in these classes.
 
 .. autosummary::

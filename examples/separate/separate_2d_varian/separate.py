@@ -1,10 +1,10 @@
 #! /usr/bin/env python
-# Unarray 2D Agilent/Varian data creating directories based on array parameter 
+# Unarray 2D Agilent/Varian data creating directories based on array parameter
 # found in procpar file.
 
 import nmrglue as ng
 
-# read in the NMR data 
+# read in the NMR data
 dic, data = ng.varian.read('arrayed_data.dir')
 
 # set the new size of the separated data

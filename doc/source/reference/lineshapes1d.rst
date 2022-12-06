@@ -8,7 +8,7 @@ This modules is imported as nmrglue.lineshapes1d and can be called as such.
 Developer Functions
 -------------------
 
-These functions are typically not used directly by users.  Developers who 
+These functions are typically not used directly by users.  Developers who
 want to segment spectra will be interested in these functions.
 
 .. autosummary::
@@ -41,4 +41,3 @@ Developer Classes
     voigt_sigmagamma
     pvoigt_fwhm
     scale
-

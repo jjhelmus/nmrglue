@@ -27,7 +27,7 @@ fig = plt.figure()
 ax = fig.add_subplot(111)
 
 # plot the contours
-ax.contour(data, cl, cmap=cmap, 
+ax.contour(data, cl, cmap=cmap,
             extent=(0, data.shape[1] - 1, 0, data.shape[0] - 1))
 
 # loop over the peaks
@@ -41,7 +41,7 @@ for name, x0, y0, x1, y1 in peak_list:
     # plot a box around each peak and label
     ax.plot([x0, x1, x1, x0, x0], [y0, y0, y1, y1, y0], 'k')
     ax.text(x1 + 1, y0, name, size=textsize, color='r')
-    
+
 # set limits
 ax.set_xlim(1900, 2200)
 ax.set_ylim(750, 1400)

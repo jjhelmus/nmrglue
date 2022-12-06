@@ -9,7 +9,7 @@ fileio modules
 
 .. toctree::
     :maxdepth: 1
-    
+
     agilent
     bruker
     convert
@@ -43,7 +43,7 @@ analysis modules
 
 .. toctree::
     :maxdepth: 1
-    
+
     analysisbase
     helpers
     integration
@@ -59,6 +59,6 @@ util modules
 
 .. toctree::
     :maxdepth: 1
-    
+
     misc
     xcpy

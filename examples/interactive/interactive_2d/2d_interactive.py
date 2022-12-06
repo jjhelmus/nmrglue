@@ -28,7 +28,7 @@ fig = plt.figure()
 ax = fig.add_subplot(111)
 
 # plot the contours
-ax.contour(data, cl, cmap=cmap, 
+ax.contour(data, cl, cmap=cmap,
         extent=(ppm_13c_0, ppm_13c_1, ppm_15n_0, ppm_15n_1))
 
 # decorate the axes

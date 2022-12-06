@@ -20,7 +20,7 @@ def main():
     except ValueError:
         message = f"""
         Welcome to Python {python}.
-        No directory is currently open, 
+        No directory is currently open,
         or none was passed on to this script.
         """
 

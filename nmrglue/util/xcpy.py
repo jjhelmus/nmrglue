@@ -437,7 +437,7 @@ def main():
                 # check for .py extension and append it if not given
                 if not scriptname.endswith('.py'):
                     scriptname = scriptname + '.py'
-                
+
                 # run the script if it exists and then break from the for loop
                 # and set the executed status to true
                 if exists(scriptname):

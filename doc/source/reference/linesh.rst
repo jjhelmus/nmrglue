@@ -10,13 +10,13 @@ User Functions
 
 These are the functions the majority of users will use from the linesh module.
 
-.. autosummary:: 
+.. autosummary::
     :toctree: generated/
 
     fit_spectrum
     fit_NDregion
     sim_NDregion
-    
+
     add_to_table
     pack_table
     unpack_table
@@ -27,7 +27,7 @@ Developer Functions
 -------------------
 
 These functions are typically not used directly by users.  Developers who
-want fine control over lineshape fitting may be interested in these 
+want fine control over lineshape fitting may be interested in these
 functions.
 
 .. autosummary::
@@ -40,4 +40,3 @@ functions.
     s_single_NDregion
     err_NDregion
     f_NDregion
-
