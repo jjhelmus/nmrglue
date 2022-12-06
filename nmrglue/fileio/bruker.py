@@ -1090,8 +1090,7 @@ def guess_shape(dic):
             shape = shape[-2:]
 
     elif loopn == 3:  # 2D with two leading passive loops
-        if (loop[0] == 2 and loop[1] == 2 and li[0] == 0 and li[1] == 0
-                and li[2] != 0):
+        if loop[0] == loop[1] == 2 and li[0] == li[1] == 0 and li[2] != 0:
             shape[2] = 2 * loop[2]
             shape = shape[-2:]
 
@@ -1103,9 +1102,9 @@ def guess_shape(dic):
             shape = shape[-3:]
 
     elif loopn == 5:  # 3D with two/one leading passive loops
-        if loop[1] == 2 and li[0] == 0 and li[1] == 0 and li[2] != 0:
+        if loop[1] == 2 and li[0] == li[1] == 0 and li[2] != 0:
             shape[2] = 2 * loop[2]
-        if loop[3] == 2 and li[0] == 0 and li[3] == 0 and li[4] != 0:
+        if loop[3] == 2 and li[0] == li[3] == 0 and li[4] != 0:
             shape[1] = 2 * loop[4]
             shape = shape[-3:]
 
@@ -1118,11 +1117,11 @@ def guess_shape(dic):
             shape[0] = 2 * loop[5]
 
     elif loopn == 7:
-        if loop[1] == 2 and li[0] == 0 and li[1] == 0 and li[2] != 0:
+        if loop[1] == 2 and li[0] == li[1] == 0 and li[2] != 0:
             shape[2] = 2 * loop[2]
-        if loop[3] == 2 and li[0] == 0 and li[3] == 0 and li[4] != 0:
+        if loop[3] == 2 and li[0] == li[3] == 0 and li[4] != 0:
             shape[1] = 2 * loop[4]
-        if loop[5] == 2 and li[0] == 0 and li[5] == 0 and li[6] != 0:
+        if loop[5] == 2 and li[0] == li[5] == 0 and li[6] != 0:
             shape[0] = 2 * loop[6]
 
     return tuple([int(i) for i in shape if i >= 2]), cplex
