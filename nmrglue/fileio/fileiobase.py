@@ -475,8 +475,8 @@ def trace2index_flat(shape, ntrace):
     """
     Calculate the index of a trace assuming a flat structure
     """
-    # algorithm is to take quotient/remainers of sizes in reverse
-    q = ntrace  # seed quotient with remained
+    # algorithm is to take quotient/remainder of sizes in reverse
+    q = ntrace  # seed quotient with remainder
     index = []
     for s in shape[:0:-1]:  # loop from last size to 2nd size
         q, r = divmod(q, s)

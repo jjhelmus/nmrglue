@@ -2430,7 +2430,7 @@ def shuf(dic, data, mode=None):
     'rr2ri' mode ignores any imaginary vector refusing to create a mis-sized
     vector.  'bswap' mode may results in NaN in the data.  'r2i' and 'i2r' not
     implemented.  All modes correctly update minimum and maximum values.  This
-    behavor may differ from NMRPipe's SHUF function.
+    behavior may differ from NMRPipe's SHUF function.
 
     Valid modes are:
 

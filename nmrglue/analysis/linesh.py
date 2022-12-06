@@ -162,7 +162,7 @@ def fit_spectrum(spectrum, lineshapes, params, amps, bounds, ampbounds,
         :py:func:`fit_NDregion` for details.
     params : list
         P-length list (P is the number of peaks in region) of N-length lists
-        of tuples where each each tuple is the optimiztion starting parameters
+        of tuples where each each tuple is the optimization starting parameters
         for a given peak and dimension lineshape.
     amps : list
         P-length list of amplitudes.
