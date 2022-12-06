@@ -1160,7 +1160,7 @@ def write_slice_3D(filemask, dic, data, shape, slices):
 # -------
 # - When passed x must transposed 1,2 if dic["FDTRANSPOSED"] == 1
 #  (might need to call pipe_proc.tp)
-# - if 'y' passed then cann pipe_proc.tp unless dic["FDTRANSPOED"]
+# - if 'y' passed then can pipe_proc.tp unless dic["FDTRANSPOED"]
 # - save 'good' dictionary and return each loop
 #
 # Looping

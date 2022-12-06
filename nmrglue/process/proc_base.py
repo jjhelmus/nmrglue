@@ -237,9 +237,9 @@ def tm(data, t1=0.0, t2=0.0, inv=False, rev=False):
     ============ ================================
     Range        Description
     ============ ================================
-    0:t1         Linear increases from 0.0 to 1.0
+    0:t1         Linear increase from 0.0 to 1.0
     t1:size - t2 Flat with value of 1.0
-    -t2:         Linear descrease from 1.0 to 0.0
+    -t2:         Linear decrease from 1.0 to 0.0
     ============ ================================
 
     Parameters

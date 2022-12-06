@@ -427,7 +427,7 @@ def write_lowmem(dir, dic, data, fid_file="fid", procpar_file="procpar",
     read_lowmem : Read Agilent/Varian using minimal amounts of memory.
 
     """
-    # always find trace ording
+    # always find trace ordering
     if torder is None:
         torder = find_torder(dic["procpar"], data.shape)
 
@@ -450,20 +450,20 @@ def find_torder(dic, shape):
     """
     Find the torder from the procpar dictionary.
 
-    If propar dictionary is incomplete a UserWarning is issued and 'r' is
+    If procpar dictionary is incomplete a UserWarning is issued and 'r' is
     returned.
 
     Parameters
     ----------
     dic : dict
         Dictionary of parameters in the procpar file.
-    shaoe : tuple of ints
+    shape : tuple of ints
         Shape of NMR data.
 
     Returns
     --------
     torder : {'r', 'f', 'o'}
-        File ording for using in :py:func:`read` or :py:func:`write`.
+        File ordering for using in :py:func:`read` or :py:func:`write`.
 
     """
     ndim = len(shape)
