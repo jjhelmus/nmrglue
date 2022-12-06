@@ -22,7 +22,7 @@ import numpy as np
 from . import fileiobase
 
 
-TNTMAGIC_RE = re.compile(b"^TNT1\.\d\d\d$")
+TNTMAGIC_RE = re.compile(br"^TNT1\.\d\d\d$")
 
 TNTMAGIC = np.dtype('a8')
 TNTTLV = np.dtype([('tag', 'a4'), ('bool', '<u4'), ('length', '<u4')])

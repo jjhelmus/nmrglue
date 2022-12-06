@@ -4,7 +4,6 @@ JCAMP-DX parameter (acqus) files, and Bruker pulse program (pulseprogram)
 files.
 """
 
-from __future__ import print_function, division
 import locale
 import io
 
@@ -345,7 +344,7 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None, shape=None,
 
     """
     if os.path.isdir(dir) is not True:
-        raise IOError("directory %s does not exist" % (dir))
+        raise OSError("directory %s does not exist" % (dir))
 
     # Take a shot at reading the procs file
     if read_procs:
@@ -373,10 +372,10 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None, shape=None,
                 bin_file = "ser"
             else:
                 mesg = "No Bruker binary file could be found in %s"
-                raise IOError(mesg % (dir))
+                raise OSError(mesg % (dir))
         else:
             mesg = "No Bruker binary file could be found in %s"
-            raise IOError(mesg % (dir))
+            raise OSError(mesg % (dir))
 
     if read_acqus:
         # read the acqus_files and add to the dictionary
@@ -457,7 +456,7 @@ def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
     """
 
     if os.path.isdir(dir) is not True:
-        raise IOError("directory %s does not exist" % (dir))
+        raise OSError("directory %s does not exist" % (dir))
 
     # Take a shot at reading the procs file
     if read_procs:
@@ -485,10 +484,10 @@ def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
                 bin_file = "ser"
             else:
                 mesg = "No Bruker binary file could be found in %s"
-                raise IOError(mesg % (dir))
+                raise OSError(mesg % (dir))
         else:
             mesg = "No Bruker binary file could be found in %s"
-            raise IOError(mesg % (dir))
+            raise OSError(mesg % (dir))
 
     if read_acqus:
         # read the acqus_files and add to the dictionary
@@ -940,7 +939,7 @@ def write_pdata(dir, dic, data, roll=False, shape=None, submatrix_shape=None,
     # write out the procs files only for the desired dimensions
     if write_procs:
         if procs_files is None:
-            proc = ['procs'] + ['proc{}s'.format(i) for i in range(2, ndim+1)]
+            proc = ['procs'] + [f'proc{i}s' for i in range(2, ndim+1)]
             procs_files = [f for f in proc if (f in dic)]
 
         for f in procs_files:
@@ -1200,7 +1199,7 @@ def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
     # TODO read_pdata_lowmem, write_pdata
 
     if os.path.isdir(dir) is not True:
-        raise IOError("directory %s does not exist" % (dir))
+        raise OSError("directory %s does not exist" % (dir))
 
     # find binary files
     if bin_files is None:
@@ -1221,7 +1220,7 @@ def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
             else:
                 bin_files = ['3rrr']
         else:
-            raise IOError("No Bruker binary file could be found in %s" % (dir))
+            raise OSError("No Bruker binary file could be found in %s" % (dir))
 
     for f in bin_files.copy():
         if not os.path.isfile(os.path.join(dir, f)):
@@ -2158,7 +2157,7 @@ def read_jcamp(filename, encoding=locale.getpreferredencoding()):
     """
     dic = {"_coreheader": [], "_comments": []}  # create empty dictionary
 
-    with io.open(filename, 'r', encoding=encoding) as f:
+    with open(filename, 'r', encoding=encoding) as f:
         while True:     # loop until end of file is found
 
             line = f.readline().rstrip()    # read a line

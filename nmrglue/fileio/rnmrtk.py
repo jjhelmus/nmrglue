@@ -2,7 +2,6 @@
 Functions for reading and writing Rowland NMR Toolkit (RNMRTK) files
 """
 
-from __future__ import division
 
 __developer_info__ = """
 Information of the Rowland NMR Toolkit file format

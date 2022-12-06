@@ -15,7 +15,7 @@ from . import rnmrtk
 from . import fileiobase
 
 
-class converter(object):
+class converter:
     """
     Object which allows conversion between NMR file formats, including low
     memory data objects.
@@ -53,15 +53,15 @@ class converter(object):
 
         # Error checking
         if "_data" not in self.__dict__:
-            raise IOError("converter not loaded with data")
+            raise OSError("converter not loaded with data")
         if "_udic" not in self.__dict__:
-            raise IOError("converter not loaded with dictionary")
+            raise OSError("converter not loaded with dictionary")
         if "_iproc" not in self.__dict__:
-            raise IOError("converter not loaded with processing parameters")
+            raise OSError("converter not loaded with processing parameters")
         if "_oproc" not in self.__dict__:
-            raise IOError("converter not loaded with processing parameters")
+            raise OSError("converter not loaded with processing parameters")
         if "_odtype" not in self.__dict__:
-            raise IOError("converter not loaded with output dtype")
+            raise OSError("converter not loaded with output dtype")
 
         # Warnings
         if self._data.dtype.kind != np.dtype(self._odtype).kind:

@@ -175,7 +175,7 @@ def read_text(filename):
             if line[0:3] == "END":   # END marks end of data block
                 break
             ni_idx, np_idx = divmod(iline, dic['NP'])
-            r_val, i_val = [float(i) for i in line.split()]
+            r_val, i_val = (float(i) for i in line.split())
             data.real[ni_idx, np_idx] = r_val
             data.imag[ni_idx, np_idx] = i_val
 
@@ -186,7 +186,7 @@ def read_text(filename):
         for iline, line in enumerate(f):
             if line[0:3] == "END":
                 break
-            r_val, i_val = [float(i) for i in line.split()]
+            r_val, i_val = (float(i) for i in line.split())
             data.real[iline] = r_val
             data.imag[iline] = i_val
         data = data.reshape(dic['NELEM'], -1)
@@ -214,7 +214,7 @@ def read_xreim(filename):
     units = np.empty((NP, ), dtype='float32')
 
     for l_idx, line in enumerate(f):
-        np_unit, r_val, i_val = [float(i) for i in line.split()]
+        np_unit, r_val, i_val = (float(i) for i in line.split())
         units[l_idx] = np_unit
         data.real[l_idx] = r_val
         data.imag[l_idx] = i_val
@@ -246,7 +246,7 @@ def read_xyreim(filename):
         if np_idx == NP:    # skip blank line between blocks
             continue
         # unpack the line and store
-        ni_unit, np_unit, r_val, i_val = [float(i) for i in line.split()]
+        ni_unit, np_unit, r_val, i_val = (float(i) for i in line.split())
         data.real[ni_idx, np_idx] = r_val
         data.imag[ni_idx, np_idx] = i_val
         units[ni_idx, np_idx].ni_unit = ni_unit
@@ -374,7 +374,7 @@ LAST = lambda f, x: ((x) & (~0 << (8 - f)))
 
 def chars2bytes(chars):
     """Convert four characters from a data block into 3 'bytes'."""
-    c0, c1, c2, c3 = [ord(c) - BASE for c in chars]
+    c0, c1, c2, c3 = (ord(c) - BASE for c in chars)
 
     return [FIRST(6, c0) | LAST(2, c1 << 2),
             FIRST(4, c1) | LAST(4, c2 << 2),

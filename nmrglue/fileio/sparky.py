@@ -2,7 +2,6 @@
 Functions for reading and writing Sparky (.ucsf) files.
 """
 
-from __future__ import print_function
 
 __developer_info__ = """
 Sparky file format information
@@ -514,7 +513,7 @@ def read_4D(filename):
 
         # check for file size mismatch
         if seek_pos != dic["seek_pos"]:
-            warn('Bad file size in header %s vs %s' % (seek_pos, dic['seek_pos']))
+            warn('Bad file size in header {} vs {}'.format(seek_pos, dic['seek_pos']))
 
         # read the axis headers...
         for i in range(dic['naxis']):
@@ -550,7 +549,7 @@ def read_lowmem_2D(filename):
 
     # check for file size mismatch
     if seek_pos != dic["seek_pos"]:
-        warn('Bad file size in header %s vs %s' % (seek_pos, dic['seek_pos']))
+        warn('Bad file size in header {} vs {}'.format(seek_pos, dic['seek_pos']))
     return dic, data
 
 
@@ -566,7 +565,7 @@ def read_lowmem_3D(filename):
 
     # check for file size mismatch
     if seek_pos != dic["seek_pos"]:
-        warn('Bad file size in header %s vs %s' % (seek_pos, dic['seek_pos']))
+        warn('Bad file size in header {} vs {}'.format(seek_pos, dic['seek_pos']))
 
     return dic, data
 
@@ -872,10 +871,10 @@ def read_savefile(filename, spectrum_file=None):
     try:
         d, data = read(spectrum_file)
     except FileNotFoundError:
-        warn("Cannot find this file: {}".format(spectrum_file))
+        warn(f"Cannot find this file: {spectrum_file}")
         d, data = {}, None
     except UnicodeDecodeError:
-        warn("Could not correctly parse the spectrum file {}".format(spectrum_file))
+        warn(f"Could not correctly parse the spectrum file {spectrum_file}")
         d, data = {}, None
 
     dic.update(d)
@@ -963,9 +962,9 @@ class sparky_2d(fileiobase.data_nd):
 
         # tiles to get in each dim to read
         # Y tile to read
-        gtY = set([int(np.floor(i / self.lentY)) for i in gY])
+        gtY = set(int(np.floor(i / self.lentY)) for i in gY)
         # X tile to read
-        gtX = set([int(np.floor(i / self.lentX)) for i in gX])
+        gtX = set(int(np.floor(i / self.lentX)) for i in gX)
 
         # create a empty output directory
         out = np.empty((len(gY), len(gX)), dtype=self.dtype)
@@ -1098,11 +1097,11 @@ class sparky_3d(fileiobase.data_nd):
 
         # tiles to get in each dim to read
         # Z tiles
-        gtZ = set([int(np.floor(float(i) / self.lentZ)) for i in gZ])
+        gtZ = set(int(np.floor(float(i) / self.lentZ)) for i in gZ)
         # Y tiles
-        gtY = set([int(np.floor(float(i) / self.lentY)) for i in gY])
+        gtY = set(int(np.floor(float(i) / self.lentY)) for i in gY)
         # X tiles
-        gtX = set([int(np.floor(float(i) / self.lentX)) for i in gX])
+        gtX = set(int(np.floor(float(i) / self.lentX)) for i in gX)
 
         # total tiles in each dim
         ttX = int(np.ceil(self.lenX / float(self.lentX)))  # total tiles in X

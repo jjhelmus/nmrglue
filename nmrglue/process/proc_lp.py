@@ -2,7 +2,6 @@
 Linear Prediction (LP) functions for extrapolating and modeling NMR signals.
 """
 
-from __future__ import print_function
 
 __developer_info__ = """
 Notes
