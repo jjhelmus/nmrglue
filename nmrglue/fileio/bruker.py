@@ -29,6 +29,7 @@ the file with nmrglue.
 """
 
 from functools import reduce
+import operator
 import os
 from warnings import warn
 
@@ -1681,7 +1682,7 @@ class bruker_nd(fileiobase.data_nd):
 
         # check that size is correct. need isfloat to know whether each point
         # is 4 bytes or 8 bytes
-        pts = reduce(lambda x, y: x * y, fshape)
+        pts = reduce(operator.mul, fshape)
         if cplex:
             if isfloat:
                 if os.stat(filename).st_size != pts * 8 * 2:

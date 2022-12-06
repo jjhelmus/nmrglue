@@ -9,6 +9,7 @@ import string
 import sys
 import itertools
 from functools import reduce
+import operator
 
 import numpy as np
 
@@ -465,7 +466,7 @@ def index2trace_flat(shape, index):
     # by the corresponding index element, index[-1] as added at the beginning
     a = index[-1]
     for i, v in enumerate(index[:-1]):
-        mult = reduce(lambda x, y: x * y, shape[i + 1:])
+        mult = reduce(operator.mul, shape[i + 1:])
         a = a + mult * v
     return a
 

@@ -23,6 +23,7 @@ import struct
 import inspect
 from warnings import warn
 from functools import reduce
+import operator
 
 import numpy as np
 
@@ -607,7 +608,7 @@ def order_data(data, torder):
 
     """
     # determine the shape of the on disk data matrix
-    ntraces = reduce(lambda x, y: x * y, data.shape[:-1])
+    ntraces = reduce(operator.mul, data.shape[:-1])
     nshape = (ntraces, data.shape[-1])
 
     # take care of flat files
@@ -638,7 +639,7 @@ def read_fid(filename, shape=None, torder='flat', as_2d=False,
     Read a Agilent/Varian binary (fid) file.
 
     Parameters
-    ----------nmrglue/fileio/varian.py:441:5 [FURB125]: Return is redundant here
+    ----------
 
     filename : str
         Filename of Agilent/Varian binary file (fid) to read.
@@ -807,7 +808,7 @@ def read_fid_ntraces(filename, shape=None, torder='flat', as_2d=False,
     --------
     read_fid : Read a Agilent/Varian binary file with one trace per block.
     read_fid_lowmem : Read a Agilent/Varian binary file with one trace per
-        block using minimal amounts of memory.nmrglue/fileio/varian.py:441:5 [FURB125]: Return is redundant here
+        block using minimal amounts of memory.
 
 
     """
@@ -994,7 +995,7 @@ def write_fid_lowmem(filename, dic, data, torder='f', repack=False,
         warn("data and np size mismatch")
         if correct:
             dic['np'] = int(data.shape[1] * 2)
-    nblocks = int(reduce(lambda x, y: x * y, data.shape[:-1]))
+    nblocks = int(reduce(operator.mul, data.shape[:-1]))
     if nblocks != dic["nblocks"]:
         warn("data and block size mismatch")
         if correct:
@@ -2017,7 +2018,7 @@ class fid_nd(fileiobase.data_nd):
                 s = "last dimension should have size %i" % (int(dic["np"] / 2))
                 raise ValueError(s)
             # product of all but last dim should be number of blocks
-            if reduce(lambda x, y: x * y, fshape[:-1]) != dic['nblocks']:
+            if reduce(operator.mul, fshape[:-1]) != dic['nblocks']:
                 s = "number of traces in file does not match fshape"
                 raise ValueError(s)
 
