@@ -972,9 +972,9 @@ def guess_shape(dic):
     except KeyError:
         aq_mod = 0
 
-    if aq_mod == 0 or aq_mod == 2:
+    if aq_mod in (0, 2):
         cplex = False
-    elif aq_mod == 1 or aq_mod == 3:
+    elif aq_mod in (1, 3):
         cplex = True
     else:
         raise ValueError("Unknown Acquisition Mode")

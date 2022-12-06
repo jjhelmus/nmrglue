@@ -1132,18 +1132,16 @@ def ft(dic, data, auto=False, real=False, inv=False, alt=False, neg=False,
         else:  # freq domain
             # Real, TPPI and Sequential data is real transform
             if dic["FDDIMCOUNT"] >= 2.:
-                if ((dic["FD2DPHASE"] == 0 or dic["FD2DPHASE"] == 1) and
-                        fn != "FDF2"):
-                            real = True
+                if dic["FD2DPHASE"] in (0, 1) and fn != "FDF2":
+                    real = True
 
             # sign and negation in AQSIGN
-            if dic[fn + "AQSIGN"] == 1 or dic[fn + "AQSIGN"] == 2:
+            if dic[fn + "AQSIGN"] in (1, 2):
                 alt = True
 
-            if (dic[fn + "AQSIGN"] == 16 or dic[fn + "AQSIGN"] == 17 or
-                    dic[fn + "AQSIGN"] == 18):
-                        alt = True
-                        neg = True
+            if dic[fn + "AQSIGN"] in (16, 17, 18):
+                alt = True
+                neg = True
 
     if debug:
         print("real:", real)

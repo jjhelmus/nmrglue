@@ -1381,7 +1381,7 @@ class iter3D:
             # transpose the last two axes
             dic, plane = transpose_3D(dic, plane, (0, 2, 1))
 
-        if self.in_lead == "x" or self.in_lead == "y":
+        if self.in_lead in ("x", "y"):
             shape = (self.i_max, plane.shape[1], plane.shape[2])
             sz = slice(self.i, self.i + 1, 1)
             sx = slice(None)

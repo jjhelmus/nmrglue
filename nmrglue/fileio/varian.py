@@ -515,11 +515,11 @@ def torder2i2t(torder):
     # if torder is a function, return it
     if inspect.isfunction(torder):
         return torder
-    elif torder == 'flat' or torder == 'f':
+    elif torder in ('flat', 'f'):
         return fileiobase.index2trace_flat
-    elif torder == 'opposite' or torder == 'o':
+    elif torder in ('opposite', 'o'):
         return fileiobase.index2trace_opp
-    elif torder == 'regular' or torder == 'r':
+    elif torder in ('regular', 'r'):
         return fileiobase.index2trace_reg
     else:
         raise ValueError("unknown torder" + str(torder))
@@ -531,11 +531,11 @@ def torder2t2i(torder):
     """
     if inspect.isfunction(torder):
         return torder
-    elif torder == 'flat' or torder == 'f':
+    elif torder in ('flat', 'f'):
         return fileiobase.trace2index_flat
-    elif torder == 'opposite' or torder == 'o':
+    elif torder in ('opposite', 'o'):
         return fileiobase.trace2index_opp
-    elif torder == 'regular' or torder == 'r':
+    elif torder in ('regular', 'r'):
         return fileiobase.trace2index_reg
     else:
         raise ValueError("unknown torder" + str(torder))
@@ -566,7 +566,7 @@ def reorder_data(data, shape, torder):
 
     """
     # take care of flat files...
-    if torder == 'flat' or torder == 'f':
+    if torder in ('flat', 'f'):
         try:
             data = data.reshape(shape)
         except ValueError:
@@ -611,7 +611,7 @@ def order_data(data, torder):
     nshape = (ntraces, data.shape[-1])
 
     # take care of flat files
-    if torder == 'flat' or torder == 'f':
+    if torder in ('flat', 'f'):
         return data.reshape(nshape)
 
     # make an emprt array to hold the 2D disk formatted data matrix
@@ -1825,7 +1825,7 @@ def uninterleave_data(data):
     # determine the output dtype
     rdt = data.dtype.name
 
-    if rdt == 'int16' or rdt == "float32":
+    if rdt in ('int16', "float32"):
         cdt = "complex64"
     elif rdt == 'int32':
         cdt = "complex128"
