@@ -389,9 +389,9 @@ def read_2D(filename):
         dic = fileheader2dic(get_fileheader(f))
 
         # check for file size mismatch
-        if seek_pos != dic["seek_pos"]:
-            warn('Bad file size in header %s vs %s' %
-                 (seek_pos, dic['seek_pos']))
+        expected_seek_pos = dic["seek_pos"]
+        if seek_pos != expected_seek_pos:
+            warn(f'Bad file size in header {seek_pos} vs {expected_seek_pos}')
 
         # read the axis headers...
         for i in range(dic['naxis']):
@@ -448,9 +448,9 @@ def read_3D(filename):
         dic = fileheader2dic(get_fileheader(f))
 
         # check for file size mismatch
-        if seek_pos != dic["seek_pos"]:
-            warn('Bad file size in header %s vs %s' %
-                 (seek_pos, dic['seek_pos']))
+        expected_seek_pos = dic["seek_pos"]
+        if seek_pos != expected_seek_pos:
+            warn(f'Bad file size in header {seek_pos} vs {expected_seek_pos}')
 
         # read the axis headers...
         for i in range(dic['naxis']):
@@ -512,8 +512,9 @@ def read_4D(filename):
         dic = fileheader2dic(get_fileheader(f))
 
         # check for file size mismatch
-        if seek_pos != dic["seek_pos"]:
-            warn('Bad file size in header {} vs {}'.format(seek_pos, dic['seek_pos']))
+        expected_seek_pos = dic['seek_pos']
+        if seek_pos != expected_seek_pos:
+            warn(f'Bad file size in header {seek_pos} vs {expected_seek_pos}')
 
         # read the axis headers...
         for i in range(dic['naxis']):
@@ -548,8 +549,9 @@ def read_lowmem_2D(filename):
     dic = dict(data.dic)
 
     # check for file size mismatch
-    if seek_pos != dic["seek_pos"]:
-        warn('Bad file size in header {} vs {}'.format(seek_pos, dic['seek_pos']))
+    expected_seek_pos = dic['seek_pos']
+    if seek_pos != expected_seek_pos:
+        warn(f'Bad file size in header {seek_pos} vs {expected_seek_pos}')
     return dic, data
 
 
@@ -564,8 +566,9 @@ def read_lowmem_3D(filename):
     dic = dict(data.dic)
 
     # check for file size mismatch
-    if seek_pos != dic["seek_pos"]:
-        warn('Bad file size in header {} vs {}'.format(seek_pos, dic['seek_pos']))
+    expected_seek_pos = dic['seek_pos']
+    if seek_pos != expected_seek_pos:
+        warn(f'Bad file size in header {seek_pos} vs {expected_seek_pos}')
 
     return dic, data
 

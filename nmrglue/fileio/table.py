@@ -94,7 +94,7 @@ def guess_pformat(col):
         # N is the number of digits in largest value, or 1
         N = max(np.ceil(np.log(np.abs(col).max()) / np.log(10)), 1)
         # +1 for sign
-        return '%{0}d'.format(int(N + 1))
+        return f'%{int(N) + 1}d'
 
     if kind == 'f':
         # will be either %+e or %N.3f, see if 'e' is in %g to determine
@@ -103,7 +103,7 @@ def guess_pformat(col):
         else:
             N = max(np.ceil(np.log(np.abs(col).max()) / np.log(10)), 1)
             # +1 for sign, +1 for decimal points, +3 for precision
-            return f'%{int(N + 5)}.3f'
+            return f'%{int(N) + 5}.3f'
 
     # remaining kinds: 'c' - complex, 'b' - boolean, 'U' - unicode, 'V' - void
     raise ValueError("unknown kind %s in column" % (kind))
