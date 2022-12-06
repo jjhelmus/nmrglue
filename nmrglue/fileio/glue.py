@@ -101,7 +101,6 @@ def write(filename, dic, data, dataset="spectrum", overwrite=False):
     put_dic(f, dic, dataset)
 
     f.close()
-    return
 
 
 # data wrapping functions
@@ -165,7 +164,6 @@ def put_dic(f, dic, dataset="spectrum"):
         # simple value
         else:
             dset.attrs[key] = value
-    return
 
 
 # glue_* objects

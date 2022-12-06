@@ -434,7 +434,6 @@ def write_2D(filename, dic, data, overwrite=False):
         put_data(f, find_tilen_2d(data, i, (t_tup)))
 
     f.close()
-    return
 
 
 def read_3D(filename):
@@ -468,6 +467,7 @@ def read_3D(filename):
 
         return dic, data
 
+
 def write_3D(filename, dic, data, overwrite=False):
     """
     Write a 3D Sparky file. See :py:func:`write` for documentation.
@@ -498,7 +498,7 @@ def write_3D(filename, dic, data, overwrite=False):
     for i in range(int(tt)):
         put_data(f, find_tilen_3d(data, i, (t_tup)))
     f.close()
-    return
+
 
 def read_4D(filename):
     """
@@ -1210,6 +1210,7 @@ def get_tilen(f, n_tile, tw_tuple):
     f.seek(int(180 + 128 * len(tw_tuple) + n_tile * tsize))
     return np.frombuffer(f.read(tsize), dtype='>f4')
 
+
 def untile_data4D(data, tile_size, data_size):
     """
     Rearrange 4D tiled/Sparky formatted data into standard format.
@@ -1271,6 +1272,7 @@ def untile_data4D(data, tile_size, data_size):
 
     return out[:lenA, :lenZ, :lenY, :lenX]
 
+
 def get_tile(f, num_points):
     """
     Read the next tile from a Sparky file object.
@@ -1305,7 +1307,6 @@ def put_tile(f, tile):
 
     """
     f.write(tile.astype('>f4').tobytes())
-    return
 
 
 def get_data(f):
@@ -1324,7 +1325,6 @@ def put_data(f, data):
 
     """
     f.write(data.astype('>f4').tobytes())
-    return
 
 
 # tiling/untiling functions
@@ -1648,7 +1648,6 @@ def put_fileheader(f, fl):
     Write fileheader list to file (180-bytes).
     """
     f.write(struct.pack('>10s 4c 9s 26s 80s 3x l 40s 4x', *fl))
-    return
 
 
 def fileheader2dic(header):
@@ -1710,7 +1709,6 @@ def put_axisheader(f, al):
     Write an axisheader list to file (128-bytes written).
     """
     f.write(struct.pack('>6s h 3I 6f 84s', *al))
-    return
 
 
 def axisheader2dic(header):

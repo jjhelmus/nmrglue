@@ -774,7 +774,6 @@ def write(dir, dic, data, bin_file=None, acqus_files=None, procs_files=None,
     bin_full = os.path.join(dir, bin_file)
     write_binary(bin_full, dic, data, big=big, isfloat=isfloat,
                  overwrite=overwrite)
-    return
 
 
 def write_lowmem(dir, dic, data, bin_file=None, acqus_files=None,
@@ -837,7 +836,6 @@ def write_lowmem(dir, dic, data, bin_file=None, acqus_files=None,
     bin_full = os.path.join(dir, bin_file)
     write_binary_lowmem(bin_full, dic, data, big=big, isfloat=isfloat,
                         overwrite=overwrite)
-    return
 
 
 def write_pdata(dir, dic, data, roll=False, shape=None, submatrix_shape=None,
@@ -954,8 +952,6 @@ def write_pdata(dir, dic, data, roll=False, shape=None, submatrix_shape=None,
     bin_full = os.path.join(pdata_path, bin_file)
     write_binary(bin_full, dic, data, big=big, isfloat=isfloat,
                  overwrite=overwrite)
-
-    return
 
 
 def guess_shape(dic):
@@ -1618,7 +1614,6 @@ def write_binary(filename, dic, data, overwrite=False, big=True,
     else:
         put_data(f, data, big, isfloat)
     f.close()
-    return
 
 
 def write_binary_lowmem(filename, dic, data, overwrite=False, big=True,
@@ -1646,7 +1641,6 @@ def write_binary_lowmem(filename, dic, data, overwrite=False, big=True,
         else:
             put_data(f, trace, big, isfloat)
     f.close()
-    return
 
 
 # lowmemory ND object
@@ -1808,7 +1802,6 @@ def put_data(f, data, big=True, isfloat=False):
             f.write(data.astype('>i4').tobytes())
         else:
             f.write(data.astype('<i4').tobytes())
-    return
 
 
 def get_trace(f, num_points, big, isfloat):
@@ -2374,8 +2367,6 @@ def write_jcamp_pair(f, key, value):
     f.write(line)
     f.write("\n")
 
-    return
-
 
 # pulse program read/writing functions
 
@@ -2584,7 +2575,6 @@ def write_pprog(filename, dic, overwrite=False):
 
     # close the file
     f.close()
-    return
 
 
 def _merge_dict(a, b):
