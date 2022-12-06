@@ -3,7 +3,6 @@ Functions for fitting and simulating arbitrary dimensional lineshapes commonly
 found in NMR experiments
 """
 
-from __future__ import print_function
 
 import numpy as np
 

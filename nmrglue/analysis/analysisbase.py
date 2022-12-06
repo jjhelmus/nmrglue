@@ -161,7 +161,7 @@ def squish(r, axis):
 
 
 # Windowing classes
-class ndwindow(object):
+class ndwindow:
     """
     An N-dimensional iterator to slice arrays into windows.
 
@@ -247,7 +247,7 @@ class ndwindow(object):
         return self
 
 
-class ndwindow_index(object):
+class ndwindow_index:
     """
     An N-dimensional iterator object which returns the index of the window
     center and a :py:class:`ndwindow` slice array.  See :py:class:`ndwindow`
@@ -289,7 +289,7 @@ class ndwindow_index(object):
         return self
 
 
-class ndwindow_inside(object):
+class ndwindow_inside:
     """
     An N-dimensional iterator to slice arrays into uniform size windows.
 
@@ -352,7 +352,7 @@ class ndwindow_inside(object):
         return self
 
 
-class ndwindow_inside_index(object):
+class ndwindow_inside_index:
     """
     An N-dimensional iterator object which returns the index of the window
     top-left and a :py:class:`ndwindow_inside` slice array.

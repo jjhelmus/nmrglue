@@ -32,7 +32,7 @@ OPTIONS
 \tlocation of the Cpython executable and the folder where all scripts
 \tare located can be given. Use full path names for this, i.e., use
 \t'/usr/bin/python3' for *nix instead of 'python3' or '~/folder/python3',
-\tand 'C:\python.exe' for Windows (note the .exe) extension. If the
+\tand 'C:\\python.exe' for Windows (note the .exe) extension. If the
 \tconfiguration file already exists, the entries will be verified and
 \tthe dialog will be populated with them if these are found to be correct.
 \tElse, an error message with the configuration file will be returned and
@@ -208,7 +208,7 @@ def exists(filename, raise_error=False):
     if os.path.exists(filename):
         return True
     elif raise_error:
-        raise Exception("{} not found".format(filename))
+        raise Exception(f"{filename} not found")
     else:
         return False
 
@@ -307,7 +307,7 @@ def verify_python(command):
 
     """
     if not os.path.exists(command):
-        raise OSError("The command {} does not seem to exist".format(command))
+        raise OSError(f"The command {command} does not seem to exist")
 
     command = command.split(os.sep)[-1]
     if command.lower().find("python") != 0:

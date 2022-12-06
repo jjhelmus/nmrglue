@@ -3,7 +3,7 @@ import numpy as np
 
 def integrate(data, unit_conv, limits, unit='ppm', noise_limits=None,
               norm_to_range=None, calibrate=1.0):
-    """
+    r"""
     Integrate one 1D data array within limits given in units. Data points must
     be equally spaced.
 
@@ -26,7 +26,7 @@ def integrate(data, unit_conv, limits, unit='ppm', noise_limits=None,
     Where:
 
     .. math::
-        n =  \\frac{|b-a|}{dx}+1
+        n =  \frac{|b-a|}{dx}+1
 
     sigma is the standard deviation of the baseline noise. n is the number
     of bins in the integration range.
@@ -106,7 +106,7 @@ def integrate(data, unit_conv, limits, unit='ppm', noise_limits=None,
 
 
 def ndintegrate(data, unit_conv, limits, unit='ppm', noise_limits=None):
-    """
+    r"""
     Integrate one nD data array within limits given in units. Data points must
     be equally spaced. Can only integrate one region per function call.
 

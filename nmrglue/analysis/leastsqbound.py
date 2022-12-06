@@ -257,7 +257,7 @@ def leastsqbound(func, x0, args=(), bounds=None, Dfun=None, full_output=0,
         args = (args,)
     m = _check_func('leastsq', 'func', func, x0, args, n)[0][0]
     if n > m:
-        raise TypeError('Improper input: N=%s must not exceed M=%s' % (n, m))
+        raise TypeError(f'Improper input: N={n} must not exceed M={m}')
 
     # define a wrapped func which accept internal parameters, converts them
     # to external parameters and calls func

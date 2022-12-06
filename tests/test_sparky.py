@@ -1,6 +1,5 @@
 """ Tests for the fileio.sparky submodule """
 
-from __future__ import print_function
 
 import tempfile
 import os

@@ -562,7 +562,7 @@ def read(filename):
     """
 
     if os.path.isfile(filename) is not True:
-        raise IOError("file %s does not exist" % (filename))
+        raise OSError("file %s does not exist" % (filename))
 
     # first read everything (including data array) to "raw" dictionary,
     # in which data values are read as raw strings including whitespace

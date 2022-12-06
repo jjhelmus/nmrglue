@@ -3,7 +3,6 @@ fileiobase provides general purpose NMR file IO functions and classes
 used by multiple nmrglue.fileio modules.
 """
 
-from __future__ import division
 
 import os
 import string
@@ -397,7 +396,7 @@ def uc_from_freqscale(scale, obs, unit='ppm'):
             car = (min-dx/2.0 + (max-min)/2.0) / 1.e3
 
     else:
-        mesg = '{} is not a supported unit.'.format(unit)
+        mesg = f'{unit} is not a supported unit.'
         raise ValueError(mesg)
 
     return unit_conversion(size, complex, sw, obs, car)
@@ -412,7 +411,7 @@ def open_towrite(filename, overwrite=False, mode='wb'):
     """
     # check if file exists and overwrite if False
     if os.path.exists(filename) and (overwrite is False):
-        raise IOError("File exists, recall with overwrite=True")
+        raise OSError("File exists, recall with overwrite=True")
 
     p, fn = os.path.split(filename)  # split into filename and path
     # create directories if needed
@@ -565,7 +564,7 @@ def trace2index_reg(shape, ntrace):
 #
 
 
-class data_nd(object):
+class data_nd:
     """
     Base class for building objects which emulate ndarray objects without
     loading data into memory.  These object have the following properties:
@@ -643,12 +642,12 @@ class data_nd(object):
 
                 # check for out of range indexes
                 if v >= self.shape[i]:
-                    raise IndexError("index(%s) out of range(0 <= index < %s) \
-                    in dimension %s" % (v, self.shape[i] - 1, i))
+                    raise IndexError("index({}) out of range(0 <= index < {}) \
+                    in dimension {}".format(v, self.shape[i] - 1, i))
 
                 if v <= (-1 * self.shape[i] - 1):
-                    raise IndexError("index(%s) out of range(0 <= index < %s) \
-                    in dimension %s" % (v, self.shape[i] - 1, i))
+                    raise IndexError("index({}) out of range(0 <= index < {}) \
+                    in dimension {}".format(v, self.shape[i] - 1, i))
 
                 if v < 0:
                     w = self.shape[i] + v

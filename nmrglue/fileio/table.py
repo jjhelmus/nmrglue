@@ -103,7 +103,7 @@ def guess_pformat(col):
         else:
             N = max(np.ceil(np.log(np.abs(col).max()) / np.log(10)), 1)
             # +1 for sign, +1 for decimal points, +3 for precision
-            return '%{0}.3f'.format(int(N + 5))
+            return f'%{int(N + 5)}.3f'
 
     # remaining kinds: 'c' - complex, 'b' - boolean, 'U' - unicode, 'V' - void
     raise ValueError("unknown kind %s in column" % (kind))
@@ -134,13 +134,13 @@ def read(filename):
     # find the line beginning with # NAMES and parse out the column names
     nl = [i for i, l in enumerate(comments) if l[:7] == "# NAMES"]
     if len(nl) != 1:
-        raise IOError("%s does not have a # NAMES line" % (filename))
+        raise OSError("%s does not have a # NAMES line" % (filename))
     dtd = {'names': comments.pop(nl[0])[7:].split()}
 
     # find the line beginning with # DTYPE and parse out the column names
     dl = [i for i, l in enumerate(comments) if l[:9] == "# FORMATS"]
     if len(dl) != 1:
-        raise IOError("%s does not have a # FORMATS line" % (filename))
+        raise OSError("%s does not have a # FORMATS line" % (filename))
     dtd['formats'] = comments.pop(dl[0])[9:].split()
 
     # return the data as a records array

@@ -1,6 +1,5 @@
 """ Tests for the fileio.convert submodule """
 
-from __future__ import print_function
 
 import tempfile
 import os
@@ -794,22 +793,22 @@ def test_bruker_3d():
             line = sub("##ORIGIN= .+",
                        "##ORIGIN= Fake acqu3s file generated for testing",
                        line)
-            line = sub("\$BF1.+",
+            line = sub(r"\$BF1.+",
                        "$BF1= 201.192849",
                        line)
-            line = sub("\$NUC1.+",
+            line = sub(r"\$NUC1.+",
                        "$NUC1= <13C>",
                        line)
-            line = sub("\$O1.+",
+            line = sub(r"\$O1.+",
                        "$O1= 10663.220997003",
                        line)
-            line = sub("\$SFO1.+",
+            line = sub(r"\$SFO1.+",
                        "$SFO1= 201.203512220997",
                        line)
-            line = sub("\$SW=.+",
+            line = sub(r"\$SW=.+",
                        "$SW=27.611626113",
                        line)
-            line = sub("\$SW_h.+",
+            line = sub(r"\$SW_h.+",
                        "$SW_h= 5555.556152",
                        line)
             out.write(line)
@@ -1549,22 +1548,22 @@ def test_bruker_3d_lowmem():
             line = sub("##ORIGIN= .+",
                        "##ORIGIN= Fake acqu3s file generated for testing",
                        line)
-            line = sub("\$BF1.+",
+            line = sub(r"\$BF1.+",
                        "$BF1= 201.192849",
                        line)
-            line = sub("\$NUC1.+",
+            line = sub(r"\$NUC1.+",
                        "$NUC1= <13C>",
                        line)
-            line = sub("\$O1.+",
+            line = sub(r"\$O1.+",
                        "$O1= 10663.220997003",
                        line)
-            line = sub("\$SFO1.+",
+            line = sub(r"\$SFO1.+",
                        "$SFO1= 201.203512220997",
                        line)
-            line = sub("\$SW=.+",
+            line = sub(r"\$SW=.+",
                        "$SW=27.611626113",
                        line)
-            line = sub("\$SW_h.+",
+            line = sub(r"\$SW_h.+",
                        "$SW_h= 5555.556152",
                        line)
             out.write(line)

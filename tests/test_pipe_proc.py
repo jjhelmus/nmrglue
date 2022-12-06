@@ -1,7 +1,6 @@
 #! /usr/bin/env python
 # pipe_proc module tests, calls scripts in pipe_proc_tests directory.
 
-from __future__ import print_function
 
 import os
 import nmrglue as ng

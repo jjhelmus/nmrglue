@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import sys, os
 from datetime import date
 
@@ -257,5 +256,4 @@ def linkcode_resolve(domain, info):
 
     fn = relpath(fn, start=dirname(nmrglue.__file__))
 
-    return "http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/%s%s" % (
-        fn, linespec)
+    return f"http://github.com/jjhelmus/nmrglue/blob/master/nmrglue/{fn}{linespec}"

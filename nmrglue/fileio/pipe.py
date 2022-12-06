@@ -1,8 +1,7 @@
-"""
+    """
 Functions for reading and writing NMRPipe files and table (.tab) files
 """
 
-from __future__ import print_function, division
 
 __developer_info__ = """
 NMRPipe file structure is described in the NMRPipe man pages and fdatap.h
@@ -67,13 +66,13 @@ def read_table(filename):
     # pull out and parse the VARS line
     vl = [i for i, l in enumerate(cl) if l[:4] == "VARS"]
     if len(vl) != 1:
-        raise IOError("%s has no/more than one VARS line" % (filename))
+        raise OSError("%s has no/more than one VARS line" % (filename))
     dtd = {'names': cl.pop(vl[0]).split()[1:]}
 
     # pull out and parse the FORMAT line
     fl = [i for i, l in enumerate(cl) if l[:6] == "FORMAT"]
     if len(fl) != 1:
-        raise IOError("%s has no/more than one FORMAT line" % (filename))
+        raise OSError("%s has no/more than one FORMAT line" % (filename))
     pformat = cl.pop(fl[0]).split()[1:]
     p2f = {'d': 'i4', 'f': 'f8', 'e': 'f8', 's': 'S256'}  # pipe -> format
     dtd['formats'] = [p2f[i[-1]] for i in pformat]
@@ -1246,7 +1245,7 @@ def transpose_3D(dic, data, axes=(2, 1, 0)):
     return rdic, data
 
 
-class iter3D(object):
+class iter3D:
     """
     Object which allows for graceful iteration over 3D NMRPipe files.
 
@@ -1841,7 +1840,7 @@ class pipe_3d(fileiobase.data_nd):
         if fcheck:
             for i in range(1, lenZ + 1):
                 if os.path.exists(filemask % i) is False:
-                    raise IOError("File not found: " + str(filemask % i))
+                    raise OSError("File not found: " + str(filemask % i))
 
         # check last axis quadrature
         fn = "FDF" + str(int(dic["FDDIMORDER1"]))
@@ -2059,7 +2058,7 @@ class pipe_4d(fileiobase.data_nd):
                     else:
                         fname = filemask % (ai + 1, zi + 1)
                     if os.path.exists(fname) is False:
-                        raise IOError("File not found: " + str(fname))
+                        raise OSError("File not found: " + str(fname))
 
         # check last axis quadrature
         fn = "FDF" + str(int(dic["FDDIMORDER1"]))

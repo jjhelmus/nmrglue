@@ -6,7 +6,6 @@ a set of private functions for calculating a spectral phase quality score
 for a provided spectrum.
 """
 
-from __future__ import print_function
 
 import numpy as np
 import scipy.optimize
@@ -64,7 +63,7 @@ def autops(data, fn, p0=0.0, p1=0.0, return_phases=False, peak_width=100, **kwar
                 'acme': _ps_acme_score,
             }[fn]
         except KeyError:
-            raise KeyError('Unable to find algorithm "{}". Use "acme", "peak_minima" or pass a custom function.'.format(fn))
+            raise KeyError(f'Unable to find algorithm "{fn}". Use "acme", "peak_minima" or pass a custom function.')
 
     opt = [p0, p1]
 

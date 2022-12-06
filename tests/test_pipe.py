@@ -1,6 +1,5 @@
 """ Tests for the fileio.pipe submodule """
 
-from __future__ import print_function
 from nmrglue.fileio.pipe import fdata2dic
 
 import tempfile

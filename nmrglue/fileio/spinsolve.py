@@ -1,4 +1,4 @@
-"""
+    """
 Functions for reading Magritek Spinsolve binary (dx/1d) files and
 parameter (acqu.par/proc.par) files.
 """
@@ -99,7 +99,7 @@ def read(dir='.', specfile=None, acqupar="acqu.par", procpar="proc.par"):
     """
 
     if os.path.isdir(dir) is not True:
-        raise IOError("directory %s does not exist" % (dir))
+        raise OSError("directory %s does not exist" % (dir))
 
     # Create empty dic
     dic = {
@@ -123,7 +123,7 @@ def read(dir='.', specfile=None, acqupar="acqu.par", procpar="proc.par"):
     # Read in proc.par and write to dic
     procpar = os.path.join(dir, procpar)
     if os.path.isfile(procpar):
-        with open(procpar, "r") as f:
+        with open(procpar) as f:
             info = f.readlines()
         for line in info:
             line = line.replace("\n", "")
@@ -137,14 +137,14 @@ def read(dir='.', specfile=None, acqupar="acqu.par", procpar="proc.par"):
     if specfile:
         inputfile = os.path.join(dir, specfile)
         if not os.path.isfile(inputfile):
-            raise IOError("File %s does not exist" % (inputfile))
+            raise OSError("File %s does not exist" % (inputfile))
     else:
         for priority in priority_list:
             inputfile = os.path.join(dir, priority)
             if os.path.isfile(inputfile):
                 break
     if inputfile is None:
-        raise IOError("directory %s does not contain spectral data" % (dir))
+        raise OSError("directory %s does not contain spectral data" % (dir))
 
     # Detect which file we are dealing with from the extension and read in the spectral data
 
@@ -176,7 +176,7 @@ def read(dir='.', specfile=None, acqupar="acqu.par", procpar="proc.par"):
         data = data[split:: 2] + 1j * data[split + 1:: 2]
 
     else:
-        raise IOError("File %s cannot be interpreted, use .dx or .1d instead" % (inputfile))
+        raise OSError("File %s cannot be interpreted, use .dx or .1d instead" % (inputfile))
 
     return dic, data
 
