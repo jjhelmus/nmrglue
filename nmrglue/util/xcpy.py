@@ -155,17 +155,15 @@ def write_cfg(outfile, infile=None):
             cpyname, scripts_location = read_cfg(infile)
         except OSError:
             if exists(infile):
-                errmsg = """
-                    The following configuration was found in the file {}:
+                errmsg = f"""
+                    The following configuration was found in the file {infile}:
 
-                    {}
+                    {show_config(infile, printing=False)}
 
                     These settings are likely incorrect.
                     You can enter the correct settings at the next dialog box.
                     Press 'Close' to continue.
-                    """.format(
-                    infile, show_config(infile, printing=False)
-                )
+                    """
                 MSG(errmsg)
 
             cpyname, scripts_location = read_cfg(infile, check_python=False)
@@ -312,14 +310,12 @@ def verify_python(command):
     command = command.split(os.sep)[-1]
     if command.lower().find("python") != 0:
 
-        errmsg = """
-            {} does not seem to be a valid python file.
+        errmsg = f"""
+            {command} does not seem to be a valid python file.
             Please check the configuration file using 'xcpy --config',
             or change the configuration file using 'xcpy --settings'
             This attempt will be aborted.
-            """.format(
-            command
-        )
+            """
 
         raise OSError(errmsg)
 
@@ -373,14 +369,12 @@ def main():
     # if it does not, alert the user and open up a dialog box to write it out
     elif not os.path.exists(config_file):
         MSG(
-            """
+            f"""
             Configuration file does not exist.
             An input box will be opened next to write it.
-            Alternately, it can be manually edited at {}.
+            Alternately, it can be manually edited at {config_file}.
             Press 'Close' to continue.
-            """.format(
-                config_file
-            )
+            """
         )
         write_cfg(config_file)
 
@@ -455,10 +449,10 @@ def main():
 
             # executed should be false iff no script was found
             if not executed:
+                scriptname = argv[-1] + ".py"
+                folders = "\n".join(folders)
                 raise Exception(
-                    "The file {} was not found in the following folders:\n\n{}".format(
-                        argv[-1] + ".py", "\n".join(folders)
-                    )
+                    f"The file {scriptname} was not found in the following folders:\n\n{folders}"
                 )
 
         # handle errors and print messages from cpython
