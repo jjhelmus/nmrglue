@@ -52,7 +52,7 @@ File IO
 
 Processing
 ----------
-* Add the util/xcpy.py module for interfacing nmrglue with Topspin (#103, #105)
+* Add the util/xcpy.py module for interfacing nmrglue with TopSpin (#103, #105)
 * Add additional options to the autops function (#108)
 * Improvements to the autops function (#124)
 
