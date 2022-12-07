@@ -29,7 +29,7 @@ Developer Functions
 
 .. include:: ../../../nmrglue/process/proc_lp.py
     :start-line: 5
-    :end-line: 20 
+    :end-line: 20
 
 
 These functions are called by high-level function are and most users will not
@@ -64,5 +64,3 @@ use them in common processing scripts.  Developers may be interested in them.
     reverse_filter
     fix_roots
     extrapolate
-
-

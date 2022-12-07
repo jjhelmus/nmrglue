@@ -54,7 +54,7 @@ functions.
 Developer Classes
 ^^^^^^^^^^^^^^^^^
 
-.. autosummary:: 
+.. autosummary::
     :toctree: generated/
 
-    rnmrtk_nd 
+    rnmrtk_nd

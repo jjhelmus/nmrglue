@@ -4,13 +4,13 @@ coadd example: coadd_pseudo3d_pipe
 ==================================
 
 This example shows how to use nmrglue to coadd a number of collections of 2D
-NMRPipe files which constitute a pseudo-3D data set.  The two (or more) 
-psuedo-3D data sets are assumed to be in directories named  ``run*.dir`` with 
-subdirectories named ``*.fid`` containing a ``test.fid`` file.  The directory 
-``coadded_data.dir`` is created with the same subdirectory structure containing 
+NMRPipe files which constitute a pseudo-3D data set.  The two (or more)
+psuedo-3D data sets are assumed to be in directories named  ``run*.dir`` with
+subdirectories named ``*.fid`` containing a ``test.fid`` file.  The directory
+``coadded_data.dir`` is created with the same subdirectory structure containing
 ``test.fid`` files containing data created by coadding each pseudo-3D.
 
-The data used in this example is available for 
+The data used in this example is available for
 `download. <https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/nmrglue/example_coadd_pseudo3d_pipe.zip>`_
 
 [:download:`source code <../../../examples/coadd/coadd_pseudo3d_pipe/coadd_pseudo3d.py>`]

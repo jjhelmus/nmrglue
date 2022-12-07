@@ -15,7 +15,7 @@ where *_d and *_u indicate downlfield and upfield limits, respectively.
 
 def plot(dic, data, outfile=None, xlims=[], ylims=[]):
     """
-    Plot the sparky data as it was annotated in the save file 
+    Plot the sparky data as it was annotated in the save file
 
     """
 

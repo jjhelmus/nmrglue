@@ -21,7 +21,7 @@ Instructions
 
 3.  Run ``make html``. in this directory.
 
-The html documentation should be stored in the build/html directory.  
+The html documentation should be stored in the build/html directory.
 
 
 ReadTheDocs

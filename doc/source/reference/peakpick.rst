@@ -17,7 +17,7 @@ User Functions
 Developer Functions
 -------------------
 
-These functions are typically not used directly by users.  Developers who 
+These functions are typically not used directly by users.  Developers who
 want fine control over peak picking will be interested in these functions.
 
 .. autosummary::
@@ -34,8 +34,3 @@ want fine control over peak picking will be interested in these functions.
     find_all_nthres_fast
     find_pseg_slice
     find_nseg_slice
-    
-    
-    
-    
-    

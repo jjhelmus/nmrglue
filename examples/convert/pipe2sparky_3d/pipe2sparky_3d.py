@@ -6,7 +6,7 @@ import nmrglue as ng
 dic, data = ng.pipe.read("nmrpipe_3d/ft/test%03d.ft3")
 #dic, data = ng.pipe.read_lowmem("nmrpipe_3d/ft/test%03d.ft3")
 
-# Set the spectral parameters 
+# Set the spectral parameters
 udic = ng.pipe.guess_udic(dic, data)
 
 # create the converter object and initialize with NMRPipe data

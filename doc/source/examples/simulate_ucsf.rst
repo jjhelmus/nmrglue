@@ -1,6 +1,6 @@
 .. _simulate_ucsf:
 
-Simulate a ucsf (Sparky) file 
+Simulate a ucsf (Sparky) file
 =============================
 
 
@@ -16,4 +16,3 @@ is saved as a ucsf (Sparky) file named `test.ucsf`.
 [:download:`peaks.txt <../../../examples/simulation/simulate_ucsf/peaks.txt>`]
 
 .. literalinclude:: ../../../examples/simulation/simulate_ucsf/peaks.txt
-

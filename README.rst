@@ -1,5 +1,5 @@
 =======
-nmrglue 
+nmrglue
 =======
 
 What is nmrglue?
@@ -25,13 +25,13 @@ nmrglue has the ability to read, write and convert between a number of common
 NMR file formats including Varian, Bruker, NMRPipe, and Sparky files. The
 files, which are represented in python as dictionaries of spectral parameters
 and Numpy array objects, can be easily examined, modified and processed as
-desired. 
+desired.
 
 nmrglue provides a number of common functions for processing NMR data such as
 apodization, spectral shifting, Fourier and other transformations, baseline
 smoothing and flattening, and linear prediction. In addition new processing
 schemes can be implemented easily using the nmrglue provided functions and the
-multitude of numerical routines provided by the Numpy and Scipy packages. 
+multitude of numerical routines provided by the Numpy and Scipy packages.
 
 When used in conjunction with the matplotlib (or other) python plotting
 library nmrglue can be used to create publication quality figures of NMR

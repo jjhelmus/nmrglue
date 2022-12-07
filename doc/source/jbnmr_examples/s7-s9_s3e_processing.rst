@@ -1,6 +1,6 @@
 .. include:: ../../../examples/jbnmr_examples/s7-s9_s3e_processing/README.rst
 
-The data used in this example is available for 
+The data used in this example is available for
 `download. <https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/nmrglue/jbnmr_s7-s9_s3e_processing.zip>`_ [5.42 MB]
 
 Listing S7

@@ -15,9 +15,9 @@ User Functions
     :toctree: generated/
 
     read
-    write 
+    write
     insert_row
-    append_row 
+    append_row
     delete_row
     reorder_rows
     insert_column
@@ -27,4 +27,3 @@ User Functions
     pipe2glue
     glue2pipe
     guess_pformat
-

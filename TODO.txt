@@ -21,7 +21,7 @@ nmrglue
     - sparky_nd object? or dimension agnostic functions?
     - spinev module?
 
-    gui? 
+    gui?
     ----
     - gui module with common gui functions?
 
@@ -45,19 +45,19 @@ test
 
 Module          Notes
 ------          ------
-fileiobase      Tested       
-glue            Not currently imported      
-table       
-proc_base       Partially tested with pipe_proc test     
+fileiobase      Tested
+glue            Not currently imported
+table
+proc_base       Partially tested with pipe_proc test
 proc_bl         Partially tested with pipe_proc test
 proc_lp         Partially tested with pipe_proc test
-analysisbase    No tests needed    
-helpers         
-leastsqbound    
-lineshapes1d    
-linesh          
-peakpick        
-segmentation    
+analysisbase    No tests needed
+helpers
+leastsqbound
+lineshapes1d
+linesh
+peakpick
+segmentation
 misc
 
 - Check coverage on current tests, get to 80%+
@@ -67,9 +67,9 @@ misc
 doc
 ---
 
--   Rewrite tutorial including a mention of analysis modules. 
+-   Rewrite tutorial including a mention of analysis modules.
 -   pipe_proc: Add References to low level function / better description
--   proc_base : Additional documentation, indication which functions work on 
+-   proc_base : Additional documentation, indication which functions work on
     arbitrary dimensional data.
 -   proc_bl : Flesh out the sol_* functions?
 -   helpers : Better documentation, examples?

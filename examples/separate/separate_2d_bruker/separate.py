@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Separate 2D data sets from an arrayed data set, directories will be names 
+# Separate 2D data sets from an arrayed data set, directories will be names
 # 1, 2, 3, ... 23
 
 import nmrglue as ng

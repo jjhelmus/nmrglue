@@ -13,7 +13,7 @@ contour_num     = 20        # number of contour levels
 contour_factor  = 1.20      # scaling factor between contour levels
 
 # calculate contour levels
-cl = contour_start * contour_factor ** np.arange(contour_num) 
+cl = contour_start * contour_factor ** np.arange(contour_num)
 
 # read in the data from a NMRPipe file
 dic, data = ng.pipe.read("nmrpipe_2d/test.ft2")
@@ -23,7 +23,7 @@ fig = plt.figure()
 ax = fig.add_subplot(111)
 
 # plot the contours
-ax.contour(data, cl, cmap=cmap, 
+ax.contour(data, cl, cmap=cmap,
             extent=(0, data.shape[1] - 1, 0, data.shape[0] - 1))
 
 # add some labels

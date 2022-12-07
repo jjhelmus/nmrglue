@@ -7,7 +7,7 @@ xiter = ng.pipe.iter3D("nmrpipe_3d/data/test%03d.fid", 'x', 'x')
 
 print "Processing XY planes..."
 for i, (dic, plane) in enumerate(xiter):
-    
+
     # process the direct dimension (x)
     dic, plane = ng.pipe_proc.zf(dic, plane, auto=True)
     dic, plane = ng.pipe_proc.ft(dic, plane, auto=True)
@@ -21,7 +21,7 @@ for i, (dic, plane) in enumerate(xiter):
     dic, plane = ng.pipe_proc.ps(dic, plane, p0=0.0, p1=0.0)
     dic, plane = ng.pipe_proc.di(dic, plane)
     dic, plane = ng.pipe_proc.tp(dic, plane)
-   
+
     # write out the plane
     #print "Writing out Z slice:",i,"/",xiter.i_max
     xiter.write("./ft/test%03d.ft2", plane, dic)

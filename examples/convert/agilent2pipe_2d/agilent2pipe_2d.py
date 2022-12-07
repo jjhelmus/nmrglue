@@ -9,13 +9,13 @@ dic, data = ng.varian.read("agilent_2d")
 udic = ng.varian.guess_udic(dic, data)
 
 # Direct dimension                  # Indirect dimension
-udic[1]['size']     = 1500          ; udic[0]['size']     = 332 
+udic[1]['size']     = 1500          ; udic[0]['size']     = 332
 udic[1]['complex']  = True          ; udic[0]['complex']  = True
 udic[1]['encoding'] = 'direct'      ; udic[0]['encoding'] = 'states'
 udic[1]['sw']       = 50000.0       ; udic[0]['sw']       = 5555.556
 udic[1]['obs']      = 125.691       ; udic[0]['obs']      = 50.648
 udic[1]['car']      = 55.0 * 125.691; udic[0]['car']      = 120.0 * 50.648
-udic[1]['label']    = '13C'         ; udic[0]['label']    = '15N'    
+udic[1]['label']    = '13C'         ; udic[0]['label']    = '15N'
 
 # create the converter object and initialize with Agilent data
 C = ng.convert.converter()

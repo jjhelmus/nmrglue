@@ -31,7 +31,7 @@ Developer Functions
 ^^^^^^^^^^^^^^^^^^^
 
 These functions are typically not used directly by users.  Developers who
-want fine control over SIMPSON files will be interested in these 
+want fine control over SIMPSON files will be interested in these
 functions.
 
 .. autosummary::

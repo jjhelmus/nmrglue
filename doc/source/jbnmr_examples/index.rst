@@ -5,14 +5,14 @@
 Examples from JBNMR article
 ###########################
 
-These are all the examples from the Journal of Biomolecular NMR `article`_ 
+These are all the examples from the Journal of Biomolecular NMR `article`_
 on nmrglue.  The full reference for this article is:
 
 J.J. Helmus, C.P. Jaroniec,
 Nmrglue: An open source Python package for the analysis of multidimensional
-NMR data, 
-J. Biomol. NMR, 
-2013, 
+NMR data,
+J. Biomol. NMR,
+2013,
 10.1007/s10858-013-9718-x
 
 

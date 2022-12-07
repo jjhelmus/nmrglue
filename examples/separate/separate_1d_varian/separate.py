@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# Separate 1D Agilent/Varian data creating directories based on the 
+# Separate 1D Agilent/Varian data creating directories based on the
 # array parameter found in the procpar file.
 
 import nmrglue as ng

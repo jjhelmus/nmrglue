@@ -56,7 +56,7 @@ Standard NMR
     tp
     zf
 
-Baseline 
+Baseline
 --------
 
 .. autosummary::
@@ -128,5 +128,3 @@ Not Implemented
     poly
     xyz2zyx
     ztp
-
-

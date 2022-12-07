@@ -12,19 +12,19 @@ from . import fileiobase
 from . import jcampdx
 
 __developer_info__ = """
-Spinsolve is the software used on the Magritek benchtop NMR devices. 
+Spinsolve is the software used on the Magritek benchtop NMR devices.
 
 A spectrum is saved in a folder with several files. The spectral data is
 stored in these files: 'data.1d' (FID), 'spectrum.1d' (Fourier transformed)
 and 'spectrum_processed.1d' (FT + processed by spinsolve)
 Optional spectral data (System->Prefs->Setup->Global data storage):
-'nmr_fid.dx' (FID stored in `JCAMP-DX standard <http://www.jcamp-dx.org/>`), 
-'spectrum.csv' and 'spectrum_processed.csv' (FT + processed by Spinsolve with ppm for each 
+'nmr_fid.dx' (FID stored in `JCAMP-DX standard <http://www.jcamp-dx.org/>`),
+'spectrum.csv' and 'spectrum_processed.csv' (FT + processed by Spinsolve with ppm for each
 point and intensity delimited by ';')
 Other files:
 'acqu.par' - all parameters that are used for acquisition
 'protocol.par' - text file used to reload data back into the Spinsolve software
-'processing.script' - text file to transfer Spinsolve software protocol settings 
+'processing.script' - text file to transfer Spinsolve software protocol settings
 into MNOVA
 
 The Spinsolve Expert software has a slightly different output:
@@ -60,7 +60,7 @@ def parse_spinsolve_par_line(line):
                 return name, float(value)
             except ValueError:
                 return name, str(value)
-                
+
 
 def read(dir='.', specfile=None, acqupar="acqu.par", procpar="proc.par"):
     """

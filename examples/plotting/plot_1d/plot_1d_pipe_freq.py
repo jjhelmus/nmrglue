@@ -21,8 +21,8 @@ ax.annotate('CO region', xy=(173, 2.15e6), xycoords='data', xytext=(30,20),
             textcoords='offset points', arrowprops=dict(arrowstyle="->"))
 ax.text(59, 1.55e6, "alphatic region")
 ax.annotate('', xy=(70,1.2e6), xycoords='data', xytext=(10, 1.2e6),
-            textcoords='data', 
-            arrowprops=dict(arrowstyle="<->", connectionstyle="bar", 
+            textcoords='data',
+            arrowprops=dict(arrowstyle="<->", connectionstyle="bar",
                     ec="k", shrinkA=5, shrinkB=5,))
 
 # decorate axes

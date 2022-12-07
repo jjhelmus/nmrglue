@@ -13,7 +13,7 @@ Application Examples
 --------------------
 
 .. toctree::
-    
+
     apod_viewer_1win.rst
     apod_viewer_2win.rst
 

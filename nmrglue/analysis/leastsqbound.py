@@ -9,7 +9,7 @@ try:
     from scipy.optimize.minpack import _check_func
 except ImportError:
     from scipy.optimize._minpack_py import _check_func
-    
+
 from scipy.optimize import _minpack, leastsq
 
 

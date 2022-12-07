@@ -5,21 +5,21 @@ Installation Guide
 Where to get nmrglue
 --------------------
 
-Downloads for all platforms are available at 
+Downloads for all platforms are available at
 `<https://github.com/jjhelmus/nmrglue/releases>`_.  Tar files are available
 for UNIX-like systems (Linux or OSX) and a binary installer for Windows.
 
 Requirements
 ------------
 
-nmrglue requires `numpy <http://numpy.scipy.org>`_ and 
-`scipy <http://www.scipy.org>`_ to be installed.  Please see the install 
+nmrglue requires `numpy <http://numpy.scipy.org>`_ and
+`scipy <http://www.scipy.org>`_ to be installed.  Please see the install
 instructions for these packages for details.
 
 Unix/OSX Installation
 ---------------------
 
-After installing the above dependencies download and extract the source 
+After installing the above dependencies download and extract the source
 distribution and run::
 
     $ python setup.py install

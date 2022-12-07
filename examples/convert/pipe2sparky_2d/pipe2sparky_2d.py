@@ -5,7 +5,7 @@ import nmrglue as ng
 # read in the NMRPipe data
 dic,data = ng.pipe.read("nmrpipe_2d/test.ft2")
 
-# Set the spectral parameters 
+# Set the spectral parameters
 udic = ng.pipe.guess_udic(dic, data)
 
 # create the converter object and initialize with NMRPipe data

@@ -24,15 +24,15 @@ output.write("#Peak\tA\t\tR2\t\tier\n")
 
 # loop over the trajecory files
 for filename in glob.glob('*.dat'):
-    
+
     peak = filename[:3]
     print "Fitting Peak:", peak
 
     # fit the trajectory using constrained least squares optimization
     trajectory = np.loadtxt(filename)
-    x, ier = leastsqbound(residuals, x0, bounds=bounds, 
+    x, ier = leastsqbound(residuals, x0, bounds=bounds,
                             args=(trajectory, relaxation_times))
-    
+
     # write fitting results to output file
     output.write('%s\t%.6f\t%.6f\t%i\n' % (peak, x[0], x[1], ier))
 
