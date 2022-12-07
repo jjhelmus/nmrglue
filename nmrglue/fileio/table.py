@@ -87,10 +87,10 @@ def guess_pformat(col):
     """
     kind = col.dtype.kind
 
-    if kind == 'S' or kind == 'a':  # string
+    if kind in ('S', 'a'):  # string
         return '%s'
 
-    if kind == 'i' or kind == 'u':  # integer (signed or unsigned)
+    if kind in ('i', 'u'):  # integer (signed or unsigned)
         # N is the number of digits in largest value, or 1
         N = max(np.ceil(np.log(np.abs(col).max()) / np.log(10)), 1)
         # +1 for sign

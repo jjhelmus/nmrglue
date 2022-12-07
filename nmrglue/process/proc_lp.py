@@ -246,7 +246,7 @@ def lp_1d(trace, pred=1, slice=slice(None), order=8, mode="f", append="after",
 
     # bad_roots auto mode
     if bad_roots == "auto":
-        if mode == "f" or mode == "fb":
+        if mode in ("f", "fb"):
             bad_roots = "incr"
         else:
             bad_roots = "decr"

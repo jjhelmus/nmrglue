@@ -23,6 +23,7 @@ import struct
 import inspect
 from warnings import warn
 from functools import reduce
+import operator
 
 import numpy as np
 
@@ -388,8 +389,6 @@ def write(dir, dic, data, fid_file="fid", procpar_file="procpar",
     # write out procpar file
     write_procpar(os.path.join(dir, procpar_file), dic["procpar"], overwrite)
 
-    return
-
 
 def write_lowmem(dir, dic, data, fid_file="fid", procpar_file="procpar",
                  torder=None, repack=False, overwrite=False):
@@ -437,8 +436,6 @@ def write_lowmem(dir, dic, data, fid_file="fid", procpar_file="procpar",
 
     # write out procpar file
     write_procpar(os.path.join(dir, procpar_file), dic["procpar"], overwrite)
-
-    return
 
 ############
 # ordering #
@@ -519,11 +516,11 @@ def torder2i2t(torder):
     # if torder is a function, return it
     if inspect.isfunction(torder):
         return torder
-    elif torder == 'flat' or torder == 'f':
+    elif torder in ('flat', 'f'):
         return fileiobase.index2trace_flat
-    elif torder == 'opposite' or torder == 'o':
+    elif torder in ('opposite', 'o'):
         return fileiobase.index2trace_opp
-    elif torder == 'regular' or torder == 'r':
+    elif torder in ('regular', 'r'):
         return fileiobase.index2trace_reg
     else:
         raise ValueError("unknown torder" + str(torder))
@@ -535,11 +532,11 @@ def torder2t2i(torder):
     """
     if inspect.isfunction(torder):
         return torder
-    elif torder == 'flat' or torder == 'f':
+    elif torder in ('flat', 'f'):
         return fileiobase.trace2index_flat
-    elif torder == 'opposite' or torder == 'o':
+    elif torder in ('opposite', 'o'):
         return fileiobase.trace2index_opp
-    elif torder == 'regular' or torder == 'r':
+    elif torder in ('regular', 'r'):
         return fileiobase.trace2index_reg
     else:
         raise ValueError("unknown torder" + str(torder))
@@ -570,7 +567,7 @@ def reorder_data(data, shape, torder):
 
     """
     # take care of flat files...
-    if torder == 'flat' or torder == 'f':
+    if torder in ('flat', 'f'):
         try:
             data = data.reshape(shape)
         except ValueError:
@@ -611,11 +608,11 @@ def order_data(data, torder):
 
     """
     # determine the shape of the on disk data matrix
-    ntraces = reduce(lambda x, y: x * y, data.shape[:-1])
+    ntraces = reduce(operator.mul, data.shape[:-1])
     nshape = (ntraces, data.shape[-1])
 
     # take care of flat files
-    if torder == 'flat' or torder == 'f':
+    if torder in ('flat', 'f'):
         return data.reshape(nshape)
 
     # make an emprt array to hold the 2D disk formatted data matrix
@@ -643,6 +640,7 @@ def read_fid(filename, shape=None, torder='flat', as_2d=False,
 
     Parameters
     ----------
+
     filename : str
         Filename of Agilent/Varian binary file (fid) to read.
     shape : tuple of ints, optional
@@ -812,6 +810,7 @@ def read_fid_ntraces(filename, shape=None, torder='flat', as_2d=False,
     read_fid_lowmem : Read a Agilent/Varian binary file with one trace per
         block using minimal amounts of memory.
 
+
     """
     # open the file
     f = open(filename, 'rb')
@@ -948,7 +947,6 @@ def write_fid(filename, dic, data, torder='flat', repack=False, correct=True,
             put_block(f, trace, dic["nbheaders"], bh)
 
     f.close()
-    return
 
 
 def write_fid_lowmem(filename, dic, data, torder='f', repack=False,
@@ -997,7 +995,7 @@ def write_fid_lowmem(filename, dic, data, torder='f', repack=False,
         warn("data and np size mismatch")
         if correct:
             dic['np'] = int(data.shape[1] * 2)
-    nblocks = int(reduce(lambda x, y: x * y, data.shape[:-1]))
+    nblocks = int(reduce(operator.mul, data.shape[:-1]))
     if nblocks != dic["nblocks"]:
         warn("data and block size mismatch")
         if correct:
@@ -1034,7 +1032,6 @@ def write_fid_lowmem(filename, dic, data, torder='f', repack=False,
             trace = np.array(interleave_data(data[tup]), dtype=dt)
             put_block(f, trace, dic["nbheaders"], bh)
     f.close()
-    return
 
 
 #####################
@@ -1311,7 +1308,6 @@ def skip_blockheader(f):
     This is a replacement for get_blockheader.  It skips f ahead 28 bytes.
     """
     f.read(28)
-    return
 
 
 def get_hyperheader(file):
@@ -1380,15 +1376,12 @@ def put_block(f, trace, nbheaders, bh, hh=False):
     # write the trace
     put_trace(f, trace)
 
-    return
-
 
 def put_trace(f, trace):
     """
     Write a trace to file f.
     """
     f.write(trace.tobytes())
-    return
 
 
 def put_fileheader(f, fh):
@@ -1404,7 +1397,6 @@ def put_fileheader(f, fh):
 
     """
     f.write(struct.pack('>6lhhl', *fh))
-    return
 
 
 def put_blockheader(f, bh):
@@ -1420,7 +1412,6 @@ def put_blockheader(f, bh):
 
     """
     f.write(struct.pack('>4hl4f', *bh))
-    return
 
 
 def put_hyperheader(f, hh):
@@ -1436,7 +1427,6 @@ def put_hyperheader(f, hh):
 
     """
     f.write(struct.pack('>4hl4f', *hh))
-    return
 
 
 #########################
@@ -1836,7 +1826,7 @@ def uninterleave_data(data):
     # determine the output dtype
     rdt = data.dtype.name
 
-    if rdt == 'int16' or rdt == "float32":
+    if rdt in ('int16', "float32"):
         cdt = "complex64"
     elif rdt == 'int32':
         cdt = "complex128"
@@ -1974,7 +1964,6 @@ def write_procpar(filename, dic, overwrite=False):
 
     f.close()
 
-    return
 
 subtypes = ["undefined", "real", "string", "delay", "flag", "frequency",
             "pulse", "integer"]
@@ -2029,7 +2018,7 @@ class fid_nd(fileiobase.data_nd):
                 s = "last dimension should have size %i" % (int(dic["np"] / 2))
                 raise ValueError(s)
             # product of all but last dim should be number of blocks
-            if reduce(lambda x, y: x * y, fshape[:-1]) != dic['nblocks']:
+            if reduce(operator.mul, fshape[:-1]) != dic['nblocks']:
                 s = "number of traces in file does not match fshape"
                 raise ValueError(s)
 

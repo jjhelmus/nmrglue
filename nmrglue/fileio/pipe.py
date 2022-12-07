@@ -134,7 +134,6 @@ def write_table(filename, pcomments, pformats, rec, overwrite=False):
         drow = [i.decode('utf-8') if i.dtype.kind == 'S' else i for i in row]
         f.write((s % tuple(drow)).encode('utf-8'))
     f.close()
-    return
 
 ###################
 # unit conversion #
@@ -820,7 +819,6 @@ def write_single(filename, dic, data, overwrite=False):
 
     # write the file
     put_data(filename, fdata, data, overwrite)
-    return
 
 
 def write_3D(filemask, dic, data, overwrite=False):
@@ -835,7 +833,6 @@ def write_3D(filemask, dic, data, overwrite=False):
         fn = filemask % (zi + 1)
         plane = data[zi]
         write_single(fn, dic, plane, overwrite)
-    return
 
 
 def write_4D(filemask, dic, data, overwrite=False):
@@ -862,7 +859,6 @@ def write_4D(filemask, dic, data, overwrite=False):
                 dic["FDMIN"] = plane.min()
                 dic["FDDISPMIN"] = dic["FDMIN"]
             write_single(fn, dic, plane, overwrite)
-    return
 
 
 def write_lowmem(filename, dic, data, overwrite=False):
@@ -923,7 +919,6 @@ def write_lowmem_2D(filename, dic, data, overwrite=False):
     for y in range(lenY):
         put_trace(fh, data[y])
     fh.close()
-    return
 
 
 def write_lowmem_3D(filename, dic, data, overwrite=False):
@@ -949,7 +944,6 @@ def write_lowmem_3D(filename, dic, data, overwrite=False):
         for y in range(lenY):
             put_trace(fh, data[z, y])
         fh.close()
-    return
 
 
 def write_lowmem_3Ds(filename, dic, data, overwrite=False):
@@ -971,7 +965,6 @@ def write_lowmem_3Ds(filename, dic, data, overwrite=False):
         for y in range(lenY):
             put_trace(fh, data[z, y])
     fh.close()
-    return
 
 
 def write_lowmem_4D(filename, dic, data, overwrite=False):
@@ -1003,7 +996,6 @@ def write_lowmem_4D(filename, dic, data, overwrite=False):
             for y in range(lenY):
                 put_trace(fh, data[a, z, y])
             fh.close()
-    return
 
 
 def write_lowmem_4Ds(filename, dic, data, overwrite=False):
@@ -1026,7 +1018,6 @@ def write_lowmem_4Ds(filename, dic, data, overwrite=False):
             for y in range(lenY):
                 put_trace(fh, data[a, z, y])
     fh.close()
-    return
 
 
 ###############
@@ -1041,7 +1032,6 @@ def put_fdata(fh, fdata):
     if fdata.dtype != 'float32':
         raise TypeError('fdata.dtype is not float32')
     fh.write(fdata.tobytes())
-    return
 
 
 def put_trace(fh, trace):
@@ -1053,7 +1043,6 @@ def put_trace(fh, trace):
     if trace.dtype != 'float32':
         raise TypeError('trace.dtype is not float32')
     fh.write(trace.tobytes())
-    return
 
 
 def put_data(filename, fdata, data, overwrite=False):
@@ -1071,7 +1060,6 @@ def put_data(filename, fdata, data, overwrite=False):
     f.write(fdata.tobytes())
     f.write(data.tobytes())
     f.close()
-    return
 
 
 def write_slice_3D(filemask, dic, data, shape, slices):
@@ -1393,7 +1381,7 @@ class iter3D:
             # transpose the last two axes
             dic, plane = transpose_3D(dic, plane, (0, 2, 1))
 
-        if self.in_lead == "x" or self.in_lead == "y":
+        if self.in_lead in ("x", "y"):
             shape = (self.i_max, plane.shape[1], plane.shape[2])
             sz = slice(self.i, self.i + 1, 1)
             sx = slice(None)

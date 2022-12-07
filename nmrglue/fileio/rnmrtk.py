@@ -376,7 +376,6 @@ def write_lowmem(filename, dic, data, par_file=None, overwrite=False):
     for tup in np.ndindex(data.shape[:-1]):
         put_trace(f, data[tup])
     f.close()
-    return
 
 #######################
 # sec reading/writing #
@@ -414,7 +413,6 @@ def write_sec(filename, data, dtype='f4', overwrite=False):
     # write data and close file
     f.write(data.astype(dtype).tobytes())
     f.close()
-    return
 
 
 def read_sec(filename, dtype, shape, cplex):
@@ -780,8 +778,6 @@ def write_par(par_file, dic, overwrite):
     f.write(l + "\n")
     f.close()
 
-    return
-
 
 def parse_par_line(line, dic):
     """
@@ -821,4 +817,3 @@ def parse_par_line(line, dic):
         size = [int(p.split(":")[1]) for p in pl]
         domains = [p.split(":")[0] for p in pl]
         dic['layout'] = size, domains
-    return

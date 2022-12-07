@@ -167,7 +167,6 @@ def mark_dseg(mdata, map, pt, mark, structure):
                 Q.append(new_pt)
                 map[new_pt] = mark
                 mdata[new_pt] = ma.masked
-    return
 
 
 def label_downward_seg(data, labels, seg_slice, seg_index, max_index,
@@ -285,7 +284,6 @@ def mark_useg(mdata, map, pt, mark, structure):
                 Q.append(new_pt)
                 map[new_pt] = mark
                 mdata[new_pt] = ma.masked
-    return
 
 
 def label_upward_seg(data, labels, seg_slice, seg_index, max_index,

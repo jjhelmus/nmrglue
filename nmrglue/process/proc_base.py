@@ -1828,7 +1828,7 @@ def coadd(data, clist, axis=-1):
     s = list(data.shape)    # data shape
     k = len(clist)          # length of coefficient list
 
-    if axis == 1 or axis == -1:   # 'x' axis
+    if axis in (1, -1):   # 'x' axis
         s[-1] = int(np.floor(float(s[-1]) / k))
         n = np.zeros(s, dtype=data.dtype)
         m = s[-1] * k   # last element read

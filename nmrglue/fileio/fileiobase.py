@@ -9,6 +9,7 @@ import string
 import sys
 import itertools
 from functools import reduce
+import operator
 
 import numpy as np
 
@@ -130,9 +131,9 @@ class unit_conversion():
             pts = self.__ppm2pts(val)
         elif units == "HZ":
             pts = self.__hz2pts(val)
-        elif units == "%" or units == "PERCENT":
+        elif units in ("%", "PERCENT"):
             pts = self.__percent2pts(val)
-        elif units == "SEC" or units == "SECOND" or units == "S":
+        elif units in ("SEC", "SECOND", "S"):
             pts = self.__sec2pts(val)
         elif units == "MS":
             pts = self.__ms2pts(val)
@@ -156,9 +157,9 @@ class unit_conversion():
             k = self.__pts2ppm(val)
         elif units == "HZ":
             k = self.__pts2hz(val)
-        elif units == "%" or units == "PERCENT":
+        elif units in ("%", "PERCENT"):
             k = self.__pts2percent(val)
-        elif units == "SEC" or units == "SECOND" or units == "S":
+        elif units in ("SEC", "SECOND", "S"):
             k = self.__pts2sec(val)
         elif units == "MS":
             k = self.__pts2ms(val)
@@ -465,7 +466,7 @@ def index2trace_flat(shape, index):
     # by the corresponding index element, index[-1] as added at the beginning
     a = index[-1]
     for i, v in enumerate(index[:-1]):
-        mult = reduce(lambda x, y: x * y, shape[i + 1:])
+        mult = reduce(operator.mul, shape[i + 1:])
         a = a + mult * v
     return a
 

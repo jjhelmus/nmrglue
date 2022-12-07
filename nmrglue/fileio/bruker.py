@@ -29,6 +29,7 @@ the file with nmrglue.
 """
 
 from functools import reduce
+import operator
 import os
 from warnings import warn
 
@@ -774,7 +775,6 @@ def write(dir, dic, data, bin_file=None, acqus_files=None, procs_files=None,
     bin_full = os.path.join(dir, bin_file)
     write_binary(bin_full, dic, data, big=big, isfloat=isfloat,
                  overwrite=overwrite)
-    return
 
 
 def write_lowmem(dir, dic, data, bin_file=None, acqus_files=None,
@@ -837,7 +837,6 @@ def write_lowmem(dir, dic, data, bin_file=None, acqus_files=None,
     bin_full = os.path.join(dir, bin_file)
     write_binary_lowmem(bin_full, dic, data, big=big, isfloat=isfloat,
                         overwrite=overwrite)
-    return
 
 
 def write_pdata(dir, dic, data, roll=False, shape=None, submatrix_shape=None,
@@ -955,8 +954,6 @@ def write_pdata(dir, dic, data, roll=False, shape=None, submatrix_shape=None,
     write_binary(bin_full, dic, data, big=big, isfloat=isfloat,
                  overwrite=overwrite)
 
-    return
-
 
 def guess_shape(dic):
     """
@@ -976,9 +973,9 @@ def guess_shape(dic):
     except KeyError:
         aq_mod = 0
 
-    if aq_mod == 0 or aq_mod == 2:
+    if aq_mod in (0, 2):
         cplex = False
-    elif aq_mod == 1 or aq_mod == 3:
+    elif aq_mod in (1, 3):
         cplex = True
     else:
         raise ValueError("Unknown Acquisition Mode")
@@ -1094,8 +1091,7 @@ def guess_shape(dic):
             shape = shape[-2:]
 
     elif loopn == 3:  # 2D with two leading passive loops
-        if (loop[0] == 2 and loop[1] == 2 and li[0] == 0 and li[1] == 0
-                and li[2] != 0):
+        if loop[0] == loop[1] == 2 and li[0] == li[1] == 0 and li[2] != 0:
             shape[2] = 2 * loop[2]
             shape = shape[-2:]
 
@@ -1107,9 +1103,9 @@ def guess_shape(dic):
             shape = shape[-3:]
 
     elif loopn == 5:  # 3D with two/one leading passive loops
-        if loop[1] == 2 and li[0] == 0 and li[1] == 0 and li[2] != 0:
+        if loop[1] == 2 and li[0] == li[1] == 0 and li[2] != 0:
             shape[2] = 2 * loop[2]
-        if loop[3] == 2 and li[0] == 0 and li[3] == 0 and li[4] != 0:
+        if loop[3] == 2 and li[0] == li[3] == 0 and li[4] != 0:
             shape[1] = 2 * loop[4]
             shape = shape[-3:]
 
@@ -1122,11 +1118,11 @@ def guess_shape(dic):
             shape[0] = 2 * loop[5]
 
     elif loopn == 7:
-        if loop[1] == 2 and li[0] == 0 and li[1] == 0 and li[2] != 0:
+        if loop[1] == 2 and li[0] == li[1] == 0 and li[2] != 0:
             shape[2] = 2 * loop[2]
-        if loop[3] == 2 and li[0] == 0 and li[3] == 0 and li[4] != 0:
+        if loop[3] == 2 and li[0] == li[3] == 0 and li[4] != 0:
             shape[1] = 2 * loop[4]
-        if loop[5] == 2 and li[0] == 0 and li[5] == 0 and li[6] != 0:
+        if loop[5] == 2 and li[0] == li[5] == 0 and li[6] != 0:
             shape[0] = 2 * loop[6]
 
     return tuple([int(i) for i in shape if i >= 2]), cplex
@@ -1618,7 +1614,6 @@ def write_binary(filename, dic, data, overwrite=False, big=True,
     else:
         put_data(f, data, big, isfloat)
     f.close()
-    return
 
 
 def write_binary_lowmem(filename, dic, data, overwrite=False, big=True,
@@ -1646,7 +1641,6 @@ def write_binary_lowmem(filename, dic, data, overwrite=False, big=True,
         else:
             put_data(f, trace, big, isfloat)
     f.close()
-    return
 
 
 # lowmemory ND object
@@ -1688,7 +1682,7 @@ class bruker_nd(fileiobase.data_nd):
 
         # check that size is correct. need isfloat to know whether each point
         # is 4 bytes or 8 bytes
-        pts = reduce(lambda x, y: x * y, fshape)
+        pts = reduce(operator.mul, fshape)
         if cplex:
             if isfloat:
                 if os.stat(filename).st_size != pts * 8 * 2:
@@ -1808,7 +1802,6 @@ def put_data(f, data, big=True, isfloat=False):
             f.write(data.astype('>i4').tobytes())
         else:
             f.write(data.astype('<i4').tobytes())
-    return
 
 
 def get_trace(f, num_points, big, isfloat):
@@ -2374,8 +2367,6 @@ def write_jcamp_pair(f, key, value):
     f.write(line)
     f.write("\n")
 
-    return
-
 
 # pulse program read/writing functions
 
@@ -2584,7 +2575,6 @@ def write_pprog(filename, dic, overwrite=False):
 
     # close the file
     f.close()
-    return
 
 
 def _merge_dict(a, b):
