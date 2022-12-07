@@ -1,5 +1,5 @@
 """
-Writing 2D data processed with Nmrpipe back into Topspin format
+Writing 2D data processed with Nmrpipe back into TopSpin format
 
 """
 import os
@@ -15,7 +15,7 @@ DATA_DIR = os.path.join(up(up(up(os.path.abspath(__file__)))),
 # read in data processed using TOPSPIN
 # this is required only to get access to the dictionary
 # as a reference starting point to write the data back out
-# in a way Topspin can read it
+# in a way TopSpin can read it
 tdic, _ = ng.bruker.read_pdata(os.path.join(DATA_DIR, 'pdata', '1'))
 
 # read in data processed using nmrpipe

@@ -1141,7 +1141,7 @@ def read_pdata(dir=".", bin_files=None, procs_files=None, read_procs=True,
     """
     Read processed Bruker files from a directory.
 
-    In Topspin and other programs this data is typically scaled by dividing by
+    In TopSpin and other programs this data is typically scaled by dividing by
     2 ** -NC_proc where NC_proc is defined in the procs file.  This scaling
     can be accomplished by setting the scale_data parameter to True.
 
