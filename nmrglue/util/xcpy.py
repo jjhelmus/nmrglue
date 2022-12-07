@@ -9,7 +9,7 @@ xcpy [OPTIONS] [SCRIPTNAME]
 INSTALLATION
 1. Copy (or symlink) this file to the following directory:
 <topspin_location>/exp/stan/nmr/py/user/
-2. If you now type 'xcpy' on the command line within Topspin,
+2. If you now type 'xcpy' on the command line within TopSpin,
 this documentation should pop up
 3. A configuration file needs to be written out so that xcpy
 knows the location of the CPython executable and a folder where
@@ -19,7 +19,7 @@ can be rewritten at any time point using the same command.
 
 DESCRIPTION
 xcpy supports running external scripts via Jython (subprocess module)
-that ships with Topspin. Currently, it allows only external CPython
+that ships with TopSpin. Currently, it allows only external CPython
 programs to run. By default, it passes the current folder, expno and procno
 to the external CPython program (if available).
 
@@ -70,7 +70,7 @@ except ModuleNotFoundError:
 def topspin_error():
     errmsg = """
     This file is meant to be executed
-    using Jython from within Topspin
+    using Jython from within TopSpin
     Please see the doctring for more
     details.
     """
@@ -80,11 +80,11 @@ def topspin_error():
 def check_jython():
     """
     Checks whether Jython is being used to run this script
-    from within Topspin
+    from within TopSpin
 
     """
     # some of the functions defined in the global namespace
-    # by Topspin which are also used by xcpy
+    # by TopSpin which are also used by xcpy
     topspin_inbuilts = ["MSG", "INPUT_DIALOG", "CURDATA"]
 
     g = globals().keys()
@@ -98,9 +98,9 @@ def check_jython():
 
 def topspin_location():
     """
-    Gets Topspin home directory. Also serves to check
+    Gets TopSpin home directory. Also serves to check
     whether the script is being executed from within
-    Topspin or externally.
+    TopSpin or externally.
 
     """
     try:
@@ -213,7 +213,7 @@ def exists(filename, raise_error=False):
 
 def current_data():
     """
-    Returns the current EXPNO and PROCNO open in Topspin,
+    Returns the current EXPNO and PROCNO open in TopSpin,
     if executed when a data folder is open
 
     """

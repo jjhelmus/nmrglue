@@ -1,8 +1,8 @@
 nmrglue.misc.xcpy
 =================
 
-This module is intended for use with the Bruker Topspin software. 
-It runs external scripts via Jython (subprocess module) that ships with Topspin. 
+This module is intended for use with the Bruker TopSpin software. 
+It runs external scripts via Jython (subprocess module) that ships with TopSpin. 
 Currently, it allows only external CPython programs to run. By default, it passes
 the current folder, expno and procno to the external CPython program (if available).
 For an example of how this should look like in practice, see 
@@ -28,7 +28,7 @@ Installation
 ------------
 1. Copy (or symlink) this file to the following directory:
 <topspin_location>/exp/stan/nmr/py/user/
-2. If you now type 'xcpy' on the command line within Topspin,
+2. If you now type 'xcpy' on the command line within TopSpin,
 this documentation should pop up
 3. A configuration file needs to be written out so that xcpy
 knows the location of the CPython executable and a folder where

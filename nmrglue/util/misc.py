@@ -29,7 +29,7 @@ def pair_similar(dic1, data1, dic2, data2, verb=False, atol=ATOL, rtol=RTOL,
     verb : bool, optional
         Set True for verbose reporting.
     atol : float, optional
-        The absolute tolerant parameter to pass to numpy.allclose.
+        The absolute tolerance parameter to pass to numpy.allclose.
     rtol : float, optional
         The relative tolerance parameter to pass to numpy.allclose.
 
@@ -60,7 +60,7 @@ def isdatasimilar(data1, data2, verb=False, atol=ATOL, rtol=RTOL):
     verb : bool, optional
         Set True for verbose reporting.
     atol : float, optional
-        The absolute tolerant parameter to pass to numpy.allclose.
+        The absolute tolerance parameter to pass to numpy.allclose.
     rtol : float, optional
         The relative tolerance parameter to pass to numpy.allclose.
 
