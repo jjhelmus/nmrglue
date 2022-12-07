@@ -1,4 +1,4 @@
-    """
+"""
 Functions for reading and writing NMRPipe files and table (.tab) files
 """
 

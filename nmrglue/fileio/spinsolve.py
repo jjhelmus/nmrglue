@@ -1,4 +1,4 @@
-    """
+"""
 Functions for reading Magritek Spinsolve binary (dx/1d) files and
 parameter (acqu.par/proc.par) files.
 """
