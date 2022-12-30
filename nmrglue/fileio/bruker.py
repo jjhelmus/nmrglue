@@ -6,6 +6,7 @@ files.
 
 import locale
 import io
+from itertools import product
 
 __developer_info__ = """
 Bruker file format information
@@ -1576,6 +1577,53 @@ def read_binary_lowmem(filename, shape=(1), cplex=True, big=True,
     return dic, data
 
 
+def read_nuslist(dirc=".", fname="nuslist"):
+    """
+    Reads nuslist in bruker format
+
+    Parameters
+    ----------
+    dirc : str, optional
+        directory for the data, by default "."
+    fname : str, optional
+        name of the file that has the nuslist, by default 'nuslist'
+
+    Returns
+    -------
+    converted_nuslist: list of n-tuples
+        nuslist
+
+    Raises
+    ------
+    OSError
+        if directory is absent
+
+    FileNotFoundError
+        if file is absent
+
+    """
+    if not os.path.isdir(dirc):
+        raise OSError(f"directory {dirc} does not exist")
+
+    if fname is None:
+        fname = "nuslist"
+
+    try:
+        with open(os.path.join(dirc, fname)) as f:
+            nuslist = f.read().splitlines()
+    except FileNotFoundError:
+        raise FileNotFoundError(f"nuslist file ({fname}) not found in directory {dirc}")
+
+    converted_nuslist = []
+    for line in nuslist:
+        numbers = tuple(int(i) for i in line.split())
+        converted_nuslist.append(numbers)
+
+    return converted_nuslist
+
+
+
+
 def write_binary(filename, dic, data, overwrite=False, big=True,
                  isfloat=False):
     """
@@ -2114,6 +2162,78 @@ def rm_dig_filter(
         pdata[..., :add] = pdata[..., :add] + pdata[..., :-(add + 1):-1]
         # remove points at end of spectra
         return pdata[..., :-skip]
+
+
+def nus_to_full(data, shape, nuslist, allow_high_dims=False):
+    """
+    Converts a non-uniformaly sampled dataset to a fully sampled
+    dataset. FIDs are srted according the nuslist, and missing
+    fids replaced by zeros. All dimensions are supported, but
+    only 2D, 3D, and 4D are allowed by default to avoid creation
+    of huge datasets by mistake.
+
+    Parameters
+    ----------
+    data : np.ndarray
+        non-uniformly sampled dataset
+    shape : tuple
+        shape of the fully sampled data
+    nuslist : list of n-tuples
+        nuslist
+    allow_high_dims : bool
+        flag that allows datasets higher than 4D to
+        be genereted
+
+    Returns
+    -------
+    full_data : np.ndarray
+        data from the nus dataset sorted according to
+        the nuslist, and with missing fids replaced by
+        zeros
+
+    Raises
+    ------
+    ValueError
+        if shape of the final data is not compatible
+        with the expeted shape from nuslist
+    ValueError
+        if dataset dimension is less than 2
+    ValueError
+        if dataset dimension is greated than 4 and
+        the flag to allow this is False
+
+    """
+    idims = len(nuslist[0])
+    ndim = idims + 1
+
+    if len(shape) != ndim:
+        raise ValueError(f"expected {ndim}D data but got {ndim}D nuslist")
+
+    if ndim < 2:
+        raise ValueError(f"Needs to be be atleast a 2D dataset (not {ndim}D)")
+
+    # protection against unintended generation of large datasets
+    if (ndim > 4) and (allow_high_dims == False):
+        raise ValueError(
+            f"converting {ndim}D data to a fully sampled data not allowed by default. "
+            f"Use the flag 'allow_high_dims=True' if you really want to do this."
+        )
+
+    # generate a full dataset
+    full_data = np.zeros(shape, dtype=data.dtype)
+
+    # quadrature points in all dimensions
+    quads = list(product((0, 1), repeat=idims))
+
+    # add fids at appropriate positions
+    for i, nus_pos in enumerate(nuslist):
+        for j, quad_pos in enumerate(quads):
+            fid_pos = i * (2 ** idims) + j
+            final_pos = tuple(p * 2 + q for p, q in zip(nus_pos[::-1], quad_pos))
+            full_data[final_pos] = data[fid_pos]
+
+    return full_data
+
 
 
 # JCAMP-DX functions
