@@ -210,3 +210,29 @@ def test_write_pdata_2d():
                                      'pdata', '1'), read_acqus=False)
     write_readback_pdata(dic=dic, data=data)
     write_readback_pdata(dic=dic, data=data, pdata_folder=90)
+
+
+def test_read_nuslist():
+    """ reading nuslist """
+    with open("tmp_nuslist", "w") as f:
+        f.write("""0 0\n10 20\n50 21\n9 8\n7 8\n20 20""")
+
+    nuslist = ng.bruker.read_nuslist(fname="tmp_nuslist")
+    assert nuslist == [(0, 0), (10, 20), (50, 21), (9, 8), (7, 8), (20, 20)]
+
+    os.remove("tmp_nuslist")
+
+    pass
+
+
+def test_reorder_nus_data_2d():
+    """ reorder 2d nus data """
+    pass
+
+def test_reorder_nus_data_3d():
+    """ reorder 3d nus data """
+    pass
+
+def test_reorder_nus_data_4d():
+    """ reorder 4d nus data """
+    pass
