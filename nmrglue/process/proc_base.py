@@ -7,6 +7,7 @@ units of points unless otherwise noted.
 
 # TODO determine which of these work on N-dimension and which assume 2D
 
+from itertools import product
 import numpy as np
 import scipy.signal
 import scipy.linalg

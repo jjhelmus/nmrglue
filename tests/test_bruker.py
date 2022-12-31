@@ -223,16 +223,3 @@ def test_read_nuslist():
     os.remove("tmp_nuslist")
 
     pass
-
-
-def test_reorder_nus_data_2d():
-    """ reorder 2d nus data """
-    pass
-
-def test_reorder_nus_data_3d():
-    """ reorder 3d nus data """
-    pass
-
-def test_reorder_nus_data_4d():
-    """ reorder 4d nus data """
-    pass

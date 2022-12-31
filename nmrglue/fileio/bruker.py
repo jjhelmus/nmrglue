@@ -6,7 +6,6 @@ files.
 
 import locale
 import io
-from itertools import product
 
 __developer_info__ = """
 Bruker file format information
