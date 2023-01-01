@@ -2647,7 +2647,7 @@ def zd_gaussian(data, wide=1.0, x0=0.0, slope=1.0, g=1):
 def expand_nus(data, shape, nuslist, aqorder=None, quadrature_order=None, allow_high_dims=False):
     """
     Converts a non-uniformaly sampled dataset to a fully sampled
-    dataset. FIDs are srted according the nuslist, and missing
+    dataset. FIDs are sorted according the nuslist, and missing
     fids replaced by zeros. All dimensions are supported, but
     only 2D, 3D, and 4D are allowed by default to avoid creation
     of large datasets by mistake.
@@ -2661,9 +2661,11 @@ def expand_nus(data, shape, nuslist, aqorder=None, quadrature_order=None, allow_
     nuslist : list of n-tuples
         nuslist
     aqorder : list | None
-        reverses the order in which indirect dimensions are numbered.
-        defaults to [3, 2, 1, 0] (for 5D data). All other possibilites
-        compatible with the dimension are allowed. 
+        the order in which indirect dimensions are acquired.
+        defaults to [1, 0] for 3D and [2, 1, 0] for 4D datasets. 
+        All other possibilites compatible with the dimension are 
+        allowed, for eg, [0, 1] for 3D, and [0, 1, 2], [0, 2, 1], 
+        [2, 0, 1], [1, 0, 2], [1, 2, 0] for 4D data.  
     quadrature_order : list | None
         ordering of quadrature points. by defualt, this uses
         the order from itertools.product, which seems to be 

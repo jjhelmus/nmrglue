@@ -1576,53 +1576,6 @@ def read_binary_lowmem(filename, shape=(1), cplex=True, big=True,
     return dic, data
 
 
-def read_nuslist(dirc=".", fname="nuslist"):
-    """
-    Reads nuslist in bruker format
-
-    Parameters
-    ----------
-    dirc : str, optional
-        directory for the data, by default "."
-    fname : str, optional
-        name of the file that has the nuslist, by default 'nuslist'
-
-    Returns
-    -------
-    converted_nuslist: list of n-tuples
-        nuslist
-
-    Raises
-    ------
-    OSError
-        if directory is absent
-
-    FileNotFoundError
-        if file is absent
-
-    """
-    if not os.path.isdir(dirc):
-        raise OSError(f"directory {dirc} does not exist")
-
-    if fname is None:
-        fname = "nuslist"
-
-    try:
-        with open(os.path.join(dirc, fname)) as f:
-            nuslist = f.read().splitlines()
-    except FileNotFoundError:
-        raise FileNotFoundError(f"nuslist file ({fname}) not found in directory {dirc}")
-
-    converted_nuslist = []
-    for line in nuslist:
-        numbers = tuple(int(i) for i in line.split())
-        converted_nuslist.append(numbers)
-
-    return converted_nuslist
-
-
-
-
 def write_binary(filename, dic, data, overwrite=False, big=True,
                  isfloat=False):
     """
@@ -2628,3 +2581,49 @@ def _merge_dict(a, b):
     c = a.copy()
     c.update(b)
     return c
+
+
+def read_nuslist(dirc=".", fname="nuslist"):
+    """
+    Reads nuslist in bruker format
+
+    Parameters
+    ----------
+    dirc : str, optional
+        directory for the data, by default "."
+    fname : str, optional
+        name of the file that has the nuslist, by default 'nuslist'
+
+    Returns
+    -------
+    converted_nuslist: list of n-tuples
+        nuslist
+
+    Raises
+    ------
+    OSError
+        if directory is absent
+
+    FileNotFoundError
+        if file is absent
+
+    """
+    if not os.path.isdir(dirc):
+        raise OSError(f"directory {dirc} does not exist")
+
+    if fname is None:
+        fname = "nuslist"
+
+    try:
+        with open(os.path.join(dirc, fname)) as f:
+            nuslist = f.read().splitlines()
+    except FileNotFoundError:
+        raise FileNotFoundError(f"nuslist file ({fname}) not found in directory {dirc}")
+
+    converted_nuslist = []
+    for line in nuslist:
+        numbers = tuple(int(i) for i in line.split())
+        converted_nuslist.append(numbers)
+
+    return converted_nuslist
+
