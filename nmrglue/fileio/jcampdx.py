@@ -37,16 +37,21 @@ def _getkey(keystr):
             .replace("-", "").replace("_", "").replace("/", ""))
 
 
-def _readrawdic(filename):
+def _parsejcampdx(filename):
     '''
-    Reads JCAMP-DX file to dictionary, from which actual
-    data is parsed later. Dictionary contains each data
-    section separated to lists of subdicts per DATATYPE.
+    Actual JCAMP-DX reading. Returns a list of data sections i.e. "blocks",
+    each of them being a dictionary of JCAMP-DX tags
     '''
 
-    diclist = []  # for separating multiple data sections (multiple ##END tags)
-    dic = {"_comments": []}  # create empty dictionary
-    filein = open(filename, 'r')
+    # "blocks" in JCAMP-DX may be nested, and they begin with ##TITLE and
+    # end with ##END. Keep active blocks in stack:
+    blockstack = []
+    # keep reference to active block, i.e. the one to which to read
+    activeblock = None
+    # when encountering ##END, push the ready dict to another list
+    readyblocklist = []
+
+    filein = open(filename, 'r', encoding="utf-8", errors="replace")
 
     currentkey = None
     currentvaluestrings = []
@@ -57,7 +62,8 @@ def _readrawdic(filename):
         commentsplit = line.split("$$", 1)
         actual = commentsplit[0].lstrip()
         if len(commentsplit) > 1:
-            dic["_comments"].append(commentsplit[1])
+            if activeblock:
+                activeblock["_comments"].append(commentsplit[1])
 
         # continue with rest:
         if not actual:
@@ -71,7 +77,7 @@ def _readrawdic(filename):
         # encountered new key:
         if actual[:2] == "##":
 
-            # push previous key/value pair to dic
+            # push previous key/value pair to active dictionary
             # single value is continuous string including newlines
             # but there might be multiple values if the same key exist
             # multiple times thus values are collected to list
@@ -82,51 +88,80 @@ def _readrawdic(filename):
                     warn("JCAMP-DX key without value:" + key)
                 else:
                     try:
-                        dic[key].append(value)
+                        activeblock[key].append(value)
                     except KeyError:
-                        dic[key] = [value]
+                        activeblock[key] = [value]
                 currentkey = None
                 currentvaluestrings = []
+
+            if actual[:7] == "##TITLE":
+                # begin new block dictionary
+                activeblock = {"_comments": []}
+                blockstack.append(activeblock)
 
             if actual[:5] == "##END":
-                diclist.append(dic)
-                dic = {"_comments": []}  # begin new dictionary
+                # finalize current block
+                if activeblock:  # ensure that we had active block instead of too many ##ENDs
+                    readyblocklist.append(blockstack.pop())
+                if blockstack:
+                    # continue reading to previous block in stack, if available
+                    activeblock = blockstack[-1]
+                else:
+                    # otherwise mark it None to prevent reading
+                    activeblock = None
                 continue
 
-            # try to split to key and value and check sanity
-            keysplit = actual.split("=", 1)
-            if len(keysplit) < 2:
-                warn("Bad JCAMP-DX line, can't split key and value correctly:" +
-                     line)
-                continue
-            keystr = keysplit[0][2:]  # remove "##" already here
-            valuestr = keysplit[1]
-            if not keystr:
-                warn("Empty key in JCAMP-DX line:" + line)
-                currentkey = None
-                currentvaluestrings = []
-                continue
+            if activeblock:
+                # try to split to key and value and check sanity
+                keysplit = actual.split("=", 1)
+                if len(keysplit) < 2:
+                    warn("Bad JCAMP-DX line, can't split key and value correctly:" +
+                         line)
+                    continue
+                keystr = keysplit[0][2:]  # remove "##" already here
+                valuestr = keysplit[1]
+                if not keystr:
+                    warn("Empty key in JCAMP-DX line:" + line)
+                    currentkey = None
+                    currentvaluestrings = []
+                    continue
 
-            # split ok, init new key
-            currentkey = keystr
-            currentvaluestrings.append(valuestr)
+                # split ok, init new key
+                currentkey = keystr
+                currentvaluestrings.append(valuestr)
 
         # line continues data of previous key, append to currentvaluestrings:
         else:
-            if currentkey is None:
-                warn("JCAMP-DX data line without associated key:" + line)
-                continue
+            if activeblock:
+                if currentkey is None:
+                    warn("JCAMP-DX data line without associated key:" + line)
+                    continue
 
-            currentvaluestrings.append(commentsplit[0])
+                currentvaluestrings.append(commentsplit[0])
+
+    # push possible non-closed blocks
+    while blockstack:
+        readyblocklist.append(blockstack.pop())
 
     filein.close()
 
-    # push last one
-    diclist.append(dic)
+    return readyblocklist
+
+
+def _readrawdic(filename):
+    '''
+    Reads entire JCAMP-DX file to dictionary, from which actual
+    data is parsed later. Return value is a dictionary of different
+    DATATYPEs, containing lists of actual block dictionaries(as it
+    is possible have multiple entries of same DATATYPE in one file).
+    '''
+
+    # parse file to list of "blocks" i.e. separate data sections
+    blocklist = _parsejcampdx(filename)
 
     # clean whitespace from entries, and remove empty entries
     cleandiclist = []
-    for dic in diclist:
+    for dic in blocklist:
         for key, valuelist in dic.items():
             dic[key] = [value.strip() for value in valuelist]
         for key, valuelist in dic.items():
@@ -136,7 +171,7 @@ def _readrawdic(filename):
             cleandiclist.append(dic)
 
     returndic = {}
-    # check DATATYPE entry of each section,
+    # check DATATYPE entry of each block,
     # and build a dict of lists of dicts
     for dic in cleandiclist:
         try:
@@ -461,7 +496,7 @@ def find_yfactors(dic):
     return (factor_r, factor_i)
 
 
-def _getdataarray(dic):
+def getdataarray(dic):
     '''
     Main function for data array parsing, input is the
     raw dictionary from _readrawdic
@@ -577,7 +612,7 @@ def read(filename):
     try:
         subdiclist = dic["_datatype_NMRSPECTRUM"]
         for subdic in subdiclist:
-            data = _getdataarray(subdic)
+            data = getdataarray(subdic)
             if data is not None:
                 correctdic = subdic
                 break
@@ -589,7 +624,7 @@ def read(filename):
         try:
             subdiclist = dic["_datatype_NMRFID"]
             for subdic in subdiclist:
-                data = _getdataarray(subdic)
+                data = getdataarray(subdic)
                 if data is not None:
                     correctdic = subdic
                     break
@@ -602,7 +637,7 @@ def read(filename):
         try:
             subdiclist = dic["_datatype_NA"]
             for subdic in subdiclist:
-                data = _getdataarray(subdic)
+                data = getdataarray(subdic)
                 if data is not None:
                     correctdic = subdic
                     break
