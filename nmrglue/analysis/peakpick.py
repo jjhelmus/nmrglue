@@ -326,7 +326,7 @@ def pack_table(locations, cluster_ids=None, scales=None, amps=None,
     ndim = len(locations[0])
     anames = axis_names[-ndim:]
 
-    dt = [(a + "_AXIS", np.float) for a in anames]
+    dt = [(a + "_AXIS", float) for a in anames]
     rec = np.rec.array(locations, dtype=dt)
 
     if cluster_ids is not None:
