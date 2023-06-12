@@ -367,7 +367,7 @@ def guess_params_slice(data, location, seg_slice, ls_classes):
 
     """
     # find the rectangular region around the segment
-    region = data[seg_slice]
+    region = data[slice(*seg_slice)]
     edge = [s.start for s in seg_slice]
     rlocation = [l - s.start for l, s in zip(location, seg_slice)]
 

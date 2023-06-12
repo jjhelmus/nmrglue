@@ -92,7 +92,7 @@ class converter:
             s = [slice(None, None, None)] * data.ndim
             for i in range(data.ndim - 1):
                 s[i] = slice(1, None, 2)
-                data[s] = -data[s]
+                data[tuple(s)] = -data[tuple(s)]
                 s[i] = slice(None, None, None)
 
         if "realfactor" in self._iproc:
@@ -107,7 +107,7 @@ class converter:
             s = [slice(None, None, None)] * data.ndim
             for i in range(data.ndim - 1):
                 s[i] = slice(1, None, 2)
-                data[s] = -data[s]
+                data[tuple(s)] = -data[tuple(s)]
                 s[i] = slice(None, None, None)
 
         if "realfactor" in self._oproc:
