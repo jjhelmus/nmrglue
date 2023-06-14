@@ -194,3 +194,31 @@ def test_jcampdx_dicstructure():
     assert dic["_datatype_NA"][0]["DUMMYENTRY"][0] == "4.0"
     assert dic["_datatype_NA"][0]["_comments"][0] == "comment line"
     assert dic["_datatype_NA"][0]["_comments"][1] == "another comment"
+
+def test_jcampdx_dicstructure2():
+    '''JCAMP-DX read: ensure correct dic structure
+    (nested LINKs, multiple spectra)'''
+
+    casepath = os.path.join(DATA_DIR, "jcampdx", "dicstructure2.jdx")
+    dic, data = ng.jcampdx.read(casepath)
+
+    # check data
+    assert len(data) == 8
+    assert data[-1] == 8.0
+
+    # check dic:
+    assert dic["DATATYPE"][0] == "NMR SPECTRUM"
+    assert dic[".OBSERVENUCLEUS"][0] == "^1H"
+    assert "_datatype_LINK" in dic
+    assert "_datatype_NMRSPECTRUM" in dic
+    assert len(dic["_datatype_LINK"]) == 2
+    assert dic["_datatype_LINK"][0]["DUMMYENTRY"][0] == "INNER LINK"
+    assert dic["_datatype_LINK"][1]["DUMMYENTRY"][0] == "OUTER LINK"
+
+    # another spectrum is read to sub-dict, we must parse data for it separately
+    dic2 = dic["_datatype_NMRSPECTRUM"][0]
+    data2 = ng.jcampdx.getdataarray(dic2)
+
+    # check data
+    assert len(data2) == 8
+    assert data2[-1] == 1.0
