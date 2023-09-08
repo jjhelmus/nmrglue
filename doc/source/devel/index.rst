@@ -18,7 +18,7 @@ and available.
 
 * `SciPy <https://scipy.org/>`_
 
-* `nose <https://nose.readthedocs.org/en/latest/>`_
+* pytest_
 
 * `Sphinx <https://www.sphinx-doc.org/>`_
 
@@ -109,8 +109,8 @@ The directory layout of the nmrglue project is as follows.
 * ``doc`` : contains the setup file and source code for building the
   nmrglue documentation using `Sphinx <http://sphinx-doc.org/>`__.
 
-* ``tests`` : unit tests which use the
-  `nose <https://nose.readthedocs.org/en/latest/>`_ framework to verify the
+* ``tests`` : tests which use the
+  pytest_ framework to verify the
   functionality of nmrglue.  See the :ref:`testing` section for details.
 
 * ``example`` : contains numerous examples in which nmrglue is used to solve
@@ -162,15 +162,15 @@ Testing
 -------
 
 Tests for verifying the functionality of nmrglue are available in the test
-directory.  These tests use the nose_ testing infrastructure.
+directory.  These tests use the pytest_ testing infrastructure.
 
-.. _nose: https://nose.readthedocs.org/en/latest/
+.. _pytest: https://docs.pytest.org/
 
 
 Requirements
 ^^^^^^^^^^^^
 
-To run these tests NumPy, SciPy, nmrglue, and nose must be installed and in the
+To run these tests NumPy, SciPy, nmrglue, and pytest must be installed and in the
 Python search path.  NMRPipe must be installed to run the pipe_proc tests.
 
 In addition, the location of the the test data sets must be specified in the
@@ -186,21 +186,24 @@ details.  A subset of the full test suite can be run without installing any
 additional software.
 
 
-Running the unit tests
-^^^^^^^^^^^^^^^^^^^^^^
+Running tests
+^^^^^^^^^^^^^
 
-After ensuring that all required packages are installed and ``setup.py``
-correctly points to the location of the test data directory, the unit tests can
-be run using the following::
+After ensuring that all required packages are installed, the unit tests can be run using the following command in the topmost nmrglue directory::
 
-    nosetests
+    pytest
 
 Unit tests for a specific module can be run using::
 
-    nosetests tests/test_pipe.py
+    pytest tests/test_pipe.py
 
-Additional information on the `usage of the nosetests command
-<https://nose.readthedocs.org/en/latest/usage.html>`_ is available.
+Tests that are fast/slow can be run using::
+
+    pytest -m fast
+    pytest -m slow
+
+Additional information on the `usage of the pytest command
+<https://docs.pytest.org>`_ is available.
 
 
 Reporting Bugs
