@@ -12,3 +12,4 @@ from . import varian
 from . import varian as agilent
 from . import table
 from . import spinsolve
+from . import jeol
