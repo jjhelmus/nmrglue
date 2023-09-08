@@ -7,8 +7,7 @@ import os
 import numpy as np
 from numpy.testing import assert_array_equal
 import nmrglue as ng
-from nose.plugins.attrib import attr
-
+import pytest
 from setup import DATA_DIR
 
 
@@ -41,7 +40,7 @@ def lowmem_write_readback(dic, data):
 # tests
 
 
-@attr(speed='fast')
+@pytest.mark.fast
 def test_1d_time():
     """ reading/writing of 1D RNMRTK time domain file """
     dic, data = ng.rnmrtk.read(
@@ -57,7 +56,7 @@ def test_1d_time():
     write_readback(dic, data)
 
 
-@attr(speed='fast')
+@pytest.mark.fast
 def test_1d_freq():
     """ reading/writing of 1D RNMRTK frequency domain file """
     dic, data = ng.rnmrtk.read(
@@ -71,7 +70,7 @@ def test_1d_freq():
     write_readback(dic, data)
 
 
-@attr(speed='fast')
+@pytest.mark.fast
 def test_2d_time():
     """ reading/writing of 2D RNMRTK time domain file """
     dic, data = ng.rnmrtk.read(
@@ -90,7 +89,7 @@ def test_2d_time():
     write_readback(dic, data)
 
 
-@attr(speed='fast')
+@pytest.mark.fast
 def test_2d_freq():
     """ reading/writing of 2D RNMRTK frequency domain file """
     dic, data = ng.rnmrtk.read(
@@ -107,7 +106,7 @@ def test_2d_freq():
     write_readback(dic, data)
 
 
-@attr(speed='fast')
+@pytest.mark.fast
 def test_2d_time_lowmem():
     """ low memory reading/writing of 2D RNMRTK time domain file """
     dic, data = ng.rnmrtk.read_lowmem(
@@ -126,7 +125,7 @@ def test_2d_time_lowmem():
     lowmem_write_readback(dic, data)
 
 
-@attr(speed='fast')
+@pytest.mark.fast
 def test_2d_freq_lowmem():
     """ low memory reading/writing of 2D RNMRTK frequency domain file """
     dic, data = ng.rnmrtk.read_lowmem(
@@ -143,7 +142,7 @@ def test_2d_freq_lowmem():
     lowmem_write_readback(dic, data)
 
 
-@attr(speed='slow')
+@pytest.mark.slow
 def test_3d_time():
     """ reading/writing of 3D RNMRTK time domain file """
     dic, data = ng.rnmrtk.read(
@@ -165,7 +164,7 @@ def test_3d_time():
     write_readback(dic, data)
 
 
-@attr(speed='slow')
+@pytest.mark.slow
 def test_3d_freq():
     """ reading/writing of 3D RNMRTK frequency domain file """
     dic, data = ng.rnmrtk.read(
@@ -185,7 +184,7 @@ def test_3d_freq():
     write_readback(dic, data)
 
 
-@attr(speed='slow')
+@pytest.mark.slow
 def test_3d_time_lowmem():
     """ low memory reading/writing of 3D RNMRTK time domain file """
     dic, data = ng.rnmrtk.read_lowmem(
@@ -207,7 +206,7 @@ def test_3d_time_lowmem():
     lowmem_write_readback(dic, data)
 
 
-@attr(speed='slow')
+@pytest.mark.slow
 def test_3d_freq_lowmem():
     """ low memory reading/writing of 3D RNMRTK frequency domain file """
     dic, data = ng.rnmrtk.read_lowmem(
@@ -227,7 +226,7 @@ def test_3d_freq_lowmem():
     lowmem_write_readback(dic, data)
 
 
-@attr(speed='fast')
+@pytest.mark.fast
 def test_3d_transpose():
     """ reading/writing of transposed 3D RNMRTK time domain file """
 
@@ -275,7 +274,7 @@ def test_3d_transpose():
     write_readback(dic, data)
 
 
-@attr(speed='slow')
+@pytest.mark.slow
 def test_3d_transpose_lowmem():
     """ low mem. reading/writing of transposed 3D RNMRTK time domain file """
 
