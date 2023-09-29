@@ -79,5 +79,5 @@ doc
 
 Other thoughts
 --------------
-- Unix like commands (coadd_pipe, seperate_varian, ...)
+- Unix like commands (coadd_pipe, separate_varian, ...)
 - GUI to create conversions scripts

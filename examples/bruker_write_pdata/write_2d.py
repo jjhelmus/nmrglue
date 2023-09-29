@@ -23,7 +23,7 @@ tdic, _ = ng.bruker.read_pdata(os.path.join(DATA_DIR, 'pdata', '1'))
 ndic, ndata = ng.pipe.read(os.path.join(DATA_DIR, 'test.ft2'))
 
 # Update dictionary parameters to match the data
-# Note that none of the other parameters will macth what is
+# Note that none of the other parameters will match what is
 # written in the procs files and the procs file will not correspond to
 # the actual data
 tdic['procs']['SI'] = 2048

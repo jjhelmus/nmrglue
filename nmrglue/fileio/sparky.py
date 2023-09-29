@@ -628,7 +628,7 @@ class SparkySaveParser(HTMLParser):
         the list as the key and the remaining list as the value. In addition,
         it parses all values in the list to do the following: (i) convert the
         values to float wherever possible and (ii) if the list has a single
-        item, upack and return that item alone as the value
+        item, unpack and return that item alone as the value
 
         """
 
@@ -671,7 +671,7 @@ class SparkySaveParser(HTMLParser):
         that corresponds to a single peak in a sparky save file. In addition,
         it parses all values in the list to do the following: (i) convert the
         values to float wherever possible and (ii) if the list has a single
-        item, upack and return that item alone as the value. Currently assumes
+        item, unpack and return that item alone as the value. Currently assumes
         the following structure for a single peak:
 
         type peak

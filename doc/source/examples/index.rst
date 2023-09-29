@@ -112,7 +112,7 @@ Processing Examples
     process_pipe_2d_tppi.rst
     process_pipe_3d.rst
 
-.. _seperate_examples:
+.. _separate_examples:
 
 Separate Examples
 -----------------

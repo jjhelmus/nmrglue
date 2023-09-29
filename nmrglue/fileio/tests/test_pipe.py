@@ -153,7 +153,7 @@ def test_2d_time_tp():
 
 
 def test_2d_freq_tp():
-    """ read/write of 2D NMRPipe frequency domain file tranposed. """
+    """ read/write of 2D NMRPipe frequency domain file transposed. """
     dic, data = ng.pipe.read(NMRPIPE_2D_FREQ_TP)
     assert data.shape == (8, 2)
     assert data.dtype == 'float32'

@@ -5,13 +5,13 @@ The data used in this example is available for
 
 Listing S7
 
-[:download:`seperate_s3e.py <../../../examples/jbnmr_examples/s7-s9_s3e_processing/seperate_s3e.py>`]
+[:download:`separate_s3e.py <../../../examples/jbnmr_examples/s7-s9_s3e_processing/separate_s3e.py>`]
 
-.. literalinclude:: ../../../examples/jbnmr_examples/s7-s9_s3e_processing/seperate_s3e.py
+.. literalinclude:: ../../../examples/jbnmr_examples/s7-s9_s3e_processing/separate_s3e.py
 
 Listing S8
 
-[:download:`convert.py <../../../examples/jbnmr_examples/s7-s9_s3e_processing/seperate_s3e.py>`]
+[:download:`convert.py <../../../examples/jbnmr_examples/s7-s9_s3e_processing/separate_s3e.py>`]
 
 .. literalinclude:: ../../../examples/jbnmr_examples/s7-s9_s3e_processing/convert.py
 

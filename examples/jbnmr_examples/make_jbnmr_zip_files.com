@@ -33,28 +33,28 @@ mv jbnmr_s4_2d_plotting.zip ./zip_files/.
 
 
 # Listing S5 separate interleaved
-zip jbnmr_s5_seperate_interleaved.zip               \
-s5_seperate_interleaved/seperate.py                 \
-s5_seperate_interleaved/README.rst                  \
-s5_seperate_interleaved/arrayed_data.fid            \
-s5_seperate_interleaved/arrayed_data.fid/procpar    \
-s5_seperate_interleaved/arrayed_data.fid/text       \
-s5_seperate_interleaved/arrayed_data.fid/log        \
-s5_seperate_interleaved/arrayed_data.fid/fid
+zip jbnmr_s5_separate_interleaved.zip               \
+s5_separate_interleaved/separate.py                 \
+s5_separate_interleaved/README.rst                  \
+s5_separate_interleaved/arrayed_data.fid            \
+s5_separate_interleaved/arrayed_data.fid/procpar    \
+s5_separate_interleaved/arrayed_data.fid/text       \
+s5_separate_interleaved/arrayed_data.fid/log        \
+s5_separate_interleaved/arrayed_data.fid/fid
 
-mv jbnmr_s5_seperate_interleaved.zip ./zip_files/.
+mv jbnmr_s5_separate_interleaved.zip ./zip_files/.
 
 # Listing S6 separate inner_phase
-zip jbnmr_s6_seperate_inner_phase.zip               \
-s6_seperate_inner_phase/seperate.py                 \
-s6_seperate_inner_phase/README.rst                  \
-s6_seperate_inner_phase/arrayed_data.fid            \
-s6_seperate_inner_phase/arrayed_data.fid/procpar    \
-s6_seperate_inner_phase/arrayed_data.fid/text       \
-s6_seperate_inner_phase/arrayed_data.fid/log        \
-s6_seperate_inner_phase/arrayed_data.fid/fid
+zip jbnmr_s6_separate_inner_phase.zip               \
+s6_separate_inner_phase/separate.py                 \
+s6_separate_inner_phase/README.rst                  \
+s6_separate_inner_phase/arrayed_data.fid            \
+s6_separate_inner_phase/arrayed_data.fid/procpar    \
+s6_separate_inner_phase/arrayed_data.fid/text       \
+s6_separate_inner_phase/arrayed_data.fid/log        \
+s6_separate_inner_phase/arrayed_data.fid/fid
 
-mv jbnmr_s6_seperate_inner_phase.zip ./zip_files/.
+mv jbnmr_s6_separate_inner_phase.zip ./zip_files/.
 
 
 # Listing S7, S8 and S9 processing S3E filtered data
@@ -63,7 +63,7 @@ s7-s9_s3e_processing/convert.py         \
 s7-s9_s3e_processing/fid                \
 s7-s9_s3e_processing/procpar            \
 s7-s9_s3e_processing/README.rst         \
-s7-s9_s3e_processing/seperate_s3e.py    \
+s7-s9_s3e_processing/separate_s3e.py    \
 s7-s9_s3e_processing/xy_s3e.py
 
 mv jbnmr_s7-s9_s3e_processing.zip ./zip_files/.
