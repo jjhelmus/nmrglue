@@ -738,7 +738,7 @@ def write_par(par_file, dic, overwrite):
     f = fileiobase.open_towrite(par_file, overwrite, mode='w')
 
     # write comment line
-    f.write('Comment \'' + dic['comment'] + '\'\n')
+    f.write("Comment '" + dic['comment'] + "'\n")
 
     # Dom line, set from layout
     l = "Dom " + " ".join(dic['layout'][1])

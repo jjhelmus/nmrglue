@@ -504,8 +504,8 @@ def find_torder(dic, shape):
             warn("missing phase order, torder set to 'r'")
             return 'r'
 
-    warn("No trace ordering for" + str(ndim) +
-         "dimensional data, torder set to 'r'")
+    warn(f"No trace ordering for {ndim}dimensional data, "
+         f"torder set to 'r'")
     return 'r'
 
 
@@ -523,7 +523,7 @@ def torder2i2t(torder):
     elif torder in ('regular', 'r'):
         return fileiobase.index2trace_reg
     else:
-        raise ValueError("unknown torder" + str(torder))
+        raise ValueError(f"unknown torder {torder}")
 
 
 def torder2t2i(torder):
@@ -539,7 +539,7 @@ def torder2t2i(torder):
     elif torder in ('regular', 'r'):
         return fileiobase.trace2index_reg
     else:
-        raise ValueError("unknown torder" + str(torder))
+        raise ValueError(f"unknown torder {torder}")
 
 
 def reorder_data(data, shape, torder):
@@ -571,7 +571,7 @@ def reorder_data(data, shape, torder):
         try:
             data = data.reshape(shape)
         except ValueError:
-            warn(str(data.shape) + "cannot be shaped into" + str(shape))
+            warn(f"{data.shape} cannot be shaped into {shape}")
         return data
 
     # all other cases
@@ -716,14 +716,14 @@ def read_fid(filename, shape=None, torder='flat', as_2d=False,
         try:
             return dic, reorder_data(data, shape, torder)
         except:
-            warn("data cannot be re-ordered, returning raw 2D data\n" +
-                 "Provided shape: " + str(shape) + " torder: " + str(torder))
+            warn(f"data cannot be re-ordered, returning raw 2D data\n" +
+                 f"Provided shape: {shape} torder: {torder}")
             return dic, data
 
     try:
         data = data.reshape(shape)
     except ValueError:
-        warn(str(data.shape) + "cannot be shaped into" + str(shape))
+        warn(f"{data.shape} cannot be shaped into {shape}")
         return dic, data
 
     return dic, data
@@ -858,7 +858,7 @@ def read_fid_ntraces(filename, shape=None, torder='flat', as_2d=False,
     try:
         data = data.reshape(shape)
     except ValueError:
-        warn(str(data.shape) + "cannot be shaped into" + str(shape))
+        warn(f"{data.shape} cannot be shaped into {shape}")
         return dic, data
 
     return dic, data
@@ -942,7 +942,7 @@ def write_fid(filename, dic, data, torder='flat', repack=False, correct=True,
     else:   # create a generic blockheader
         bh = dic2blockheader(make_blockheader(dic, 1))
         for i in range(data.shape[0]):
-            bh[2] = int(i + 1)
+            bh[2] = i + 1
             trace = np.array(interleave_data(data[i]), dtype=dt)
             put_block(f, trace, dic["nbheaders"], bh)
 
@@ -1027,7 +1027,7 @@ def write_fid_lowmem(filename, dic, data, torder='f', repack=False,
     else:   # create a generic blockheader
         bh = dic2blockheader(make_blockheader(dic, 1))
         for ntrace in range(nblocks):
-            bh[2] = int(ntrace + 1)
+            bh[2] = ntrace + 1
             tup = t2i(data.shape[:-1], ntrace)
             trace = np.array(interleave_data(data[tup]), dtype=dt)
             put_block(f, trace, dic["nbheaders"], bh)
@@ -1949,7 +1949,7 @@ def write_procpar(filename, dic, overwrite=False):
             print(len(d["values"]), end=' ', file=f)  # don't end the line
             for value in d["values"]:
                 # now end the line (for each string)
-                print('"' + value + '"', file=f)
+                print(f'"{value}"', file=f)
 
         # print out the last line
         print(d["enumerable"], end=' ', file=f)
@@ -1959,7 +1959,7 @@ def write_procpar(filename, dic, overwrite=False):
                 if d["basictype"] == "1":  # reals
                     print(e, end=' ', file=f)
                 elif d["basictype"] == "2":  # strings
-                    print('"' + e + '"', end=' ', file=f)
+                    print(f'"{e}"', end=' ', file=f)
         print("", file=f)   # end the enumerable line
 
     f.close()

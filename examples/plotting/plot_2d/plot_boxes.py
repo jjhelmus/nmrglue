@@ -56,5 +56,5 @@ for name, x0, y0, x1, y1 in peak_list:
     ax.set_title(name)
 
     # save the figure
-    fig.savefig(name + ".png")
+    fig.savefig(f"{name}.png")
     del(fig)

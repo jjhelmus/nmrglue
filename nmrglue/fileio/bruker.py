@@ -111,8 +111,8 @@ def add_axis_to_udic(udic, dic, udim, strip_fake):
     """
     # This could still use some work
     b_dim = udic['ndim'] - udim - 1  # last dim
-    acq_file = "acqu" + str(b_dim + 1) + "s"
-    pro_file = "proc" + str(b_dim + 1) + "s"
+    acq_file = f"acqu{b_dim + 1}s"
+    pro_file = f"proc{b_dim + 1}s"
 
     # Because they're inconsistent,..
     if acq_file == "acqu1s":
@@ -1546,7 +1546,7 @@ def read_binary(filename, shape=(1), cplex=True, big=True, isfloat=False):
         return dic, data.reshape(shape)
 
     except ValueError:
-        warn(str(data.shape) + "cannot be shaped into" + str(shape))
+        warn(f"{data.shape} cannot be shaped into {shape}")
         return dic, data
 
 
@@ -2169,9 +2169,9 @@ def read_jcamp(filename, encoding=locale.getpreferredencoding()):
                     key, value = parse_jcamp_line(line, f)
                     dic[key] = value
                 except:
-                    warn("Unable to correctly parse line:" + line)
+                    warn(f"Unable to correctly parse line: {line}")
             else:
-                warn("Extraneous line:" + line)
+                warn(f"Extraneous line: {line}")
 
     return dic
 
@@ -2192,7 +2192,7 @@ def parse_jcamp_line(line, f):
 
     if "<" in text:   # string
         while ">" not in text:      # grab additional text until ">" in string
-            text = text + "\n" + f.readline().rstrip()
+            text += "\n" + f.readline().rstrip()
         value = text[1:-1]  # remove < and >
 
     elif "(" in text:   # array
@@ -2317,24 +2317,24 @@ def write_jcamp_pair(f, key, value):
     """
 
     # the parameter name and such
-    line = "##$" + key + "= "
+    line = f"##${key}= "
 
-    # need to be type not isinstance since isinstance(bool, int) == True
-    if type(value) == float or type(value) == int:  # simple numbers
-        line = line + repr(value)
-
-    elif isinstance(value, str):    # string
-        line = line + "<" + value + ">"
-
-    elif type(value) == bool:   # yes or no
+    # need to be checked first since isinstance(bool, int) == True
+    if isinstance(value, bool):  # yes or no
         if value:
-            line = line + "yes"
+            line += "yes"
         else:
-            line = line + "no"
+            line += "no"
+
+    elif isinstance(value, (float, int)):  # simple numbers
+        line += repr(value)
+
+    elif isinstance(value, str):  # string
+        line += f"<{value}>"
 
     elif isinstance(value, list):
         # write out the current line
-        line = line + "(0.." + repr(len(value) - 1) + ")"
+        line += f"(0..{len(value) - 1!r})"
         f.write(line)
         f.write("\n")
         line = ""
@@ -2349,7 +2349,7 @@ def write_jcamp_pair(f, key, value):
                 line = ""
 
             if isinstance(v, str):
-                to_add = "<" + v + ">"
+                to_add = f"<{v}>"
             else:
                 to_add = repr(v)
 
@@ -2359,7 +2359,7 @@ def write_jcamp_pair(f, key, value):
                 line = ""
 
             if line != "":
-                line = line + to_add + " "
+                line += to_add + " "
             else:
                 line = to_add + " "
 
@@ -2558,20 +2558,20 @@ def write_pprog(filename, dic, overwrite=False):
 
     # write our the variables
     for k, v in dic["var"].items():
-        f.write("\"" + k + "=" + v + "\"\n")
+        f.write(f'"{k}={v}"\n')
 
     # write out each loop
     for i, steps in enumerate(dic["loop"]):
 
         # write our the increments
         for v in dic["incr"][i]:
-            f.write("d01 id" + str(v) + "\n")
+            f.write(f"d01 id{v}\n")
 
         # write out the phases
         for v, w in zip(dic["phase"][i], dic["ph_extra"][i]):
-            f.write("d01 ip" + str(v) + " " + str(w) + "\n")
+            f.write(f"d01 ip{v} {w}\n")
 
-        f.write("lo to 0 times " + str(steps) + "\n")
+        f.write(f"lo to 0 times {steps}\n")
 
     # close the file
     f.close()

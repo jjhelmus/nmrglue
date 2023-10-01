@@ -82,7 +82,7 @@ def plot(dic, data, outfile=None, xlims=[], ylims=[]):
     # save figure
     if outfile is None:
         outfile = "plot"
-    fig.savefig(outfile + ".png")
+    fig.savefig(f"{outfile}.png")
 
     return
 

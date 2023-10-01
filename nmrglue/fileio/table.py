@@ -34,7 +34,7 @@ def pipe2glue(pcomments, pformat, rec):
 
     """
     # add a "#" to the list of comments and we are done
-    comments = ["# " + c for c in pcomments]
+    comments = [f"# {c}" for c in pcomments]
     return comments, rec
 
 
@@ -62,7 +62,7 @@ def glue2pipe(comments, rec):
 
     """
     # add REMARK to each comment
-    pcomments = ["REMARK " + c for c in comments]
+    pcomments = [f"REMARK {c}" for c in comments]
 
     # guess the pipe format strings
     pformat = [guess_pformat(rec[t]) for t in rec.dtype.names]

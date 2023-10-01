@@ -467,7 +467,7 @@ class converter:
                     label=value["label"],
                 )
                 for key, value in list(self._udic.items())
-                if type(key) == int and value["size"] != 1
+                if type(key) is int and value["size"] != 1
             ]
 
             return cp.CSDM(

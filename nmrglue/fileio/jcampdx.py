@@ -72,7 +72,7 @@ def _parsejcampdx(filename):
         # for multi-line data, linebreak must be restored if it has been
         # cut out with comments:
         if actual[-1] != "\n":
-            actual = actual + "\n"
+            actual += "\n"
 
         # encountered new key:
         if actual[:2] == "##":
@@ -85,7 +85,7 @@ def _parsejcampdx(filename):
                 key = _getkey(currentkey)
                 value = "".join(currentvaluestrings)  # collapse
                 if not value.strip():
-                    warn("JCAMP-DX key without value:" + key)
+                    warn(f"JCAMP-DX key without value: {key}")
                 else:
                     try:
                         activeblock[key].append(value)
@@ -121,7 +121,7 @@ def _parsejcampdx(filename):
                 keystr = keysplit[0][2:]  # remove "##" already here
                 valuestr = keysplit[1]
                 if not keystr:
-                    warn("Empty key in JCAMP-DX line:" + line)
+                    warn(f"Empty key in JCAMP-DX line: {line}")
                     currentkey = None
                     currentvaluestrings = []
                     continue
@@ -134,7 +134,7 @@ def _parsejcampdx(filename):
         else:
             if activeblock:
                 if currentkey is None:
-                    warn("JCAMP-DX data line without associated key:" + line)
+                    warn(f"JCAMP-DX data line without associated key: {line}")
                     continue
 
                 currentvaluestrings.append(commentsplit[0])
@@ -272,7 +272,7 @@ def _parse_affn_pac(datalines):
             try:
                 value = float(base + (exp if exp is not None else ""))
             except ValueError:
-                warn("Data parsing failed at line:" + dataline)
+                warn(f"Data parsing failed at line: {dataline}")
                 return None
             linedata.append(value)
         if len(linedata) > 1:
@@ -375,8 +375,7 @@ def _parse_pseudo(datalines):
                         valuechar = _DUP_DIGITS[char]
                         newmode = 3
                     except KeyError:
-                        warn("Unknown pseudo-digit: " +
-                             char + " at line: " + dataline)
+                        warn(f"Unknown pseudo-digit: {char} at line: {dataline}")
                         return None
 
             # finish previous number
@@ -399,7 +398,7 @@ def _parse_pseudo(datalines):
                                                          value_to_append,
                                                          data)
                 if not success:
-                    warn("Data parsing failed at line:" + dataline)
+                    warn(f"Data parsing failed at line: {dataline}")
                     return None
 
             # in DIF mode last of line is same than the first of next line
