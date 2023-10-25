@@ -1904,7 +1904,12 @@ def read_jcamp(filename):
     with open(filename, 'r') as f:
         while True:     # loop until end of file is found
 
-            line = f.readline().rstrip()    # read a line
+            try:
+                line = f.readline().rstrip()    # read a line
+            except Exception as e:
+                warn("Unable read line, leave it as a comment")
+                line = "$$"
+
             if line == '':      # end of file found
                 break
 
