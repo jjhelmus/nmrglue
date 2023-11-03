@@ -151,7 +151,7 @@ def _detect_format(dataline):
     firstvalue_re = re.compile(
         "(\s)*([+-]?\d+\.?\d*|[+-]?\.\d+)([eE][+-]?\d+)?(\s)*")
 
-    xy_re = re.compile('^[0-9\.]+, [0-9\.]+')
+    xy_re = re.compile('^[0-9\.]+,[ ]?[0-9\.]+')
 
     index = firstvalue_re.match(dataline).end()
     if index is None:
@@ -362,8 +362,14 @@ def _parse_xy_xy(datalines):
         xy_re = re.compile('[^ ][0-9\.]+, [0-9\.]+')
         group_data = re.findall(xy_re, dataline)
         len_group_data = len(group_data)
+        if len_group_data == 0:
+            xy_re = re.compile('[^ ][0-9\.]+,[0-9\.]+;')
+            group_data = re.findall(xy_re, dataline)
+
         for data in group_data:
-            x, y = data.split(', ')
+            clean_data = data.replace(', ', ',')
+            clean_data = clean_data.replace(';', '')
+            x, y = clean_data.split(',')
             pts.append([float(x), float(y)])
 
     if len_group_data > 1:
