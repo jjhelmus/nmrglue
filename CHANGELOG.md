@@ -1,4 +1,4 @@
-0.10 (Unreleased)
+0.10 (2023-11-14)
 =================
 
 * Remove use of deprecated np.float compatibility with NumPy 1.24+ (#193)
