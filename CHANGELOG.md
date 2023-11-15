@@ -1,6 +1,16 @@
 0.10 (Unreleased)
 =================
 
+* Remove use of deprecated np.float compatibility with NumPy 1.24+ (#193)
+* Remove use of deprecated np.prod function (#207)
+* Switch from nose to pytest for running tests (#201, #206)
+* Bruker NUS data can now be expanded (#189)
+* Fix JCAMP-DX digit parsing (#198)
+* Fix JCAMP-DX block reading (#191)
+* Fix a bug with ndimage slices (#197)
+* Updates to the CI (#185, #183)
+* Code changes to reflect Python 3 preferred syntax (#179, #180, #181, #204, #205)
+* Fixed various typos and misspelling (#172, #173, #177, #182, #203)
 
 
 0.9 (2022-04-20)
