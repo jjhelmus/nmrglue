@@ -2667,18 +2667,18 @@ def expand_nus(data, shape, nuslist, aqorder=None, quadrature_order=None, allow_
     aqorder : list | None
         the order in which indirect dimensions are acquired.
         defaults to [1, 0] for 3D and [2, 1, 0] for 4D datasets. 
-        All other possibilites compatible with the dimension are 
+        All other possibilities compatible with the dimension are 
         allowed, for eg, [0, 1] for 3D, and [0, 1, 2], [0, 2, 1], 
         [2, 0, 1], [1, 0, 2], [1, 2, 0] for 4D data.  
     quadrature_order : list | None
-        ordering of quadrature points. by defualt, this uses
+        ordering of quadrature points. by default, this uses
         the order from itertools.product, which seems to be 
         fine most of the common acquistions. For example, for a 2D dataset,
         this will be [(0,), (1,)], for 3D, this will be [(0, 0), (0, 1), (1, 0), (1, 1)]
         and for 4D [(0, 0, 0), (0, 0, 1), (0, 1, 0), (0, 1, 1), (1, 0, 0), (1, 0, 1),
         (1, 1, 0), (1, 1, 1)], where 0=real and 1=imag point
     allow_high_dims : bool
-        flag that allows datasets higher than 4D to be genereted.
+        flag that allows datasets higher than 4D to be generated.
         By default, this is not allowed to prevent generation of large datasets
         by mistake
 
@@ -2693,11 +2693,11 @@ def expand_nus(data, shape, nuslist, aqorder=None, quadrature_order=None, allow_
     ------
     ValueError
         if shape of the final data is not compatible
-        with the expeted shape from nuslist
+        with the expected shape from nuslist
     ValueError
         if dataset dimension is less than 2
     ValueError
-        if dataset dimension is greated than 4 and
+        if dataset dimension is greater than 4 and
         the flag to allow this is False
 
     """
@@ -2709,7 +2709,7 @@ def expand_nus(data, shape, nuslist, aqorder=None, quadrature_order=None, allow_
         raise ValueError(f"expected {ndim}D data but got {ndim}D nuslist")
 
     if ndim < 2:
-        raise ValueError(f"Needs to be be atleast a 2D dataset (not {ndim}D)")
+        raise ValueError(f"Needs to be be at least a 2D dataset (not {ndim}D)")
 
     # protection against unintended generation of large datasets
     if (ndim > 4) and (allow_high_dims == False):
