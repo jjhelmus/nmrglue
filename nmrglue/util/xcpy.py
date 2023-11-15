@@ -196,7 +196,7 @@ def write_cfg(outfile, infile=None):
 
         with open(outfile, "w") as f:
             config.write(f)
-        MSG("Written Configuration file at: " + outfile)
+        MSG(f"Written Configuration file at: {outfile}")
 
 
 def exists(filename, raise_error=False):
@@ -273,7 +273,7 @@ def run(cpython, script, pass_current_folder=True, use_shell=None, dry=None):
     args = [cpython, script] + cd
 
     if dry:
-        MSG("The following command will be executed: \n" + " ".join(args))
+        MSG("The following command will be executed:\n" + " ".join(args))
         process = None
 
     else:
@@ -336,7 +336,7 @@ def show_config(filename, printing=True):
                 MSG(config)
     except FileNotFoundError:
         if printing:
-            MSG(filename + " not found")
+            MSG(f"{filename} not found")
         config = None
 
     return config
@@ -442,7 +442,7 @@ def main():
 
                 # check for .py extension and append it if not given
                 if not scriptname.endswith('.py'):
-                    scriptname = scriptname + '.py'
+                    scriptname += '.py'
 
                 # run the script if it exists and then break from the for loop
                 # and set the executed status to true

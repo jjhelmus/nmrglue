@@ -496,8 +496,7 @@ def fit_NDregion(region, lineshapes, params, amps, bounds=None,
     if wmask is None:   # default is to include all points in region
         wmask = np.ones(shape, dtype='bool')
     if wmask.shape != shape:
-        err = "wmask has incorrect shape:" + str(wmask.shape) +   \
-              " should be " + str(shape)
+        err = f"wmask has incorrect shape: {wmask.shape} should be {shape}"
         raise ValueError(err)
 
     # DEBUGGING

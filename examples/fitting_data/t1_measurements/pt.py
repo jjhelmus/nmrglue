@@ -40,5 +40,5 @@ for peak, params in fits.items():
     ax.set_title(peak)
 
     # save the figure
-    fig.savefig(peak + "_plot.png")
+    fig.savefig(f"{peak}_plot.png")
     plt.close()
