@@ -428,8 +428,20 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None, shape=None,
 
     # read the binary file
     f = os.path.join(dir, bin_file)
-    null, data = read_binary(f, shape=shape, cplex=cplex, big=big,
+    _, data = read_binary(f, shape=shape, cplex=cplex, big=big,
                              isfloat=isfloat)
+
+    try:
+        if dic['acqus']['FnTYPE'] == 2: # non-uniformly sampled data
+            try:
+                dic['nuslist'] = read_nuslist(dir)
+            except FileNotFoundError:
+                warn("NUS data detected, but nuslist was not found")
+    except KeyError:
+        # old datasets do not have the FnTYPE parameter in acqus files. 
+        # also fails silently when acqus file is absent.
+        pass
+        
     return dic, data
 
 
@@ -537,8 +549,20 @@ def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
 
     # read the binary file
     f = os.path.join(dir, bin_file)
-    null, data = read_binary_lowmem(f, shape=shape, cplex=cplex, big=big,
+    _, data = read_binary_lowmem(f, shape=shape, cplex=cplex, big=big,
                                     isfloat=isfloat)
+    
+    try:
+        if dic['acqus']['FnTYPE'] == 2: # non-uniformly sampled data
+            try:
+                dic['nuslist'] = read_nuslist(dir)
+            except FileNotFoundError:
+                warn("NUS data detected, but nuslist was not found")
+    except KeyError:
+        # old datasets do not have the FnTYPE parameter in acqus files. 
+        # also fails silently when acqus file is absent.
+        pass
+
     return dic, data
 
 
@@ -2581,3 +2605,49 @@ def _merge_dict(a, b):
     c = a.copy()
     c.update(b)
     return c
+
+
+def read_nuslist(dirc=".", fname="nuslist"):
+    """
+    Reads nuslist in bruker format
+
+    Parameters
+    ----------
+    dirc : str, optional
+        directory for the data, by default "."
+    fname : str, optional
+        name of the file that has the nuslist, by default 'nuslist'
+
+    Returns
+    -------
+    converted_nuslist: list of n-tuples
+        nuslist
+
+    Raises
+    ------
+    OSError
+        if directory is absent
+
+    FileNotFoundError
+        if file is absent
+
+    """
+    if not os.path.isdir(dirc):
+        raise OSError(f"directory {dirc} does not exist")
+
+    if fname is None:
+        fname = "nuslist"
+
+    try:
+        with open(os.path.join(dirc, fname)) as f:
+            nuslist = f.read().splitlines()
+    except FileNotFoundError:
+        raise FileNotFoundError(f"nuslist file ({fname}) not found in directory {dirc}")
+
+    converted_nuslist = []
+    for line in nuslist:
+        numbers = tuple(int(i) for i in line.split())
+        converted_nuslist.append(numbers)
+
+    return converted_nuslist
+

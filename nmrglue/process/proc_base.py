@@ -7,6 +7,7 @@ units of points unless otherwise noted.
 
 # TODO determine which of these work on N-dimension and which assume 2D
 
+from itertools import product
 import numpy as np
 import scipy.signal
 import scipy.linalg
@@ -2641,3 +2642,101 @@ def zd_gaussian(data, wide=1.0, x0=0.0, slope=1.0, g=1):
     tln2 = np.sqrt(2 * np.log(2))
     window = 1 - scipy.signal.gaussian(2 * wide + 1, g / tln2)
     return zd(data, window, x0=x0, slope=slope)
+
+
+def expand_nus(data, shape, nuslist, aqorder=None, quadrature_order=None, allow_high_dims=False):
+    """
+    Converts a non-uniformaly sampled dataset to a fully sampled
+    dataset. FIDs are sorted according the nuslist, and missing
+    fids replaced by zeros. All dimensions are supported, but
+    only 2D, 3D, and 4D are allowed by default to avoid creation
+    of large datasets by mistake.
+
+    Parameters
+    ----------
+    data : np.ndarray
+        non-uniformly sampled dataset
+    shape : tuple
+        shape of the fully sampled data
+    nuslist : list of n-tuples
+        nuslist
+    aqorder : list | None
+        the order in which indirect dimensions are acquired.
+        defaults to [1, 0] for 3D and [2, 1, 0] for 4D datasets. 
+        All other possibilites compatible with the dimension are 
+        allowed, for eg, [0, 1] for 3D, and [0, 1, 2], [0, 2, 1], 
+        [2, 0, 1], [1, 0, 2], [1, 2, 0] for 4D data.  
+    quadrature_order : list | None
+        ordering of quadrature points. by defualt, this uses
+        the order from itertools.product, which seems to be 
+        fine most of the common acquistions. For example, for a 2D dataset,
+        this will be [(0,), (1,)], for 3D, this will be [(0, 0), (0, 1), (1, 0), (1, 1)]
+        and for 4D [(0, 0, 0), (0, 0, 1), (0, 1, 0), (0, 1, 1), (1, 0, 0), (1, 0, 1),
+        (1, 1, 0), (1, 1, 1)], where 0=real and 1=imag point
+    allow_high_dims : bool
+        flag that allows datasets higher than 4D to be genereted.
+        By default, this is not allowed to prevent generation of large datasets
+        by mistake
+
+    Returns
+    -------
+    full_data : np.ndarray
+        data from the nus dataset sorted according to
+        the nuslist, and with missing fids replaced by
+        zeros
+
+    Raises
+    ------
+    ValueError
+        if shape of the final data is not compatible
+        with the expeted shape from nuslist
+    ValueError
+        if dataset dimension is less than 2
+    ValueError
+        if dataset dimension is greated than 4 and
+        the flag to allow this is False
+
+    """
+
+    idims = len(nuslist[0])
+    ndim = idims + 1
+
+    if len(shape) != ndim:
+        raise ValueError(f"expected {ndim}D data but got {ndim}D nuslist")
+
+    if ndim < 2:
+        raise ValueError(f"Needs to be be atleast a 2D dataset (not {ndim}D)")
+
+    # protection against unintended generation of large datasets
+    if (ndim > 4) and (allow_high_dims == False):
+        raise ValueError(
+            f"converting {ndim}D data to a fully sampled data not allowed by default. "
+            f"Use the flag 'allow_high_dims=True' if you really want to do this."
+        )
+
+    # make sure that nuslist is correctly ordered and typed
+    if aqorder is None:
+        aqorder = list(range(idims))[::-1]
+
+    reordered_nuslist = []
+    for item in nuslist:
+        reordered_item = []
+        for pos in aqorder:
+            reordered_item.append(item[pos])
+        reordered_nuslist.append(tuple(reordered_item))
+
+    # generate a full dataset
+    full_data = np.zeros(shape, dtype=data.dtype)
+
+    # quadrature points in all dimensions
+    if quadrature_order is None:
+        quadrature_order = list(product((0, 1), repeat=idims))
+
+    # add fids at appropriate positions
+    for i, nus_pos in enumerate(reordered_nuslist):
+        for j, quad_pos in enumerate(quadrature_order):
+            fid_pos = i * (2 ** idims) + j
+            final_pos = tuple(p * 2 + q for p, q in zip(nus_pos, quad_pos))
+            full_data[final_pos] = data[fid_pos]
+
+    return full_data

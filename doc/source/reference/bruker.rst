@@ -35,8 +35,8 @@ These are functions which are targeted for users of nmrglue.
     write_pprog
     guess_udic
     create_dic
-
-
+    read_nuslist
+    
 
 Developer Information
 ---------------------
