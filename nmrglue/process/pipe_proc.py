@@ -3162,7 +3162,7 @@ def lp2d(dic, data, xOrd=8, yOrd=8, xSize="default", ySize="default",
     # predict the X (last) axis.
     data = proc_lp.lp2d(data, xpred, yOrd, xOrd, yMirror, fix_pts, method)
 
-    # transpose the data matrix, predict Y axis, tranpose back
+    # transpose the data matrix, predict Y axis, transpose back
     data = data.T
     data = proc_lp.lp2d(data, ypred, xOrd, yOrd, xMirror, fix_pts, method)
     data = data.T

@@ -552,7 +552,7 @@ def reorder_data(data, shape, torder):
         Raw data as ordered in binary file.
     shape : tuple of ints
         Shape of the NMR data.
-    torder : {'f', 'r', 'o' of Pytho function}
+    torder : {'f', 'r', 'o' or a Python function}
         Trace ordering . See :py:func:`read` for details.
 
     Returns

@@ -51,7 +51,7 @@ pipe.write("shuf10.glue", d, a, overwrite=True)
 # pipe.write("shuf12.glue", d, a, overwrite=True)
 
 # DEV
-# NMRPipe DEV functions goes into a infinite loop, oviously we don't
+# NMRPipe DEV functions goes into a infinite loop, obviously we don't
 # want to reproduce this.
 # d, a = pipe.read("time_complex.fid")
 # d, a = p.dev(d, a)

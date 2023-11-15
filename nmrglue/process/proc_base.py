@@ -1002,7 +1002,7 @@ xy2yx = tp
 
 def tp_hyper(data):
     """
-    Hypercomplex tranpose.
+    Hypercomplex transpose.
 
     Use when both dimension are complex.
 
@@ -1160,9 +1160,9 @@ def zf_auto(data, mid=False):
     return zf_size(data, largest_power_of_2(data.shape[-1]), mid)
 
 
-####################
-# Basic Untilities #
-####################
+###################
+# Basic Utilities #
+###################
 
 
 # Add Constant
@@ -1587,11 +1587,15 @@ def c2ri(data):
     return n
 
 
-def seperate_interleaved(data):
+def separate_interleaved(data):
     """
     Separate interleaved real, imaginary data into complex array.
     """
     return c2ri(data)
+
+
+def seperate_interleaved(data):
+    return separate_interleaved(data)
 
 
 def pack_complex(data):

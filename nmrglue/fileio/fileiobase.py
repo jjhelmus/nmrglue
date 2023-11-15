@@ -748,7 +748,7 @@ class data_nd:
 
         # check for repeated axes
         if len(set(axes)) != self.ndim:
-            raise ValueError("repeated axis in tranpose")
+            raise ValueError("repeated axis in transpose")
 
         # create a new data_nd object with transposed order
         return self.__fcopy__(order=tuple([self.order[i] for i in axes]))
