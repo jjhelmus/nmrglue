@@ -438,10 +438,10 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None, shape=None,
             except FileNotFoundError:
                 warn("NUS data detected, but nuslist was not found")
     except KeyError:
-        # old datasets do not have the FnTYPE parameter in acqus files. 
+        # old datasets do not have the FnTYPE parameter in acqus files.
         # also fails silently when acqus file is absent.
         pass
-        
+
     return dic, data
 
 
@@ -551,7 +551,7 @@ def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
     f = os.path.join(dir, bin_file)
     _, data = read_binary_lowmem(f, shape=shape, cplex=cplex, big=big,
                                     isfloat=isfloat)
-    
+
     try:
         if dic['acqus']['FnTYPE'] == 2: # non-uniformly sampled data
             try:
@@ -559,7 +559,7 @@ def read_lowmem(dir=".", bin_file=None, acqus_files=None, pprog_file=None,
             except FileNotFoundError:
                 warn("NUS data detected, but nuslist was not found")
     except KeyError:
-        # old datasets do not have the FnTYPE parameter in acqus files. 
+        # old datasets do not have the FnTYPE parameter in acqus files.
         # also fails silently when acqus file is absent.
         pass
 
@@ -1501,7 +1501,7 @@ def reorder_submatrix(data, shape, submatrix_shape, reverse=False):
         return data
 
     sub_per_dim = [int(i / j) for i, j in zip(shape, submatrix_shape)]
-    nsubs = np.product(sub_per_dim)
+    nsubs = np.prod(sub_per_dim)
 
     if reverse:
         rdata = np.empty([nsubs] + list(submatrix_shape))
