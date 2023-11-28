@@ -2651,3 +2651,52 @@ def read_nuslist(dirc=".", fname="nuslist"):
 
     return converted_nuslist
 
+# Read Bruker VD delays list
+
+def read_vdlist(dir):
+    """
+    This function reads a Bruker 'vdlist' file from a specified directory and
+    returns a list of variable delay (vd) times in seconds.
+    The 'vdlist' file contains delay times used in NMR relaxation
+    experiments, typically ns, ms, ms, or s. This function converts all delays
+    to seconds for consistency.
+
+    Parameters
+    ----------
+    dir : str
+        The directory path where the 'vdlist' file is located.
+
+    Returns
+    -------
+    vdlist : list
+        A list of delay times in seconds. Each delay time is a float.
+    """
+    
+    # Check that vdlist file exists
+    vdlist_file = os.path.join(dir, "vdlist")
+    if os.path.isfile(vdlist_file) is not True:
+        raise OSError(
+            "The 'vdlist' file was not found in the directory: {}. Please ensure"
+            " that you have provided the 'acqu' directory, not the 'pdata'"
+            " directory.".format(directory)
+        )
+        
+    # Read vdlist file
+    with open(vdlist_file, 'r') as f:
+        vdlist = f.readlines()
+        for i in range(len(vdlist)):
+            if 'n' in vdlist[i]:
+                vdlist[i] = vdlist[i].replace('n', 'e-9')
+            elif 'u' in vdlist[i]:
+                vdlist[i] = vdlist[i].replace('u', 'e-6')
+            elif 'm' in vdlist[i]:
+                vdlist[i] = vdlist[i].replace('m', 'e-3')
+            elif 's' in vdlist[i]:
+                vdlist[i] = vdlist[i].replace('s', 'e0')
+            else:
+                vdlist[i] = vdlist[i].replace('\n', '')
+
+    # Convert to floats
+    vdlist = [float(i) for i in vdlist]
+
+    return vdlist
