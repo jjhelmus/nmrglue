@@ -2655,8 +2655,11 @@ def read_nuslist(dirc=".", fname="nuslist"):
 
 def read_vdlist(dir):
     """
-    This function reads a Bruker 'vdlist' file from a specified directory and returns a list of variable delay (vd) times in seconds. 
-    The 'vdlist' file contains delay times typically used in NMR relaxation experiments, typically ns, ms, ms, or s. This function converts all delay times to seconds for consistency.
+    This function reads a Bruker 'vdlist' file from a specified directory and
+    returns a list of variable delay (vd) times in seconds.
+    The 'vdlist' file contains delay times used in NMR relaxation
+    experiments, typically ns, ms, ms, or s. This function converts all delays
+    to seconds for consistency.
 
     Parameters
     ----------
@@ -2668,12 +2671,17 @@ def read_vdlist(dir):
     vdlist : list
         A list of delay times in seconds. Each delay time is a float.
     """
-    # check that vdlist file exists
+    
+    # Check that vdlist file exists
     vdlist_file = os.path.join(dir, "vdlist")
     if os.path.isfile(vdlist_file) is not True:
-        raise OSError("The 'vdlist' file was not found in the directory: %s. Please ensure that you have provided the 'acqu' directory, not the 'pdata' directory." % (dir))
-    
-    # read vdlist file
+        raise OSError(
+            "The 'vdlist' file was not found in the directory: {}. Please ensure"
+            " that you have provided the 'acqu' directory, not the 'pdata'"
+            " directory.".format(directory)
+        )
+        
+    # Read vdlist file
     with open(vdlist_file, 'r') as f:
         vdlist = f.readlines()
         for i in range(len(vdlist)):
@@ -2688,7 +2696,7 @@ def read_vdlist(dir):
             else:
                 vdlist[i] = vdlist[i].replace('\n', '')
 
-    # convert to floats
+    # Convert to floats
     vdlist = [float(i) for i in vdlist]
 
     return vdlist
