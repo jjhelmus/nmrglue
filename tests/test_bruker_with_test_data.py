@@ -222,4 +222,15 @@ def test_read_nuslist():
 
     os.remove("tmp_nuslist")
 
-    pass
+
+def test_read_vdlist():
+    """ reading vdlist """
+    with open("tmp_vdlist", "w") as f:
+        f.write("""1n\n10n\n50u\n20u\n30m\n50m\n1\n2\n""")
+
+    vdlist = ng.bruker.read_vdlist(".", fname="tmp_vdlist")
+    true_vdlist = [1e-9, 10e-9, 50e-6, 20e-6, 30e-3, 50e-3, 1.0, 2.0] 
+    for i, j in zip(vdlist, true_vdlist):
+        assert i -j < 1e-10
+
+    os.remove("tmp_vdlist")

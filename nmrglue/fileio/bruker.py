@@ -2653,7 +2653,8 @@ def read_nuslist(dirc=".", fname="nuslist"):
 
 # Read Bruker VD delays list
 
-def read_vdlist(dir):
+
+def read_vdlist(dirc, fname='vdlist'):
     """
     This function reads a Bruker 'vdlist' file from a specified directory and
     returns a list of variable delay (vd) times in seconds.
@@ -2663,22 +2664,28 @@ def read_vdlist(dir):
 
     Parameters
     ----------
-    dir : str
+    dirc : str
         The directory path where the 'vdlist' file is located.
+    fname : str
+        name of the vdlist file, by default 'vdlist'
 
     Returns
     -------
     vdlist : list
         A list of delay times in seconds. Each delay time is a float.
+
+    Raises
+    ------
+    FileNotFoundError 
+        if the vdlist file is absent
+
     """
-    
     # Check that vdlist file exists
-    vdlist_file = os.path.join(dir, "vdlist")
+    vdlist_file = os.path.join(dirc, fname)
     if os.path.isfile(vdlist_file) is not True:
-        raise OSError(
-            "The 'vdlist' file was not found in the directory: {}. Please ensure"
-            " that you have provided the 'acqu' directory, not the 'pdata'"
-            " directory.".format(directory)
+        raise FileNotFoundError(
+            f"The 'vdlist' file ({fname}) was not found in the directory: {dirc}. Please ensure"
+            " that you have provided the 'acqu' directory, not the 'pdata' directory."
         )
         
     # Read vdlist file
