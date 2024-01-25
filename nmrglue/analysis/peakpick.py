@@ -535,7 +535,7 @@ def find_pseg_slice(data, location, thres):
             stop = stop + 1
             al[dim] = stop
         seg_slice.append(slice(start + 1, stop))
-    return seg_slice
+    return tuple(seg_slice)
 
 
 def find_nseg_slice(data, location, thres):
@@ -558,4 +558,4 @@ def find_nseg_slice(data, location, thres):
             stop = stop + 1
             al[dim] = stop
         seg_slice.append(slice(start + 1, stop))
-    return seg_slice
+    return tuple(seg_slice)
