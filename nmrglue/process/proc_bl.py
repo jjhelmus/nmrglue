@@ -237,7 +237,7 @@ def baseline_corrector(data, wd=20):
     sigma = _find_noise_sd(sd_set, 0.999)
     sn_vector = _is_signal(sigma, sd_set, 3)
     s_start = _get_signal_start(sn_vector)
-    s_end = np.sort(len(data) - 1 - _get_signal_start((sn_vector[::-1])))
+    s_end = np.sort(len(data) - 1 - _get_signal_start(sn_vector[::-1]))
     r = _get_temp_baseline(data, s_start, s_end, 7)
     baseline = _smooth(r, 60)
     return data - baseline
