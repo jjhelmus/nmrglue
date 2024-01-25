@@ -15,10 +15,10 @@ coadd_dic = dict(dic)
 
 # loop over the files, adding them to the coadded array
 for f in flist:
-    print "Coadding file:", f
+    print("Coadding file:", f)
     dic, data = ng.pipe.read(f)
     coadd_data += data / len(flist)
 
 # write out the file
-print "Writing out coadded data"
+print("Writing out coadded data")
 ng.pipe.write("coadded.fid", coadd_dic, coadd_data, overwrite=True)
