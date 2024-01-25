@@ -58,7 +58,7 @@ def test_1d_integrate():
     assert_array_almost_equal(values_2,  [0.5 * 3, 3.])
 
 
-def test_1d_integrate_withnoise():
+def test_1d_integrate_with_noise():
     """ Test integration of synthetic 1D data with two peaks and noise"""
 
     # seed random number
@@ -88,11 +88,11 @@ def test_1d_integrate_withnoise():
     assert abs(integrate(data, uc, limits) - 1) <= max_error
 
     # Test renormalization of norms
-    resutls = integrate(data, uc, ((4, 6), (7, 9)), noise_limits=(1, 2),
+    results = integrate(data, uc, ((4, 6), (7, 9)), noise_limits=(1, 2),
                         norm_to_range=1)
 
     # Test renormalization of values.
-    assert abs(resutls[0, 0] - 0.5) <= max_error
+    assert abs(results[0, 0] - 0.5) <= max_error
 
 
 def test_1d_ndintegrate():
