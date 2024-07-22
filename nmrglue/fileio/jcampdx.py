@@ -400,7 +400,10 @@ def _parse_data(datastring):
     elif mode == 0:
         data = _parse_affn_pac(datalines)
     elif mode == 2:
-        data = _parse_xy_xy(datalines)
+        if headerline == '(X++(Y..Y))':
+            data = _parse_affn_pac(datalines)
+        else:
+            data = _parse_xy_xy(datalines)
     else:
         return None
     if data is None:
