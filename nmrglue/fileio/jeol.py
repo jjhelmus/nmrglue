@@ -260,7 +260,7 @@ def read_header(buffer, conversion_table):
     header["annote_start"] = (buffer.read_uint32() << 32) | (buffer.read_uint32())
     header["annote_length"] = buffer.read_uint32()
     header["total_size"] = (buffer.read_uint32() << 32) | (buffer.read_uint32())
-    header["unit_location"] = buffer.get_array(("read_uint8"), 8)
+    header["unit_location"] = buffer.get_array("read_uint8", 8)
 
     info = []
     for _ in range(2):
@@ -311,7 +311,7 @@ def read_parameters(buffer, param_start, endianness, conversion_table):
 
     param_array = []
     for p in range(params["high_index"]):
-        _class = buffer.read_bytes(4)
+        _class = buffer.get_array("read_byte", 4)
         unit_scaler = buffer.read_int16()
         unit = buffer.get_unit(5)
         buffer.skip(16)
@@ -346,7 +346,7 @@ def read_parameters(buffer, param_start, endianness, conversion_table):
 
         param_array.append(
             {
-                "class": _class,
+                "_class": _class,
                 "name": name.lower(),
                 "unit_scaler": unit_scaler,
                 "units": unit,
