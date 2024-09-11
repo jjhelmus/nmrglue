@@ -195,43 +195,42 @@ def read_header(buffer, conversion_table):
     header["endian"] = t.endianness[buffer.read_int8()]
     header["major_version"] = buffer.read_uint8()
     header["minor_version"] = buffer.read_uint16()
-    header["ndim"] = buffer.read_uint8()
+    header["data_dimension_number"] = buffer.read_uint8()
 
     info = buffer.read_byte()
-    header["dim_exist"] = [bool(int(x)) for x in format(info, "08b")]
+    header["data_dimension_exist"] = [bool(int(x)) for x in format(info, "08b")]
 
     info = buffer.read_byte()
-    header["type"] = t.data_type[info >> 6]
-    header["format"] = t.data_type[info & 0b00111111]
+    header["data_type"] = t.data_type[info >> 6]
+    header["data_format"] = t.data_type[info & 0b00111111]
 
     header["instrument"] = t.instruments[buffer.read_int8()]
     header["translate"] = [buffer.read_int8() for i in range(8)]
-    header["axis_type"] = [t.axis_type[i] for i in buffer.get_array("read_int8", 8)]
+    header["data_axis_type"] = [t.axis_type[i] for i in buffer.get_array("read_int8", 8)]
     header["units"] = buffer.get_unit(8)
     header["title"] = buffer.get_string(124)
 
     info = []
     for i in buffer.get_array("read_uint8", 4):
-        # print(bytes(i))
         info.append(t.data_axis_ranged[i >> 4])
         info.append(t.data_axis_ranged[i & 0b00001111])
     header["data_axis_ranged"] = info
 
-    header["npoints"] = buffer.get_array("read_uint32", 8)
-    header["offset_start"] = buffer.get_array("read_uint32", 8)
-    header["offset_stop"] = buffer.get_array("read_uint32", 8)
-    header["axis_start"] = buffer.get_array("read_float64", 8)
-    header["axis_stop"] = buffer.get_array("read_float64", 8)
+    header["data_points"] = buffer.get_array("read_uint32", 8)
+    header["data_offset_start"] = buffer.get_array("read_uint32", 8)
+    header["data_offset_stop"] = buffer.get_array("read_uint32", 8)
+    header["data_axis_start"] = buffer.get_array("read_float64", 8)
+    header["data_axis_stop"] = buffer.get_array("read_float64", 8)
 
     info = buffer.get_array("read_byte", 4)
-    header["creation_date"] = {
+    header["creation_time"] = {
         "year": 1990 + (info[0] >> 1),
         "month": ((info[0] << 3) & 0b00001000) + (info[1] >> 5),
         "day": info[2] & 0b00011111,
     }
 
     info = buffer.get_array("read_byte", 4)
-    header["revision_date"] = {
+    header["revision_time"] = {
         "year": 1990 + (info[0] >> 1),
         "month": ((info[0] << 3) & 0b00001000) + (info[1] >> 5),
         "day": info[2] & 0b00011111,
@@ -241,13 +240,13 @@ def read_header(buffer, conversion_table):
     header["site"] = buffer.get_string(128)
     header["author"] = buffer.get_string(128)
     header["comment"] = buffer.get_string(128)
-    header["axis_title"] = buffer.get_array("get_string", 8, 32)
-    header["base_frequency"] = buffer.get_array("read_float64", 8)
+    header["data_axis_titles"] = buffer.get_array("get_string", 8, 32)
+    header["base_freq"] = buffer.get_array("read_float64", 8)
     header["zero_point"] = buffer.get_array("read_float64", 8)
     header["reversed"] = buffer.get_array("read_boolean", 8)
 
     buffer.skip(3)
-    header["annotation_flag"] = bool(buffer.read_byte() >> 7)
+    header["annotation_ok"] = bool(buffer.read_byte() >> 7)
     header["history_used"] = buffer.read_uint32()
     header["history_length"] = buffer.read_uint32()
     header["param_start"] = buffer.read_uint32()
@@ -258,9 +257,9 @@ def read_header(buffer, conversion_table):
     header["data_length"] = (buffer.read_uint32() << 32) | (buffer.read_uint32())
     header["context_start"] = (buffer.read_uint32() << 32) | (buffer.read_uint32())
     header["context_length"] = buffer.read_uint32()
-    header["annotation_start"] = (buffer.read_uint32() << 32) | (buffer.read_uint32())
-    header["annotation_length"] = buffer.read_uint32()
-    header["size"] = (buffer.read_uint32() << 32) | (buffer.read_uint32())
+    header["annote_start"] = (buffer.read_uint32() << 32) | (buffer.read_uint32())
+    header["annote_length"] = buffer.read_uint32()
+    header["total_size"] = (buffer.read_uint32() << 32) | (buffer.read_uint32())
     header["unit_location"] = buffer.get_array(("read_uint8"), 8)
 
     info = []
@@ -271,7 +270,7 @@ def read_header(buffer, conversion_table):
             byte = buffer.read_int16()
             unit.append(byte)
         info.append({"scaler": scaler, "unit": unit})
-    header["compound_unit"] = info
+    header["compound_units"] = info
 
     return buffer, header
 
@@ -298,12 +297,10 @@ def read_parameters(buffer, param_start, endianness, conversion_table):
     """
     t = conversion_table
 
-    print(buffer.position)
     if endianness == "little_endian":
         buffer.set_little_endian()
 
     buffer.position = param_start
-    print(buffer.position, param_start)
 
     params = {
         "parameter_size": buffer.read_uint32(),
@@ -311,19 +308,15 @@ def read_parameters(buffer, param_start, endianness, conversion_table):
         "high_index": buffer.read_uint32(),
         "total_size": buffer.read_uint32(),
     }
-    print(params)
 
     param_array = []
     for p in range(params["high_index"]):
-        buffer.skip(4)
-        scaler = buffer.read_int16()
+        _class = buffer.read_bytes(4)
+        unit_scaler = buffer.read_int16()
         unit = buffer.get_unit(5)
-        # print(unit)
         buffer.skip(16)
         value_type = t.value_type[buffer.read_int32()]
-        # print(p)
         buffer.position -= 20
-        # print(buffer.position)
 
         value = None
         if value_type == "string":
@@ -353,9 +346,10 @@ def read_parameters(buffer, param_start, endianness, conversion_table):
 
         param_array.append(
             {
+                "class": _class,
                 "name": name.lower(),
-                "scaler": scaler,
-                "unit": unit,
+                "unit_scaler": unit_scaler,
+                "units": unit,
                 "value": value,
                 "value_type": value_type,
             }
@@ -536,4 +530,18 @@ class ConversionTable:
         2: "float",
         3: "complex",
         4: "infinity",
+    }
+
+    submatrix_edge = {
+     "one_d": 8,
+     "two_d": 32,
+      "three_d": 8,
+      "four_d": 8,
+      "five_d": 4,
+      "six_d": 4,
+      "seven_d": 2,
+      "eight_d": 2,
+      "small_two_d": 4,
+      "small_three_d": 4,
+      "small_four_d": 4,
     }
