@@ -1,194 +1,114 @@
 """
-Functions for reading and writing Jeol JDF files
+Functions for reading Jeol JDF files
 
 """
-
-import locale
-import io
 
 __developer_info__ = """
 Jeol data format information
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-:
 
 """
 
-import os
-from warnings import warn
-
+import struct
 import numpy as np
 
-from . import fileiobase
-from ..process import proc_base
-
-import struct
+from .bruker import reorder_submatrix
 
 
 def read(fname):
     """
-    _summary_
+    Reads in a JDF (Jeol Data Format) File
 
     Parameters
     ----------
-    fname : _type_
-        _description_
+    fname : str, path object
+        filepath
 
     Returns
     -------
-    _type_
-        _description_
+    dict, np.ndarray
+        A dictionary with data informations, parameters, and an array of
+        NMR data
+
+    """
+    with open(fname, "rb") as f:
+        buffer = f.read()
+
+    dic = parse_jeol(buffer)
+    data = read_bin_data(dic, buffer)
+    data = reorganize(dic, data)
+
+    return dic, data
+
+def reorganize(dic, bin_data):
+    """
+    A Wrapper functions around reorganization for data of different dimensions
+
+    """
+    dim = ndims(dic)
+    if dim == 1:
+        return reorganize_1d(dic, bin_data)
+    elif dim == 2:
+        return reorganize_2d(dic, bin_data)
+    elif dim > 2:
+        raise NotImplementedError("Higher dimensions have not been tested yet")
+
+
+def reorganize_1d(dic, bin_data):
+    """
+    Reorganize 1d data into correct numpy array
+
+    """
+    return 1
+
+
+def reorganize_2d(dic, bin_data):
+    """
+    Reorganize 2d data into corectly ordered numpy array
+
     """
 
-    with open(fname, "rb") as f:
-        data = f.read()
+    dic, sections = split_sections(dic, bin_data)
+    _out_shape = dic['header']['data_points'][:2][::-1]
 
-    header = parse_jeol(data)
+    sections = [reorder_submatrix(data=s, shape=_out_shape, submatrix_shape=submatrix_shape(dic)) for s in sections]
 
-    return header
+    complexity = [2 if i == 'complex' else 0 for i in dic['header']["data_axis_type"][:2]]
+
+    # for i in (0, 1):
+    print(_out_shape, complexity)
+
+    return
 
 
-class IOBuffer:
 
-    def __init__(self, buffer, conversion_table, endian=None):
-        """
-        _summary_
+def get_data_shape(dic):
+    shape = dic['header']['data_points']
+    shape = [i for i in shape if i > 1]
+    shape = shape[::-1]
 
-        Parameters
-        ----------
-        buffer : _type_
-            _description_
-        conversion_table : _type_
-            _description_
-        endian : _type_, optional
-            _description_, by default None
+    return shape
 
-        """
-        self.buffer = buffer
-        self.conversion_table = conversion_table
-        self.position = 0
-        self.set_big_endian() # default for the header
 
-    def set_big_endian(self):
-        self.endian = 'big'
-        self.e = ">" 
+def get_data_types(dic):
+    shape = get_data_shape(dic)
+    types = dic['header']['data_axis_type'][:len(shape)]
+    types = [2 if t == 'complex' else 1 for t in types]
 
-    def set_little_endian(self):
-        self.endian = "little"
-        self.e = "<"
+    return types
 
-    def skip(self, count):
-        self.position += count
 
-    def read_chars(self, count):
-        chars = struct.unpack_from(f"{self.e}{count}s", self.buffer, self.position)
-        self.position += count
-        return chars[0].decode("utf-8")
-
-    def read_int8(self):
-        value = struct.unpack_from(f"{self.e}b", self.buffer, self.position)
-        self.position += 1
-        return value[0]
-
-    def read_uint8(self):
-        value = struct.unpack_from(f"{self.e}B", self.buffer, self.position)
-        self.position += 1
-        return value[0]
-
-    def read_uint16(self):
-        value = struct.unpack_from(f"{self.e}H", self.buffer, self.position)
-        self.position += 2
-        return value[0]
-
-    def read_int16(self):
-        value = struct.unpack_from(f"{self.e}h", self.buffer, self.position)
-        self.position += 2
-        return value[0]
-
-    def read_uint32(self):
-        value = struct.unpack_from(f"{self.e}I", self.buffer, self.position)
-        self.position += 4
-        return value[0]
-
-    def read_int32(self):
-        value = struct.unpack_from(f"{self.e}i", self.buffer, self.position)
-        self.position += 4
-        return value[0]
-
-    def read_float64(self):
-        value = struct.unpack_from(f"{self.e}d", self.buffer, self.position)
-        self.position += 8
-        return value[0]
-
-    def read_byte(self):
-        """ reads a single byte """
-        value = struct.unpack_from(f"B", self.buffer, self.position)
-        self.position += 1
-        return value[0]
-
-    def read_boolean(self):
-        """ reads a boolean """
-        value = struct.unpack_from(f"B", self.buffer, self.position)
-        self.position += 1
-        return bool(value[0])
-
-    def get_array(self, read_func, count, *args, **kwargs):
-        return [getattr(self, read_func)(*args, **kwargs) for _ in range(count)]
-
-    def get_unit(self, size):
-        """
-        parses the byte that gives the unit of the value of a 
-        parameter and gives the power
-
-        Parameters
-        ----------
-        size : _type_
-            _description_
-
-        Returns
-        -------
-        _type_
-            _description_
-        """
-        unit = []
-        for i in range(size):
-            byte = self.read_byte()
-            prefix = self.conversion_table.prefix[byte >> 4]
-            power = byte & 0b00001111
-            base = self.conversion_table.base[self.read_int8()]
-            unit.append({"prefix": prefix, "power": power, "base": base})
-        return unit
-
-    def get_string(self, count):
-        return self.read_chars(count).replace("\x00", "")
 
 
 def parse_jeol(buffer):
     buffer = IOBuffer(buffer, conversion_table=ConversionTable)
-    buffer, header = read_header(buffer, conversion_table=ConversionTable)
-    buffer, params = read_parameters(
-        buffer, header["param_start"], header["endian"], ConversionTable
-    )
-
+    buffer, header = read_header(buffer)
+    buffer, params = read_parameters(buffer, header["param_start"], header["endian"])
     return {"header": header, "parameters": params}
 
 
-def read_header(buffer, conversion_table):
-    """
-    _summary_
-
-    Parameters
-    ----------
-    buffer : _type_
-        _description_
-    conversion_table : _type_
-        _description_
-
-    Returns
-    -------
-    _type_
-        _description_
-    """
-    t = conversion_table  # short for convinience
+def read_header(buffer):
+    t = buffer.conversion_table
     header = {}
 
     header["file_identifier"] = buffer.read_chars(8)
@@ -202,11 +122,13 @@ def read_header(buffer, conversion_table):
 
     info = buffer.read_byte()
     header["data_type"] = t.data_type[info >> 6]
-    header["data_format"] = t.data_type[info & 0b00111111]
-
+    header["data_format"] = t.data_format[info & 0b00111111]
+    header["submatrix_edge"] = t.submatrix_edge[header["data_format"]]
     header["instrument"] = t.instruments[buffer.read_int8()]
     header["translate"] = [buffer.read_int8() for i in range(8)]
-    header["data_axis_type"] = [t.axis_type[i] for i in buffer.get_array("read_int8", 8)]
+    header["data_axis_type"] = [
+        t.axis_type[i] for i in buffer.get_array("read_int8", 8)
+    ]
     header["units"] = buffer.get_unit(8)
     header["title"] = buffer.get_string(124)
 
@@ -275,27 +197,8 @@ def read_header(buffer, conversion_table):
     return buffer, header
 
 
-def read_parameters(buffer, param_start, endianness, conversion_table):
-    """
-    _summary_
-
-    Parameters
-    ----------
-    buffer : _type_
-        _description_
-    param_start : _type_
-        _description_
-    endianness : _type_
-        _description_
-    conversion_table : _type_
-        _description_
-
-    Returns
-    -------
-    _type_
-        _description_
-    """
-    t = conversion_table
+def read_parameters(buffer, param_start, endianness):
+    t = buffer.conversion_table
 
     if endianness == "little_endian":
         buffer.set_little_endian()
@@ -358,6 +261,175 @@ def read_parameters(buffer, param_start, endianness, conversion_table):
     params["array"] = param_array
 
     return buffer, params
+
+
+def read_bin_data(dic, buffer):
+    buffer = IOBuffer(buffer, conversion_table=ConversionTable)
+
+    if dic["header"]["endian"] == "little_endian":
+        buffer.set_little_endian()
+
+    elif dic["header"]["endian"] == "big_endian":
+        buffer.set_big_endian()
+
+    start = dic["header"]["data_start"]
+    length = dic["header"]["data_length"] // 8
+
+    buffer.position = start
+    data = buffer.get_array(f"read_{dic['header']['data_type']}", length)
+
+    return np.array(data)
+
+
+def ndims(dic):
+    return sum(bool(i) for i in dic["header"]["data_axis_type"])
+
+
+def nsections(dic):
+    return 2 ** num_complex_dims(dic)
+
+
+def split_sections(dic, data):
+    sections = data.reshape(nsections(dic), -1)
+    return dic, [i for i in sections]
+
+
+def submatrix_shape(dic):
+    submatrix_edge = ConversionTable.submatrix_edge[dic["header"]["data_format"]]
+    return [submatrix_edge] * ndims(dic)
+
+
+def num_complex_dims(dic):
+    complex_dims = ["complex" in i for i in dic["header"]["data_axis_type"] if i]
+    return sum(complex_dims)
+
+def num_real_dims(dic):
+    real_dims = ["real" in i for i in dic["header"]["data_axis_type"] if i]
+    return sum(real_dims)
+
+
+
+def reorganize_sections(sections):
+    pass
+
+
+class IOBuffer:
+    def __init__(self, buffer, conversion_table, endian=None):
+        """
+        _summary_
+
+        Parameters
+        ----------
+        buffer : _type_
+            _description_
+        conversion_table : _type_
+            _description_
+        endian : _type_, optional
+            _description_, by default None
+
+        """
+        self.buffer = buffer
+        self.conversion_table = conversion_table
+        self.position = 0
+        self.set_big_endian()  # default for the header
+
+    def set_big_endian(self):
+        self.endian = "big"
+        self.e = ">"
+
+    def set_little_endian(self):
+        self.endian = "little"
+        self.e = "<"
+
+    def skip(self, count):
+        self.position += count
+
+    def read_chars(self, count):
+        chars = struct.unpack_from(f"{self.e}{count}s", self.buffer, self.position)
+        self.position += count
+        return chars[0].decode("utf-8")
+
+    def read_int8(self):
+        value = struct.unpack_from(f"{self.e}b", self.buffer, self.position)
+        self.position += 1
+        return value[0]
+
+    def read_uint8(self):
+        value = struct.unpack_from(f"{self.e}B", self.buffer, self.position)
+        self.position += 1
+        return value[0]
+
+    def read_uint16(self):
+        value = struct.unpack_from(f"{self.e}H", self.buffer, self.position)
+        self.position += 2
+        return value[0]
+
+    def read_int16(self):
+        value = struct.unpack_from(f"{self.e}h", self.buffer, self.position)
+        self.position += 2
+        return value[0]
+
+    def read_uint32(self):
+        value = struct.unpack_from(f"{self.e}I", self.buffer, self.position)
+        self.position += 4
+        return value[0]
+
+    def read_int32(self):
+        value = struct.unpack_from(f"{self.e}i", self.buffer, self.position)
+        self.position += 4
+        return value[0]
+
+    def read_float32(self):
+        value = struct.unpack_from(f"{self.e}f", self.buffer, self.position)
+        self.position += 4
+        return value[0]
+
+    def read_float64(self):
+        value = struct.unpack_from(f"{self.e}d", self.buffer, self.position)
+        self.position += 8
+        return value[0]
+
+    def read_byte(self):
+        """reads a single byte"""
+        value = struct.unpack_from("B", self.buffer, self.position)
+        self.position += 1
+        return value[0]
+
+    def read_boolean(self):
+        """reads a boolean"""
+        value = struct.unpack_from("B", self.buffer, self.position)
+        self.position += 1
+        return bool(value[0])
+
+    def get_array(self, read_func, count, *args, **kwargs):
+        return [getattr(self, read_func)(*args, **kwargs) for _ in range(count)]
+
+    def get_unit(self, size):
+        """
+        parses the byte that gives the unit of the value of a
+        parameter and gives the power
+
+        Parameters
+        ----------
+        size : _type_
+            _description_
+
+        Returns
+        -------
+        _type_
+            _description_
+        """
+        unit = []
+        for i in range(size):
+            byte = self.read_byte()
+            prefix = self.conversion_table.prefix[byte >> 4]
+            power = byte & 0b00001111
+            base = self.conversion_table.base[self.read_int8()]
+            unit.append({"prefix": prefix, "power": power, "base": base})
+        return unit
+
+    def get_string(self, count):
+        return self.read_chars(count).replace("\x00", "")
 
 
 # Conversion Table for Jeol Data Format
@@ -449,7 +521,7 @@ class ConversionTable:
         5: "femto",
         6: "atto",
         7: "zepto",
-        15: "None"
+        15: "None",
     }
 
     unit_prefix_table = {
@@ -533,15 +605,15 @@ class ConversionTable:
     }
 
     submatrix_edge = {
-     "one_d": 8,
-     "two_d": 32,
-      "three_d": 8,
-      "four_d": 8,
-      "five_d": 4,
-      "six_d": 4,
-      "seven_d": 2,
-      "eight_d": 2,
-      "small_two_d": 4,
-      "small_three_d": 4,
-      "small_four_d": 4,
+        "one_d": 8,
+        "two_d": 32,
+        "three_d": 8,
+        "four_d": 8,
+        "five_d": 4,
+        "six_d": 4,
+        "seven_d": 2,
+        "eight_d": 2,
+        "small_two_d": 4,
+        "small_three_d": 4,
+        "small_four_d": 4,
     }
