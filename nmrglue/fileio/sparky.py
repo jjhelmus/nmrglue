@@ -239,7 +239,7 @@ def calc_tshape(shape, kbyte_max=128):
         i = i + 1
         if i == len(s):
             i = 0
-    return tuple(s)
+    return tuple(map(lambda x: max(1, x), s))
 
 
 # global read/write functions
