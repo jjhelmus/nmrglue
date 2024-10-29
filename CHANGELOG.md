@@ -1,4 +1,4 @@
-0.11 (Unreleased)
+0.11 (2024-10-29)
 =================
 
 * Add support for Python 3.12, drop support for Python 3.7 (#208)
