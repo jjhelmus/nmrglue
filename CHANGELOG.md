@@ -1,6 +1,12 @@
 0.11 (Unreleased)
 =================
 
+* Add support for Python 3.12, drop support for Python 3.7 (#208)
+* Bruker vd list can be read (#212, #213)
+* Minor typos and fixes (#209, #210, #211)
+* Tests for peak picking (#216)
+* Sparky related fix (#222)
+
 
 0.10 (2023-11-14)
 =================
