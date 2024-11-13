@@ -24,8 +24,8 @@ from . import fileiobase
 
 TNTMAGIC_RE = re.compile(br"^TNT1\.\d\d\d$")
 
-TNTMAGIC = np.dtype('a8')
-TNTTLV = np.dtype([('tag', 'a4'), ('bool', '<u4'), ('length', '<u4')])
+TNTMAGIC = np.dtype('S8')
+TNTTLV = np.dtype([('tag', 'S4'), ('bool', '<u4'), ('length', '<u4')])
 
 TNTTMAG = np.dtype([
     ('npts', '<i4', 4),
@@ -47,7 +47,7 @@ TNTTMAG = np.dtype([
     ('ref_freq', '<f8'),
     ('NMR_frequency', '<f8'),
     ('obs_channel', '<i2'),
-    ('space2', 'a42'),
+    ('space2', 'S42'),
 
     ('sw', '<f8', 4),
     ('dwell', '<f8', 4),
@@ -61,14 +61,14 @@ TNTTMAG = np.dtype([
     ('Type', '<i2'),
     ('bDigRec', '<u4'),
     ('nDigitalCenter', '<i4'),
-    ('space3', 'a16'),
+    ('space3', 'S16'),
 
     ('transmitter_gain', '<i2'),
     ('receiver_gain', '<i2'),
     ('NumberOfReceivers', '<i2'),
     ('RG2', '<i2'),
     ('receiver_phase', '<f8'),
-    ('space4', 'a4'),
+    ('space4', 'S4'),
 
     ('set_spin_rate', '<u2'),
     ('actual_spin_rate', '<u2'),
@@ -80,7 +80,7 @@ TNTTMAG = np.dtype([
     ('lock_freq_mhz', '<f8'),
     ('lock_ppm', '<f8'),
     ('H2O_freq_ref', '<f8'),
-    ('space5', 'a16'),
+    ('space5', 'S16'),
 
     ('set_temperature', '<f8'),
     ('actual_temperature', '<f8'),
@@ -103,11 +103,11 @@ TNTTMAG = np.dtype([
     ('finish_time', '<u4'),
     ('elapsed_time', '<i4'),
 
-    ('date', 'a32'),
-    ('nuclei', 'a16', 4),
-    ('sequence', 'a32'),
-    ('lock_solvent', 'a16'),
-    ('lock_nucleus', 'a16')
+    ('date', 'S32'),
+    ('nuclei', 'S16', 4),
+    ('sequence', 'S32'),
+    ('lock_solvent', 'S16'),
+    ('lock_nucleus', 'S16')
 ])
 
 
@@ -122,8 +122,8 @@ TNTGRIDANDAXIS = np.dtype([
     ('showGridLabels', '<u4'),
     ('adjustOnZoom', '<u4'),
     ('showDistanceUnits', '<u4'),
-    ('axisName', 'a32'),
-    ('space', 'a52'),
+    ('axisName', 'S32'),
+    ('space', 'S52'),
 ])
 
 
@@ -217,18 +217,18 @@ TNTTMG2 = np.dtype([
     ('Poly_point_avr', '<i2'),
     ('Poly_order', '<i2'),
 
-    ('space', 'a610'),
+    ('space', 'S610'),
 
-    ('line_simulation_name', 'a32'),
-    ('integral_template_name', 'a32'),
-    ('baseline_template_name', 'a32'),
-    ('layout_name', 'a32'),
-    ('relax_information_name', 'a32'),
-    ('username', 'a32'),
-    ('user_string_1', 'a16'),
-    ('user_string_2', 'a16'),
-    ('user_string_3', 'a16'),
-    ('user_string_4', 'a16')
+    ('line_simulation_name', 'S32'),
+    ('integral_template_name', 'S32'),
+    ('baseline_template_name', 'S32'),
+    ('layout_name', 'S32'),
+    ('relax_information_name', 'S32'),
+    ('username', 'S32'),
+    ('user_string_1', 'S16'),
+    ('user_string_2', 'S16'),
+    ('user_string_3', 'S16'),
+    ('user_string_4', 'S16')
 ])
 
 
@@ -263,7 +263,7 @@ def read(filename):
 
         # Read in the section headers
         tnthdrbytes = tntfile.read(TNTTLV.itemsize)
-        while(TNTTLV.itemsize == len(tnthdrbytes)):
+        while (TNTTLV.itemsize == len(tnthdrbytes)):
             tlv = np.fromstring(tnthdrbytes, TNTTLV)[0]
             data_length = tlv['length']
             hdrdict = {'offset': tntfile.tell(),
@@ -271,17 +271,17 @@ def read(filename):
                        'bool': bool(tlv['bool'])}
             if data_length <= 4096:
                 hdrdict['data'] = tntfile.read(data_length)
-                assert(len(hdrdict['data']) == data_length)
+                assert (len(hdrdict['data']) == data_length)
             else:
                 tntfile.seek(data_length, os.SEEK_CUR)
             tnt_sections[tlv['tag'].decode()] = hdrdict
             tnthdrbytes = tntfile.read(TNTTLV.itemsize)
 
-    assert(tnt_sections['TMAG']['length'] == TNTTMAG.itemsize)
+    assert (tnt_sections['TMAG']['length'] == TNTTMAG.itemsize)
     tmag = np.fromstring(tnt_sections['TMAG']['data'], TNTTMAG, count=1)[0]
 
-    assert(tnt_sections['DATA']['length'] ==
-           tmag['actual_npts'].prod() * 8)
+    assert (tnt_sections['DATA']['length'] ==
+            tmag['actual_npts'].prod() * 8)
     #  For some reason we can't set offset and shape together
     # DATA = np.memmap(tntfilename,np.dtype('<c8'), mode='r',
     #                  offset=self.tnt_sections['DATA']['offset'],
@@ -291,7 +291,7 @@ def read(filename):
                      shape=tmag['actual_npts'].prod())
     data = np.reshape(data, tmag['actual_npts'], order='F')
 
-    assert(tnt_sections['TMG2']['length'] == TNTTMG2.itemsize)
+    assert (tnt_sections['TMG2']['length'] == TNTTMG2.itemsize)
     tmg2 = np.fromstring(tnt_sections['TMG2']['data'], TNTTMG2, count=1)[0]
 
     dic = dict()

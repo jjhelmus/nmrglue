@@ -2,8 +2,8 @@ import nmrglue as ng
 import numpy as np
 
 # read the integration limits and list of spectra
-peak_list = np.recfromtxt("boxes.in", names=True)
-spectra_list = np.recfromtxt("spectra.in")
+peak_list = np.genfromtxt("boxes.in", names=True)
+spectra_list = np.genfromtxt("spectra.in")
 
 # create an array to hold the trajectories
 trajectories = np.empty((peak_list.size, spectra_list.size), dtype='float')
