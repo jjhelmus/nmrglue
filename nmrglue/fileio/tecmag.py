@@ -93,7 +93,7 @@ TNTTMAG = np.dtype([
     ('DF_DN', '<i2'),
     ('F1_tran_mode', '<i2', 7),
     ('dec_BW', '<i2'),
-    ('grd_orientation', 'a4'),
+    ('grd_orientation', 'S4'),
     ('LatchLP', '<i4'),
     ('grd_Theta', '<f8'),
     ('grd_Phi', '<f8'),
