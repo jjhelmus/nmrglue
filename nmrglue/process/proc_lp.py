@@ -528,8 +528,8 @@ def cadzow_single(x, M, K, min_var=False):
     U, s, Vh = scipy.linalg.svd(X)
 
     # correct the singular values and truncate the rank K
-    Ul = np.mat(U[:, :K])
-    Vlh = np.mat(Vh[:K, :])     # first K columns of V are first K rows of Vh
+    Ul = np.asmatrix(U[:, :K])
+    Vlh = np.asmatrix(Vh[:K, :])     # first K columns of V are first K rows of Vh
     sl = s[:K]
 
     if min_var:  # adjust singular values using minimum variance method
@@ -537,7 +537,7 @@ def cadzow_single(x, M, K, min_var=False):
         s2 = (1. / (M - K)) * np.power(s[K:], 2).sum()
         sl = np.array([l - s2 / l for l in sl])
 
-    Sl = np.mat(np.diag(sl))
+    Sl = np.asmatrix(np.diag(sl))
 
     # compute enhanced data vector for rank-reduced data matrix
     Xp = Ul * Sl * Vlh
@@ -803,7 +803,7 @@ def find_lpc_svd(D, d):
     L = D.shape[0]
     m = D.shape[1]
     U, s, Vh = scipy.linalg.svd(D)  # SVD decomposition
-    U, Vh = np.mat(U), np.mat(Vh)   # make U and Vh matrices
+    U, Vh = np.asmatrix(U), np.asmatrix(Vh)   # make U and Vh matrices
     Si = pinv_diagsvd(s, m, L)      # construct the pseudo-inverse sigma matrix
     return np.array(Vh.H * Si * U.H * d)
 
@@ -833,7 +833,7 @@ def find_lpc_qr(D, d):
     Find linear prediction filter using QR decomposition.
     """
     q, r = scipy.linalg.qr(D)
-    q, r = np.mat(q), np.mat(r)
+    q, r = np.asmatrix(q), np.asmatrix(r)
 
     # SPEED
     # the next line is slow and the use of pinv2 should be avoided as
@@ -852,9 +852,9 @@ def find_lpc_cholesky(D, d):
     # form the normal equation (D.H*D)*a = D.H*d
     # SPEED
     # this can be improved by using the Hankel nature of D
-    D = np.mat(D)
-    DhD = np.mat(np.dot(D.H, D))
-    Dhd = np.mat(np.dot(D.H, d))
+    D = np.asmatrix(D)
+    DhD = np.asmatrix(np.dot(D.H, D))
+    Dhd = np.asmatrix(np.dot(D.H, d))
 
     c, lower = scipy.linalg.cho_factor(DhD)     # Compute Cholesky decomp.
     return scipy.linalg.cho_solve((c, lower), Dhd)  # solve normal equation
@@ -1018,7 +1018,7 @@ def find_lproots_hsvd(x, M, K, mode, zmethod='sm'):
 
     # SVD of data matrix and truncation of U to form Uk
     U, s, Vh = scipy.linalg.svd(X)
-    Uk = np.mat(U[:, :K])   # truncated U matrix of rank K
+    Uk = np.asmatrix(U[:, :K])   # truncated U matrix of rank K
     Ub = Uk[:-1]            # Uk with bottom row removed
     Ut = Uk[1:]             # Uk with top row removed
 
