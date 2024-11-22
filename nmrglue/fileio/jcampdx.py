@@ -371,12 +371,7 @@ def _parse_xy_xy(datalines):
             clean_data = clean_data.replace(';', '')
             x, y = clean_data.split(',')
             pts.append([float(x), float(y)])
-
-    if len_group_data > 1:
-      return [pts]
-    else:
-      return pts
-
+    return [pts]
 
 def _parse_data(datastring):
     '''
