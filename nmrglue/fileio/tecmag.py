@@ -97,7 +97,7 @@ TNTTMAG = np.dtype([
     ('LatchLP', '<i4'),
     ('grd_Theta', '<f8'),
     ('grd_Phi', '<f8'),
-    ('space6', 'a264'),
+    ('space6', 'S264'),
 
     ('start_time', '<u4'),
     ('finish_time', '<u4'),

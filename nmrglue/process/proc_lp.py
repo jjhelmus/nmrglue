@@ -529,7 +529,8 @@ def cadzow_single(x, M, K, min_var=False):
 
     # correct the singular values and truncate the rank K
     Ul = np.asmatrix(U[:, :K])
-    Vlh = np.asmatrix(Vh[:K, :])     # first K columns of V are first K rows of Vh
+    # first K columns of V are first K rows of Vh
+    Vlh = np.asmatrix(Vh[:K, :])
     sl = s[:K]
 
     if min_var:  # adjust singular values using minimum variance method
@@ -656,7 +657,7 @@ def lp_model(trace, slice=slice(None), order=8, mode="f", mirror=None,
 
     # build the B matrix (a Vandermonde matrix) and solve for the coefficients
     poles = np.array(poles)
-    B = np.row_stack([poles ** (i) for i in range(len(x))])
+    B = np.vstack([poles ** (i) for i in range(len(x))])
     z, resid, rank, s = np.linalg.lstsq(B, np.array(x))
 
     # Now the z_n = amp_n*exp(phase_n*i), use this to determine the amplitudes
@@ -806,6 +807,7 @@ def find_lpc_svd(D, d):
     U, Vh = np.asmatrix(U), np.asmatrix(Vh)   # make U and Vh matrices
     Si = pinv_diagsvd(s, m, L)      # construct the pseudo-inverse sigma matrix
     return np.array(Vh.H * Si * U.H * d)
+
 
 # the next 3 lines and the pinv_diagsvd function were adapted from the
 # scipy.linalg.pinv2 function - jjh
