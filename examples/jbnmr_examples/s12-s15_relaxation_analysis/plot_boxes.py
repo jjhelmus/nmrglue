@@ -12,8 +12,8 @@ cmap = matplotlib.cm.Blues_r    # contour map (colors to use for contours)
 cl = 30000 * 1.20 ** np.arange(20)
 
 # read in the box limits and list of spectra
-peak_list = np.recfromtxt("boxes.in", names=True)
-spectra_list = np.recfromtxt("spectra.in")
+peak_list = np.genfromtxt("boxes.in", names=True)
+spectra_list = np.genfromtxt("spectra.in")
 
 # loop over the spectra
 for spec_number, spectra in enumerate(spectra_list):
@@ -30,16 +30,16 @@ for spec_number, spectra in enumerate(spectra_list):
             y0, y1 = y1, y0
 
         # slice the data around the peak
-        slice = data[y0 - ypad:y1 + 1 + ypad, x0 - xpad:x1 + 1 + xpad]
+        slice_ = data[y0 - ypad:y1 + 1 + ypad, x0 - xpad:x1 + 1 + xpad]
 
         # create the figure
         fig = plt.figure()
         ax = fig.add_subplot(111)
 
         # plot the contours
-        print "Plotting:", peak, spec_number
+        print("Plotting:", peak, spec_number)
         extent = (x0 - xpad + 1, x1 + xpad - 1, y0 - ypad + 1, y1 + ypad - 1)
-        ax.contour(slice, cl, cmap=cmap, extent=extent)
+        ax.contour(slice_, cl, cmap=cmap, extent=extent)
 
         # draw a box around the peak
         ax.plot([x0, x1, x1, x0, x0], [y0, y0, y1, y1, y0], 'k--')
@@ -51,6 +51,6 @@ for spec_number, spectra in enumerate(spectra_list):
                 [y0 + 1, y0 + 1, y1 - 1, y1 - 1, y0 + 1], 'k--', alpha=0.35)
 
         # set the title, save the figure
-        ax.set_title('Peak: %s Spectrum: %i'%(peak, spec_number))
-        fig.savefig('peak_%s_spectrum_%i'%(peak, spec_number))
-        del(fig)
+        ax.set_title('Peak: %s Spectrum: %i' % (peak, spec_number))
+        fig.savefig('peak_%s_spectrum_%i' % (peak, spec_number))
+        del fig
