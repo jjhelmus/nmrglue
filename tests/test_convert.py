@@ -1156,9 +1156,10 @@ def test_csdm_1d():
     assert len(csdm_data.dependent_variables) == 1
     assert csdm_data.dimensions[0].count == ubdic1[0]["size"]
     assert csdm_data.dimensions[0].increment.value == 1 / ubdic1[0]["sw"]
-    assert (
-        csdm_data.dimensions[0].reciprocal.coordinates_offset.value == ubdic1[0]["car"]
-    )
+    assert str(csdm_data.dimensions[0].increment.unit) == 's'
+    coordinates_offset = csdm_data.dimensions[0].reciprocal.coordinates_offset
+    assert coordinates_offset.value == ubdic1[0]["car"]
+    assert str(coordinates_offset.unit) == 'Hz'
     assert csdm_data.dimensions[0].reciprocal.origin_offset.value == ubdic1[0]["obs"]
     assert csdm_data.dimensions[0].label == ubdic1[0]["label"]
     assert_array_equal(csdm_data.dependent_variables[0].components[0], bdata1)
@@ -1173,9 +1174,10 @@ def test_csdm_1d():
     assert len(csdm_data.dependent_variables) == 1
     assert csdm_data.dimensions[0].count == uadic1[0]["size"]
     assert csdm_data.dimensions[0].increment.value == 1 / uadic1[0]["sw"]
-    assert (
-        csdm_data.dimensions[0].reciprocal.coordinates_offset.value == uadic1[0]["car"]
-    )
+    assert str(csdm_data.dimensions[0].increment.unit) == 's'
+    coordinates_offset = csdm_data.dimensions[0].reciprocal.coordinates_offset
+    assert coordinates_offset.value == uadic1[0]["car"]
+    assert str(coordinates_offset.unit) == 'Hz'
     assert csdm_data.dimensions[0].reciprocal.origin_offset.value == uadic1[0]["obs"]
     assert csdm_data.dimensions[0].label == uadic1[0]["label"]
     assert_array_equal(csdm_data.dependent_variables[0].components[0], adata1)
@@ -1195,10 +1197,10 @@ def test_csdm_2d():
         j = 1 - i
         assert csdm_data.dimensions[j].count == ubdic2[i]["size"]
         assert csdm_data.dimensions[j].increment.value == 1 / ubdic2[i]["sw"]
-        assert (
-            csdm_data.dimensions[j].reciprocal.coordinates_offset.value
-            == ubdic2[i]["car"]
-        )
+        assert str(csdm_data.dimensions[j].increment.unit) == 's'
+        coordinates_offset = csdm_data.dimensions[j].reciprocal.coordinates_offset
+        assert coordinates_offset.value == ubdic2[i]["car"]
+        assert str(coordinates_offset.unit) == 'Hz'
         assert (
             csdm_data.dimensions[j].reciprocal.origin_offset.value == ubdic2[i]["obs"]
         )
@@ -1217,10 +1219,10 @@ def test_csdm_2d():
         j = 1 - i
         assert csdm_data.dimensions[j].count == uadic2[i]["size"]
         assert csdm_data.dimensions[j].increment.value == 1 / uadic2[i]["sw"]
-        assert (
-            csdm_data.dimensions[j].reciprocal.coordinates_offset.value
-            == uadic2[i]["car"]
-        )
+        assert str(csdm_data.dimensions[j].increment.unit) == 's'
+        coordinates_offset = csdm_data.dimensions[j].reciprocal.coordinates_offset
+        assert coordinates_offset.value == uadic2[i]["car"]
+        assert str(coordinates_offset.unit) == 'Hz'
         assert (
             csdm_data.dimensions[j].reciprocal.origin_offset.value == uadic2[i]["obs"]
         )
@@ -1242,10 +1244,10 @@ def test_csdm_3d():
         i = 2 - j
         assert csdm_data.dimensions[j].count == ubdic3[i]["size"]
         assert csdm_data.dimensions[j].increment.value == 1 / ubdic3[i]["sw"]
-        assert (
-            csdm_data.dimensions[j].reciprocal.coordinates_offset.value
-            == ubdic3[i]["car"]
-        )
+        assert str(csdm_data.dimensions[j].increment.unit) == 's'
+        coordinates_offset = csdm_data.dimensions[j].reciprocal.coordinates_offset
+        assert coordinates_offset.value == ubdic3[i]["car"]
+        assert str(coordinates_offset.unit) == 'Hz'
         assert (
             csdm_data.dimensions[j].reciprocal.origin_offset.value == ubdic3[i]["obs"]
         )
@@ -1273,10 +1275,10 @@ def test_csdm_3d():
         print(csdm_data)
         assert csdm_data.dimensions[j].count == uadic3[i]["size"]
         assert csdm_data.dimensions[j].increment.value == 1 / uadic3[i]["sw"]
-        assert (
-            csdm_data.dimensions[j].reciprocal.coordinates_offset.value
-            == uadic3[i]["car"]
-        )
+        assert str(csdm_data.dimensions[j].increment.unit) == 's'
+        coordinates_offset = csdm_data.dimensions[j].reciprocal.coordinates_offset
+        assert coordinates_offset.value == uadic3[i]["car"]
+        assert str(coordinates_offset.unit) == 'Hz'
         assert (
             csdm_data.dimensions[j].reciprocal.origin_offset.value == uadic3[i]["obs"]
         )

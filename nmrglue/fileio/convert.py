@@ -456,19 +456,32 @@ class converter:
             # self._odtype = str(self._data.dtype)
 
             # create a list of dimension objects
-            dimensions = [
-                cp.LinearDimension(
-                    count=value["size"],
-                    increment=f'{1 / value["sw"]} s',
-                    reciprocal={
-                        "coordinates_offset": f'{value["car"]} Hz',
-                        "origin_offset": f'{value["obs"]} MHz',
-                    },
-                    label=value["label"],
-                )
-                for key, value in list(self._udic.items())
-                if type(key) is int and value["size"] != 1
-            ]
+            dimensions = []
+            for key, value in list(self._udic.items()):
+                if type(key) is int and value["size"] != 1:
+                    if value['freq']:
+                        dimensions.append(cp.LinearDimension(
+                            count=value["size"],
+                            increment=f'{value["sw"] / value["size"]} Hz',
+                            coordinates_offset=f'{value["car"]} Hz',
+                            origin_offset=f'{value["obs"]} MHz',
+                            reciprocal={
+                                "increment": f'{1 / value["sw"]} s',
+                            },
+                            label=value["label"],
+                        ))
+                    elif value['time']:
+                        dimensions.append(cp.LinearDimension(
+                            count=value["size"],
+                            increment=f'{1 / value["sw"]} s',
+                            reciprocal={
+                                "coordinates_offset": f'{value["car"]} Hz',
+                                "origin_offset": f'{value["obs"]} MHz',
+                            },
+                            label=value["label"],
+                        ))
+                    else:
+                        raise ImportError('Invalid dictionary')
 
             return cp.CSDM(
                 dimensions=dimensions[::-1],
