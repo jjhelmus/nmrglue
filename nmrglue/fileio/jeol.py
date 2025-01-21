@@ -73,12 +73,12 @@ def reorganize_2d(dic, bin_data):
 
     sections = [reorder_submatrix(data=s, shape=_out_shape, submatrix_shape=submatrix_shape(dic)) for s in sections]
 
-    complexity = [2 if i == 'complex' else 0 for i in dic['header']["data_axis_type"][:2]]
+    # complexity = [2 if i == 'complex' else 0 for i in dic['header']["data_axis_type"][:2]]
 
     # for i in (0, 1):
-    print(_out_shape, complexity)
+    # print(_out_shape, complexity)
 
-    return
+    return sections
 
 
 
