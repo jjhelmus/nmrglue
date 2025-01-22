@@ -32,7 +32,7 @@ dic = ng.sparky.create_dic(udic)
 data = np.empty((512, 1024), dtype='float32')
 
 # read in the peak list
-peak_list = np.genfromtxt('peaks.txt', names=True)
+peak_list = np.genfromtxt('peaks.txt', dtype=None, names=True)
 npeaks = len(peak_list)
 
 # convert the peak list from PPM to points

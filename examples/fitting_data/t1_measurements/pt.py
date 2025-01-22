@@ -24,7 +24,7 @@ def fit_func(p, x):
 # read in the trajectories, fitting results, and times
 fits = pickle.load(open("fits.pickle", "rb"))
 trajs = np.load("traj.npy")
-times = np.genfromtxt("time.dat")
+times = np.genfromtxt("time.dat", dtype=None)
 
 sim_times = np.linspace(times[0], times[-1], 2000)
 

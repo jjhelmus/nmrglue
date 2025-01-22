@@ -21,7 +21,7 @@ cl = contour_start * contour_factor ** np.arange(contour_num)
 dic, data = ng.pipe.read("nmrpipe_2d/test.ft2")
 
 # read in the integration limits
-peak_list = np.genfromtxt("limits.in")
+peak_list = np.genfromtxt("limits.in", dtype=None)
 
 # loop over the peaks
 for name, x0, y0, x1, y1 in peak_list:

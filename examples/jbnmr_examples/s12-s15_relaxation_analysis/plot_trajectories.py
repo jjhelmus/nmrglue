@@ -9,7 +9,7 @@ def fit_func(p, x):
     return A * np.exp(-1.0 * np.array(x) * R2 / 1.0e6)
 
 
-fitting_results = np.genfromtxt('fits.txt')
+fitting_results = np.genfromtxt('fits.txt', dtype=None)
 experimental_relaxation_times = np.loadtxt("relaxation_times.in")
 simulated_relaxation_times = np.linspace(0, 4000000, 2000)
 

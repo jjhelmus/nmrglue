@@ -7,7 +7,7 @@ import pickle
 
 # read in the trajectories and times
 trajs = np.load("traj.npy")
-t1 = np.genfromtxt("time.dat")
+t1 = np.genfromtxt("time.dat", dtype=None)
 
 # fitting function and residual calculation
 

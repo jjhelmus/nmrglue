@@ -12,8 +12,8 @@ cmap = matplotlib.cm.Blues_r    # contour map (colors to use for contours)
 cl = 30000 * 1.20 ** np.arange(20)
 
 # read in the box limits and list of spectra
-peak_list = np.genfromtxt("boxes.in", names=True)
-spectra_list = np.genfromtxt("spectra.in")
+peak_list = np.genfromtxt("boxes.in", dtype=None, names=True)
+spectra_list = np.genfromtxt("spectra.in", dtype=None)
 
 # loop over the spectra
 for spec_number, spectra in enumerate(spectra_list):

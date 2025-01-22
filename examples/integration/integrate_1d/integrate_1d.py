@@ -10,7 +10,7 @@ dic, data = ng.pipe.read("1d_data.ft")
 length = data.shape[0]
 
 # read in the integration limits
-peak_list = np.genfromtxt("limits.in")
+peak_list = np.genfromtxt("limits.in", dtype=None)
 
 # determine the ppm scale
 uc = ng.pipe.make_uc(dic, data)

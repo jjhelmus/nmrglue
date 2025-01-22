@@ -20,7 +20,7 @@ cl = contour_start * contour_factor ** np.arange(contour_num)
 dic, data = ng.pipe.read("nmrpipe_2d/test.ft2")
 
 # read in the integration limits
-peak_list = np.genfromtxt("limits.in")
+peak_list = np.genfromtxt("limits.in", dtype=None)
 
 # create the figure
 fig = plt.figure()
