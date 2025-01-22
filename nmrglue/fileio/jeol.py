@@ -3,15 +3,12 @@ Functions for reading Jeol JDF files
 
 """
 
-__developer_info__ = """
-Jeol data format information
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-"""
-
 import struct
 import numpy as np
+from warnings import warn
 
+# submatrix reordering routines are the same as bruker
+# TODO: test this for dimensions > 2
 from .bruker import reorder_submatrix
 
 
@@ -37,6 +34,8 @@ def read(fname):
     dic = parse_jeol(buffer)
     data = read_bin_data(dic, buffer)
     data = reorganize(dic, data)
+    if isinstance(data, np.ndarray):
+        data = truncate_data(dic, data)
 
     return dic, data
 
@@ -48,42 +47,115 @@ def reorganize(dic, bin_data):
     dim = ndims(dic)
     if dim == 1:
         return reorganize_1d(dic, bin_data)
-    elif dim == 2:
+
+    elif dim == 2 and dic["header"]["data_format"] == "two_d":
         return reorganize_2d(dic, bin_data)
+
+    elif dim == 2 and dic["header"]["data_format"] == "small_two_d":
+        raise NotImplementedError(
+            "Datasets of the type 'small_two_d' have not been tested yet."
+        )
+
     elif dim > 2:
-        raise NotImplementedError("Higher dimensions have not been tested yet")
+        raise NotImplementedError(
+            "Datasets with dimensions greater than 2 have not been tested yet."
+        )
 
 
 def reorganize_1d(dic, bin_data):
     """
-    Reorganize 1d data into correct numpy array
+    Reorganize 1d data into correctly ordered numpy array
 
     """
-    return 1
+    dic, sections = split_sections(dic, bin_data)
+    _out_shape = dic["header"]["data_points"][:2][::-1]
+
+    sections = [
+        reorder_submatrix(
+            data=s, shape=_out_shape, submatrix_shape=submatrix_shape(dic)
+        )
+        for s in sections
+    ]
+
+    _type = dic["header"]["data_axis_type"][0]
+    _ls = len(sections)
+
+    if (_ls == 1) and (_type == "real"):
+        return sections[0]
+
+    elif (_ls == 2) and (_type == "complex"):
+        return sections[0] - 1j * sections[1]
+
+    else:
+        warn(f"Inconsistent data found ({_ls} sections and type {_type}). Returning data as {_ls} sections instead of an array.")
+        return sections
 
 
 def reorganize_2d(dic, bin_data):
     """
-    Reorganize 2d data into corectly ordered numpy array
+    Reorganize 2d data into correctly ordered numpy array
 
     """
-
     dic, sections = split_sections(dic, bin_data)
-    _out_shape = dic['header']['data_points'][:2][::-1]
+    _out_shape = dic["header"]["data_points"][:2][::-1]
 
-    sections = [reorder_submatrix(data=s, shape=_out_shape, submatrix_shape=submatrix_shape(dic)) for s in sections]
+    sections = [
+        reorder_submatrix(
+            data=s, shape=_out_shape, submatrix_shape=submatrix_shape(dic)
+        )
+        for s in sections
+    ]
 
-    # complexity = [2 if i == 'complex' else 0 for i in dic['header']["data_axis_type"][:2]]
+    _type = dic["header"]["data_axis_type"][:2]
+    _ls = len(sections)
 
-    # for i in (0, 1):
-    # print(_out_shape, complexity)
+    if (_ls == 1) and (_type == ["real", "real"]):
+        return sections[0]
 
-    return sections
+    elif (_ls == 2) and (_type == ["real_complex", "real_complex"]):
+        return sections[0] - 1j * sections[1]
 
+    elif (_ls == 2) and (_type == ["complex", "real"]):
+        return sections[0] - 1j * sections[1]
+
+    elif (_ls == 4) and (_type == ["complex", "complex"]):
+        real = sections[0] - 1j * sections[1]
+        imag = sections[2] - 1j * sections[3]
+
+        sections = np.zeros((_out_shape[0] * 2, _out_shape[1]), dtype="complex")
+        sections[0::2] = real
+        sections[1::2] = -imag
+
+        return sections
+
+    else:
+        warn(f"Inconsistent data found ({_ls} sections and type {_type}). Returning data as {_ls} sections instead of an array.")
+        return sections
+
+
+def truncate_data(dic, data):
+    header = dic["header"]
+    slices = []
+    for i, (start, end) in enumerate(
+        zip(header["data_offset_start"], header["data_offset_stop"])
+    ):
+        if i > 0:
+            end = (end + 1) * (nsections(dic) // 2)
+            slices.append(slice(start, end))
+        else:
+            slices.append(slice(start, end + 1))
+
+        if i == (ndims(dic) - 1):
+            break
+
+    slices = slices[::-1]
+    # print(slices)
+
+    return data[*slices]
 
 
 def get_data_shape(dic):
-    shape = dic['header']['data_points']
+    shape = dic["header"]["data_points"]
     shape = [i for i in shape if i > 1]
     shape = shape[::-1]
 
@@ -92,18 +164,17 @@ def get_data_shape(dic):
 
 def get_data_types(dic):
     shape = get_data_shape(dic)
-    types = dic['header']['data_axis_type'][:len(shape)]
-    types = [2 if t == 'complex' else 1 for t in types]
+    types = dic["header"]["data_axis_type"][: len(shape)]
+    types = [2 if t == "complex" else 1 for t in types]
 
     return types
-
-
 
 
 def parse_jeol(buffer):
     buffer = IOBuffer(buffer, conversion_table=ConversionTable)
     buffer, header = read_header(buffer)
     buffer, params = read_parameters(buffer, header["param_start"], header["endian"])
+
     return {"header": header, "parameters": params}
 
 
@@ -176,6 +247,7 @@ def read_header(buffer):
     header["list_start"] = buffer.get_array("read_uint32", 8)
     header["list_length"] = buffer.get_array("read_uint32", 8)
     header["data_start"] = buffer.read_uint32()
+
     header["data_length"] = (buffer.read_uint32() << 32) | (buffer.read_uint32())
     header["context_start"] = (buffer.read_uint32() << 32) | (buffer.read_uint32())
     header["context_length"] = buffer.read_uint32()
@@ -273,7 +345,8 @@ def read_bin_data(dic, buffer):
         buffer.set_big_endian()
 
     start = dic["header"]["data_start"]
-    length = dic["header"]["data_length"] // 8
+    # length = dic["header"]["data_length"] // 8
+    length = np.prod(dic["header"]["data_points"]) * nsections(dic)
 
     buffer.position = start
     data = buffer.get_array(f"read_{dic['header']['data_type']}", length)
@@ -300,13 +373,19 @@ def submatrix_shape(dic):
 
 
 def num_complex_dims(dic):
-    complex_dims = ["complex" in i for i in dic["header"]["data_axis_type"] if i]
-    return sum(complex_dims)
+    complex_dims = 0
+    for dim in dic["header"]["data_axis_type"]:
+        if dim == "complex":
+            complex_dims += 1
+        elif dim == "real_complex":
+            return 1
+
+    return complex_dims
+
 
 def num_real_dims(dic):
     real_dims = ["real" in i for i in dic["header"]["data_axis_type"] if i]
     return sum(real_dims)
-
 
 
 def reorganize_sections(sections):
