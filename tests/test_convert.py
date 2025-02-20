@@ -1164,6 +1164,21 @@ def test_csdm_1d():
     assert csdm_data.dimensions[0].label == ubdic1[0]["label"]
     assert_array_equal(csdm_data.dependent_variables[0].components[0], bdata1)
 
+    # read it as freq dataset
+    csdm_data = bC1.to_csdm(freq_dims=[True])
+    assert len(csdm_data.dimensions) == 1
+    assert len(csdm_data.dependent_variables) == 1
+    assert csdm_data.dimensions[0].count == ubdic1[0]["size"]
+    assert csdm_data.dimensions[0].increment.value == ubdic1[0]["sw"] / ubdic1[0]["size"]
+    assert str(csdm_data.dimensions[0].increment.unit) == 'Hz'
+    coordinates_offset = csdm_data.dimensions[0].coordinates_offset
+    assert csdm_data.dimensions[0].coordinates_offset.value == ubdic1[0]["car"]
+    assert csdm_data.dimensions[0].origin_offset.value == ubdic1[0]["obs"]
+    reciprocal_dim = csdm_data.dimensions[0].reciprocal
+    assert str(reciprocal_dim.quantity_name) == 'time'
+    assert csdm_data.dimensions[0].label == ubdic1[0]["label"]
+    assert_array_equal(csdm_data.dependent_variables[0].components[0], bdata1)
+
     # 1D agilent
     adic1, adata1 = ng.agilent.read(os.path.join(DATA_DIR, "agilent_1d"))
     uadic1 = ng.agilent.guess_udic(adic1, adata1)
@@ -1205,6 +1220,33 @@ def test_csdm_2d():
             csdm_data.dimensions[j].reciprocal.origin_offset.value == ubdic2[i]["obs"]
         )
         assert csdm_data.dimensions[j].label == ubdic2[i]["label"]
+    assert_array_equal(csdm_data.dependent_variables[0].components[0], bdata2)
+
+    # read one dim as freq
+    csdm_data = bC2.to_csdm(freq_dims=[False, True])
+    assert len(csdm_data.dimensions) == 2
+    assert len(csdm_data.dependent_variables) == 1
+
+    # time dim
+    assert csdm_data.dimensions[1].count == ubdic2[0]["size"]
+    assert csdm_data.dimensions[1].increment.value == 1 / ubdic2[0]["sw"]
+    assert str(csdm_data.dimensions[1].increment.unit) == 's'
+    coordinates_offset = csdm_data.dimensions[1].reciprocal.coordinates_offset
+    assert coordinates_offset.value == ubdic2[0]["car"]
+    assert str(coordinates_offset.unit) == 'Hz'
+    assert (
+        csdm_data.dimensions[1].reciprocal.origin_offset.value == ubdic2[0]["obs"]
+    )
+    assert csdm_data.dimensions[1].label == ubdic2[0]["label"]
+
+    # freq dim
+    assert csdm_data.dimensions[0].count == ubdic2[1]["size"]
+    assert csdm_data.dimensions[0].increment.value == ubdic2[1]["sw"] / ubdic2[1]["size"]
+    assert str(csdm_data.dimensions[0].increment.unit) == 'Hz'
+    assert csdm_data.dimensions[0].coordinates_offset.value == ubdic2[1]["car"]
+    assert csdm_data.dimensions[0].reciprocal.quantity_type == 'time'
+    assert csdm_data.dimensions[0].label == ubdic2[1]["label"]
+
     assert_array_equal(csdm_data.dependent_variables[0].components[0], bdata2)
 
     # 2D agilent

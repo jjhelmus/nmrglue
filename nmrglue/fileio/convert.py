@@ -439,9 +439,17 @@ class converter:
 
         return dic, self.__returndata()
 
-    def to_csdm(self):
+    def to_csdm(self, freq_dims=None):
         """
         Return a csdm object containing data.
+
+        Parameters
+        ----------
+        freq_dims : list of optional `n` booleans for `n`-dimensional dataset.
+            Default is None, `i.e.` uses internal metadata to deside (may be incorrect). If so, manually set this parameter.
+            If some or all dimensions are in frequency domain (processed data),
+            set freq_dims list elements to true for the corresponding frequency
+            dimensions and false for time domain dimensions.
 
         Returns
         -------
@@ -449,7 +457,6 @@ class converter:
             CSDM object containing parameters and data
 
         """
-
         try:
             import csdmpy as cp
             # self._oproc = {}
@@ -457,20 +464,20 @@ class converter:
 
             # create a list of dimension objects
             dimensions = []
+            index = 0
             for key, value in list(self._udic.items()):
                 if type(key) is int and value["size"] != 1:
-                    if value['freq']:
+                    freq = value['freq'] if freq_dims is None else freq_dims[index]
+                    index += 1
+                    if freq:
                         dimensions.append(cp.LinearDimension(
                             count=value["size"],
                             increment=f'{value["sw"] / value["size"]} Hz',
                             coordinates_offset=f'{value["car"]} Hz',
                             origin_offset=f'{value["obs"]} MHz',
-                            reciprocal={
-                                "increment": f'{1 / value["sw"]} s',
-                            },
                             label=value["label"],
                         ))
-                    elif value['time']:
+                    else:
                         dimensions.append(cp.LinearDimension(
                             count=value["size"],
                             increment=f'{1 / value["sw"]} s',
@@ -480,8 +487,6 @@ class converter:
                             },
                             label=value["label"],
                         ))
-                    else:
-                        raise ImportError('Invalid dictionary')
 
             return cp.CSDM(
                 dimensions=dimensions[::-1],
