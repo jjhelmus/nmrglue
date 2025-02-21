@@ -10,6 +10,7 @@ from warnings import warn
 # submatrix reordering routines are the same as bruker
 # TODO: test this for dimensions > 2
 from .bruker import reorder_submatrix
+from . import fileiobase
 
 
 def read(fname):
@@ -38,6 +39,70 @@ def read(fname):
         data = truncate_data(dic, data)
 
     return dic, data
+
+
+def guess_udic(dic, data):
+    """
+    Guess parameters of universal dictionary from dic, data pair.
+
+    Parameters
+    ----------
+    dic : dict
+        Dictionary of Bruker parameters.
+    data : ndarray
+        Array of NMR data.
+
+    Returns
+    -------
+    udic : dict
+        Universal dictionary of spectral parameters.
+
+    """
+
+    # create an empty universal dictionary
+    _dims = ndims(dic)
+    udic = fileiobase.create_blank_udic(_dims)
+
+    # update default values
+    for b_dim in range(_dims):
+        udic[b_dim]["size"] = data.shape[b_dim]
+
+        # try to add additional parameter from acqus dictionary keys
+        try:
+            udic = add_axis_to_udic(udic, dic, b_dim)
+        except Exception as e:
+            warn(f"Failed to determine udic parameters for dim: {b_dim} with the following error: {'\n'.join(e.args)}")
+    return udic
+
+
+def add_axis_to_udic(udic, dic, udim):
+    """
+    Adds information to a universal dictionary based on
+    a dictionary and dataset in jeol format
+
+    Parameters
+    ----------
+    udic : dict
+        universal dictionary
+    dic : dict
+        dictionary with jeol data
+    udim : int
+        the dictionary dimension to add the information to
+
+    Returns
+    -------
+    udic : dict
+        the updated universal dictionary
+    """
+    axis_prefix = dimension_names(dic)[udim]
+    udic[udim]["sw"] = dic["parameters"][f"{axis_prefix}_sweep"]
+    udic[udim]["obs"] =  dic['parameters'][f'{axis_prefix}_freq'] / 1e6
+    udic[udim]["car"] = dic["parameters"][f"{axis_prefix}_offset"] * udic[udim]["obs"]
+    udic[udim]["label"] = dic["parameters"][f"{axis_prefix}_domain"]
+    udic[udim]["encoding"] = dic["header"]["data_axis_type"][udim]
+
+    return udic
+
 
 def reorganize(dic, bin_data):
     """
@@ -147,7 +212,7 @@ def truncate_data(dic, data):
 
         if i == (ndims(dic) - 1):
             break
-        
+
     slices = slices[::-1]
 
     return data[*slices]
@@ -357,6 +422,9 @@ def read_bin_data(dic, buffer):
 
 def ndims(dic):
     return sum(bool(i) for i in dic["header"]["data_axis_type"])
+
+def dimension_names(dic):
+    return [i for i, j in zip("xyzabcde", dic['header']['data_dimension_exist']) if j]
 
 
 def nsections(dic):
