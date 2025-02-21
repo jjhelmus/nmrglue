@@ -147,9 +147,8 @@ def truncate_data(dic, data):
 
         if i == (ndims(dic) - 1):
             break
-
+        
     slices = slices[::-1]
-    # print(slices)
 
     return data[*slices]
 
@@ -284,7 +283,7 @@ def read_parameters(buffer, param_start, endianness):
         "total_size": buffer.read_uint32(),
     }
 
-    param_array = []
+    param_array = {}
     for p in range(params["high_index"]):
         _class = buffer.get_array("read_byte", 4)
         unit_scaler = buffer.read_int16()
@@ -317,20 +316,22 @@ def read_parameters(buffer, param_start, endianness):
 
         buffer.skip(4)
 
-        name = buffer.get_string(28).replace(" ", "")
+        name = buffer.get_string(28)
+        bname = name.lower().replace(" ", "")
 
-        param_array.append(
-            {
+        param_array[bname] = {
                 "_class": _class,
-                "name": name.lower(),
+                "name": name,
                 "unit_scaler": unit_scaler,
                 "units": unit,
                 "value": value,
                 "value_type": value_type,
             }
-        )
 
-    params["array"] = param_array
+        params[bname] = value * (10 ** unit_scaler)
+
+    params["info"] = param_array
+
 
     return buffer, params
 
@@ -504,7 +505,7 @@ class IOBuffer:
             prefix = self.conversion_table.prefix[byte >> 4]
             power = byte & 0b00001111
             base = self.conversion_table.base[self.read_int8()]
-            unit.append({"prefix": prefix, "power": power, "base": base})
+            unit.append((prefix, power, base))
         return unit
 
     def get_string(self, count):
