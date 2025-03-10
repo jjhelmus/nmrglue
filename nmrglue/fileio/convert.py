@@ -446,7 +446,7 @@ class converter:
         Parameters
         ----------
         freq_dims : list of optional `n` booleans for `n`-dimensional dataset.
-            Default is None, `i.e.` uses internal metadata to deside (may be incorrect). If so, manually set this parameter.
+            Default is None, `i.e.` uses internal metadata to decide (may be incorrect). If so, manually set this parameter.
             If some or all dimensions are in frequency domain (processed data),
             set freq_dims list elements to true for the corresponding frequency
             dimensions and false for time domain dimensions.
@@ -457,43 +457,45 @@ class converter:
             CSDM object containing parameters and data
 
         """
-        try:
-            import csdmpy as cp
-            # self._oproc = {}
-            # self._odtype = str(self._data.dtype)
+        import csdmpy as cp
+        dimensions = []
+        index = 0
+        for key, value in list(self._udic.items()):
+            if type(key) is int and value["size"] != 1:
+                freq = value['freq'] if freq_dims is None else freq_dims[index]
+                index += 1
+                uc = fileiobase.uc_from_udic(self._udic, dim=key)
+                if freq:
+                    scales = uc.hz_scale()
+                    inc = np.diff(scales).mean()
 
-            # create a list of dimension objects
-            dimensions = []
-            index = 0
-            for key, value in list(self._udic.items()):
-                if type(key) is int and value["size"] != 1:
-                    freq = value['freq'] if freq_dims is None else freq_dims[index]
-                    index += 1
-                    if freq:
-                        dimensions.append(cp.LinearDimension(
-                            count=value["size"],
-                            increment=f'{value["sw"] / value["size"]} Hz',
-                            coordinates_offset=f'{value["car"]} Hz',
-                            origin_offset=f'{value["obs"]} MHz',
-                            label=value["label"],
-                        ))
-                    else:
-                        dimensions.append(cp.LinearDimension(
-                            count=value["size"],
-                            increment=f'{1 / value["sw"]} s',
-                            reciprocal={
-                                "coordinates_offset": f'{value["car"]} Hz',
-                                "origin_offset": f'{value["obs"]} MHz',
-                            },
-                            label=value["label"],
-                        ))
+                    dimensions.append(cp.LinearDimension(
+                        count=value["size"],
+                        increment=f'{inc} Hz',
+                        coordinates_offset=f'{scales[0]} Hz',
+                        origin_offset=f'{value["obs"]} MHz',
+                        label=value["label"],
+                    ))
+                    np.testing.assert_allclose(scales, dimensions[-1].coordinates.to('Hz').value)
+                else:
+                    scales = uc.sec_scale()
+                    inc = np.diff(scales).mean()
 
-            return cp.CSDM(
-                dimensions=dimensions[::-1],
-                dependent_variables=[cp.as_dependent_variable(self._data.copy())],
-            )
-        except:
-            raise ImportError("csdmpy must be installed to use this function. Please install by typing 'pip install csdmpy' in the terminal.")
+                    dimensions.append(cp.LinearDimension(
+                        count=value["size"],
+                        increment=f'{inc} s',
+                        reciprocal={
+                            "coordinates_offset": f'{value["car"]} Hz',
+                            "origin_offset": f'{value["obs"]} MHz',
+                        },
+                        label=value["label"],
+                    ))
+                    np.testing.assert_allclose(scales, dimensions[-1].coordinates.to('s').value)
+
+        return cp.CSDM(
+            dimensions=dimensions[::-1],
+            dependent_variables=[cp.as_dependent_variable(self._data.copy())],
+        ).to_positive_inc()
 
 
 class udata_nd(fileiobase.data_nd):
