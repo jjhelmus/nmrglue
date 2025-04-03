@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # the same fit_func as in fit_exp_leastsq.py
+
+
 def fit_func(p, x):
 
     A, R2 = p
@@ -18,10 +20,11 @@ def fit_func(p, x):
 
     return A * np.exp(-1.0 * np.array(x) * R2 / 1.0e6)
 
+
 # read in the trajectories, fitting results, and times
 fits = pickle.load(open("fits.pickle", "rb"))
 trajs = np.load("traj.npy")
-times = np.recfromtxt("time.dat")
+times = np.genfromtxt("time.dat", dtype=None)
 
 sim_times = np.linspace(times[0], times[-1], 2000)
 
