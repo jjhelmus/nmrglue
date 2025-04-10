@@ -9,7 +9,7 @@ from warnings import warn
 import numpy as np
 
 
-def read(filename, data_dtype=None):
+def read(filename, data_dtype=None, read_processed=False):
     """
     Read a nmrML file.
 
@@ -22,6 +22,8 @@ def read(filename, data_dtype=None):
         data type from the information in the file. Occasionally this
         information is incorrect and this argument can be used to explicitly
         supply this information.
+    read_processed : bool
+        Option to read processed data instead of FID (dafault=False)
 
     Returns
     -------
@@ -35,8 +37,11 @@ def read(filename, data_dtype=None):
     with open(filename, 'rb') as nmrml_file:
         doc = xmltodict.parse(nmrml_file.read())
 
-    fid_dict = doc['nmrML']['acquisition']['acquisition1D']['fidData']
-    data = _get_nmrml_data(fid_dict, data_dtype)
+    if read_processed:
+        data_dict = doc['nmrML']['spectrumList']['spectrum1D']['spectrumDataArray']
+    else:
+        data_dict = doc['nmrML']['acquisition']['acquisition1D']['fidData']
+    data = _get_nmrml_data(data_dict, data_dtype)
 
     dic = doc['nmrML']
     return dic, data
