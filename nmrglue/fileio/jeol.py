@@ -71,7 +71,8 @@ def guess_udic(dic, data):
         try:
             udic = add_axis_to_udic(udic, dic, b_dim)
         except Exception as e:
-            warn(f"Failed to determine udic parameters for dim: {b_dim} with the following error: {'\n'.join(e.args)}")
+            error_message = '\n'.join(e.args)
+            warn(f"Failed to determine udic parameters for dim: {b_dim} with the following error: {error_message}")
     return udic
 
 
