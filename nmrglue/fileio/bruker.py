@@ -1052,6 +1052,12 @@ def guess_shape(dic):
     except KeyError:
         dtypa = 0   # default value, int32 data
 
+    version = guess_topspin_version(dic)[1]
+    if (version >= 4) and (dtypa == 2):
+        bytesize = 8
+    else:
+        bytesize = 4
+
     # last (direct) dimension is given by "TD" parameter in acqus file
     # rounded up to nearest (1024/(bytes per point))
     # next-to-last dimension may be given by "TD" in acqu2s. In 3D+ data
@@ -1063,8 +1069,8 @@ def guess_shape(dic):
 
     # additional dimension given by data size
     if shape[2] != 0 and shape[3] != 0:
-        shape[1] = fsize // (shape[3] * shape[2] * 4)
-        shape[0] = fsize // (shape[3] * shape[2] * shape[1] * 4)
+        shape[1] = fsize // (shape[3] * shape[2] * bytesize)
+        shape[0] = fsize // (shape[3] * shape[2] * shape[1] * bytesize)
 
     # if there in no pulse program parameters in dictionary return current
     # shape after removing zeros
