@@ -2724,3 +2724,48 @@ def read_vdlist(dirc, fname='vdlist'):
     vdlist = [float(i) for i in vdlist]
 
     return vdlist
+
+def guess_topspin_version(dic):
+    """
+    Guess the version of topspin on which the data was acquired
+
+    Parameters
+    ----------
+    dic : dict
+        dictionary associated with the data
+
+    Returns
+    -------
+    tuple
+        (version, tag, instrument)
+
+    """
+    version = dic["acqus"]["_coreheader"][0]
+    version = version.split("##TITLE= Parameter file, ")[1]
+    version = (
+        version.replace(" ", "")
+        .replace("\t", "")
+        .replace("Version", "")
+        .replace("TopSpin", "topspin.")
+        .replace("TOPSPIN", "topspin.")
+    )
+    if "XWIN-NMR" in version:
+        version = version.replace("XWIN-NMR", "xwin-nmr.").split(".")
+    else:
+        version = version.replace(" ", "").replace("pl", ".pl.").split(".")
+
+    parsed_version = []
+    for i in version:
+        try:
+            parsed_version.append(int(i))
+        except (TypeError, ValueError):
+            parsed_version.append(i)
+
+    version = f"{parsed_version[1]}.{parsed_version[2]}"
+    instrument = parsed_version[0]
+    try:
+        tag = ''.join(str(i) for i in parsed_version[3:])
+    except IndexError:
+        tag = ''
+
+    return version, tag, instrument
