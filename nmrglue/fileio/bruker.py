@@ -2155,7 +2155,7 @@ def read_jcamp(filename, encoding=locale.getpreferredencoding()):
     filename : str
         Filename of Bruker JCAMP-DX file.
     encoding : str
-        Encoding of Bruker JCAMP-DX file. Defaults to the system default locale
+        Encoding of Bruker JCAMP-DX file. Defaults to the system default locale.
 
     Returns
     -------
@@ -2173,32 +2173,49 @@ def read_jcamp(filename, encoding=locale.getpreferredencoding()):
 
     """
     dic = {"_coreheader": [], "_comments": []}  # create empty dictionary
-
-    with open(filename, 'r', encoding=encoding) as f:
-        while True:     # loop until end of file is found
-
-            line = f.readline().rstrip()    # read a line
-            if line == '':      # end of file found
-                break
-
-            if line[:6] == "##END=":
-                # print("End of file")
-                break
-            elif line[:2] == "$$":
-                dic["_comments"].append(line)
-            elif line[:2] == "##" and line[2] != "$":
-                dic["_coreheader"].append(line)
-            elif line[:3] == "##$":
-                try:
-                    key, value = parse_jcamp_line(line, f)
-                    dic[key] = value
-                except:
-                    warn(f"Unable to correctly parse line: {line}")
-            else:
-                warn(f"Extraneous line: {line}")
+    try:
+        with open(filename, 'r', encoding=encoding) as f:
+            dic=parse_jcamp_file(f,dic)
+    except:
+        if encoding == "utf-8":
+            with open(filename, 'r', encoding="cp1252") as f:
+                dic=parse_jcamp_file(f,dic)
+        else:
+            with open(filename, 'r', encoding="utf-8") as f:
+                dic=parse_jcamp_file(f,dic)
 
     return dic
 
+def parse_jcamp_file(f,dic):
+    """
+    Parse a Bruker JCAMP-DX file into the given dictionary.
+
+    The dictionary shoul contain the keys _coreheader and _comments intialized
+    with empty lists. Bruker parameter "$FOO" are extracted into strings,
+    floats or lists and assigned to dic["FOO"]
+    """
+    while True:     # loop until end of file is found
+
+        line = f.readline().rstrip()    # read a line
+        if line == '':      # end of file found
+            break
+
+        if line[:6] == "##END=":
+            # print("End of file")
+            break
+        elif line[:2] == "$$":
+            dic["_comments"].append(line)
+        elif line[:2] == "##" and line[2] != "$":
+            dic["_coreheader"].append(line)
+        elif line[:3] == "##$":
+            try:
+                key, value = parse_jcamp_line(line, f)
+                dic[key] = value
+            except:
+                warn(f"Unable to correctly parse line: {line}")
+        else:
+            warn(f"Extraneous line: {line}")
+    return dic
 
 def parse_jcamp_line(line, f):
     """
