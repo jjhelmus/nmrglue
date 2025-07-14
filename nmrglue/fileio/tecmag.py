@@ -253,7 +253,7 @@ def read(filename):
 
     with open(filename, 'rb') as tntfile:
 
-        tntmagic = np.fromstring(tntfile.read(TNTMAGIC.itemsize),
+        tntmagic = np.frombuffer(tntfile.read(TNTMAGIC.itemsize),
                                  TNTMAGIC, count=1)[0]
 
         if not TNTMAGIC_RE.match(tntmagic):
@@ -263,21 +263,21 @@ def read(filename):
 
         # Read in the section headers
         tnthdrbytes = tntfile.read(TNTTLV.itemsize)
-        while (TNTTLV.itemsize == len(tnthdrbytes)):
-            tlv = np.fromstring(tnthdrbytes, TNTTLV)[0]
+        while TNTTLV.itemsize == len(tnthdrbytes):
+            tlv = np.frombuffer(tnthdrbytes, TNTTLV)[0]
             data_length = tlv['length']
             hdrdict = {'offset': tntfile.tell(),
                        'length': data_length,
                        'bool': bool(tlv['bool'])}
             if data_length <= 4096:
                 hdrdict['data'] = tntfile.read(data_length)
-                assert (len(hdrdict['data']) == data_length)
+                assert len(hdrdict['data']) == data_length
             else:
                 tntfile.seek(data_length, os.SEEK_CUR)
             tnt_sections[tlv['tag'].decode()] = hdrdict
             tnthdrbytes = tntfile.read(TNTTLV.itemsize)
 
-    assert (tnt_sections['TMAG']['length'] == TNTTMAG.itemsize)
+    assert tnt_sections['TMAG']['length'] == TNTTMAG.itemsize
     tmag = np.fromstring(tnt_sections['TMAG']['data'], TNTTMAG, count=1)[0]
 
     assert (tnt_sections['DATA']['length'] ==
@@ -291,7 +291,7 @@ def read(filename):
                      shape=tmag['actual_npts'].prod())
     data = np.reshape(data, tmag['actual_npts'], order='F')
 
-    assert (tnt_sections['TMG2']['length'] == TNTTMG2.itemsize)
+    assert tnt_sections['TMG2']['length'] == TNTTMG2.itemsize
     tmg2 = np.fromstring(tnt_sections['TMG2']['data'], TNTTMG2, count=1)[0]
 
     dic = dict()

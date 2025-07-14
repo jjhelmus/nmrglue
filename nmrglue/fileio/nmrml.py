@@ -76,6 +76,6 @@ def _get_nmrml_data(fid_dict, data_dtype):
     # convert to ndarray
     if data_dtype is None:
         data_dtype = BYTE_FORMAT_TO_DTYPE[byte_format]
-    data = np.fromstring(uncompressed_bytes, dtype=data_dtype)
+    data = np.frombuffer(uncompressed_bytes, dtype=data_dtype)
 
     return data
