@@ -12,7 +12,7 @@ contour_num = 20                # number of contour levels
 contour_factor = 1.20           # scaling factor between contour levels
 
 # calculate contour levels
-cl = [contour_start * contour_factor ** x for x in xrange(contour_num)]
+cl = [contour_start * contour_factor ** x for x in range(contour_num)]
 
 # read in the data from a NMRPipe file
 dic, data = ng.pipe.read("nmrpipe_2d/test.ft2")
