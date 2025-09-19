@@ -324,7 +324,7 @@ def tri(data, loc="auto", lHi=0.0, rHi=0.0, inv=False, rev=False):
 ###################
 
 
-def rs(data, pts=0.0):
+def rs(data, pts=0):
     """
     Right shift and zero fill.
 
@@ -345,12 +345,13 @@ def rs(data, pts=0.0):
     roll : shift without zero filling.
 
     """
+
     data = np.roll(data, int(pts), axis=-1)
     data[..., :int(pts)] = 0
     return data
 
 
-def ls(data, pts=0.0):
+def ls(data, pts=0):
     """
     Left shift and fill with zero
 
@@ -371,12 +372,14 @@ def ls(data, pts=0.0):
     roll : shift without zero filling.
 
     """
+    if int(pts) == 0:
+        return data
     data = np.roll(data, -int(pts), axis=-1)
     data[..., -int(pts):] = 0
     return data
 
 
-def cs(data, pts=0.0, neg=False):
+def cs(data, pts=0, neg=False):
     """
     Circular shift
 
@@ -399,7 +402,7 @@ def cs(data, pts=0.0, neg=False):
     return roll(data, pts, neg)
 
 
-def roll(data, pts=0.0, neg=False):
+def roll(data, pts=0, neg=False):
     """
     Roll axis
 
