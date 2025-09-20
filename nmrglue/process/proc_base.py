@@ -2647,7 +2647,7 @@ def zd_gaussian(data, wide=1.0, x0=0.0, slope=1.0, g=1):
 
     """
     tln2 = np.sqrt(2 * np.log(2))
-    window = 1 - scipy.signal.gaussian(2 * wide + 1, g / tln2)
+    window = 1 - scipy.signal.windows.gaussian(2 * wide + 1, g / tln2)
     return zd(data, window, x0=x0, slope=slope)
 
 
