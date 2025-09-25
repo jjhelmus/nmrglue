@@ -7,9 +7,11 @@ import pickle
 
 # read in the trajectories and times
 trajs = np.load("traj.npy")
-t1 = np.recfromtxt("time.dat")
+t1 = np.genfromtxt("time.dat", dtype=None)
 
 # fitting function and residual calculation
+
+
 def fit_func(p, x):
     A, R2 = p
     # bound A between 0.98 and 1.02 (although fits do not reflect this)
@@ -20,11 +22,13 @@ def fit_func(p, x):
 
     return A * np.exp(-1.0 * np.array(x) * R2 / 1.0e6)
 
+
 def residuals(p, y, x):
     err = y - fit_func(p, x)
     return err
 
-p0 = [1.0, 0.05] # initial guess
+
+p0 = [1.0, 0.05]  # initial guess
 
 fits = {}
 # loop over the peak trajectories
