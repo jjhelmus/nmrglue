@@ -19,12 +19,12 @@ def test_1d_time():
         os.path.join(DD_1D, '1d_rawbin.fid'), spe=False, ndim=1)
 
     # check data in text file
-    assert text_data.shape == (4096, )
+    assert text_data.shape == (1, 4096)
     assert text_data.dtype == 'complex64'
-    assert np.abs(text_data[0].real - 2.0) <= 0.01
-    assert np.abs(text_data[0].imag - 0.0) <= 0.01
-    assert np.abs(text_data[1].real - 1.78) <= 0.01
-    assert np.abs(text_data[1].imag - -0.01) <= 0.01
+    assert np.abs(text_data[0][0].real - 2.0) <= 0.01
+    assert np.abs(text_data[0][0].imag - 0.0) <= 0.01
+    assert np.abs(text_data[0][1].real - 1.78) <= 0.01
+    assert np.abs(text_data[0][1].imag - -0.01) <= 0.01
 
     # data in all files should be close
     assert np.allclose(rawbin_data, text_data)
@@ -42,12 +42,12 @@ def test_1d_freq():
         os.path.join(DD_1D, '1d_rawbin.spe'), spe=True, ndim=1)
 
     # check data in text file
-    assert text_data.shape == (4096, )
+    assert text_data.shape == (1, 4096)
     assert text_data.dtype == 'complex64'
-    assert np.abs(text_data[2048].real - 40.34) <= 0.01
-    assert np.abs(text_data[2048].imag - -1.51) <= 0.01
-    assert np.abs(text_data[2049].real - 39.58) <= 0.01
-    assert np.abs(text_data[2049].imag - -3.97) <= 0.01
+    assert np.abs(text_data[0][2048].real - 40.34) <= 0.01
+    assert np.abs(text_data[0][2048].imag - -1.51) <= 0.01
+    assert np.abs(text_data[0][2049].real - 39.58) <= 0.01
+    assert np.abs(text_data[0][2049].imag - -3.97) <= 0.01
 
     # data in all file should be close
     assert np.allclose(rawbin_data, text_data)
