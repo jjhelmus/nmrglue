@@ -540,7 +540,7 @@ def test_agilent_3d_rnmrtk():
 def test_bruker_1d():
     """ 1D time bruker, pipe <-> bruker, pipe """
     # prepare Bruker converter
-    bdic, bdata = ng.bruker.read(os.path.join(DATA_DIR, "bruker_1d"))
+    bdic, bdata = ng.bruker.read(os.path.join(DATA_DIR, "bruker_1d"), read_procs=False)
     ubdic = ng.bruker.guess_udic(bdic, bdata)
     bC = ng.convert.converter()
     bC.from_bruker(bdic, bdata, ubdic)
@@ -661,7 +661,7 @@ def test_bruker_1d_rnmrtk():
 def test_bruker_2d():
     """ 2D time bruker, pipe <-> bruker, pipe """
     # prepare Bruker converter
-    bdic, bdata = ng.bruker.read(os.path.join(DATA_DIR, "bruker_2d"))
+    bdic, bdata = ng.bruker.read(os.path.join(DATA_DIR, "bruker_2d"), read_procs=False)
     ubdic = ng.bruker.guess_udic(bdic, bdata)
     bC = ng.convert.converter()
     bC.from_bruker(bdic, bdata, ubdic)
@@ -729,7 +729,7 @@ def test_bruker_2d():
 def test_bruker_2d_rnmrtk():
     """ 2D time bruker, rnmrtk <-> rnmrtk """
     # prepare Bruker converter
-    bdic, bdata = ng.bruker.read(os.path.join(DATA_DIR, "bruker_2d"))
+    bdic, bdata = ng.bruker.read(os.path.join(DATA_DIR, "bruker_2d"), read_procs=False)
     ubdic = ng.bruker.guess_udic(bdic, bdata)
     bC = ng.convert.converter()
     bC.from_bruker(bdic, bdata, ubdic)
