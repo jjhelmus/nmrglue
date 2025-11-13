@@ -148,8 +148,8 @@ def check_rdic(dic1, dic2, ndim, exclude=None, v=True):
 
 
 bad_varian_keys = ["procpar"]
-bad_pipe_keys = ["FDYEAR", "FDMONTH", "FDDAY", "FDHOURS", "FDMINS", "FDSECS"]
-bad_bruker_keys = ["pprog", "acqus", "acqu2s", "acqu3s"]
+bad_pipe_keys = ["FDYEAR", "FDMONTH", "FDDAY", "FDHOURS", "FDMINS", "FDSECS", "FDDMXVAL"]
+bad_bruker_keys = ["pprog", "acqus", "acqu2s", "acqu3s", "procs", "proc2s", "proc3s"]
 bad_sparky_keys = ['bsize', 'extended', 'date', 'owner']
 # bad_rnmrtk_keys = ['layout', 'comment', 'p0', 'p1']
 bad_rnmrtk_keys = ['nacq', 'cphase', 'lphase']
