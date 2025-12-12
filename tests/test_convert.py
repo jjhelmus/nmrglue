@@ -546,8 +546,7 @@ def test_bruker_1d():
     bC.from_bruker(bdic, bdata, ubdic)
 
     # prepare Pipe converter
-    pdic, pdata = ng.pipe.read(os.path.join(DATA_DIR, "bruker_1d",
-                               "test.fid"))
+    pdic, pdata = ng.pipe.read(os.path.join(DATA_DIR, "bruker_1d", "test.fid"))
     updic = ng.pipe.guess_udic(pdic, pdata)
     pC = ng.convert.converter()
     pC.from_pipe(pdic, pdata, updic)
@@ -613,8 +612,7 @@ def test_bruker_1d_rnmrtk():
     bC.from_bruker(bdic, bdata, ubdic)
 
     # prepare Pipe converter
-    rdic, rdata = ng.rnmrtk.read(os.path.join(DATA_DIR, "bruker_1d",
-                                 "time_1d.sec"))
+    rdic, rdata = ng.rnmrtk.read(os.path.join(DATA_DIR, "bruker_1d", "time_1d.sec"))
     urdic = ng.rnmrtk.guess_udic(rdic, rdata)
     rC = ng.convert.converter()
     rC.from_rnmrtk(rdic, rdata, urdic)
@@ -735,8 +733,7 @@ def test_bruker_2d_rnmrtk():
     bC.from_bruker(bdic, bdata, ubdic)
 
     # prepare Pipe converter
-    rdic, rdata = ng.rnmrtk.read(os.path.join(DATA_DIR, "bruker_2d",
-                                              "time_2d.sec"))
+    rdic, rdata = ng.rnmrtk.read(os.path.join(DATA_DIR, "bruker_2d", "time_2d.sec"))
     urdic = ng.rnmrtk.guess_udic(rdic, rdata)
     rC = ng.convert.converter()
     rC.from_rnmrtk(rdic, rdata, urdic)
