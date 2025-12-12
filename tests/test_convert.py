@@ -148,7 +148,7 @@ def check_rdic(dic1, dic2, ndim, exclude=None, v=True):
 
 
 bad_varian_keys = ["procpar"]
-bad_pipe_keys = ["FDYEAR", "FDMONTH", "FDDAY", "FDHOURS", "FDMINS", "FDSECS"]
+bad_pipe_keys = ["FDYEAR", "FDMONTH", "FDDAY", "FDHOURS", "FDMINS", "FDSECS", "FDDMXVAL"]
 bad_bruker_keys = ["pprog", "acqus", "acqu2s", "acqu3s"]
 bad_sparky_keys = ['bsize', 'extended', 'date', 'owner']
 # bad_rnmrtk_keys = ['layout', 'comment', 'p0', 'p1']
@@ -546,8 +546,7 @@ def test_bruker_1d():
     bC.from_bruker(bdic, bdata, ubdic)
 
     # prepare Pipe converter
-    pdic, pdata = ng.pipe.read(os.path.join(DATA_DIR, "bruker_1d",
-                               "test.fid"))
+    pdic, pdata = ng.pipe.read(os.path.join(DATA_DIR, "bruker_1d", "test.fid"))
     updic = ng.pipe.guess_udic(pdic, pdata)
     pC = ng.convert.converter()
     pC.from_pipe(pdic, pdata, updic)
@@ -607,14 +606,13 @@ def test_bruker_1d():
 def test_bruker_1d_rnmrtk():
     """ 1D time bruker, rnmrtk <-> rnmrtk """
     # prepare Bruker converter
-    bdic, bdata = ng.bruker.read(os.path.join(DATA_DIR, "bruker_1d"))
+    bdic, bdata = ng.bruker.read(os.path.join(DATA_DIR, "bruker_1d"), read_procs=False)
     ubdic = ng.bruker.guess_udic(bdic, bdata)
     bC = ng.convert.converter()
     bC.from_bruker(bdic, bdata, ubdic)
 
     # prepare Pipe converter
-    rdic, rdata = ng.rnmrtk.read(os.path.join(DATA_DIR, "bruker_1d",
-                                 "time_1d.sec"))
+    rdic, rdata = ng.rnmrtk.read(os.path.join(DATA_DIR, "bruker_1d", "time_1d.sec"))
     urdic = ng.rnmrtk.guess_udic(rdic, rdata)
     rC = ng.convert.converter()
     rC.from_rnmrtk(rdic, rdata, urdic)
@@ -735,8 +733,7 @@ def test_bruker_2d_rnmrtk():
     bC.from_bruker(bdic, bdata, ubdic)
 
     # prepare Pipe converter
-    rdic, rdata = ng.rnmrtk.read(os.path.join(DATA_DIR, "bruker_2d",
-                                              "time_2d.sec"))
+    rdic, rdata = ng.rnmrtk.read(os.path.join(DATA_DIR, "bruker_2d", "time_2d.sec"))
     urdic = ng.rnmrtk.guess_udic(rdic, rdata)
     rC = ng.convert.converter()
     rC.from_rnmrtk(rdic, rdata, urdic)
@@ -1498,7 +1495,7 @@ def test_bruker_2d_lowmem():
     """ 2D time bruker, pipe <-> bruker, pipe low memory"""
     # prepare Bruker converter
     bdic, bdata = ng.bruker.read_lowmem(
-        os.path.join(DATA_DIR, "bruker_2d"))
+        os.path.join(DATA_DIR, "bruker_2d"), read_procs=False)
     ubdic = ng.bruker.guess_udic(bdic, bdata)
     bC = ng.convert.converter()
     bC.from_bruker(bdic, bdata, ubdic)
