@@ -216,7 +216,7 @@ def truncate_data(dic, data):
 
     slices = slices[::-1]
 
-    return data[*slices]
+    return data[tuple(slices)]
 
 
 def get_data_shape(dic):
