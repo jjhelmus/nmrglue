@@ -2,6 +2,7 @@ import nmrglue.fileio.simpson as simpson
 import numpy as np
 from numpy.testing import assert_allclose, assert_raises
 import os.path
+import pytest
 
 from setup import DATA_DIR
 
@@ -80,7 +81,7 @@ def test_2d_time():
     assert np.allclose(rawbin_data, bin_data)
     assert np.allclose(rawbin_data, xyreim_data)
 
-
+@pytest.mark.slow
 def test_2d_freq():
     """ reading 2D freq domain files """
     # read the text, binary, xreim, and rawbin data
