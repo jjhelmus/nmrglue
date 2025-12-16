@@ -9,6 +9,7 @@ from pathlib import Path
 import numpy as np
 from numpy.testing import assert_array_equal
 import nmrglue as ng
+import pytest
 
 from setup import DATA_DIR
 
@@ -153,7 +154,7 @@ def test_2d_lowmem():
     assert np.abs(data[13, 91].imag - -17680.0) <= 0.01
     lowmem_write_readback(dic, data)
 
-
+@pytest.mark.slow
 def test_3d():
     """ reading/writing of 3D bruker data"""
     dic, data = ng.bruker.read(os.path.join(DATA_DIR, "bruker_3d"))
@@ -165,7 +166,7 @@ def test_3d():
     assert np.abs(data[5, 13, 91].imag - 3482.0) <= 0.01
     write_readback(dic, data)
 
-
+@pytest.mark.slow
 def test_3d_lowmem():
     """ low memory reading/writing of 3D bruker data"""
     dic, data = ng.bruker.read_lowmem(os.path.join(DATA_DIR, "bruker_3d"),

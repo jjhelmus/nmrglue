@@ -8,6 +8,7 @@ import sys
 import glob
 from re import sub
 import numpy as np
+import pytest
 
 # Ignore UserWarnings when converting Bruker data
 import warnings
@@ -410,7 +411,7 @@ def test_agilent_2d_rnmrtk():
     check_dic(vdic, cdic, bad_varian_keys)
     shutil.rmtree(td)
 
-
+@pytest.mark.slow
 def test_agilent_3d():
     """ 3D time agilent, pipe <-> agilent, pipe """
     # prepare Agilent converter
@@ -482,7 +483,7 @@ def test_agilent_3d():
     check_dic(vdic, cdic, bad_varian_keys)
     shutil.rmtree(td)
 
-
+@pytest.mark.slow
 def test_agilent_3d_rnmrtk():
     """ 3D time agilent, rnmrtk <-> rnmrtk """
     # prepare agilent converter
@@ -776,7 +777,7 @@ def test_bruker_2d_rnmrtk():
     check_dic(bdic, cdic, bad_bruker_keys)
     shutil.rmtree(td)
 
-
+@pytest.mark.slow
 def test_bruker_3d():
     """ 3D time bruker, pipe <-> bruker, pipe """
 
@@ -887,7 +888,7 @@ def test_bruker_3d():
 
     os.remove(acqu3s)
 
-
+@pytest.mark.slow
 def test_bruker_3d_rnmrtk():
     """ 3D time bruker, rnmrtk <-> rnmrtk """
     # prepare Bruker converter
@@ -1026,7 +1027,7 @@ def test_sparky_2d():
     check_sdic(sdic, rdic, bad_sparky_keys, True)
     os.remove(tf)
 
-
+@pytest.mark.slow
 def test_sparky_3d():
     """ 3D freq sparky, pipe <-> sparky, pipe """
     # prepare Sparky converter
@@ -1141,7 +1142,7 @@ def test_pipe_1d():
     check_pdic(pdic, cdic, bad_pipe_keys)
     os.remove(tf)
 
-
+@pytest.mark.failing
 def test_csdm_1d():
     """Test 1D bruker and agilent -> CSDM"""
     # 1D bruker
@@ -1193,7 +1194,7 @@ def test_csdm_1d():
     assert csdm_data.dimensions[0].label == uadic1[0]["label"]
     assert_array_equal(csdm_data.dependent_variables[0].components[0], adata1)
 
-
+@pytest.mark.failing
 def test_csdm_2d():
     """Test 2D bruker and agilent -> CSDM"""
     # 2D bruker
@@ -1262,7 +1263,7 @@ def test_csdm_2d():
         assert csdm_data.dimensions[j].label == uadic2[i]["label"]
     assert_array_equal(csdm_data.dependent_variables[0].components[0], adata2)
 
-
+@pytest.mark.failing
 def test_csdm_3d():
     """Test 3D bruker and agilent -> CSDM"""
     # 3D bruker
@@ -1396,7 +1397,7 @@ def test_sparky_2d_lowmem():
     check_sdic(sdic, rdic, bad_sparky_keys, True)
     os.remove(tf)
 
-
+@pytest.mark.slow
 def test_sparky_3d_lowmem():
     """ 3D freq sparky, pipe <-> sparky, pipe low memory"""
     # prepare Sparky converter
@@ -1559,7 +1560,7 @@ def test_bruker_2d_lowmem():
     check_dic(bdic, cdic, bad_bruker_keys)
     shutil.rmtree(td)
 
-
+@pytest.mark.slow
 def test_bruker_3d_lowmem():
     """ 3D time bruker, pipe <-> bruker, pipe low memory"""
 
@@ -1736,7 +1737,7 @@ def test_agilent_2d_lowmem():
     check_dic(vdic, cdic, bad_varian_keys)
     shutil.rmtree(td)
 
-
+@pytest.mark.slow
 def test_agilent_3d_lowmem():
     """ 3D time agilent, pipe <-> agilent, pipe low memory"""
     # prepare Agilent converter
@@ -1945,7 +1946,7 @@ def test_rnmrtk_2d():
     os.remove(tf)
     os.remove(tf.replace('.sec', '.par'))
 
-
+@pytest.mark.slow
 def test_rnmrtk_3d():
     """ 3D freq rnmrtk, pipe <-> rnmrtk, pipe """
 
