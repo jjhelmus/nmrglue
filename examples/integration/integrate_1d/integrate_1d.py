@@ -10,7 +10,7 @@ dic, data = ng.pipe.read("1d_data.ft")
 length = data.shape[0]
 
 # read in the integration limits
-peak_list = np.recfromtxt("limits.in")
+peak_list = np.genfromtxt("limits.in", dtype=None)
 
 # determine the ppm scale
 uc = ng.pipe.make_uc(dic, data)
@@ -40,7 +40,7 @@ for name, start, end in peak_list:
     ax.plot(peak_scale, peak.cumsum() / 100. + peak.max(), 'g-')
     ax.plot(peak_scale, [0] * len(peak_scale), 'r-')
     ax.text(peak_scale[0], 0.5 * peak.sum() / 100. + peak.max(), name,
-                fontsize=8)
+            fontsize=8)
 
     # write out the integration info
     tup = (name, peak_scale[0], peak_scale[-1], peak.sum())

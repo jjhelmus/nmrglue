@@ -144,7 +144,7 @@ def read(filename):
     dtd['formats'] = comments.pop(dl[0])[9:].split()
 
     # return the data as a records array
-    return comments, np.atleast_1d(np.recfromtxt(filename, dtype=dtd))
+    return comments, np.atleast_1d(np.genfromtxt(filename, dtype=dtd))
 
 
 def write(filename, comments, rec, overwrite=False):
