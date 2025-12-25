@@ -1,6 +1,7 @@
 import nox
 
 PYTHON_NUMPY_MATRIX = {
+    "3.8": ["1.23", "1.24"],
     "3.9": ["1.24", "1.25", "1.26", "2.0"],
     "3.10": ["1.24", "1.25", "1.26", "2.0", "2.1", "2.2"],
     "3.11": ["1.24", "1.25", "1.26", "2.0", "2.1", "2.2", "2.3"],
@@ -11,7 +12,7 @@ PYTHON_NUMPY_MATRIX = {
 
 ALL_NUMPY_VERSIONS = tuple(set(sum(PYTHON_NUMPY_MATRIX.values(), [])))
 
-DEPENDENCIES = ["pytest", "pluggy", "scipy"]
+DEPENDENCIES = ["pytest",  "pytest-xdist", "pluggy", "scipy", "xmltodict"]
 
 @nox.session(python=list(PYTHON_NUMPY_MATRIX.keys()))
 @nox.parametrize("numpy_version", ALL_NUMPY_VERSIONS)
