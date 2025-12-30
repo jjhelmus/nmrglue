@@ -278,7 +278,7 @@ def read(filename):
             tnthdrbytes = tntfile.read(TNTTLV.itemsize)
 
     assert tnt_sections['TMAG']['length'] == TNTTMAG.itemsize
-    tmag = np.fromstring(tnt_sections['TMAG']['data'], TNTTMAG, count=1)[0]
+    tmag = np.frombuffer(tnt_sections['TMAG']['data'], TNTTMAG, count=1)[0]
 
     assert (tnt_sections['DATA']['length'] ==
             tmag['actual_npts'].prod() * 8)
@@ -292,7 +292,7 @@ def read(filename):
     data = np.reshape(data, tmag['actual_npts'], order='F')
 
     assert tnt_sections['TMG2']['length'] == TNTTMG2.itemsize
-    tmg2 = np.fromstring(tnt_sections['TMG2']['data'], TNTTMG2, count=1)[0]
+    tmg2 = np.frombuffer(tnt_sections['TMG2']['data'], TNTTMG2, count=1)[0]
 
     dic = dict()
     for name in TNTTMAG.names:
