@@ -136,7 +136,6 @@ def _parsejcampdx(filename):
                 if currentkey is None:
                     warn(f"JCAMP-DX data line without associated key: {line}")
                     continue
-
                 currentvaluestrings.append(commentsplit[0])
 
     # push possible non-closed blocks
@@ -375,7 +374,8 @@ def _parse_pseudo(datalines):
                         valuechar = _DUP_DIGITS[char]
                         newmode = 3
                     except KeyError:
-                        warn(f"Unknown pseudo-digit: {char} at line: {dataline}")
+                        warn(
+                            f"Unknown pseudo-digit: {char} at line: {dataline}")
                         return None
 
             # finish previous number
@@ -746,6 +746,23 @@ def _find_firstx_lastx(dic):
     return firstx, lastx, isppm
 
 
+def get_complex_array(data):
+    """
+    By default JCAMP FID data are read as two separate arrays
+    for real and imaginary parts. This function returns 
+    them combined for single complex array.
+    """
+
+    if len(data) != 2:
+        warn("data is not list of arrays [real, imag]")
+        return None
+
+    complexdata = np.empty((len(data[0]), ), dtype='complex128')
+    complexdata.real = data[0][:]
+    complexdata.imag = data[1][:]
+    return complexdata
+
+
 def guess_udic(dic, data):
     """
     Guess parameters of universal dictionary from dic, data pair.
@@ -790,32 +807,63 @@ def guess_udic(dic, data):
         pass
 
     # "size"
-    if isinstance(data, list):
-        data = data[0]  # if list [R,I]
+    npoints = None
     if data is not None:
-        udic[0]["size"] = len(data)
+    if isinstance(data, list):
+            npoints = len(data[0])  # if list [R,I]
+        else:
+            npoints = len(data)
+        udic[0]["size"] = npoints
     else:
         warn('No data, cannot set udic size')
 
-    # "sw"
-    # get firstx, lastx and unit
-    firstx, lastx, isppm = _find_firstx_lastx(dic)
+    # check if this is fid or processed:
+    is_processed = True  # by default, expect processed data
+    try:
+        datatype = dic["DATATYPE"][0]
+        if datatype.strip().upper().replace(" ", "") == "NMRFID":
+            is_processed = False
+    except KeyError:
+        pass
 
+    # "sw" and "car"
+    # get firstx, lastx and unit
+    firstx, lastx, is_ppm = _find_firstx_lastx(dic)
+    if firstx is not None and lastx is not None:
+        if is_processed:
     # ppm data: convert to Hz
-    if isppm:
+            if is_ppm:
         if obs_freq:
             firstx = firstx * obs_freq
             lastx = lastx * obs_freq
         else:
             firstx, lastx = (None, None)
-            warn('Data is in ppm but have no frequency, cannot set udic sweep')
-
+                    warn('Data is in ppm but base frequency is unknown, \
+                          cannot set udic spectral width')
     if firstx is not None and lastx is not None:
         udic[0]["sw"] = abs(lastx - firstx)
+                udic[0]["car"] = (lastx + firstx) / 2
     else:
-        warn('Cannot set udic sweep')
+            # FID:
+            if npoints:
+                aqtime = lastx - firstx
+                sw = npoints / aqtime
+                udic[0]["sw"] = sw
+            # note: in FIDs "car" is left to default as there is no required
+            # standard tag in JCAMP for it. Quite often manufacturers store
+            # it under their own tags though.
+    else:
+        warn('No data ranges found from JCAMP, cannot set udic sw & car')
 
-    # keys not found in standard&required JCAMP-DX keys and thus left default:
-    # car, complex, encoding
+    # "time" & "freq"
+    udic[0]["freq"] = is_processed
+    udic[0]["time"] = not is_processed
+
+    # "complex" always false in JCAMP (R&I in separate arrays)
+    udic[0]["complex"] = False
+    # ...unless combined by nmrglue user with get_complex_array
+    if not isinstance(data, list):
+        if data.dtype == "complex128":
+            udic[0]["complex"] = True
 
     return udic
