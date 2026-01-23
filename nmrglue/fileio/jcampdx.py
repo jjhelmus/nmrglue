@@ -51,7 +51,7 @@ def _parsejcampdx(filename):
     # when encountering ##END, push the ready dict to another list
     readyblocklist = []
 
-    filein = open(filename, 'r', encoding="utf-8", errors="replace")
+    filein = open(filename, 'r', encoding="utf-8-sig", errors="replace")
 
     currentkey = None
     currentvaluestrings = []
