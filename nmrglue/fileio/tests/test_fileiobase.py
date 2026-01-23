@@ -46,3 +46,14 @@ def test_uc_with_float_size():
         size=64.0, cplx=False, sw=1.0, obs=1.0, car=1.0)
     scale = uc.ppm_scale()
     assert len(scale) == 64
+
+
+def test_update_uc():
+    uc = ng.fileiobase.unit_conversion(
+        size=64.0, cplx=False, sw=1.0, obs=1.0, car=1.0)
+    uc2 = ng.fileiobase.update_uc(uc, size=10, cplx=True, sw=2.0, car=5.2, obs=3.0)
+    assert uc2._size == 10
+    assert uc2._cplx is True
+    assert abs(uc2._sw - 2.0) < 1e-5
+    assert abs(uc2._car - 5.2) < 1e-5
+    assert abs(uc2._obs - 3.0) < 1e-5
