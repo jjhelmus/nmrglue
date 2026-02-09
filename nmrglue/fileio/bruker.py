@@ -426,21 +426,23 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None, shape=None,
             else:
                 isfloat = False
 
-    # read the binary file
-    f = os.path.join(dir, bin_file)
-    _, data = read_binary(f, shape=shape, cplex=cplex, big=big,
-                             isfloat=isfloat)
-
     try:
         if dic['acqus']['FnTYPE'] == 2: # non-uniformly sampled data
             try:
                 dic['nuslist'] = read_nuslist(dir)
             except FileNotFoundError:
                 warn("NUS data detected, but nuslist was not found")
+            shape = (-1, shape[-1])
     except KeyError:
         # old datasets do not have the FnTYPE parameter in acqus files.
         # also fails silently when acqus file is absent.
         pass
+
+    # read the binary file
+    f = os.path.join(dir, bin_file)
+    _, data = read_binary(f, shape=shape, cplex=cplex, big=big,
+                             isfloat=isfloat)
+
 
     return dic, data
 
@@ -1052,19 +1054,25 @@ def guess_shape(dic):
     except KeyError:
         dtypa = 0   # default value, int32 data
 
+    if dtypa == 0:
+        bytesize = 4
+    elif dtypa == 2:
+        bytesize = 8
+    else:
+        raise ValueError(f'DTYPA ({dtypa}) is inconsistent with expected values of 0 or 2')
+
     # last (direct) dimension is given by "TD" parameter in acqus file
     # rounded up to nearest (1024/(bytes per point))
     # next-to-last dimension may be given by "TD" in acqu2s. In 3D+ data
     # this is often the sum of the indirect dimensions
-    if dtypa == 2:
-        shape = [0, 0, td2, int(np.ceil(td0 / 128.) * 128.)]
-    else:
-        shape = [0, 0, td2, int(np.ceil(td0 / 256.) * 256.)]
+
+    pointsize = 1024.0 / bytesize
+    shape = [0, 0, td2, int(np.ceil(td0 / pointsize) * pointsize)]
 
     # additional dimension given by data size
     if shape[2] != 0 and shape[3] != 0:
-        shape[1] = fsize // (shape[3] * shape[2] * 4)
-        shape[0] = fsize // (shape[3] * shape[2] * shape[1] * 4)
+        shape[1] = fsize // (shape[3] * shape[2] * bytesize)
+        shape[0] = fsize // (shape[3] * shape[2] * shape[1] * bytesize)
 
     # if there in no pulse program parameters in dictionary return current
     # shape after removing zeros
@@ -2724,3 +2732,48 @@ def read_vdlist(dirc, fname='vdlist'):
     vdlist = [float(i) for i in vdlist]
 
     return vdlist
+
+def guess_topspin_version(dic):
+    """
+    Guess the version of topspin on which the data was acquired
+
+    Parameters
+    ----------
+    dic : dict
+        dictionary associated with the data
+
+    Returns
+    -------
+    tuple
+        (version, tag, instrument)
+
+    """
+    version = dic["acqus"]["_coreheader"][0]
+    version = version.split("##TITLE= Parameter file, ")[1]
+    version = (
+        version.replace(" ", "")
+        .replace("\t", "")
+        .replace("Version", "")
+        .replace("TopSpin", "topspin.")
+        .replace("TOPSPIN", "topspin.")
+    )
+    if "XWIN-NMR" in version:
+        version = version.replace("XWIN-NMR", "xwin-nmr.").split(".")
+    else:
+        version = version.replace(" ", "").replace("pl", ".pl.").split(".")
+
+    parsed_version = []
+    for i in version:
+        try:
+            parsed_version.append(int(i))
+        except (TypeError, ValueError):
+            parsed_version.append(i)
+
+    version = f"{parsed_version[1]}.{parsed_version[2]}"
+    instrument = parsed_version[0]
+    try:
+        tag = ''.join(str(i) for i in parsed_version[3:])
+    except IndexError:
+        tag = ''
+
+    return version, tag, instrument
