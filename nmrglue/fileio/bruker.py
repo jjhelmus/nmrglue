@@ -438,10 +438,15 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None, shape=None,
         # also fails silently when acqus file is absent.
         pass
 
+    estimated_dims = 1
+    for i in (2, 3, 4):
+        if f'acqu{i}s' in dic.keys():
+            estimated_dims += 1
+
     # read the binary file
     f = os.path.join(dir, bin_file)
     _, data = read_binary(f, shape=shape, cplex=cplex, big=big,
-                             isfloat=isfloat)
+                             isfloat=isfloat, estimated_dims=estimated_dims)
 
 
     return dic, data
@@ -1529,7 +1534,7 @@ def reorder_submatrix(data, shape, submatrix_shape, reverse=False):
 
 # Bruker binary (fid/ser) reading and writing
 
-def read_binary(filename, shape=(1), cplex=True, big=True, isfloat=False):
+def read_binary(filename, shape=(1), cplex=True, big=True, isfloat=False, estimated_dims=None):
     """
     Read Bruker binary data from file and return dic,data pair.
 
@@ -1578,7 +1583,18 @@ def read_binary(filename, shape=(1), cplex=True, big=True, isfloat=False):
         return dic, data.reshape(shape)
 
     except ValueError:
-        warn(f"{data.shape} cannot be shaped into {shape}")
+        try:
+            data = data.reshape(-1, shape[-1])
+            if estimated_dims and (estimated_dims > 2): 
+                warn(
+                    "Data is inconsistent with acquistion parameters. "
+                    "This usually happens with partially acquired datasets with dims >2. "
+                    "A 2D dataset will be returned. This will requires further reshaping before processing."
+                )
+            return dic, data
+        except ValueError:
+            warn(f"{data.shape} cannot be shaped into {shape} or a consistent 2D array. A 1D array will be returned.")
+        
         return dic, data
 
 
