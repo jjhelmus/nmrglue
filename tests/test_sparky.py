@@ -8,6 +8,7 @@ import os.path
 import numpy as np
 from numpy.testing import assert_array_equal
 import nmrglue as ng
+import pytest
 
 from setup import DATA_DIR
 
@@ -68,7 +69,7 @@ def test_2d_lowmem():
     assert np.abs(data[15, 20] - 4281.06) <= 0.01
     lowmem_write_readback(dic, data)
 
-
+@pytest.mark.slow
 def test_3d():
     """ reading/writing of 3D sparky file """
     dic, data = ng.sparky.read(
@@ -78,7 +79,7 @@ def test_3d():
     assert np.abs(data[11, 15, 20] - -15256.97) <= 0.01
     write_readback(dic, data)
 
-
+@pytest.mark.slow
 def test_3d_lowmem():
     """ lowmemory reading/writing of 3D sparky file """
     dic, data = ng.sparky.read_lowmem(

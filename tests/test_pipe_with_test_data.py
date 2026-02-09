@@ -10,6 +10,7 @@ from pathlib import Path
 import numpy as np
 from numpy.testing import assert_array_equal
 import nmrglue as ng
+import pytest
 
 from setup import DATA_DIR
 
@@ -187,7 +188,7 @@ def test_read_bytes_3d_time():
     data_path = os.path.join(DATA_DIR, "nmrpipe_3d", "full3D.fid")
     read_with_bytes_or_buffer(data_path)
 
-
+@pytest.mark.slow
 def test_read_bytes_3d_freq():
     """ reading NMRPipe data from io.BytesIO binary stream """
     data_path = os.path.join(DATA_DIR, "nmrpipe_3d", "full3D.ft3")
@@ -337,7 +338,7 @@ def test_3d_time():
 
     write_readback_3d(dic, data)
 
-
+@pytest.mark.slow
 def test_3d_freq():
     """reading/writing of 3D NMRPipe freq domain data"""
     dic, data = ng.pipe.read(
@@ -378,7 +379,7 @@ def test_3d_time_lowmem():
     assert np.abs(data[10, 22, 5].imag - 15.1) <= 0.01
     lowmem_write_readback_3d(dic, data)
 
-
+@pytest.mark.slow
 def test_3d_freq_lowmem():
     """lowmemory reading/writing of 3D NMRPipe freq domain data"""
     dic, data = ng.pipe.read_lowmem(
@@ -405,7 +406,7 @@ def test_3d_stream_time():
     assert np.abs(data[10, 22, 5].imag - 15.1) <= 0.01
     write_readback(dic, data)
 
-
+@pytest.mark.slow
 def test_3d_stream_freq():
     """reading/writing of 3D NMRPipe data stream freq domain file"""
     dic, data = ng.pipe.read(
@@ -524,7 +525,7 @@ def test_3d_tranpose():
     assert_array_equal(fdata.swapaxes(2, 0)[0, 1, 2],
                        data.swapaxes(2, 0)[0, 1, 2])
 
-
+@pytest.mark.failing
 def test_4d_single_index_time():
     """reading/writing of 4D single-index NMRPipe time domain file"""
     fmask = os.path.join(DATA_DIR, "nmrpipe_4d", "time_1index",
@@ -616,7 +617,7 @@ def test_4d_stream_time():
 
     lowmem_write_readback(dic, data)
 
-
+@pytest.mark.failing
 def test_4d_single_index_freq():
     """reading/writing of 4D single-index NMRPipe freq domain file"""
     fmask = os.path.join(DATA_DIR, "nmrpipe_4d", "ft_1index", "test%03d.ft4")
