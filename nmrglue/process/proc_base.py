@@ -879,7 +879,7 @@ def ha(data):
     if pad:
         zdata = zf(data, pad)
     else:
-        zdata = np.array(data, copy=True)
+        zdata = np.asarray(data)
 
     # Transform in Hadamard order, then permute into Walsh/sequency order.
     nat = _fwht_last_axis(zdata)
