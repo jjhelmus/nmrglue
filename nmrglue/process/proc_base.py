@@ -816,11 +816,26 @@ def _walsh_sequency_permutation(order):
                    np.asarray(gray(order), dtype=np.intp))
 
 
-def _fwht_last_axis(data):
+def _fwht_last_axis(data, *, copy=True):
     """
     Fast Walsh-Hadamard transform along the last axis.
+
+    Parameters
+    ----------
+    data : array_like
+        Input data. The transform is performed along the last axis.
+    copy : bool, optional
+        If True (default), operate on a copy of ``data`` and return the
+        transformed copy. If False, attempt to operate in-place on the
+        provided buffer (or a view of it), which can avoid an extra
+        allocation when ``data`` is already a suitable working array.
     """
-    out = np.array(data, copy=True)
+    if copy:
+        out = np.array(data, copy=True)
+    else:
+        # Use a view of the input data; caller is responsible for ensuring
+        # that ``data`` is writeable and has an appropriate shape.
+        out = np.asarray(data)
     h = 1
     while h < out.shape[-1]:
         reshaped = out.reshape(*out.shape[:-1], -1, 2 * h)
