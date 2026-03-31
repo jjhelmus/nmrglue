@@ -61,13 +61,29 @@ def test_reorder_submatrix():
     assert np.all(data == r2data)
 
 
+def test_reorder_submatrix_3d():
+    """reordering higher-dimensional submatrices back and forth"""
+
+    data = np.arange(64, dtype='float64').reshape(4, 4, 4)
+
+    reordered = ng.bruker.reorder_submatrix(
+        data, shape=(4, 4, 4), submatrix_shape=(2, 2, 2), reverse=False
+    )
+    restored = ng.bruker.reorder_submatrix(
+        reordered, shape=(4, 4, 4), submatrix_shape=(2, 2, 2), reverse=True
+    )
+
+    assert restored.shape == data.shape
+    assert np.all(data == restored)
+
+
 def test_write_pdata():
     """ Writing a processed Bruker dataset """
 
     dic, data = ng.bruker.read_pdata(os.path.join(DATA_DIR, '1', 'pdata', '1'))
 
     # write to a temperory file
-    td = tempfile.mkdtemp('.')
+    td = tempfile.mkdtemp(dir='.')
     ng.bruker.write_pdata(td, dic, data, write_procs=True, pdata_folder=10)
 
     assert os.path.isdir(os.path.join(td, 'pdata', '10'))
