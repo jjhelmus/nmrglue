@@ -1515,7 +1515,16 @@ def reorder_submatrix(data, shape, submatrix_shape, reverse=False):
 
     shape = tuple(shape)
     submatrix_shape = tuple(submatrix_shape)
-    sub_per_dim = tuple(int(i / j) for i, j in zip(shape, submatrix_shape))
+    sub_per_dim_list = []
+    for dim, sub_dim in zip(shape, submatrix_shape):
+        if sub_dim == 0:
+            raise ValueError("submatrix dimension cannot be zero: {}".format(submatrix_shape))
+        if dim % sub_dim != 0:
+            raise ValueError(
+                "Shape {} is not evenly divisible by submatrix_shape {}".format(shape, submatrix_shape)
+            )
+        sub_per_dim_list.append(dim // sub_dim)
+    sub_per_dim = tuple(sub_per_dim_list)
     ndim = len(shape)
 
     if reverse:
