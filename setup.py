@@ -31,15 +31,16 @@ setup(
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
         'Programming Language :: Python :: 3.12',
+        'Programming Language :: Python :: 3.13',
         'Topic :: Scientific/Engineering',
         'Operating System :: MacOS :: MacOS X',
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX :: Linux'],
     install_requires=['numpy', 'scipy'],
     extras_require={
-        "docs": ["sphinx", "sphinx_rtd_theme", "numpydoc"]
+        "docs": ["sphinx", "sphinx_rtd_theme", "numpydoc"],
+        "test": ["pytest"],
     },
-    tests_require=["pytest"],
     packages=[
         'nmrglue',
         'nmrglue.analysis',
