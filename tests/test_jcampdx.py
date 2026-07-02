@@ -1,6 +1,7 @@
 """ Tests for the fileio.jcampdx submodule """
 
 import os
+import tempfile
 import numpy as np
 import nmrglue as ng
 from setup import DATA_DIR
@@ -222,3 +223,50 @@ def test_jcampdx_dicstructure2():
     # check data
     assert len(data2) == 8
     assert data2[-1] == 1.0
+
+
+def test_jcampdx_show_all_data():
+    # Test NTUPLES with show_all_data=True
+    content_ntup = (
+        "##TITLE=Test NTUPLES\n"
+        "##JCAMPDX=5.0\n"
+        "##DATATYPE=NMR SPECTRUM\n"
+        "##DATA CLASS=NTUPLES\n"
+        "##NUM DIM=1\n"
+        "##SYMBOL=X, R, I\n"
+        "##VARNAME=FREQUENCY, REAL, IMAGINARY\n"
+        "##VARTYPE=RANDOM, DEPENDENT, DEPENDENT\n"
+        "##VARFORM=(X++(R..R))\n"
+        "##FACTOR=1, 2.5, 5.0\n"
+        "##PAGE=N=1\n"
+        "##DATA TABLE=(X++(R..R)), R\n"
+        "1.0 10 20\n"
+        "##PAGE=N=2\n"
+        "##DATA TABLE=(X++(I..I)), I\n"
+        "1.0 100 200\n"
+        "##END=\n"
+    )
+
+    fd, path = tempfile.mkstemp()
+    try:
+        with os.fdopen(fd, 'w') as f:
+            f.write(content_ntup)
+
+        # Test normal read (returns only first real & imaginary arrays)
+        dic, data = ng.jcampdx.read(path, show_all_data=False)
+        assert len(data) == 2
+        # YFACTOR applied: R factor=2.5, I factor=5.0
+        assert np.allclose(data[0], [25.0, 50.0])
+        assert np.allclose(data[1], [500.0, 1000.0])
+
+        # Test show_all_data=True (returns {'real': [...], 'imaginary': [...]})
+        dic, data_all = ng.jcampdx.read(path, show_all_data=True)
+        assert isinstance(data_all, dict)
+        assert 'real' in data_all
+        assert 'imaginary' in data_all
+        assert len(data_all['real']) == 1
+        assert len(data_all['imaginary']) == 1
+        assert np.allclose(data_all['real'][0], [25.0, 50.0])
+        assert np.allclose(data_all['imaginary'][0], [500.0, 1000.0])
+    finally:
+        os.remove(path)

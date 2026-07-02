@@ -495,10 +495,18 @@ def find_yfactors(dic):
     return (factor_r, factor_i)
 
 
-def getdataarray(dic):
+def getdataarray(dic, show_all_data=False):
     '''
     Main function for data array parsing, input is the
     raw dictionary from _readrawdic
+
+    Parameters
+    ----------
+    dic : dict
+        Raw dictionary from _readrawdic.
+    show_all_data : bool
+        If True and data is NTUPLES, return all data arrays as a dict
+        with keys 'real' and 'imaginary', each containing a list of arrays.
     '''
 
     data = None
@@ -525,19 +533,22 @@ def getdataarray(dic):
                     idatalist.append(data)
                 else:
                     rdatalist.append(data)
-            if len(rdatalist) > 1:
-                warn("NTUPLES: multiple real arrays, returning first one only")
-            if len(idatalist) > 1:
-                warn("NTUPLES: multiple imaginary arrays, \
-                     returning first one only")
-            if rdatalist:
-                if idatalist:
-                    data = [rdatalist[0], idatalist[0]]
-                else:
-                    data = rdatalist[0]
+            if show_all_data:
+                data = {'real': rdatalist, 'imaginary': idatalist}
             else:
-                if idatalist:
-                    data = [None, idatalist[0]]
+                if len(rdatalist) > 1:
+                    warn("NTUPLES: multiple real arrays, returning first one only")
+                if len(idatalist) > 1:
+                    warn("NTUPLES: multiple imaginary arrays, \
+                         returning first one only")
+                if rdatalist:
+                    if idatalist:
+                        data = [rdatalist[0], idatalist[0]]
+                    else:
+                        data = rdatalist[0]
+                else:
+                    if idatalist:
+                        data = [None, idatalist[0]]
 
     if data is None:  # XYDATA
         try:
@@ -558,11 +569,18 @@ def getdataarray(dic):
     # apply YFACTOR to data if available
     if is_ntuples:
         yfactor_r, yfactor_i = find_yfactors(dic)
-        if yfactor_r is None or yfactor_r is None:
+        if yfactor_r is None or yfactor_i is None:
             warn("NTUPLES: YFACTORs not applied, parsing failed")
+        elif show_all_data:
+            for i in range(len(data['real'])):
+                data['real'][i] = data['real'][i] * yfactor_r
+            for i in range(len(data['imaginary'])):
+                data['imaginary'][i] = data['imaginary'][i] * yfactor_i
         else:
-            data[0] = data[0] * yfactor_r
-            data[1] = data[1] * yfactor_i
+            if data[0] is not None:
+                data[0] = data[0] * yfactor_r
+            if data[1] is not None:
+                data[1] = data[1] * yfactor_i
     else:
         try:
             yfactor = float(dic["YFACTOR"][0])
@@ -575,7 +593,7 @@ def getdataarray(dic):
     return data
 
 
-def read(filename):
+def read(filename, show_all_data=False):
     """
     Read JCAMP-DX file
 
@@ -583,6 +601,11 @@ def read(filename):
     ----------
     filename : str
         File to read from.
+    show_all_data : bool
+        If True and data is NTUPLES, return all data arrays as a dict
+        with keys 'real' and 'imaginary', each containing a list of
+        numpy arrays. If False (default), return only the first real
+        and imaginary arrays.
 
     Returns
     -------
@@ -591,8 +614,10 @@ def read(filename):
         file, parameters of first NMR SPECTRUM or NMR FID are read to base
         level and others are stored under _datatype_<DATATYPE> keys in the
         dictionary.
-    data : ndarray
-        Array of NMR data, or a list NMR data arrays in order [real, imaginary]
+    data : ndarray or dict
+        Array of NMR data, or a list of NMR data arrays in order
+        [real, imaginary]. When show_all_data=True and data is NTUPLES,
+        a dict with keys 'real' and 'imaginary' is returned.
     """
 
     if os.path.isfile(filename) is not True:
@@ -611,7 +636,7 @@ def read(filename):
     try:
         subdiclist = dic["_datatype_NMRSPECTRUM"]
         for subdic in subdiclist:
-            data = getdataarray(subdic)
+            data = getdataarray(subdic, show_all_data)
             if data is not None:
                 correctdic = subdic
                 break
@@ -623,7 +648,7 @@ def read(filename):
         try:
             subdiclist = dic["_datatype_NMRFID"]
             for subdic in subdiclist:
-                data = getdataarray(subdic)
+                data = getdataarray(subdic, show_all_data)
                 if data is not None:
                     correctdic = subdic
                     break
@@ -636,7 +661,7 @@ def read(filename):
         try:
             subdiclist = dic["_datatype_NA"]
             for subdic in subdiclist:
-                data = getdataarray(subdic)
+                data = getdataarray(subdic, show_all_data)
                 if data is not None:
                     correctdic = subdic
                     break
