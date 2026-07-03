@@ -54,7 +54,7 @@ Unix/OSX Installation
 After installing the above dependencies download and extract the source
 distribution and run::
 
-    $ python setup.py install
+    $ python -m pip install .
 
 Windows Installation
 --------------------

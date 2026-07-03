@@ -1,3 +1,60 @@
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "nmrglue"
+version = "0.12-dev"
+description = "A module for working with NMR data in Python"
+readme = "README.rst"
+requires-python = ">=3.8"
+license = {text = "New BSD License"}
+authors = [
+    {name = "Jonathan J. Helmus", email = "jjhelmus@gmail.com"}
+]
+classifiers = [
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
+]
+dependencies = [
+    "numpy",
+    "scipy",
+]
+
+[project.optional-dependencies]
+docs = [
+    "sphinx",
+    "sphinx_rtd_theme",
+    "numpydoc",
+]
+test = [
+    "pytest",
+]
+
+[project.urls]
+Homepage = "http://www.nmrglue.com"
+
+[tool.setuptools]
+packages = [
+    "nmrglue",
+    "nmrglue.analysis",
+    "nmrglue.analysis.tests",
+    "nmrglue.fileio",
+    "nmrglue.fileio.tests",
+    "nmrglue.process",
+    "nmrglue.process.nmrtxt",
+    "nmrglue.util",
+]
+include-package-data = true
