@@ -2593,6 +2593,7 @@ def zd_triangle(data, wide=1.0, x0=0.0, slope=1.0):
         Array of NMR data with diagonal band set to zero.
 
     """
+    wide = int(wide)
     window = np.append(np.linspace(1, 0, wide + 1),
                        np.linspace(0, 1, wide + 1)[1:])
     return zd(data, window, x0=x0, slope=slope)
@@ -2619,6 +2620,7 @@ def zd_sinebell(data, wide=1.0, x0=0.0, slope=1.0):
         Array of NMR data with diagonal band set to zero.
 
     """
+    wide = int(wide)
     window = 1 - np.sin(np.linspace(0, pi, 2 * wide + 1))
     return zd(data, window, x0=x0, slope=slope)
 
@@ -2646,6 +2648,7 @@ def zd_gaussian(data, wide=1.0, x0=0.0, slope=1.0, g=1):
         Array of NMR data with diagonal band set to zero.
 
     """
+    wide = int(wide)
     tln2 = np.sqrt(2 * np.log(2))
     window = 1 - scipy.signal.windows.gaussian(2 * wide + 1, g / tln2)
     return zd(data, window, x0=x0, slope=slope)
