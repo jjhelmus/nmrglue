@@ -634,7 +634,8 @@ def read_procs_file(dir='.', procs_files=None):
         procs_files = []
 
         pdata_path = dir
-        for f in ["procs", "proc2s", "proc3s", "proc4s"]:
+        for f in ["procs", "proc", "proc2s", "proc2", "proc3s", "proc3",
+                  "proc4s", "proc4"]:
             pf = os.path.join(pdata_path, f)
             if os.path.isfile(pf):
                 procs_files.append(pf)
@@ -650,7 +651,8 @@ def read_procs_file(dir='.', procs_files=None):
                 else:
                     pdata_path = os.path.join(dir, 'pdata', pdata_folders[0])
 
-            for f in ["procs", "proc2s", "proc3s", "proc4s"]:
+            for f in ["procs", "proc", "proc2s", "proc2", "proc3s", "proc3",
+                      "proc4s", "proc4"]:
                 pf = os.path.join(pdata_path, f)
                 if os.path.isfile(pf):
                     procs_files.append(pf)
