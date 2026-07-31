@@ -11,7 +11,7 @@ Instructions
 1.  Create and activate a environment with nmrglue dependencies, sphinx,
     numpydoc and sphinx_rtd_theme installed.  For example using conda:
 
-        conda create -n nmrglue_dev python=3.12 numpy scipy pytest sphinx pip numpydoc sphinx_rtd_theme -c conda-forge
+        conda create -n nmrglue_dev python=3.13 numpy scipy pytest sphinx pip numpydoc sphinx_rtd_theme -c conda-forge
         conda activate nmrglue_dev
 
 2.  Install nmrglue in editable mode using the following from the root
