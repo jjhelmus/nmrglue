@@ -20,11 +20,11 @@ in the Python ecosystem.
 +------------+------------+---------------------------------------+
 | Package    | Version    | Details                               |
 +============+============+=======================================+
-| Python     | 3.6.0+     |                                       |
+| Python     | 3.11.0+    |                                       |
 +------------+------------+---------------------------------------+
-| Numpy      | 1.16+      | Required for all basic data types     |
+| Numpy      | 1.23.2+    | Required for all basic data types     |
 +------------+------------+---------------------------------------+
-| Scipy      | 0.16+      | Required for processing functions     |
+| Scipy      | 1.9.2+     | Required for processing functions     |
 +------------+------------+---------------------------------------+
 | Matplotlib | 2.2.3+     | Optional, required for some functions |
 |            |            | such as interactive phase correction  |
@@ -54,7 +54,7 @@ Unix/OSX Installation
 After installing the above dependencies download and extract the source
 distribution and run::
 
-    $ python setup.py install
+    $ python -m pip install .
 
 Windows Installation
 --------------------
