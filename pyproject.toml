@@ -29,32 +29,26 @@ classifiers = [
     "Operating System :: POSIX :: Linux",
 ]
 dependencies = [
-    "numpy",
-    "scipy",
+    "numpy>=1.16.0,<3.0.0",
+    "scipy>=0.16.0,<2.0.0",
 ]
 
 [project.optional-dependencies]
 docs = [
-    "sphinx",
+    "sphinx>=4.0.0",
     "sphinx_rtd_theme",
     "numpydoc",
 ]
 test = [
-    "pytest",
+    "pytest>=6.0.0",
 ]
 
 [project.urls]
-Homepage = "http://www.nmrglue.com"
+Homepage = "https://www.nmrglue.com"
 
 [tool.setuptools]
-packages = [
-    "nmrglue",
-    "nmrglue.analysis",
-    "nmrglue.analysis.tests",
-    "nmrglue.fileio",
-    "nmrglue.fileio.tests",
-    "nmrglue.process",
-    "nmrglue.process.nmrtxt",
-    "nmrglue.util",
-]
 include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["nmrglue", "nmrglue.*"]
