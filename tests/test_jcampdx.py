@@ -3,6 +3,7 @@
 import os
 import tempfile
 import numpy as np
+import pytest
 import nmrglue as ng
 from setup import DATA_DIR
 
@@ -268,5 +269,70 @@ def test_jcampdx_show_all_data():
         assert len(data_all['imaginary']) == 1
         assert np.allclose(data_all['real'][0], [25.0, 50.0])
         assert np.allclose(data_all['imaginary'][0], [500.0, 1000.0])
+    finally:
+        os.remove(path)
+
+
+# NTUPLES data whose dependent variable is declared as something other
+# than R/I, as written by JEOL/MestReNova and Bruker for 2D spectra: the
+# variable list is (F1, F2, Y) and every page is an (F2++(Y..Y)) table.
+_NTUPLES_Y_TEMPLATE = (
+    "##TITLE=Test NTUPLES with Y symbol\n"
+    "##JCAMPDX=6.0\n"
+    "##DATATYPE=NMR SPECTRUM\n"
+    "##DATA CLASS=NTUPLES\n"
+    "##NUM DIM=2\n"
+    "##NTUPLES=NMR SPECTRUM\n"
+    "##VAR_NAME=FREQUENCY1, FREQUENCY2, SPECTRUM\n"
+    "##SYMBOL=F1, F2, Y\n"
+    "##VAR_TYPE=INDEPENDENT, INDEPENDENT, DEPENDENT\n"
+    "##VAR_FORM=AFFN, AFFN, ASDF\n"
+    "%s"
+    "##PAGE=F1=1\n"
+    "##DATA TABLE=(F2++(Y..Y)), PROFILE\n"
+    "1.0 10 20\n"
+    "##PAGE=F1=2\n"
+    "##DATA TABLE=(F2++(Y..Y)), PROFILE\n"
+    "1.0 30 40\n"
+    "##END=\n"
+)
+
+
+def _write_jcamp(content):
+    fd, path = tempfile.mkstemp()
+    with os.fdopen(fd, 'w') as f:
+        f.write(content)
+    return path
+
+
+def test_jcampdx_ntuples_symbol_factor():
+    '''NTUPLES FACTOR is picked by the table's own dependent symbol'''
+    # Y is the third entry of SYMBOL, so its factor is the third of FACTOR
+    path = _write_jcamp(_NTUPLES_Y_TEMPLATE % "##FACTOR=1, 1, 2.0\n")
+    try:
+        # all pages, each scaled by Y's factor and not by F1's or F2's
+        _, data_all = ng.jcampdx.read(path, show_all_data=True)
+        assert isinstance(data_all, dict)
+        assert len(data_all['real']) == 2
+        assert data_all['imaginary'] == []
+        assert np.allclose(data_all['real'][0], [20.0, 40.0])
+        assert np.allclose(data_all['real'][1], [60.0, 80.0])
+
+        # the single-array form is scaled identically
+        _, data = ng.jcampdx.read(path, show_all_data=False)
+        assert np.allclose(data, [20.0, 40.0])
+    finally:
+        os.remove(path)
+
+
+def test_jcampdx_ntuples_symbol_factor_missing():
+    '''NTUPLES data is left unscaled, with a warning, if its FACTOR is absent'''
+    # FACTOR declares only the two independent variables, so Y has none
+    path = _write_jcamp(_NTUPLES_Y_TEMPLATE % "##FACTOR=1, 1\n")
+    try:
+        with pytest.warns(UserWarning, match="no FACTOR found for symbol Y"):
+            _, data_all = ng.jcampdx.read(path, show_all_data=True)
+        assert np.allclose(data_all['real'][0], [10.0, 20.0])
+        assert np.allclose(data_all['real'][1], [30.0, 40.0])
     finally:
         os.remove(path)

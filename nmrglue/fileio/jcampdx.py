@@ -436,9 +436,14 @@ def _parse_data(datastring):
     datalines = datastring.split("\n")
     headerline = datalines[0]
 
+    # the dependent variable symbol is declared in the variable list
+    # of the header line, e.g. (X++(R..R)) -> R, (F2++(Y..Y)) -> Y
     datatype = "R"
-    if "I..I" in headerline:
-        datatype = "I"
+    match = re.search(
+        r"\(\s*[A-Za-z][A-Za-z0-9]*\s*\+\+\s*\(\s*([A-Za-z][A-Za-z0-9]*)\s*\.\.",
+        headerline)
+    if match:
+        datatype = match.group(1)
 
     datalines = datalines[1:]  # get rid of the header line (e.g. (X++(Y..Y)))
     mode = _detect_format(datalines[0])
@@ -467,32 +472,27 @@ def get_is_ntuples(dic):
     return is_ntuples
 
 
+def find_factor(dic, symbol):
+    '''
+    Helper to find the scaling factor of the given symbol (e.g. "R", "I"
+    or "Y") from the NTUPLES ##SYMBOL= and ##FACTOR= records, whose
+    comma-separated entries correspond by position.
+    Returns None if the factor cannot be determined.
+    '''
+    try:
+        symbols = [s.strip() for s in dic["SYMBOL"][0].split(",")]
+        factors = [s.strip() for s in dic["FACTOR"][0].split(",")]
+        return float(factors[symbols.index(symbol)])
+    except (KeyError, IndexError, ValueError):
+        return None
+
+
 def find_yfactors(dic):
     '''
     Helper to find yfactors from NTUPLES format.
     Returns YFactors in tuple with order (R,I)
     '''
-
-    # first check which column is R and I:
-    index_r = None
-    index_i = None
-    try:
-        symbols = dic["SYMBOL"][0].split(",")
-        symbols = [s.strip() for s in symbols]
-        index_r = symbols.index("R")
-        index_i = symbols.index("I")
-    except (KeyError, IndexError, ValueError):
-        return (None, None)
-
-    try:
-        factors = dic["FACTOR"][0].split(",")
-        factors = [s.strip() for s in factors]
-        factor_r = float(factors[index_r])
-        factor_i = float(factors[index_i])
-    except (KeyError, IndexError, ValueError):
-        return (None, None)
-
-    return (factor_r, factor_i)
+    return (find_factor(dic, "R"), find_factor(dic, "I"))
 
 
 def getdataarray(dic, show_all_data=False):
@@ -529,6 +529,16 @@ def getdataarray(dic, show_all_data=False):
                 if parseret is None:
                     return None
                 data, datatype = parseret
+                # scale by the factor of this table's own dependent
+                # symbol: an (X++(I..I)) table gets I's factor, an
+                # (X++(R..R)) table R's, so factors can never be
+                # applied to the wrong component
+                factor = find_factor(dic, datatype)
+                if factor is None:
+                    warn("NTUPLES: no FACTOR found for symbol %s, "
+                         "data not scaled" % datatype)
+                else:
+                    data = data * factor
                 if datatype == "I":
                     idatalist.append(data)
                 else:
@@ -567,21 +577,8 @@ def getdataarray(dic, show_all_data=False):
         return None
 
     # apply YFACTOR to data if available
-    if is_ntuples:
-        yfactor_r, yfactor_i = find_yfactors(dic)
-        if yfactor_r is None or yfactor_i is None:
-            warn("NTUPLES: YFACTORs not applied, parsing failed")
-        elif show_all_data:
-            for i in range(len(data['real'])):
-                data['real'][i] = data['real'][i] * yfactor_r
-            for i in range(len(data['imaginary'])):
-                data['imaginary'][i] = data['imaginary'][i] * yfactor_i
-        else:
-            if data[0] is not None:
-                data[0] = data[0] * yfactor_r
-            if data[1] is not None:
-                data[1] = data[1] * yfactor_i
-    else:
+    # (NTUPLES data was already scaled per-table above)
+    if not is_ntuples:
         try:
             yfactor = float(dic["YFACTOR"][0])
             data = data * yfactor
