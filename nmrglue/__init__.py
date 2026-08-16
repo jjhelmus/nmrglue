@@ -3,4 +3,4 @@ from .process import *
 from .util import *
 from .analysis import *
 
-__version__ = '0.12'
+__version__ = '0.13-dev'
