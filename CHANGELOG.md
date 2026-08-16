@@ -1,5 +1,16 @@
-0.12 (Unreleased)
+0.12 (2026-08-16)
 =================
+* Bruker to csdm conversion returns the correct dimension units (#227)
+* When reading bruker files both utf-8 and cp1252 encodings are tried (#239)
+* Correctly read Bruker data  in floating point format (#249)
+* Support reading partially acquired Bruker data (#252)
+* Add support for reading JEOL jdf format (#228)
+* Add support for reading RS2D/QUAD format (#230)
+* Add the update_uc function to update a unit_conversion object (#250)
+* Add a guess_tables function for use when reading Tecmat sequence tables (#257)
+* The read function in nmrml can optionally return processed data (#232)
+* Add support for Numpy 2.0+ (#224, #248)
+* Various minor fixes (#233, #236, #242, #238, #246, #245, #251)
 
 
 0.11 (2024-10-29)
