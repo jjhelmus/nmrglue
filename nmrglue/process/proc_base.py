@@ -7,10 +7,10 @@ units of points unless otherwise noted.
 
 # TODO determine which of these work on N-dimension and which assume 2D
 
+from functools import lru_cache
 from itertools import product
 import numpy as np
 import scipy.signal
-import scipy.linalg
 
 pi = np.pi
 
@@ -803,6 +803,50 @@ def gray(n):
     return g
 
 
+@lru_cache(maxsize=None)
+def _walsh_sequency_permutation(order):
+    """
+    Return the permutation which converts Hadamard order into Walsh/sequency
+    order for vectors of size ``2 ** order``.
+    """
+    size = 2 ** order
+    bit_reversal = [bin2int(int2bin(value, digits=order)[::-1])
+                    for value in range(size)]
+    return np.take(np.asarray(bit_reversal, dtype=np.intp),
+                   np.asarray(gray(order), dtype=np.intp))
+
+
+def _fwht_last_axis(data, *, copy=True):
+    """
+    Fast Walsh-Hadamard transform along the last axis.
+
+    Parameters
+    ----------
+    data : array_like
+        Input data. The transform is performed along the last axis.
+    copy : bool, optional
+        If True (default), operate on a copy of ``data`` and return the
+        transformed copy. If False, attempt to operate in-place on the
+        provided buffer (or a view of it), which can avoid an extra
+        allocation when ``data`` is already a suitable working array.
+    """
+    if copy:
+        out = np.array(data, copy=True)
+    else:
+        # Use a view of the input data; caller is responsible for ensuring
+        # that ``data`` is writeable and has an appropriate shape.
+        out = np.asarray(data)
+    h = 1
+    while h < out.shape[-1]:
+        reshaped = out.reshape(*out.shape[:-1], -1, 2 * h)
+        left = reshaped[..., :h].copy()
+        right = reshaped[..., h:2 * h].copy()
+        reshaped[..., :h] = left + right
+        reshaped[..., h:2 * h] = left - right
+        h *= 2
+    return out
+
+
 def ha(data):
     """
     Hadamard Transform
@@ -826,32 +870,23 @@ def ha(data):
     http://en.wikipedia.org/wiki/Fast_Hadamard_transform
 
     """
-    # implementation is a proof of concept and EXTEMEMLY SLOW
-
     # determine the order and final size of input vectors
-    ord = int(np.ceil(np.log2(data.shape[-1])))  # Walsh/Hadamard order
-    max = 2 ** ord
+    order = int(np.ceil(np.log2(data.shape[-1])))  # Walsh/Hadamard order
+    max_size = 2 ** order
 
     # zero fill to power of 2
-    pad = max - data.shape[-1]
-    zdata = zf(data, pad)
+    pad = max_size - data.shape[-1]
+    if pad:
+        zdata = zf(data, pad)
+    else:
+        zdata = np.asarray(data)
 
-    # Multiply each vector by the hadamard matrix
-    nat = np.zeros(zdata.shape, dtype=zdata.dtype)
-    H = scipy.linalg.hadamard(max)
-    nat = np.dot(zdata, H)
-    nat = np.array(nat, dtype=data.dtype)
-
-    # Bit-Reversal Permutation
-    s = [int2bin(x, digits=ord)[::-1] for x in range(max)]
-    brp = [bin2int(x) for x in s]
-    brp_data = np.take(nat, brp, axis=-1)
-
-    # Gray code permutation (bit-inverse)
-    gp = gray(ord)
-    gp_data = np.take(brp_data, gp, axis=-1)
-
-    return gp_data
+    # Transform in Hadamard order, then permute into Walsh/sequency order.
+    nat = _fwht_last_axis(zdata)
+    return np.asarray(
+        np.take(nat, _walsh_sequency_permutation(order), axis=-1),
+        dtype=data.dtype,
+    )
 
 
 def ht(data, N=None):
@@ -873,17 +908,12 @@ def ht(data, N=None):
         NMR data which has been Hilvert transformed.
 
     """
-    # XXX come back and fix this when a sane version of scipy.signal.hilbert
-    # is included with scipy 0.8
+    if N is None:
+        N = data.shape[-1]
 
-    # create an empty output array
     fac = N / data.shape[-1]
-    z = np.empty(data.shape, dtype=(data.flat[0] + data.flat[1] * 1.j).dtype)
-    if data.ndim == 1:
-        z[:] = scipy.signal.hilbert(data.real, N)[:data.shape[-1]] * fac
-    else:
-        for i, vec in enumerate(data):
-            z[i] = scipy.signal.hilbert(vec.real, N)[:data.shape[-1]] * fac
+    z = scipy.signal.hilbert(data.real, N=N, axis=-1)[..., :data.shape[-1]]
+    z = np.asarray(z * fac, dtype=np.result_type(data.real.dtype, np.complex64))
 
     # correct the real data as sometimes it changes
     z.real = data.real

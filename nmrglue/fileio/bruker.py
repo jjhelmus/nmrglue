@@ -1513,23 +1513,36 @@ def reorder_submatrix(data, shape, submatrix_shape, reverse=False):
     if len(submatrix_shape) == 1 or len(shape) == 1:
         return data
 
-    sub_per_dim = [int(i / j) for i, j in zip(shape, submatrix_shape)]
-    nsubs = np.prod(sub_per_dim)
+    shape = tuple(shape)
+    submatrix_shape = tuple(submatrix_shape)
+    sub_per_dim_list = []
+    for dim, sub_dim in zip(shape, submatrix_shape):
+        if sub_dim == 0:
+            raise ValueError("submatrix dimension cannot be zero: {}".format(submatrix_shape))
+        if dim % sub_dim != 0:
+            raise ValueError(
+                "Shape {} is not evenly divisible by submatrix_shape {}".format(shape, submatrix_shape)
+            )
+        sub_per_dim_list.append(dim // sub_dim)
+    sub_per_dim = tuple(sub_per_dim_list)
+    ndim = len(shape)
 
     if reverse:
-        rdata = np.empty([nsubs] + list(submatrix_shape))
-    else:
-        data = data.reshape([nsubs] + list(submatrix_shape))
-        rdata = np.empty(shape, dtype=data.dtype)
+        interleaved_shape = []
+        for count, sub in zip(sub_per_dim, submatrix_shape):
+            interleaved_shape.extend((count, sub))
+        axes = tuple(range(0, 2 * ndim, 2)) + tuple(range(1, 2 * ndim, 2))
+        return (np.asarray(data)
+                .reshape(interleaved_shape)
+                .transpose(axes)
+                .reshape(shape))
 
-    for sub_num, sub_idx in enumerate(np.ndindex(tuple(sub_per_dim))):
-        sub_slices = [slice(i * j, (i + 1) * j) for i, j in
-                      zip(sub_idx, submatrix_shape)]
-        if reverse:
-            rdata[sub_num] = data[tuple(sub_slices)]
-        else:
-            rdata[tuple(sub_slices)] = data[sub_num]
-    return rdata.reshape(shape)
+    reshaped = np.asarray(data).reshape(sub_per_dim + submatrix_shape)
+    axes = tuple(
+        axis for pair in zip(range(ndim), range(ndim, 2 * ndim))
+        for axis in pair
+    )
+    return reshaped.transpose(axes).reshape(shape)
 
 
 # Bruker binary (fid/ser) reading and writing
