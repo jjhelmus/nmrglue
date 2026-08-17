@@ -109,10 +109,13 @@ def test_jcampdx1():
 
         # check udic:
         udic = ng.jcampdx.guess_udic(dic, data)
-        assert np.abs(udic[0]["obs"]-100.4) < epsilon_e
-        assert np.abs(udic[0]["sw"]-24038.5) < epsilon_e
+        assert np.abs(udic[0]["obs"] - 100.4) < epsilon_e
+        assert np.abs(udic[0]["sw"] - 24038.5) < epsilon_e
         assert udic[0]["size"] == npoints_target
         assert udic[0]["label"] == "13C"
+        assert udic[0]["time"] is False
+        assert udic[0]["freq"] is True
+        assert udic[0]["complex"] is False
 
 
 def test_jcampdx2():
@@ -122,7 +125,7 @@ def test_jcampdx2():
     # npoints, first, last, freq, sweep
     # note: first and last are raw values from datalines for convenience,
     # i.e. not scaled with YFACTORS
-    cases.append(("TESTFID.DX", 16384, 573, -11584, 100.4, 0.6815317))
+    cases.append(("TESTFID.DX", 16384, 573, -11584, 100.4, 16384/0.6815317))
     cases.append(("bruker1.dx", 16384, -5, -51, 200.13, 4098.3606557377))
     cases.append(("bruker2.dx", 16384, 42, 422, 300.13336767, 6024.096385479))
     cases.append(("bruker3.dx", 16384, 22, -313, 300.13336729, 6024.096385479))
@@ -143,9 +146,11 @@ def test_jcampdx2():
         print(case[0])
         # read
         casepath = os.path.join(DATA_DIR, "jcampdx", case[0])
-        dic, data = ng.jcampdx.read(casepath)
-        if isinstance(data, list):
-            data = data[0]  # for data with both R&I, check only R
+        dic, rawdata = ng.jcampdx.read(casepath)
+        if isinstance(rawdata, list):
+            data = rawdata[0]  # for data with both R&I, check only R
+        else:
+            data = rawdata
 
         # since first and last are raw values, do yfactor
         # back-scaling here
@@ -164,8 +169,22 @@ def test_jcampdx2():
 
         # check udic
         udic = ng.jcampdx.guess_udic(dic, data)
-        assert np.abs(udic[0]["obs"]-case[4]) < epsilon
-        assert np.abs(udic[0]["sw"]-case[5]) < epsilon
+        assert np.abs(udic[0]["obs"] - case[4]) < epsilon
+        assert np.abs(udic[0]["sw"] - case[5]) < epsilon
+        if dic["DATATYPE"][0] == "NMR FID":
+            assert udic[0]["time"] is True
+            assert udic[0]["freq"] is False
+            assert udic[0]["complex"] is False
+            assert len(rawdata) == 2  # [R,I]
+            # FID: merge raw arrays and assert changes
+            data = ng.jcampdx.get_complex_array(rawdata)
+            assert len(data) == case[1]
+            udic = ng.jcampdx.guess_udic(dic, data)
+            assert udic[0]["complex"] is True
+        else:
+            assert udic[0]["time"] is False
+            assert udic[0]["freq"] is True
+            assert udic[0]["complex"] is False
 
 
 def test_jcampdx_dicstructure():
@@ -194,6 +213,7 @@ def test_jcampdx_dicstructure():
     assert dic["_datatype_NA"][0]["DUMMYENTRY"][0] == "4.0"
     assert dic["_datatype_NA"][0]["_comments"][0] == "comment line"
     assert dic["_datatype_NA"][0]["_comments"][1] == "another comment"
+
 
 def test_jcampdx_dicstructure2():
     '''JCAMP-DX read: ensure correct dic structure
