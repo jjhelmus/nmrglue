@@ -37,6 +37,22 @@ def test_read_pdata():
     assert len(dic['procs'].keys()) == 131
 
 
+def test_read_procs_file_discovers_singular_proc():
+    """The current and status processing files are discovered separately."""
+
+    base = {"_coreheader": ["##TITLE= Parameter file"], "_comments": []}
+    with tempfile.TemporaryDirectory() as td:
+        ng.bruker.write_jcamp(dict(base, ABSF1=100), os.path.join(td, "procs"))
+        ng.bruker.write_jcamp(dict(base, ABSF1=200), os.path.join(td, "proc"))
+
+        explicit = ng.bruker.read_procs_file(td, ["procs", "proc"])
+        assert explicit["proc"]["ABSF1"] == 200
+
+        discovered = ng.bruker.read_procs_file(td)
+        assert discovered["procs"]["ABSF1"] == 100
+        assert discovered["proc"]["ABSF1"] == 200
+
+
 def test_reorder_submatrix():
     """reordering submatrix back and forth"""
 
