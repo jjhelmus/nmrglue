@@ -4,7 +4,6 @@ JCAMP-DX parameter (acqus) files, and Bruker pulse program (pulseprogram)
 files.
 """
 
-import locale
 import io
 
 __developer_info__ = """
@@ -2166,7 +2165,7 @@ def rm_dig_filter(
 
 # JCAMP-DX functions
 
-def read_jcamp(filename, encoding=locale.getpreferredencoding()):
+def read_jcamp(filename, encoding=None):
     """
     Read a Bruker JCAMP-DX file into a dictionary.
 
@@ -2178,8 +2177,11 @@ def read_jcamp(filename, encoding=locale.getpreferredencoding()):
     ----------
     filename : str
         Filename of Bruker JCAMP-DX file.
-    encoding : str
-        Encoding of Bruker JCAMP-DX file. Defaults to the system default locale.
+    encoding : str, optional
+        Encoding of Bruker JCAMP-DX file. When given, it is tried first;
+        otherwise (and on failure) the file is decoded by trying utf-8,
+        cp1252 and latin-1 in order, using the first that decodes without
+        error. As latin-1 maps every byte, reading never fails on decoding.
 
     Returns
     -------
@@ -2197,18 +2199,35 @@ def read_jcamp(filename, encoding=locale.getpreferredencoding()):
 
     """
     dic = {"_coreheader": [], "_comments": []}  # create empty dictionary
-    try:
-        with open(filename, 'r', encoding=encoding) as f:
-            dic=parse_jcamp_file(f,dic)
-    except:
-        if encoding == "utf-8":
-            with open(filename, 'r', encoding="cp1252") as f:
-                dic=parse_jcamp_file(f,dic)
-        else:
-            with open(filename, 'r', encoding="utf-8") as f:
-                dic=parse_jcamp_file(f,dic)
 
-    return dic
+    with open(filename, 'rb') as f:
+        raw = f.read()
+
+    # utf-8-sig rather than utf-8 so that a byte order mark is consumed
+    # instead of being left on the first line, where it would stop ##TITLE=
+    # from being recognised. It decodes BOM-less files identically to utf-8.
+    codecs_to_try = []
+    for enc in ([encoding] if encoding is not None else []) + \
+            ['utf-8-sig', 'cp1252', 'latin-1']:
+        if enc not in codecs_to_try:
+            codecs_to_try.append(enc)
+
+    # strict decoding with each candidate in turn: a wrongly-guessed codec
+    # raises instead of silently corrupting characters. latin-1 decodes any
+    # byte sequence, so the loop always produces text.
+    for enc in codecs_to_try:
+        try:
+            text = raw.decode(enc)
+            break
+        except UnicodeDecodeError:
+            continue
+
+    if enc == 'latin-1' and enc != codecs_to_try[0]:
+        warn("%s: could not be decoded as %s; fell back to latin-1, "
+             "non-ASCII characters may be incorrect."
+             % (filename, " or ".join(codecs_to_try[:-1])))
+
+    return parse_jcamp_file(io.StringIO(text), dic)
 
 def parse_jcamp_file(f,dic):
     """
