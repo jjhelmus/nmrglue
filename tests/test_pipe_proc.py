@@ -4,6 +4,7 @@
 
 import os
 import nmrglue as ng
+import pytest
 
 # Framework functions
 
@@ -58,47 +59,47 @@ def _standard_test(func_name, num_files, ignore_pipe_display=False):
 # Apodization functions #
 #########################
 
-
+@pytest.mark.dependencies
 def test_apod():
     """ APOD function """
     return _standard_test('apod', 7)
 
-
+@pytest.mark.dependencies
 def test_em():
     """ EM function """
     return _standard_test('em', 2)
 
-
+@pytest.mark.dependencies
 def test_gm():
     """ GM function """
     return _standard_test('gm', 3)
 
-
+@pytest.mark.dependencies
 def test_gmb():
     """ GMB function """
     return _standard_test('gmb', 2)
 
-
+@pytest.mark.failing
 def test_jmod():
     """ JMOD function """
     return _standard_test('jmod', 2)
 
-
+@pytest.mark.dependencies
 def test_sp():
     """ SP function """
     return _standard_test('sp', 2)
 
-
+@pytest.mark.dependencies
 def test_sine():
     """ SINE function """
     return _standard_test('sine', 2)
 
-
+@pytest.mark.dependencies
 def test_tm():
     """ TM function """
     return _standard_test('tm', 2)
 
-
+@pytest.mark.dependencies
 def test_tri():
     """ TRI function """
     return _standard_test('tri', 2)
@@ -107,23 +108,24 @@ def test_tri():
 # Shift functions #
 ###################
 
-
+@pytest.mark.dependencies
 def test_rs():
     """ RS function """
     return _standard_test('rs', 5)
 
-
+@pytest.mark.dependencies
 def test_ls():
     """ LS function """
     return _standard_test('ls', 5)
 
-
+@pytest.mark.dependencies
 def test_cs():
     """ CS function """
     return _standard_test('cs', 8)
 
 
 # XXX fsh test 1-4 fail
+@pytest.mark.dependencies
 def test_fsh():
     """ FSH function """
     return _standard_test('fsh', 0)
@@ -133,12 +135,12 @@ def test_fsh():
 # Transforms #
 ##############
 
-
+@pytest.mark.dependencies
 def test_ft():
     """ FT function """
     return _standard_test('ft', 8)
 
-
+@pytest.mark.dependencies
 def test_rft():
     """ RFT function """
     # return _standard_test('rft', 14)    # XXX tests 9-11 fail
@@ -152,12 +154,12 @@ def test_rft():
     glue_script = './rft.py'
     return _perform_test(glue_script, pipe_script, glue_files, pipe_files)
 
-
+@pytest.mark.dependencies
 def test_ha():
     """ HA function """
     return _standard_test('ha', 2)
 
-
+@pytest.mark.failing
 def test_ht():
     """ HT function """
     # return _standard_test('ht', 8)  # XXX test 4 fails
@@ -174,27 +176,27 @@ def test_ht():
 # Standard NMR Functions #
 ##########################
 
-
+@pytest.mark.dependencies
 def test_ps():
     """ PS function """
     return _standard_test('ps', 6)
 
-
+@pytest.mark.failing
 def test_tp():
     """ TP function """
     return _standard_test('tp', 9, ignore_pipe_display=True)
 
-
+@pytest.mark.dependencies
 def test_ytp():
     """ YTP function """
     return _standard_test('ytp', 3)
 
-
+@pytest.mark.dependencies
 def test_xy2yx():
     """ XY2YX function """
     return _standard_test('xy2yx', 3)
 
-
+@pytest.mark.dependencies
 def test_zf():
     """ ZF function """
     return _standard_test('zf', 5)
@@ -204,57 +206,57 @@ def test_zf():
 # Basic Utilities #
 ###################
 
-
+@pytest.mark.dependencies
 def test_add():
     """ ADD function """
     return _standard_test('add', 4)     # Note that test 5 fails intentionally
 
-
+@pytest.mark.dependencies
 def test_dx():
     """ DX function """
     return _standard_test('dx', 1)
 
-
+@pytest.mark.failing
 def test_ext():
     """ EXT function """
     return _standard_test('ext', 11, ignore_pipe_display=True)
 
-
+@pytest.mark.dependencies
 def test_integ():
     """ INTEG function """
     return _standard_test('integ', 1)
 
-
+@pytest.mark.dependencies
 def test_mc():
     """ MC function """
     return _standard_test('mc', 2)
 
-
+@pytest.mark.dependencies
 def test_mir():
     """ MIR function """
     return _standard_test('mir', 14)
 
-
+@pytest.mark.dependencies
 def test_mult():
     """ MULT function """
     return _standard_test('mult', 3)    # Note that test 4 fails intentionally
 
-
+@pytest.mark.dependencies
 def test_rev():
     """ REV function """
     return _standard_test('rev', 3)
 
-
+@pytest.mark.dependencies
 def test_set():
     """ SET function """
     return _standard_test('set', 4)
 
-
+@pytest.mark.dependencies
 def test_shuf():
     """ SHUF function """
     return _standard_test('shuf', 7)
 
-
+@pytest.mark.dependencies
 def test_sign():
     """ SIGN function """
     return _standard_test('sign', 8)
@@ -264,47 +266,47 @@ def test_sign():
 # Misc #
 ########
 
-
+@pytest.mark.dependencies
 def test_coadd():
     """ COADD function """
     return _standard_test('coadd', 2)
 
-
+@pytest.mark.dependencies
 def test_coad():
     """ COAD function """
     return _standard_test('coad', 2)
 
-
+@pytest.mark.dependencies
 def test_dev():
     """ DEV function """
     return _standard_test('dev', 0)
 
-
+@pytest.mark.dependencies
 def test_null():
     """ NULL function """
     return _standard_test('null', 2)
 
-
+@pytest.mark.dependencies
 def test_qart():
     """ QART function """
     return _standard_test('qart', 2)
 
-
+@pytest.mark.dependencies
 def test_qmix():
     """ QMIX function """
     return _standard_test('qmix', 2)
 
-
+@pytest.mark.dependencies
 def test_smo():
     """ SMO function """
     return _standard_test('smo', 3)
 
-
+@pytest.mark.failing
 def test_zd():
     """ ZD function """
     return _standard_test('zd', 4)
 
-
+@pytest.mark.failing
 def test_save():
     """ SAVE function """
     return _standard_test('save', 2)
@@ -314,12 +316,12 @@ def test_save():
 # Baseline functions #
 ######################
 
-
+@pytest.mark.dependencies
 def test_base():
     """ BASE function """
     return _standard_test('base', 7)
 
-
+@pytest.mark.dependencies
 def test_cbf():
     """ CBF function """
     return _standard_test('cbf', 4)
@@ -328,7 +330,7 @@ def test_cbf():
 # Units #
 #########
 
-
+@pytest.mark.dependencies
 def test_units():
     """ Units """
     return _standard_test('units', 17)
@@ -337,7 +339,7 @@ def test_units():
 # Inetgration Tests #
 #####################
 
-
+@pytest.mark.dependencies
 def test_2D_complex_processing():
     """ 2D complex mode processing pipeline """
     return _standard_test('2d_complex_processing', 1)

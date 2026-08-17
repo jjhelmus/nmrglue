@@ -4,6 +4,7 @@ import os
 
 import numpy as np
 import nmrglue as ng
+import pytest
 
 from setup import DATA_DIR
 JEOLDATA = os.path.join(DATA_DIR, "jeol")
@@ -67,7 +68,7 @@ def test_2d_rr():
 
     pass
 
-
+@pytest.mark.slow
 def test_2d_cc_1():
     """data with two complex dimensions"""
 
@@ -76,7 +77,7 @@ def test_2d_cc_1():
     pdic, pdata = ng.pipe.read(f"{JEOLDATA}/{basename}.fid")
     assert np.allclose(jdata, pdata, rtol=1e-7)
 
-
+@pytest.mark.slow
 def test_2d_cc_1_udic():
     basename = "cyclosporine_tocsy-1-1"
     dic, data = ng.jeol.read(os.path.join(JEOLDATA, f"{basename}.jdf"))
@@ -95,6 +96,7 @@ def test_2d_cc_1_udic():
     assert udic[1]["label"] == "Proton"
     assert udic[1]["encoding"] == "complex"
 
+@pytest.mark.slow
 def test_2d_cc_2():
     """data with two complex dimensions"""
 
@@ -120,7 +122,7 @@ def test_2d_rc_nus():
     pdic, pdata = ng.pipe.read(f"{JEOLDATA}/{basename}.fid")
     assert np.allclose(jdata, pdata, rtol=1e-7)
 
-
+@pytest.mark.slow
 def test_2d_rc():
     """data with two real_complex dimensions"""
 
