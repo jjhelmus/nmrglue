@@ -5,12 +5,13 @@ as well as in-house denoising models.
 """
 
 import numpy as np
-import scipy.optimize
-import nmrdenoise as nd
 from nmrglue.fileio.bruker import scale_pdata
 
 
 def denoise(nmr_file=None, data=None, model="Desperate"):
+
+    import nmrdenoise as nd
+
     """
     Computes denoised data across all models (ML and non-ML).
     
@@ -18,7 +19,7 @@ def denoise(nmr_file=None, data=None, model="Desperate"):
 
     Parameters:
     -----------
-    data : array_like (2D array real + imaginary)
+    data : numpy.array (2D array real + imaginary)
         The input NMR data after FFT has been applied by nmrglue.
     model : str, optional
         The algorithm to use for denoising. Defaults to "Desperate".
