@@ -1,7 +1,9 @@
 """ Tests for the fileio.jcampdx submodule """
 
 import os
+import tempfile
 import numpy as np
+import pytest
 import nmrglue as ng
 from setup import DATA_DIR
 
@@ -222,3 +224,210 @@ def test_jcampdx_dicstructure2():
     # check data
     assert len(data2) == 8
     assert data2[-1] == 1.0
+
+
+def test_jcampdx_show_all_data():
+    # Test NTUPLES with show_all_data=True
+    content_ntup = (
+        "##TITLE=Test NTUPLES\n"
+        "##JCAMPDX=5.0\n"
+        "##DATATYPE=NMR SPECTRUM\n"
+        "##DATA CLASS=NTUPLES\n"
+        "##NUM DIM=1\n"
+        "##SYMBOL=X, R, I\n"
+        "##VARNAME=FREQUENCY, REAL, IMAGINARY\n"
+        "##VARTYPE=RANDOM, DEPENDENT, DEPENDENT\n"
+        "##VARFORM=(X++(R..R))\n"
+        "##FACTOR=1, 2.5, 5.0\n"
+        "##PAGE=N=1\n"
+        "##DATA TABLE=(X++(R..R)), R\n"
+        "1.0 10 20 30\n"
+        "##PAGE=N=2\n"
+        "##DATA TABLE=(X++(I..I)), I\n"
+        "1.0 100 200 300\n"
+        "##END=\n"
+    )
+
+    fd, path = tempfile.mkstemp()
+    try:
+        with os.fdopen(fd, 'w') as f:
+            f.write(content_ntup)
+
+        # Test normal read (returns only first real & imaginary arrays)
+        dic, data = ng.jcampdx.read(path, show_all_data=False)
+        assert len(data) == 2
+        # YFACTOR applied: R factor=2.5, I factor=5.0
+        assert np.allclose(data[0], [25.0, 50.0, 75.0])
+        assert np.allclose(data[1], [500.0, 1000.0, 1500.0])
+
+        # Test show_all_data=True (returns {'real': [...], 'imaginary': [...]})
+        dic, data_all = ng.jcampdx.read(path, show_all_data=True)
+        assert isinstance(data_all, dict)
+        assert 'real' in data_all
+        assert 'imaginary' in data_all
+        assert len(data_all['real']) == 1
+        assert len(data_all['imaginary']) == 1
+        assert np.allclose(data_all['real'][0], [25.0, 50.0, 75.0])
+        assert np.allclose(data_all['imaginary'][0], [500.0, 1000.0, 1500.0])
+
+        # size comes from a page, not from the dict's two keys, which a
+        # two-point spectrum would have hidden
+        udic = ng.jcampdx.guess_udic(dic, data_all)
+        assert udic[0]["size"] == 3
+    finally:
+        os.remove(path)
+
+
+# NTUPLES data whose dependent variable is declared as something other
+# than R/I, as written by JEOL/MestReNova and Bruker for 2D spectra: the
+# variable list is (F1, F2, Y) and every page is an (F2++(Y..Y)) table.
+_NTUPLES_Y_TEMPLATE = (
+    "##TITLE=Test NTUPLES with Y symbol\n"
+    "##JCAMPDX=6.0\n"
+    "##DATATYPE=NMR SPECTRUM\n"
+    "##DATA CLASS=NTUPLES\n"
+    "##NUM DIM=2\n"
+    "##NTUPLES=NMR SPECTRUM\n"
+    "##VAR_NAME=FREQUENCY1, FREQUENCY2, SPECTRUM\n"
+    "##SYMBOL=F1, F2, Y\n"
+    "##VAR_TYPE=INDEPENDENT, INDEPENDENT, DEPENDENT\n"
+    "##VAR_FORM=AFFN, AFFN, ASDF\n"
+    "%s"
+    "##PAGE=F1=1\n"
+    "##DATA TABLE=(F2++(Y..Y)), PROFILE\n"
+    "1.0 10 20\n"
+    "##PAGE=F1=2\n"
+    "##DATA TABLE=(F2++(Y..Y)), PROFILE\n"
+    "1.0 30 40\n"
+    "##END=\n"
+)
+
+
+def _write_jcamp(content):
+    fd, path = tempfile.mkstemp()
+    with os.fdopen(fd, 'w') as f:
+        f.write(content)
+    return path
+
+
+def test_jcampdx_ntuples_symbol_factor():
+    '''NTUPLES FACTOR is picked by the table's own dependent symbol'''
+    # Y is the third entry of SYMBOL, so its factor is the third of FACTOR
+    path = _write_jcamp(_NTUPLES_Y_TEMPLATE % "##FACTOR=1, 1, 2.0\n")
+    try:
+        # all pages, each scaled by Y's factor and not by F1's or F2's
+        _, data_all = ng.jcampdx.read(path, show_all_data=True)
+        assert isinstance(data_all, dict)
+        assert len(data_all['real']) == 2
+        assert data_all['imaginary'] == []
+        assert np.allclose(data_all['real'][0], [20.0, 40.0])
+        assert np.allclose(data_all['real'][1], [60.0, 80.0])
+
+        # the single-array form is scaled identically
+        _, data = ng.jcampdx.read(path, show_all_data=False)
+        assert np.allclose(data, [20.0, 40.0])
+    finally:
+        os.remove(path)
+
+
+def test_jcampdx_ntuples_symbol_factor_missing():
+    '''NTUPLES data is left unscaled, with a warning, if its FACTOR is absent'''
+    # FACTOR declares only the two independent variables, so Y has none
+    path = _write_jcamp(_NTUPLES_Y_TEMPLATE % "##FACTOR=1, 1\n")
+    try:
+        with pytest.warns(UserWarning, match="no FACTOR found for symbol Y"):
+            _, data_all = ng.jcampdx.read(path, show_all_data=True)
+        assert np.allclose(data_all['real'][0], [10.0, 20.0])
+        assert np.allclose(data_all['real'][1], [30.0, 40.0])
+    finally:
+        os.remove(path)
+
+
+# a two dimensional spectrum, stored the way JEOL, MestReNova and Bruker
+# write them: DATATYPE nD NMR SPECTRUM, one (F2++(Y..Y)) page per F1 value
+_ND_SPECTRUM = (
+    "##TITLE=Test nD NTUPLES\n"
+    "##JCAMPDX=6.0\n"
+    "##DATATYPE=nD NMR SPECTRUM\n"
+    "##DATA CLASS=NTUPLES\n"
+    "##NUM DIM=2\n"
+    "##.OBSERVE FREQUENCY=100.0\n"
+    "##.OBSERVE NUCLEUS=^1H\n"
+    "##NTUPLES=nD NMR SPECTRUM\n"
+    "##VAR_NAME=FREQUENCY1, FREQUENCY2, SPECTRUM\n"
+    "##SYMBOL=F1, F2, Y\n"
+    "##VAR_TYPE=INDEPENDENT, INDEPENDENT, DEPENDENT\n"
+    "##VAR_FORM=AFFN, AFFN, ASDF\n"
+    "##UNITS=HZ, HZ, ARBITRARY UNITS\n"
+    "##FIRST=500, 400, 10\n"
+    "##LAST=100, 200, 40\n"
+    "##FACTOR=1, 1, 2.0\n"
+    "##PAGE=F1=500\n"
+    "##DATA TABLE=(F2++(Y..Y)), PROFILE\n"
+    "1.0 10 20\n"
+    "##PAGE=F1=100\n"
+    "##DATA TABLE=(F2++(Y..Y)), PROFILE\n"
+    "1.0 30 40\n"
+    "##END=\n"
+)
+
+
+def test_jcampdx_read_nd_spectrum():
+    '''JCAMP-DX read: nD NMR SPECTRUM sections are found and scaled'''
+    path = _write_jcamp(_ND_SPECTRUM)
+    try:
+        dic, data_all = ng.jcampdx.read(path, show_all_data=True)
+
+        # every page is present, and scaled by Y's factor
+        assert len(data_all['real']) == 2
+        assert np.allclose(data_all['real'][0], [20.0, 40.0])
+        assert np.allclose(data_all['real'][1], [60.0, 80.0])
+
+        # the section's parameters were promoted, as for any other datatype
+        assert dic["DATATYPE"][0] == "nD NMR SPECTRUM"
+
+        # the udic describes the direct dimension: F2 is the abscissa of each
+        # page, so the sweep comes from F2's FIRST and LAST and not F1's
+        with pytest.warns(UserWarning, match="direct dimension only"):
+            udic = ng.jcampdx.guess_udic(dic, data_all)
+        assert udic[0]["size"] == 2
+        assert udic[0]["sw"] == 200.0
+        assert udic[0]["obs"] == 100.0
+        assert udic[0]["label"] == "1H"
+    finally:
+        os.remove(path)
+
+
+def test_jcampdx_prefers_1d_over_nd():
+    '''JCAMP-DX read: a 1D section wins over an nD one in the same file'''
+    # LINK file holding both, as Bruker and MestReNova write for 2D datasets
+    content = (
+        "##TITLE=Both\n"
+        "##JCAMPDX=6.0\n"
+        "##DATATYPE=LINK\n"
+        "##BLOCKS=2\n"
+        + _ND_SPECTRUM +
+        "##TITLE=The 1D part\n"
+        "##JCAMPDX=5.0\n"
+        "##DATATYPE=NMR SPECTRUM\n"
+        "##DATA CLASS=XYDATA\n"
+        "##FIRSTX=1\n"
+        "##LASTX=2\n"
+        "##XUNITS=HZ\n"
+        "##YFACTOR=1\n"
+        "##XYDATA=(X++(Y..Y))\n"
+        "1.0 7 8\n"
+        "##END=\n"
+        "##END=\n"
+    )
+    path = _write_jcamp(content)
+    try:
+        # the nD section is listed first but must not win, so that files which
+        # already returned their 1D spectrum keep returning it
+        dic, data = ng.jcampdx.read(path)
+        assert np.allclose(data, [7.0, 8.0])
+        assert dic["DATATYPE"][0] == "NMR SPECTRUM"
+        # the nD section is still reachable from the dic
+        assert "_datatype_NDNMRSPECTRUM" in dic
+    finally:
+        os.remove(path)
