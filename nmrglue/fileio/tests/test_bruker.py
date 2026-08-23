@@ -37,6 +37,49 @@ def test_read_pdata():
     assert len(dic['procs'].keys()) == 131
 
 
+def test_read_procs_file_prefers_current_values():
+    """The current proc file is preferred when both files are present."""
+
+    base = {"_coreheader": ["##TITLE= Parameter file"], "_comments": []}
+    with tempfile.TemporaryDirectory() as td:
+        status = dict(base, ABSF1=100, ABSF2=-100, SW_p=123)
+        current = dict(base, ABSF1=200, ABSF2=-200, SW_p=999)
+        status_2d = dict(base, ABSF1=300, ABSF2=-300, SW_p=321)
+        current_2d = dict(base, ABSF1=400, ABSF2=-400, SW_p=654)
+        ng.bruker.write_jcamp(status, os.path.join(td, "procs"))
+        ng.bruker.write_jcamp(current, os.path.join(td, "proc"))
+        ng.bruker.write_jcamp(status_2d, os.path.join(td, "proc2s"))
+        ng.bruker.write_jcamp(current_2d, os.path.join(td, "proc2"))
+
+        explicit = ng.bruker.read_procs_file(td, ["procs", "proc"])
+        assert explicit["procs"]["ABSF1"] == 100
+        assert explicit["proc"]["ABSF1"] == 200
+
+        discovered = ng.bruker.read_procs_file(td)
+        assert set(discovered) == {"procs", "proc2s"}
+        assert discovered["procs"]["ABSF1"] == 200
+        assert discovered["procs"]["ABSF2"] == -200
+        assert discovered["procs"]["SW_p"] == 999
+        assert discovered["proc2s"]["ABSF1"] == 400
+        assert discovered["proc2s"]["ABSF2"] == -400
+        assert discovered["proc2s"]["SW_p"] == 654
+
+
+def test_read_procs_file_uses_current_file_when_status_file_is_missing():
+    """A lone current proc file still populates the conventional key."""
+
+    base = {"_coreheader": ["##TITLE= Parameter file"], "_comments": []}
+    with tempfile.TemporaryDirectory() as td:
+        current = dict(base, ABSF1=200, ABSF2=-200)
+        ng.bruker.write_jcamp(current, os.path.join(td, "proc"))
+
+        discovered = ng.bruker.read_procs_file(td)
+
+        assert set(discovered) == {"procs"}
+        assert discovered["procs"]["ABSF1"] == 200
+        assert discovered["procs"]["ABSF2"] == -200
+
+
 def test_reorder_submatrix():
     """reordering submatrix back and forth"""
 
