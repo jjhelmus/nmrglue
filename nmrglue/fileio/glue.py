@@ -17,6 +17,7 @@ encoding    type of encoding, 'states', 'tppi', 'direct', etc
 freq        True for frequency domain data, False otherwise
 label       Axis label, ('13C', etc)
 obs         Observation frequency in MHz
+ref         Optional reference frequency in MHz
 size        Dimension size (R|I for direct dim, R+I for indirect)
 sw          Spectral width in Hz
 time        True for time domain data, False otherwise
@@ -42,8 +43,9 @@ def make_uc(dic, data, dim=-1):
     sw = dic[dim]["sw"]
     obs = dic[dim]["obs"]
     car = dic[dim]["car"]
+    ref = dic[dim].get("ref")
 
-    return fileiobase.unit_conversion(size, cplex, sw, obs, car)
+    return fileiobase.unit_conversion(size, cplex, sw, obs, car, ref)
 
 
 # dictionary/data creation functions (null functions)

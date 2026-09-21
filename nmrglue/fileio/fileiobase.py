@@ -66,9 +66,12 @@ class unit_conversion():
         Observation frequency in MHz.
     car : float
         Carrier frequency in Hz.
+    ref : float, optional
+        Reference frequency in MHz. If not provided, ``obs`` is used for ppm
+        conversions.
 
     """
-    def __init__(self, size, cplx, sw, obs, car):
+    def __init__(self, size, cplx, sw, obs, car, ref=None):
         """
         create and set up a unit_conversion object
         """
@@ -78,10 +81,12 @@ class unit_conversion():
         self._sw = float(sw)
         self._obs = float(obs)
         self._car = float(car)
+        self._ref = None if ref is None else float(ref)
 
         # derived units (these are in ppm)
-        self._delta = -self._sw / (self._size * self._obs)
-        self._first = self._car / self._obs - self._delta * self._size / 2.
+        ppm_freq = self._obs if self._ref is None else self._ref
+        self._delta = -self._sw / (self._size * ppm_freq)
+        self._first = self._car / ppm_freq - self._delta * self._size / 2.
 
     # individual unit conversion functions
     def __percent2pts(self, percent):
@@ -91,10 +96,12 @@ class unit_conversion():
         return pts * 100 / (self._size - 1.0)
 
     def __hz2pts(self, hz):
-        return ((hz / self._obs) - self._first) / self._delta
+        ppm_freq = self._obs if self._ref is None else self._ref
+        return ((hz / ppm_freq) - self._first) / self._delta
 
     def __pts2hz(self, pts):
-        return (pts * self._delta + self._first) * self._obs
+        ppm_freq = self._obs if self._ref is None else self._ref
+        return (pts * self._delta + self._first) * ppm_freq
 
     def __ppm2pts(self, ppm):
         return (ppm - self._first) / self._delta
@@ -359,7 +366,7 @@ def update_uc(uc, **kwargs):
     if not kwargs:
         return uc
     
-    params = ('size', 'cplx', 'sw', 'obs', 'car')
+    params = ('size', 'cplx', 'sw', 'obs', 'car', 'ref')
     new_params = {p: uc.__getattribute__(f'_{p}') for p in params}
     
     for k, v in kwargs.items():
@@ -393,10 +400,10 @@ def uc_from_udic(udic, dim=-1):
         dim = udic['ndim'] - 1  # last dimension
     adic = udic[dim]
     return unit_conversion(adic['size'], adic['complex'], adic['sw'],
-                           adic['obs'], adic['car'])
+                           adic['obs'], adic['car'], adic.get('ref'))
 
 
-def uc_from_freqscale(scale, obs, unit='ppm'):
+def uc_from_freqscale(scale, obs, unit='ppm', ref=None):
     """
     Create a unit conversion object from a spectrum frequency scale axis.
 
@@ -408,6 +415,9 @@ def uc_from_freqscale(scale, obs, unit='ppm'):
         Observation frequency in MHz.
     unit: {'ppm', 'hz', 'khz'}
         The unit of the scale axis.
+    ref : float, optional
+        Reference frequency in MHz. If not provided, ``obs`` is used for ppm
+        conversions.
 
     Returns
     -------
@@ -416,6 +426,7 @@ def uc_from_freqscale(scale, obs, unit='ppm'):
     """
     scale = np.array(scale)
     size = len(scale)
+    ppm_freq = obs if ref is None else ref
 
     if unit in ['ppm', 'hz', 'khz']:
         complex = False
@@ -428,8 +439,8 @@ def uc_from_freqscale(scale, obs, unit='ppm'):
         dx = abs(scale[1]-scale[0])
 
         if unit == 'ppm':
-            sw = ((max + dx/2.0) - (min - dx/2.0)) * obs
-            car = (min-dx/2.0 + (max-min)/2.0) * obs
+            sw = ((max + dx/2.0) - (min - dx/2.0)) * ppm_freq
+            car = (min-dx/2.0 + (max-min)/2.0) * ppm_freq
         elif unit == 'hz':
             sw = ((max + dx/2.0) - (min - dx/2.0))
             car = (min-dx/2.0 + (max-min)/2.0)
@@ -442,7 +453,7 @@ def uc_from_freqscale(scale, obs, unit='ppm'):
         mesg = f'{unit} is not a supported unit.'
         raise ValueError(mesg)
 
-    return unit_conversion(size, complex, sw, obs, car)
+    return unit_conversion(size, complex, sw, obs, car, ref)
 
 
 def open_towrite(filename, overwrite=False, mode='wb'):

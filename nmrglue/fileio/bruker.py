@@ -136,16 +136,19 @@ def add_axis_to_udic(udic, dic, udim, strip_fake):
     elif pro_file in dic:
         udic[udim]["label"] = dic[pro_file]["AXNUC"]
 
+    ref = None
     try:
-        obs = dic[pro_file]["SF"]
+        ref = dic[pro_file]["SF"]
         if acq_file in dic:
-            car = (dic[acq_file]["SFO1"] - obs) * 1e6
+            obs = dic[acq_file]["SFO1"]
+            car = (obs - ref) * 1e6
         else:
+            obs = ref
             # we should be able to use the 'OFFSET' parameter in procNs to
             # calculate 'car'. But this is slightly off (~ 5E-3 Hz)
             # most likely because the procs file does not store the OFFSET
             # to a high precision. Hence the value in acquNs is given priority
-            car = dic[pro_file]["OFFSET"]*obs - sw/2
+            car = dic[pro_file]["OFFSET"]*ref - sw/2
 
     except KeyError:
         warn('The chemical shift referencing was not corrected for "sr".')
@@ -169,6 +172,8 @@ def add_axis_to_udic(udic, dic, udim, strip_fake):
     udic[udim]["sw"] = sw
     udic[udim]["car"] = car
     udic[udim]["obs"] = obs
+    if ref is not None:
+        udic[udim]["ref"] = ref
 
     if acq_file in dic:
         if acq_file == "acqus":

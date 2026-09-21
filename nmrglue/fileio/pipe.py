@@ -333,8 +333,9 @@ def add_axis_to_dic(dic, adic, n):
 
     # parameter directly in dictionary
     dic[fn + "SW"] = float(adic["sw"])
-    dic[fn + "OBS"] = float(adic["obs"])
-    dic[fn + "CAR"] = float(adic["car"] / adic["obs"])
+    ppm_freq = adic["obs"] if adic.get("ref") is None else adic["ref"]
+    dic[fn + "OBS"] = float(ppm_freq)
+    dic[fn + "CAR"] = float(adic["car"] / ppm_freq)
     dic[fn + "LABEL"] = adic["label"]
 
     if adic["complex"]:

@@ -155,10 +155,13 @@ def create_dic(udic, dim_order=None):
         dim_order = range(ndim)  # default to 0, 1, 2, ...
 
     # set various parameters from the universal dictionary
+    ppm_freqs = [udic[i]['obs'] if udic[i].get('ref') is None
+                 else udic[i]['ref'] for i in dim_order]
     dic['dom'] = [['F', 'T'][udic[i]['time']] for i in dim_order]
     dic['nptype'] = [['R', 'C'][udic[i]['complex']] for i in dim_order]
-    dic['ppm'] = [udic[i]['car'] / udic[i]['obs'] for i in dim_order]
-    dic['sf'] = [udic[i]['obs'] for i in dim_order]
+    dic['ppm'] = [udic[i]['car'] / freq
+                  for i, freq in zip(dim_order, ppm_freqs)]
+    dic['sf'] = ppm_freqs
     dic['sw'] = [udic[i]['sw'] for i in dim_order]
     dic['npts'] = [udic[i]['size'] for i in dim_order]
     dic['quad'] = [udic[i]['encoding'].lower() for i in dim_order]

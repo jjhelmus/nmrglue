@@ -130,6 +130,7 @@ encoding    How the data is encoded, 'states', 'tppi', etc.
 freq        True for frequency domain data, False for time domain.
 label       String describing the axis name.
 obs         Observation frequency in MHz.
+ref         Optional reference frequency in MHz.
 size        Dimension size (R|I for last axis, R+I for others)
 sw          Spectral width in Hz.
 time        True for time domain data, False got frequency domain.
