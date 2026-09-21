@@ -6,13 +6,28 @@ import nmrglue as ng
 from setup import DATA_DIR
 
 
+def test_rs2d_reference_and_observation_frequencies():
+    """BASE_FREQ and TRANSMIT_FREQ retain their distinct meanings."""
+    dic = {
+        "RECEIVER_COUNT": {"value": "1"},
+        "BASE_FREQ_1": {"value": "400000000"},
+        "TRANSMIT_FREQ_1": {"value": "400001000"},
+    }
+
+    udic = ng.rs2d.guess_udic(dic, np.zeros(8, dtype=np.complex128))
+
+    assert udic[0]["obs"] == 400.001
+    assert udic[0]["ref"] == 400.0
+    assert udic[0]["car"] == 1000.0
+
+
 def test_rs2d():
     '''RS2D read: format testset. Expects to find the provided test cases under 
     data/rs2d/Installer_data'''
 
     # case tuple is:
     #  0       1      2       3,          4            5        6
-    # (folder, shape, is_fid, is_complex, basefreqMHz, sweepHz, offsetHz,
+    # (folder, shape, is_fid, is_complex, reffreqMHz, sweepHz, offsetHz,
     #  7        8        9
     #  nucleus, solvent, temperature)
 
@@ -95,7 +110,10 @@ def test_rs2d():
         for dim in range(len(data.shape)):
             assert udic[dim]["time"] is case[2]
             assert udic[dim]["freq"] is not case[2]
-            assert np.abs(udic[dim]["obs"] - case[4][dim]) < epsilon
+            expected_ref = case[4][dim]
+            expected_obs = expected_ref + case[6][dim] / 1e6
+            assert np.abs(udic[dim]["obs"] - expected_obs) < epsilon
+            assert np.abs(udic[dim]["ref"] - expected_ref) < epsilon
             assert np.abs(udic[dim]["sw"] - case[5][dim]) < epsilon
             assert np.abs(udic[dim]["car"] - case[6][dim]) < epsilon
             assert udic[dim]["size"] == case[1][dim]

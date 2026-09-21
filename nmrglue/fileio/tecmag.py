@@ -334,10 +334,13 @@ def guess_udic(dic, data):
         udic[i]["size"] = dic['actual_npts'][i]
         udic[i]["sw"] = dic['sw'][i]
         udic[i]["complex"] = True
-        udic[i]["obs"] = dic['ob_freq'][i] * 1e6
-        # Not sure what the difference is here
-        # N.B. base_freq is some bogus value like 1.4e-13
-        udic[i]["car"] = dic['ob_freq'][i] * 1e6
+        udic[i]["obs"] = dic['ob_freq'][i]
+        udic[i]["car"] = 0.0
+        if i == 0:
+            # ref_freq is the offset in Hz between the transmitter and the
+            # frequency assigned to 0 ppm.
+            udic[i]["ref"] = dic['ob_freq'][i] + dic['ref_freq'] / 1e6
+            udic[i]["car"] = -dic['ref_freq']
         udic[i]["time"] = not bool(dic['fft_flag'][i])
         udic[i]["freq"] = bool(dic['fft_flag'][i])
 
