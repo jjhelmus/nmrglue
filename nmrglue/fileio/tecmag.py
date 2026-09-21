@@ -332,7 +332,9 @@ def guess_udic(dic, data):
     # update default values
     for i in range(4):
         udic[i]["size"] = dic['actual_npts'][i]
-        udic[i]["sw"] = dic['sw'][i]
+        # TNMR stores the sweep half-width; the full spectral width is also
+        # equal to 1 / dwell.
+        udic[i]["sw"] = 2.0 * dic['sw'][i]
         udic[i]["complex"] = True
         udic[i]["obs"] = dic['ob_freq'][i]
         udic[i]["car"] = 0.0

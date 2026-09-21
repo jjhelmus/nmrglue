@@ -62,6 +62,7 @@ def _build_minimal_tnt(table_pairs=(), n_points=8, n_records=4):
     tmag_arr[0]['actual_npts'][2] = 1
     tmag_arr[0]['actual_npts'][3] = 1
     tmag_arr[0]['sw'][0]      = 20000.0
+    tmag_arr[0]['dwell'][0]   = 1.0 / 40000.0
     tmag_arr[0]['ob_freq'][0] = 21.31
     tmag_arr[0]['ref_freq'] = 125.0
     tmag_payload = tmag_arr.tobytes()
@@ -155,7 +156,8 @@ def test_guess_udic_basic(tmp_path):
     dic, data = ng.tecmag.read(path)
     udic = ng.tecmag.guess_udic(dic, data)
     assert udic[0]['size'] == 8
-    assert udic[0]['sw']   == 20000.0
+    assert udic[0]['sw']   == 40000.0
+    assert_allclose(udic[0]['sw'], 1.0 / dic['dwell'][0])
     assert_allclose(udic[0]['obs'], 21.31)
     assert_allclose(udic[0]['ref'], 21.310125)
     assert_allclose(udic[0]['car'], -125.0)
