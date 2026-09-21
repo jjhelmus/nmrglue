@@ -124,17 +124,22 @@ dictionaries contain the following keys:
 ========    ======================================================
 Key         Description
 ========    ======================================================
-car         Carrier frequency in Hz.
+car         Carrier offset from the reference frequency in Hz.
 complex     True for complex data, False for magnitude data.
 encoding    How the data is encoded, 'states', 'tppi', etc.
 freq        True for frequency domain data, False for time domain.
 label       String describing the axis name.
-obs         Observation frequency in MHz.
+obs         Observation (transmitter) frequency in MHz.
 ref         Optional reference frequency in MHz.
 size        Dimension size (R|I for last axis, R+I for others)
 sw          Spectral width in Hz.
 time        True for time domain data, False got frequency domain.
 ========    ======================================================
+
+When ``ref`` is present, it is used as the denominator for ppm conversions,
+and ``car`` is the offset of the spectral center from that reference. When a
+format does not provide a separate reference frequency, ``ref`` is omitted and
+``obs`` is used instead, preserving the historical behavior.
 
 
 For our 2D NMRPipe file, these parameters for the indirect dimension are:

@@ -59,6 +59,11 @@ def test_uc_with_reference_frequency():
     assert_allclose(uc.hz_scale(), [300.0, 200.0, 100.0, 0.0])
     assert_allclose(uc.f(uc.ppm_scale(), 'ppm'), np.arange(4))
 
+    rebuilt = ng.fileiobase.uc_from_freqscale(
+        uc.ppm_scale(), obs=100.0, unit='ppm', ref=80.0)
+    assert_allclose(rebuilt.ppm_scale(), uc.ppm_scale())
+    assert_allclose(rebuilt.hz_scale(), uc.hz_scale())
+
 
 def test_uc_reference_defaults_to_observation_frequency():
     """Omitting ref preserves the historical unit conversion behavior."""
@@ -132,6 +137,7 @@ def test_update_uc():
     assert abs(uc2._sw - 2.0) < 1e-5
     assert abs(uc2._car - 5.2) < 1e-5
     assert abs(uc2._obs - 3.0) < 1e-5
+    assert uc2._ref is None
 
     referenced = ng.fileiobase.unit_conversion(
         size=64, cplx=False, sw=1.0, obs=1.0, car=1.0, ref=0.8)

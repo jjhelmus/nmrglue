@@ -63,9 +63,9 @@ class unit_conversion():
     sw : float
         Spectral width in Hz.
     obs : float
-        Observation frequency in MHz.
+        Observation (transmitter) frequency in MHz.
     car : float
-        Carrier frequency in Hz.
+        Carrier offset from the reference frequency in Hz.
     ref : float, optional
         Reference frequency in MHz. If not provided, ``obs`` is used for ppm
         conversions.
@@ -412,7 +412,7 @@ def uc_from_freqscale(scale, obs, unit='ppm', ref=None):
     scale : array like
         array of spectrum axis
     obs : float
-        Observation frequency in MHz.
+        Observation (transmitter) frequency in MHz.
     unit: {'ppm', 'hz', 'khz'}
         The unit of the scale axis.
     ref : float, optional

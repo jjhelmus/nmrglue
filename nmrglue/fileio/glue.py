@@ -11,12 +11,12 @@ keys:
 ========    =====================================================
 Key         Description
 ========    =====================================================
-car         Carrier frequency in Hz
+car         Carrier offset from the reference frequency in Hz
 complex     True for complex data, False for magnitude
 encoding    type of encoding, 'states', 'tppi', 'direct', etc
 freq        True for frequency domain data, False otherwise
 label       Axis label, ('13C', etc)
-obs         Observation frequency in MHz
+obs         Observation (transmitter) frequency in MHz
 ref         Optional reference frequency in MHz
 size        Dimension size (R|I for direct dim, R+I for indirect)
 sw          Spectral width in Hz
