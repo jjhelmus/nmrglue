@@ -337,8 +337,8 @@ def guess_udic(dic, data):
         udic[i]["obs"] = dic['ob_freq'][i]
         udic[i]["car"] = 0.0
         if i == 0:
-            # ref_freq is the offset in Hz between the transmitter and the
-            # frequency assigned to 0 ppm.
+            # TNMR convention, as documented by pytnt's TNTdtypes.py:
+            # frequency for 0 ppm = ob_freq * 1e6 + ref_freq.
             udic[i]["ref"] = dic['ob_freq'][i] + dic['ref_freq'] / 1e6
             udic[i]["car"] = -dic['ref_freq']
         udic[i]["time"] = not bool(dic['fft_flag'][i])

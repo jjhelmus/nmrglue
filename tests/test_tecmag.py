@@ -159,6 +159,8 @@ def test_guess_udic_basic(tmp_path):
     assert_allclose(udic[0]['obs'], 21.31)
     assert_allclose(udic[0]['ref'], 21.310125)
     assert_allclose(udic[0]['car'], -125.0)
+    uc = ng.fileiobase.uc_from_udic(udic, dim=0)
+    assert_allclose(uc.hz(data.shape[0] // 2), -dic['ref_freq'])
 
 
 # =============================================================================
