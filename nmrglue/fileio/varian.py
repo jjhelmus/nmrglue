@@ -1231,7 +1231,7 @@ def get_block_ntraces(f, ntraces, pts, nbheaders, dt, read_blockhead=False):
             for i in range(2, nbheaders):
                 skip_blockheader(f)
         # read the data
-        trace = get_trace(file, pts * ntraces, dt)
+        trace = get_trace(f, pts * ntraces, dt)
         return dic, trace.reshape(ntraces, pts)
 
 
