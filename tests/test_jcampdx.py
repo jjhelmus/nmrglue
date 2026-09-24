@@ -1,6 +1,7 @@
 """ Tests for the fileio.jcampdx submodule """
 
 import os
+import tempfile
 import numpy as np
 import nmrglue as ng
 from setup import DATA_DIR
@@ -222,3 +223,37 @@ def test_jcampdx_dicstructure2():
     # check data
     assert len(data2) == 8
     assert data2[-1] == 1.0
+
+
+def test_jcampdx_read_err_param():
+    # Test reading with read_err custom parameters
+    content_bad = (
+        "##TITLE=Test Bad UTF8\n"
+        "##JCAMPDX=5.0\n"
+        "##DATATYPE=NMR SPECTRUM\n"
+        "##$BAD=\xff\xfe\xfd\n"
+        "##END=\n"
+    )
+
+    import pytest
+
+    fd, path = tempfile.mkstemp()
+    try:
+        with os.fdopen(fd, 'wb') as f:
+            f.write(content_bad.encode('latin1'))
+
+        # Test default (read_err=None, fallback to replace) does not crash
+        dic, data = ng.jcampdx.read(path)
+        subdic = dic["_datatype_NMRSPECTRUM"][0]
+        assert "\ufffd" in subdic["$BAD"][0]
+
+        # Test read_err='ignore' does not crash and drops the bad characters
+        dic2, data2 = ng.jcampdx.read(path, read_err='ignore')
+        subdic2 = dic2["_datatype_NMRSPECTRUM"][0]
+        assert "$BAD" not in subdic2
+
+        # Test read_err='strict' raises UnicodeDecodeError
+        with pytest.raises(UnicodeDecodeError):
+            ng.jcampdx.read(path, read_err='strict')
+    finally:
+        os.remove(path)
