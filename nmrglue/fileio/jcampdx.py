@@ -1,5 +1,9 @@
 """
-Functions for reading 1D JCAMP-DX files.
+Functions for reading JCAMP-DX files.
+
+The interface is oriented towards 1D data. Multidimensional NTUPLES spectra
+can be read, as the set of 1D pages they are stored as, but guess_udic
+describes their direct dimension only.
 """
 
 import os
@@ -429,6 +433,24 @@ def _parse_pseudo(datalines):
     return data
 
 
+# variable list of a data table header, e.g. (X++(R..R)) or (F2++(Y..Y)):
+# the first symbol is the abscissa, the second the dependent variable
+_VARIABLE_LIST_RE = re.compile(
+    r"\(\s*([A-Za-z][A-Za-z0-9]*)\s*\+\+\s*\(\s*([A-Za-z][A-Za-z0-9]*)\s*\.\.")
+
+
+def _parse_variable_list(headerline):
+    '''
+    Finds the variable symbols declared by a data table header, e.g.
+    "(X++(R..R))" gives ("X", "R") and "(F2++(Y..Y))" gives ("F2", "Y").
+    Returns (None, None) when the header declares no variable list.
+    '''
+    match = _VARIABLE_LIST_RE.search(headerline)
+    if match is None:
+        return (None, None)
+    return match.group(1), match.group(2)
+
+
 def _parse_data(datastring):
     '''
     Creates numpy array from datalines
@@ -436,9 +458,11 @@ def _parse_data(datastring):
     datalines = datastring.split("\n")
     headerline = datalines[0]
 
-    datatype = "R"
-    if "I..I" in headerline:
-        datatype = "I"
+    # the dependent variable is named by the header's variable list; headers
+    # that declare none are assumed to hold the real component
+    datatype = _parse_variable_list(headerline)[1]
+    if datatype is None:
+        datatype = "R"
 
     datalines = datalines[1:]  # get rid of the header line (e.g. (X++(Y..Y)))
     mode = _detect_format(datalines[0])
@@ -467,38 +491,41 @@ def get_is_ntuples(dic):
     return is_ntuples
 
 
+def find_factor(dic, symbol):
+    '''
+    Helper to find the scaling factor of the given symbol (e.g. "R", "I"
+    or "Y") from the NTUPLES ##SYMBOL= and ##FACTOR= records, whose
+    comma-separated entries correspond by position.
+    Returns None if the factor cannot be determined.
+    '''
+    try:
+        symbols = [s.strip() for s in dic["SYMBOL"][0].split(",")]
+        factors = [s.strip() for s in dic["FACTOR"][0].split(",")]
+        return float(factors[symbols.index(symbol)])
+    except (KeyError, IndexError, ValueError):
+        return None
+
+
 def find_yfactors(dic):
     '''
     Helper to find yfactors from NTUPLES format.
     Returns YFactors in tuple with order (R,I)
     '''
-
-    # first check which column is R and I:
-    index_r = None
-    index_i = None
-    try:
-        symbols = dic["SYMBOL"][0].split(",")
-        symbols = [s.strip() for s in symbols]
-        index_r = symbols.index("R")
-        index_i = symbols.index("I")
-    except (KeyError, IndexError, ValueError):
-        return (None, None)
-
-    try:
-        factors = dic["FACTOR"][0].split(",")
-        factors = [s.strip() for s in factors]
-        factor_r = float(factors[index_r])
-        factor_i = float(factors[index_i])
-    except (KeyError, IndexError, ValueError):
-        return (None, None)
-
-    return (factor_r, factor_i)
+    return (find_factor(dic, "R"), find_factor(dic, "I"))
 
 
-def getdataarray(dic):
+def getdataarray(dic, show_all_data=False):
     '''
     Main function for data array parsing, input is the
     raw dictionary from _readrawdic
+
+    Parameters
+    ----------
+    dic : dict
+        Raw dictionary from _readrawdic.
+    show_all_data : bool
+        If True and data is NTUPLES, return all data arrays as a dict
+        with keys 'real' and 'imaginary', each containing a list of arrays.
     '''
 
     data = None
@@ -521,23 +548,36 @@ def getdataarray(dic):
                 if parseret is None:
                     return None
                 data, datatype = parseret
+                # scale by the factor of this table's own dependent
+                # symbol: an (X++(I..I)) table gets I's factor, an
+                # (X++(R..R)) table R's, so factors can never be
+                # applied to the wrong component
+                factor = find_factor(dic, datatype)
+                if factor is None:
+                    warn("NTUPLES: no FACTOR found for symbol %s, "
+                         "data not scaled" % datatype)
+                else:
+                    data = data * factor
                 if datatype == "I":
                     idatalist.append(data)
                 else:
                     rdatalist.append(data)
-            if len(rdatalist) > 1:
-                warn("NTUPLES: multiple real arrays, returning first one only")
-            if len(idatalist) > 1:
-                warn("NTUPLES: multiple imaginary arrays, \
-                     returning first one only")
-            if rdatalist:
-                if idatalist:
-                    data = [rdatalist[0], idatalist[0]]
-                else:
-                    data = rdatalist[0]
+            if show_all_data:
+                data = {'real': rdatalist, 'imaginary': idatalist}
             else:
-                if idatalist:
-                    data = [None, idatalist[0]]
+                if len(rdatalist) > 1:
+                    warn("NTUPLES: multiple real arrays, returning first one only")
+                if len(idatalist) > 1:
+                    warn("NTUPLES: multiple imaginary arrays, \
+                         returning first one only")
+                if rdatalist:
+                    if idatalist:
+                        data = [rdatalist[0], idatalist[0]]
+                    else:
+                        data = rdatalist[0]
+                else:
+                    if idatalist:
+                        data = [None, idatalist[0]]
 
     if data is None:  # XYDATA
         try:
@@ -556,14 +596,8 @@ def getdataarray(dic):
         return None
 
     # apply YFACTOR to data if available
-    if is_ntuples:
-        yfactor_r, yfactor_i = find_yfactors(dic)
-        if yfactor_r is None or yfactor_r is None:
-            warn("NTUPLES: YFACTORs not applied, parsing failed")
-        else:
-            data[0] = data[0] * yfactor_r
-            data[1] = data[1] * yfactor_i
-    else:
+    # (NTUPLES data was already scaled per-table above)
+    if not is_ntuples:
         try:
             yfactor = float(dic["YFACTOR"][0])
             data = data * yfactor
@@ -575,7 +609,7 @@ def getdataarray(dic):
     return data
 
 
-def read(filename):
+def read(filename, show_all_data=False):
     """
     Read JCAMP-DX file
 
@@ -583,6 +617,11 @@ def read(filename):
     ----------
     filename : str
         File to read from.
+    show_all_data : bool
+        If True and data is NTUPLES, return all data arrays as a dict
+        with keys 'real' and 'imaginary', each containing a list of
+        numpy arrays. If False (default), return only the first real
+        and imaginary arrays.
 
     Returns
     -------
@@ -591,8 +630,10 @@ def read(filename):
         file, parameters of first NMR SPECTRUM or NMR FID are read to base
         level and others are stored under _datatype_<DATATYPE> keys in the
         dictionary.
-    data : ndarray
-        Array of NMR data, or a list NMR data arrays in order [real, imaginary]
+    data : ndarray or dict
+        Array of NMR data, or a list of NMR data arrays in order
+        [real, imaginary]. When show_all_data=True and data is NTUPLES,
+        a dict with keys 'real' and 'imaginary' is returned.
     """
 
     if os.path.isfile(filename) is not True:
@@ -603,45 +644,21 @@ def read(filename):
     # and newlines
     dic = _readrawdic(filename)
 
-    # select the relevant data section.
-    # first try to parse NMRSPECTRUM sections in order,
-    # and go with first that has proper data:
+    # select the relevant data section, taking the first section of the most
+    # preferred DATATYPE that yields data. Non-typed sections are tried
+    # because the DATATYPE label is sometimes missing, and multidimensional
+    # spectra come last so that a file offering both a 1D and an nD spectrum
+    # keeps returning the 1D one.
     data = None
     correctdic = None
-    try:
-        subdiclist = dic["_datatype_NMRSPECTRUM"]
-        for subdic in subdiclist:
-            data = getdataarray(subdic)
+    for datatype in ("NMRSPECTRUM", "NMRFID", "NA", "NDNMRSPECTRUM"):
+        for subdic in dic.get("_datatype_" + datatype, []):
+            data = getdataarray(subdic, show_all_data)
             if data is not None:
                 correctdic = subdic
                 break
-    except KeyError:
-        pass
-
-    if data is None:
-        # then try NMRFIDs:
-        try:
-            subdiclist = dic["_datatype_NMRFID"]
-            for subdic in subdiclist:
-                data = getdataarray(subdic)
-                if data is not None:
-                    correctdic = subdic
-                    break
-        except KeyError:
-            pass
-
-    if data is None:
-        # finally try all non-typed data sections, since
-        # sometimes DATATYPE label may be missing
-        try:
-            subdiclist = dic["_datatype_NA"]
-            for subdic in subdiclist:
-                data = getdataarray(subdic)
-                if data is not None:
-                    correctdic = subdic
-                    break
-        except KeyError:
-            pass
+        if data is not None:
+            break
 
     if data is None:
         warn("no data found either in XYDATA or NTUPLES format")
@@ -675,6 +692,35 @@ def read(filename):
     return dic, data
 
 
+def _find_abscissa_symbol(dic, symbols):
+    '''
+    Finds which of an NTUPLES variable list's symbols is the abscissa.
+    One dimensional data calls it X, while multidimensional data names its
+    dimensions instead. In that case the innermost, i.e. last, independent
+    variable is the abscissa of every page: a file declaring (F1, F2, Y)
+    stores (F2++(Y..Y)) data tables, one per value of F1.
+    Returns None if it cannot be identified.
+    '''
+    if "X" in symbols:
+        return "X"
+
+    try:
+        vartypes = [s.strip().upper() for s in dic["VARTYPE"][0].split(",")]
+        independent = [symbol for symbol, vartype in zip(symbols, vartypes)
+                       if vartype == "INDEPENDENT"]
+        if independent:
+            return independent[-1]
+    except (KeyError, IndexError):
+        pass
+
+    # no VARTYPE to go on: fall back to the abscissa a data table declares,
+    # available while reading but not after read() strips the tables
+    try:
+        return _parse_variable_list(dic["DATATABLE"][0].split("\n", 1)[0])[0]
+    except (KeyError, IndexError):
+        return None
+
+
 def _find_firstx_lastx(dic):
     '''
     Helper for guess_udic: seeks firstx and lastx for
@@ -691,12 +737,12 @@ def _find_firstx_lastx(dic):
     is_ntuples = get_is_ntuples(dic)
 
     if is_ntuples:
-        # first check which column is X:
+        # first check which column is the abscissa:
         index_x = None
         try:
             symbols = dic["SYMBOL"][0].split(",")
             symbols = [s.strip() for s in symbols]
-            index_x = symbols.index("X")
+            index_x = symbols.index(_find_abscissa_symbol(dic, symbols))
         except (KeyError, IndexError, ValueError):
             warn("Cannot found X column on NTUPLES")
         if index_x is not None:
@@ -766,7 +812,16 @@ def guess_udic(dic, data):
     # create an empty universal dictionary
     udic = fileiobase.create_blank_udic(1)
 
-    # update default values (currently only 1D possible)
+    # the universal dictionary is one dimensional, so for multidimensional
+    # data it can only describe the direct dimension
+    try:
+        if int(dic["NUMDIM"][0]) > 1:
+            warn("Multidimensional data: udic describes the direct "
+                 "dimension only")
+    except (KeyError, IndexError, ValueError):
+        pass
+
+    # update default values
     # "label"
     try:
         label_value = dic[".OBSERVENUCLEUS"][0].replace("^", "")
@@ -790,6 +845,11 @@ def guess_udic(dic, data):
         pass
 
     # "size"
+    if isinstance(data, dict):
+        # show_all_data form: every page has the same length, so measure the
+        # first one that is present
+        pages = data.get("real") or data.get("imaginary") or [None]
+        data = pages[0]
     if isinstance(data, list):
         data = data[0]  # if list [R,I]
     if data is not None:
