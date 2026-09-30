@@ -160,7 +160,6 @@ def test_ha():
 
 def test_ht():
     """ HT function """
-    # return _standard_test('ht', 8)  # XXX test 4 fails
     glue_files = ['ht1.glue', 'ht2.glue', 'ht3.glue', 'ht5.glue', 'ht6.glue',
                   'ht7.glue', 'ht8.glue']
     pipe_files = ['ht1.dat', 'ht2.dat', 'ht3.dat', 'ht5.dat', 'ht6.dat',
@@ -168,6 +167,11 @@ def test_ht():
     pipe_script = './ht.com'
     glue_script = './ht.py'
     return _perform_test(glue_script, pipe_script, glue_files, pipe_files)
+
+
+def test_ht_ps90_180():
+    """HT mirror-image mode."""
+    return _standard_test('ht4', 1)
 
 
 ##########################

@@ -1326,11 +1326,6 @@ def ht(dic, data, mode="ps0-0", zf=False, td=False, auto=False):
     ndata : ndarray
         Array of NMR data which has been Hilbert transformed.
 
-    Notes
-    -----
-    "ps90-180" mirror image mode gives different results than NMRPipe's HT
-    function.
-
     """
     fn = "FDF" + str(int(dic["FDDIMORDER"][0]))  # F1, F2, etc
     if auto:
@@ -1345,14 +1340,31 @@ def ht(dic, data, mode="ps0-0", zf=False, td=False, auto=False):
     if mode not in ["ps0-0", "ps90-180"]:
         raise ValueError("mode must be ps0-0 or ps90-180")
     if mode == "ps90-180":
-        # XXX determine how this works....
-        pass
-    if zf:
+        size = data.shape[-1]
+        half = size // 2
+        # Center the input in NMRPipe's antisymmetric 2N-point extension.
+        # For odd sizes, the unpaired final extension point is zero.
+        if size % 2:
+            padding = np.zeros(data.shape[:-1] + (1,), dtype=data.real.dtype)
+            mirrored = np.concatenate(
+                (-data.real[..., half + 1:], data.real,
+                 -data.real[..., :half], padding), axis=-1
+            )
+        else:
+            mirrored = np.concatenate(
+                (-data.real[..., half:], data.real,
+                 -data.real[..., :half]), axis=-1
+            )
+        z = p.ht(mirrored, mirrored.shape[-1])[..., half:half + size]
+    elif zf:
         N = int(2 ** (np.ceil(np.log2(data.shape[-1]))))  # not same as NMRPipe
+        z = p.ht(data, N)
     else:
         N = data.shape[-1]
+        z = p.ht(data, N)
 
-    z = np.array(p.ht(data, N), dtype="complex64")
+    z = np.array(z, dtype="complex64")
+    z.real = data.real
     dic = update_minmax(dic, data)
 
     # set the QUADFLAG as complex
