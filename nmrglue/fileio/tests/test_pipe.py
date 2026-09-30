@@ -609,3 +609,27 @@ def test_write_table():
         assert ref_tbl_format == tbl_format
     finally:
         os.remove(tbl_fname)
+
+
+def test_pipe_proc_save(tmp_path):
+    dic, data = ng.pipe.read(NMRPIPE_1D_FREQ)
+    dic["FDPIPEFLAG"] = 0.0
+    before = dic.copy()
+    filename = tmp_path / "save.ft1"
+
+    returned_dic, returned_data = ng.pipe_proc.save(
+        dic, data, filename, overwrite=True
+    )
+    saved_dic, saved_data = ng.pipe.read(filename)
+
+    assert before["FDPIPEFLAG"] == 0.0
+    assert before["FDPIPECOUNT"] == 0.0
+    assert saved_dic["FDPIPEFLAG"] == 0.0
+    assert saved_dic["FDPIPECOUNT"] == 0.0
+    assert returned_dic is dic
+    assert returned_dic == before
+    assert returned_data is data
+    assert saved_data.dtype == data.dtype
+    assert saved_data.shape == data.shape
+    assert_array_equal(saved_data, data)
+    assert_array_equal(returned_data, data)
