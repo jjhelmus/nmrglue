@@ -657,7 +657,7 @@ class data_nd:
         """
         create a copy
         """
-        return __fcopy(self, self.order)
+        return self.__fcopy__(self.order)
 
     def __getitem__(self, key):
         """
@@ -731,12 +731,12 @@ class data_nd:
         """
         axis1, axis2 = int(axis1), int(axis2)
         if axis1 < 0:
-            axis1 = self.ndim - axis1
+            axis1 = self.ndim + axis1
         if axis2 < 0:
-            axis2 = self.ndim - axis2
-        if axis1 >= self.ndim:
+            axis2 = self.ndim + axis2
+        if axis1 < 0 or axis1 >= self.ndim:
             raise ValueError("bad axis1 argument to swapaxes")
-        if axis2 >= self.ndim:
+        if axis2 < 0 or axis2 >= self.ndim:
             raise ValueError("bad axis2 argument to swapaxes")
 
         order = list(self.order)
@@ -785,7 +785,7 @@ class data_nd:
 
         # check for invalid axes
         for v in axes:
-            if v >= self.ndim:
+            if v < 0 or v >= self.ndim:
                 raise ValueError("invalid axis for this array")
 
         # check for repeated axes
