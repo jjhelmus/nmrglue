@@ -10,6 +10,67 @@ import pytest
 
 # Test data.
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'bruker_test_data')
+SYNTHETIC_PPROG = os.path.join(DATA_DIR, 'synthetic_pulseprogram')
+
+
+def test_jcamp1(tmp_path):
+    """Read and write known acquisition parameters from a packaged fixture."""
+    source = os.path.join(DATA_DIR, '1', 'acqus')
+    dic = ng.bruker.read_jcamp(source)
+
+    assert dic['LFILTER'] == 200
+    assert dic['PRECHAN'] == [5, 1, 5, 5, 2, 5, 5, 5,
+                              5, 5, 5, 5, 5, 5, 5, 5]
+    assert dic['SW_h'] == 10000
+    assert dic['NUC1'] == '1H'
+    assert len(dic['_comments']) == 2
+
+    output = tmp_path / 'acqus'
+    ng.bruker.write_jcamp(dic, output)
+    text = output.read_text()
+    assert '##$LFILTER= 200' in text
+    assert '##$PRECHAN= (0..15)' in text
+    assert ng.bruker.read_jcamp(output) == dic
+
+
+def test_jcamp2(tmp_path):
+    """Read and write known processing parameters from a packaged fixture."""
+    source = os.path.join(DATA_DIR, '1', 'pdata', '1', 'procs')
+    dic = ng.bruker.read_jcamp(source)
+
+    assert dic['OFFSET'] == 13.03153
+    assert dic['SF'] == 600.13
+    assert dic['SI'] == 2
+    assert dic['BYTORDP'] == 0
+    assert dic['AXNUC'] == '1H'
+
+    output = tmp_path / 'procs'
+    ng.bruker.write_jcamp(dic, output)
+    text = output.read_text()
+    assert '##$OFFSET= 13.03153' in text
+    assert '##$AXNUC= <1H>' in text
+    assert ng.bruker.read_jcamp(output) == dic
+
+
+def test_pprog(tmp_path):
+    """Read and write a synthetic pulse-program parser fixture."""
+    expected = {
+        'var': {'LOOPC': '58', 'DELAY': '0.25'},
+        'incr': [[0], [2], [3], [4]],
+        'loop': [4, 58, 8, 16],
+        'phase': [[1], [2], [3], [4]],
+        'ph_extra': [[''], ['(p2)'], [''], ['(p4)']],
+    }
+
+    dic = ng.bruker.read_pprog(SYNTHETIC_PPROG)
+    assert dic == expected
+
+    output = tmp_path / 'pulseprogram'
+    ng.bruker.write_pprog(output, dic)
+    text = output.read_text()
+    assert '"LOOPC=58"' in text
+    assert text.count('lo to 0 times') == 4
+    assert ng.bruker.read_pprog(output) == dic
 
 
 def _make_2d_dic(indirect_dic):

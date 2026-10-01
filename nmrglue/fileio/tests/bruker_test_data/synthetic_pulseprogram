@@ -1,0 +1,17 @@
+; Synthetic Bruker pulse program created for nmrglue parser tests.
+; This file is test input and is not intended to run on an instrument.
+#include <Avance.incl>
+"LOOPC=58"
+"DELAY=0.25"
+1 d01 id0
+d01 ip1
+lo to 1 times 4
+2, d01 dd2
+d01 ip2 (p2)
+lo to 2 times LOOPC
+3 d01 ipu3
+d01 ip3
+lo to 3 times 8
+4, d01 dpu4
+d01 ip4 (p4)
+lo to 4 times 16
