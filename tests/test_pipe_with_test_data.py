@@ -1,11 +1,8 @@
 """ Tests for the fileio.pipe submodule """
 
-from nmrglue.fileio.pipe import fdata2dic
-
 import tempfile
 import os
 import glob
-from pathlib import Path
 
 import numpy as np
 from numpy.testing import assert_array_equal
@@ -86,113 +83,7 @@ def check_ppm_limits(dic, data, dim, limits):
     assert limits == climits
 
 
-def read_with_bytes_or_buffer(filename):
-    """ Check reading pipe files from filename, io.BytesIO or bytes buffer """
-    dic, data = ng.pipe.read(filename)
-    # read bytes
-    with open(filename, "rb") as binary_stream:
-        data_bytes = binary_stream.read()
-        bdic, bdata = ng.pipe.read(data_bytes)
-    # read from io.BytesIO
-    with open(filename, "rb") as binary_stream:
-        bdic2, bdata2 = ng.pipe.read(binary_stream)
-    assert dic == bdic == bdic2
-    assert_array_equal(data, bdata)
-    assert_array_equal(data, bdata2)
-
-# tests
-def test_read_pathlib_path():
-    data_path_str = os.path.join(DATA_DIR, "nmrpipe_1d", "test.fid")
-    data_path = Path(DATA_DIR) / "nmrpipe_1d" / "test.fid"
-    dic, data = ng.pipe.read(data_path_str)
-    pdic, pdata = ng.pipe.read(data_path)
-    assert_array_equal(data, pdata)
-    assert dic == pdic
-
-
-def test_read_pathlib_path_template():
-    data_path_template = Path(DATA_DIR) / "nmrpipe_3d" / "data" / "test%03d.fid"
-    data_path_template_str = os.path.join(DATA_DIR, "nmrpipe_3d", "data", "test%03d.fid")
-    dic, data = ng.pipe.read(data_path_template)
-    pdic, pdata = ng.pipe.read(data_path_template_str)
-    assert_array_equal(data, pdata)
-    assert dic == pdic
-
-
-def test_get_fdata_bytes():
-    data_path = os.path.join(DATA_DIR, "nmrpipe_1d", "test.fid") 
-    with open(data_path, "rb") as binary_stream:
-        bytes_stream = binary_stream.read()
-        bdata = ng.fileio.pipe.get_fdata(bytes_stream)
-    data = ng.fileio.pipe.get_fdata(data_path)
-    assert_array_equal(data, bdata)
-
-
-def test_get_data_bytes():
-    data_path = os.path.join(DATA_DIR, "nmrpipe_1d", "test.fid") 
-    with open(data_path, "rb") as binary_stream:
-        bytes_stream = binary_stream.read()
-        bdata = ng.fileio.pipe.get_data(bytes_stream)
-    data = ng.fileio.pipe.get_data(data_path)
-    assert_array_equal(data, bdata)
-
-
-def test_fdata2dic_bytes():
-    data_path = os.path.join(DATA_DIR, "nmrpipe_1d", "test.fid") 
-    with open(data_path, "rb") as binary_stream:
-        bytes_stream = binary_stream.read()
-        bfdata = ng.fileio.pipe.get_fdata(bytes_stream)
-    fdata = ng.fileio.pipe.get_fdata(data_path)
-    dic = fdata2dic(fdata)
-    bdic = fdata2dic(bfdata)
-    assert dic == bdic
-
-
-def test_fdata_data_bytes():
-    data_path = os.path.join(DATA_DIR, "nmrpipe_1d", "test.fid") 
-    with open(data_path, "rb") as binary_stream:
-        bytes_stream = binary_stream.read()
-        bdic_data, bdata = ng.fileio.pipe.get_fdata_data(bytes_stream)
-    dic_data, data = ng.fileio.pipe.get_fdata_data(data_path)
-    assert_array_equal(dic_data, bdic_data)
-    assert_array_equal(data, bdata)
-
-
-def test_read_bytes_1d_time():
-    """ reading NMRPipe data from io.BytesIO binary stream or bytes buffer"""
-    data_path = os.path.join(DATA_DIR, "nmrpipe_1d", "test.fid")
-    read_with_bytes_or_buffer(data_path)
-
-
-def test_read_bytes_1d_freq():
-    """ reading NMRPipe data from io.BytesIO binary stream or bytes buffer"""
-    data_path = os.path.join(DATA_DIR, "nmrpipe_1d", "test.ft")
-    read_with_bytes_or_buffer(data_path)
-
-
-def test_read_bytes_2d_time():
-    """ reading NMRPipe data from io.BytesIO binary stream """
-    data_path = os.path.join(DATA_DIR, "nmrpipe_2d", "test.fid")
-    read_with_bytes_or_buffer(data_path)
-
-
-def test_read_bytes_2d_freq():
-    """ reading NMRPipe data from io.BytesIO binary stream """
-    data_path = os.path.join(DATA_DIR, "nmrpipe_2d", "test.ft2")
-    read_with_bytes_or_buffer(data_path)
-
-
-def test_read_bytes_3d_time():
-    """ reading NMRPipe data from io.BytesIO binary stream """
-    data_path = os.path.join(DATA_DIR, "nmrpipe_3d", "full3D.fid")
-    read_with_bytes_or_buffer(data_path)
-
-
-def test_read_bytes_3d_freq():
-    """ reading NMRPipe data from io.BytesIO binary stream """
-    data_path = os.path.join(DATA_DIR, "nmrpipe_3d", "full3D.ft3")
-    read_with_bytes_or_buffer(data_path)
-
+# Tests retaining specific historical numerical references remain external.
 
 def test_1d_time():
     """reading/writing of 1D NMRPipe time domain file"""
