@@ -585,8 +585,8 @@ class rnmrtk_nd(fileiobase.data_nd):
         """
         Create a copy
         """
-        n = rnmrtk_nd(self.filename, self.filename, self.fshape, self.cplex,
-                      self.big, order)
+        n = rnmrtk_nd(self.filename, self.fshape, self.cplex, self.big,
+                      order=order)
         return n
 
     def __fgetitem__(self, slices):

@@ -785,7 +785,7 @@ class data_nd:
 
         # check for invalid axes
         for v in axes:
-            if v >= self.ndim:
+            if v < 0 or v >= self.ndim:
                 raise ValueError("invalid axis for this array")
 
         # check for repeated axes

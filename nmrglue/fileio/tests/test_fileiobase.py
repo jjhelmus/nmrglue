@@ -17,17 +17,19 @@ NMRPIPE_1D_FREQ = os.path.join(DATA_DIR, 'nmrpipe_1d_freq.fid')
 class DummyDataND(ng.fileiobase.data_nd):
     """Minimal data_nd implementation for testing base-class operations."""
 
-    def __init__(self, order=(0, 1)):
-        self.fshape = (2, 3)
+    def __init__(self, order=None, fshape=(2, 3)):
+        self.fshape = fshape
+        if order is None:
+            order = range(len(fshape))
         self.order = tuple(order)
         self.dtype = np.dtype("float64")
         self.__setdimandshape__()
 
     def __fcopy__(self, order):
-        return DummyDataND(order)
+        return DummyDataND(order, self.fshape)
 
     def __fgetitem__(self, slices):
-        return np.arange(6).reshape(self.fshape)[slices]
+        return np.arange(np.prod(self.fshape)).reshape(self.fshape)[slices]
 
 
 def test_uc_from_freqscale():
@@ -88,6 +90,22 @@ def test_data_nd_copy():
     assert_array_equal(copied[:], data[:])
 
 
+def test_data_nd_copy_and_transform_orders_are_independent():
+    data = DummyDataND(fshape=(2, 3, 4))
+    expected = np.arange(24).reshape(data.fshape)
+
+    transformed = data.transpose(-1, -2, -3)
+    copied_transformed = copy.copy(transformed)
+    transformed_copy = copy.copy(data).swapaxes(-3, 2)
+
+    assert data.order == (0, 1, 2)
+    assert transformed.order == (2, 1, 0)
+    assert copied_transformed.order == transformed.order
+    assert transformed_copy.order == (2, 1, 0)
+    assert_array_equal(copied_transformed[:], expected.transpose(2, 1, 0))
+    assert_array_equal(transformed_copy[:], expected.swapaxes(-3, 2))
+
+
 @pytest.mark.parametrize("axes", [(-1, 0), (0, -1)])
 def test_data_nd_swapaxes_with_negative_axis(axes):
     data = DummyDataND()
@@ -99,7 +117,45 @@ def test_data_nd_swapaxes_with_negative_axis(axes):
     assert_array_equal(swapped[:], np.arange(6).reshape(2, 3).swapaxes(0, 1))
 
 
+def test_data_nd_swapaxes_3d_with_negative_axis():
+    data = DummyDataND(fshape=(2, 3, 4))
+
+    swapped = data.swapaxes(-3, 2)
+
+    assert swapped.order == (2, 1, 0)
+    expected = np.arange(24).reshape(2, 3, 4).swapaxes(-3, 2)
+    assert_array_equal(swapped[:], expected)
+
+
 @pytest.mark.parametrize("axes", [(-3, 0), (0, -3), (2, 0), (0, 2)])
 def test_data_nd_swapaxes_rejects_invalid_axis(axes):
     with pytest.raises(ValueError):
         DummyDataND().swapaxes(*axes)
+
+
+@pytest.mark.parametrize(
+    "axes, expected_order",
+    [
+        ((0, 1, 2), (0, 1, 2)),
+        ((2, 1, 0), (2, 1, 0)),
+        ((-1, -2, -3), (2, 1, 0)),
+        ((-3, 1, -1), (0, 1, 2)),
+    ],
+)
+def test_data_nd_transpose_axes(axes, expected_order):
+    data = DummyDataND(fshape=(2, 3, 4))
+
+    transposed = data.transpose(*axes)
+
+    assert transposed.order == expected_order
+    expected = np.arange(24).reshape(data.fshape).transpose(axes)
+    assert_array_equal(transposed[:], expected)
+
+
+@pytest.mark.parametrize(
+    "axes",
+    [(-4, 0, 1), (0, 0, 1), (0, 1), (0, 1, 2, 3)],
+)
+def test_data_nd_transpose_rejects_invalid_axes(axes):
+    with pytest.raises(ValueError):
+        DummyDataND(fshape=(2, 3, 4)).transpose(*axes)

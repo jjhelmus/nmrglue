@@ -1769,7 +1769,8 @@ class bruker_nd(fileiobase.data_nd):
         """
         Create a copy.
         """
-        n = bruker_nd(self.filename, self.fshape, self.cplex, self.big, order)
+        n = bruker_nd(self.filename, self.fshape, self.cplex, self.big,
+                      isfloat=self.isfloat, order=order)
         return n
 
     def __fgetitem__(self, slices):
