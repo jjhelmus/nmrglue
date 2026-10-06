@@ -258,14 +258,14 @@ def test_jcampdx_parsing_improvements():
         "##END=\n"
     )
 
-    # 3. Test comma decimal separator
+    # 3. Test integer (XY..XY) pairs, as in mass spectra peak tables
     content_comma = (
-        "##TITLE=Test Comma\n"
+        "##TITLE=Test Integer Pairs\n"
         "##JCAMPDX=5.0\n"
         "##DATATYPE=NMR SPECTRUM\n"
-        "##DATA CLASS=XYDATA\n"
-        "##XYDATA=(X..XY)\n"
-        "1,0, 10,5; 2,0, 20,5\n"
+        "##XYPOINTS=(XY..XY)\n"
+        "15,420 16,1201\n"
+        "26,300 27,3073\n"
         "##END=\n"
     )
 
@@ -306,13 +306,14 @@ def test_jcampdx_parsing_improvements():
         assert np.allclose(data[0], [[1.5, 150.0], [2.5, 250.0]])
         os.remove(path3)
 
-        # Test comma decimal parsing
+        # Test integer pairs are not merged into decimals
         fd4, path4 = tempfile.mkstemp()
         with os.fdopen(fd4, 'w') as f:
             f.write(content_comma)
         dic, data = ng.jcampdx.read(path4)
-        assert data.shape == (1, 2, 2)
-        assert np.allclose(data[0], [[1.0, 10.5], [2.0, 20.5]])
+        assert data.shape == (1, 4, 2)
+        assert np.allclose(
+            data[0], [[15, 420], [16, 1201], [26, 300], [27, 3073]])
         os.remove(path4)
 
         # Test scientific notation

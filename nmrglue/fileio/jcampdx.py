@@ -458,11 +458,6 @@ def _parse_data(datastring):
     '''
     Creates numpy array from datalines
     '''
-    header_end = datastring.find('\n')
-    data_part = datastring[header_end:] if header_end != -1 else datastring
-    if ',' in data_part and '.' not in data_part:
-        datastring = re.sub(r'(\d),(\d)', r'\1.\2', datastring)
-
     datalines = datastring.split("\n")
     headerline = datalines[0]
 
