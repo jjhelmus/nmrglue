@@ -809,7 +809,7 @@ def guess_udic(dic, data):
     # "size"
     npoints = None
     if data is not None:
-    if isinstance(data, list):
+        if isinstance(data, list):
             npoints = len(data[0])  # if list [R,I]
         else:
             npoints = len(data)
@@ -831,27 +831,27 @@ def guess_udic(dic, data):
     firstx, lastx, is_ppm = _find_firstx_lastx(dic)
     if firstx is not None and lastx is not None:
         if is_processed:
-    # ppm data: convert to Hz
+            # ppm data: convert to Hz
             if is_ppm:
         if obs_freq:
             firstx = firstx * obs_freq
             lastx = lastx * obs_freq
         else:
             firstx, lastx = (None, None)
-                    warn('Data is in ppm but base frequency is unknown, \
+            warn('Data is in ppm but base frequency is unknown, \
                           cannot set udic spectral width')
     if firstx is not None and lastx is not None:
         udic[0]["sw"] = abs(lastx - firstx)
-                udic[0]["car"] = (lastx + firstx) / 2
+        udic[0]["car"] = (lastx + firstx) / 2
     else:
-            # FID:
-            if npoints:
-                aqtime = lastx - firstx
-                sw = npoints / aqtime
-                udic[0]["sw"] = sw
-            # note: in FIDs "car" is left to default as there is no required
-            # standard tag in JCAMP for it. Quite often manufacturers store
-            # it under their own tags though.
+        # FID:
+        if npoints:
+            aqtime = lastx - firstx
+            sw = npoints / aqtime
+            udic[0]["sw"] = sw
+        # note: in FIDs "car" is left to default as there is no required
+        # standard tag in JCAMP for it. Quite often manufacturers store
+        # it under their own tags though.
     else:
         warn('No data ranges found from JCAMP, cannot set udic sw & car')
 
