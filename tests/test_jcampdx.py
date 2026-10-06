@@ -1,8 +1,10 @@
 """ Tests for the fileio.jcampdx submodule """
 
 import os
+import tempfile
 import numpy as np
 import nmrglue as ng
+import pytest
 from setup import DATA_DIR
 
 
@@ -222,3 +224,206 @@ def test_jcampdx_dicstructure2():
     # check data
     assert len(data2) == 8
     assert data2[-1] == 1.0
+
+
+def test_jcampdx_parsing_improvements():
+    # 1. Test coordinate format (XY..XY)
+    content_xy = (
+        "##TITLE=Test XY\n"
+        "##JCAMPDX=5.0\n"
+        "##DATATYPE=NMR SPECTRUM\n"
+        "##DATA CLASS=XYDATA\n"
+        "##XYDATA=(X..XY)\n"
+        "1.0, 10.0; 2.0, 20.0; 3.0, 30.0\n"
+        "##END=\n"
+    )
+
+    # 2. Test PEAKTABLE and XYPOINTS
+    content_peakt = (
+        "##TITLE=Test PEAKTABLE\n"
+        "##JCAMPDX=5.0\n"
+        "##DATATYPE=NMR SPECTRUM\n"
+        "##PEAKTABLE=(XY..XY)\n"
+        "1.0, 100.0\n"
+        "2.0, 200.0\n"
+        "##END=\n"
+    )
+
+    content_xypoints = (
+        "##TITLE=Test XYPOINTS\n"
+        "##JCAMPDX=5.0\n"
+        "##DATATYPE=NMR SPECTRUM\n"
+        "##XYPOINTS=(XY..XY)\n"
+        "1.5, 150.0\n"
+        "2.5, 250.0\n"
+        "##END=\n"
+    )
+
+    # 3. Test integer (XY..XY) pairs, as in mass spectra peak tables
+    content_comma = (
+        "##TITLE=Test Integer Pairs\n"
+        "##JCAMPDX=5.0\n"
+        "##DATATYPE=NMR SPECTRUM\n"
+        "##XYPOINTS=(XY..XY)\n"
+        "15,420 16,1201\n"
+        "26,300 27,3073\n"
+        "##END=\n"
+    )
+
+    # 4. Test scientific notation in XY pairs
+    content_sci = (
+        "##TITLE=Test Scientific\n"
+        "##JCAMPDX=5.0\n"
+        "##DATATYPE=NMR SPECTRUM\n"
+        "##XYPOINTS=(XY..XY)\n"
+        "1.5e3, 2.0E-1\n"
+        "##END=\n"
+    )
+
+    fd, path = tempfile.mkstemp()
+    try:
+        # Test XY coordinate parsing
+        with os.fdopen(fd, 'w') as f:
+            f.write(content_xy)
+        dic, data = ng.jcampdx.read(path)
+        assert data.shape == (1, 3, 2)
+        assert np.allclose(data[0], [[1.0, 10.0], [2.0, 20.0], [3.0, 30.0]])
+
+        # Test PEAKTABLE
+        fd2, path2 = tempfile.mkstemp()
+        with os.fdopen(fd2, 'w') as f:
+            f.write(content_peakt)
+        dic, data = ng.jcampdx.read(path2)
+        assert data.shape == (1, 2, 2)
+        assert np.allclose(data[0], [[1.0, 100.0], [2.0, 200.0]])
+        os.remove(path2)
+
+        # Test XYPOINTS
+        fd3, path3 = tempfile.mkstemp()
+        with os.fdopen(fd3, 'w') as f:
+            f.write(content_xypoints)
+        dic, data = ng.jcampdx.read(path3)
+        assert data.shape == (1, 2, 2)
+        assert np.allclose(data[0], [[1.5, 150.0], [2.5, 250.0]])
+        os.remove(path3)
+
+        # Test integer pairs are not merged into decimals
+        fd4, path4 = tempfile.mkstemp()
+        with os.fdopen(fd4, 'w') as f:
+            f.write(content_comma)
+        dic, data = ng.jcampdx.read(path4)
+        assert data.shape == (1, 4, 2)
+        assert np.allclose(
+            data[0], [[15, 420], [16, 1201], [26, 300], [27, 3073]])
+        os.remove(path4)
+
+        # Test scientific notation
+        fd5, path5 = tempfile.mkstemp()
+        with os.fdopen(fd5, 'w') as f:
+            f.write(content_sci)
+        dic, data = ng.jcampdx.read(path5)
+        assert data.shape == (1, 1, 2)
+        assert np.allclose(data[0], [[1500.0, 0.2]])
+        os.remove(path5)
+    finally:
+        os.remove(path)
+
+
+def test_jcampdx_xy_pairs_indented_and_signed():
+    '''JCAMP-DX read: (XY..XY) pairs with leading whitespace or signs'''
+    cases = [
+        # indented, one pair per line, as some MS writers emit
+        (" 199.9, 1097735\n 199.95, 1097736\n",
+         [[199.9, 1097735.0], [199.95, 1097736.0]]),
+        # indented, several pairs per line
+        (" 27, 1248 28, 2067\n 29, 5538\n",
+         [[27.0, 1248.0], [28.0, 2067.0], [29.0, 5538.0]]),
+        # a signed first value, as for cyclic voltammetry potentials
+        ("-1.5, 20\n-1.4, -21\n", [[-1.5, 20.0], [-1.4, -21.0]]),
+    ]
+    for lines, expected in cases:
+        fd, path = tempfile.mkstemp()
+        try:
+            with os.fdopen(fd, 'w') as f:
+                f.write("##TITLE=Test\n##JCAMPDX=5.0\n"
+                        "##DATATYPE=NMR SPECTRUM\n##DATA CLASS=XYDATA\n"
+                        "##XYDATA=(XY..XY)\n" + lines + "##END=\n")
+            dic, data = ng.jcampdx.read(path)
+            assert data.shape == (1, len(expected), 2)
+            assert np.allclose(data[0], expected)
+        finally:
+            os.remove(path)
+
+
+def test_jcampdx_empty_table():
+    '''JCAMP-DX read: a table with no values gives no data, not an error'''
+    fd, path = tempfile.mkstemp()
+    try:
+        with os.fdopen(fd, 'w') as f:
+            f.write("##TITLE=Test\n##JCAMPDX=5.0\n"
+                    "##DATATYPE=NMR SPECTRUM\n##DATA CLASS=PEAKTABLE\n"
+                    "##NPOINTS=0\n##PEAKTABLE=(XY..XY)\n##END=\n")
+        dic, data = ng.jcampdx.read(path)
+        assert data is None
+    finally:
+        os.remove(path)
+
+
+def test_jcampdx_xy_pairs_factors():
+    '''JCAMP-DX read: XFACTOR scales X and YFACTOR scales Y of (XY..XY) pairs'''
+    fd, path = tempfile.mkstemp()
+    try:
+        with os.fdopen(fd, 'w') as f:
+            f.write("##TITLE=Test\n##JCAMPDX=5.0\n##DATATYPE=NMR SPECTRUM\n"
+                    "##XFACTOR=10\n##YFACTOR=2\n"
+                    "##XYDATA=(XY..XY)\n1, 5\n2, 6\n##END=\n")
+        dic, data = ng.jcampdx.read(path)
+        assert np.allclose(data[0], [[10.0, 10.0], [20.0, 12.0]])
+    finally:
+        os.remove(path)
+
+
+def _read_peaktable(header, lines):
+    fd, path = tempfile.mkstemp()
+    try:
+        with os.fdopen(fd, 'w') as f:
+            f.write("##TITLE=Test\n##JCAMPDX=5.01\n"
+                    "##DATATYPE=NMR SPECTRUM\n##DATA CLASS=PEAKTABLE\n"
+                    "##PEAKTABLE=" + header + "\n" + lines + "##END=\n")
+        return ng.jcampdx.read(path)[1]
+    finally:
+        os.remove(path)
+
+
+def test_jcampdx_xy_leading_decimal_point():
+    '''JCAMP-DX read: (XY..XY) values written without a leading zero'''
+    data = _read_peaktable("(XY..XY)", ".5,3 .75,-.25\n-.5,1E2\n")
+    assert data.shape == (1, 3, 2)
+    assert np.allclose(data[0], [[0.5, 3.0], [0.75, -0.25], [-0.5, 100.0]])
+
+
+def test_jcampdx_xyw_and_xym_tables():
+    '''JCAMP-DX read: (XYW..XYW) and (XYM..XYM) peak tables'''
+    # one triplet per line, as peak-picking software exports it
+    data = _read_peaktable("(XYW..XYW)",
+                           "-4.25,1.5,0.25\n0.75,1.75,0.003\n")
+    assert data.shape == (1, 2, 3)
+    assert np.allclose(data[0], [[-4.25, 1.5, 0.25], [0.75, 1.75, 0.003]])
+
+    # triplets separated by commas alone are not paired across tuples
+    data = _read_peaktable("(XYW..XYW)", "15,420,1,16,1201,2\n")
+    assert np.allclose(data[0], [[15, 420, 1], [16, 1201, 2]])
+
+    # the multiplicity is text: X and Y are returned, with a warning
+    with pytest.warns(UserWarning, match="only the XY values"):
+        data = _read_peaktable("(XYM..XYM)", "15.0,420,S 16.0,1201,D\n")
+    assert np.allclose(data[0], [[15, 420], [16, 1201]])
+
+    # semicolon-separated pairs, with one ending the line
+    data = _read_peaktable("(XY..XY)", "12.5,300.0;13.5,410.0;\n")
+    assert np.allclose(data[0], [[12.5, 300], [13.5, 410]])
+
+    # a line that does not hold whole tuples is refused, not re-paired
+    with pytest.warns(UserWarning, match="whole tuples"):
+        data = _read_peaktable("(XYW..XYW)", "15,420,1 16,1201\n")
+    assert data is None
