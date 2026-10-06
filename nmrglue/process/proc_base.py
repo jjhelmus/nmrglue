@@ -93,6 +93,18 @@ def gm(data, g1=0.0, g2=0.0, g3=0.0, inv=False, rev=False):
     ndata : ndarray
         Array of NMR data with apodization applied.
 
+    Notes
+    -----
+    The factor ``0.6`` in the Gaussian term matches the NMRPipe GM function.
+    It approximates
+
+    .. math::
+        \\frac{1}{2\\sqrt{\\ln(2)}} \\approx 0.600561,
+
+    the coefficient for which the Fourier transform of the Gaussian
+    contribution has a full width at half maximum of ``g2``. The rounded
+    value is retained for numerical compatibility with NMRPipe.
+
     """
     size = data.shape[-1]
     e = pi * np.arange(size) * g1

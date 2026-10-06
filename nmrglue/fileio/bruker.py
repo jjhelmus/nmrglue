@@ -182,8 +182,10 @@ def add_axis_to_udic(udic, dic, udim, strip_fake):
                 udic[udim]["encoding"] = "undefined"
             elif aq_mod == 1:
                 udic[udim]["encoding"] = "magnitude"  # qf
+                udic[udim]["complex"] = False
             elif aq_mod == 2:
                 udic[udim]["encoding"] = "magnitude"  # qsec
+                udic[udim]["complex"] = False
             elif aq_mod == 3:
                 udic[udim]["encoding"] = "tppi"
             elif aq_mod == 4:
@@ -203,8 +205,10 @@ def add_axis_to_udic(udic, dic, udim, strip_fake):
             aq_mod = dic[pro_file]["MC2"]
             if aq_mod == 0:
                 udic[udim]["encoding"] = "magnitude"  # qf
+                udic[udim]["complex"] = False
             elif aq_mod == 1:
                 udic[udim]["encoding"] = "magnitude"  # qsec
+                udic[udim]["complex"] = False
             elif aq_mod == 2:
                 udic[udim]["encoding"] = "tppi"
             elif aq_mod == 3:
@@ -426,21 +430,28 @@ def read(dir=".", bin_file=None, acqus_files=None, pprog_file=None, shape=None,
             else:
                 isfloat = False
 
-    # read the binary file
-    f = os.path.join(dir, bin_file)
-    _, data = read_binary(f, shape=shape, cplex=cplex, big=big,
-                             isfloat=isfloat)
-
     try:
         if dic['acqus']['FnTYPE'] == 2: # non-uniformly sampled data
             try:
                 dic['nuslist'] = read_nuslist(dir)
             except FileNotFoundError:
                 warn("NUS data detected, but nuslist was not found")
+            shape = (-1, shape[-1])
     except KeyError:
         # old datasets do not have the FnTYPE parameter in acqus files.
         # also fails silently when acqus file is absent.
         pass
+
+    estimated_dims = 1
+    for i in (2, 3, 4):
+        if f'acqu{i}s' in dic.keys():
+            estimated_dims += 1
+
+    # read the binary file
+    f = os.path.join(dir, bin_file)
+    _, data = read_binary(f, shape=shape, cplex=cplex, big=big,
+                             isfloat=isfloat, estimated_dims=estimated_dims)
+
 
     return dic, data
 
@@ -1052,19 +1063,25 @@ def guess_shape(dic):
     except KeyError:
         dtypa = 0   # default value, int32 data
 
+    if dtypa == 0:
+        bytesize = 4
+    elif dtypa == 2:
+        bytesize = 8
+    else:
+        raise ValueError(f'DTYPA ({dtypa}) is inconsistent with expected values of 0 or 2')
+
     # last (direct) dimension is given by "TD" parameter in acqus file
     # rounded up to nearest (1024/(bytes per point))
     # next-to-last dimension may be given by "TD" in acqu2s. In 3D+ data
     # this is often the sum of the indirect dimensions
-    if dtypa == 2:
-        shape = [0, 0, td2, int(np.ceil(td0 / 128.) * 128.)]
-    else:
-        shape = [0, 0, td2, int(np.ceil(td0 / 256.) * 256.)]
+
+    pointsize = 1024.0 / bytesize
+    shape = [0, 0, td2, int(np.ceil(td0 / pointsize) * pointsize)]
 
     # additional dimension given by data size
     if shape[2] != 0 and shape[3] != 0:
-        shape[1] = fsize // (shape[3] * shape[2] * 4)
-        shape[0] = fsize // (shape[3] * shape[2] * shape[1] * 4)
+        shape[1] = fsize // (shape[3] * shape[2] * bytesize)
+        shape[0] = fsize // (shape[3] * shape[2] * shape[1] * bytesize)
 
     # if there in no pulse program parameters in dictionary return current
     # shape after removing zeros
@@ -1521,7 +1538,7 @@ def reorder_submatrix(data, shape, submatrix_shape, reverse=False):
 
 # Bruker binary (fid/ser) reading and writing
 
-def read_binary(filename, shape=(1), cplex=True, big=True, isfloat=False):
+def read_binary(filename, shape=(1), cplex=True, big=True, isfloat=False, estimated_dims=None):
     """
     Read Bruker binary data from file and return dic,data pair.
 
@@ -1570,7 +1587,18 @@ def read_binary(filename, shape=(1), cplex=True, big=True, isfloat=False):
         return dic, data.reshape(shape)
 
     except ValueError:
-        warn(f"{data.shape} cannot be shaped into {shape}")
+        try:
+            data = data.reshape(-1, shape[-1])
+            if estimated_dims and (estimated_dims > 2): 
+                warn(
+                    "Data is inconsistent with acquistion parameters. "
+                    "This usually happens with partially acquired datasets with dims >2. "
+                    "A 2D dataset will be returned. This will requires further reshaping before processing."
+                )
+            return dic, data
+        except ValueError:
+            warn(f"{data.shape} cannot be shaped into {shape} or a consistent 2D array. A 1D array will be returned.")
+        
         return dic, data
 
 
@@ -2724,3 +2752,48 @@ def read_vdlist(dirc, fname='vdlist'):
     vdlist = [float(i) for i in vdlist]
 
     return vdlist
+
+def guess_topspin_version(dic):
+    """
+    Guess the version of topspin on which the data was acquired
+
+    Parameters
+    ----------
+    dic : dict
+        dictionary associated with the data
+
+    Returns
+    -------
+    tuple
+        (version, tag, instrument)
+
+    """
+    version = dic["acqus"]["_coreheader"][0]
+    version = version.split("##TITLE= Parameter file, ")[1]
+    version = (
+        version.replace(" ", "")
+        .replace("\t", "")
+        .replace("Version", "")
+        .replace("TopSpin", "topspin.")
+        .replace("TOPSPIN", "topspin.")
+    )
+    if "XWIN-NMR" in version:
+        version = version.replace("XWIN-NMR", "xwin-nmr.").split(".")
+    else:
+        version = version.replace(" ", "").replace("pl", ".pl.").split(".")
+
+    parsed_version = []
+    for i in version:
+        try:
+            parsed_version.append(int(i))
+        except (TypeError, ValueError):
+            parsed_version.append(i)
+
+    version = f"{parsed_version[1]}.{parsed_version[2]}"
+    instrument = parsed_version[0]
+    try:
+        tag = ''.join(str(i) for i in parsed_version[3:])
+    except IndexError:
+        tag = ''
+
+    return version, tag, instrument

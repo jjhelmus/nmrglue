@@ -330,6 +330,48 @@ class unit_conversion():
     __call__ = i    # calling the object x is the same as x.i
 
 
+def update_uc(uc, **kwargs):
+    """
+    Updates the unit_conversion object with new parameters 
+    and returns a new unit_conversion object
+
+    Parameters
+    ----------
+    uc : unit_conversion
+        unit_conversion object to update
+
+    Returns
+    -------
+    unit_conversion
+        Updated unit_conversion object
+
+    Raises
+    ------
+    TypeError
+        If the provided uc is not a unit conversion object 
+    TypeError
+        If the parameter to update is not a valid parameter.
+
+    """
+    if not isinstance(uc, unit_conversion):
+        raise TypeError(f'{uc} is not a unit_conversion object.')
+
+    if not kwargs:
+        return uc
+    
+    params = ('size', 'cplx', 'sw', 'obs', 'car')
+    new_params = {p: uc.__getattribute__(f'_{p}') for p in params}
+    
+    for k, v in kwargs.items():
+        if k in params:
+            new_params[k] = v
+        else:
+            raise TypeError(
+                f'{k} cannot be used to construct a unit conversion object. Acceptable keywords are {(params)}.')
+
+    return unit_conversion(*new_params.values())
+
+
 def uc_from_udic(udic, dim=-1):
     """
     Create a unit conversion object from a Universal dictionary.
