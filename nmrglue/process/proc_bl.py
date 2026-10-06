@@ -206,7 +206,7 @@ def calc_bl_med(x, mw, sf, sigma):
     # described algorithm but is MUCH faster
 
     # convolve with a gaussian
-    g = scipy.signal.gaussian(sf, sigma)
+    g = scipy.signal.windows.gaussian(sf, sigma)
     g = g / g.sum()
     return scipy.signal.convolve(m, g, mode='same')
 
@@ -360,7 +360,7 @@ def sol_gaussian(data, w=16, mode='same'):
     """
     Solvent filter with square gaussian filter. See :py:func:`sol_general`.
     """
-    filter = scipy.signal.gaussian(w, w / 2.)
+    filter = scipy.signal.windows.gaussian(w, w / 2.)
     return sol_general(data, filter, w=w, mode=mode)
 
 

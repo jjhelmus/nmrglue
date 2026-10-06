@@ -20,7 +20,7 @@ cl = contour_start * contour_factor ** np.arange(contour_num)
 dic, data = ng.pipe.read("nmrpipe_2d/test.ft2")
 
 # read in the integration limits
-peak_list = np.recfromtxt("limits.in")
+peak_list = np.genfromtxt("limits.in", dtype=None)
 
 # create the figure
 fig = plt.figure()
@@ -28,7 +28,7 @@ ax = fig.add_subplot(111)
 
 # plot the contours
 ax.contour(data, cl, cmap=cmap,
-            extent=(0, data.shape[1] - 1, 0, data.shape[0] - 1))
+           extent=(0, data.shape[1] - 1, 0, data.shape[0] - 1))
 
 # loop over the peaks
 for name, x0, y0, x1, y1 in peak_list:

@@ -81,7 +81,7 @@ def read_table(filename):
     # print(dtd['names'],dtd['formats'])
     s = [l.encode('utf-8') for l in dl]
 
-    rec = np.recfromtxt(s, dtype=dtd, comments='XXXXXXXXXXX')
+    rec = np.genfromtxt(s, dtype=dtd, comments='XXXXXXXXXXX')
     return cl, pformat, np.atleast_1d(rec)
 
 
@@ -191,6 +191,7 @@ def make_uc(dic, data, dim=-1):
 ############################
 # dictionary/data creation #
 ############################
+
 
 fd2dphase_dic = {"magnitude": 0, "tppi": 1, "states": 2, "image": 3}
 
@@ -318,7 +319,7 @@ def create_dic(udic, datetimeobj=datetime.datetime.now()):
 
     if ((dic["FDF1QUADFLAG"] == dic["FDF2QUADFLAG"] == dic["FDF3QUADFLAG"]) and
             (dic["FDF1QUADFLAG"] == dic["FDF4QUADFLAG"] == 1)):
-                dic["FDQUADFLAG"] = 1.0
+        dic["FDQUADFLAG"] = 1.0
 
     return dic
 
@@ -1111,7 +1112,7 @@ def write_slice_3D(filemask, dic, data, shape, slices):
             # file doesn't exist, create a empty one
             ndata = np.zeros((dy, dx), dtype=data.dtype)
             write_single(f, dic, data, False)
-            del(ndata)
+            del ndata
 
         # mmap the [new] file
         mdata = np.memmap(f, dtype='float32', offset=512 * 4, mode='r+')
@@ -1132,11 +1133,11 @@ def write_slice_3D(filemask, dic, data, shape, slices):
         if data.dtype == 'complex64':
             idata[sy, sx] = data.imag[i]
             idata.flush()
-            del(idata)
+            del idata
 
         # clean up
-        del(rdata)
-        del(mdata)
+        del rdata
+        del mdata
 
 # iter3D tools (xyz2pipe and pipe2xyz replacements)
 # Notes for iter3D implementation
@@ -1260,6 +1261,7 @@ class iter3D:
             ziter.write("ft/test%03d.ft3",XZplane,dic)
 
     """
+
     def __init__(self, filemask, in_lead="x", out_lead="DEFAULT"):
         """
         Create a iter3D object
@@ -1806,9 +1808,9 @@ class pipe_3d(fileiobase.data_nd):
         f3 = "FDF" + str(int(dic["FDDIMORDER3"]))
         quadrature_factor = [2, 1][int(dic[f3 + 'QUADFLAG'])]
 
-        #Checking whether "nmrPipe -fn EXT ..." has been applied to z-dim or not.
-        #If EXT has been applied, FDF*XN is not zero.
-        #If z-dim is in time-domain, data-size given by FDF*X1 and FDF*XN has to be doubled.
+        # Checking whether "nmrPipe -fn EXT ..." has been applied to z-dim or not.
+        # If EXT has been applied, FDF*XN is not zero.
+        # If z-dim is in time-domain, data-size given by FDF*X1 and FDF*XN has to be doubled.
         if dic[f3 + 'FTFLAG']:
 
             if int(dic[f3 + 'XN']) == 0:
@@ -1900,6 +1902,7 @@ class pipestream_3d(fileiobase.data_nd):
         Ordering of axes against file.
 
     """
+
     def __init__(self, filename, order=(0, 1, 2)):
         """
         Create and set up object
@@ -1995,6 +1998,7 @@ class pipe_4d(fileiobase.data_nd):
         set exist.  Raises a IOError if files are missing. Default is False.
 
     """
+
     def __init__(self, filemask, order=(0, 1, 2, 3), fcheck=False):
         """
         Create and set up object, check that files exist if fcheck is True
@@ -2194,6 +2198,7 @@ class pipestream_4d(fileiobase.data_nd):
                     out[ai, zi, yi] = trace[sX]
         f.close()
         return out
+
 
 # data, see fdata.h
 fdata_nums = {
