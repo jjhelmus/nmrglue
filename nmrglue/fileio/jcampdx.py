@@ -107,7 +107,12 @@ def _parsejcampdx(filename, read_err=None, _opened=None):
                     _opened.append((activeblock, parent))
                 blockstack.append(activeblock)
 
-            if actual[:5] == "##END":
+            # only ##END= closes a block; ##END NTUPLES= closes the NTUPLES
+            # table inside it and, as before, is not kept
+            endkey = _getkey(actual[2:].split("=", 1)[0])
+            if endkey == "ENDNTUPLES":
+                continue
+            if endkey == "END":
                 # finalize current block
                 if activeblock:  # ensure that we had active block instead of too many ##ENDs
                     readyblocklist.append(blockstack.pop())

@@ -322,3 +322,53 @@ def test_jcampdx_read_blocks_read_err():
             ng.jcampdx.read_blocks(path, read_err='strict')
     finally:
         os.remove(path)
+
+
+_NTUPLES_LINK_FILE = (
+    "##TITLE=Linked\n"
+    "##JCAMP-DX=6.0\n"
+    "##DATA TYPE=LINK\n"
+    "##BLOCKS=2\n"
+    "##TITLE=FID\n"
+    "##JCAMP-DX=6.0\n"
+    "##DATA TYPE=NMR FID\n"
+    "##DATA CLASS=NTUPLES\n"
+    "##NTUPLES=NMR FID\n"
+    "##VAR_NAME=TIME,FID/REAL\n"
+    "##SYMBOL=X,R\n"
+    "##FACTOR=1,1\n"
+    "##PAGE=N=1\n"
+    "##DATA TABLE=(X++(R..R)),XYDATA\n"
+    "0 1 2 3\n"
+    "##END NTUPLES=NMR FID\n"
+    "##END=\n"
+    "##TITLE=Spectrum\n"
+    "##JCAMP-DX=6.0\n"
+    "##DATA TYPE=NMR SPECTRUM\n"
+    "##DATA CLASS=XYDATA\n"
+    "##XYDATA=(X++(Y..Y))\n"
+    "0 4 5 6\n"
+    "##$INTEGRALS=(X Y)\n"
+    "##END=\n"
+    "##END=\n"
+)
+
+
+def test_jcampdx_read_blocks_end_ntuples():
+    '''JCAMP-DX read_blocks: ##END NTUPLES= does not close the block'''
+    fd, path = tempfile.mkstemp()
+    try:
+        with os.fdopen(fd, 'w') as f:
+            f.write(_NTUPLES_LINK_FILE.replace(
+                "##END=\n##TITLE=Spectrum",
+                "##$PROCESSED=yes\n##END=\n##TITLE=Spectrum"))
+        blocks = ng.jcampdx.read_blocks(path)
+        # both blocks stay inside the LINK block
+        assert [b["_parent"] for b in blocks] == [None, 0, 0]
+        # a label after ##END NTUPLES= belongs to the block it is in
+        assert blocks[1]["$PROCESSED"] == ["yes"]
+        assert "$PROCESSED" not in blocks[0]
+        assert "ENDNTUPLES" not in blocks[1]
+        assert blocks[2]["$INTEGRALS"] == ["(X Y)"]
+    finally:
+        os.remove(path)
