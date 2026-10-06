@@ -145,3 +145,19 @@ def test_reorder_nus_3d_quadorder():
     assert np.allclose(full_data[15, 12], nus_data[13], atol=1e-7)
     assert np.allclose(full_data[14, 13], nus_data[14], atol=1e-7)
     assert np.allclose(full_data[15, 13], nus_data[15], atol=1e-7)
+
+
+def test_zd_wide_rounds_half_up():
+    """zd_* round a fractional half width half up, as NMRPipe does"""
+    for zd_func in (ng.proc_base.zd_boxcar, ng.proc_base.zd_triangle,
+                    ng.proc_base.zd_sinebell, ng.proc_base.zd_gaussian):
+        def band(wide):
+            # zd works in place, so each call gets fresh data
+            return zd_func(np.ones((64, 64)), wide=wide, x0=0.0, slope=1.0)
+
+        # a float width works at all; NumPy 2 rejects a float sample count
+        assert np.array_equal(band(5.0), band(5))
+        assert np.array_equal(band(5.49), band(5))
+        assert np.array_equal(band(5.5), band(6))
+        assert np.array_equal(band(4.5), band(5))
+        assert not np.array_equal(band(5.5), band(5))
