@@ -4,6 +4,7 @@ import os
 import tempfile
 import numpy as np
 import nmrglue as ng
+import pytest
 from setup import DATA_DIR
 
 
@@ -380,3 +381,49 @@ def test_jcampdx_xy_pairs_factors():
         assert np.allclose(data[0], [[10.0, 10.0], [20.0, 12.0]])
     finally:
         os.remove(path)
+
+
+def _read_peaktable(header, lines):
+    fd, path = tempfile.mkstemp()
+    try:
+        with os.fdopen(fd, 'w') as f:
+            f.write("##TITLE=Test\n##JCAMPDX=5.01\n"
+                    "##DATATYPE=NMR SPECTRUM\n##DATA CLASS=PEAKTABLE\n"
+                    "##PEAKTABLE=" + header + "\n" + lines + "##END=\n")
+        return ng.jcampdx.read(path)[1]
+    finally:
+        os.remove(path)
+
+
+def test_jcampdx_xy_leading_decimal_point():
+    '''JCAMP-DX read: (XY..XY) values written without a leading zero'''
+    data = _read_peaktable("(XY..XY)", ".5,3 .75,-.25\n-.5,1E2\n")
+    assert data.shape == (1, 3, 2)
+    assert np.allclose(data[0], [[0.5, 3.0], [0.75, -0.25], [-0.5, 100.0]])
+
+
+def test_jcampdx_xyw_and_xym_tables():
+    '''JCAMP-DX read: (XYW..XYW) and (XYM..XYM) peak tables'''
+    # one triplet per line, as peak-picking software exports it
+    data = _read_peaktable("(XYW..XYW)",
+                           "-4.25,1.5,0.25\n0.75,1.75,0.003\n")
+    assert data.shape == (1, 2, 3)
+    assert np.allclose(data[0], [[-4.25, 1.5, 0.25], [0.75, 1.75, 0.003]])
+
+    # triplets separated by commas alone are not paired across tuples
+    data = _read_peaktable("(XYW..XYW)", "15,420,1,16,1201,2\n")
+    assert np.allclose(data[0], [[15, 420, 1], [16, 1201, 2]])
+
+    # the multiplicity is text: X and Y are returned, with a warning
+    with pytest.warns(UserWarning, match="only the XY values"):
+        data = _read_peaktable("(XYM..XYM)", "15.0,420,S 16.0,1201,D\n")
+    assert np.allclose(data[0], [[15, 420], [16, 1201]])
+
+    # semicolon-separated pairs, with one ending the line
+    data = _read_peaktable("(XY..XY)", "12.5,300.0;13.5,410.0;\n")
+    assert np.allclose(data[0], [[12.5, 300], [13.5, 410]])
+
+    # a line that does not hold whole tuples is refused, not re-paired
+    with pytest.warns(UserWarning, match="whole tuples"):
+        data = _read_peaktable("(XYW..XYW)", "15,420,1 16,1201\n")
+    assert data is None
