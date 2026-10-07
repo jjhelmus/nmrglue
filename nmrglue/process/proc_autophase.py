@@ -79,7 +79,7 @@ def autops(data, fn, p0=0.0, p1=0.0, return_phases=False, peak_width=100,
     -------
     ndata : ndarray
         Phased NMR data.
-    opt : list of float, optional
+    opt : ndarray, optional
         ``[p0, p1]`` optimised phase values in degrees. Only returned when
         *return_phases* is ``True``.
 
@@ -122,6 +122,11 @@ def autops(data, fn, p0=0.0, p1=0.0, return_phases=False, peak_width=100,
     opt = [p0, p1]
 
     if bounds is not None:
+        if len(bounds) != 2 or any(len(b) != 2 for b in bounds):
+            raise ValueError(
+                'bounds must contain two (min, max) pairs, one for p0 and '
+                f'one for p1, got {bounds!r}'
+            )
         # Translate fmin-style keyword arguments into minimize options so the
         # same call works with and without bounds.
         options = {}

@@ -200,6 +200,18 @@ def test_autops_bounded_unknown_fn_raises():
                bounds=[(-180, 180), (-1800, 1800)])
 
 
+@pytest.mark.parametrize('bounds', [
+    [(-180, 180)],
+    [(-180, 180), (-1800, 1800), (0, 0)],
+    [(-180, 180), (0,)],
+])
+def test_autops_invalid_bounds_raises(bounds):
+    """bounds must be exactly two (min, max) pairs."""
+    data = _lorentzian_spectrum(p0=30.0)
+    with pytest.raises(ValueError, match='two \\(min, max\\) pairs'):
+        autops(data, 'acme', bounds=bounds)
+
+
 def test_autops_bounded_kwargs_passed_to_minimize():
     """Extra kwargs are forwarded to scipy.optimize.minimize."""
     data = _lorentzian_spectrum(p0=30.0)
