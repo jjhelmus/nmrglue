@@ -2,6 +2,7 @@
 
 import os
 import shutil
+import locale
 import tempfile
 import warnings
 
@@ -176,9 +177,12 @@ def test_read_jcamp_cp1252():
         os.remove(temp_path)
 
 
-def test_read_jcamp_undecodable_bytes():
+def test_read_jcamp_undecodable_bytes(monkeypatch):
     """bytes invalid in both utf-8 and cp1252 do not crash the reader"""
-    # 0x81 is undefined in cp1252 and invalid utf-8; latin-1 fallback
+    # 0x81 is undefined in cp1252 and invalid utf-8; latin-1 fallback.
+    # A utf-8 locale adds nothing, so the result does not depend on the
+    # machine running the test.
+    monkeypatch.setattr(locale, "getpreferredencoding", lambda *a: "UTF-8")
     content = _real_acqus_bytes().replace(
         b"##END=", b"##$BAD= <\x81>\n##END=")
     temp_path = _write_temp(content)
@@ -238,3 +242,36 @@ def test_read_jcamp_line_endings():
             expected = dic
         assert dic == expected
     assert expected["LOCKED"] is True
+
+
+def test_read_jcamp_locale_encoding(monkeypatch):
+    """the locale's encoding is tried before falling back to latin-1"""
+    # 0x81 fails utf-8 and cp1252 but is a letter in cp1251
+    content = _real_acqus_bytes().replace(
+        b"##END=", b"##$NAME= <\x81>\n##END=")
+    temp_path = _write_temp(content)
+    try:
+        monkeypatch.setattr(locale, "getpreferredencoding",
+                            lambda *a: "cp1251")
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")
+            dic = ng.bruker.read_jcamp(temp_path)
+        assert dic["NAME"] == "\u0403"
+        assert dic["LOCKED"] is True
+
+        # a latin-1 locale is a choice, not a fallback: no warning
+        monkeypatch.setattr(locale, "getpreferredencoding",
+                            lambda *a: "ISO-8859-1")
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")
+            dic = ng.bruker.read_jcamp(temp_path)
+        assert dic["NAME"] == "\x81"
+
+        # a locale encoding Python does not know is skipped
+        monkeypatch.setattr(locale, "getpreferredencoding",
+                            lambda *a: "no-such-codec")
+        with pytest.warns(UserWarning, match="latin-1"):
+            dic = ng.bruker.read_jcamp(temp_path)
+        assert dic["NAME"] == "\x81"
+    finally:
+        os.remove(temp_path)
