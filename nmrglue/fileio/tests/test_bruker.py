@@ -222,3 +222,19 @@ def test_read_jcamp_utf8_bom():
         assert dic["LOCKED"] is True  # remainder of the real file still parsed
     finally:
         os.remove(temp_path)
+
+
+def test_read_jcamp_line_endings():
+    """CRLF and CR-only line endings read as LF does"""
+    lf = _real_acqus_bytes().replace(b"\r\n", b"\n")
+    expected = None
+    for eol in (b"\n", b"\r\n", b"\r"):
+        temp_path = _write_temp(lf.replace(b"\n", eol))
+        try:
+            dic = ng.bruker.read_jcamp(temp_path)
+        finally:
+            os.remove(temp_path)
+        if expected is None:
+            expected = dic
+        assert dic == expected
+    assert expected["LOCKED"] is True

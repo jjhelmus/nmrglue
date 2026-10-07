@@ -2231,7 +2231,9 @@ def read_jcamp(filename, encoding=None):
              "non-ASCII characters may be incorrect."
              % (filename, " or ".join(codecs_to_try[:-1])))
 
-    return parse_jcamp_file(io.StringIO(text), dic)
+    # newline=None translates \r\n and \r line endings as open() did;
+    # StringIO's default would leave a \r-only file as a single line
+    return parse_jcamp_file(io.StringIO(text, newline=None), dic)
 
 def parse_jcamp_file(f,dic):
     """
