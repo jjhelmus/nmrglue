@@ -13,7 +13,7 @@ import scipy.optimize
 from .proc_base import ps
 
 # fmin keyword arguments and their scipy.optimize.minimize(Nelder-Mead)
-# option equivalents, used when autops is called with bounds.
+# option equivalents, used when autops is called with p1_bounds.
 _FMIN_TO_MINIMIZE_OPTIONS = {
     'xtol': 'xatol',
     'ftol': 'fatol',
@@ -25,7 +25,7 @@ _FMIN_TO_MINIMIZE_OPTIONS = {
 
 
 def autops(data, fn, p0=0.0, p1=0.0, return_phases=False, peak_width=100,
-           bounds=None, **kwargs):
+           p1_bounds=None, **kwargs):
     """
     Automatic linear phase correction
 
@@ -46,42 +46,28 @@ def autops(data, fn, p0=0.0, p1=0.0, return_phases=False, peak_width=100,
     return_phases : bool
         If True, also return the optimised ``[p0, p1]`` list in addition to
         the phased data.
-    bounds : sequence of two (min, max) pairs or None, optional
-        Bounds on the zero- and first-order phases, respectively, in degrees.
-        For example ``bounds=[(-180, 180), (-1800, 1800)]`` restricts p0 to
-        +-180 and p1 to +-1800 degrees. When *bounds* is provided the
-        optimisation uses :func:`scipy.optimize.minimize` with the Nelder-Mead
-        method (same simplex algorithm as :func:`scipy.optimize.fmin`) so the
-        solver behaviour is equivalent but constrained. When *bounds* is
-        ``None`` (default) the original unconstrained
-        :func:`scipy.optimize.fmin` is used and the function is fully
-        backward-compatible.
+    p1_bounds : (min, max) or None, optional
+        Bounds on the first-order phase in degrees, e.g. ``(-1800, 1800)``.
+        Either limit may be ``None`` for no bound on that side, and equal
+        limits fix p1, e.g. ``(0, 0)`` to find only the zero-order phase.
+        When *p1_bounds* is provided the optimisation uses
+        :func:`scipy.optimize.minimize` with the Nelder-Mead method (same
+        simplex algorithm as :func:`scipy.optimize.fmin`) and the returned p0
+        is wrapped into [-180, 180) degrees. When *p1_bounds* is ``None``
+        (default) the original unconstrained :func:`scipy.optimize.fmin` is
+        used and the function is fully backward-compatible.
 
-        Use ``(None, None)`` to leave one of the phases unbounded, e.g.
-        ``bounds=[(None, None), (-90, 90)]`` bounds only p1 and
-        ``bounds=[(-180, 180), (None, None)]`` bounds only p0. A pair with
-        equal limits fixes that phase, e.g. ``(0, 0)`` for p1 to find only
-        the zero-order phase.
-
-        Bounds are useful to find only the zero-order phase, or to prevent
-        the optimiser from wandering into physically unreasonable regions
-        when the spectrum has poor initial phase.
-
-        .. note:: The bounds are hard limits, while the zero-order phase is
-           periodic (360 degrees). If the required p0 correction lies close
-           to a p0 limit, the optimiser can stop at that limit and compensate
-           with a wrong p1 instead of reaching the correct value. When only
-           p1 needs to be restricted, leave p0 unbounded with
-           ``(None, None)``; otherwise keep a margin between the p0 limits
-           and the expected correction.
+        The zero-order phase is never bounded: it is periodic, and hard
+        limits on it can trap the optimiser at a limit while p1 compensates
+        for the remaining error.
     kwargs : additional key-word arguments
         Passed directly to the underlying solver.
 
-        When *bounds* is ``None`` (fmin): see
+        When *p1_bounds* is ``None`` (fmin): see
         https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin.html
         Useful options: ``disp`` (bool), ``ftol`` (float).
 
-        When *bounds* is provided (minimize): see
+        When *p1_bounds* is provided (minimize): see
         https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html
         The method is fixed to 'Nelder-Mead'; pass e.g.
         ``options={'xatol': 1e-4}``. The fmin-style arguments ``xtol``,
@@ -103,22 +89,14 @@ def autops(data, fn, p0=0.0, p1=0.0, return_phases=False, peak_width=100,
 
     >>> phased = ng.proc_autophase.autops(data, 'acme')
 
-    Bounded autophase — restrict search to +-180 in p0, +-1800 in p1:
+    Restrict the first-order phase to +-1800 degrees:
 
     >>> phased, phases = ng.proc_autophase.autops(
-    ...     data, 'acme', p0=0.0, p1=0.0,
-    ...     bounds=[(-180, 180), (-1800, 1800)],
-    ...     return_phases=True)
+    ...     data, 'acme', p1_bounds=(-1800, 1800), return_phases=True)
 
-    Zero-order only — fix p1 to zero and leave p0 unbounded:
+    Zero-order only — fix p1 to zero:
 
-    >>> phased = ng.proc_autophase.autops(
-    ...     data, 'acme', bounds=[(None, None), (0, 0)])
-
-    Bound only the first-order phase:
-
-    >>> phased = ng.proc_autophase.autops(
-    ...     data, 'acme', bounds=[(None, None), (-90, 90)])
+    >>> phased = ng.proc_autophase.autops(data, 'acme', p1_bounds=(0, 0))
 
     """
     arguments = [data]
@@ -140,14 +118,14 @@ def autops(data, fn, p0=0.0, p1=0.0, return_phases=False, peak_width=100,
 
     opt = [p0, p1]
 
-    if bounds is not None:
-        if len(bounds) != 2 or any(len(b) != 2 for b in bounds):
+    if p1_bounds is not None:
+        if len(p1_bounds) != 2 or not all(
+                b is None or np.isscalar(b) for b in p1_bounds):
             raise ValueError(
-                'bounds must contain two (min, max) pairs, one for p0 and '
-                f'one for p1, got {bounds!r}'
+                f'p1_bounds must be a (min, max) pair, got {p1_bounds!r}'
             )
         # Translate fmin-style keyword arguments into minimize options so the
-        # same call works with and without bounds.
+        # same call works with and without p1_bounds.
         options = {}
         for fmin_key, option_key in _FMIN_TO_MINIMIZE_OPTIONS.items():
             if fmin_key in kwargs:
@@ -156,11 +134,12 @@ def autops(data, fn, p0=0.0, p1=0.0, return_phases=False, peak_width=100,
         result = scipy.optimize.minimize(
             fn, x0=opt, args=tuple(arguments),
             method='Nelder-Mead',
-            bounds=bounds,
+            bounds=[(None, None), tuple(p1_bounds)],
             options=options,
             **kwargs,
         )
         opt = result.x
+        opt[0] = (opt[0] + 180) % 360 - 180
     else:
         opt = scipy.optimize.fmin(fn, x0=opt, args=tuple(arguments), **kwargs)
 
