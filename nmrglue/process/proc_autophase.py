@@ -12,6 +12,17 @@ import scipy.optimize
 
 from .proc_base import ps
 
+# fmin keyword arguments and their scipy.optimize.minimize(Nelder-Mead)
+# option equivalents, used when autops is called with bounds.
+_FMIN_TO_MINIMIZE_OPTIONS = {
+    'xtol': 'xatol',
+    'ftol': 'fatol',
+    'maxiter': 'maxiter',
+    'maxfun': 'maxfev',
+    'disp': 'disp',
+    'initial_simplex': 'initial_simplex',
+}
+
 
 def autops(data, fn, p0=0.0, p1=0.0, return_phases=False, peak_width=100,
            bounds=None, **kwargs):
@@ -59,7 +70,10 @@ def autops(data, fn, p0=0.0, p1=0.0, return_phases=False, peak_width=100,
         When *bounds* is provided (minimize): see
         https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html
         The method is fixed to 'Nelder-Mead'; pass e.g.
-        ``options={'xatol': 1e-4}``.
+        ``options={'xatol': 1e-4}``. The fmin-style arguments ``xtol``,
+        ``ftol``, ``maxiter``, ``maxfun``, ``disp`` and ``initial_simplex``
+        are also accepted and translated to the matching ``options`` entries
+        (explicit ``options`` take precedence).
 
     Returns
     -------
@@ -108,10 +122,18 @@ def autops(data, fn, p0=0.0, p1=0.0, return_phases=False, peak_width=100,
     opt = [p0, p1]
 
     if bounds is not None:
+        # Translate fmin-style keyword arguments into minimize options so the
+        # same call works with and without bounds.
+        options = {}
+        for fmin_key, option_key in _FMIN_TO_MINIMIZE_OPTIONS.items():
+            if fmin_key in kwargs:
+                options[option_key] = kwargs.pop(fmin_key)
+        options.update(kwargs.pop('options', {}))
         result = scipy.optimize.minimize(
             fn, x0=opt, args=tuple(arguments),
             method='Nelder-Mead',
             bounds=bounds,
+            options=options,
             **kwargs,
         )
         opt = result.x

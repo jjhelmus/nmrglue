@@ -19,12 +19,15 @@ from nmrglue.process.proc_autophase import (
 )
 from nmrglue.process.proc_base import ps
 
+# Tolerance (degrees) when comparing recovered phases with the applied error.
+PHASE_TOL = 5.0
+
 
 # =============================================================================
 # Helpers
 # =============================================================================
 
-def _lorentzian_spectrum(n=512, sw=10000.0, f0=1000.0, t2=0.1, p0=0.0, p1=0.0):
+def _lorentzian_spectrum(n=512, sw=10000.0, f0=1000.0, t2=0.01, p0=0.0, p1=0.0):
     """Return a phase-shifted Lorentzian spectrum (complex ndarray).
 
     Parameters
@@ -38,6 +41,9 @@ def _lorentzian_spectrum(n=512, sw=10000.0, f0=1000.0, t2=0.1, p0=0.0, p1=0.0):
     """
     t = np.arange(n) / sw
     fid = np.exp(1j * 2 * np.pi * f0 * t) * np.exp(-t / t2)
+    # Halve the first point so the DFT does not add a baseline offset that
+    # ACME would compensate with a spurious p1.
+    fid[0] *= 0.5
     spec = np.fft.fftshift(np.fft.fft(fid))
     return ps(spec, p0=p0, p1=p1)
 
@@ -91,9 +97,9 @@ def test_autops_acme_reduces_phase_error():
     p0_true = 60.0
     data = _lorentzian_spectrum(p0=p0_true)
     phased, opt = autops(data, 'acme', return_phases=True, disp=False)
-    # After correction the residual phase should be much smaller than the
-    # original error (we don't require exact recovery — ACME is heuristic).
-    assert abs(opt[0]) < abs(p0_true)
+    # The correction must undo the applied error: opt[0] ~ -p0_true, p1 ~ 0.
+    assert abs(p0_true + opt[0]) < PHASE_TOL, f"p0={opt[0]}"
+    assert abs(opt[1]) < PHASE_TOL, f"p1={opt[1]}"
 
 
 # =============================================================================
@@ -163,7 +169,8 @@ def test_autops_bounded_acme_reduces_phase_error():
     _, opt = autops(data, 'acme',
                     bounds=[(-180, 180), (-1800, 1800)],
                     return_phases=True)
-    assert abs(opt[0]) < abs(p0_true)
+    assert abs(p0_true + opt[0]) < PHASE_TOL, f"p0={opt[0]}"
+    assert abs(opt[1]) < PHASE_TOL, f"p1={opt[1]}"
 
 
 def test_autops_bounded_peak_minima():
@@ -202,6 +209,16 @@ def test_autops_bounded_kwargs_passed_to_minimize():
                          return_phases=True,
                          options={'xatol': 1e-2, 'fatol': 1e-2, 'disp': False})
     assert isinstance(phased, np.ndarray)
+
+
+def test_autops_bounded_accepts_fmin_kwargs():
+    """fmin-style kwargs (disp, xtol, ftol, ...) also work with bounds."""
+    data = _lorentzian_spectrum(p0=30.0)
+    _, opt = autops(data, 'acme',
+                    bounds=[(-180, 180), (-1800, 1800)],
+                    return_phases=True,
+                    disp=False, xtol=1e-4, ftol=1e-4, maxiter=2000)
+    assert abs(30.0 + opt[0]) < PHASE_TOL, f"p0={opt[0]}"
 
 
 def test_autops_bounded_vs_unbounded_agreement():
