@@ -201,6 +201,30 @@ def test_autops_bounded_unknown_fn_raises():
 
 
 @pytest.mark.parametrize('bounds', [
+    [(-180, 180), (None, None)],
+    [(None, None), (-90, 90)],
+    [(-np.inf, np.inf), (-1800, 1800)],
+])
+def test_autops_bounds_single_phase(bounds):
+    """(None, None) or infinite limits leave one phase unbounded."""
+    p0_true, p1_true = 60.0, 30.0
+    data = _lorentzian_spectrum(p0=p0_true, p1=p1_true)
+    _, opt = autops(data, 'acme', bounds=bounds, return_phases=True)
+    assert abs(p0_true + opt[0]) < PHASE_TOL, f"p0={opt[0]}"
+    assert abs(p1_true + opt[1]) < PHASE_TOL, f"p1={opt[1]}"
+
+
+def test_autops_p0_only_unbounded_p0():
+    """Fixing p1 with p0 unbounded recovers p0 near the +-180 limit."""
+    p0_true = 170.0
+    data = _lorentzian_spectrum(p0=p0_true)
+    _, opt = autops(data, 'acme', bounds=[(None, None), (0, 0)],
+                    return_phases=True)
+    assert abs(p0_true + opt[0]) < PHASE_TOL, f"p0={opt[0]}"
+    assert opt[1] == 0.0
+
+
+@pytest.mark.parametrize('bounds', [
     [(-180, 180)],
     [(-180, 180), (-1800, 1800), (0, 0)],
     [(-180, 180), (0,)],

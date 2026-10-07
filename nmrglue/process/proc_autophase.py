@@ -57,9 +57,23 @@ def autops(data, fn, p0=0.0, p1=0.0, return_phases=False, peak_width=100,
         :func:`scipy.optimize.fmin` is used and the function is fully
         backward-compatible.
 
-        Bounds are useful to find only the zero-order phase (set p1 bounds to
-        ``(0, 0)``), or to prevent the optimiser from wandering into physically
-        unreasonable regions when the spectrum has poor initial phase.
+        Use ``(None, None)`` to leave one of the phases unbounded, e.g.
+        ``bounds=[(None, None), (-90, 90)]`` bounds only p1 and
+        ``bounds=[(-180, 180), (None, None)]`` bounds only p0. A pair with
+        equal limits fixes that phase, e.g. ``(0, 0)`` for p1 to find only
+        the zero-order phase.
+
+        Bounds are useful to find only the zero-order phase, or to prevent
+        the optimiser from wandering into physically unreasonable regions
+        when the spectrum has poor initial phase.
+
+        .. note:: The bounds are hard limits, while the zero-order phase is
+           periodic (360 degrees). If the required p0 correction lies close
+           to a p0 limit, the optimiser can stop at that limit and compensate
+           with a wrong p1 instead of reaching the correct value. When only
+           p1 needs to be restricted, leave p0 unbounded with
+           ``(None, None)``; otherwise keep a margin between the p0 limits
+           and the expected correction.
     kwargs : additional key-word arguments
         Passed directly to the underlying solver.
 
@@ -96,10 +110,15 @@ def autops(data, fn, p0=0.0, p1=0.0, return_phases=False, peak_width=100,
     ...     bounds=[(-180, 180), (-1800, 1800)],
     ...     return_phases=True)
 
-    Zero-order only — fix p1 to zero:
+    Zero-order only — fix p1 to zero and leave p0 unbounded:
 
     >>> phased = ng.proc_autophase.autops(
-    ...     data, 'acme', bounds=[(-180, 180), (0, 0)])
+    ...     data, 'acme', bounds=[(None, None), (0, 0)])
+
+    Bound only the first-order phase:
+
+    >>> phased = ng.proc_autophase.autops(
+    ...     data, 'acme', bounds=[(None, None), (-90, 90)])
 
     """
     arguments = [data]
