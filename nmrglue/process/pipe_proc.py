@@ -2033,7 +2033,7 @@ def ext(dic, data, x1="default", xn="default", y1="default", yn="default",
 
         if y_max > data.shape[0]:
             y_min = y_min - (y_max - data.shape[0])
-            y_min = data.shape[0]
+            y_max = data.shape[0]
 
         # print("ymin:",y_min,"ymax:",y_max)
         # print("xmin:",x_min,"xmax:",x_max)
