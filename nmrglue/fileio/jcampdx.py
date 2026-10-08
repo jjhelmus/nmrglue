@@ -37,10 +37,14 @@ def _getkey(keystr):
             .replace("-", "").replace("_", "").replace("/", ""))
 
 
-def _parsejcampdx(filename):
+def _parsejcampdx(filename, read_err=None, _opened=None):
     '''
     Actual JCAMP-DX reading. Returns a list of data sections i.e. "blocks",
-    each of them being a dictionary of JCAMP-DX tags
+    each of them being a dictionary of JCAMP-DX tags, in the order the blocks
+    end in the file (so a LINK block follows the blocks it contains).
+
+    If _opened is a list, a (block, enclosing block or None) tuple is appended
+    to it for every block, in the order the blocks begin in the file.
     '''
 
     # "blocks" in JCAMP-DX may be nested, and they begin with ##TITLE and
@@ -51,7 +55,8 @@ def _parsejcampdx(filename):
     # when encountering ##END, push the ready dict to another list
     readyblocklist = []
 
-    filein = open(filename, 'r', encoding="utf-8-sig", errors="replace")
+    errors = "replace" if read_err is None else read_err
+    filein = open(filename, 'r', encoding="utf-8-sig", errors=errors)
 
     currentkey = None
     currentvaluestrings = []
@@ -97,9 +102,17 @@ def _parsejcampdx(filename):
             if actual[:7] == "##TITLE":
                 # begin new block dictionary
                 activeblock = {"_comments": []}
+                if _opened is not None:
+                    parent = blockstack[-1] if blockstack else None
+                    _opened.append((activeblock, parent))
                 blockstack.append(activeblock)
 
-            if actual[:5] == "##END":
+            # only ##END= closes a block; ##END NTUPLES= closes the NTUPLES
+            # table inside it and, as before, is not kept
+            endkey = _getkey(actual[2:].split("=", 1)[0])
+            if endkey == "ENDNTUPLES":
+                continue
+            if endkey == "END":
                 # finalize current block
                 if activeblock:  # ensure that we had active block instead of too many ##ENDs
                     readyblocklist.append(blockstack.pop())
@@ -148,7 +161,7 @@ def _parsejcampdx(filename):
     return readyblocklist
 
 
-def _readrawdic(filename):
+def _readrawdic(filename, read_err=None):
     '''
     Reads entire JCAMP-DX file to dictionary, from which actual
     data is parsed later. Return value is a dictionary of different
@@ -157,7 +170,7 @@ def _readrawdic(filename):
     '''
 
     # parse file to list of "blocks" i.e. separate data sections
-    blocklist = _parsejcampdx(filename)
+    blocklist = _parsejcampdx(filename, read_err)
 
     # clean whitespace from entries, and remove empty entries
     cleandiclist = []
@@ -201,6 +214,55 @@ def _readrawdic(filename):
             returndic[key] = [dic]
 
     return returndic
+
+
+def read_blocks(filename, read_err=None):
+    """
+    Read every data block of a JCAMP-DX file, in file order.
+
+    Where :func:`read` selects a single NMR block, this returns all blocks of
+    a file, of any DATATYPE and including those nested in a LINK block, in
+    the order they begin in the file, so that the caller can choose between
+    them.
+
+    Parameters
+    ----------
+    filename : str
+        File to read from.
+    read_err : str, optional
+        Error handling for character decoding, as for :func:`read`.
+
+    Returns
+    -------
+    blocks : list of dict
+        One dictionary per block, in the order the blocks begin in the file.
+        Keys are labels normalised as in :func:`read` and values are lists of
+        stripped strings, one per occurrence of the label in the block. Data
+        tables such as ``XYDATA``, ``DATATABLE``, ``PEAKTABLE`` and
+        ``XYPOINTS`` are kept unparsed; pass a block to :func:`getdataarray`
+        to parse its data. ``blocks[i]["_parent"]`` is the index of the block
+        enclosing block ``i``, or None for a top-level block.
+    """
+    if os.path.isfile(filename) is not True:
+        raise OSError("file %s does not exist" % (filename))
+
+    opened = []
+    _parsejcampdx(filename, read_err, _opened=opened)
+
+    # same cleaning as _readrawdic, but empty blocks are kept so that
+    # the _parent indices stay valid
+    position = {id(block): i for i, (block, _) in enumerate(opened)}
+    blocks = []
+    for block, parent in opened:
+        clean = {}
+        for key, valuelist in block.items():
+            values = [value.strip() for value in valuelist]
+            values = [value for value in values if value]
+            if values:
+                clean[key] = values
+        clean["_parent"] = None if parent is None else position[id(parent)]
+        blocks.append(clean)
+    return blocks
 
 
 ###############################################################################
@@ -575,7 +637,7 @@ def getdataarray(dic):
     return data
 
 
-def read(filename):
+def read(filename, read_err=None):
     """
     Read JCAMP-DX file
 
@@ -583,6 +645,11 @@ def read(filename):
     ----------
     filename : str
         File to read from.
+    read_err : str, optional
+        Error handling for character decoding, passed to open() as the
+        ``errors`` parameter. Valid values include 'strict', 'ignore',
+        'replace', 'backslashreplace', etc. Defaults to None which uses
+        'replace'.
 
     Returns
     -------
@@ -601,7 +668,7 @@ def read(filename):
     # first read everything (including data array) to "raw" dictionary,
     # in which data values are read as raw strings including whitespace
     # and newlines
-    dic = _readrawdic(filename)
+    dic = _readrawdic(filename, read_err)
 
     # select the relevant data section.
     # first try to parse NMRSPECTRUM sections in order,
