@@ -632,32 +632,39 @@ def read_procs_file(dir='.', procs_files=None):
         Dictionary of Bruker parameters.
     """
 
-    if procs_files is None:
+    default_files = procs_files is None
 
-        # Reading standard procs files
-        procs_files = []
+    if default_files:
+
+        # Reading standard procs files. TopSpin may keep the current values in
+        # the corresponding singular procN file. Read only one file per
+        # dimension, preferring the singular file when it is available, while
+        # retaining the conventional status-file keys in the returned dict.
+        proc_pairs = [("procs", "proc"), ("proc2s", "proc2"),
+                      ("proc3s", "proc3"), ("proc4s", "proc4")]
 
         pdata_path = dir
-        for f in ["procs", "proc2s", "proc3s", "proc4s"]:
-            pf = os.path.join(pdata_path, f)
-            if os.path.isfile(pf):
-                procs_files.append(pf)
-
-        if not procs_files:
-            # procs not found in the given dir, try look adding pdata to the dir path
-
+        if not any(os.path.isfile(os.path.join(pdata_path, name))
+                   for pair in proc_pairs for name in pair):
+            # procs not found in the given dir, try adding pdata to the dir path
             if os.path.isdir(os.path.join(dir, 'pdata')):
                 pdata_folders = [folder for folder in
                                  os.walk(os.path.join(dir, 'pdata'))][0][1]
-                if '1' in pdata_folders:
-                    pdata_path = os.path.join(dir, 'pdata', '1')
-                else:
-                    pdata_path = os.path.join(dir, 'pdata', pdata_folders[0])
+                if pdata_folders:
+                    if '1' in pdata_folders:
+                        pdata_path = os.path.join(dir, 'pdata', '1')
+                    else:
+                        pdata_path = os.path.join(dir, 'pdata', pdata_folders[0])
 
-            for f in ["procs", "proc2s", "proc3s", "proc4s"]:
-                pf = os.path.join(pdata_path, f)
-                if os.path.isfile(pf):
-                    procs_files.append(pf)
+        files_to_read = []
+        for status_name, current_name in proc_pairs:
+            status_path = os.path.join(pdata_path, status_name)
+            current_path = os.path.join(pdata_path, current_name)
+            if os.path.isfile(current_path):
+                files_to_read.append((status_name, current_path))
+            elif os.path.isfile(status_path):
+                # Keep the conventional status key when no current file exists.
+                files_to_read.append((status_name, status_path))
 
     else:
         # proc paths were explicitly given
@@ -675,13 +682,15 @@ def read_procs_file(dir='.', procs_files=None):
             else:
                 procs_files[i] = pf
 
+    if not default_files:
+        files_to_read = [(os.path.basename(f), f) for f in procs_files]
+
     # create an empty dictionary
     dic = dict()
 
-    # read the acqus_files and add to the dictionary
-    for f in procs_files:
-        pdata_path = os.path.basename(f)
-        dic[pdata_path] = read_jcamp(f)
+    # read the procs files and add them to the dictionary
+    for procs_name, f in files_to_read:
+        dic[procs_name] = read_jcamp(f)
     return dic
 
 
