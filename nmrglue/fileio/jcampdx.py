@@ -575,7 +575,7 @@ def getdataarray(dic):
     return data
 
 
-def read(filename):
+def read(filename, as_complex=False):
     """
     Read JCAMP-DX file
 
@@ -583,6 +583,11 @@ def read(filename):
     ----------
     filename : str
         File to read from.
+    as_complex : bool, optional
+        If True, combine separate real and imaginary arrays using
+        get_complex_array(). Both components must be present. Default False
+        preserves the separate arrays; data without a complete pair are
+        returned unchanged.
 
     Returns
     -------
@@ -593,6 +598,8 @@ def read(filename):
         dictionary.
     data : ndarray
         Array of NMR data, or a list NMR data arrays in order [real, imaginary]
+        If as_complex is True and both components are present, returns a
+        complex128 array.
     """
 
     if os.path.isfile(filename) is not True:
@@ -671,6 +678,10 @@ def read(filename):
 
     # clean main dic from possible empty entries
     dic = {key: value for key, value in dic.items() if value}
+
+    if (as_complex and isinstance(data, list) and len(data) == 2
+            and data[0] is not None and data[1] is not None):
+        data = get_complex_array(data)
 
     return dic, data
 
@@ -808,11 +819,14 @@ def guess_udic(dic, data):
 
     # "size"
     npoints = None
-    if data is not None:
-        if isinstance(data, list):
-            npoints = len(data[0])  # if list [R,I]
-        else:
-            npoints = len(data)
+    if isinstance(data, list):
+        for elem in data:
+            if elem is not None:
+                npoints = len(elem)
+                break
+    elif data is not None:
+        npoints = len(data)
+    if npoints is not None:
         udic[0]["size"] = npoints
     else:
         warn('No data, cannot set udic size')
@@ -821,10 +835,10 @@ def guess_udic(dic, data):
     is_processed = True  # by default, expect processed data
     try:
         datatype = dic["DATATYPE"][0]
-        if datatype.strip().upper().replace(" ", "") == "NMRFID":
-            is_processed = False
     except KeyError:
-        pass
+        datatype = dic.get("NTUPLES", [""])[0]
+    if datatype.strip().upper().replace(" ", "") == "NMRFID":
+        is_processed = False
 
     # "sw" and "car"
     # get firstx, lastx and unit
