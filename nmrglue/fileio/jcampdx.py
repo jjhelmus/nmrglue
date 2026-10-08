@@ -847,7 +847,7 @@ def guess_udic(dic, data):
             # FID:
             if npoints:
                 aqtime = lastx - firstx
-                sw = npoints / aqtime
+                sw = (npoints - 1) / aqtime
                 udic[0]["sw"] = sw
             # note: in FIDs "car" is left to default as there is no required
             # standard tag in JCAMP for it. Quite often manufacturers store
@@ -863,7 +863,7 @@ def guess_udic(dic, data):
     udic[0]["complex"] = False
     # ...unless combined by nmrglue user with get_complex_array
     if not isinstance(data, list):
-        if data.dtype == "complex128":
+        if np.iscomplexobj(data):
             udic[0]["complex"] = True
 
     return udic

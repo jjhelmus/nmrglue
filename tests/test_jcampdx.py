@@ -125,7 +125,8 @@ def test_jcampdx2():
     # npoints, first, last, freq, sweep
     # note: first and last are raw values from datalines for convenience,
     # i.e. not scaled with YFACTORS
-    cases.append(("TESTFID.DX", 16384, 573, -11584, 100.4, 16384/0.6815317))
+    cases.append(("TESTFID.DX", 16384, 573, -
+                 11584, 100.4, (16384-1)/0.6815317))
     cases.append(("bruker1.dx", 16384, -5, -51, 200.13, 4098.3606557377))
     cases.append(("bruker2.dx", 16384, 42, 422, 300.13336767, 6024.096385479))
     cases.append(("bruker3.dx", 16384, 22, -313, 300.13336729, 6024.096385479))
