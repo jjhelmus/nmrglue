@@ -463,6 +463,8 @@ class converter:
         for key, value in list(self._udic.items()):
             if type(key) is int and value["size"] != 1:
                 freq = value['freq'] if freq_dims is None else freq_dims[index]
+                ppm_freq = (value["obs"] if value.get("ref") is None
+                            else value["ref"])
                 index += 1
                 uc = fileiobase.uc_from_udic(self._udic, dim=key)
                 if freq:
@@ -473,7 +475,7 @@ class converter:
                         count=value["size"],
                         increment=f'{inc} Hz',
                         coordinates_offset=f'{scales[0]} Hz',
-                        origin_offset=f'{value["obs"]} MHz',
+                        origin_offset=f'{ppm_freq} MHz',
                         label=value["label"],
                     ))
                     np.testing.assert_allclose(scales, dimensions[-1].coordinates.to('Hz').value)
@@ -486,7 +488,7 @@ class converter:
                         increment=f'{inc} s',
                         reciprocal={
                             "coordinates_offset": f'{value["car"]} Hz',
-                            "origin_offset": f'{value["obs"]} MHz',
+                            "origin_offset": f'{ppm_freq} MHz',
                         },
                         label=value["label"],
                     ))

@@ -202,7 +202,9 @@ def make_uc(dic, data):
 
     """
     udic = guess_udic(dic, data)
-    return fileiobase.unit_conversion(data.size, udic[0]['complex'], udic[0]['sw'], udic[0]['obs'], udic[0]['car'])
+    return fileiobase.unit_conversion(
+        data.size, udic[0]['complex'], udic[0]['sw'], udic[0]['obs'],
+        udic[0]['car'], udic[0].get('ref'))
 
 
 def get_udic_from_acqu_dict(param: dict):
@@ -252,7 +254,8 @@ def get_udic_from_jcamp_dict(param):
     except KeyError:
         pass
     try:
-        return_dict['car'] = (return_dict['obs'] - float(param['$SF'][0])) * 1e6
+        return_dict['ref'] = float(param['$SF'][0])
+        return_dict['car'] = (return_dict['obs'] - return_dict['ref']) * 1e6
     except KeyError:
         warn("Cannot set carrier - try: 'udic[0]['car'] = x * udic[0]['obs']' "
              "where x is the center of the spectrum in ppm")

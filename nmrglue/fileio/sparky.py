@@ -188,9 +188,10 @@ def create_axisdic(adic, tlen, dlen):
     dic["npoints"] = int(dlen)
     dic["size"] = int(dlen)
     dic["bsize"] = int(tlen)
-    dic["spectrometer_freq"] = float(adic["obs"])
+    ppm_freq = adic["obs"] if adic.get("ref") is None else adic["ref"]
+    dic["spectrometer_freq"] = float(ppm_freq)
     dic["spectral_width"] = float(adic["sw"])
-    dic["xmtr_freq"] = float(adic["car"]) / dic["spectrometer_freq"]
+    dic["xmtr_freq"] = float(adic["car"]) / ppm_freq
     dic["zero_order"] = 0.0
     dic["first_order"] = 0.0
     dic["first_pt_scale"] = 0.0

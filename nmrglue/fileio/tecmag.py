@@ -332,12 +332,17 @@ def guess_udic(dic, data):
     # update default values
     for i in range(4):
         udic[i]["size"] = dic['actual_npts'][i]
-        udic[i]["sw"] = dic['sw'][i]
+        # TNMR stores the sweep half-width; the full spectral width is also
+        # equal to 1 / dwell.
+        udic[i]["sw"] = 2.0 * dic['sw'][i]
         udic[i]["complex"] = True
-        udic[i]["obs"] = dic['ob_freq'][i] * 1e6
-        # Not sure what the difference is here
-        # N.B. base_freq is some bogus value like 1.4e-13
-        udic[i]["car"] = dic['ob_freq'][i] * 1e6
+        udic[i]["obs"] = dic['ob_freq'][i]
+        udic[i]["car"] = 0.0
+        if i == 0:
+            # TNMR convention, as documented by pytnt's TNTdtypes.py:
+            # frequency for 0 ppm = ob_freq * 1e6 + ref_freq.
+            udic[i]["ref"] = dic['ob_freq'][i] + dic['ref_freq'] / 1e6
+            udic[i]["car"] = -dic['ref_freq']
         udic[i]["time"] = not bool(dic['fft_flag'][i])
         udic[i]["freq"] = bool(dic['fft_flag'][i])
 

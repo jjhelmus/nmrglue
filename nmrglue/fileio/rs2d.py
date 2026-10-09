@@ -215,7 +215,10 @@ def guess_udic(dic, data):
             basefreqhz = float(dic[tag_basefreq]["value"])
             transmitfreqhz = float(dic[tag_transmitfreq]["value"])
             car = transmitfreqhz - basefreqhz
-            udic[dims-i-1]["car"] = car
+            adic = udic[dims-i-1]
+            adic["obs"] = transmitfreqhz / 1e6
+            adic["ref"] = basefreqhz / 1e6
+            adic["car"] = car
         except ValueError:
             warn(f"Cannot parse {tag_basefreq} or {tag_transmitfreq}")
         except KeyError:
