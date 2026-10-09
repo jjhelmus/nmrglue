@@ -1,6 +1,7 @@
 0.13 (Unreleased)
 =================
 
+* Fix header dimension correction in `write_fid_lowmem` (#268)
 
 0.12 (2026-08-16)
 =================

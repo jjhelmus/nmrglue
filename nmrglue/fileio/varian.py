@@ -950,7 +950,7 @@ def write_fid(filename, dic, data, torder='flat', repack=False, correct=True,
 
 
 def write_fid_lowmem(filename, dic, data, torder='f', repack=False,
-                     overwrite=False):
+                     overwrite=False, correct=True):
     """
     Write a Agilent/Varian binary (fid) file using minimal amounts of memory.
 
@@ -969,14 +969,14 @@ def write_fid_lowmem(filename, dic, data, torder='f', repack=False,
         Trace ordering.  See :py:func:`read` for details.
     repack : bool, optional
         True to repack file and block headers. False leave as is.
-    correct : bool, optional
-        True (the default) will correct mis-sized np and nblocks values in dic.
-        False will write out the incorrect values to the file header and
-        record the full data set, the resulting file will not be readable by
-        nmrglue.
     overwrite : bool, optional
         Set True to overwrite an existing file, False will raise a Warning if
         the file exists.
+    correct : bool, optional
+        True (the default) will correct structural file-header values to match
+        the data and binary layout written. False preserves the supplied
+        header values after warning about mismatches and records the full data
+        set; an inconsistent resulting file may not be readable by nmrglue.
 
     See Also
     --------
@@ -990,16 +990,46 @@ def write_fid_lowmem(filename, dic, data, torder='f', repack=False,
 
     t2i = torder2t2i(torder)
 
-    # verify data and dic shapes
-    if data.shape[-1] != (dic["np"] // 2):
+    # determine the physical layout written by this function. Each logical
+    # point is stored as an interleaved real/imaginary pair, and each logical
+    # trace is written in its own block.
+    dt = find_dtype(dic)
+    expected_np = int(data.shape[-1] * 2)
+    expected_nblocks = int(reduce(operator.mul, data.shape[:-1]))
+    expected_ntraces = 1
+    expected_ebytes = dt.itemsize
+    expected_tbytes = expected_np * expected_ebytes
+    blockheader_bytes = struct.calcsize('>4hl4f')
+    expected_bbytes = (dic["nbheaders"] * blockheader_bytes +
+                       expected_ntraces * expected_tbytes)
+
+    # verify data and structural file-header values
+    if dic["np"] != expected_np:
         warn("data and np size mismatch")
         if correct:
-            dic['np'] = int(data.shape[1] * 2)
-    nblocks = int(reduce(operator.mul, data.shape[:-1]))
-    if nblocks != dic["nblocks"]:
+            dic["np"] = expected_np
+    if dic["nblocks"] != expected_nblocks:
         warn("data and block size mismatch")
         if correct:
-            dic['nblocks'] = nblocks
+            dic["nblocks"] = expected_nblocks
+    if dic["ntraces"] != expected_ntraces:
+        warn("data and trace count mismatch")
+        if correct:
+            dic["ntraces"] = expected_ntraces
+    if dic["ebytes"] != expected_ebytes:
+        warn("data dtype and ebytes mismatch")
+        if correct:
+            dic["ebytes"] = expected_ebytes
+    if dic["tbytes"] != expected_tbytes:
+        warn("data and tbytes size mismatch")
+        if correct:
+            dic["tbytes"] = expected_tbytes
+    if dic["bbytes"] != expected_bbytes:
+        warn("data and bbytes size mismatch")
+        if correct:
+            dic["bbytes"] = expected_bbytes
+
+    nblocks = expected_nblocks
 
     # open file for writing
     f = fileiobase.open_towrite(filename, overwrite=overwrite)
@@ -1009,9 +1039,6 @@ def write_fid_lowmem(filename, dic, data, torder='f', repack=False,
 
     # write the fileheader to file
     put_fileheader(f, dic2fileheader(dic))
-
-    # determine data type
-    dt = find_dtype(dic)
 
     if "blockheader" in dic and len(dic["blockheader"]) == dic["nblocks"]:
         for ntrace in range(nblocks):
