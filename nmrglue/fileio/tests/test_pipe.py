@@ -3,9 +3,11 @@
 import os
 import tempfile
 import glob
+from pathlib import Path
 
 from numpy.testing import assert_array_equal
 import nmrglue as ng
+from nmrglue.fileio.pipe import fdata2dic
 
 # NMRPipe files being tested, these are created by the script:
 # create_test_data_nmrpipe.sh
@@ -73,6 +75,96 @@ def check_ppm_limits(dic, data, dim, limits):
     l0, l1 = uc0.ppm_limits()
     assert round(l0, 2) == limits[0]
     assert round(l1, 2) == limits[1]
+
+def read_with_bytes_or_buffer(filename):
+    """Check reading pipe files from a filename, BytesIO, or bytes buffer."""
+    dic, data = ng.pipe.read(filename)
+    with open(filename, "rb") as binary_stream:
+        bdic, bdata = ng.pipe.read(binary_stream.read())
+    with open(filename, "rb") as binary_stream:
+        bdic2, bdata2 = ng.pipe.read(binary_stream)
+    assert dic == bdic == bdic2
+    assert_array_equal(data, bdata)
+    assert_array_equal(data, bdata2)
+
+
+def test_read_pathlib_path():
+    """Path and string inputs read the same packaged 1D fixture."""
+    dic, data = ng.pipe.read(NMRPIPE_1D_TIME)
+    pdic, pdata = ng.pipe.read(Path(NMRPIPE_1D_TIME))
+    assert_array_equal(data, pdata)
+    assert dic == pdic
+
+
+def test_read_pathlib_path_template():
+    """Path and string templates expand the same packaged 3D fixture."""
+    dic, data = ng.pipe.read(NMRPIPE_3D_TIME)
+    pdic, pdata = ng.pipe.read(Path(NMRPIPE_3D_TIME))
+    assert_array_equal(data, pdata)
+    assert dic == pdic
+
+
+def test_get_fdata_bytes():
+    """Header floats are identical for filename and bytes inputs."""
+    with open(NMRPIPE_1D_TIME, "rb") as binary_stream:
+        bdata = ng.fileio.pipe.get_fdata(binary_stream.read())
+    data = ng.fileio.pipe.get_fdata(NMRPIPE_1D_TIME)
+    assert_array_equal(data, bdata)
+
+
+def test_get_data_bytes():
+    """Raw data are identical for filename and bytes inputs."""
+    with open(NMRPIPE_1D_TIME, "rb") as binary_stream:
+        bdata = ng.fileio.pipe.get_data(binary_stream.read())
+    data = ng.fileio.pipe.get_data(NMRPIPE_1D_TIME)
+    assert_array_equal(data, bdata)
+
+
+def test_fdata2dic_bytes():
+    """Header dictionaries are identical for filename and bytes inputs."""
+    with open(NMRPIPE_1D_TIME, "rb") as binary_stream:
+        bfdata = ng.fileio.pipe.get_fdata(binary_stream.read())
+    fdata = ng.fileio.pipe.get_fdata(NMRPIPE_1D_TIME)
+    assert fdata2dic(fdata) == fdata2dic(bfdata)
+
+
+def test_fdata_data_bytes():
+    """Combined header/data reads agree for filename and bytes inputs."""
+    with open(NMRPIPE_1D_TIME, "rb") as binary_stream:
+        bdic_data, bdata = ng.fileio.pipe.get_fdata_data(binary_stream.read())
+    dic_data, data = ng.fileio.pipe.get_fdata_data(NMRPIPE_1D_TIME)
+    assert_array_equal(dic_data, bdic_data)
+    assert_array_equal(data, bdata)
+
+
+def test_read_bytes_1d_time():
+    """Read packaged 1D time data from file, BytesIO, and bytes."""
+    read_with_bytes_or_buffer(NMRPIPE_1D_TIME)
+
+
+def test_read_bytes_1d_freq():
+    """Read packaged 1D frequency data from file, BytesIO, and bytes."""
+    read_with_bytes_or_buffer(NMRPIPE_1D_FREQ)
+
+
+def test_read_bytes_2d_time():
+    """Read packaged 2D time data from file, BytesIO, and bytes."""
+    read_with_bytes_or_buffer(NMRPIPE_2D_TIME)
+
+
+def test_read_bytes_2d_freq():
+    """Read packaged 2D frequency data from file, BytesIO, and bytes."""
+    read_with_bytes_or_buffer(NMRPIPE_2D_FREQ)
+
+
+def test_read_bytes_3d_time():
+    """Read packaged 3D time stream from file, BytesIO, and bytes."""
+    read_with_bytes_or_buffer(NMRPIPE_3D_TIME_STREAM)
+
+
+def test_read_bytes_3d_freq():
+    """Read packaged 3D frequency stream from file, BytesIO, and bytes."""
+    read_with_bytes_or_buffer(NMRPIPE_3D_FREQ_STREAM)
 
 
 def test_1d_time():
