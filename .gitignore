@@ -67,3 +67,7 @@ examples/jbnmr_examples/s7-s9_s3e_processing/procpar
 .project
 .pydevproject
 *.prefs
+
+# Test outputs and local tools
+tests/pipe_proc_tests/*.glue
+.tool-versions
