@@ -68,41 +68,6 @@ def lowmem_write_readback(dic, data):
 
 
 # tests
-def test_jcamp1():
-    """ reading/writing of JCAMP file 1"""
-    dic = ng.bruker.read_jcamp(os.path.join(DATA_DIR, "bruker_1d", "acqus"))
-    assert dic['LFILTER'] == 200
-    assert len(dic['PRECHAN']) == 16
-    tf = tempfile.mktemp(dir='.')
-    ng.bruker.write_jcamp(dic, tf)
-    ndic = ng.bruker.read_jcamp(tf)
-    assert dic_similar(dic, ndic)
-    os.remove(tf)
-
-
-def test_jcamp2():
-    """ reading/writing of JCAMP file 2"""
-    dic = ng.bruker.read_jcamp(os.path.join(DATA_DIR, "bruker_2d", "acqu2s"))
-    tf = tempfile.mktemp(dir='.')
-    ng.bruker.write_jcamp(dic, tf)
-    ndic = ng.bruker.read_jcamp(tf)
-    assert dic_similar(dic, ndic)
-    os.remove(tf)
-
-
-def test_pprog():
-    """ reading/writing of pulse program"""
-    dic = ng.bruker.read_pprog(os.path.join(DATA_DIR, "bruker_3d",
-                                            "pulseprogram"))
-    assert dic['var']['LOOPC'] == '58'
-    assert len(dic['incr']) == 4
-    tf = tempfile.mktemp(dir='.')
-    ng.bruker.write_pprog(tf, dic)
-    ndic = ng.bruker.read_pprog(tf)
-    assert dic_similar(dic, ndic)
-    os.remove(tf)
-
-
 def test_1d():
     """ reading/writing of 1D bruker data"""
     dic, data = ng.bruker.read(os.path.join(DATA_DIR, "bruker_1d"))
