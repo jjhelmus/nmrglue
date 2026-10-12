@@ -2559,6 +2559,17 @@ def zd(data, window, x0=0.0, slope=1.0):
     return data
 
 
+def _zd_half_width(wide):
+    """
+    Half width in whole points of a zero diagonal band.
+
+    NMRPipe rounds a fractional width half up, so 5.49 gives 5 and 5.5 gives
+    6. Python's round() would round 4.5 down to 4, and int() would truncate
+    5.5 to 5, so neither matches.
+    """
+    return int(np.floor(wide + 0.5))
+
+
 def zd_boxcar(data, wide=1, x0=0.0, slope=1.0):
     """
     Zero diagonal band with a boxcar function.
@@ -2567,8 +2578,9 @@ def zd_boxcar(data, wide=1, x0=0.0, slope=1.0):
     ----------
     data : ndarray
         Array of NMR data.
-    wide : int
-        Diagonal band half width in points.
+    wide : float
+        Diagonal band half width in points, rounded half up to whole points
+        as NMRPipe does.
     x0 : int
         Starting location of diagonal band in points.
     slope : float
@@ -2580,7 +2592,8 @@ def zd_boxcar(data, wide=1, x0=0.0, slope=1.0):
         Array of NMR data with diagonal band set to zero.
 
     """
-    window = np.zeros(2 * int(wide) + 1)
+    wide = _zd_half_width(wide)
+    window = np.zeros(2 * wide + 1)
     return zd(data, window, x0=x0, slope=slope)
 
 
@@ -2592,8 +2605,9 @@ def zd_triangle(data, wide=1.0, x0=0.0, slope=1.0):
     ----------
     data : ndarray
         Array of NMR data.
-    wide : int
-        Diagonal band half width in points.
+    wide : float
+        Diagonal band half width in points, rounded half up to whole points
+        as NMRPipe does.
     x0 : int
         Starting location of diagonal band in points.
     slope : float
@@ -2605,6 +2619,7 @@ def zd_triangle(data, wide=1.0, x0=0.0, slope=1.0):
         Array of NMR data with diagonal band set to zero.
 
     """
+    wide = _zd_half_width(wide)
     window = np.append(np.linspace(1, 0, wide + 1),
                        np.linspace(0, 1, wide + 1)[1:])
     return zd(data, window, x0=x0, slope=slope)
@@ -2618,8 +2633,9 @@ def zd_sinebell(data, wide=1.0, x0=0.0, slope=1.0):
     ----------
     data : ndarray
         Array of NMR data.
-    wide : int
-        Diagonal band half width in points.
+    wide : float
+        Diagonal band half width in points, rounded half up to whole points
+        as NMRPipe does.
     x0 : int
         Starting location of diagonal band in points.
     slope : float
@@ -2631,6 +2647,7 @@ def zd_sinebell(data, wide=1.0, x0=0.0, slope=1.0):
         Array of NMR data with diagonal band set to zero.
 
     """
+    wide = _zd_half_width(wide)
     window = 1 - np.sin(np.linspace(0, pi, 2 * wide + 1))
     return zd(data, window, x0=x0, slope=slope)
 
@@ -2643,8 +2660,9 @@ def zd_gaussian(data, wide=1.0, x0=0.0, slope=1.0, g=1):
     ----------
     data : ndarray
         Array of NMR data.
-    wide : int
-        Diagonal band half width in points.
+    wide : float
+        Diagonal band half width in points, rounded half up to whole points
+        as NMRPipe does.
     x0 : int
         Starting location of diagonal band in points.
     slope : float
@@ -2658,6 +2676,7 @@ def zd_gaussian(data, wide=1.0, x0=0.0, slope=1.0, g=1):
         Array of NMR data with diagonal band set to zero.
 
     """
+    wide = _zd_half_width(wide)
     tln2 = np.sqrt(2 * np.log(2))
     window = 1 - scipy.signal.windows.gaussian(2 * wide + 1, g / tln2)
     return zd(data, window, x0=x0, slope=slope)
