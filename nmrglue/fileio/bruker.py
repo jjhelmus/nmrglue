@@ -182,8 +182,10 @@ def add_axis_to_udic(udic, dic, udim, strip_fake):
                 udic[udim]["encoding"] = "undefined"
             elif aq_mod == 1:
                 udic[udim]["encoding"] = "magnitude"  # qf
+                udic[udim]["complex"] = False
             elif aq_mod == 2:
                 udic[udim]["encoding"] = "magnitude"  # qsec
+                udic[udim]["complex"] = False
             elif aq_mod == 3:
                 udic[udim]["encoding"] = "tppi"
             elif aq_mod == 4:
@@ -203,8 +205,10 @@ def add_axis_to_udic(udic, dic, udim, strip_fake):
             aq_mod = dic[pro_file]["MC2"]
             if aq_mod == 0:
                 udic[udim]["encoding"] = "magnitude"  # qf
+                udic[udim]["complex"] = False
             elif aq_mod == 1:
                 udic[udim]["encoding"] = "magnitude"  # qsec
+                udic[udim]["complex"] = False
             elif aq_mod == 2:
                 udic[udim]["encoding"] = "tppi"
             elif aq_mod == 3:

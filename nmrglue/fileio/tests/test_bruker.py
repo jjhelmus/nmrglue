@@ -1,14 +1,77 @@
 """ Unit tests for nmrglue/fileio/bruker.py module """
 
 import os
-
-import numpy as np
-import nmrglue as ng
 import shutil
 import tempfile
 
+import numpy as np
+import nmrglue as ng
+import pytest
+
 # Test data.
 DATA_DIR = os.path.join(os.path.dirname(__file__), 'bruker_test_data')
+
+
+def _make_2d_dic(indirect_dic):
+    """Return minimal Bruker parameters for a 2D dataset."""
+    return {
+        'acqus': {
+            'AQ_mod': 3,
+            'NUC1': '1H',
+            'O1': 0.0,
+            'SFO1': 400.0,
+            'SW_h': 10000.0,
+        },
+        'procs': {'SF': 400.0},
+        **indirect_dic,
+    }
+
+
+@pytest.mark.parametrize('fnmode', [1, 2])
+def test_guess_udic_magnitude_indirect_dimension(fnmode):
+    """QF and QSEC indirect dimensions are real, not complex."""
+    dic = _make_2d_dic({
+        'acqu2s': {
+            'FnMODE': fnmode,
+            'NUC1': '1H',
+            'SFO1': 400.0,
+            'SW': 10.0,
+        },
+        'proc2s': {'SF': 400.0},
+    })
+    data = np.zeros((40, 128), dtype=np.complex128)
+
+    udic = ng.bruker.guess_udic(dic, data)
+    converter = ng.convert.converter()
+    converter.from_bruker(dic, data)
+    pipe_dic, pipe_data = converter.to_pipe()
+    _, transposed = ng.pipe_proc.tp(pipe_dic.copy(), pipe_data)
+
+    assert udic[0]['encoding'] == 'magnitude'
+    assert udic[0]['complex'] is False
+    assert pipe_dic['FDF2QUADFLAG'] == 0.0
+    assert pipe_dic['FDF1QUADFLAG'] == 1.0
+    assert transposed.shape == (128, 40)
+
+
+@pytest.mark.parametrize('mc2', [0, 1])
+def test_guess_udic_magnitude_indirect_dimension_from_proc_params(mc2):
+    """Processed QF and QSEC indirect dimensions are real, not complex."""
+    dic = _make_2d_dic({
+        'proc2s': {
+            'AXNUC': '1H',
+            'MC2': mc2,
+            'OFFSET': 0.0,
+            'SF': 400.0,
+            'SW_p': 4000.0,
+        },
+    })
+    data = np.zeros((40, 128), dtype=np.complex128)
+
+    udic = ng.bruker.guess_udic(dic, data)
+
+    assert udic[0]['encoding'] == 'magnitude'
+    assert udic[0]['complex'] is False
 
 def test_read_pdata():
     """Reading processed bruker 1D data"""

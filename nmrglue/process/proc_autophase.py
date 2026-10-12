@@ -12,8 +12,20 @@ import scipy.optimize
 
 from .proc_base import ps
 
+# fmin keyword arguments and their scipy.optimize.minimize(Nelder-Mead)
+# option equivalents, used when autops is called with p1_bounds.
+_FMIN_TO_MINIMIZE_OPTIONS = {
+    'xtol': 'xatol',
+    'ftol': 'fatol',
+    'maxiter': 'maxiter',
+    'maxfun': 'maxfev',
+    'disp': 'disp',
+    'initial_simplex': 'initial_simplex',
+}
 
-def autops(data, fn, p0=0.0, p1=0.0, return_phases=False, peak_width=100, **kwargs):
+
+def autops(data, fn, p0=0.0, p1=0.0, return_phases=False, peak_width=100,
+           p1_bounds=None, **kwargs):
     """
     Automatic linear phase correction
 
@@ -29,29 +41,65 @@ def autops(data, fn, p0=0.0, p1=0.0, return_phases=False, peak_width=100, **kwar
     p1 : float
         Initial first order phase in degrees.
     peak_width : int
-        Width of the ROI for peak_minima optimization (number of surrounding indexes)
-    return_phases : Bool
-        returns a list of optimized values of phases [p0, p1] in addition
-        to the phased data
-    kwargs : additional key-word arguments to be passed to the solver
-        The are documented at the following link:
-        https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin.html
-        Some of the more useful ones for this use case:
+        Width of the ROI for peak_minima optimization (number of surrounding
+        indexes). Only used when fn='peak_minima'.
+    return_phases : bool
+        If True, also return the optimised ``[p0, p1]`` list in addition to
+        the phased data.
+    p1_bounds : (min, max) or None, optional
+        Bounds on the first-order phase in degrees, e.g. ``(-1800, 1800)``.
+        Either limit may be ``None`` for no bound on that side, and equal
+        limits fix p1, e.g. ``(0, 0)`` to find only the zero-order phase.
+        When *p1_bounds* is provided the optimisation uses
+        :func:`scipy.optimize.minimize` with the Nelder-Mead method (same
+        simplex algorithm as :func:`scipy.optimize.fmin`) and the returned p0
+        is wrapped into [-180, 180) degrees. When *p1_bounds* is ``None``
+        (default) the original unconstrained :func:`scipy.optimize.fmin` is
+        used and the function is fully backward-compatible.
 
-        * disp : Bool
-            Turns on or off the printing of convergence messages
-            By default, this is set to True.
-        * ftol : float
-            Absolute error in fn between iterations that is acceptable for
-            convergence. The default is 1e-4.
+        The zero-order phase is never bounded: it is periodic, and hard
+        limits on it can trap the optimiser at a limit while p1 compensates
+        for the remaining error.
+    kwargs : additional key-word arguments
+        Passed directly to the underlying solver.
+
+        When *p1_bounds* is ``None`` (fmin): see
+        https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.fmin.html
+        Useful options: ``disp`` (bool), ``ftol`` (float).
+
+        When *p1_bounds* is provided (minimize): see
+        https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html
+        The method is fixed to 'Nelder-Mead'; pass e.g.
+        ``options={'xatol': 1e-4}``. The fmin-style arguments ``xtol``,
+        ``ftol``, ``maxiter``, ``maxfun``, ``disp`` and ``initial_simplex``
+        are also accepted and translated to the matching ``options`` entries
+        (explicit ``options`` take precedence).
 
     Returns
     -------
     ndata : ndarray
         Phased NMR data.
+    opt : ndarray, optional
+        ``[p0, p1]`` optimised phase values in degrees. Only returned when
+        *return_phases* is ``True``.
+
+    Examples
+    --------
+    Unconstrained autophase (original behaviour):
+
+    >>> phased = ng.proc_autophase.autops(data, 'acme')
+
+    Restrict the first-order phase to +-1800 degrees:
+
+    >>> phased, phases = ng.proc_autophase.autops(
+    ...     data, 'acme', p1_bounds=(-1800, 1800), return_phases=True)
+
+    Zero-order only — fix p1 to zero:
+
+    >>> phased = ng.proc_autophase.autops(data, 'acme', p1_bounds=(0, 0))
 
     """
-    arguments = [data,]
+    arguments = [data]
 
     if not callable(fn):
         if fn == 'peak_minima':
@@ -63,11 +111,37 @@ def autops(data, fn, p0=0.0, p1=0.0, return_phases=False, peak_width=100, **kwar
                 'acme': _ps_acme_score,
             }[fn]
         except KeyError:
-            raise KeyError(f'Unable to find algorithm "{fn}". Use "acme", "peak_minima" or pass a custom function.')
+            raise KeyError(
+                f'Unable to find algorithm "{fn}". '
+                'Use "acme", "peak_minima" or pass a custom function.'
+            )
 
     opt = [p0, p1]
 
-    opt = scipy.optimize.fmin(fn, x0=opt, args=tuple(arguments), **kwargs)
+    if p1_bounds is not None:
+        if len(p1_bounds) != 2 or not all(
+                b is None or np.isscalar(b) for b in p1_bounds):
+            raise ValueError(
+                f'p1_bounds must be a (min, max) pair, got {p1_bounds!r}'
+            )
+        # Translate fmin-style keyword arguments into minimize options so the
+        # same call works with and without p1_bounds.
+        options = {}
+        for fmin_key, option_key in _FMIN_TO_MINIMIZE_OPTIONS.items():
+            if fmin_key in kwargs:
+                options[option_key] = kwargs.pop(fmin_key)
+        options.update(kwargs.pop('options', {}))
+        result = scipy.optimize.minimize(
+            fn, x0=opt, args=tuple(arguments),
+            method='Nelder-Mead',
+            bounds=[(None, None), tuple(p1_bounds)],
+            options=options,
+            **kwargs,
+        )
+        opt = result.x
+        opt[0] = (opt[0] + 180) % 360 - 180
+    else:
+        opt = scipy.optimize.fmin(fn, x0=opt, args=tuple(arguments), **kwargs)
 
     phasedspc = ps(data, p0=opt[0], p1=opt[1])
 

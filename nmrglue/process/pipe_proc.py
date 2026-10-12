@@ -2033,13 +2033,13 @@ def ext(dic, data, x1="default", xn="default", y1="default", yn="default",
 
         if y_max > data.shape[0]:
             y_min = y_min - (y_max - data.shape[0])
-            y_min = data.shape[0]
+            y_max = data.shape[0]
 
         # print("ymin:",y_min,"ymax:",y_max)
         # print("xmin:",x_min,"xmax:",x_max)
 
         data = data[int(y_min):int(y_max), int(x_min):int(x_max)]
-        if y_min != 1 and y_max != data.shape[0]:  # only update when sliced
+        if y_max - y_min != old_y:  # only update when sliced
             dic["FDSLICECOUNT"] = y_max - y_min
             dic["FDSPECNUM"] = y_max - y_min
         dic["FDSIZE"] = x_max - x_min

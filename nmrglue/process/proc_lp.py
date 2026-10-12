@@ -838,13 +838,13 @@ def find_lpc_qr(D, d):
     q, r = np.asmatrix(q), np.asmatrix(r)
 
     # SPEED
-    # the next line is slow and the use of pinv2 should be avoided as
+    # the next line is slow and the use of a pseudo-inverse should be avoided as
     # pseudo inversion of r involves a computationally expensive SVD
     # decomposition which is not needed.  Rather r*x = q.H*d should be
     # solved for x using LAPACK's ZTRTRS function (or similar function with
     # different prefix).  This is not currently available in scipy/numpy and
     # therefore is not used here.
-    return scipy.linalg.pinv2(r) * q.H * d
+    return scipy.linalg.pinv(r) * q.H * d
 
 
 def find_lpc_cholesky(D, d):
