@@ -841,8 +841,13 @@ def guess_udic(dic, data):
                     warn('Data is in ppm but base frequency is unknown, \
                                 cannot set udic spectral width')
             if firstx is not None and lastx is not None:
-                udic[0]["sw"] = abs(lastx - firstx)
-                udic[0]["car"] = (lastx + firstx) / 2
+                sw = abs(lastx - firstx)
+                car = (lastx + firstx) / 2
+                if npoints and npoints > 1 and firstx > lastx:
+                    sw = sw * npoints / (npoints - 1)
+                    car = firstx - sw / 2
+                udic[0]["sw"] = sw
+                udic[0]["car"] = car
         else:
             # FID:
             if npoints:

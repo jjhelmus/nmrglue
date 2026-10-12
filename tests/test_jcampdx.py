@@ -3,6 +3,7 @@
 import os
 import numpy as np
 import nmrglue as ng
+from nmrglue.fileio import fileiobase
 from setup import DATA_DIR
 
 
@@ -214,6 +215,23 @@ def test_jcampdx_dicstructure():
     assert dic["_datatype_NA"][0]["DUMMYENTRY"][0] == "4.0"
     assert dic["_datatype_NA"][0]["_comments"][0] == "comment line"
     assert dic["_datatype_NA"][0]["_comments"][1] == "another comment"
+
+
+def test_guess_udic_spectrum_preserves_descending_endpoints():
+    """Processed FIRSTX/LASTX survive conversion through uc_from_udic."""
+    dic = {
+        "DATATYPE": ["NMR SPECTRUM"],
+        "FIRSTX": ["100"],
+        "LASTX": ["93"],
+        "XUNITS": ["HZ"],
+    }
+    data = np.zeros(8)
+    udic = ng.jcampdx.guess_udic(dic, data)
+    uc = fileiobase.uc_from_udic(udic)
+
+    assert abs(udic[0]["sw"] - 8.0) < 1e-12
+    assert abs(uc.hz(0) - 100.0) < 1e-12
+    assert abs(uc.hz(udic[0]["size"] - 1) - 93.0) < 1e-12
 
 
 def test_jcampdx_dicstructure2():
