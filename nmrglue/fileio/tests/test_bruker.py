@@ -2,7 +2,9 @@
 
 import os
 import shutil
+import locale
 import tempfile
+import warnings
 
 import numpy as np
 import nmrglue as ng
@@ -143,3 +145,133 @@ def test_write_pdata():
     assert np.all(data == rdata)
     assert rdic['procs'].keys() == dic['procs'].keys()
     shutil.rmtree(td)
+
+
+def _real_acqus_bytes():
+    """Bytes of the real acqus file shipped with the test data."""
+    with open(os.path.join(DATA_DIR, '1', 'acqus'), 'rb') as f:
+        return f.read()
+
+
+def _write_temp(content):
+    fd, temp_path = tempfile.mkstemp()
+    with os.fdopen(fd, 'wb') as f:
+        f.write(content)
+    return temp_path
+
+
+def test_read_jcamp_cp1252():
+    """cp1252-encoded acqus (e.g. degree sign) decodes correctly"""
+    # real acqus with a realistic cp1252 (non utf-8) parameter added,
+    # as written by instruments configured with a western locale
+    content = _real_acqus_bytes().replace(
+        b"##END=", "##$SOLVENT= <CDCl3 at 25\u00b0C>\n##END=".encode("cp1252"))
+    temp_path = _write_temp(content)
+    try:
+        dic = ng.bruker.read_jcamp(temp_path)
+        # correct character, no U+FFFD corruption
+        assert dic["SOLVENT"] == "CDCl3 at 25\u00b0C"
+        # remainder of the real file still parsed
+        assert dic["LOCKED"] is True
+    finally:
+        os.remove(temp_path)
+
+
+def test_read_jcamp_undecodable_bytes(monkeypatch):
+    """bytes invalid in both utf-8 and cp1252 do not crash the reader"""
+    # 0x81 is undefined in cp1252 and invalid utf-8; latin-1 fallback.
+    # A utf-8 locale adds nothing, so the result does not depend on the
+    # machine running the test.
+    monkeypatch.setattr(locale, "getpreferredencoding", lambda *a: "UTF-8")
+    content = _real_acqus_bytes().replace(
+        b"##END=", b"##$BAD= <\x81>\n##END=")
+    temp_path = _write_temp(content)
+    try:
+        with pytest.warns(UserWarning, match="latin-1"):
+            dic = ng.bruker.read_jcamp(temp_path)
+        assert dic["BAD"] == "\x81"  # latin-1 maps byte to same codepoint
+        assert dic["LOCKED"] is True  # rest of file intact
+    finally:
+        os.remove(temp_path)
+
+
+def test_read_jcamp_explicit_encoding():
+    """an explicit encoding is tried first"""
+    # 0xb0 is a degree sign in cp1252 but an infinity sign in mac-roman;
+    # with an explicit encoding the caller's choice must win
+    content = _real_acqus_bytes().replace(
+        b"##END=", b"##$TEMPUNIT= <\xb0C>\n##END=")
+    temp_path = _write_temp(content)
+    try:
+        dic = ng.bruker.read_jcamp(temp_path, encoding="mac-roman")
+        assert dic["TEMPUNIT"] == "\u221eC"
+        dic = ng.bruker.read_jcamp(temp_path)
+        assert dic["TEMPUNIT"] == "\u00b0C"
+    finally:
+        os.remove(temp_path)
+
+
+def test_read_jcamp_utf8_bom():
+    """a byte order mark does not hide the first record"""
+    content = b"\xef\xbb\xbf" + _real_acqus_bytes()
+    temp_path = _write_temp(content)
+    try:
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            dic = ng.bruker.read_jcamp(temp_path)
+        # left in place, the BOM makes ##TITLE= unrecognisable and it is
+        # discarded as an extraneous line
+        assert not [w for w in caught if "Extraneous line" in str(w.message)]
+        assert dic["_coreheader"][0].startswith("##TITLE=")
+        assert dic["LOCKED"] is True  # remainder of the real file still parsed
+    finally:
+        os.remove(temp_path)
+
+
+def test_read_jcamp_line_endings():
+    """CRLF and CR-only line endings read as LF does"""
+    lf = _real_acqus_bytes().replace(b"\r\n", b"\n")
+    expected = None
+    for eol in (b"\n", b"\r\n", b"\r"):
+        temp_path = _write_temp(lf.replace(b"\n", eol))
+        try:
+            dic = ng.bruker.read_jcamp(temp_path)
+        finally:
+            os.remove(temp_path)
+        if expected is None:
+            expected = dic
+        assert dic == expected
+    assert expected["LOCKED"] is True
+
+
+def test_read_jcamp_locale_encoding(monkeypatch):
+    """the locale's encoding is tried before falling back to latin-1"""
+    # 0x81 fails utf-8 and cp1252 but is a letter in cp1251
+    content = _real_acqus_bytes().replace(
+        b"##END=", b"##$NAME= <\x81>\n##END=")
+    temp_path = _write_temp(content)
+    try:
+        monkeypatch.setattr(locale, "getpreferredencoding",
+                            lambda *a: "cp1251")
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")
+            dic = ng.bruker.read_jcamp(temp_path)
+        assert dic["NAME"] == "\u0403"
+        assert dic["LOCKED"] is True
+
+        # a latin-1 locale is a choice, not a fallback: no warning
+        monkeypatch.setattr(locale, "getpreferredencoding",
+                            lambda *a: "ISO-8859-1")
+        with warnings.catch_warnings():
+            warnings.simplefilter("error")
+            dic = ng.bruker.read_jcamp(temp_path)
+        assert dic["NAME"] == "\x81"
+
+        # a locale encoding Python does not know is skipped
+        monkeypatch.setattr(locale, "getpreferredencoding",
+                            lambda *a: "no-such-codec")
+        with pytest.warns(UserWarning, match="latin-1"):
+            dic = ng.bruker.read_jcamp(temp_path)
+        assert dic["NAME"] == "\x81"
+    finally:
+        os.remove(temp_path)

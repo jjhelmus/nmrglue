@@ -4,8 +4,9 @@ JCAMP-DX parameter (acqus) files, and Bruker pulse program (pulseprogram)
 files.
 """
 
-import locale
+import codecs
 import io
+import locale
 
 __developer_info__ = """
 Bruker file format information
@@ -2170,7 +2171,15 @@ def rm_dig_filter(
 
 # JCAMP-DX functions
 
-def read_jcamp(filename, encoding=locale.getpreferredencoding()):
+def _codec_name(name):
+    """Canonical name of a codec, or None if Python does not know it."""
+    try:
+        return codecs.lookup(name).name
+    except LookupError:
+        return None
+
+
+def read_jcamp(filename, encoding=None):
     """
     Read a Bruker JCAMP-DX file into a dictionary.
 
@@ -2182,8 +2191,12 @@ def read_jcamp(filename, encoding=locale.getpreferredencoding()):
     ----------
     filename : str
         Filename of Bruker JCAMP-DX file.
-    encoding : str
-        Encoding of Bruker JCAMP-DX file. Defaults to the system default locale.
+    encoding : str, optional
+        Encoding of Bruker JCAMP-DX file. When given, it is tried first;
+        otherwise (and on failure) the file is decoded by trying utf-8,
+        cp1252, the locale's preferred encoding and latin-1 in order, using
+        the first that decodes without error. As latin-1 maps every byte,
+        reading never fails on decoding.
 
     Returns
     -------
@@ -2201,18 +2214,42 @@ def read_jcamp(filename, encoding=locale.getpreferredencoding()):
 
     """
     dic = {"_coreheader": [], "_comments": []}  # create empty dictionary
-    try:
-        with open(filename, 'r', encoding=encoding) as f:
-            dic=parse_jcamp_file(f,dic)
-    except:
-        if encoding == "utf-8":
-            with open(filename, 'r', encoding="cp1252") as f:
-                dic=parse_jcamp_file(f,dic)
-        else:
-            with open(filename, 'r', encoding="utf-8") as f:
-                dic=parse_jcamp_file(f,dic)
 
-    return dic
+    with open(filename, 'rb') as f:
+        raw = f.read()
+
+    # utf-8-sig rather than utf-8 so that a byte order mark is consumed
+    # instead of being left on the first line, where it would stop ##TITLE=
+    # from being recognised. It decodes BOM-less files identically to utf-8.
+    requested = [encoding] if encoding is not None else []
+    preferred = locale.getpreferredencoding(False)
+    codecs_to_try = []
+    for enc in requested + ['utf-8-sig', 'cp1252', preferred, 'latin-1']:
+        if enc not in codecs_to_try:
+            codecs_to_try.append(enc)
+
+    # strict decoding with each candidate in turn: a wrongly-guessed codec
+    # raises instead of silently corrupting characters. latin-1 decodes any
+    # byte sequence, so the loop always produces text. An unknown codec name,
+    # given by the caller or by the locale, is skipped.
+    for enc in codecs_to_try:
+        try:
+            text = raw.decode(enc)
+            break
+        except (UnicodeDecodeError, LookupError):
+            continue
+
+    # warn only when latin-1 was the last resort, not when the caller or the
+    # locale asked for it
+    if _codec_name(enc) == 'iso8859-1' and 'iso8859-1' not in \
+            [_codec_name(name) for name in requested + [preferred]]:
+        tried = " or ".join(codecs_to_try[:codecs_to_try.index(enc)])
+        warn(f"{filename}: could not be decoded as {tried}; fell back to "
+             "latin-1, non-ASCII characters may be incorrect.")
+
+    # newline=None translates \r\n and \r line endings as open() did;
+    # StringIO's default would leave a \r-only file as a single line
+    return parse_jcamp_file(io.StringIO(text, newline=None), dic)
 
 def parse_jcamp_file(f,dic):
     """
