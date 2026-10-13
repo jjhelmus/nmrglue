@@ -1,6 +1,7 @@
 0.13 (Unreleased)
 =================
 
+* Fix Varian multi-trace reading with block headers (#270)
 
 0.12 (2026-08-16)
 =================
