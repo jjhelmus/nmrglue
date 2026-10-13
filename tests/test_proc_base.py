@@ -1,5 +1,7 @@
 import numpy as np
 import nmrglue as ng
+import scipy.linalg
+import scipy.signal
 
 
 def test_reorder_nus_data_2d():
@@ -145,3 +147,62 @@ def test_reorder_nus_3d_quadorder():
     assert np.allclose(full_data[15, 12], nus_data[13], atol=1e-7)
     assert np.allclose(full_data[14, 13], nus_data[14], atol=1e-7)
     assert np.allclose(full_data[15, 13], nus_data[15], atol=1e-7)
+
+
+def _reference_hadamard(data):
+    """Reference implementation matching the historic Hadamard pipeline."""
+    order = int(np.ceil(np.log2(data.shape[-1])))
+    max_size = 2 ** order
+    pad = max_size - data.shape[-1]
+    zdata = ng.proc_base.zf(data, pad)
+
+    nat = np.array(np.dot(zdata, scipy.linalg.hadamard(max_size)),
+                   dtype=data.dtype)
+    bit_reversal = [ng.proc_base.bin2int(
+        ng.proc_base.int2bin(value, digits=order)[::-1]
+    ) for value in range(max_size)]
+    gray = ng.proc_base.gray(order)
+    return np.take(np.take(nat, bit_reversal, axis=-1), gray, axis=-1)
+
+
+def test_hadamard_matches_reference_for_complex_input():
+    """The FWHT path should match the previous Hadamard implementation."""
+    real = np.arange(12, dtype=np.float32).reshape(2, 6)
+    imag = np.arange(12, 24, dtype=np.float32).reshape(2, 6)
+    data = real + 1j * imag
+
+    expected = _reference_hadamard(data)
+    result = ng.proc_base.ha(data)
+
+    assert result.dtype == data.dtype
+    np.testing.assert_allclose(result, expected, atol=1e-6)
+
+
+def test_hilbert_default_matches_scipy_last_axis():
+    """The default N should use the trace length and preserve real values."""
+    data = np.arange(12, dtype=np.float32).reshape(3, 4)
+
+    expected = scipy.signal.hilbert(data.real, N=data.shape[-1], axis=-1)
+    expected = np.asarray(expected, dtype=np.complex64)
+    expected.real = data.real
+
+    result = ng.proc_base.ht(data)
+
+    assert result.dtype == expected.dtype
+    np.testing.assert_allclose(result, expected, atol=1e-6)
+
+
+def test_hilbert_respects_requested_fourier_components():
+    """The Hilbert transform should match SciPy for explicit zero filling."""
+    data = np.linspace(0, 1, 10, dtype=np.float32).reshape(2, 5)
+    n_components = 8
+
+    expected = scipy.signal.hilbert(data.real, N=n_components, axis=-1)
+    expected = np.asarray(expected[..., :data.shape[-1]] *
+                          (n_components / data.shape[-1]),
+                          dtype=np.complex64)
+    expected.real = data.real
+
+    result = ng.proc_base.ht(data, N=n_components)
+
+    np.testing.assert_allclose(result, expected, atol=1e-6)
