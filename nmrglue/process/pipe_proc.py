@@ -2878,14 +2878,7 @@ def save(dic, data, name, overwrite=True):
     ndata : ndarray
         Unmodified array of NMR data.
 
-    Notes
-    -----
-    The resulting FDPIPECOUNT header parameter does not match the one created
-    using NMRPipe's SAVE function.
-
     """
-    dic["FDPIPECOUNT"] = 1.0
-
     pipe.write_single(name, dic, data, overwrite)
 
     dic["FDPIPECOUNT"] = 0.0
