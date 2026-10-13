@@ -1,6 +1,7 @@
 0.13 (Unreleased)
 =================
 
+* Fix copying and negative-axis handling for low-memory data objects (#272)
 
 0.12 (2026-08-16)
 =================
