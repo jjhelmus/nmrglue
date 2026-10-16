@@ -463,6 +463,7 @@ def _parse_data(datastring):
     datatype = _parse_variable_list(headerline)[1]
     if datatype is None:
         datatype = "R"
+    datatype = datatype.upper()  # symbols are matched case-insensitively
 
     datalines = datalines[1:]  # get rid of the header line (e.g. (X++(Y..Y)))
     mode = _detect_format(datalines[0])
@@ -495,13 +496,14 @@ def find_factor(dic, symbol):
     '''
     Helper to find the scaling factor of the given symbol (e.g. "R", "I"
     or "Y") from the NTUPLES ##SYMBOL= and ##FACTOR= records, whose
-    comma-separated entries correspond by position.
+    comma-separated entries correspond by position. Symbols are compared
+    case-insensitively.
     Returns None if the factor cannot be determined.
     '''
     try:
-        symbols = [s.strip() for s in dic["SYMBOL"][0].split(",")]
+        symbols = [s.strip().upper() for s in dic["SYMBOL"][0].split(",")]
         factors = [s.strip() for s in dic["FACTOR"][0].split(",")]
-        return float(factors[symbols.index(symbol)])
+        return float(factors[symbols.index(symbol.upper())])
     except (KeyError, IndexError, ValueError):
         return None
 

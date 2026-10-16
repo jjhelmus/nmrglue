@@ -351,6 +351,18 @@ def test_jcampdx_ntuples_symbol_factor():
         os.remove(path)
 
 
+def test_jcampdx_ntuples_symbol_factor_case():
+    '''NTUPLES FACTOR symbols are matched case-insensitively'''
+    content = (_NTUPLES_Y_TEMPLATE % "##FACTOR=1, 1, 2.0\n").replace(
+        "(F2++(Y..Y))", "(f2++(y..y))")
+    path = _write_jcamp(content)
+    try:
+        _, data_all = ng.jcampdx.read(path, show_all_data=True)
+        assert np.allclose(data_all['real'][0], [20.0, 40.0])
+    finally:
+        os.remove(path)
+
+
 def test_jcampdx_ntuples_symbol_factor_missing():
     '''NTUPLES data is left unscaled, with a warning, if its FACTOR is absent'''
     # FACTOR declares only the two independent variables, so Y has none
