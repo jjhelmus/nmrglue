@@ -333,8 +333,8 @@ def test_jcampdx_xy_pairs_indented_and_signed():
     '''JCAMP-DX read: (XY..XY) pairs with leading whitespace or signs'''
     cases = [
         # indented, one pair per line, as some MS writers emit
-        (" 199.9, 1097735\n 199.95, 1097736\n",
-         [[199.9, 1097735.0], [199.95, 1097736.0]]),
+        (" 120.5, 4521\n 120.75, 4533\n",
+         [[120.5, 4521.0], [120.75, 4533.0]]),
         # indented, several pairs per line
         (" 27, 1248 28, 2067\n 29, 5538\n",
          [[27.0, 1248.0], [28.0, 2067.0], [29.0, 5538.0]]),
@@ -427,3 +427,26 @@ def test_jcampdx_xyw_and_xym_tables():
     with pytest.warns(UserWarning, match="whole tuples"):
         data = _read_peaktable("(XYW..XYW)", "15,420,1 16,1201\n")
     assert data is None
+
+
+def test_jcampdx_comma_separated_affn():
+    '''JCAMP-DX read: AFFN separated by commas is not a coordinate list'''
+    for header in ("(X++(Y..Y))", "(X++(R..R))", "(F2++(Y..Y))"):
+        data, _ = ng.jcampdx._parse_data(
+            header + "\n0, 1, 2, 3\n3, 4, 5, 6")
+        assert np.allclose(data, [1, 2, 3, 4, 5, 6])
+
+
+def test_jcampdx_xypoints_before_peaktable():
+    '''JCAMP-DX read: a block with XYPOINTS and PEAKTABLE gives XYPOINTS'''
+    fd, path = tempfile.mkstemp()
+    try:
+        with os.fdopen(fd, 'w') as f:
+            f.write("##TITLE=Test\n##JCAMPDX=5.01\n"
+                    "##DATATYPE=NMR SPECTRUM\n"
+                    "##XYPOINTS=(XY..XY)\n1.0,10 2.0,20 3.0,30\n"
+                    "##PEAKTABLE=(XY..XY)\n2.0,20\n##END=\n")
+        dic, data = ng.jcampdx.read(path)
+        assert data.shape == (1, 3, 2)
+    finally:
+        os.remove(path)

@@ -502,7 +502,10 @@ def _parse_data(datastring):
     elif mode == 0:
         data = _parse_affn_pac(datalines)
     elif mode == 2:
-        if headerline == '(X++(Y..Y))':
+        # a line starting "number, number" is a coordinate list only under a
+        # coordinate list header such as (XY..XY); under (X++(Y..Y)),
+        # (X++(R..R)) and the like it is AFFN with comma separators
+        if "++" in headerline:
             data = _parse_affn_pac(datalines)
         else:
             data = _parse_xy_xy(datalines, headerline)
@@ -612,11 +615,13 @@ def getdataarray(dic):
         except KeyError:
             warn("XYDATA not found ")
 
-    if data is None:  # PEAKTABLE
+    # XYPOINTS is a spectrum and PEAKTABLE is derived from one, so a block
+    # offering both returns its XYPOINTS
+    if data is None:  # XYPOINTS
         try:
-            valuelist = dic["PEAKTABLE"]
+            valuelist = dic["XYPOINTS"]
             if len(valuelist) > 1:
-                warn("Multiple PEAKTABLE arrays in JCAMP-DX file, "
+                warn("Multiple XYPOINTS arrays in JCAMP-DX file, "
                      "returning first one only")
             parseret = _parse_data(valuelist[0])
             if parseret is not None:
@@ -624,11 +629,11 @@ def getdataarray(dic):
         except KeyError:
             pass
 
-    if data is None:  # XYPOINTS
+    if data is None:  # PEAKTABLE
         try:
-            valuelist = dic["XYPOINTS"]
+            valuelist = dic["PEAKTABLE"]
             if len(valuelist) > 1:
-                warn("Multiple XYPOINTS arrays in JCAMP-DX file, "
+                warn("Multiple PEAKTABLE arrays in JCAMP-DX file, "
                      "returning first one only")
             parseret = _parse_data(valuelist[0])
             if parseret is not None:
