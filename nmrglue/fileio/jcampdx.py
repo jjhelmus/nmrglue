@@ -220,13 +220,24 @@ _DUP_DIGITS = {"S": "1", "T": "2", "U": "3", "V": "4", "W": "5",
 ###############################################################################
 
 
+# an AFFN number: optional sign, digits with an optional decimal point or a
+# leading decimal point (.5), optional exponent
+_AFFN_NUMBER = r'[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?'
+
+
 def _detect_format(dataline):
     '''
     Detects and returns digit format:
     0  Normal
     1  Pseudodigits
+    2  Coordinate list (XY..XY)
     -1 Error
     '''
+    # check for coordinate list first
+    # values may be signed, and writers commonly indent pair lines
+    xy_re = re.compile(r'^\s*' + _AFFN_NUMBER + r'\s*,\s*' + _AFFN_NUMBER)
+    if re.search(xy_re, dataline):
+        return 2
 
     # regexp to find & skip the first value of line, that never begins
     # with a pseudodigit in any format
@@ -429,6 +440,56 @@ def _parse_pseudo(datalines):
     return data
 
 
+# a coordinate list header such as (XY..XY), (XYW..XYW) or (XYM..XYM): the
+# same symbols on both sides, one per value of a tuple
+_TUPLE_HEADER_RE = re.compile(r'\(\s*([A-Za-z]+)\s*\.\.\s*\1\s*\)')
+
+
+def _parse_xy_xy(datalines, headerline="(XY..XY)"):
+    '''
+    Parses datalines in coordinate list format, e.g. (XY..XY), (XYW..XYW)
+    or (XYM..XYM), as AFFN: the header's variable list gives the number of
+    values per tuple, and values are separated by commas or blanks. A
+    semicolon may close a tuple, and a tuple may continue on the next line.
+
+    Returns one row per tuple holding its numeric values (X, Y and W, the
+    peak width). M, a multiplicity such as S or D, is text and is not
+    returned. Returns None if a semicolon falls inside a tuple or the data
+    does not end on a whole tuple.
+    '''
+    match = _TUPLE_HEADER_RE.match(headerline.strip().upper())
+    symbols = match.group(1) if match else "XY"
+    size = len(symbols)
+    numeric = [i for i, symbol in enumerate(symbols) if symbol in "XYW"]
+    if len(numeric) < size:
+        warn("(%s..%s): only the %s values are returned"
+             % (symbols, symbols, "".join(symbols[i] for i in numeric)))
+
+    pts = []
+    values = []
+    for token in re.findall(r';|[^\s,;]+', "\n".join(datalines)):
+        if token == ";":
+            if values:
+                warn("(%s..%s): a semicolon falls inside a tuple"
+                     % (symbols, symbols))
+                return None
+            continue
+        values.append(token)
+        if len(values) == size:
+            try:
+                pts.append([float(values[i]) for i in numeric])
+            except ValueError:
+                warn("(%s..%s): could not parse values: %s"
+                     % (symbols, symbols, ",".join(values)))
+                return None
+            values = []
+    if values:
+        warn("(%s..%s): data does not hold whole tuples: %s"
+             % (symbols, symbols, ",".join(values)))
+        return None
+    return [pts]
+
+
 def _parse_data(datastring):
     '''
     Creates numpy array from datalines
@@ -441,11 +502,25 @@ def _parse_data(datastring):
         datatype = "I"
 
     datalines = datalines[1:]  # get rid of the header line (e.g. (X++(Y..Y)))
+    if not datalines:
+        return None  # a table declared with no values, e.g. an empty PEAKTABLE
     mode = _detect_format(datalines[0])
-    if mode == 1:
+    if _TUPLE_HEADER_RE.match(headerline.strip()) and "++" not in headerline:
+        # a coordinate list header fixes the format, whatever the first line
+        # looks like: X and Y may be separated by a blank as well as a comma
+        data = _parse_xy_xy(datalines, headerline)
+    elif mode == 1:
         data = _parse_pseudo(datalines)
     elif mode == 0:
         data = _parse_affn_pac(datalines)
+    elif mode == 2:
+        # a line starting "number, number" is a coordinate list only under a
+        # coordinate list header such as (XY..XY); under (X++(Y..Y)),
+        # (X++(R..R)) and the like it is AFFN with comma separators
+        if "++" in headerline:
+            data = _parse_affn_pac(datalines)
+        else:
+            data = _parse_xy_xy(datalines, headerline)
     else:
         return None
     if data is None:
@@ -552,6 +627,32 @@ def getdataarray(dic):
         except KeyError:
             warn("XYDATA not found ")
 
+    # XYPOINTS is a spectrum and PEAKTABLE is derived from one, so a block
+    # offering both returns its XYPOINTS
+    if data is None:  # XYPOINTS
+        try:
+            valuelist = dic["XYPOINTS"]
+            if len(valuelist) > 1:
+                warn("Multiple XYPOINTS arrays in JCAMP-DX file, "
+                     "returning first one only")
+            parseret = _parse_data(valuelist[0])
+            if parseret is not None:
+                data, datatype = parseret
+        except KeyError:
+            pass
+
+    if data is None:  # PEAKTABLE
+        try:
+            valuelist = dic["PEAKTABLE"]
+            if len(valuelist) > 1:
+                warn("Multiple PEAKTABLE arrays in JCAMP-DX file, "
+                     "returning first one only")
+            parseret = _parse_data(valuelist[0])
+            if parseret is not None:
+                data, datatype = parseret
+        except KeyError:
+            pass
+
     if data is None:
         return None
 
@@ -563,6 +664,18 @@ def getdataarray(dic):
         else:
             data[0] = data[0] * yfactor_r
             data[1] = data[1] * yfactor_i
+    elif data.ndim == 3 and data.shape[-1] >= 2:
+        # (XY..XY) pairs carry their own X values, which XFACTOR scales;
+        # YFACTOR scales only the Y column. A W (peak width) column is
+        # returned as written.
+        for column, factorkey in ((0, "XFACTOR"), (1, "YFACTOR")):
+            try:
+                factor = float(dic[factorkey][0])
+                data[..., column] = data[..., column] * factor
+            except (ValueError, IndexError):
+                warn(f"{factorkey} not applied, parsing failed")
+            except KeyError:
+                pass
     else:
         try:
             yfactor = float(dic["YFACTOR"][0])
