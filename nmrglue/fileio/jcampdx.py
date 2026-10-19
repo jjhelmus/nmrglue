@@ -440,45 +440,53 @@ def _parse_pseudo(datalines):
     return data
 
 
+# a coordinate list header such as (XY..XY), (XYW..XYW) or (XYM..XYM): the
+# same symbols on both sides, one per value of a tuple
+_TUPLE_HEADER_RE = re.compile(r'\(\s*([A-Za-z]+)\s*\.\.\s*\1\s*\)')
+
+
 def _parse_xy_xy(datalines, headerline="(XY..XY)"):
     '''
     Parses datalines in coordinate list format, e.g. (XY..XY), (XYW..XYW)
-    or (XYM..XYM). The header's variable list gives the number of values
-    per tuple. Within a tuple values are separated by commas; tuples are
-    separated by whitespace or semicolons, or by commas alone.
+    or (XYM..XYM), as AFFN: the header's variable list gives the number of
+    values per tuple, and values are separated by commas or blanks. A
+    semicolon may close a tuple, and a tuple may continue on the next line.
 
     Returns one row per tuple holding its numeric values (X, Y and W, the
     peak width). M, a multiplicity such as S or D, is text and is not
-    returned. Returns None if a line does not hold whole tuples.
+    returned. Returns None if a semicolon falls inside a tuple or the data
+    does not end on a whole tuple.
     '''
-    match = re.match(r'\(\s*([A-Z]+)\s*\.\.\s*\1\s*\)',
-                     headerline.strip().upper())
+    match = _TUPLE_HEADER_RE.match(headerline.strip().upper())
     symbols = match.group(1) if match else "XY"
+    size = len(symbols)
     numeric = [i for i, symbol in enumerate(symbols) if symbol in "XYW"]
-    if len(numeric) < len(symbols):
+    if len(numeric) < size:
         warn("(%s..%s): only the %s values are returned"
              % (symbols, symbols, "".join(symbols[i] for i in numeric)))
 
     pts = []
-    for dataline in datalines:
-        dataline = re.sub(r'\s*,\s*', ',', dataline.strip())
-        if not dataline:
+    values = []
+    for token in re.findall(r';|[^\s,;]+', "\n".join(datalines)):
+        if token == ";":
+            if values:
+                warn("(%s..%s): a semicolon falls inside a tuple"
+                     % (symbols, symbols))
+                return None
             continue
-        # a separator may also end the line, as in "1,2;3,4;"
-        fields = [field for group in re.split(r'[\s;]+', dataline) if group
-                  for field in group.split(',')]
-        if len(fields) % len(symbols):
-            warn("(%s..%s): line does not hold whole tuples: %s"
-                 % (symbols, symbols, dataline))
-            return None
-        for start in range(0, len(fields), len(symbols)):
-            values = fields[start:start + len(symbols)]
+        values.append(token)
+        if len(values) == size:
             try:
                 pts.append([float(values[i]) for i in numeric])
             except ValueError:
                 warn("(%s..%s): could not parse values: %s"
                      % (symbols, symbols, ",".join(values)))
                 return None
+            values = []
+    if values:
+        warn("(%s..%s): data does not hold whole tuples: %s"
+             % (symbols, symbols, ",".join(values)))
+        return None
     return [pts]
 
 
@@ -497,7 +505,11 @@ def _parse_data(datastring):
     if not datalines:
         return None  # a table declared with no values, e.g. an empty PEAKTABLE
     mode = _detect_format(datalines[0])
-    if mode == 1:
+    if _TUPLE_HEADER_RE.match(headerline.strip()) and "++" not in headerline:
+        # a coordinate list header fixes the format, whatever the first line
+        # looks like: X and Y may be separated by a blank as well as a comma
+        data = _parse_xy_xy(datalines, headerline)
+    elif mode == 1:
         data = _parse_pseudo(datalines)
     elif mode == 0:
         data = _parse_affn_pac(datalines)

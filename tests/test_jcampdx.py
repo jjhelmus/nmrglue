@@ -450,3 +450,23 @@ def test_jcampdx_xypoints_before_peaktable():
         assert data.shape == (1, 3, 2)
     finally:
         os.remove(path)
+
+
+def test_jcampdx_xy_tuples_affn_separators():
+    '''JCAMP-DX read: coordinate lists follow AFFN separator rules'''
+    # X and Y separated by a blank, one pair per line
+    data = _read_peaktable("(XY..XY)", "-1 0\n-0.5 2.5\n0 4\n")
+    assert np.allclose(data[0], [[-1, 0], [-0.5, 2.5], [0, 4]])
+
+    # several blank-separated pairs on a line
+    data = _read_peaktable("(XY..XY)", "1 10 2 20\n3 30\n")
+    assert np.allclose(data[0], [[1, 10], [2, 20], [3, 30]])
+
+    # a tuple continued on the next line
+    data = _read_peaktable("(XYW..XYW)", "1,10,\n0.5 2,20,0.25\n")
+    assert np.allclose(data[0], [[1, 10, 0.5], [2, 20, 0.25]])
+
+    # a semicolon may only close a tuple
+    with pytest.warns(UserWarning, match="semicolon falls inside a tuple"):
+        data = _read_peaktable("(XYW..XYW)", "1,10;0.5\n")
+    assert data is None
