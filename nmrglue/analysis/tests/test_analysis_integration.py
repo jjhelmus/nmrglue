@@ -1,6 +1,7 @@
 """ Unit tests for nmrglue/analysis/integration.py module """
 
 import numpy as np
+import pytest
 from scipy.stats import multivariate_normal
 from numpy.testing import assert_array_almost_equal
 
@@ -133,3 +134,37 @@ def test_2d_ndintegrate():
     limits = ((4, 6), (7, 9))
 
     assert abs(ndintegrate(data, [uc, uc], limits) - 1.0) <= 1e-10
+
+
+@pytest.mark.parametrize('ndim', [1, 2, 3])
+@pytest.mark.parametrize('unit', ['ppm', 'hz'])
+@pytest.mark.parametrize('reverse', [False, True])
+def test_ndintegrate_noise_uses_signal_bins_and_bin_volume(
+        ndim, unit, reverse):
+    """Propagate baseline noise through the same weighted sum as the volume."""
+    shape = (6, 8, 10)[-ndim:]
+    data = np.arange(np.prod(shape), dtype=float).reshape(shape) % 7 + 1
+    widths = np.arange(1, ndim + 1) * 0.125
+    ucs = [ng.fileiobase.unit_conversion(n, False, n * 100 * dx, 100, 0)
+           for n, dx in zip(shape, widths)]
+    signal_slices = tuple(slice(2, min(n - 1, 6)) for n in shape)
+    noise_slices = tuple(slice(0, 2) for n in shape)
+
+    def limits_for(slices):
+        limits = [[uc.unit(sl.start, unit), uc.unit(sl.stop, unit)]
+                  for uc, sl in zip(ucs, slices)][::-1]
+        return [x[::-1] for x in limits] if reverse else limits
+
+    signal = data[signal_slices]
+    noise = data[noise_slices]
+    expected = [signal.sum() * np.prod(widths),
+                noise.std() * np.sqrt(signal.size) * np.prod(widths)]
+    actual = ndintegrate(data, ucs[::-1], limits_for(signal_slices),
+                         unit=unit, noise_limits=limits_for(noise_slices))
+
+    np.testing.assert_allclose(actual, expected, rtol=1e-12)
+    if ndim == 1:
+        flat_noise_limits = limits_for(noise_slices)[0]
+        actual = ndintegrate(data, ucs[0], limits_for(signal_slices),
+                             unit=unit, noise_limits=flat_noise_limits)
+        np.testing.assert_allclose(actual, expected, rtol=1e-12)

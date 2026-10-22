@@ -113,13 +113,16 @@ def ndintegrate(data, unit_conv, limits, unit='ppm', noise_limits=None):
     The integration error due to baseline noise is calculated as:
 
     .. math::
-        error = \sigma_{vol} = \sigma \sqrt{\prod_i^{d} n_{i}},
+        error = \sigma_{vol} = \sigma \sqrt{\prod_i^{d} n_{i}}
+        \prod_i^{d} dx_i,
 
     if the noise_limits are set.
 
     Where:
     sigma is the standard deviation of the baseline noise. n is the number
-    of bins in the integration range for each d dimensions.
+    of bins in the integration range for each d dimensions. dx_i is the bin
+    width in ppm along dimension i, so the error has the same units as the
+    integrated volume.
 
     See integrate for more information.
 
@@ -179,7 +182,8 @@ def ndintegrate(data, unit_conv, limits, unit='ppm', noise_limits=None):
     ppm_scales = [x.ppm_scale() for x in unit_conv]
     dx = np.prod(np.array([abs(x[1]-x[0]) for x in ppm_scales]))
 
-    slice_sum = (data[tuple([slice(x[0], x[1]) for x in np.flipud(inds)])]).sum()
+    signal = data[tuple(slice(*ind) for ind in np.flipud(inds))]
+    slice_sum = signal.sum()
 
     value = slice_sum * dx
 
@@ -188,7 +192,7 @@ def ndintegrate(data, unit_conv, limits, unit='ppm', noise_limits=None):
 
     else:
         noise_limits = np.array(noise_limits)
-        if noise_limits.size == 2:
+        if noise_limits.ndim == 1:
             noise_limits = np.expand_dims(noise_limits, axis=0)
 
         if noise_limits.shape[0] != d and noise_limits.shape[1] != 2:
@@ -200,8 +204,9 @@ def ndintegrate(data, unit_conv, limits, unit='ppm', noise_limits=None):
         noise_inds = [sorted(x) for x in noise_inds]
 
         # see docstring of integrate
-        nm = np.prod(np.array([abs(x[1]-x[0]) for x in noise_inds]))
-        std = np.std(data[[slice(x[0], x[1])for x in np.flipud(noise_inds)]])
+        nm = signal.size
+        noise_slices = tuple(slice(*ind) for ind in np.flipud(noise_inds))
+        std = np.std(data[noise_slices])
 
-        error = std * np.sqrt(nm)
+        error = std * np.sqrt(nm) * dx
         return np.hstack((value, error))
