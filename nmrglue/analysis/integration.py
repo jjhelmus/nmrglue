@@ -19,7 +19,7 @@ def integrate(data, unit_conv, limits, unit='ppm', noise_limits=None,
     The integration error due to baseline noise is calculated as:
 
     .. math::
-        error = \sigma_{vol} = \sigma \sqrt{n}
+        error = \sigma_{vol} = \sigma \sqrt{n} dx
 
     if the noise_limits are set.
 
@@ -29,7 +29,8 @@ def integrate(data, unit_conv, limits, unit='ppm', noise_limits=None,
         n =  \frac{|b-a|}{dx}+1
 
     sigma is the standard deviation of the baseline noise. n is the number
-    of bins in the integration range.
+    of bins in the integration range. The bin width dx is in ppm, so the error
+    has the same units as the integral.
 
     Parameters
     ----------
@@ -90,7 +91,7 @@ def integrate(data, unit_conv, limits, unit='ppm', noise_limits=None,
 
         # the error (from noise) is  std * dx * limits range
         std = np.std(data[slice(*noise_inds)])
-        errors = std * np.sqrt(inds[:, 1] - inds[:, 0])
+        errors = std * np.sqrt(inds[:, 1] - inds[:, 0]) * dx
 
         if norm_to_range is not None:
             # You must normalize the error before you normalize the value!

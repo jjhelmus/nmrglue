@@ -1,6 +1,7 @@
 """ Unit tests for nmrglue/analysis/integration.py module """
 
 import numpy as np
+import pytest
 from scipy.stats import multivariate_normal
 from numpy.testing import assert_array_almost_equal
 
@@ -93,6 +94,30 @@ def test_1d_integrate_with_noise():
 
     # Test renormalization of values.
     assert abs(results[0, 0] - 0.5) <= max_error
+
+
+@pytest.mark.parametrize('width', [0.25, 2.0])
+@pytest.mark.parametrize('norm_to_range', [None, 1])
+@pytest.mark.parametrize('unit', ['ppm', 'hz'])
+def test_integrate_noise_has_integral_units(width, norm_to_range, unit):
+    """The integral and its noise estimate must use the same bin width."""
+    data = np.arange(16, dtype=float) + 1
+    uc = ng.fileiobase.unit_conversion(16, False, 16 * 100 * width, 100, 0)
+    limits = [[uc.unit(a, unit), uc.unit(b, unit)]
+              for a, b in [(4, 8), (8, 14)]]
+    noise_limits = [uc.unit(0, unit), uc.unit(4, unit)]
+    expected_values = np.array([data[4:8].sum(), data[8:14].sum()]) * width
+    expected_errors = data[:4].std() * np.sqrt([4, 6]) * width
+    if norm_to_range is not None:
+        factor = 3.0 / expected_values[norm_to_range]
+        expected_values *= factor
+        expected_errors *= factor
+
+    actual = integrate(data, uc, limits, unit=unit, noise_limits=noise_limits,
+                       norm_to_range=norm_to_range, calibrate=3.0)
+
+    np.testing.assert_allclose(actual[:, 0], expected_values, rtol=1e-12)
+    np.testing.assert_allclose(actual[:, 1], expected_errors, rtol=1e-12)
 
 
 def test_1d_ndintegrate():
