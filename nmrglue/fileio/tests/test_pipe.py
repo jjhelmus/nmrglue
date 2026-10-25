@@ -6,6 +6,7 @@ import glob
 
 from numpy.testing import assert_array_equal
 import nmrglue as ng
+import pytest
 
 # NMRPipe files being tested, these are created by the script:
 # create_test_data_nmrpipe.sh
@@ -579,7 +580,6 @@ def test_guess_udic():
     assert udic[1]['time'] is True
     assert udic['ndim'] == 2
 
-
 def test_read_table():
     comments, tbl_format, tbl = ng.pipe.read_table(NMRPIPE_TABLE)
 
@@ -596,7 +596,6 @@ def test_read_table():
 
     assert tbl['X1'][0] == 1328
     assert tbl['X1'][-1] == 1161
-
 
 def test_write_table():
     ref_comments, ref_tbl_format, ref_tbl = ng.pipe.read_table(NMRPIPE_TABLE)

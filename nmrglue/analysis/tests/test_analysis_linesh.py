@@ -1,12 +1,7 @@
 import numpy as np
-
-
-import nmrglue as ng
-from nmrglue.analysis.linesh import fit_spectrum
-
+from nmrglue.analysis.linesh import fit_spectrum, sim_NDregion
 
 def test_fit_spectrum():
-    _bb = np.random.uniform(0, 77, size=65536)
     lineshapes = ['g']
     params = [[(13797.0, 2.2495075273313034)],
               [(38979.0, 5.8705185693227664)],
@@ -26,9 +21,12 @@ def test_fit_spectrum():
                (49007.0,), (54774.0,)]
     rIDs = [1, 2, 3, 4, 5, 6, 7]
     box_width = (5,)
-    error_flag = False
-    verb = False
 
-    params_best, amp_best, iers = ng.linesh.fit_spectrum(
-        _bb, lineshapes, params, amps, bounds, ampbounds, centers,
-        rIDs, box_width, error_flag, verb=False)
+    generated_data = sim_NDregion(shape=(65536,), lineshapes=['g'], params=params, amps=amps)
+
+    params_best, amp_best, iers = fit_spectrum(
+        generated_data, lineshapes, params, amps, bounds, ampbounds, centers,
+        rIDs, box_width, error_flag=False, verb=False)
+    
+    assert np.allclose(params_best, params, rtol=1e-4)
+    assert np.allclose(amp_best, amps, rtol=1e-4)
