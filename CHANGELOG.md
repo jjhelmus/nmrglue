@@ -1,6 +1,8 @@
 0.13 (Unreleased)
 =================
 
+* Pipe-to-Pipe conversion keeps the FDDMXVAL digital-filter value (#292)
+
 
 0.12 (2026-08-16)
 =================
