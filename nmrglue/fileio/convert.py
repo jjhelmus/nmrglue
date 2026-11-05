@@ -43,7 +43,11 @@ class converter:
         """
         Create a converter object
         """
-        pass
+        self._pipe_fddmxval = None
+
+    def _clear_format_metadata(self):
+        """Drop parameters that belong only to the previously loaded format."""
+        self._pipe_fddmxval = None
 
     # utility functions
     def __returndata(self):
@@ -131,6 +135,7 @@ class converter:
             NMR data.
 
         """
+        self._clear_format_metadata()
         # set data
         self._data = data
         self._iproc = {}
@@ -152,6 +157,7 @@ class converter:
             Universal dictionary, if not provided will be guesses from dic.
 
         """
+        self._clear_format_metadata()
         # set data
         self._data = data
         if udic is not None and udic[0]['encoding'].lower() == "tppi":
@@ -181,6 +187,7 @@ class converter:
             True when RNMRTK data is being compared to Agilent/Varian data.
 
         """
+        self._clear_format_metadata()
         # set data
         self._data = data
 
@@ -210,9 +217,14 @@ class converter:
             Universal dictionary, if not provided will be guesses from dic.
 
         """
+        self._clear_format_metadata()
         # set data
         self._data = data
         self._iproc = {}
+        # FDDMXVAL is Pipe digital-filter metadata. guess_udic does not
+        # carry it, and create_dic leaves unknown keys at the empty default.
+        if "FDDMXVAL" in dic:
+            self._pipe_fddmxval = dic["FDDMXVAL"]
 
         # set the universal dictionary
         if udic is not None:
@@ -234,6 +246,7 @@ class converter:
             Universal dictionary, if not provided will be guesses from dic.
 
         """
+        self._clear_format_metadata()
         # set data
         self._data = data
         self._iproc = {}
@@ -263,6 +276,7 @@ class converter:
 
 
         """
+        self._clear_format_metadata()
         # set data, possibly with removal of filter delay
         if remove_digital_filter:
             self._data = bruker.remove_digital_filter(dic, data)
@@ -319,6 +333,8 @@ class converter:
         """
         # create dictionary
         dic = pipe.create_dic(self._udic, datetimeobj)
+        if self._pipe_fddmxval is not None:
+            dic["FDDMXVAL"] = self._pipe_fddmxval
 
         # add processing flags for output
         self._oproc = {}
