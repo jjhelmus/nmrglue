@@ -1732,23 +1732,11 @@ class bruker_nd(fileiobase.data_nd):
         Create and set up object.
         """
 
-        # check that size is correct. need isfloat to know whether each point
-        # is 4 bytes or 8 bytes
-        pts = reduce(operator.mul, fshape)
-        if cplex:
-            if isfloat:
-                if os.stat(filename).st_size != pts * 8 * 2:
-                    raise ValueError("shape does not agree with file size")
-            else:
-                if os.stat(filename).st_size != pts * 4 * 2:
-                    raise ValueError("shape does not agree with file size")
-        else:
-            if isfloat:
-                if os.stat(filename).st_size != pts * 8:
-                    raise ValueError("shape does not agree with file size")
-            else:
-                if os.stat(filename).st_size != pts * 4:
-                    raise ValueError("shape does not agree with file size")
+        word_dtype = np.dtype("float64" if isfloat else "int32")
+        words_per_point = 2 if cplex else 1
+        expected_size = reduce(operator.mul, fshape) * words_per_point * word_dtype.itemsize
+        if os.stat(filename).st_size != expected_size:
+            raise ValueError("shape does not agree with file size")
 
         # check order
         if order is None:
@@ -1762,10 +1750,8 @@ class bruker_nd(fileiobase.data_nd):
         self.isfloat = isfloat
         self.order = order
 
-        if self.cplex:
-            self.dtype = np.dtype("complex128")
-        else:
-            self.dtype = np.dtype("int32")
+        self._word_size = word_dtype.itemsize
+        self.dtype = np.dtype("complex128") if cplex else word_dtype
 
         self.__setdimandshape__()   # set ndim and shape attributes
 
@@ -1797,6 +1783,8 @@ class bruker_nd(fileiobase.data_nd):
         # create an empty array to store the selected slices
         out = np.empty(tuple(osize), dtype=self.dtype)
 
+        trace_words = lfshape * (2 if self.cplex else 1)
+        trace_bytes = trace_words * self._word_size
         with open(self.filename, 'rb') as f:
 
             # read in the data trace by trace
@@ -1806,15 +1794,10 @@ class bruker_nd(fileiobase.data_nd):
                 ntrace = fileiobase.index2trace_flat(ffshape, in_index)
 
                 # seek to the correct place in the file
+                f.seek(ntrace * trace_bytes)
+                trace = get_trace(f, trace_words, self.big, self.isfloat)
                 if self.cplex:
-                    ts = ntrace * lfshape * 2 * 4
-                    f.seek(ts)
-                    trace = get_trace(f, lfshape * 2, self.big, self.isfloat)
                     trace = complexify_data(trace)
-                else:
-                    ts = ntrace * lfshape * 2
-                    f.seek(ts)
-                    trace = get_trace(f, lfshape, self.big, self.isfloat)
 
                 # save to output
                 out[out_index] = trace[lslice]
