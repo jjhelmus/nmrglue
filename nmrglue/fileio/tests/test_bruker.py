@@ -73,6 +73,33 @@ def test_guess_udic_magnitude_indirect_dimension_from_proc_params(mc2):
     assert udic[0]['encoding'] == 'magnitude'
     assert udic[0]['complex'] is False
 
+@pytest.mark.parametrize('big', [False, True])
+@pytest.mark.parametrize('cplex', [False, True])
+@pytest.mark.parametrize('isfloat', [False, True])
+def test_read_lowmem_trace_offsets(tmp_path, big, cplex, isfloat):
+    real = np.arange(12, dtype=np.int32).reshape(3, 4)
+    imag = -real - 1
+    if isfloat:
+        real = real + 0.25
+        imag = imag - 0.5
+
+    byte_order = '>' if big else '<'
+    storage_dtype = byte_order + ('f8' if isfloat else 'i4')
+    stored = np.stack((real, imag), axis=-1) if cplex else real
+    (tmp_path / 'ser').write_bytes(stored.astype(storage_dtype).tobytes())
+    expected = real + 1j * imag if cplex else real
+    _, data = ng.bruker.read_lowmem(
+        str(tmp_path), shape=expected.shape, cplex=cplex, big=big,
+        isfloat=isfloat, read_pulseprogram=False, read_acqus=False,
+        read_procs=False,
+    )
+
+    assert data.shape == expected.shape
+    assert data.dtype == expected.dtype
+    np.testing.assert_array_equal(data[:], expected)
+    np.testing.assert_array_equal(data[1:, ::-2], expected[1:, ::-2])
+
+
 def test_read_pdata():
     """Reading processed bruker 1D data"""
 
