@@ -136,7 +136,7 @@ def _parsejcampdx(filename):
                 if currentkey is None:
                     warn(f"JCAMP-DX data line without associated key: {line}")
                     continue
-                currentvaluestrings.append(commentsplit[0])
+                currentvaluestrings.append(commentsplit[0].rstrip("\n") + "\n")
 
     # push possible non-closed blocks
     while blockstack:

@@ -243,3 +243,19 @@ def test_jcampdx_dicstructure2():
     # check data
     assert len(data2) == 8
     assert data2[-1] == 1.0
+
+
+def test_jcampdx_inline_comment_preserves_data_line(tmp_path):
+    path = tmp_path / "inline-comment.jdx"
+    path.write_text(
+        "##TITLE= Inline comment\n"
+        "##DATA TYPE= NMR SPECTRUM\n"
+        "##XYDATA= (X++(Y..Y))\n"
+        "0 1 2$$ comment\n"
+        "2 3 4\n"
+        "##END=\n",
+        encoding="ascii",
+    )
+
+    _, data = ng.jcampdx.read(path)
+    np.testing.assert_array_equal(data, [1, 2, 3, 4])
